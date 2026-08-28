@@ -1,10 +1,10 @@
 # W24 coordination evidence index
 
-> **CURRENT EVIDENCE ROUTING — U1+U2 INTEGRATION CLOSEOUT / U3 PUBLICATION (2026-08-28).** ADR-005 and this section control new evidence selection. The pre-U0 entries retained below preserve exact history but cannot be selected as proof of the ordinary-user runtime or treated as current dependencies/blockers.
+> **CURRENT EVIDENCE ROUTING — U3 CLOSEOUT / U4 PUBLICATION (2026-08-28).** ADR-005 and this section control new evidence selection. The pre-U0 entries retained below preserve exact history but cannot be selected as proof of the ordinary-user runtime or treated as current dependencies/blockers.
 >
 > Normative U0 architecture token: `USER_MODE_LOCAL_CREATIVE_TOOL_V1`.
 
-## Current U1+U2 integration evidence and U3 publication boundary
+## Current U3 closeout evidence and U4 publication boundary
 
 - U0 is `CLOSED — USER_MODE_ARCHITECTURE_SIMPLIFICATION / DOCS ONLY` at commit `53c1eeb4577a7067d8702fdea9866adf01733191`; its baseline started at `038d1b0ef1675fd6bd12c2b1cd196ff17546917b`.
 - U0 owned exactly seven documents:
@@ -18,15 +18,16 @@
 - U0 accepted no source/binary/runtime receipt, performed no M1/M2 merge, and wrote no handoff micro-package.
 - U1 is `CLOSED / INTEGRATED` at commit `48cd27103f8fe0c510770b1584b326f55fca3485`; its declared gates are complete. Its evidence does not prove Desktop integration, project read, arbitrary-path admission, or authority.
 - U2 is `CLOSED / INTEGRATED` at commit `4b2f9a81a82911d68b8b64864ae05a03f9690b2e`. Its audit recorded `P1=3`; one remediation then closed with three `42/42` runs and Broker `171/171`. No second independent audit is claimed by that remediation evidence.
-- This one integration closeout creates no audit, handoff, or micro-receipt. Its only new publication is the active U3 ownership declaration below.
+- U3 is `CLOSED / INTEGRATED — USER_PROJECT_SELECTION_READ_CONTAINMENT`: source commit `0123616e21d656b2374809a13aeb2769f0324e7e`, merged at `027ba07448dd6d4a0741a67937427cd2d37b2649`; exact seven files; Broker target `8/8`; Unity EditMode `9/9`; no-tests PASS; unified Broker `179/179`; controller-supplied manifest SHA-256 prefix `b716…`.
+- This single closeout/publication writes only the three current coordination sections. It creates no source, handoff, audit verdict, or U5 evidence. Its only active publication is U4 below.
 
 The exact current DAG is `U0 -> U1`; `U0 -> U2`; `U1 + U2 -> U3`; `U3 -> U4 -> U5 -> U6`. U1 combines C3+W1 actual Unity Worker connector; U2 is ordinary-user child-process/pipe/nonce/session/cleanup; U3 is project selection/read containment; U4 Desktop integration; U5 local E2E; U6 final audit.
 
 The threat/evidence claim is deliberately narrow: current user and intentionally launched local processes/project choice are trusted; cross-user, stale session, wrong project, protocol drift, PID reuse, unexpected path, leakage and crash are defended; same-user malware, admin/kernel and offline attacks are out of scope. Hashes/signatures prove release integrity only.
 
-### U3 active exact ownership and evidence boundary
+### U3 closed exact ownership and evidence boundary
 
-U3 is `ACTIVE — USER_PROJECT_SELECTION_READ_CONTAINMENT` and may author exactly:
+U3 authored exactly:
 
 1. `services/VFXComposer.Broker/Registration/UserModeProjectSelectionStore.cs`
 2. `services/VFXComposer.Broker/Ipc/UserModeProjectReadSession.cs`
@@ -36,7 +37,32 @@ U3 is `ACTIVE — USER_PROJECT_SELECTION_READ_CONTAINMENT` and may author exactl
 6. `project/Packages/com.vfxcomposer.unity/Tests/EditMode/W24S6UserModeProjectReadSessionTests.cs`
 7. `project/Packages/com.vfxcomposer.unity/Tests/EditMode/W24S6UserModeProjectReadSessionTests.cs.meta`
 
-U3 is ordinary-route only: an explicit current-user local project selection becomes a restricted session-bound locator for a bounded Worker-side read. It has no privileged route and no evidence claim for Service/SCM, `LocalSystem`, elevated token, privileged enrollment, strict-SACL admission, loaded-image proof, installer, Desktop project I/O, command, mutation, or authority. U3 source is not part of this closeout.
+The exact seven-file U3 source is bound to commit `0123616e21d656b2374809a13aeb2769f0324e7e`; the integration merge is `027ba07448dd6d4a0741a67937427cd2d37b2649`. Accepted closeout evidence is Broker `8/8`, Unity `9/9`, no-tests PASS, unified Broker `179/179`, and manifest SHA-256 prefix `b716…`. U3 is ordinary-route only and has no claim for Service/SCM, privilege, Desktop project I/O, command, mutation, evidence, verdict, or authority.
+
+### U4 active exact ownership and evidence boundary
+
+U4 is `ACTIVE — DESKTOP_USER_MODE_INTEGRATION` and may author exactly:
+
+1. `src/VFXComposer.Protocol/Ipc/UserModeDesktopSessionCodec.cs`
+2. `src/VFXComposer.Protocol.Tests/UserModeDesktopSessionCodecTests.cs`
+3. `src/VFXComposer.Client/IUserModeDesktopSession.cs`
+4. `src/VFXComposer.Client/UserModeBrokerProcessHost.cs`
+5. `src/VFXComposer.Client/UserModeDesktopSession.cs`
+6. `src/VFXComposer.Client.Tests/UserModeDesktopSessionTests.cs`
+7. `services/VFXComposer.Broker/Program.cs`
+8. `services/VFXComposer.Broker/Ipc/UserModeDesktopBrokerHost.cs`
+9. `services/VFXComposer.Broker.Tests/UserModeDesktopBrokerHostTests.cs`
+10. `services/VFXComposer.Broker.Tests/UserModeBrokerProgramTests.cs`
+11. `apps/VFXComposer.Desktop/App.axaml.cs`
+12. `apps/VFXComposer.Desktop/Services/IProjectSelectionDialog.cs`
+13. `apps/VFXComposer.Desktop/Services/AvaloniaProjectSelectionDialog.cs`
+14. `apps/VFXComposer.Desktop/Services/AvaloniaUiDispatcher.cs`
+15. `apps/VFXComposer.Desktop/ViewModels/MainWindowViewModel.cs`
+16. `apps/VFXComposer.Desktop/Views/MainWindow.axaml`
+17. `apps/VFXComposer.Desktop.Tests/UserModeDesktopIntegrationTests.cs`
+18. `apps/VFXComposer.Desktop.Tests/UserModeProjectSelectionTests.cs`
+
+U4 evidence may establish only ordinary-current-user Broker launch/session, explicit selection forwarding, U3 read presentation, restart/disconnect recovery, and strict correlation. Desktop must perform zero project filesystem I/O and has no direct Worker route. Default Broker execution with no arguments must remain stderr `W24FS001`, exit `23`; an explicit U4 mode cannot be rebound as the default or as production GO. SDK globs must cover all leaves, with no project/solution/package/lock changes. U4 provides no Service/SCM, privileged enrollment, strict-SACL, loaded-image, command, mutation, evidence, verdict, or authority claim. U5 is not started.
 
 ## Reuse evidence and non-rebinding
 
