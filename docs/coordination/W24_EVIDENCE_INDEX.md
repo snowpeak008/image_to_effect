@@ -1,10 +1,10 @@
 # W24 coordination evidence index
 
-> **CURRENT EVIDENCE ROUTING — U3 CLOSEOUT / U4 PUBLICATION (2026-08-28).** ADR-005 and this section control new evidence selection. The pre-U0 entries retained below preserve exact history but cannot be selected as proof of the ordinary-user runtime or treated as current dependencies/blockers.
+> **CURRENT EVIDENCE ROUTING — U4 STRUCTURAL REMEDIATION PUBLICATION (2026-08-28).** ADR-005 and this section control new evidence selection. The pre-U0 entries retained below preserve exact history but cannot be selected as proof of the ordinary-user runtime or treated as current dependencies/blockers.
 >
 > Normative U0 architecture token: `USER_MODE_LOCAL_CREATIVE_TOOL_V1`.
 
-## Current U3 closeout evidence and U4 publication boundary
+## Current U4 structural-remediation evidence boundary
 
 - U0 is `CLOSED — USER_MODE_ARCHITECTURE_SIMPLIFICATION / DOCS ONLY` at commit `53c1eeb4577a7067d8702fdea9866adf01733191`; its baseline started at `038d1b0ef1675fd6bd12c2b1cd196ff17546917b`.
 - U0 owned exactly seven documents:
@@ -19,7 +19,8 @@
 - U1 is `CLOSED / INTEGRATED` at commit `48cd27103f8fe0c510770b1584b326f55fca3485`; its declared gates are complete. Its evidence does not prove Desktop integration, project read, arbitrary-path admission, or authority.
 - U2 is `CLOSED / INTEGRATED` at commit `4b2f9a81a82911d68b8b64864ae05a03f9690b2e`. Its audit recorded `P1=3`; one remediation then closed with three `42/42` runs and Broker `171/171`. No second independent audit is claimed by that remediation evidence.
 - U3 is `CLOSED / INTEGRATED — USER_PROJECT_SELECTION_READ_CONTAINMENT`: source commit `0123616e21d656b2374809a13aeb2769f0324e7e`, merged at `027ba07448dd6d4a0741a67937427cd2d37b2649`; exact seven files; Broker target `8/8`; Unity EditMode `9/9`; no-tests PASS; unified Broker `179/179`; controller-supplied manifest SHA-256 prefix `b716…`.
-- This single closeout/publication writes only the three current coordination sections. It creates no source, handoff, audit verdict, or U5 evidence. Its only active publication is U4 below.
+- The first U4 writer is `STOPPED / UNCOMMITTED`: it referenced a nonexistent `VFXComposer.UnityWorker.exe`, launched before explicit selection, accepted selection before strict C2 locator acknowledgement, and crossed its 18-file ownership into `apps/VFXComposer.Desktop.Tests/NoProjectAccessSurfaceTests.cs`. Its isolated bytes are not evidence and make no real Worker/E2E claim.
+- This structural-remediation publication writes only the three current coordination sections. It creates no source, handoff, audit verdict, Worker artifact, E2E receipt, or U5 evidence. Its only active publication is the corrected U4 boundary below; U5 remains `NOT STARTED`.
 
 The exact current DAG is `U0 -> U1`; `U0 -> U2`; `U1 + U2 -> U3`; `U3 -> U4 -> U5 -> U6`. U1 combines C3+W1 actual Unity Worker connector; U2 is ordinary-user child-process/pipe/nonce/session/cleanup; U3 is project selection/read containment; U4 Desktop integration; U5 local E2E; U6 final audit.
 
@@ -39,9 +40,9 @@ U3 authored exactly:
 
 The exact seven-file U3 source is bound to commit `0123616e21d656b2374809a13aeb2769f0324e7e`; the integration merge is `027ba07448dd6d4a0741a67937427cd2d37b2649`. Accepted closeout evidence is Broker `8/8`, Unity `9/9`, no-tests PASS, unified Broker `179/179`, and manifest SHA-256 prefix `b716…`. U3 is ordinary-route only and has no claim for Service/SCM, privilege, Desktop project I/O, command, mutation, evidence, verdict, or authority.
 
-### U4 active exact ownership and evidence boundary
+### U4 stopped first writer and active exact ownership/evidence boundary
 
-U4 is `ACTIVE — DESKTOP_USER_MODE_INTEGRATION` and may author exactly:
+U4 is `ACTIVE — DESKTOP_USER_MODE_INTEGRATION / STRUCTURAL REMEDIATION` and may author exactly these 19 files:
 
 1. `src/VFXComposer.Protocol/Ipc/UserModeDesktopSessionCodec.cs`
 2. `src/VFXComposer.Protocol.Tests/UserModeDesktopSessionCodecTests.cs`
@@ -61,8 +62,31 @@ U4 is `ACTIVE — DESKTOP_USER_MODE_INTEGRATION` and may author exactly:
 16. `apps/VFXComposer.Desktop/Views/MainWindow.axaml`
 17. `apps/VFXComposer.Desktop.Tests/UserModeDesktopIntegrationTests.cs`
 18. `apps/VFXComposer.Desktop.Tests/UserModeProjectSelectionTests.cs`
+19. `apps/VFXComposer.Desktop.Tests/NoProjectAccessSurfaceTests.cs`
 
-U4 evidence may establish only ordinary-current-user Broker launch/session, explicit selection forwarding, U3 read presentation, restart/disconnect recovery, and strict correlation. Desktop must perform zero project filesystem I/O and has no direct Worker route. Default Broker execution with no arguments must remain stderr `W24FS001`, exit `23`; an explicit U4 mode cannot be rebound as the default or as production GO. SDK globs must cover all leaves, with no project/solution/package/lock changes. U4 provides no Service/SCM, privileged enrollment, strict-SACL, loaded-image, command, mutation, evidence, verdict, or authority claim. U5 is not started.
+U4 evidence may establish only ordinary-current-user component behavior: Broker starts no Worker until explicit selection; the path is exactly `Path.Combine(AppContext.BaseDirectory, "VFXComposer.UnityWorker.exe")`; the selected canonical root becomes `WorkingDirectory`; U2 admission precedes sending the U3 locator; strict C2 ACK precedes `SelectAccepted`; and reselect/restart disposes the old Worker/session. Desktop must perform zero project filesystem I/O and has no direct Worker route. Component tests may use a scripted peer only; they cannot prove the real Worker artifact or E2E. Default Broker execution with no arguments remains stderr `W24FS001`, exit `23`; an explicit U4 mode cannot be rebound as the default or production GO. SDK globs cover all U4 leaves, with no project/solution/package/lock changes. U4 provides no Service/SCM, privileged enrollment, strict-SACL, loaded-image, command, mutation, evidence, verdict, or authority claim.
+
+### U5 planned evidence ownership — not started
+
+U5 is `NOT STARTED`. Its planned exact 15-file boundary is:
+
+1. `services/VFXComposer.UnityWorker/VFXComposer.UnityWorker.csproj`
+2. `services/VFXComposer.UnityWorker/packages.lock.json`
+3. `services/VFXComposer.UnityWorker/Program.cs`
+4. `services/VFXComposer.UnityWorker/UserModeUnityWorkerHost.cs`
+5. `services/VFXComposer.UnityWorker/UserModeWorkerBootstrapPeerCodec.cs`
+6. `tests/VFXComposer.LocalE2E.Tests/VFXComposer.LocalE2E.Tests.csproj`
+7. `tests/VFXComposer.LocalE2E.Tests/packages.lock.json`
+8. `tests/VFXComposer.LocalE2E.Tests/UserModeLocalE2EFixture.cs`
+9. `tests/VFXComposer.LocalE2E.Tests/UserModeLocalE2EHappyPathTests.cs`
+10. `tests/VFXComposer.LocalE2E.Tests/UserModeLocalE2EAdversarialTests.cs`
+11. `tests/VFXComposer.LocalE2E.Tests/UserModeLocalE2ECrashCleanupTests.cs`
+12. `tests/VFXComposer.LocalE2E.Tests/UserModeLocalE2EContractTests.cs`
+13. `VFXComposer.sln`
+14. `eng/run-user-mode-local-e2e.ps1`
+15. `eng/phase2-baseline-roots.json`
+
+Only accepted U5 evidence may establish the fixed standalone `VFXComposer.UnityWorker.exe` artifact and real local Desktop/Broker/Worker E2E. This planned boundary is neither a start signal nor evidence.
 
 ## Reuse evidence and non-rebinding
 
