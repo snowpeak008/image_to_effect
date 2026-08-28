@@ -20,12 +20,19 @@ public sealed partial class App : Application
 
             try
             {
-                desktop.MainWindow = new MainWindow
-                {
-                    DataContext = MainWindowViewModel.CreateDisconnected(
-                        diagnostics,
-                        errorBoundary),
-                };
+                var session = new VFXComposer.Client.UserModeDesktopSession();
+                var window = new MainWindow();
+                var selectionDialog = new AvaloniaProjectSelectionDialog(() => desktop.MainWindow);
+                var viewModel = MainWindowViewModel.CreateUserMode(
+                    session,
+                    selectionDialog,
+                    new AvaloniaUiDispatcher(),
+                    diagnostics,
+                    errorBoundary);
+                window.DataContext = viewModel;
+                desktop.MainWindow = window;
+                desktop.Exit += async (_, _) => await viewModel.DisposeAsync();
+                viewModel.ConnectCommand.Execute(null);
             }
             catch (Exception exception)
             {
