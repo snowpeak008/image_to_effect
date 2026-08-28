@@ -69,7 +69,7 @@ U4 evidence establishes only ordinary-current-user component behavior: Broker st
 
 ### U5 active evidence ownership and acceptance boundary
 
-`WP-USERMODE-LOCAL-E2E` is active and owns exactly these 15 files:
+`WP-USERMODE-LOCAL-E2E` is active and owns exactly these 17 files:
 
 1. `services/VFXComposer.UnityWorker/VFXComposer.UnityWorker.csproj`
 2. `services/VFXComposer.UnityWorker/packages.lock.json`
@@ -86,6 +86,20 @@ U4 evidence establishes only ordinary-current-user component behavior: Broker st
 13. `VFXComposer.sln`
 14. `eng/run-phase2-gate.ps1`
 15. `eng/phase2-baseline-roots.json`
+16. `src/VFXComposer.Client/UserModeDesktopSession.cs`
+17. `src/VFXComposer.Client.Tests/UserModeDesktopSessionTests.cs`
+
+This same-milestone scope correction adds exactly items 16–17; it does not authorize an 18th U5 file. The other 12 U5-new bytes (items 1–12) remain `UNCOMMITTED / UNACCEPTED`. `VFXComposer.sln`, `eng/run-phase2-gate.ps1`, and `eng/phase2-baseline-roots.json` (items 13–15) remain unmodified. This documentation-only correction accepts no source, test, runtime, or E2E evidence and does not change U5's sole-`ACTIVE` status.
+
+The first genuine U5 LocalE2E attempt is `12/17` passed, not an acceptance receipt. Its five open failures are recorded without waiver:
+
+1. **Client product gap:** if the Broker is already dead before `ReadAsync` or `SelectAsync` enters `ExchangeAsync`, `SessionIdFor` throws outside the existing recovery `try/catch`; the session remains `Reading` or `Selecting`, `EnterRecoveryAsync` is not called, and `RestartAsync` is rejected.
+2. **U5-local:** malformed C2 causes an uncaught `WireDecodeException` in the Worker instead of clean exit `31`.
+3. **U5-local:** the reparse test setup cannot create a symbolic link in this environment and needs a safe junction fallback.
+4. **U5-local:** the wrong-user static scan finds its own `CreateUser` assertion literal.
+5. **U5-local:** temporary-project teardown races a lingering file handle after cancellation and needs bounded residue/deletion retry.
+
+The Client correction is acceptance-critical and must not weaken crash recovery: in both `SelectAsync` and `ReadAsync`, `SessionIdFor`, request construction, and `ExchangeAsync` must all be inside the existing recovery `try/catch`. A dead host must transition through `RecoveryRequired` and disposal, then allow `RestartAsync` to reach `ConnectedNoProject`. The existing `UserModeDesktopSessionTests.cs` must genuinely cover pre-exchange inactive-host failure for both read and selection, rather than only an exchange-time failure.
 
 Only accepted U5 evidence may establish a standalone Protocol-only `net8.0-windows` `VFXComposer.UnityWorker.exe` that references Protocol only, with zero Unity source links, Newtonsoft, and `UNITY_INCLUDE_TESTS`. The Worker is the canonical runtime C2 consumer; the Unity package is parity/reference only. A minimum local U2-private `UMB1`/`UMH1` bootstrap ABI copy may be evidenced only by byte-level compatibility and real Broker coverage; it is not a second C2 format and retains `CurrentUserOnly`, nonce, session, generation, PID, and epoch.
 
@@ -94,6 +108,8 @@ The claimed E2E evidence must be driven through public `UserModeDesktopSession` 
 The Worker must send strict C2 locator ACK before actual U3 bounded `LIBRARY_INDEX`/manifest reads and use the selected canonical project as child working directory. Required evidence covers happy path; invalid nonce/session/generation/locator/path/protocol; marker/traversal/reparse/size/JSON rejection; crash/restart/cancel/partial-frame recovery; and zero orphan process, pipe, and temporary-project residue. HandleProbe, startup hooks, scripted/fake peers, Service/SCM, privilege, SACL, and substitutes cannot be accepted as product or E2E evidence. Wrong-user evidence is only `CurrentUserOnly` static/IL plus existing unit evidence: no created account and no literal wrong-user E2E claim. Default Broker must still be `W24FS001`/exit `23`.
 
 The only final gate evidence is one execution of the extended existing `eng/run-phase2-gate.ps1`; no independent E2E runner is a U5 artifact. If fresh assets are necessary, accepted evidence must show an approved local feed and unique ignored temporary locks, no pre-existing tracked-lock drift, and no copied `bin`/`obj`. U6 and AI A0 remain not started, and the post-U6 AI two-channel plan cannot be selected as U5 evidence.
+
+No stale-baseline unified gate is run or accepted for this documentation-only correction: it is a U5 same-milestone scope correction with no source acceptance. That exception does not relax the final-gate requirement above.
 
 ## Reuse evidence and non-rebinding
 
