@@ -1,24 +1,36 @@
 # W24 work-package registry
 
-> **CURRENT REGISTRY — ADR-005 U0 REBASE (2026-08-28).** Only U0-U6 below are current delivery nodes. Every pre-U0 package entry retained later in this file is historical provenance, not an active contract, dependency, blocker, or audit queue.
+> **CURRENT REGISTRY — U1+U2 INTEGRATION CLOSEOUT / U3 PUBLICATION (2026-08-28).** Only U0-U6 below are current delivery nodes. Every pre-U0 package entry retained later in this file is historical provenance, not an active contract, dependency, blocker, or audit queue.
 >
 > Normative U0 architecture token: `USER_MODE_LOCAL_CREATIVE_TOOL_V1`.
 
-## Current seven-node registry
+## Current seven-node registry and integration status
 
 Exact DAG: `U0 -> U1`; `U0 -> U2`; `U1 + U2 -> U3`; `U3 -> U4 -> U5 -> U6`.
 
 | Node | Contract | Acceptance boundary |
 |---|---|---|
-| U0 `USER_MODE_ARCHITECTURE_SIMPLIFICATION` | Modify exactly ADR-004, ADR-005, Phase Plan, Phase2 Report, Program Control, Registry, and Evidence Index. No source, M1/M2 merge, handoff micro-package, product command, Unity, or network. | The seven docs agree; specified docs gate passes; exactly one commit from the declared baseline. Architecture-only, no runtime GO. |
-| U1 `C3_W1_ACTUAL_UNITY_WORKER_CONNECTOR` | Combined C3 plus W1: one canonical C1/C2-compatible adapter and actual ordinary-user Unity Worker connector. Review the stopped M1 12-file candidate without inheriting or merging it automatically. | Strict schema/vector/codec parity, connector lifecycle and negatives; no second wire contract, Desktop integration, arbitrary path, or authority. |
-| U2 `USER_MODE_CHILD_PIPE_SESSION` | Ordinary-user Broker/Worker child launch, current-user-SID local pipe, random pipe name, one-use nonce, generation, exact parent/child handle and process epoch, revoke/cleanup/crash containment. | Cross-user, replay/stale, PID reuse, unexpected path, leak, crash, disconnect and orphan negatives. No Service/SCM/privilege/SACL/loaded-image/enrollment claim. |
-| U3 `USER_PROJECT_SELECTION_READ_CONTAINMENT` | Explicit user project selection becomes a session-bound restricted locator; Worker performs bounded read; Broker routes and correlates. | Wrong root/path, locator drift, reselect/restart/revoke and protocol negatives; zero Desktop project I/O. |
+| U0 `USER_MODE_ARCHITECTURE_SIMPLIFICATION` | `CLOSED`; docs-only architecture rebase in commit `53c1eeb4577a7067d8702fdea9866adf01733191`. | Architecture-only, no runtime GO. |
+| U1 `C3_W1_ACTUAL_UNITY_WORKER_CONNECTOR` | `CLOSED / INTEGRATED`; commit `48cd27103f8fe0c510770b1584b326f55fca3485`; declared U1 gates complete. | Strict schema/vector/codec parity and connector lifecycle negatives only; no second wire contract, Desktop integration, arbitrary path, project read, or authority. |
+| U2 `USER_MODE_CHILD_PIPE_SESSION` | `CLOSED / INTEGRATED`; commit `4b2f9a81a82911d68b8b64864ae05a03f9690b2e`; the initial audit recorded `P1=3`, and one remediation closed with `42/42` three times plus Broker `171/171`. | The remediation result is not represented as a second independent-audit verdict. No Service/SCM/privilege/SACL/loaded-image/enrollment claim. |
+| U3 `USER_PROJECT_SELECTION_READ_CONTAINMENT` | `ACTIVE`; exact seven-file ownership below. Explicit user project selection becomes a session-bound restricted locator; Worker performs bounded read; Broker routes and correlates. | Wrong root/path, locator drift, reselect/restart/revoke and protocol negatives; zero Desktop project I/O and no privileged route. |
 | U4 `DESKTOP_USER_MODE_INTEGRATION` | Desktop launches/connects through U2 and presents U3 project/read/recovery state. | No Desktop-to-Worker bypass, caller-path trust, mutation, verdict, or authority. |
 | U5 `LOCAL_USER_MODE_E2E` | Local ordinary-user Desktop/Unity-host to Broker/Worker read across exact release topology. | Full wrong-user/session/project/protocol/path/crash matrix and residue-free teardown; no installed-service or hostile-same-user claim. |
 | U6 `USER_MODE_FINAL_AUDIT` | Independent frozen-byte/source/receipt/provenance audit. | No source edits; all declared gates replay; P0/P1/P2=0 for scoped GO. |
 
-U1 and U2 may run in parallel only with disjoint exact owned files. U3 cannot publish until both close. There are no other current nodes.
+U1 and U2 ran with disjoint exact ownership and are now closed/integrated. U3 is the sole active current node; no U3 source is included in this integration closeout. There are no other current nodes.
+
+### U3 exact active ownership
+
+1. `services/VFXComposer.Broker/Registration/UserModeProjectSelectionStore.cs`
+2. `services/VFXComposer.Broker/Ipc/UserModeProjectReadSession.cs`
+3. `services/VFXComposer.Broker.Tests/UserModeProjectSelectionReadTests.cs`
+4. `project/Packages/com.vfxcomposer.unity/Editor/W24/S6/Worker/W24S6UserModeProjectReadSession.cs`
+5. `project/Packages/com.vfxcomposer.unity/Editor/W24/S6/Worker/W24S6UserModeProjectReadSession.cs.meta`
+6. `project/Packages/com.vfxcomposer.unity/Tests/EditMode/W24S6UserModeProjectReadSessionTests.cs`
+7. `project/Packages/com.vfxcomposer.unity/Tests/EditMode/W24S6UserModeProjectReadSessionTests.cs.meta`
+
+U3 is limited to ordinary explicit current-user local project paths, converted to a restricted session-bound locator and consumed for a bounded Worker-only read. It must not introduce a privileged route, Service/SCM action, elevated token, privileged enrollment, strict-SACL gate, loaded-image proof, installer, Desktop project I/O, command, mutation, or authority.
 
 ## Current trust and reuse rules
 

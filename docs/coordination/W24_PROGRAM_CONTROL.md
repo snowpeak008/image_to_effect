@@ -1,17 +1,19 @@
 # W24 program control
 
-> **CURRENT CONTROL PLANE — U0 USER-MODE REBASE (2026-08-28).** This section and ADR-005 supersede the pre-U0 control ledger retained below. Old Service/SCM/privileged nodes are historical only and are neither active, schedulable, auditable, nor blockers.
+> **CURRENT CONTROL PLANE — U1+U2 INTEGRATION CLOSEOUT / U3 PUBLICATION (2026-08-28).** This section and ADR-005 supersede the pre-U0 control ledger retained below. Old Service/SCM/privileged nodes are historical only and are neither active, schedulable, auditable, nor blockers.
 >
 > Normative U0 architecture token: `USER_MODE_LOCAL_CREATIVE_TOOL_V1`.
 
-## U0 current state
+## Current user-mode integration state
 
 | Item | Current state | Boundary |
 |---|---|---|
-| Architecture | `U0 — USER_MODE_ARCHITECTURE_SIMPLIFICATION / DOCS ONLY` | Single-user local trusted authoring tool; no runtime or production GO. |
-| Runtime | `NO-GO` | No source is owned or merged by U0. Existing `W24FS001`/23 fail-closed behavior remains until later U-nodes replace it through audited work. |
-| Writers | `M1 STOPPED; M2 STOPPED` | M1's uncommitted 12-file candidate is U1 review input only. M2 `fa8843be` is historical and never enters this line. |
-| Progress | `45/100 planning point; 42%-48% band` | Frozen ADR-005 weighted algorithm. Remaining plan is approximately 45%-55% shorter than the superseded privileged route. |
+| U0 architecture | `CLOSED — USER_MODE_ARCHITECTURE_SIMPLIFICATION / DOCS ONLY` | Commit `53c1eeb4577a7067d8702fdea9866adf01733191`; single-user local trusted authoring architecture only, with no runtime or production GO. |
+| U1 Worker connector | `CLOSED / INTEGRATED — C3_W1_ACTUAL_UNITY_WORKER_CONNECTOR` | Commit `48cd27103f8fe0c510770b1584b326f55fca3485`; declared U1 gates are complete. No Desktop integration, project read, arbitrary path, or authority claim. |
+| U2 child-pipe session | `CLOSED / INTEGRATED — USER_MODE_CHILD_PIPE_SESSION` | Commit `4b2f9a81a82911d68b8b64864ae05a03f9690b2e`; its audit recorded `P1=3`, then one remediation closed with `42/42` three times and Broker `171/171`. This is not a claim of a second independent audit. |
+| U3 selection/read | `ACTIVE — USER_PROJECT_SELECTION_READ_CONTAINMENT` | Exact seven-file publication below; this integration closeout writes no U3 source. |
+| Runtime | `NO-GO` | Existing `W24FS001`/23 fail-closed behavior remains until U3-U6 complete their own declared gates. |
+| Planning baseline | `45/100 planning point; 42%-48% band` | Frozen ADR-005 weighted algorithm. Remaining plan is approximately 45%-55% shorter than the superseded privileged route. |
 
 The product trusts the current logged-in user, intentionally launched Desktop/Broker/Worker or Unity host, and explicit user-selected project. It does not defend against malicious same-user software, administrator/kernel control, or offline tampering. It must defend cross-user pipe access, stale/cross-generation sessions, wrong project, protocol drift, PID reuse, unexpected release-layout path, leakage, crash/disconnect, and orphan cleanup.
 
@@ -21,13 +23,27 @@ The exact current seven-node DAG is:
 
 | Node | Control identity | Publication dependency |
 |---|---|---|
-| U0 | Architecture simplification; these seven docs; one docs gate and one commit; no handoff micro-package. | Current baseline. |
-| U1 | Combined C3+W1 actual Unity Worker connector. | U0. |
-| U2 | Ordinary-user Broker/Worker child process, current-user-SID random pipe, one-use nonce, generation, handle/epoch session and cleanup. | U0; may parallel U1 with disjoint ownership. |
-| U3 | Explicit user project selection and restricted read containment. | U1 + U2. |
+| U0 | `CLOSED` architecture simplification; seven docs, one docs gate and one commit; no handoff micro-package. | Current baseline. |
+| U1 | `CLOSED / INTEGRATED` combined C3+W1 actual Unity Worker connector, commit `48cd27103f8fe0c510770b1584b326f55fca3485`. | U0. |
+| U2 | `CLOSED / INTEGRATED` ordinary-user Broker/Worker child process, pipe, nonce, generation, handle/epoch session and cleanup, commit `4b2f9a81a82911d68b8b64864ae05a03f9690b2e`. | U0; parallel U1 ownership is complete. |
+| U3 | `ACTIVE` explicit user project selection and restricted read containment. | U1 + U2 closed integration outputs. |
 | U4 | Desktop integration with zero direct project I/O. | U3. |
 | U5 | Local ordinary-user E2E and adversarial/cleanup matrix. | U4. |
 | U6 | Independent final audit, no source edits, scoped P0/P1/P2=0. | U5. |
+
+### U3 active exact ownership
+
+U3 may author exactly these seven files and no others:
+
+1. `services/VFXComposer.Broker/Registration/UserModeProjectSelectionStore.cs`
+2. `services/VFXComposer.Broker/Ipc/UserModeProjectReadSession.cs`
+3. `services/VFXComposer.Broker.Tests/UserModeProjectSelectionReadTests.cs`
+4. `project/Packages/com.vfxcomposer.unity/Editor/W24/S6/Worker/W24S6UserModeProjectReadSession.cs`
+5. `project/Packages/com.vfxcomposer.unity/Editor/W24/S6/Worker/W24S6UserModeProjectReadSession.cs.meta`
+6. `project/Packages/com.vfxcomposer.unity/Tests/EditMode/W24S6UserModeProjectReadSessionTests.cs`
+7. `project/Packages/com.vfxcomposer.unity/Tests/EditMode/W24S6UserModeProjectReadSessionTests.cs.meta`
+
+Its only route is an explicit current-user local project selection converted into a session-bound restricted locator and a bounded Worker-side read. It has no privileged route: no Service/SCM, `LocalSystem`, elevated token, privileged enrollment, strict-SACL admission, loaded-image proof, installer, or authority claim. U3 source is not started by this closeout.
 
 C1/C2 are accepted reuse inputs; ordinary-user-compatible P1/S1 fragments require review in their U-node. D1/D1R, ServiceHost/install, I1, R1, A1, B1 and the old privileged E2E/audit chain must not continue and must not block a U-node. Windows Service/SCM, `LocalSystem`, privileged enrollment, `SeSecurityPrivilege`, `SeRestorePrivilege`, strict-SACL live admission, loaded-image proof, privileged issuer and ServiceHost `Running` are not product prerequisites.
 

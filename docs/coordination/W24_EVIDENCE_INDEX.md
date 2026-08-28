@@ -1,14 +1,13 @@
 # W24 coordination evidence index
 
-> **CURRENT EVIDENCE ROUTING — U0 USER-MODE REBASE (2026-08-28).** ADR-005 and this section control new evidence selection. The pre-U0 entries retained below preserve exact history but cannot be selected as proof of the ordinary-user runtime or treated as current dependencies/blockers.
+> **CURRENT EVIDENCE ROUTING — U1+U2 INTEGRATION CLOSEOUT / U3 PUBLICATION (2026-08-28).** ADR-005 and this section control new evidence selection. The pre-U0 entries retained below preserve exact history but cannot be selected as proof of the ordinary-user runtime or treated as current dependencies/blockers.
 >
 > Normative U0 architecture token: `USER_MODE_LOCAL_CREATIVE_TOOL_V1`.
 
-## U0 architecture evidence boundary
+## Current U1+U2 integration evidence and U3 publication boundary
 
-- Baseline branch: `codex/u0-user-mode-architecture`.
-- Exact starting commit: `038d1b0ef1675fd6bd12c2b1cd196ff17546917b`.
-- U0 owns exactly seven documents:
+- U0 is `CLOSED — USER_MODE_ARCHITECTURE_SIMPLIFICATION / DOCS ONLY` at commit `53c1eeb4577a7067d8702fdea9866adf01733191`; its baseline started at `038d1b0ef1675fd6bd12c2b1cd196ff17546917b`.
+- U0 owned exactly seven documents:
   1. `docs/rules/ADR-005_USER_MODE_BROKER_WORKER_ARCHITECTURE.md` (new);
   2. `docs/rules/ADR-004_WINDOWS_BROKER_INSTALLATION_AND_PRODUCTION_READ.md` (historical body retained; top supersession notice only);
   3. `docs/stage-notes/W24_STANDALONE_DESKTOP_PHASE_PLAN.md`;
@@ -16,12 +15,28 @@
   5. `docs/coordination/W24_PROGRAM_CONTROL.md`;
   6. `docs/coordination/W24_WORK_PACKAGE_REGISTRY.md`;
   7. `docs/coordination/W24_EVIDENCE_INDEX.md`.
-- U0 accepts no source/binary/runtime receipt, performs no M1/M2 merge, and writes no handoff micro-package.
-- Required validation is `eng/run-phase2-gate.ps1 -Milestone u0-user-mode-architecture -MutableRoot docs/rules,docs/stage-notes,docs/coordination`; its durable output is the U0 gate evidence. One final commit binds the seven-document rebase.
+- U0 accepted no source/binary/runtime receipt, performed no M1/M2 merge, and wrote no handoff micro-package.
+- U1 is `CLOSED / INTEGRATED` at commit `48cd27103f8fe0c510770b1584b326f55fca3485`; its declared gates are complete. Its evidence does not prove Desktop integration, project read, arbitrary-path admission, or authority.
+- U2 is `CLOSED / INTEGRATED` at commit `4b2f9a81a82911d68b8b64864ae05a03f9690b2e`. Its audit recorded `P1=3`; one remediation then closed with three `42/42` runs and Broker `171/171`. No second independent audit is claimed by that remediation evidence.
+- This one integration closeout creates no audit, handoff, or micro-receipt. Its only new publication is the active U3 ownership declaration below.
 
 The exact current DAG is `U0 -> U1`; `U0 -> U2`; `U1 + U2 -> U3`; `U3 -> U4 -> U5 -> U6`. U1 combines C3+W1 actual Unity Worker connector; U2 is ordinary-user child-process/pipe/nonce/session/cleanup; U3 is project selection/read containment; U4 Desktop integration; U5 local E2E; U6 final audit.
 
 The threat/evidence claim is deliberately narrow: current user and intentionally launched local processes/project choice are trusted; cross-user, stale session, wrong project, protocol drift, PID reuse, unexpected path, leakage and crash are defended; same-user malware, admin/kernel and offline attacks are out of scope. Hashes/signatures prove release integrity only.
+
+### U3 active exact ownership and evidence boundary
+
+U3 is `ACTIVE — USER_PROJECT_SELECTION_READ_CONTAINMENT` and may author exactly:
+
+1. `services/VFXComposer.Broker/Registration/UserModeProjectSelectionStore.cs`
+2. `services/VFXComposer.Broker/Ipc/UserModeProjectReadSession.cs`
+3. `services/VFXComposer.Broker.Tests/UserModeProjectSelectionReadTests.cs`
+4. `project/Packages/com.vfxcomposer.unity/Editor/W24/S6/Worker/W24S6UserModeProjectReadSession.cs`
+5. `project/Packages/com.vfxcomposer.unity/Editor/W24/S6/Worker/W24S6UserModeProjectReadSession.cs.meta`
+6. `project/Packages/com.vfxcomposer.unity/Tests/EditMode/W24S6UserModeProjectReadSessionTests.cs`
+7. `project/Packages/com.vfxcomposer.unity/Tests/EditMode/W24S6UserModeProjectReadSessionTests.cs.meta`
+
+U3 is ordinary-route only: an explicit current-user local project selection becomes a restricted session-bound locator for a bounded Worker-side read. It has no privileged route and no evidence claim for Service/SCM, `LocalSystem`, elevated token, privileged enrollment, strict-SACL admission, loaded-image proof, installer, Desktop project I/O, command, mutation, or authority. U3 source is not part of this closeout.
 
 ## Reuse evidence and non-rebinding
 
