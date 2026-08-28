@@ -1,6 +1,6 @@
 # W24 program control
 
-> **CURRENT CONTROL PLANE — U3 CLOSEOUT / U4 PUBLICATION (2026-08-28).** This section and ADR-005 supersede the pre-U0 control ledger retained below. Old Service/SCM/privileged nodes are historical only and are neither active, schedulable, auditable, nor blockers.
+> **CURRENT CONTROL PLANE — U4 STRUCTURAL REMEDIATION PUBLICATION (2026-08-28).** This section and ADR-005 supersede the pre-U0 control ledger retained below. Old Service/SCM/privileged nodes are historical only and are neither active, schedulable, auditable, nor blockers.
 >
 > Normative U0 architecture token: `USER_MODE_LOCAL_CREATIVE_TOOL_V1`.
 
@@ -12,8 +12,9 @@
 | U1 Worker connector | `CLOSED / INTEGRATED — C3_W1_ACTUAL_UNITY_WORKER_CONNECTOR` | Commit `48cd27103f8fe0c510770b1584b326f55fca3485`; declared U1 gates are complete. No Desktop integration, project read, arbitrary path, or authority claim. |
 | U2 child-pipe session | `CLOSED / INTEGRATED — USER_MODE_CHILD_PIPE_SESSION` | Commit `4b2f9a81a82911d68b8b64864ae05a03f9690b2e`; its audit recorded `P1=3`, then one remediation closed with `42/42` three times and Broker `171/171`. This is not a claim of a second independent audit. |
 | U3 selection/read | `CLOSED / INTEGRATED — USER_PROJECT_SELECTION_READ_CONTAINMENT` | Source commit `0123616e21d656b2374809a13aeb2769f0324e7e`, merged at `027ba07448dd6d4a0741a67937427cd2d37b2649`; exact seven files; Broker target `8/8`, Unity EditMode `9/9`, no-tests PASS, unified Broker `179/179`, manifest SHA-256 prefix `b716…`. |
-| U4 Desktop integration | `ACTIVE — DESKTOP_USER_MODE_INTEGRATION` | Exact 18-file publication below. Ordinary-current-user launch/selection/read presentation only; this closeout writes no U4 source. |
-| Runtime | `NO-GO` | Default Broker launch with no arguments remains stderr `W24FS001`, exit `23`; U5 is not started and production remains NO-GO through U5 plus U6. |
+| U4 Desktop integration | `ACTIVE — DESKTOP_USER_MODE_INTEGRATION / STRUCTURAL REMEDIATION` | The first writer is `STOPPED / UNCOMMITTED`; U4 is republished with exact 19-file ownership and the corrected launch/ACK boundary below. |
+| U5 local E2E | `NOT STARTED` | Planned exact 15-file standalone Worker artifact and real local E2E contract below; none of those files or claims belongs to U4. |
+| Runtime | `NO-GO` | Default Broker launch with no arguments remains stderr `W24FS001`, exit `23`; production remains NO-GO through U5 plus U6. |
 | Planning baseline | `45/100 planning point; 42%-48% band` | Frozen ADR-005 weighted algorithm. Remaining plan is approximately 45%-55% shorter than the superseded privileged route. |
 
 The product trusts the current logged-in user, intentionally launched Desktop/Broker/Worker or Unity host, and explicit user-selected project. It does not defend against malicious same-user software, administrator/kernel control, or offline tampering. It must defend cross-user pipe access, stale/cross-generation sessions, wrong project, protocol drift, PID reuse, unexpected release-layout path, leakage, crash/disconnect, and orphan cleanup.
@@ -28,8 +29,8 @@ The exact current seven-node DAG is:
 | U1 | `CLOSED / INTEGRATED` combined C3+W1 actual Unity Worker connector, commit `48cd27103f8fe0c510770b1584b326f55fca3485`. | U0. |
 | U2 | `CLOSED / INTEGRATED` ordinary-user Broker/Worker child process, pipe, nonce, generation, handle/epoch session and cleanup, commit `4b2f9a81a82911d68b8b64864ae05a03f9690b2e`. | U0; parallel U1 ownership is complete. |
 | U3 | `CLOSED / INTEGRATED` explicit user project selection and restricted Worker-only read containment, source commit `0123616e21d656b2374809a13aeb2769f0324e7e`. | U1 + U2 closed integration outputs. |
-| U4 | `ACTIVE` Desktop ordinary-user launch, explicit selection, read presentation and fail-closed recovery with zero direct project I/O. | U3 closed integration output. |
-| U5 | Local ordinary-user E2E and adversarial/cleanup matrix. | U4. |
+| U4 | `ACTIVE / STRUCTURAL REMEDIATION` Desktop ordinary-user launch, explicit selection, read presentation and fail-closed recovery with zero direct project I/O; the first writer stopped uncommitted. | U3 closed integration output. |
+| U5 | `NOT STARTED` standalone ordinary-user Worker artifact plus real local E2E and adversarial/cleanup matrix. | Accepted U4. |
 | U6 | Independent final audit, no source edits, scoped P0/P1/P2=0. | U5. |
 
 ### U3 closed evidence
@@ -46,9 +47,11 @@ U3 authored exactly these seven files and no others:
 
 U3 is closed at source commit `0123616e21d656b2374809a13aeb2769f0324e7e` and integrated by merge commit `027ba07448dd6d4a0741a67937427cd2d37b2649`. Its closeout records Broker target `8/8`, Unity EditMode `9/9`, no-tests PASS, unified Broker `179/179`, and controller-supplied manifest SHA-256 prefix `b716…`. Its route remains only an explicit current-user local project selection converted into a session-bound restricted locator and a bounded Worker-side read; it grants no Desktop project I/O, command, mutation, evidence, verdict, or authority.
 
-### U4 active exact ownership
+### U4 stopped first writer and active exact ownership
 
-U4 may author exactly these 18 files and no others:
+The first U4 writer is `STOPPED / UNCOMMITTED`. Review found that it targeted a nonexistent `VFXComposer.UnityWorker.exe`, launched the Worker before explicit selection, ordered selection acceptance before the strict C2 locator acknowledgement, and touched an existing Desktop test outside its published ownership. Its isolated worktree bytes are not integrated evidence and make no component, Worker, or E2E claim.
+
+The structural-remediation U4 writer may author exactly these 19 files and no others:
 
 1. `src/VFXComposer.Protocol/Ipc/UserModeDesktopSessionCodec.cs`
 2. `src/VFXComposer.Protocol.Tests/UserModeDesktopSessionCodecTests.cs`
@@ -68,8 +71,31 @@ U4 may author exactly these 18 files and no others:
 16. `apps/VFXComposer.Desktop/Views/MainWindow.axaml`
 17. `apps/VFXComposer.Desktop.Tests/UserModeDesktopIntegrationTests.cs`
 18. `apps/VFXComposer.Desktop.Tests/UserModeProjectSelectionTests.cs`
+19. `apps/VFXComposer.Desktop.Tests/NoProjectAccessSurfaceTests.cs`
 
-U4 is ordinary-user only. Desktop may explicitly choose a path and pass it through the Client/Broker U3 contract, but Desktop must perform zero project filesystem I/O and must never connect directly to Worker. `Program.cs` may add only an explicit validated U4 host mode; the default no-argument Broker behavior must remain exactly stderr `W24FS001`, exit `23`, with no listener. U4 adds no Service/SCM, privilege, enrollment, strict-SACL, loaded-image, command, mutation, evidence, verdict, or authority capability. SDK globs must suffice; no project or lock file is owned. U5 is not published or started.
+U4 is ordinary-user only. Broker must start no Worker until explicit project selection. After selection, the Worker path is fixed as `Path.Combine(AppContext.BaseDirectory, "VFXComposer.UnityWorker.exe")`, and the selected canonical project root is the child `WorkingDirectory`; U2 admission must complete, then Broker sends the U3 locator and requires its strict C2 acknowledgement before emitting `SelectAccepted`. Reselect and restart must dispose the old Worker/session before admitting a replacement. Desktop performs zero project filesystem I/O and never connects directly to Worker. Component tests may use a scripted peer, but they cannot claim a real Worker artifact or E2E. `Program.cs` may add only an explicit validated U4 host mode; the default no-argument Broker behavior remains exactly stderr `W24FS001`, exit `23`, with no listener. U4 adds no Service/SCM, privilege, enrollment, strict-SACL, loaded-image, command, mutation, evidence, verdict, or authority capability. SDK globs must suffice; no project or lock file is owned.
+
+### U5 planned exact ownership — not started
+
+U5 is `NOT STARTED`. Its planned exact 15-file ownership is:
+
+1. `services/VFXComposer.UnityWorker/VFXComposer.UnityWorker.csproj`
+2. `services/VFXComposer.UnityWorker/packages.lock.json`
+3. `services/VFXComposer.UnityWorker/Program.cs`
+4. `services/VFXComposer.UnityWorker/UserModeUnityWorkerHost.cs`
+5. `services/VFXComposer.UnityWorker/UserModeWorkerBootstrapPeerCodec.cs`
+6. `tests/VFXComposer.LocalE2E.Tests/VFXComposer.LocalE2E.Tests.csproj`
+7. `tests/VFXComposer.LocalE2E.Tests/packages.lock.json`
+8. `tests/VFXComposer.LocalE2E.Tests/UserModeLocalE2EFixture.cs`
+9. `tests/VFXComposer.LocalE2E.Tests/UserModeLocalE2EHappyPathTests.cs`
+10. `tests/VFXComposer.LocalE2E.Tests/UserModeLocalE2EAdversarialTests.cs`
+11. `tests/VFXComposer.LocalE2E.Tests/UserModeLocalE2ECrashCleanupTests.cs`
+12. `tests/VFXComposer.LocalE2E.Tests/UserModeLocalE2EContractTests.cs`
+13. `VFXComposer.sln`
+14. `eng/run-user-mode-local-e2e.ps1`
+15. `eng/phase2-baseline-roots.json`
+
+Only U5 may create the fixed standalone `VFXComposer.UnityWorker.exe` artifact and claim real Desktop/Broker/Worker E2E. This plan is not publication authority to start U5.
 
 C1/C2 are accepted reuse inputs; ordinary-user-compatible P1/S1 fragments require review in their U-node. D1/D1R, ServiceHost/install, I1, R1, A1, B1 and the old privileged E2E/audit chain must not continue and must not block a U-node. Windows Service/SCM, `LocalSystem`, privileged enrollment, `SeSecurityPrivilege`, `SeRestorePrivilege`, strict-SACL live admission, loaded-image proof, privileged issuer and ServiceHost `Running` are not product prerequisites.
 
