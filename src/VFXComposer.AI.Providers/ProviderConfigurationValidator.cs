@@ -1,5 +1,3 @@
-using System.Net;
-using System.Net.Sockets;
 using VFXComposer.AI.Contracts;
 
 namespace VFXComposer.AI.Providers;
@@ -68,45 +66,10 @@ public static class ProviderConfigurationValidator
     {
         ArgumentNullException.ThrowIfNull(endpoint);
         ArgumentNullException.ThrowIfNull(auth);
-        var uri = endpoint.Uri;
-        if (!uri.IsAbsoluteUri ||
-            uri.AbsoluteUri.Length > EndpointDefinition.MaximumUriLength ||
-            string.IsNullOrEmpty(uri.Host) ||
-            !string.IsNullOrEmpty(uri.UserInfo) ||
-            !string.IsNullOrEmpty(uri.Query) ||
-            !string.IsNullOrEmpty(uri.Fragment))
-        {
-            throw new AiGatewayException(AiErrorCode.EndpointRejected);
-        }
-
-        if (string.Equals(uri.Scheme, Uri.UriSchemeHttps, StringComparison.OrdinalIgnoreCase))
-        {
-            if (endpoint.AllowLoopbackHttp)
-            {
-                throw new AiGatewayException(AiErrorCode.EndpointRejected);
-            }
-
-            return;
-        }
-
-        if (!string.Equals(uri.Scheme, Uri.UriSchemeHttp, StringComparison.OrdinalIgnoreCase) ||
-            !endpoint.AllowLoopbackHttp ||
-            !IsExactLoopbackHost(uri.Host) ||
-            auth.SecretScope != SecretScope.DevelopmentOnly)
+        if (!EndpointPolicy.IsValid(endpoint, auth.SecretScope))
         {
             throw new AiGatewayException(AiErrorCode.EndpointRejected);
         }
     }
 
-    public static bool IsExactLoopbackHost(string host)
-    {
-        if (string.Equals(host, "localhost", StringComparison.OrdinalIgnoreCase))
-        {
-            return true;
-        }
-
-        return IPAddress.TryParse(host, out var address) &&
-            address.AddressFamily is AddressFamily.InterNetwork or AddressFamily.InterNetworkV6 &&
-            IPAddress.IsLoopback(address);
-    }
 }

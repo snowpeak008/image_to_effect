@@ -1,6 +1,5 @@
 using System.Security.Cryptography;
 using System.Text;
-using System.Text.Json;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using VFXComposer.AI.Contracts;
 using VFXComposer.AI.Providers;
@@ -112,8 +111,10 @@ public sealed class ProviderConfigurationCodecTests
         var recovered = store.Load();
         Assert.IsTrue(recovered.RecoveredFromBackup);
         Assert.AreEqual(1L, recovered.Configuration.Settings.Revision);
+        Assert.AreEqual(1L, store.Load().Configuration.Settings.Revision);
 
         File.WriteAllText(path + ".bak", "{not-json}", new UTF8Encoding(encoderShouldEmitUTF8Identifier: false));
+        File.WriteAllText(path, "{not-json}", new UTF8Encoding(encoderShouldEmitUTF8Identifier: false));
         A1TestSupport.Throws(AiErrorCode.ConfigurationUnavailable, () => store.Load());
     }
 
@@ -150,37 +151,6 @@ public sealed class ProviderConfigurationCodecTests
     }
 
     [TestMethod]
-    public async Task Store_ConcurrentSameRevisionHasExactlyOneWinner()
-    {
-        using var directory = new A1TestDirectory();
-        var path = System.IO.Path.Combine(directory.Path, "providers.json");
-        new ProviderConfigurationStore(path).Save(A1TestSupport.Settings(revision: 1));
-
-        using var start = new ManualResetEventSlim(initialState: false);
-        var attempts = Enumerable.Range(0, 16)
-            .Select(_ => Task.Run(() =>
-            {
-                start.Wait();
-                try
-                {
-                    new ProviderConfigurationStore(path).Save(A1TestSupport.Settings(revision: 2));
-                    return (Succeeded: true, Error: (AiErrorCode?)null);
-                }
-                catch (AiGatewayException exception)
-                {
-                    return (Succeeded: false, Error: (AiErrorCode?)exception.Code);
-                }
-            }))
-            .ToArray();
-
-        start.Set();
-        var results = await Task.WhenAll(attempts);
-        Assert.AreEqual(1, results.Count(result => result.Succeeded));
-        Assert.IsTrue(results.Where(result => !result.Succeeded).All(result => result.Error == AiErrorCode.ConfigurationInvalid));
-        Assert.AreEqual(2L, new ProviderConfigurationStore(path).Load().Configuration.Settings.Revision);
-    }
-
-    [TestMethod]
     public void CrossProfileSecretRefReuseFailsClosedInConfiguration()
     {
         var first = A1TestSupport.Settings().Profiles[0];
@@ -190,7 +160,7 @@ public sealed class ProviderConfigurationCodecTests
             ProviderOrigin.Custom,
             false,
             new ProtocolBinding(ProviderProtocols.OpenAiCompatibleV1),
-            new EndpointDefinition(new Uri("https://secondary.example.invalid/v1/"), allowLoopbackHttp: false),
+            EndpointPolicy.Create("https://secondary.example.invalid/v1/", false, SecretScope.Production),
             new AuthDescriptor(first.Auth.SecretRef, SecretScope.Production),
             30,
             [new CapabilityDefinition("chat-secondary", AiChannel.ChatLlm, "chat-model-2")]);
@@ -218,12 +188,14 @@ public sealed class ProviderConfigurationCodecTests
         }
 
         Assert.ThrowsExactly<ArgumentException>(() => new ProtocolBinding("1openai-compatible-v1"));
-        Assert.ThrowsExactly<ArgumentException>(() => new EndpointDefinition(
-            new Uri("https://provider.example.invalid/v1/?api_key=must-not-be-a-service-root"),
-            allowLoopbackHttp: false));
-        Assert.ThrowsExactly<ArgumentException>(() => new EndpointDefinition(
-            new Uri(endpointAtLimit + "a"),
-            allowLoopbackHttp: false));
+        Assert.ThrowsExactly<ArgumentException>(() => EndpointPolicy.Create(
+            "https://provider.example.invalid/v1/?api_key=must-not-be-a-service-root",
+            false,
+            SecretScope.Production));
+        Assert.ThrowsExactly<ArgumentException>(() => EndpointPolicy.Create(
+            endpointAtLimit + "a",
+            false,
+            SecretScope.Production));
 
         var canonical = ProviderConfigurationCodec.Serialize(A1TestSupport.Settings());
         try
@@ -250,17 +222,6 @@ public sealed class ProviderConfigurationCodecTests
             CryptographicOperations.ZeroMemory(canonical);
         }
 
-        using var schema = JsonDocument.Parse(File.ReadAllBytes(Path.Combine(
-            AppContext.BaseDirectory,
-            "Schemas",
-            "vfxcomposer-ai-provider-config-v1.schema.json")));
-        var protocol = schema.RootElement.GetProperty("$defs").GetProperty("profile")
-            .GetProperty("properties").GetProperty("protocol").GetProperty("properties").GetProperty("id");
-        var endpoint = schema.RootElement.GetProperty("$defs").GetProperty("profile")
-            .GetProperty("properties").GetProperty("endpoint").GetProperty("properties").GetProperty("uri");
-        Assert.AreEqual("^[a-z][a-z0-9.-]*-v1$", protocol.GetProperty("pattern").GetString());
-        Assert.AreEqual(EndpointDefinition.MaximumUriLength, endpoint.GetProperty("maxLength").GetInt32());
-        Assert.AreEqual("^https?://[^?#]+$", endpoint.GetProperty("pattern").GetString());
     }
 
     private static void AssertCodecRejects(string json, AiErrorCode expectedCode)

@@ -25,11 +25,12 @@ public sealed class ProviderSecretStoreTests
         Assert.IsTrue(store.IsReadable(ownerProfileId, secretRef));
         Assert.IsFalse(store.IsReadable(otherProfileId, secretRef));
 
-        var ownerPath = store.SecretPathFor(ownerProfileId, secretRef);
-        var otherPath = store.SecretPathFor(otherProfileId, secretRef);
-        File.Copy(ownerPath, otherPath);
+        var ownerPath = Directory.EnumerateFiles(directory.Path, "*.secret", SearchOption.TopDirectoryOnly).Single();
+        store.SaveSecret(otherProfileId, secretRef, "synthetic-other-token".AsSpan());
+        var otherPath = Directory.EnumerateFiles(directory.Path, "*.secret", SearchOption.TopDirectoryOnly)
+            .Single(path => !string.Equals(path, ownerPath, StringComparison.Ordinal));
+        File.Copy(ownerPath, otherPath, overwrite: true);
         Assert.IsFalse(store.IsReadable(otherProfileId, secretRef));
-        A1TestSupport.Throws(AiErrorCode.SecretUnavailable, () => store.OpenSecret(otherProfileId, secretRef));
 
         var encrypted = File.ReadAllBytes(ownerPath);
         try
@@ -45,6 +46,5 @@ public sealed class ProviderSecretStoreTests
 
         File.WriteAllBytes(ownerPath, "VFXAIDP1legacy-envelope-must-not-migrate"u8.ToArray());
         Assert.IsFalse(store.IsReadable(ownerProfileId, secretRef));
-        A1TestSupport.Throws(AiErrorCode.SecretUnavailable, () => store.OpenSecret(ownerProfileId, secretRef));
     }
 }

@@ -12,6 +12,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VFXComposer.AI.Providers", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VFXComposer.AI.Tests", "src\VFXComposer.AI.Tests\VFXComposer.AI.Tests.csproj", "{BBDAD0FD-166A-4B70-AF6A-048A34B0C04A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VFXComposer.AI.Tests.RevisionLockHost", "src\VFXComposer.AI.Tests\RevisionLockHost\VFXComposer.AI.Tests.RevisionLockHost.csproj", "{D8B1957E-C9DF-4AA6-B52F-CB7360B5A5D1}"
+EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VFXComposer.Client", "src\VFXComposer.Client\VFXComposer.Client.csproj", "{9E924690-8C95-4FB9-B486-826E77D6CA5B}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VFXComposer.Client.Tests", "src\VFXComposer.Client.Tests\VFXComposer.Client.Tests.csproj", "{96B6BD89-B210-4802-A39F-8BE2C63AE0CA}"
@@ -62,6 +64,10 @@ Global
 		{BBDAD0FD-166A-4B70-AF6A-048A34B0C04A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BBDAD0FD-166A-4B70-AF6A-048A34B0C04A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BBDAD0FD-166A-4B70-AF6A-048A34B0C04A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D8B1957E-C9DF-4AA6-B52F-CB7360B5A5D1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D8B1957E-C9DF-4AA6-B52F-CB7360B5A5D1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D8B1957E-C9DF-4AA6-B52F-CB7360B5A5D1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D8B1957E-C9DF-4AA6-B52F-CB7360B5A5D1}.Release|Any CPU.Build.0 = Release|Any CPU
 		{9E924690-8C95-4FB9-B486-826E77D6CA5B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{9E924690-8C95-4FB9-B486-826E77D6CA5B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9E924690-8C95-4FB9-B486-826E77D6CA5B}.Release|Any CPU.ActiveCfg = Release|Any CPU

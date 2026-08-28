@@ -435,6 +435,7 @@ $testResults = Join-Path $ReceiptRoot "test-results"
 $commands = @(
     [ordered]@{ phase = "build"; id = "ai-contracts-build"; file = "dotnet"; args = @("build", "src/VFXComposer.AI.Contracts/VFXComposer.AI.Contracts.csproj", "--configuration", "Release", "--no-restore", "-p:RestoreLockedMode=true"); expected = @(0) },
     [ordered]@{ phase = "build"; id = "ai-providers-build"; file = "dotnet"; args = @("build", "src/VFXComposer.AI.Providers/VFXComposer.AI.Providers.csproj", "--configuration", "Release", "--no-restore", "-p:RestoreLockedMode=true"); expected = @(0) },
+    [ordered]@{ phase = "build"; id = "ai-revision-lock-host-build"; file = "dotnet"; args = @("build", "src/VFXComposer.AI.Tests/RevisionLockHost/VFXComposer.AI.Tests.RevisionLockHost.csproj", "--configuration", "Release", "--no-restore", "-p:RestoreLockedMode=true"); expected = @(0) },
     [ordered]@{ phase = "build"; id = "ai-test-build"; file = "dotnet"; args = @("build", "src/VFXComposer.AI.Tests/VFXComposer.AI.Tests.csproj", "--configuration", "Release", "--no-restore", "-p:RestoreLockedMode=true"); expected = @(0) },
     [ordered]@{ phase = "build"; id = "protocol-build"; file = "dotnet"; args = @("build", "src/VFXComposer.Protocol.Tests/VFXComposer.Protocol.Tests.csproj", "--configuration", "Release", "--no-restore", "-p:RestoreLockedMode=true"); expected = @(0) },
     [ordered]@{ phase = "build"; id = "client-build"; file = "dotnet"; args = @("build", "src/VFXComposer.Client.Tests/VFXComposer.Client.Tests.csproj", "--configuration", "Release", "--no-restore", "-p:RestoreLockedMode=true"); expected = @(0) },
@@ -484,6 +485,7 @@ $bindingBeforeTests = @(
     Get-AssemblyIdentity -RelativePath "src/VFXComposer.Protocol.Tests/bin/Release/net8.0/VFXComposer.Protocol.Tests.dll"
     Get-AssemblyIdentity -RelativePath "src/VFXComposer.AI.Contracts/bin/Release/net8.0/VFXComposer.AI.Contracts.dll"
     Get-AssemblyIdentity -RelativePath "src/VFXComposer.AI.Providers/bin/Release/net8.0/VFXComposer.AI.Providers.dll"
+    Get-AssemblyIdentity -RelativePath "src/VFXComposer.AI.Tests/RevisionLockHost/bin/Release/net8.0/VFXComposer.AI.Tests.RevisionLockHost.dll"
     Get-AssemblyIdentity -RelativePath "src/VFXComposer.AI.Tests/bin/Release/net8.0/VFXComposer.AI.Tests.dll"
     Get-AssemblyIdentity -RelativePath "src/VFXComposer.Client.Tests/bin/Release/net8.0/VFXComposer.Client.Tests.dll"
     Get-AssemblyIdentity -RelativePath "src/VFXComposer.Client/bin/Release/net8.0/VFXComposer.Client.dll"
@@ -514,6 +516,7 @@ $bindingAfterTests = @(
     Get-AssemblyIdentity -RelativePath "src/VFXComposer.Protocol.Tests/bin/Release/net8.0/VFXComposer.Protocol.Tests.dll"
     Get-AssemblyIdentity -RelativePath "src/VFXComposer.AI.Contracts/bin/Release/net8.0/VFXComposer.AI.Contracts.dll"
     Get-AssemblyIdentity -RelativePath "src/VFXComposer.AI.Providers/bin/Release/net8.0/VFXComposer.AI.Providers.dll"
+    Get-AssemblyIdentity -RelativePath "src/VFXComposer.AI.Tests/RevisionLockHost/bin/Release/net8.0/VFXComposer.AI.Tests.RevisionLockHost.dll"
     Get-AssemblyIdentity -RelativePath "src/VFXComposer.AI.Tests/bin/Release/net8.0/VFXComposer.AI.Tests.dll"
     Get-AssemblyIdentity -RelativePath "src/VFXComposer.Client.Tests/bin/Release/net8.0/VFXComposer.Client.Tests.dll"
     Get-AssemblyIdentity -RelativePath "src/VFXComposer.Client/bin/Release/net8.0/VFXComposer.Client.dll"

@@ -192,24 +192,17 @@ public sealed class TomProviderDraftImporter
             throw new AiGatewayException(AiErrorCode.ImportRejected);
         }
 
-        Uri endpoint;
         try
         {
-            endpoint = new Uri(baseUrl, UriKind.Absolute);
-            ProviderConfigurationValidator.ValidateEndpoint(
-                new EndpointDefinition(endpoint, allowLoopbackHttp: false),
-                new AuthDescriptor(new SecretRef("tom-import-placeholder"), SecretScope.Production));
+            return EndpointPolicy.Create(
+                baseUrl,
+                allowLoopbackHttp: false,
+                secretScope: SecretScope.Production).Uri;
         }
-        catch (AiGatewayException)
+        catch (ArgumentException)
         {
             throw new AiGatewayException(AiErrorCode.ImportRejected);
         }
-        catch (UriFormatException)
-        {
-            throw new AiGatewayException(AiErrorCode.ImportRejected);
-        }
-
-        return endpoint;
     }
 
     private static string? ParseRelayProtocolSuggestion(ProviderOrigin origin, string relayProtocol)

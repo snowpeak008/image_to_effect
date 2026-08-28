@@ -1,4 +1,3 @@
-using System.Collections.Concurrent;
 using System.Security.Cryptography;
 using VFXComposer.AI.Contracts;
 
@@ -6,43 +5,32 @@ namespace VFXComposer.AI.Providers;
 
 /// <summary>
 /// Current-user non-secret configuration store. Reads never synthesize an empty configuration. Every read-modify-write
-/// operation takes both a process-local gate and an exclusive cross-process lock before it observes a revision.
+/// operation takes <see cref="ProviderConfigurationRevisionLock"/> before it observes a revision.
 /// </summary>
 public sealed class ProviderConfigurationStore
 {
-    private const int LockRetryMilliseconds = 20;
-    private static readonly TimeSpan LockTimeout = TimeSpan.FromSeconds(10);
-    private static readonly ConcurrentDictionary<string, object> ProcessGates = new(StringComparer.OrdinalIgnoreCase);
-
     private readonly string _configurationPath;
     private readonly string _backupPath;
-    private readonly string _lockPath;
-    private readonly object _processGate;
+    private readonly ProviderConfigurationRevisionLock _revisionLock;
 
     public ProviderConfigurationStore(string configurationPath)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(configurationPath);
         _configurationPath = Path.GetFullPath(configurationPath);
         _backupPath = _configurationPath + ".bak";
-        _lockPath = _configurationPath + ".lock";
-        _processGate = ProcessGates.GetOrAdd(_configurationPath, static _ => new object());
+        _revisionLock = new ProviderConfigurationRevisionLock(_configurationPath);
     }
 
     public void Save(AiProviderSettings settings)
     {
         ArgumentNullException.ThrowIfNull(settings);
-        ExecuteUnderLock(() =>
+        ExecuteUnderRevisionLock(() =>
         {
             var current = TryLoadExistingCore();
             ProviderConfigurationValidator.Validate(settings);
             if (current is not null && settings.Revision <= current.Configuration.Settings.Revision)
             {
                 throw new AiGatewayException(AiErrorCode.ConfigurationInvalid);
-            }
-
-            if (current?.RecoveredFromBackup == true)
-            {
-                RestoreRecoveredPrimary(current.Configuration.Settings);
             }
 
             var bytes = ProviderConfigurationCodec.Serialize(settings);
@@ -59,7 +47,7 @@ public sealed class ProviderConfigurationStore
         });
     }
 
-    public ProviderConfigurationStoreReadResult Load() => ExecuteUnderLock(LoadCore);
+    public ProviderConfigurationStoreReadResult Load() => ExecuteUnderRevisionLock(LoadCore);
 
     public bool Exists() => File.Exists(_configurationPath) || File.Exists(_backupPath);
 
@@ -84,6 +72,7 @@ public sealed class ProviderConfigurationStore
 
         if (TryRead(_backupPath, out var backup))
         {
+            RestoreRecoveredPrimary(backup!.Settings);
             return new ProviderConfigurationStoreReadResult(backup!, recoveredFromBackup: true);
         }
 
@@ -103,56 +92,23 @@ public sealed class ProviderConfigurationStore
         }
     }
 
-    private T ExecuteUnderLock<T>(Func<T> operation)
+    private T ExecuteUnderRevisionLock<T>(Func<T> operation)
     {
-        lock (_processGate)
+        try
         {
-            try
-            {
-                using var fileLock = AcquireCrossProcessLock();
-                return operation();
-            }
-            catch (AiGatewayException)
-            {
-                throw;
-            }
-            catch (IOException)
-            {
-                throw new AiGatewayException(AiErrorCode.ConfigurationUnavailable);
-            }
-            catch (UnauthorizedAccessException)
-            {
-                throw new AiGatewayException(AiErrorCode.ConfigurationUnavailable);
-            }
+            return _revisionLock.Execute(operation);
         }
-    }
-
-    private FileStream AcquireCrossProcessLock()
-    {
-        var parent = Path.GetDirectoryName(_lockPath);
-        if (string.IsNullOrEmpty(parent))
+        catch (AiGatewayException)
         {
-            throw new IOException("Provider storage path is invalid.");
+            throw;
         }
-
-        Directory.CreateDirectory(parent);
-        var deadline = DateTime.UtcNow + LockTimeout;
-        while (true)
+        catch (IOException)
         {
-            try
-            {
-                return new FileStream(
-                    _lockPath,
-                    FileMode.OpenOrCreate,
-                    FileAccess.ReadWrite,
-                    FileShare.None,
-                    bufferSize: 1,
-                    FileOptions.WriteThrough);
-            }
-            catch (IOException) when (DateTime.UtcNow < deadline)
-            {
-                Thread.Sleep(LockRetryMilliseconds);
-            }
+            throw new AiGatewayException(AiErrorCode.ConfigurationUnavailable);
+        }
+        catch (UnauthorizedAccessException)
+        {
+            throw new AiGatewayException(AiErrorCode.ConfigurationUnavailable);
         }
     }
 

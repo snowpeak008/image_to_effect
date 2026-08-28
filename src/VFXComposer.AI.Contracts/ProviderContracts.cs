@@ -83,21 +83,17 @@ public sealed class EndpointDefinition
 {
     public const int MaximumUriLength = 2048;
 
-    public EndpointDefinition(Uri uri, bool allowLoopbackHttp)
+    // EndpointPolicy is the sole constructor caller. Keeping this constructor assembly-internal prevents callers
+    // from retaining a non-canonical Uri and makes the policy result the endpoint's only representation.
+    internal EndpointDefinition(Uri canonicalUri, string canonicalWireUri, bool allowLoopbackHttp)
     {
-        ArgumentNullException.ThrowIfNull(uri);
-        if (!uri.IsAbsoluteUri ||
-            uri.AbsoluteUri.Length > MaximumUriLength ||
-            !string.IsNullOrEmpty(uri.Query))
-        {
-            throw new ArgumentException("Endpoint URI must be absolute.", nameof(uri));
-        }
-
-        Uri = uri;
+        Uri = canonicalUri ?? throw new ArgumentNullException(nameof(canonicalUri));
+        CanonicalWireUri = canonicalWireUri ?? throw new ArgumentNullException(nameof(canonicalWireUri));
         AllowLoopbackHttp = allowLoopbackHttp;
     }
 
     public Uri Uri { get; }
+    public string CanonicalWireUri { get; }
     public bool AllowLoopbackHttp { get; }
 
     public override string ToString() => "EndpointDefinition(<redacted>)";
@@ -151,8 +147,15 @@ public sealed class ProviderProfile
         Origin = origin;
         Enabled = enabled;
         Protocol = protocol ?? throw new ArgumentNullException(nameof(protocol));
-        Endpoint = endpoint ?? throw new ArgumentNullException(nameof(endpoint));
-        Auth = auth ?? throw new ArgumentNullException(nameof(auth));
+        var checkedEndpoint = endpoint ?? throw new ArgumentNullException(nameof(endpoint));
+        var checkedAuth = auth ?? throw new ArgumentNullException(nameof(auth));
+        if (!EndpointPolicy.IsValid(checkedEndpoint, checkedAuth.SecretScope))
+        {
+            throw new ArgumentException("Endpoint does not match the declared secret scope.", nameof(endpoint));
+        }
+
+        Endpoint = checkedEndpoint;
+        Auth = checkedAuth;
         if (timeoutSeconds is < 1 or > 300)
         {
             throw new ArgumentOutOfRangeException(nameof(timeoutSeconds));

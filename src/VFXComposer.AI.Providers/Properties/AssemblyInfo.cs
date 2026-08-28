@@ -1,3 +1,3 @@
 using System.Runtime.CompilerServices;
 
-[assembly: InternalsVisibleTo("VFXComposer.AI.Tests")]
+[assembly: InternalsVisibleTo("VFXComposer.AI.Tests.RevisionLockHost")]

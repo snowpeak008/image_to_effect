@@ -21,7 +21,7 @@ internal static class A1TestSupport
             ProviderOrigin.Official,
             enabled,
             new ProtocolBinding(protocolId),
-            new EndpointDefinition(endpoint, endpoint.Scheme == Uri.UriSchemeHttp),
+            EndpointPolicy.Create(endpoint, endpoint.Scheme == Uri.UriSchemeHttp, secretScope),
             new AuthDescriptor(new SecretRef("secret-primary"), secretScope),
             30,
             [

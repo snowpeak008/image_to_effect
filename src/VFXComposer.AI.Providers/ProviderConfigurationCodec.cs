@@ -128,23 +128,16 @@ public static class ProviderConfigurationCodec
                 RequireString(capabilityElement, "modelId")));
         }
 
-        var endpointText = RequireString(endpointElement, "uri");
-        if (endpointText.Length > EndpointDefinition.MaximumUriLength)
-        {
-            throw new AiGatewayException(AiErrorCode.EndpointRejected);
-        }
-
-        Uri endpointUri;
+        var secretScope = ParseEnum<SecretScope>(RequireString(authElement, "secretScope"));
+        EndpointDefinition endpoint;
         try
         {
-            endpointUri = new Uri(endpointText, UriKind.Absolute);
+            endpoint = EndpointPolicy.Create(
+                RequireString(endpointElement, "uri"),
+                RequireBoolean(endpointElement, "allowLoopbackHttp"),
+                secretScope);
         }
-        catch (UriFormatException)
-        {
-            throw new AiGatewayException(AiErrorCode.EndpointRejected);
-        }
-
-        if (endpointUri.AbsoluteUri.Length > EndpointDefinition.MaximumUriLength || !string.IsNullOrEmpty(endpointUri.Query))
+        catch (ArgumentException)
         {
             throw new AiGatewayException(AiErrorCode.EndpointRejected);
         }
@@ -155,10 +148,10 @@ public static class ProviderConfigurationCodec
             ParseEnum<ProviderOrigin>(RequireString(element, "origin")),
             RequireBoolean(element, "enabled"),
             new ProtocolBinding(RequireString(protocolElement, "id")),
-            new EndpointDefinition(endpointUri, RequireBoolean(endpointElement, "allowLoopbackHttp")),
+            endpoint,
             new AuthDescriptor(
                 new SecretRef(RequireString(authElement, "secretRef")),
-                ParseEnum<SecretScope>(RequireString(authElement, "secretScope"))),
+                secretScope),
             RequireInt32(element, "timeoutSeconds"),
             capabilities);
     }
@@ -221,7 +214,7 @@ public static class ProviderConfigurationCodec
         writer.WriteString("id", profile.Protocol.ProtocolId);
         writer.WriteEndObject();
         writer.WriteStartObject("endpoint");
-        writer.WriteString("uri", profile.Endpoint.Uri.AbsoluteUri);
+        writer.WriteString("uri", profile.Endpoint.CanonicalWireUri);
         writer.WriteBoolean("allowLoopbackHttp", profile.Endpoint.AllowLoopbackHttp);
         writer.WriteEndObject();
         writer.WriteStartObject("auth");

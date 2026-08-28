@@ -58,7 +58,10 @@ public sealed class ProviderConfigurationResolver
             throw new AiGatewayException(AiErrorCode.ProtocolNotAllowed);
         }
 
-        ProviderConfigurationValidator.ValidateEndpoint(profile.Endpoint, profile.Auth);
+        if (!EndpointPolicy.IsValid(profile.Endpoint, profile.Auth.SecretScope))
+        {
+            throw new AiGatewayException(AiErrorCode.EndpointRejected);
+        }
         if (!_secrets.IsReadable(profile.Id, profile.Auth.SecretRef))
         {
             throw new AiGatewayException(AiErrorCode.SecretUnavailable);

@@ -29,6 +29,7 @@ PHASE2_NAMES = (
     "vfxcomposer-worker-project-locator-ack-v1.schema.json",
 )
 AI_PROVIDER_CONFIG_NAME = "vfxcomposer-ai-provider-config-v1.schema.json"
+AI_ENDPOINT_VECTOR_PATH = ROOT / "src" / "VFXComposer.AI.Tests" / "EndpointPolicyVectors.json"
 
 
 def typed(type_tag: str) -> dict:
@@ -590,6 +591,55 @@ def main() -> None:
             raise AssertionError("AI provider schema accepted a negative fixture")
         ai_negative_count += 1
 
+    endpoint_vector_payload = strict_json_load(AI_ENDPOINT_VECTOR_PATH.read_text(encoding="utf-8"))
+    if not isinstance(endpoint_vector_payload, dict) or endpoint_vector_payload.get("formatVersion") != 1:
+        raise AssertionError("AI endpoint policy vector corpus is invalid")
+    endpoint_vectors = endpoint_vector_payload.get("vectors")
+    if not isinstance(endpoint_vectors, list) or not endpoint_vectors:
+        raise AssertionError("AI endpoint policy vector corpus is empty")
+
+    endpoint_vector_names: set[str] = set()
+    ai_vector_positive_count = 0
+    ai_vector_negative_count = 0
+    for vector in endpoint_vectors:
+        if not isinstance(vector, dict):
+            raise AssertionError("AI endpoint policy vector is not an object")
+        required = {"name", "uri", "allowLoopbackHttp", "secretScope", "expected"}
+        if set(vector) - (required | {"canonicalUri"}) or required - set(vector):
+            raise AssertionError("AI endpoint policy vector shape is invalid")
+        name = vector["name"]
+        uri = vector["uri"]
+        allow_loopback_http = vector["allowLoopbackHttp"]
+        secret_scope = vector["secretScope"]
+        expected = vector["expected"]
+        if (
+            not isinstance(name, str)
+            or not name
+            or name in endpoint_vector_names
+            or not isinstance(uri, str)
+            or not isinstance(allow_loopback_http, bool)
+            or secret_scope not in ("Production", "DevelopmentOnly")
+            or not isinstance(expected, bool)
+            or (expected and not isinstance(vector.get("canonicalUri"), str))
+            or (not expected and "canonicalUri" in vector)
+        ):
+            raise AssertionError("AI endpoint policy vector values are invalid")
+        endpoint_vector_names.add(name)
+
+        candidate = copy.deepcopy(ai_positive)
+        candidate["profiles"][0]["endpoint"] = {
+            "uri": uri,
+            "allowLoopbackHttp": allow_loopback_http,
+        }
+        candidate["profiles"][0]["auth"]["secretScope"] = secret_scope
+        accepted = ai_validator.is_valid(candidate)
+        if accepted != expected:
+            raise AssertionError(f"AI provider schema endpoint-vector parity failed for {name}")
+        if expected:
+            ai_vector_positive_count += 1
+        else:
+            ai_vector_negative_count += 1
+
     print(json.dumps({
         "schema": "w24-phase2-schema-verification/1",
         "status": "PASS",
@@ -600,8 +650,9 @@ def main() -> None:
         "negativeCount": negative_count,
         "aiProviderSchemaValidation": {
             "status": "PASS",
-            "positiveCount": 2,
-            "negativeCount": ai_negative_count,
+            "positiveCount": 2 + ai_vector_positive_count,
+            "negativeCount": ai_negative_count + ai_vector_negative_count,
+            "endpointVectorCount": len(endpoint_vectors),
         },
     }, separators=(",", ":")))
 

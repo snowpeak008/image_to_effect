@@ -10,24 +10,30 @@ public sealed class ProviderResolutionTests
     [TestMethod]
     public void EndpointPolicy_RejectsCredentialsQueriesOversizeNonHttpAndNonLoopbackHttp()
     {
-        var credentials = A1TestSupport.Settings(endpoint: new Uri("https://user:password@provider.example.invalid/v1/"));
-        A1TestSupport.Throws(AiErrorCode.EndpointRejected, () => ProviderConfigurationValidator.Validate(credentials));
-
-        Assert.ThrowsExactly<ArgumentException>(() => new EndpointDefinition(
-            new Uri("https://provider.example.invalid/v1/?api_key=query-credentials-are-not-a-service-root"),
-            allowLoopbackHttp: false));
+        Assert.ThrowsExactly<ArgumentException>(() => EndpointPolicy.Create(
+            "https://user:password@provider.example.invalid/v1/",
+            allowLoopbackHttp: false,
+            secretScope: SecretScope.Production));
+        Assert.ThrowsExactly<ArgumentException>(() => EndpointPolicy.Create(
+            "https://provider.example.invalid/v1/?api_key=query-credentials-are-not-a-service-root",
+            allowLoopbackHttp: false,
+            secretScope: SecretScope.Production));
 
         const string endpointPrefix = "https://provider.example.invalid/";
         var oversizedEndpoint = endpointPrefix + new string('a', EndpointDefinition.MaximumUriLength - endpointPrefix.Length + 1);
-        Assert.ThrowsExactly<ArgumentException>(() => new EndpointDefinition(new Uri(oversizedEndpoint), allowLoopbackHttp: false));
+        Assert.ThrowsExactly<ArgumentException>(() => EndpointPolicy.Create(
+            oversizedEndpoint,
+            allowLoopbackHttp: false,
+            secretScope: SecretScope.Production));
 
-        var nonHttp = A1TestSupport.Settings(endpoint: new Uri("ftp://provider.example.invalid/"));
-        A1TestSupport.Throws(AiErrorCode.EndpointRejected, () => ProviderConfigurationValidator.Validate(nonHttp));
-
-        var nonLoopback = A1TestSupport.Settings(
-            endpoint: new Uri("http://provider.example.invalid/"),
-            secretScope: SecretScope.DevelopmentOnly);
-        A1TestSupport.Throws(AiErrorCode.EndpointRejected, () => ProviderConfigurationValidator.Validate(nonLoopback));
+        Assert.ThrowsExactly<ArgumentException>(() => EndpointPolicy.Create(
+            "ftp://provider.example.invalid/",
+            allowLoopbackHttp: false,
+            secretScope: SecretScope.Production));
+        Assert.ThrowsExactly<ArgumentException>(() => EndpointPolicy.Create(
+            "http://provider.example.invalid/",
+            allowLoopbackHttp: true,
+            secretScope: SecretScope.DevelopmentOnly));
     }
 
     [TestMethod]
@@ -38,10 +44,10 @@ public sealed class ProviderResolutionTests
             secretScope: SecretScope.DevelopmentOnly);
         ProviderConfigurationValidator.Validate(settings);
 
-        var productionSecret = A1TestSupport.Settings(
-            endpoint: new Uri("http://localhost:8787/v1/"),
-            secretScope: SecretScope.Production);
-        A1TestSupport.Throws(AiErrorCode.EndpointRejected, () => ProviderConfigurationValidator.Validate(productionSecret));
+        Assert.ThrowsExactly<ArgumentException>(() => EndpointPolicy.Create(
+            "http://localhost:8787/v1/",
+            allowLoopbackHttp: true,
+            secretScope: SecretScope.Production));
     }
 
     [TestMethod]
@@ -53,7 +59,7 @@ public sealed class ProviderResolutionTests
             ProviderOrigin.Official,
             true,
             new ProtocolBinding(ProviderProtocols.OpenAiCompatibleV1),
-            new EndpointDefinition(new Uri("https://provider.example.invalid/"), false),
+            EndpointPolicy.Create("https://provider.example.invalid/", false, SecretScope.Production),
             new AuthDescriptor(new SecretRef("secret-cross"), SecretScope.Production),
             30,
             [new CapabilityDefinition("image-only", AiChannel.ImageGeneration, "image-model-1")]);

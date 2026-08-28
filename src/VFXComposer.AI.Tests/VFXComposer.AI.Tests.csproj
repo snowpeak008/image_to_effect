@@ -15,11 +15,16 @@
   <ItemGroup>
     <ProjectReference Include="..\VFXComposer.AI.Contracts\VFXComposer.AI.Contracts.csproj" />
     <ProjectReference Include="..\VFXComposer.AI.Providers\VFXComposer.AI.Providers.csproj" />
+    <ProjectReference Include="RevisionLockHost\VFXComposer.AI.Tests.RevisionLockHost.csproj"
+                      ReferenceOutputAssembly="false" />
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Remove="RevisionLockHost\**\*.cs" />
     <None Include="..\..\docs\schemas\desktop\vfxcomposer-ai-provider-config-v1.schema.json"
           Link="Schemas\vfxcomposer-ai-provider-config-v1.schema.json"
+          CopyToOutputDirectory="PreserveNewest" />
+    <None Include="EndpointPolicyVectors.json"
           CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
 </Project>
