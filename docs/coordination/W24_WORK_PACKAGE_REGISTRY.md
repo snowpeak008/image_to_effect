@@ -111,10 +111,11 @@ The formal AI DAG is `A0 -> A1 -> (A2 || A3) -> A4 -> A5 -> A6`. A0 is closed in
 3. `src/VFXComposer.AI.Tests/**`
 4. `docs/schemas/desktop/vfxcomposer-ai-provider-config-v1.schema.json`
 5. `VFXComposer.sln`
-6. `eng/run-phase2-gate.ps1`
-7. `eng/phase2-baseline-roots.json`
+6. `eng/verify-phase2-schemas.py`
+7. `eng/run-phase2-gate.ps1`
+8. `eng/phase2-baseline-roots.json`
 
-Any other path is forbidden. A central package-management change or an external `.csproj` dependency is an immediate STOP. A1 may implement only contracts/profile/channel bindings/schema, strict versioned atomic JSON with `.bak`, DPAPI CurrentUser SecretRef storage, configuration fingerprint, health/adapter-registry skeletons, Tom non-sensitive draft import, resolver, and `IAiGateway`; real Chat/Image HTTP is prohibited. Required tests include canonical configuration, migration/future rejection, corrupt backup, DPAPI no-plaintext/unreadable failure, URI policy, channel/capability fail-closed behavior, no fallback, Tom secret exclusion, internal boundary, and redaction.
+`eng/verify-phase2-schemas.py` is the only additional A1 file beyond the three roots, schema, solution, runner, and baseline. Any other path is forbidden. A central package-management change or an external `.csproj` dependency is an immediate STOP. The first A1 writer is `STOPPED — ZERO WRITES`: the new AI schema would be desktop schema 23 while verifier line 57 hard-codes 22. A1 must change the expected total to 23, preserve `Phase 2=13`, `positive=14`, and `negative=236`, and add AI-schema structural validation with positive and negative cases; merely loosening the count is STOP. A1 may implement only contracts/profile/channel bindings/schema, strict versioned atomic JSON with `.bak`, DPAPI CurrentUser SecretRef storage, configuration fingerprint, health/adapter-registry skeletons, Tom non-sensitive draft import, resolver, and `IAiGateway`; real Chat/Image HTTP is prohibited. Required tests include canonical configuration, migration/future rejection, corrupt backup, DPAPI no-plaintext/unreadable failure, URI policy, channel/capability fail-closed behavior, no fallback, Tom secret exclusion, internal boundary, and redaction.
 
 After this publication the registry is `FINAL STOPPED` for U6/A0. Only A1 can proceed.
 
