@@ -15,7 +15,7 @@ Exact DAG: `U0 -> U1`; `U0 -> U2`; `U1 + U2 -> U3`; `U3 -> U4 -> U5 -> U6`.
 | U2 `USER_MODE_CHILD_PIPE_SESSION` | `CLOSED / INTEGRATED`; commit `4b2f9a81a82911d68b8b64864ae05a03f9690b2e`; the initial audit recorded `P1=3`, and one remediation closed with `42/42` three times plus Broker `171/171`. | The remediation result is not represented as a second independent-audit verdict. No Service/SCM/privilege/SACL/loaded-image/enrollment claim. |
 | U3 `USER_PROJECT_SELECTION_READ_CONTAINMENT` | `CLOSED / INTEGRATED`; source commit `0123616e21d656b2374809a13aeb2769f0324e7e`, merged at `027ba07448dd6d4a0741a67937427cd2d37b2649`; exact seven files. | Broker `8/8`, Unity `9/9`, no-tests PASS, unified Broker `179/179`, manifest SHA-256 prefix `b716…`; zero Desktop project I/O and no privileged route. |
 | U4 `DESKTOP_USER_MODE_INTEGRATION` | `CLOSED / INTEGRATED`; source `2295b022348dc1514c72846533b86430bc4762ad`, integration `e1a6a9a37d3125717afbe795d283a07ffa242060`. | Accepted targets Protocol `108/108`, Client `14/14`, Broker `183/183`, Desktop `12/12`; r2 receipt manifest `b741fef9ab35a683363993cfeeb74abd2b1cbc26f5e3988574febfe1349a66eb`. |
-| U5 `WP-USERMODE-LOCAL-E2E` | `ACTIVE`; sole current source package, with exactly 15 owned files below. | Protocol-only standalone Worker plus public-Desktop-backend E2E, adversarial, crash, cleanup, and default-smoke preservation. |
+| U5 `WP-USERMODE-LOCAL-E2E` | `ACTIVE`; sole current source package, with exactly 17 owned files below. | Protocol-only standalone Worker plus public-Desktop-backend E2E, adversarial, crash, cleanup, and default-smoke preservation. |
 | U6 `USER_MODE_FINAL_AUDIT` | `NOT STARTED`. | No source edits; all declared gates replay; P0/P1/P2=0 for scoped GO after U5. |
 | Post-U6 AI A0 | `NOT STARTED`. | Two-channel AI-provider plan is outside U5 source, runtime, test, and evidence scope. |
 
@@ -80,6 +80,20 @@ U4 owns no csproj, solution, package, or lock file. Its retained component bound
 13. `VFXComposer.sln`
 14. `eng/run-phase2-gate.ps1`
 15. `eng/phase2-baseline-roots.json`
+16. `src/VFXComposer.Client/UserModeDesktopSession.cs`
+17. `src/VFXComposer.Client.Tests/UserModeDesktopSessionTests.cs`
+
+This same-milestone scope correction adds exactly items 16–17; it does not authorize an 18th U5 file. The other 12 U5-new bytes (items 1–12) remain `UNCOMMITTED / UNACCEPTED`. `VFXComposer.sln`, `eng/run-phase2-gate.ps1`, and `eng/phase2-baseline-roots.json` (items 13–15) remain unmodified. This documentation-only correction accepts no source, test, runtime, or E2E evidence and does not change U5's sole-`ACTIVE` status.
+
+The first genuine U5 LocalE2E attempt is `12/17` passed, not an acceptance receipt. Its five open failures are recorded without waiver:
+
+1. **Client product gap:** if the Broker is already dead before `ReadAsync` or `SelectAsync` enters `ExchangeAsync`, `SessionIdFor` throws outside the existing recovery `try/catch`; the session remains `Reading` or `Selecting`, `EnterRecoveryAsync` is not called, and `RestartAsync` is rejected.
+2. **U5-local:** malformed C2 causes an uncaught `WireDecodeException` in the Worker instead of clean exit `31`.
+3. **U5-local:** the reparse test setup cannot create a symbolic link in this environment and needs a safe junction fallback.
+4. **U5-local:** the wrong-user static scan finds its own `CreateUser` assertion literal.
+5. **U5-local:** temporary-project teardown races a lingering file handle after cancellation and needs bounded residue/deletion retry.
+
+The Client correction is acceptance-critical and must not weaken crash recovery: in both `SelectAsync` and `ReadAsync`, `SessionIdFor`, request construction, and `ExchangeAsync` must all be inside the existing recovery `try/catch`. A dead host must transition through `RecoveryRequired` and disposal, then allow `RestartAsync` to reach `ConnectedNoProject`. The existing `UserModeDesktopSessionTests.cs` must genuinely cover pre-exchange inactive-host failure for both read and selection, rather than only an exchange-time failure.
 
 U5 alone may create a standalone Protocol-only `net8.0-windows` `VFXComposer.UnityWorker.exe`, which references Protocol only and has zero Unity source link, Newtonsoft, or `UNITY_INCLUDE_TESTS`. It is the canonical runtime C2 consumer; the Unity package is parity/reference only. A minimum local copy of U2 private `UMB1`/`UMH1` bootstrap ABI is allowed only for byte-level compatibility and real Broker coverage, preserving `CurrentUserOnly`, nonce, session, generation, PID, and epoch. It creates no second C2 format.
 
@@ -88,6 +102,8 @@ The true E2E uses public `UserModeDesktopSession` over the real Desktop/Client -
 Required real coverage is happy path; bad nonce/session/generation/locator/path/protocol; marker/traversal/reparse/size/JSON rejection; crash/restart/cancel/partial-frame recovery; and zero orphan process, pipe, and temporary-project residue. HandleProbe, startup hooks, scripted/fake peer, Service/SCM, privilege, SACL, and E2E substitutes are forbidden. Wrong-user is `CurrentUserOnly` static/IL plus existing unit evidence only, never a created account or claimed literal wrong-user E2E. Default Broker remains `W24FS001`/exit `23`.
 
 U5 extends only the existing unified `eng/run-phase2-gate.ps1` and runs it once as final gate; no independent E2E runner is a U5 artifact. Fresh assets, if needed, use an approved local feed and unique ignored temporary locks; no pre-existing tracked-lock drift and no copied `bin`/`obj`. U6 and AI A0 remain not started; the AI two-channel plan is not U5 source.
+
+No stale-baseline unified gate is run or accepted for this documentation-only correction: it is a U5 same-milestone scope correction with no source acceptance. That exception does not relax the final-gate requirement above.
 
 ## Current trust and reuse rules
 
