@@ -1,5 +1,41 @@
 # W24 work-package registry
 
+> **CURRENT REGISTRY — ADR-005 U0 REBASE (2026-08-28).** Only U0-U6 below are current delivery nodes. Every pre-U0 package entry retained later in this file is historical provenance, not an active contract, dependency, blocker, or audit queue.
+>
+> Normative U0 architecture token: `USER_MODE_LOCAL_CREATIVE_TOOL_V1`.
+
+## Current seven-node registry
+
+Exact DAG: `U0 -> U1`; `U0 -> U2`; `U1 + U2 -> U3`; `U3 -> U4 -> U5 -> U6`.
+
+| Node | Contract | Acceptance boundary |
+|---|---|---|
+| U0 `USER_MODE_ARCHITECTURE_SIMPLIFICATION` | Modify exactly ADR-004, ADR-005, Phase Plan, Phase2 Report, Program Control, Registry, and Evidence Index. No source, M1/M2 merge, handoff micro-package, product command, Unity, or network. | The seven docs agree; specified docs gate passes; exactly one commit from the declared baseline. Architecture-only, no runtime GO. |
+| U1 `C3_W1_ACTUAL_UNITY_WORKER_CONNECTOR` | Combined C3 plus W1: one canonical C1/C2-compatible adapter and actual ordinary-user Unity Worker connector. Review the stopped M1 12-file candidate without inheriting or merging it automatically. | Strict schema/vector/codec parity, connector lifecycle and negatives; no second wire contract, Desktop integration, arbitrary path, or authority. |
+| U2 `USER_MODE_CHILD_PIPE_SESSION` | Ordinary-user Broker/Worker child launch, current-user-SID local pipe, random pipe name, one-use nonce, generation, exact parent/child handle and process epoch, revoke/cleanup/crash containment. | Cross-user, replay/stale, PID reuse, unexpected path, leak, crash, disconnect and orphan negatives. No Service/SCM/privilege/SACL/loaded-image/enrollment claim. |
+| U3 `USER_PROJECT_SELECTION_READ_CONTAINMENT` | Explicit user project selection becomes a session-bound restricted locator; Worker performs bounded read; Broker routes and correlates. | Wrong root/path, locator drift, reselect/restart/revoke and protocol negatives; zero Desktop project I/O. |
+| U4 `DESKTOP_USER_MODE_INTEGRATION` | Desktop launches/connects through U2 and presents U3 project/read/recovery state. | No Desktop-to-Worker bypass, caller-path trust, mutation, verdict, or authority. |
+| U5 `LOCAL_USER_MODE_E2E` | Local ordinary-user Desktop/Unity-host to Broker/Worker read across exact release topology. | Full wrong-user/session/project/protocol/path/crash matrix and residue-free teardown; no installed-service or hostile-same-user claim. |
+| U6 `USER_MODE_FINAL_AUDIT` | Independent frozen-byte/source/receipt/provenance audit. | No source edits; all declared gates replay; P0/P1/P2=0 for scoped GO. |
+
+U1 and U2 may run in parallel only with disjoint exact owned files. U3 cannot publish until both close. There are no other current nodes.
+
+## Current trust and reuse rules
+
+Trust is limited to the current logged-in user, actively launched local product processes, and explicit project choice. The route defends cross-user access, freshness, exact process/session/project correlation, protocol strictness, release-layout path expectation, redaction and crash cleanup; it does not defend malicious same-user code, admin/kernel control, offline tampering, or a deliberately malicious chosen project. Hashes/signatures are release integrity only.
+
+C1/C2 are accepted reuse inputs. P1 named-pipe and S1 lifecycle/ownership fragments are candidates only to the extent they work for an ordinary-user topology and are revalidated within a U-node. The stopped M1 candidate earns no acceptance credit and is U1 review input only; M2 `fa8843be` remains historical and is not merged.
+
+D1/D1R, ServiceHost/install, I1, R1, A1, B1, SCM/privileged E2E and their audits are retired product-delivery history. They must receive no further implementation or audit and cannot block U1-U6. No Windows Service, SCM, `LocalSystem`, privileged enrollment, `SeSecurityPrivilege`, `SeRestorePrivilege`, strict-SACL live gate, loaded-image proof or privileged issuer may be silently reintroduced.
+
+## Frozen planning baseline
+
+U0 closeout freezes `45/100`, reported as **42%-48% complete**, under weights `U0=8`, `U1=22`, `U2=22`, `U3=18`, `U4=12`, `U5=12`, `U6=6` plus accepted C1/C2 and reviewable ordinary-user P1/S1 reuse credit. The stopped M1/M2 work contributes zero. The new remaining route is estimated **45%-55% shorter** than the superseded privileged route, with a 50% planning point. The algorithm cannot be replaced by line/test/receipt counting.
+
+---
+
+## Historical pre-U0 package registry (superseded for product delivery)
+
 Status date: `2026-08-28`
 
 ## 1. Registry

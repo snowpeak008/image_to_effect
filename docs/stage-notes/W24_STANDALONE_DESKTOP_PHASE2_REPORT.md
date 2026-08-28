@@ -1,5 +1,40 @@
 # W24 Standalone Desktop Phase 2 foundation report
 
+> **CURRENT U0 STATUS (2026-08-28).** Phase 2 has been rebased to ADR-005's ordinary-user architecture. The pre-U0 report below remains historical evidence only; its privileged route and blockers are not current delivery dependencies.
+>
+> Normative U0 architecture token: `USER_MODE_LOCAL_CREATIVE_TOOL_V1`.
+
+## U0 architecture simplification report
+
+U0 changes documentation only. It does not merge source, including the stopped M1 writer's uncommitted 12-file candidate, and it does not merge the stopped M2 branch `fa8843be`. Both old writers are stopped. M1 may be reviewed later inside U1; M2 remains historical.
+
+The current product model is a single-user local trusted authoring tool:
+
+- trust the current logged-in user and the Desktop/Broker/Worker or Unity host that user intentionally launches;
+- use ordinary-user child processes, a current-user-SID local pipe, random pipe name, one-use nonce, generation, and exact parent/child handle plus process epoch;
+- accept only an explicit user-selected project and reduce it to a session-bound restricted locator; Worker owns bounded project read and Unity API access;
+- defend cross-user access, stale/replayed sessions, wrong project, protocol drift, PID reuse, unexpected release-layout path, leakage, crash/disconnect, and orphan cleanup;
+- make no claim against malicious same-user programs, administrator/kernel control, offline tampering, or a malicious selected project;
+- use hashes/signatures only for release integrity.
+
+Windows Service/SCM, `LocalSystem`, privileged installer/enrollment, `SeSecurityPrivilege`, `SeRestorePrivilege`, strict-SACL live gate, loaded-image proof, production issuer, and ServiceHost `Running` are absent from the delivery architecture.
+
+The only current DAG has seven nodes and exact edges:
+
+`U0 -> U1`; `U0 -> U2`; `U1 + U2 -> U3`; `U3 -> U4 -> U5 -> U6`.
+
+U1 is the combined C3+W1 actual Unity Worker connector. U2 is ordinary-user Broker/Worker child-process, pipe, nonce/session and cleanup. U3 is user project selection/read containment. U4 is Desktop integration. U5 is local ordinary-user E2E. U6 is the independent final audit. U1 and U2 may overlap under disjoint ownership; U3 waits for both.
+
+C1/C2 and reviewed ordinary-user P1/S1 fragments are reuse inputs. D1/D1R, ServiceHost/install, I1, R1, A1, B1, and the old privileged chain are historical only: no more implementation, audit, or blocker status attaches to them.
+
+The frozen U0 completion point is `45/100`, reported as **42%-48% complete**, using weights `8/22/22/18/12/12/6` for U0-U6 plus accepted reuse credit as defined in ADR-005. The remaining user-mode plan is estimated **45%-55% shorter** than the superseded privileged remaining route (50% planning point). No runtime capability is added by this estimate.
+
+Current blockers are only the not-yet-closed U1-U6 gates. Production connection/read, commands, mutation, evidence authority, and Phase 2 remain NO-GO.
+
+---
+
+## Historical pre-U0 Phase-2 report (superseded for product delivery)
+
 Date: 2026-08-26; production-read architecture freeze update: 2026-08-28  
 Status: `PHASE_2_FOUNDATION_IN_PROGRESS / PRODUCTION_CONNECTION_NO_GO / BROKER_TO_UNITY_TEST_READ_SCOPED_GO / PRODUCTION_READ_DAG_REBASE_STOPPED_REMEDIATION_COMPLETE_FRESH_INDEPENDENT_AUDIT_PENDING`  
 Authority: none. This report grants no production registration, project-content read, Worker command, project write, machine/visual verdict, user sign-off, L3, L4, Publication or transport authority.

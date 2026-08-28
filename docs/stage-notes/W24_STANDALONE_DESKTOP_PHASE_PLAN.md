@@ -1,5 +1,49 @@
 # W24 standalone desktop — file-level implementation plan
 
+> **U0 PRODUCT-DELIVERY REBASE (2026-08-28).** ADR-005 and this section are the current Phase-2 plan. The pre-U0 plan retained below is historical provenance only: its Service/SCM/privileged nodes are not current dependencies, blockers, implementation work, or audit work.
+>
+> Normative U0 architecture token: `USER_MODE_LOCAL_CREATIVE_TOOL_V1`.
+
+## Current Phase-2 plan: ordinary-user local tool
+
+The product trusts the current logged-in user, the Desktop/Broker/Worker or Unity host that user deliberately starts, and that user's explicit project selection. It defends cross-user connection, stale/cross-generation session, wrong-project/locator escape, protocol drift, PID reuse, unexpected release-layout path, secret/path leakage, crash, disconnect, and orphan cleanup. It does not defend against malicious same-user code, administrator/kernel compromise, offline tampering, or a deliberately malicious selected project.
+
+Desktop or the active Unity host launches ordinary-user Broker/Worker children. The local session binds current-user SID pipe ACL, a random unguessable pipe name, a one-use nonce, generation, and exact parent/child process handles and creation epochs. Explicit user selection produces a restricted project locator; Desktop does not gain Unity project I/O. Hash/signature checks are release-integrity checks only.
+
+### Exact seven-node DAG
+
+There are exactly seven current nodes and these exact edges:
+
+`U0 -> U1`; `U0 -> U2`; `U1 + U2 -> U3`; `U3 -> U4 -> U5 -> U6`.
+
+| Node | Deliverable | Must remain false until exit |
+|---|---|---|
+| U0 architecture simplification | ADR-005 plus the seven-document coordination rebase; docs-only gate and one commit; no handoff micro-package. | No source merge or runtime GO. |
+| U1 C3+W1 actual Unity Worker connector | One canonical C1/C2-compatible Unity codec/adapter and ordinary-user Worker connector. The stopped M1 12-file uncommitted candidate is review input only. | No second protocol, Desktop integration, or acceptance of M1 bytes by provenance. |
+| U2 user-mode child process/session | Ordinary-user Broker/Worker launch; random-name current-user-SID pipe; one-use nonce, generation, handle/epoch correlation, revoke and cleanup. | No Service/SCM/privilege/strict-SACL/loaded-image/enrollment claim. |
+| U3 user project selection/read containment | Explicit project chooser, restricted locator, wrong-root/path negatives, Worker-only bounded read. | No arbitrary caller path or Desktop project I/O. |
+| U4 Desktop integration | Desktop launches/connects through U2 and consumes U3 selection/read with disconnected/restart UI state. | No Desktop-to-Worker bypass or authority promotion. |
+| U5 local E2E | Ordinary-user Desktop/Unity-host to Broker/Worker local read, adversarial session/project/path/protocol/crash matrix, clean teardown. | No installed-system or hostile-same-user security claim. |
+| U6 final audit | Independent frozen-byte/source/receipt/provenance audit of U0-U5. | No source edit; P0/P1/P2 must be zero for scoped GO. |
+
+U1 and U2 may execute in parallel only with disjoint exact ownership. Both consume U0; U3 waits for both accepted outputs. The stopped M2 branch `fa8843be` is historical only and is never merged.
+
+### Reuse and retired route
+
+C1 and C2 are accepted reuse inputs. Ordinary-user-compatible P1 named-pipe and S1 lifecycle/ownership fragments are review inputs, not inherited package GO. D1/D1R, ServiceHost, SCM/install, I1, R1, A1, B1, and the old installed/privileged chain remain historical evidence and must not receive further implementation or audit. They are not blockers for U1-U6.
+
+### Frozen completion and schedule estimate
+
+At U0 closeout the formal baseline is `45/100`, reported as **42%-48% complete**. The frozen weights are `U0=8`, `U1=22`, `U2=22`, `U3=18`, `U4=12`, `U5=12`, `U6=6`; the extra U0 baseline credit comes only from accepted C1/C2 and reviewable ordinary-user P1/S1 reuse, never M1/M2. Progress later equals accepted weighted nodes plus explicitly audited reuse credit, not test count, line count, or receipt volume.
+
+Relative to `100` normalized remaining units for the superseded privileged route, U1-U6 are planned at `50`, so remaining delivery is approximately **45%-55% shorter** (50% planning point). This baseline stays frozen; later variance must be reported against it.
+
+Production connection/read remains NO-GO through U5 and U6. Commands, mutation, machine/visual evidence, user verdict, L3, L4, and legacy Unity UI retirement remain separate gates.
+
+---
+
+## Historical pre-U0 plan (superseded for product delivery)
+
 Date: 2026-08-26; production-read architecture freeze: 2026-08-28  
 Architecture authority: `docs/rules/ADR-002_STANDALONE_DESKTOP_UNITY_WORKER_BROKER.md`; `docs/rules/ADR-004_WINDOWS_BROKER_INSTALLATION_AND_PRODUCTION_READ.md` for Windows production-read gating  
 Current phase: `PHASE_1_GO / PHASE_2_FOUNDATION_IN_PROGRESS / PRODUCTION_READ_DAG_REBASE_STOPPED_REMEDIATION_COMPLETE_FRESH_INDEPENDENT_AUDIT_PENDING`  

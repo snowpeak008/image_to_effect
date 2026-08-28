@@ -1,5 +1,42 @@
 # W24 program control
 
+> **CURRENT CONTROL PLANE — U0 USER-MODE REBASE (2026-08-28).** This section and ADR-005 supersede the pre-U0 control ledger retained below. Old Service/SCM/privileged nodes are historical only and are neither active, schedulable, auditable, nor blockers.
+>
+> Normative U0 architecture token: `USER_MODE_LOCAL_CREATIVE_TOOL_V1`.
+
+## U0 current state
+
+| Item | Current state | Boundary |
+|---|---|---|
+| Architecture | `U0 — USER_MODE_ARCHITECTURE_SIMPLIFICATION / DOCS ONLY` | Single-user local trusted authoring tool; no runtime or production GO. |
+| Runtime | `NO-GO` | No source is owned or merged by U0. Existing `W24FS001`/23 fail-closed behavior remains until later U-nodes replace it through audited work. |
+| Writers | `M1 STOPPED; M2 STOPPED` | M1's uncommitted 12-file candidate is U1 review input only. M2 `fa8843be` is historical and never enters this line. |
+| Progress | `45/100 planning point; 42%-48% band` | Frozen ADR-005 weighted algorithm. Remaining plan is approximately 45%-55% shorter than the superseded privileged route. |
+
+The product trusts the current logged-in user, intentionally launched Desktop/Broker/Worker or Unity host, and explicit user-selected project. It does not defend against malicious same-user software, administrator/kernel control, or offline tampering. It must defend cross-user pipe access, stale/cross-generation sessions, wrong project, protocol drift, PID reuse, unexpected release-layout path, leakage, crash/disconnect, and orphan cleanup.
+
+The exact current seven-node DAG is:
+
+`U0 -> U1`; `U0 -> U2`; `U1 + U2 -> U3`; `U3 -> U4 -> U5 -> U6`.
+
+| Node | Control identity | Publication dependency |
+|---|---|---|
+| U0 | Architecture simplification; these seven docs; one docs gate and one commit; no handoff micro-package. | Current baseline. |
+| U1 | Combined C3+W1 actual Unity Worker connector. | U0. |
+| U2 | Ordinary-user Broker/Worker child process, current-user-SID random pipe, one-use nonce, generation, handle/epoch session and cleanup. | U0; may parallel U1 with disjoint ownership. |
+| U3 | Explicit user project selection and restricted read containment. | U1 + U2. |
+| U4 | Desktop integration with zero direct project I/O. | U3. |
+| U5 | Local ordinary-user E2E and adversarial/cleanup matrix. | U4. |
+| U6 | Independent final audit, no source edits, scoped P0/P1/P2=0. | U5. |
+
+C1/C2 are accepted reuse inputs; ordinary-user-compatible P1/S1 fragments require review in their U-node. D1/D1R, ServiceHost/install, I1, R1, A1, B1 and the old privileged E2E/audit chain must not continue and must not block a U-node. Windows Service/SCM, `LocalSystem`, privileged enrollment, `SeSecurityPrivilege`, `SeRestorePrivilege`, strict-SACL live admission, loaded-image proof, privileged issuer and ServiceHost `Running` are not product prerequisites.
+
+Production read remains NO-GO through U5 plus U6. Hash/signature evidence is release integrity only. Commands, mutation, machine/visual evidence, user verdict, L3 and L4 remain independent later gates.
+
+---
+
+## Historical pre-U0 control ledger (superseded for product delivery)
+
 Status date: `2026-08-28`  
 Controller role: `planning / package publication / dependency coordination / merge and integration gate only`  
 Current product direction: `Standalone Avalonia Desktop + pure C# Protocol/Client + Unity Package Worker + Windows Broker`  

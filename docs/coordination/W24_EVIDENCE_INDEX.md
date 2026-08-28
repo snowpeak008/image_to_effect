@@ -1,5 +1,42 @@
 # W24 coordination evidence index
 
+> **CURRENT EVIDENCE ROUTING — U0 USER-MODE REBASE (2026-08-28).** ADR-005 and this section control new evidence selection. The pre-U0 entries retained below preserve exact history but cannot be selected as proof of the ordinary-user runtime or treated as current dependencies/blockers.
+>
+> Normative U0 architecture token: `USER_MODE_LOCAL_CREATIVE_TOOL_V1`.
+
+## U0 architecture evidence boundary
+
+- Baseline branch: `codex/u0-user-mode-architecture`.
+- Exact starting commit: `038d1b0ef1675fd6bd12c2b1cd196ff17546917b`.
+- U0 owns exactly seven documents:
+  1. `docs/rules/ADR-005_USER_MODE_BROKER_WORKER_ARCHITECTURE.md` (new);
+  2. `docs/rules/ADR-004_WINDOWS_BROKER_INSTALLATION_AND_PRODUCTION_READ.md` (historical body retained; top supersession notice only);
+  3. `docs/stage-notes/W24_STANDALONE_DESKTOP_PHASE_PLAN.md`;
+  4. `docs/stage-notes/W24_STANDALONE_DESKTOP_PHASE2_REPORT.md`;
+  5. `docs/coordination/W24_PROGRAM_CONTROL.md`;
+  6. `docs/coordination/W24_WORK_PACKAGE_REGISTRY.md`;
+  7. `docs/coordination/W24_EVIDENCE_INDEX.md`.
+- U0 accepts no source/binary/runtime receipt, performs no M1/M2 merge, and writes no handoff micro-package.
+- Required validation is `eng/run-phase2-gate.ps1 -Milestone u0-user-mode-architecture -MutableRoot docs/rules,docs/stage-notes,docs/coordination`; its durable output is the U0 gate evidence. One final commit binds the seven-document rebase.
+
+The exact current DAG is `U0 -> U1`; `U0 -> U2`; `U1 + U2 -> U3`; `U3 -> U4 -> U5 -> U6`. U1 combines C3+W1 actual Unity Worker connector; U2 is ordinary-user child-process/pipe/nonce/session/cleanup; U3 is project selection/read containment; U4 Desktop integration; U5 local E2E; U6 final audit.
+
+The threat/evidence claim is deliberately narrow: current user and intentionally launched local processes/project choice are trusted; cross-user, stale session, wrong project, protocol drift, PID reuse, unexpected path, leakage and crash are defended; same-user malware, admin/kernel and offline attacks are out of scope. Hashes/signatures prove release integrity only.
+
+## Reuse evidence and non-rebinding
+
+C1/C2 accepted contract evidence may be consumed by U1/U3. P1 named-pipe and S1 lifecycle/ownership evidence may be reviewed only for ordinary-user-compatible fragments and must be rebound through new U-node source/test manifests. The stopped M1 uncommitted 12-file candidate is U1 review input, not accepted evidence; M2 `fa8843be` is historical and never enters the line.
+
+D1/D1R, ServiceHost/install, I1, R1, A1, B1 and their privileged/installed E2E or audit evidence are historical. They receive no further implementation/audit and are not blockers. Nothing in their receipts proves a current-user child topology, explicit user project selection, or U0-U6 acceptance.
+
+## Frozen estimate evidence
+
+U0 freezes a formal completion planning point of `45/100`, reported as **42%-48%**, using U0-U6 weights `8/22/22/18/12/12/6` and explicit accepted reuse credit only. It also freezes a 50% remaining-effort reduction planning point, reported as **45%-55% shorter** than the privileged remaining route. M1/M2 contribute zero. Future status must compare actual accepted work against this baseline rather than recompute history.
+
+---
+
+## Historical pre-U0 evidence index (superseded for product delivery)
+
 Status date: `2026-08-28`
 
 This index binds the controller's starting state. It is not a new authority or a substitute for opening the referenced report and receipt.
