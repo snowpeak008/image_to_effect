@@ -47,6 +47,113 @@ namespace VFXComposer.Tests.EditMode
         }
 
         [Test]
+        public void C2LocatorGoldenVectorsDecodeProjectAndSealExactAcknowledgementBytes()
+        {
+            var vectors = LoadLocatorVectors();
+            var locator = W24S6WorkerProtocolCodec.DecodeLocator(vectors["locator"]);
+            var acknowledgement = W24S6WorkerProtocolCodec.DecodeLocatorAcknowledgementForTests(
+                vectors["locatorAcknowledgement"],
+                locator);
+
+            Assert.That(locator.ProtocolVersion, Is.EqualTo(W24S6WorkerProtocolCodec.ProtocolVersion));
+            Assert.That(locator.MessageKind, Is.EqualTo(W24S6WorkerProtocolCodec.LocatorKind));
+            Assert.That(locator.RequestId, Is.EqualTo("locator-request-01"));
+            Assert.That(locator.RegisteredProjectId, Is.EqualTo("registered-project-01"));
+            Assert.That(locator.BrokerGeneration, Is.EqualTo(17));
+            Assert.That(locator.RegistrationGeneration, Is.EqualTo(23));
+            Assert.That(locator.EnrollmentGeneration, Is.EqualTo(29));
+            Assert.That(locator.WorkerSessionId, Is.EqualTo("worker-session-01"));
+            Assert.That(locator.WorkerProcessEpoch, Is.EqualTo("worker-epoch-01"));
+            Assert.That(locator.ProjectIdentity.TypeTag, Is.EqualTo(W24S6WorkerProtocolCodec.ProjectIdentityType));
+            Assert.That(locator.VolumeIdentity.TypeTag, Is.EqualTo(W24S6WorkerProtocolCodec.VolumeIdentityType));
+            Assert.That(locator.RepositoryIdentity.TypeTag, Is.EqualTo(W24S6WorkerProtocolCodec.DirectoryIdentityType));
+            Assert.That(locator.ProjectRootIdentity.TypeTag, Is.EqualTo(W24S6WorkerProtocolCodec.DirectoryIdentityType));
+            Assert.That(locator.SelfHash.Digest,
+                Is.EqualTo("sha256:d5f66b315be8d5677467e795638e30b8a3e5d1f12007836690686035022d6fc6"));
+            Assert.That(acknowledgement.SelfHash.Digest,
+                Is.EqualTo("sha256:7f2a07288195216a6d25a547d415d32ef37a258a04f9c90d8a1a664428ac8b47"));
+            Assert.That(acknowledgement.LocatorSelfHash.Digest, Is.EqualTo(locator.SelfHash.Digest));
+            CollectionAssert.AreEqual(
+                vectors["locatorAcknowledgement"],
+                W24S6WorkerProtocolCodec.CreateLocatorAcknowledgementForTests(locator));
+        }
+
+        [Test]
+        public void C2LocatorRejectsMalformedPathAuthorityTypeGenerationAndHashDrift()
+        {
+            var locatorBytes = LoadLocatorVectors()["locator"];
+            AssertReject(() => W24S6WorkerProtocolCodec.DecodeLocator(
+                new byte[] { 0xef, 0xbb, 0xbf }.Concat(locatorBytes).ToArray()));
+
+            var text = StrictUtf8.GetString(locatorBytes);
+            AssertReject(() => W24S6WorkerProtocolCodec.DecodeLocator(StrictUtf8.GetBytes(
+                text.Replace(
+                    "{\"brokerGeneration\":17",
+                    "{\"brokerGeneration\":17,\"\\u0062rokerGeneration\":17"))));
+
+            var callerPath = ParseVector(locatorBytes);
+            callerPath["callerPath"] = "C:/untrusted";
+            AssertReject(() => W24S6WorkerProtocolCodec.DecodeLocator(Encode(callerPath)));
+
+            var authority = ParseVector(locatorBytes);
+            authority["authority"] = "L4";
+            AssertReject(() => W24S6WorkerProtocolCodec.DecodeLocator(Encode(authority)));
+
+            var missing = ParseVector(locatorBytes);
+            missing.Remove("workerSessionId");
+            AssertReject(() => W24S6WorkerProtocolCodec.DecodeLocator(Encode(missing)));
+
+            var wrongType = ParseVector(locatorBytes);
+            wrongType["enrollmentGeneration"] = "29";
+            AssertReject(() => W24S6WorkerProtocolCodec.DecodeLocator(Encode(wrongType)));
+
+            var zeroGeneration = ParseVector(locatorBytes);
+            zeroGeneration["registrationGeneration"] = 0;
+            ResealForTests(zeroGeneration, W24S6WorkerProtocolCodec.LocatorSelfHashType);
+            AssertReject(() => W24S6WorkerProtocolCodec.DecodeLocator(Encode(zeroGeneration)));
+
+            var wrongIdentityType = ParseVector(locatorBytes);
+            ((JObject)wrongIdentityType["projectIdentity"])["typeTag"] =
+                W24S6WorkerProtocolCodec.DirectoryIdentityType;
+            ResealForTests(wrongIdentityType, W24S6WorkerProtocolCodec.LocatorSelfHashType);
+            AssertReject(() => W24S6WorkerProtocolCodec.DecodeLocator(Encode(wrongIdentityType)));
+
+            var tampered = ParseVector(locatorBytes);
+            tampered["registeredProjectId"] = "registered-project-02";
+            AssertReject(() => W24S6WorkerProtocolCodec.DecodeLocator(Encode(tampered)));
+        }
+
+        [Test]
+        public void LocatorAcknowledgementRequiresExactDecodedLocatorCorrelation()
+        {
+            var vectors = LoadLocatorVectors();
+            var locator = W24S6WorkerProtocolCodec.DecodeLocator(vectors["locator"]);
+            var changedRoot = ParseVector(vectors["locator"]);
+            changedRoot["workerSessionId"] = "worker-session-02";
+            ResealForTests(changedRoot, W24S6WorkerProtocolCodec.LocatorSelfHashType);
+            var changedLocator = W24S6WorkerProtocolCodec.DecodeLocator(Encode(changedRoot));
+
+            AssertReject(() => W24S6WorkerProtocolCodec.DecodeLocatorAcknowledgementForTests(
+                vectors["locatorAcknowledgement"],
+                changedLocator));
+
+            var disposition = ParseVector(vectors["locatorAcknowledgement"]);
+            disposition["disposition"] = "GRANT_ACCEPTED";
+            ResealForTests(disposition, W24S6WorkerProtocolCodec.LocatorAcknowledgementSelfHashType);
+            AssertReject(() => W24S6WorkerProtocolCodec.DecodeLocatorAcknowledgementForTests(
+                Encode(disposition),
+                locator));
+
+            var wrongLocatorHash = ParseVector(vectors["locatorAcknowledgement"]);
+            ((JObject)wrongLocatorHash["locatorSelfHash"])["digest"] =
+                "sha256:" + new string('d', 64);
+            ResealForTests(wrongLocatorHash, W24S6WorkerProtocolCodec.LocatorAcknowledgementSelfHashType);
+            AssertReject(() => W24S6WorkerProtocolCodec.DecodeLocatorAcknowledgementForTests(
+                Encode(wrongLocatorHash),
+                locator));
+        }
+
+        [Test]
         public void GoldenVectorWrapperPinsExactPhysicalBytesAndLengths()
         {
             var root = LoadVectorRoot();
@@ -202,6 +309,16 @@ namespace VFXComposer.Tests.EditMode
                     StringComparer.Ordinal);
         }
 
+        private static Dictionary<string, byte[]> LoadLocatorVectors()
+        {
+            return ((JArray)LoadLocatorVectorRoot()["vectors"])
+                .OfType<JObject>()
+                .ToDictionary(
+                    vector => (string)vector["name"],
+                    vector => Convert.FromBase64String((string)vector["base64"]),
+                    StringComparer.Ordinal);
+        }
+
         private static JObject LoadVectorRoot()
         {
             return W24StrictJsonText.ParseObject(
@@ -211,6 +328,17 @@ namespace VFXComposer.Tests.EditMode
                         "docs/protocol-vectors/desktop-phase2-worker-handle-lifecycle-v1.json"),
                     StrictUtf8),
                 "Worker lifecycle golden vectors");
+        }
+
+        private static JObject LoadLocatorVectorRoot()
+        {
+            return W24StrictJsonText.ParseObject(
+                File.ReadAllText(
+                    Path.Combine(
+                        RepositoryRoot(),
+                        "src/VFXComposer.Protocol.Tests/GoldenVectors/desktop-phase2-worker-project-locator-v1.json"),
+                    StrictUtf8),
+                "Worker project locator golden vectors");
         }
 
         private static JObject ParseVector(byte[] bytes)
