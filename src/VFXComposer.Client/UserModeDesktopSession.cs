@@ -85,21 +85,21 @@ public sealed class UserModeDesktopSession : IUserModeDesktopSession
             RequireState(UserModeDesktopSessionState.ConnectedNoProject, UserModeDesktopSessionState.Selected);
             SetState(UserModeDesktopSessionState.Selecting);
             Volatile.Write(ref _lastRead, null);
-            var generation = Generation;
-            var sessionId = SessionIdFor(generation);
-            var requestId = "desktop-select-" + Guid.NewGuid().ToString("N");
-            using var request = new UserModeDesktopControlMessage(
-                ProtocolVersions.Current,
-                UserModeDesktopControlKinds.Select,
-                requestId,
-                generation,
-                sessionId,
-                selection,
-                null,
-                null,
-                []);
             try
             {
+                var generation = Generation;
+                var sessionId = SessionIdFor(generation);
+                var requestId = "desktop-select-" + Guid.NewGuid().ToString("N");
+                using var request = new UserModeDesktopControlMessage(
+                    ProtocolVersions.Current,
+                    UserModeDesktopControlKinds.Select,
+                    requestId,
+                    generation,
+                    sessionId,
+                    selection,
+                    null,
+                    null,
+                    []);
                 using var response = await ExchangeAsync(request, cancellationToken).ConfigureAwait(false);
                 RequireResponse(response, UserModeDesktopControlKinds.SelectAccepted, requestId, generation, sessionId);
                 SetState(UserModeDesktopSessionState.Selected);
@@ -126,21 +126,21 @@ public sealed class UserModeDesktopSession : IUserModeDesktopSession
         {
             RequireState(UserModeDesktopSessionState.Selected);
             SetState(UserModeDesktopSessionState.Reading);
-            var generation = Generation;
-            var sessionId = SessionIdFor(generation);
-            var requestId = "desktop-read-" + Guid.NewGuid().ToString("N");
-            using var request = new UserModeDesktopControlMessage(
-                ProtocolVersions.Current,
-                UserModeDesktopControlKinds.Read,
-                requestId,
-                generation,
-                sessionId,
-                null,
-                documentKind,
-                documentId,
-                []);
             try
             {
+                var generation = Generation;
+                var sessionId = SessionIdFor(generation);
+                var requestId = "desktop-read-" + Guid.NewGuid().ToString("N");
+                using var request = new UserModeDesktopControlMessage(
+                    ProtocolVersions.Current,
+                    UserModeDesktopControlKinds.Read,
+                    requestId,
+                    generation,
+                    sessionId,
+                    null,
+                    documentKind,
+                    documentId,
+                    []);
                 using var response = await ExchangeAsync(request, cancellationToken).ConfigureAwait(false);
                 RequireResponse(response, UserModeDesktopControlKinds.ReadResult, requestId, generation, sessionId);
                 if (!string.Equals(response.DocumentKind, documentKind, StringComparison.Ordinal) ||

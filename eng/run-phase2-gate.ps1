@@ -25,11 +25,17 @@ $script:RepositoryRoot = [System.IO.Path]::GetFullPath((Join-Path $PSScriptRoot 
 $script:DefaultRoots = @(
     "src/VFXComposer.Protocol",
     "src/VFXComposer.Protocol.Tests",
+    "src/VFXComposer.Client",
+    "src/VFXComposer.Client.Tests",
     "docs/schemas/desktop",
+    "apps/VFXComposer.Desktop",
+    "apps/VFXComposer.Desktop.Tests",
     "services/VFXComposer.Broker",
     "services/VFXComposer.Broker.Tests",
     "services/VFXComposer.Broker.ServiceHost",
     "services/VFXComposer.Broker.ServiceHost.Tests",
+    "services/VFXComposer.UnityWorker",
+    "tests/VFXComposer.LocalE2E.Tests",
     "project/Packages/com.vfxcomposer.unity",
     "VFXComposer.sln"
 )
@@ -201,6 +207,10 @@ function Get-RepositoryFiles {
     $paths = [System.Collections.Generic.List[string]]::new()
     foreach ($path in $raw.Split([char]0, [System.StringSplitOptions]::RemoveEmptyEntries)) {
         $normalized = $path.Replace('\', '/')
+        $segments = $normalized.Split('/')
+        if ($segments -contains "bin" -or $segments -contains "obj") {
+            continue
+        }
         if ([System.IO.File]::Exists((Join-Path $script:RepositoryRoot $path))) {
             $paths.Add($normalized)
         }
@@ -344,16 +354,16 @@ function Get-AssemblyIdentity {
 }
 
 function Get-ResidueSnapshot {
-    $brokerProcesses = @()
+    $runtimeProcesses = @()
     try {
-        $brokerProcesses = @(Get-CimInstance Win32_Process | Where-Object {
-            $_.CommandLine -and $_.CommandLine -match 'VFXComposer\.Broker(?:\.dll|\.exe)'
+        $runtimeProcesses = @(Get-CimInstance Win32_Process | Where-Object {
+            $_.CommandLine -and $_.CommandLine -match 'VFXComposer\.(?:Broker|UnityWorker)(?:\.dll|\.exe)'
         } | ForEach-Object {
             [ordered]@{ processId = $_.ProcessId; name = $_.Name; commandLine = $_.CommandLine }
         })
     }
     catch {
-        $brokerProcesses = @([ordered]@{ queryError = $_.Exception.Message })
+        $runtimeProcesses = @([ordered]@{ queryError = $_.Exception.Message })
     }
 
     $pipeNames = @()
@@ -366,10 +376,22 @@ function Get-ResidueSnapshot {
         $pipeNames = @("<query-error: $($_.Exception.Message)>")
     }
 
+    $localE2ETemporaryRoots = @()
+    try {
+        $temporaryRoot = [System.IO.Path]::GetFullPath([System.IO.Path]::GetTempPath())
+        $localE2ETemporaryRoots = @(Get-ChildItem -LiteralPath $temporaryRoot -Directory -Force -ErrorAction Stop |
+            Where-Object { $_.Name.StartsWith("vfxcomposer-u5-", [System.StringComparison]::Ordinal) } |
+            ForEach-Object { $_.FullName })
+    }
+    catch {
+        $localE2ETemporaryRoots = @("<query-error: $($_.Exception.Message)>")
+    }
+
     return [ordered]@{
-        brokerProcesses = $brokerProcesses
+        runtimeProcesses = $runtimeProcesses
         vfxComposerNamedPipes = $pipeNames
-        claim = "Point-in-time process and named-pipe enumeration only; not proof of historical absence."
+        localE2ETemporaryRoots = $localE2ETemporaryRoots
+        claim = "Point-in-time staged runtime, named-pipe, and owned LocalE2E temporary-root enumeration only; not proof of historical absence."
     }
 }
 
@@ -408,13 +430,18 @@ if (-not $ReceiptRoot.StartsWith((Join-Path $script:RepositoryRoot ".codex_tmp")
 
 $testResults = Join-Path $ReceiptRoot "test-results"
 $commands = @(
-    [ordered]@{ id = "protocol-build"; file = "dotnet"; args = @("build", "src/VFXComposer.Protocol.Tests/VFXComposer.Protocol.Tests.csproj", "--configuration", "Release", "--no-restore", "-p:RestoreLockedMode=true"); expected = @(0) },
-    [ordered]@{ id = "broker-build"; file = "dotnet"; args = @("build", "services/VFXComposer.Broker.Tests/VFXComposer.Broker.Tests.csproj", "--configuration", "Release", "--no-restore", "-p:RestoreLockedMode=true"); expected = @(0) },
-    [ordered]@{ id = "solution-build"; file = "dotnet"; args = @("build", "VFXComposer.sln", "--configuration", "Release", "--no-restore", "-p:RestoreLockedMode=true"); expected = @(0) },
-    [ordered]@{ id = "protocol-test"; file = "dotnet"; args = @("test", "src/VFXComposer.Protocol.Tests/VFXComposer.Protocol.Tests.csproj", "--configuration", "Release", "--no-build", "--no-restore", "-p:RestoreLockedMode=true", "--logger", "trx;LogFileName=protocol.trx", "--results-directory", (Join-Path $testResults "protocol")); expected = @(0) },
-    [ordered]@{ id = "broker-test"; file = "dotnet"; args = @("test", "services/VFXComposer.Broker.Tests/VFXComposer.Broker.Tests.csproj", "--configuration", "Release", "--no-build", "--no-restore", "-p:RestoreLockedMode=true", "--logger", "trx;LogFileName=broker.trx", "--results-directory", (Join-Path $testResults "broker")); expected = @(0) },
-    [ordered]@{ id = "schema"; file = "python"; args = @("eng/verify-phase2-schemas.py"); expected = @(0) },
-    [ordered]@{ id = "broker-smoke"; file = "dotnet"; args = @("services/VFXComposer.Broker/bin/Release/net8.0/VFXComposer.Broker.dll"); expected = @(23) }
+    [ordered]@{ phase = "build"; id = "protocol-build"; file = "dotnet"; args = @("build", "src/VFXComposer.Protocol.Tests/VFXComposer.Protocol.Tests.csproj", "--configuration", "Release", "--no-restore", "-p:RestoreLockedMode=true"); expected = @(0) },
+    [ordered]@{ phase = "build"; id = "client-build"; file = "dotnet"; args = @("build", "src/VFXComposer.Client.Tests/VFXComposer.Client.Tests.csproj", "--configuration", "Release", "--no-restore", "-p:RestoreLockedMode=true"); expected = @(0) },
+    [ordered]@{ phase = "build"; id = "broker-build"; file = "dotnet"; args = @("build", "services/VFXComposer.Broker.Tests/VFXComposer.Broker.Tests.csproj", "--configuration", "Release", "--no-restore", "-p:RestoreLockedMode=true"); expected = @(0) },
+    [ordered]@{ phase = "build"; id = "worker-build"; file = "dotnet"; args = @("build", "services/VFXComposer.UnityWorker/VFXComposer.UnityWorker.csproj", "--configuration", "Release", "--no-restore", "-p:RestoreLockedMode=true"); expected = @(0) },
+    [ordered]@{ phase = "build"; id = "local-e2e-build"; file = "dotnet"; args = @("build", "tests/VFXComposer.LocalE2E.Tests/VFXComposer.LocalE2E.Tests.csproj", "--configuration", "Release", "--no-restore", "-p:RestoreLockedMode=true"); expected = @(0) },
+    [ordered]@{ phase = "build"; id = "solution-build"; file = "dotnet"; args = @("build", "VFXComposer.sln", "--configuration", "Release", "--no-restore", "-p:RestoreLockedMode=true"); expected = @(0) },
+    [ordered]@{ phase = "run"; id = "protocol-test"; file = "dotnet"; args = @("test", "src/VFXComposer.Protocol.Tests/VFXComposer.Protocol.Tests.csproj", "--configuration", "Release", "--no-build", "--no-restore", "-p:RestoreLockedMode=true", "--logger", "trx;LogFileName=protocol.trx", "--results-directory", (Join-Path $testResults "protocol")); expected = @(0) },
+    [ordered]@{ phase = "run"; id = "client-test"; file = "dotnet"; args = @("test", "src/VFXComposer.Client.Tests/VFXComposer.Client.Tests.csproj", "--configuration", "Release", "--no-build", "--no-restore", "-p:RestoreLockedMode=true", "--logger", "trx;LogFileName=client.trx", "--results-directory", (Join-Path $testResults "client")); expected = @(0) },
+    [ordered]@{ phase = "run"; id = "broker-test"; file = "dotnet"; args = @("test", "services/VFXComposer.Broker.Tests/VFXComposer.Broker.Tests.csproj", "--configuration", "Release", "--no-build", "--no-restore", "-p:RestoreLockedMode=true", "--logger", "trx;LogFileName=broker.trx", "--results-directory", (Join-Path $testResults "broker")); expected = @(0) },
+    [ordered]@{ phase = "run"; id = "local-e2e-test"; file = "dotnet"; args = @("test", "tests/VFXComposer.LocalE2E.Tests/VFXComposer.LocalE2E.Tests.csproj", "--configuration", "Release", "--no-build", "--no-restore", "-p:RestoreLockedMode=true", "--logger", "trx;LogFileName=local-e2e.trx", "--results-directory", (Join-Path $testResults "local-e2e")); expected = @(0) },
+    [ordered]@{ phase = "run"; id = "schema"; file = "python"; args = @("eng/verify-phase2-schemas.py"); expected = @(0) },
+    [ordered]@{ phase = "run"; id = "broker-smoke"; file = "dotnet"; args = @("services/VFXComposer.Broker/bin/Release/net8.0/VFXComposer.Broker.dll"); expected = @(23) }
 )
 
 if ($DryRun) {
@@ -440,7 +467,7 @@ $preRoots = @(Get-RootSnapshot)
 Write-Json -Path (Join-Path $ReceiptRoot "roots-pre.json") -Value ([ordered]@{ roots = $preRoots })
 
 $buildResults = @()
-foreach ($command in $commands | Select-Object -First 3) {
+foreach ($command in $commands | Where-Object { $_.phase -eq "build" }) {
     $result = Invoke-CapturedProcess -Id $command.id -FileName $command.file -Arguments $command.args -ExpectedExitCodes $command.expected -OutputRoot (Join-Path $ReceiptRoot "commands")
     $buildResults += $result
     if (-not $result.Passed) { $failures.Add("$($command.id) exited $($result.ExitCode)") }
@@ -448,13 +475,19 @@ foreach ($command in $commands | Select-Object -First 3) {
 
 $bindingBeforeTests = @(
     Get-AssemblyIdentity -RelativePath "src/VFXComposer.Protocol.Tests/bin/Release/net8.0/VFXComposer.Protocol.Tests.dll"
+    Get-AssemblyIdentity -RelativePath "src/VFXComposer.Client.Tests/bin/Release/net8.0/VFXComposer.Client.Tests.dll"
+    Get-AssemblyIdentity -RelativePath "src/VFXComposer.Client/bin/Release/net8.0/VFXComposer.Client.dll"
     Get-AssemblyIdentity -RelativePath "services/VFXComposer.Broker.Tests/bin/Release/net8.0/VFXComposer.Broker.Tests.dll"
     Get-AssemblyIdentity -RelativePath "services/VFXComposer.Broker/bin/Release/net8.0/VFXComposer.Broker.dll"
+    Get-AssemblyIdentity -RelativePath "services/VFXComposer.UnityWorker/bin/Release/net8.0-windows/VFXComposer.UnityWorker.dll"
+    Get-AssemblyIdentity -RelativePath "tests/VFXComposer.LocalE2E.Tests/bin/Release/net8.0-windows/VFXComposer.LocalE2E.Tests.dll"
+    Get-AssemblyIdentity -RelativePath "tests/VFXComposer.LocalE2E.Tests/bin/Release/net8.0-windows/VFXComposer.Broker.dll"
+    Get-AssemblyIdentity -RelativePath "tests/VFXComposer.LocalE2E.Tests/bin/Release/net8.0-windows/VFXComposer.UnityWorker.dll"
 )
 Write-Json -Path (Join-Path $ReceiptRoot "assembly-binding-before-tests.json") -Value ([ordered]@{ assemblies = $bindingBeforeTests })
 
 $runResults = @()
-foreach ($command in $commands | Select-Object -Skip 3) {
+foreach ($command in $commands | Where-Object { $_.phase -eq "run" }) {
     $result = Invoke-CapturedProcess -Id $command.id -FileName $command.file -Arguments $command.args -ExpectedExitCodes $command.expected -OutputRoot (Join-Path $ReceiptRoot "commands")
     $runResults += $result
     if (-not $result.Passed) { $failures.Add("$($command.id) exited $($result.ExitCode)") }
@@ -469,8 +502,14 @@ foreach ($command in $commands | Select-Object -Skip 3) {
 
 $bindingAfterTests = @(
     Get-AssemblyIdentity -RelativePath "src/VFXComposer.Protocol.Tests/bin/Release/net8.0/VFXComposer.Protocol.Tests.dll"
+    Get-AssemblyIdentity -RelativePath "src/VFXComposer.Client.Tests/bin/Release/net8.0/VFXComposer.Client.Tests.dll"
+    Get-AssemblyIdentity -RelativePath "src/VFXComposer.Client/bin/Release/net8.0/VFXComposer.Client.dll"
     Get-AssemblyIdentity -RelativePath "services/VFXComposer.Broker.Tests/bin/Release/net8.0/VFXComposer.Broker.Tests.dll"
     Get-AssemblyIdentity -RelativePath "services/VFXComposer.Broker/bin/Release/net8.0/VFXComposer.Broker.dll"
+    Get-AssemblyIdentity -RelativePath "services/VFXComposer.UnityWorker/bin/Release/net8.0-windows/VFXComposer.UnityWorker.dll"
+    Get-AssemblyIdentity -RelativePath "tests/VFXComposer.LocalE2E.Tests/bin/Release/net8.0-windows/VFXComposer.LocalE2E.Tests.dll"
+    Get-AssemblyIdentity -RelativePath "tests/VFXComposer.LocalE2E.Tests/bin/Release/net8.0-windows/VFXComposer.Broker.dll"
+    Get-AssemblyIdentity -RelativePath "tests/VFXComposer.LocalE2E.Tests/bin/Release/net8.0-windows/VFXComposer.UnityWorker.dll"
 )
 Write-Json -Path (Join-Path $ReceiptRoot "assembly-binding-after-tests.json") -Value ([ordered]@{ assemblies = $bindingAfterTests })
 if (($bindingBeforeTests | ConvertTo-Json -Depth 6 -Compress) -cne ($bindingAfterTests | ConvertTo-Json -Depth 6 -Compress)) {
@@ -498,11 +537,14 @@ if ($rootMismatches.Count -ne 0) {
 
 $residue = Get-ResidueSnapshot
 Write-Json -Path (Join-Path $ReceiptRoot "residue.json") -Value $residue
-if (@($residue.brokerProcesses | Where-Object { -not $_.Contains('queryError') }).Count -ne 0) {
-    $failures.Add("Broker process residue was present after the gate")
+if (@($residue.runtimeProcesses | Where-Object { -not $_.Contains('queryError') }).Count -ne 0) {
+    $failures.Add("Broker or Worker process residue was present after the gate")
 }
 if (@($residue.vfxComposerNamedPipes | Where-Object { $_ -notlike '<query-error:*' }).Count -ne 0) {
     $failures.Add("VFX Composer named-pipe residue was present after the gate")
+}
+if (@($residue.localE2ETemporaryRoots | Where-Object { $_ -notlike '<query-error:*' }).Count -ne 0) {
+    $failures.Add("LocalE2E temporary-project residue was present after the gate")
 }
 
 $gateEnd = [DateTimeOffset]::UtcNow
