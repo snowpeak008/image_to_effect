@@ -123,7 +123,9 @@ The result closes the entire ADR-005 USER_MODE main architecture at `100/100`. I
 
 The AI A0 documentation freeze is closed in this same commit, with no U6 gate replay. ADR-006 freezes `ChatLlm` and `ImageGeneration` as isolated, exact one-profile/capability/model bindings, with Origin as metadata and explicit independent protocol. It prohibits fallback, undocumented auth, cookie/script/custom-header/DLL/TLS-bypass behavior, secret/raw diagnostic leakage, and automatic Unity writes.
 
-`A1 — AI_PROVIDER_FOUNDATION` is the unique `ACTIVE` package. Its exact owned roots are `src/VFXComposer.AI.Contracts/**`, `src/VFXComposer.AI.Providers/**`, `src/VFXComposer.AI.Tests/**`, `docs/schemas/desktop/vfxcomposer-ai-provider-config-v1.schema.json`, `VFXComposer.sln`, `eng/run-phase2-gate.ps1`, and `eng/phase2-baseline-roots.json`; any other path, central package-management change, or external `.csproj` dependency is STOP. A1 has no real Chat/Image HTTP. A2-A6 remain `NOT STARTED`.
+`A1 — AI_PROVIDER_FOUNDATION` is the unique `ACTIVE` package. Its exact owned roots are `src/VFXComposer.AI.Contracts/**`, `src/VFXComposer.AI.Providers/**`, `src/VFXComposer.AI.Tests/**`, `docs/schemas/desktop/vfxcomposer-ai-provider-config-v1.schema.json`, `VFXComposer.sln`, `eng/verify-phase2-schemas.py`, `eng/run-phase2-gate.ps1`, and `eng/phase2-baseline-roots.json`; the verifier is the only additional file beyond the three roots, schema, solution, runner, and baseline. Any other path, central package-management change, or external `.csproj` dependency is STOP. A1 has no real Chat/Image HTTP. A2-A6 remain `NOT STARTED`.
+
+The first A1 writer is `STOPPED — ZERO WRITES`: the new AI schema would be desktop schema 23 while `eng/verify-phase2-schemas.py` line 57 hard-codes 22. A1 must change the expected total to 23, preserve `Phase 2=13`, `positive=14`, and `negative=236`, and add AI-schema structural validation with positive and negative cases; merely loosening the count is STOP.
 
 After this publication, the current control state is `FINAL STOPPED` for U6 and A0. Only the separately scoped A1 package may proceed.
 
