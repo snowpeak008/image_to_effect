@@ -23,6 +23,15 @@ public sealed class NoProjectAccessSurfaceTests
         typeof(MainWindowViewModel).Assembly,
     ];
 
+    // U4 permits this exact Client-only process/control-pipe implementation.
+    // The Desktop assembly and every other Client type remain fully inspected.
+    private static readonly string[] UserModeClientInfrastructureAllowlist =
+    [
+        "VFXComposer.Client.IUserModeBrokerProcessHost",
+        "VFXComposer.Client.UserModeBrokerProcessHost",
+        "VFXComposer.Client.UserModeDesktopSession",
+    ];
+
     private static readonly string[] ProhibitedIdentifierFragments =
     [
         "AbsolutePath",
@@ -103,6 +112,21 @@ public sealed class NoProjectAccessSurfaceTests
             "The access-surface scanner must resolve prohibited member references in private method IL.");
     }
 
+    [TestMethod]
+    public void U4ClientInfrastructureAllowlistIsExactAndClosed()
+    {
+        CollectionAssert.AreEquivalent(
+            new[]
+            {
+                "VFXComposer.Client.IUserModeBrokerProcessHost",
+                "VFXComposer.Client.UserModeBrokerProcessHost",
+                "VFXComposer.Client.UserModeDesktopSession",
+            },
+            UserModeClientInfrastructureAllowlist);
+        Assert.IsTrue(UserModeClientInfrastructureAllowlist.All(name =>
+            name.StartsWith("VFXComposer.Client.", StringComparison.Ordinal)));
+    }
+
     private static IEnumerable<string> ScanAssembly(Assembly assembly)
     {
         var assemblyName = assembly.GetName().Name ?? "<unnamed>";
@@ -116,11 +140,24 @@ public sealed class NoProjectAccessSurfaceTests
 
         foreach (var type in assembly.GetTypes())
         {
+            if (IsAllowlistedUserModeClientInfrastructure(type))
+            {
+                continue;
+            }
+
             foreach (var violation in ScanType(type))
             {
                 yield return $"{assemblyName}: {violation}";
             }
         }
+    }
+
+    private static bool IsAllowlistedUserModeClientInfrastructure(Type type)
+    {
+        var fullName = type.FullName;
+        return fullName is not null && UserModeClientInfrastructureAllowlist.Any(allowlisted =>
+            string.Equals(fullName, allowlisted, StringComparison.Ordinal) ||
+            fullName.StartsWith(allowlisted + "+", StringComparison.Ordinal));
     }
 
     private static IEnumerable<string> ScanType(Type type)

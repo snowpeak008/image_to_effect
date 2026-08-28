@@ -6,14 +6,19 @@ using VFXComposer.Desktop.Services;
 
 namespace VFXComposer.Desktop.ViewModels;
 
-public sealed class MainWindowViewModel : ObservableObject
+public sealed class MainWindowViewModel : ObservableObject, IAsyncDisposable
 {
     private readonly VfxComposerClient _client;
+    private IUserModeDesktopSession? _session;
+    private IProjectSelectionDialog? _selectionDialog;
+    private IUiDispatcher? _dispatcher;
     private readonly IInMemoryDiagnosticSink _diagnostics;
     private readonly IUiErrorBoundary _errorBoundary;
     private NavigationItemViewModel _selectedNavigationItem;
     private string _connectionDisplay;
     private string _projectDisplay;
+    private string _sessionDisplay = "Disconnected";
+    private string _readDisplay = "No read result";
 
     public MainWindowViewModel(
         VfxComposerClient client,
@@ -41,6 +46,13 @@ public sealed class MainWindowViewModel : ObservableObject
         _connectionDisplay = client.CurrentState.ConnectionDisplay;
         _projectDisplay = client.CurrentState.ProjectDisplay;
         RefreshCommand = new AsyncRelayCommand(RefreshAsync);
+        ConnectCommand = new AsyncRelayCommand(ConnectAsync, () => _session is not null);
+        SelectProjectCommand = new AsyncRelayCommand(SelectProjectAsync, () =>
+            _session?.State is UserModeDesktopSessionState.ConnectedNoProject or UserModeDesktopSessionState.Selected);
+        ReadProjectCommand = new AsyncRelayCommand(ReadProjectAsync, () =>
+            _session?.State == UserModeDesktopSessionState.Selected);
+        RecoverCommand = new AsyncRelayCommand(RecoverAsync, () =>
+            _session?.State == UserModeDesktopSessionState.RecoveryRequired);
 
         _diagnostics.Record(
             "DESKTOP_READY",
@@ -79,6 +91,22 @@ public sealed class MainWindowViewModel : ObservableObject
     }
 
     public IAsyncRelayCommand RefreshCommand { get; }
+    public IAsyncRelayCommand ConnectCommand { get; }
+    public IAsyncRelayCommand SelectProjectCommand { get; }
+    public IAsyncRelayCommand ReadProjectCommand { get; }
+    public IAsyncRelayCommand RecoverCommand { get; }
+
+    public string SessionDisplay
+    {
+        get => _sessionDisplay;
+        private set => SetProperty(ref _sessionDisplay, value);
+    }
+
+    public string ReadDisplay
+    {
+        get => _readDisplay;
+        private set => SetProperty(ref _readDisplay, value);
+    }
 
     public IReadOnlyList<UiDiagnostic> Diagnostics => _diagnostics.Snapshot;
 
@@ -93,6 +121,30 @@ public sealed class MainWindowViewModel : ObservableObject
             VfxComposerClient.CreateDisconnected(),
             diagnostics,
             errorBoundary);
+    }
+
+    public static MainWindowViewModel CreateUserMode(
+        IUserModeDesktopSession session,
+        IProjectSelectionDialog selectionDialog,
+        IUiDispatcher dispatcher,
+        IInMemoryDiagnosticSink? diagnostics = null,
+        IUiErrorBoundary? errorBoundary = null)
+    {
+        ArgumentNullException.ThrowIfNull(session);
+        ArgumentNullException.ThrowIfNull(selectionDialog);
+        ArgumentNullException.ThrowIfNull(dispatcher);
+        diagnostics ??= new InMemoryDiagnosticSink();
+        errorBoundary ??= new UiErrorBoundary(diagnostics);
+        var result = new MainWindowViewModel(
+            VfxComposerClient.CreateDisconnected(), diagnostics, errorBoundary)
+        {
+            _session = session,
+            _selectionDialog = selectionDialog,
+            _dispatcher = dispatcher,
+        };
+        session.StateChanged += result.OnSessionStateChanged;
+        result.RefreshSessionPresentation();
+        return result;
     }
 
     public bool TryNavigate(string key)
@@ -120,5 +172,107 @@ public sealed class MainWindowViewModel : ObservableObject
                 ConnectionDisplay = state.ConnectionDisplay;
                 ProjectDisplay = state.ProjectDisplay;
             });
+    }
+
+    public async ValueTask DisposeAsync()
+    {
+        if (_session is not null)
+        {
+            _session.StateChanged -= OnSessionStateChanged;
+            await _session.DisposeAsync();
+        }
+    }
+
+    private async Task ConnectAsync()
+    {
+        if (_session is null)
+        {
+            return;
+        }
+
+        await RunSessionOperationAsync("connect-user-mode", token => _session.ConnectAsync(token));
+    }
+
+    private async Task SelectProjectAsync()
+    {
+        if (_session is null || _selectionDialog is null)
+        {
+            return;
+        }
+
+        string? selection = await _selectionDialog.SelectAsync();
+        if (selection is null)
+        {
+            return;
+        }
+
+        try
+        {
+            await RunSessionOperationAsync(
+                "select-user-project",
+                token => _session.SelectAsync(selection, token));
+        }
+        finally
+        {
+            selection = null;
+        }
+    }
+
+    private async Task ReadProjectAsync()
+    {
+        if (_session is null)
+        {
+            return;
+        }
+
+        await RunSessionOperationAsync(
+            "read-user-project",
+            async token =>
+            {
+                var result = await _session.ReadAsync(cancellationToken: token);
+                ReadDisplay = result.Accepted
+                    ? $"Read {result.ByteLength} bytes"
+                    : $"Read rejected: {result.DiagnosticCode ?? "U4FS001"}";
+            });
+    }
+
+    private async Task RecoverAsync()
+    {
+        if (_session is null)
+        {
+            return;
+        }
+
+        ReadDisplay = "No read result";
+        await RunSessionOperationAsync("restart-user-mode", token => _session.RestartAsync(token));
+    }
+
+    private async Task RunSessionOperationAsync(
+        string operation,
+        Func<CancellationToken, ValueTask> action)
+    {
+        await _errorBoundary.RunAsync(operation, () => action(CancellationToken.None));
+        RefreshSessionPresentation();
+    }
+
+    private void OnSessionStateChanged(object? sender, EventArgs eventArgs) =>
+        _dispatcher?.Post(RefreshSessionPresentation);
+
+    private void RefreshSessionPresentation()
+    {
+        SessionDisplay = _session?.State.ToString() ?? "Disconnected";
+        ConnectionDisplay = _session?.State is
+            UserModeDesktopSessionState.ConnectedNoProject or
+            UserModeDesktopSessionState.Selecting or
+            UserModeDesktopSessionState.Selected or
+            UserModeDesktopSessionState.Reading
+                ? "Connected"
+                : "Disconnected";
+        ProjectDisplay = _session?.State is UserModeDesktopSessionState.Selected or UserModeDesktopSessionState.Reading
+            ? "Selected project"
+            : "No registered project";
+        SelectProjectCommand.NotifyCanExecuteChanged();
+        ReadProjectCommand.NotifyCanExecuteChanged();
+        RecoverCommand.NotifyCanExecuteChanged();
     }
 }

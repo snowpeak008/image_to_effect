@@ -1,4 +1,4 @@
-using VFXComposer.Broker.Configuration;
+using VFXComposer.Broker.Ipc;
 
 namespace VFXComposer.Broker;
 
@@ -6,16 +6,38 @@ internal static class Program
 {
     public static int Main()
     {
-        if (!BrokerPolicy.TryLoadProduction(out _))
+        if (ReferenceEquals(System.Reflection.Assembly.GetEntryAssembly(), typeof(Program).Assembly))
         {
-            Console.Error.WriteLine(BrokerDiagnosticCodes.RegistrationIssuerPending);
-            return 23;
+            var args = Environment.GetCommandLineArgs().Skip(1).ToArray();
+            if (OperatingSystem.IsWindows() && args.Length == 1 &&
+                string.Equals(args[0], "--user-mode-desktop-child", StringComparison.Ordinal))
+            {
+                return UserModeDesktopBrokerHost.RunChildModeAsync(Console.OpenStandardInput())
+                    .GetAwaiter().GetResult();
+            }
+
+            if (OperatingSystem.IsWindows() && args.Length == 1 &&
+                string.Equals(args[0], "--u4-scripted-worker-peer", StringComparison.Ordinal))
+            {
+                return UserModeDesktopBrokerHost.RunScriptedWorkerPeerAsync(
+                        Console.OpenStandardInput(),
+                        emitMalformedAcknowledgement: false)
+                    .GetAwaiter().GetResult();
+            }
+
+            if (OperatingSystem.IsWindows() && args.Length == 1 &&
+                string.Equals(args[0], "--u4-scripted-worker-peer-invalid-ack", StringComparison.Ordinal))
+            {
+                return UserModeDesktopBrokerHost.RunScriptedWorkerPeerAsync(
+                        Console.OpenStandardInput(),
+                        emitMalformedAcknowledgement: true)
+                    .GetAwaiter().GetResult();
+            }
         }
 
-        // Production listening is intentionally unreachable until a host-owned policy
-        // issuer and the Windows peer-facts gate are independently accepted.
-        Console.Error.WriteLine(BrokerDiagnosticCodes.PeerAuthenticatorPending);
-        return 24;
+        // The ordinary default is a no-listener, no-Worker fail-closed process.
+        Console.Error.WriteLine(BrokerDiagnosticCodes.RegistrationIssuerPending);
+        return 23;
     }
 }
 

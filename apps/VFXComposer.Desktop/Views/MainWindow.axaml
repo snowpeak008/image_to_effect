@@ -81,9 +81,16 @@
     </ScrollViewer>
 
     <Border Grid.Row="2" Grid.ColumnSpan="2" Padding="16,9" Background="#1B1F25" BorderBrush="#343A45" BorderThickness="0,1,0,0">
-      <Grid ColumnDefinitions="*,Auto" ColumnSpacing="16">
-        <TextBlock Classes="muted" Text="Fail closed: no listener, no project access, no authority issuer" VerticalAlignment="Center" />
-        <Button Grid.Column="1" Command="{Binding RefreshCommand}" Content="Refresh status" />
+      <Grid ColumnDefinitions="*,Auto,Auto,Auto,Auto" ColumnSpacing="10">
+        <StackPanel>
+          <TextBlock Classes="muted" Text="Read-only ordinary-user session; commands and mutation are disabled" />
+          <TextBlock Classes="muted" Text="{Binding SessionDisplay}" />
+          <TextBlock Classes="muted" Text="{Binding ReadDisplay}" />
+        </StackPanel>
+        <Button Grid.Column="1" Command="{Binding ConnectCommand}" Content="Connect" />
+        <Button Grid.Column="2" Command="{Binding SelectProjectCommand}" Content="Select project" />
+        <Button Grid.Column="3" Command="{Binding ReadProjectCommand}" Content="Read" />
+        <Button Grid.Column="4" Command="{Binding RecoverCommand}" Content="Restart" />
       </Grid>
     </Border>
   </Grid>
