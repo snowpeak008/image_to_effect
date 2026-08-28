@@ -1,35 +1,24 @@
 # W24 Standalone Desktop Phase 2 foundation report
 
-> **CURRENT U0 STATUS (2026-08-28).** Phase 2 has been rebased to ADR-005's ordinary-user architecture. The pre-U0 report below remains historical evidence only; its privileged route and blockers are not current delivery dependencies.
+> **CURRENT CLOSEOUT — U6 FINAL GO / A0 AI ARCHITECTURE FREEZE (2026-08-28).** ADR-005's ordinary-user Phase-2 route is complete at `100/100`; ADR-006 starts a separate post-U6 AI-provider delivery chain. The pre-U0 report below remains historical evidence only; its privileged route and blockers are not current delivery dependencies.
 >
-> Normative U0 architecture token: `USER_MODE_LOCAL_CREATIVE_TOOL_V1`.
+> Normative tokens: `USER_MODE_LOCAL_CREATIVE_TOOL_V1` and `AI_PROVIDER_TWO_CHANNEL_ROUTING_V1`.
 
-## U0 architecture simplification report
+## U6 final audit closeout and A0 publication report
 
-U0 changes documentation only. It does not merge source, including the stopped M1 writer's uncommitted 12-file candidate, and it does not merge the stopped M2 branch `fa8843be`. Both old writers are stopped. M1 may be reviewed later inside U1; M2 remains historical.
+The independent receipt `u6-independent-final-audit-20260828T232640380Z` closes U6 at `FINAL GO — P0/P1/P2=0/0/0`. It reports `passed: true`, a stable `16607`-entry source manifest with SHA-256 `592bfeaab629e8cb9b100cf82fd3ce95c5be23972742501be34e57f1908a2284`, frozen-root replay `0` mismatches, and empty point-in-time runtime-process, VFX Composer named-pipe, and owned LocalE2E temporary-root residue. The USER_MODE main architecture is therefore `CLOSED — 100/100`; this conclusion is limited to ADR-005's local ordinary-user route.
 
-The current product model is a single-user local trusted authoring tool:
+Default Broker behavior is unchanged by this closeout: no-argument launch writes only `W24FS001` to stderr and exits `23`. U6 is closed and no longer schedules repairs or source work. The earlier failed U6 publication checkpoint remains historical provenance only and is superseded by this accepted independent final receipt.
 
-- trust the current logged-in user and the Desktop/Broker/Worker or Unity host that user intentionally launches;
-- use ordinary-user child processes, a current-user-SID local pipe, random pipe name, one-use nonce, generation, and exact parent/child handle plus process epoch;
-- accept only an explicit user-selected project and reduce it to a session-bound restricted locator; Worker owns bounded project read and Unity API access;
-- defend cross-user access, stale/replayed sessions, wrong project, protocol drift, PID reuse, unexpected release-layout path, leakage, crash/disconnect, and orphan cleanup;
-- make no claim against malicious same-user programs, administrator/kernel control, offline tampering, or a malicious selected project;
-- use hashes/signatures only for release integrity.
+In this same documentation commit, A0 is `CLOSED — AI_PROVIDER_TWO_CHANNEL_ROUTING`. It introduces ADR-006 and changes no implementation byte, provider behavior, credential, Desktop UI, Broker, Worker, Unity, project path, or runner behavior. A0 relies only on the accepted U6 unified-gate evidence and does not rerun the project gate; its validation is `git diff --check`.
 
-Windows Service/SCM, `LocalSystem`, privileged installer/enrollment, `SeSecurityPrivilege`, `SeRestorePrivilege`, strict-SACL live gate, loaded-image proof, production issuer, and ServiceHost `Running` are absent from the delivery architecture.
+The formal new DAG is `A0 -> A1 -> (A2 || A3) -> A4 -> A5 -> A6`. A1 is released as the sole `ACTIVE` package; A2 through A6 are `NOT STARTED`. A1 is foundation-only: contracts, profile/channel bindings, schema, strict versioned atomic JSON/`.bak`, DPAPI CurrentUser SecretRef store, configuration fingerprint, health and adapter-registry skeletons, safe Tom draft import, resolver, and `IAiGateway`; no real Chat or Image HTTP is implemented.
 
-The only current DAG has seven nodes and exact edges:
+ADR-006 freezes channel routing: all LLM/conversation work must use the one explicit `ChatLlm` binding and all image generation must use the one explicit `ImageGeneration` binding. Each is exactly one explicit profile/capability/model; sharing a profile is permitted only through separate capabilities and separate bindings. Origin (`Official`, `Relay`, `Friend`, `Subscription`, `Custom`) is metadata only; explicit protocol remains independent. Missing, invalid, cross-channel, or failed state is fail-closed with no fallback.
 
-`U0 -> U1`; `U0 -> U2`; `U1 + U2 -> U3`; `U3 -> U4 -> U5 -> U6`.
+The frozen operational boundary is documented API-token/OAuth only, HTTPS or explicitly enabled loopback HTTP only, no cookie scraping/scripts/custom-header templates/dynamic DLL/TLS bypass, no secrets or AI network in Broker/Worker/Unity, and Desktop through Gateway only. Logs, receipts, and exports exclude keys/Auth/prompt/raw/base64 data. Tom import is non-sensitive only and never decrypts `ApiKeyProtected`; images remain in private cache and are never automatically written to Unity.
 
-U1 is the combined C3+W1 actual Unity Worker connector. U2 is ordinary-user Broker/Worker child-process, pipe, nonce/session and cleanup. U3 is user project selection/read containment. U4 is Desktop integration. U5 is local ordinary-user E2E. U6 is the independent final audit. U1 and U2 may overlap under disjoint ownership; U3 waits for both.
-
-C1/C2 and reviewed ordinary-user P1/S1 fragments are reuse inputs. D1/D1R, ServiceHost/install, I1, R1, A1, B1, and the old privileged chain are historical only: no more implementation, audit, or blocker status attaches to them.
-
-The frozen U0 completion point is `45/100`, reported as **42%-48% complete**, using weights `8/22/22/18/12/12/6` for U0-U6 plus accepted reuse credit as defined in ADR-005. The remaining user-mode plan is estimated **45%-55% shorter** than the superseded privileged remaining route (50% planning point). No runtime capability is added by this estimate.
-
-Current blockers are only the not-yet-closed U1-U6 gates. Production connection/read, commands, mutation, evidence authority, and Phase 2 remain NO-GO.
+The exact A1 owned roots and mandatory tests are governed by ADR-006 and the current Phase Plan. No other file is authorized; any central package-management or external `.csproj` dependency is a STOP condition.
 
 ---
 

@@ -1,8 +1,8 @@
 # W24 program control
 
-> **CURRENT CONTROL PLANE — U6 USER-MODE FINAL AUDIT PUBLICATION (2026-08-28).** This section and ADR-005 supersede the pre-U0 control ledger retained below. Old Service/SCM/privileged nodes are historical only and are neither active, schedulable, auditable, nor blockers.
+> **CURRENT CONTROL PLANE — U6 FINAL GO / A0 AI ARCHITECTURE FREEZE (2026-08-28).** ADR-005's USER_MODE route is closed at `100/100`; ADR-006 controls the separate post-U6 AI-provider route. Old Service/SCM/privileged nodes are historical only and are neither active, schedulable, auditable, nor blockers.
 >
-> Normative U0 architecture token: `USER_MODE_LOCAL_CREATIVE_TOOL_V1`.
+> Normative tokens: `USER_MODE_LOCAL_CREATIVE_TOOL_V1` and `AI_PROVIDER_TWO_CHANNEL_ROUTING_V1`.
 
 ## Current user-mode integration state
 
@@ -14,14 +14,20 @@
 | U3 selection/read | `CLOSED / INTEGRATED — USER_PROJECT_SELECTION_READ_CONTAINMENT` | Source commit `0123616e21d656b2374809a13aeb2769f0324e7e`, merged at `027ba07448dd6d4a0741a67937427cd2d37b2649`; exact seven files; Broker target `8/8`, Unity EditMode `9/9`, no-tests PASS, unified Broker `179/179`, manifest SHA-256 prefix `b716…`. |
 | U4 Desktop integration | `CLOSED / INTEGRATED — DESKTOP_USER_MODE_INTEGRATION` | Source commit `2295b022348dc1514c72846533b86430bc4762ad`, integrated by `e1a6a9a37d3125717afbe795d283a07ffa242060`; accepted targets Protocol `108/108`, Client `14/14`, Broker `183/183`, Desktop `12/12`; r2 gate manifest `b741fef9ab35a683363993cfeeb74abd2b1cbc26f5e3988574febfe1349a66eb`. |
 | U5 local E2E | `CLOSED / SCOPED GO — LOCAL_ORDINARY_USER_E2E` | Source commit `365e7612b1be276aa74f4ab36f40482a0858e1ae`, integrated at `b9de2eb47e4e9d9ea29e0490b9dfc745a4dc307d`; exact 17-file closeout and independent acceptance `P0/P1/P2=0/0/0`. |
-| U6 final audit | `ACTIVE — WP-USERMODE-FINAL-AUDIT` | Sole active current package; read-only frozen-byte/evidence audit of the integrated U0-U5 route. Source changes are prohibited. |
-| Post-U6 AI A0 | `NOT STARTED` | The two-channel AI-provider plan is queued only; it is not user-mode source, runtime, evidence, or main-architecture completion credit. |
-| Runtime | `NO-GO` | Default Broker launch with no arguments remains stderr `W24FS001`, exit `23`; production remains NO-GO until U6 reaches its scoped final GO. |
-| Planning baseline | `45/100 planning point; 42%-48% band` | Frozen ADR-005 weighted algorithm. Remaining plan is approximately 45%-55% shorter than the superseded privileged route. |
+| U6 final audit | `CLOSED — FINAL GO — P0/P1/P2=0/0/0` | Accepted independent receipt `u6-independent-final-audit-20260828T232640380Z`; no U6 repair or source work remains. |
+| USER_MODE main architecture | `CLOSED — 100/100` | ADR-005 route is complete; this is not an AI-provider or external-service activation. |
+| Post-U6 AI A0 | `CLOSED — DOCS ONLY` | ADR-006 and this five-document control publication are completed in this same single documentation commit; existing U6 unified-gate evidence only, no project-gate rerun. |
+| A1 `AI_PROVIDER_FOUNDATION` | `ACTIVE` — sole active package. | Foundation only; no real Chat/Image HTTP, no Desktop wiring, and exact owned roots apply. |
+| A2 Chat adapter | `NOT STARTED` | May begin only after A1 closeout. |
+| A3 Image adapter | `NOT STARTED` | May begin only after A1 closeout. |
+| A4 Desktop wiring | `NOT STARTED` | May begin only after A2 and A3 closeout. |
+| A5 mock E2E | `NOT STARTED` | May begin only after A4 closeout. |
+| A6 AI final audit | `NOT STARTED` | May begin only after A5 closeout. |
+| Runtime | `USER_MODE FINAL GO; AI NO-GO` | Default Broker launch with no arguments remains stderr `W24FS001`, exit `23`; no AI provider runtime is released. |
 
 The product trusts the current logged-in user, intentionally launched Desktop/Broker/Worker or Unity host, and explicit user-selected project. It does not defend against malicious same-user software, administrator/kernel control, or offline tampering. It must defend cross-user pipe access, stale/cross-generation sessions, wrong project, protocol drift, PID reuse, unexpected release-layout path, leakage, crash/disconnect, and orphan cleanup.
 
-The exact current seven-node DAG is:
+The completed USER_MODE DAG is:
 
 `U0 -> U1`; `U0 -> U2`; `U1 + U2 -> U3`; `U3 -> U4 -> U5 -> U6`.
 
@@ -33,7 +39,9 @@ The exact current seven-node DAG is:
 | U3 | `CLOSED / INTEGRATED` explicit user project selection and restricted Worker-only read containment, source commit `0123616e21d656b2374809a13aeb2769f0324e7e`. | U1 + U2 closed integration outputs. |
 | U4 | `CLOSED / INTEGRATED` Desktop ordinary-user launch, explicit selection, read presentation and fail-closed recovery with zero direct project I/O. | U3 closed integration output. |
 | U5 | `CLOSED / SCOPED GO — LOCAL_ORDINARY_USER_E2E`; standalone ordinary-user Worker and real local E2E are accepted at source `365e7612b1be276aa74f4ab36f40482a0858e1ae`, integration `b9de2eb47e4e9d9ea29e0490b9dfc745a4dc307d`. | Accepted U4 integration. |
-| U6 | `ACTIVE — WP-USERMODE-FINAL-AUDIT`; read-only final audit with source changes prohibited and `P0/P1/P2=0/0/0` required for final scoped GO. | Accepted U5 frozen integration. |
+| U6 | `CLOSED — FINAL GO — P0/P1/P2=0/0/0`; accepted independent frozen-byte/evidence audit. | Frozen U0-U5 integration and accepted final receipt. |
+
+The exact formal post-U6 AI DAG is `A0 -> A1 -> (A2 || A3) -> A4 -> A5 -> A6`. A0 is closed in this documentation commit; A1 is the unique active package; A2-A6 are not started. The AI program is separate from the closed USER_MODE `100/100` accounting.
 
 ### U3 closed evidence
 
@@ -105,19 +113,19 @@ The same receipt records the Release solution build at `0 warnings / 0 errors`, 
 
 U5 establishes only the ADR-005 ordinary-user route: a standalone Protocol-only `net8.0-windows` `VFXComposer.UnityWorker.exe`, public `UserModeDesktopSession` across Desktop/Client -> Broker -> Worker, explicit selected-root working directory, and strict C2 locator acknowledgement before bounded `LIBRARY_INDEX`/manifest reads. The accepted adversarial and lifecycle coverage addresses nonce/session/generation/PID-epoch correlation, malformed or drifting protocol/locator/path input, marker/traversal/reparse/size/JSON rejection, crash/cancel/restart/partial-frame recovery, and leak cleanup.
 
-The other-user denial claim remains deliberately bounded to `CurrentUserOnly` static/IL plus existing unit evidence: no separate Windows account and no literal multi-user E2E result is claimed. It is not a claim against malicious same-user code, administrator/kernel control, offline tampering, or a deliberately malicious selected project. U5 introduces no Service/SCM, `LocalSystem`, privilege, SACL, enrollment, loaded-image, command, mutation, evidence, verdict, or authority capability. Production read remains NO-GO until U6 closes; hashes and signatures remain release-integrity evidence only.
+The other-user denial claim remains deliberately bounded to `CurrentUserOnly` static/IL plus existing unit evidence: no separate Windows account and no literal multi-user E2E result is claimed. It is not a claim against malicious same-user code, administrator/kernel control, offline tampering, or a deliberately malicious selected project. U5 introduces no Service/SCM, `LocalSystem`, privilege, SACL, enrollment, loaded-image, command, mutation, evidence, verdict, or authority capability. U6 now closes the defined ADR-005 route; hashes and signatures remain release-integrity evidence only.
 
-### U6 active final frozen-byte audit contract
+### U6 final frozen-byte audit closeout
 
-`WP-USERMODE-FINAL-AUDIT` is the sole active current package. It is read-only: no source, test, solution, project, package-lock, Service/SCM, runtime, or authority change is permitted. This publication may update only this control document, the work-package registry, and the evidence index; U5 is `CLOSED / SCOPED GO` and stopped as a source package.
+`WP-USERMODE-FINAL-AUDIT` is `CLOSED — FINAL GO — P0/P1/P2=0/0/0`. The accepted independent receipt is `u6-independent-final-audit-20260828T232640380Z`: it reports passed summary, `16607` source-manifest rows at SHA-256 `592bfeaab629e8cb9b100cf82fd3ce95c5be23972742501be34e57f1908a2284`, frozen-root mismatch count `0`, and zero point-in-time process/pipe/owned-temp-root residue. It supersedes the prior failed publication checkpoint as the current U6 evidence.
 
-U6 must audit the frozen U0-U5 integration rather than reinterpret it. It verifies: (1) the bounded other-user denial claim and the explicit exclusion of same-user-adversary protection; (2) session, one-use nonce, generation, parent/child handle, PID and process-epoch correlation; (3) explicit selected-project scope, locator containment, revocation, and Worker-only bounded reads; (4) strict protocol/version/schema/message/correlation rejection and C2 acknowledgement ordering; (5) crash, cancel, disconnect, restart, partial-frame, child cleanup, diagnostic redaction, and process/pipe/temp-root leak behavior; and (6) the real staged Broker/Worker runtime bundle rather than a fake peer or an installed-package claim.
+The result closes the entire ADR-005 USER_MODE main architecture at `100/100`. It neither adds nor permits an AI provider, credential, external network request, Desktop project I/O, Unity mutation, or authority claim. The default Broker remains exact `W24FS001` stderr / exit `23` on no-argument launch.
 
-U6 must replay or independently review the unified `eng/run-phase2-gate.ps1` evidence and the real LocalE2E execution, including solution, schema, smoke, binding, frozen-root, and residue receipts. A final scoped GO is possible only with `P0/P1/P2=0/0/0`; any byte drift, failed gate, unbounded claim, missing evidence, Service/SCM or privileged-path reintroduction, or same-user-threat overclaim blocks it. If fresh gate assets are needed, they may come only from the approved local feed with unique ignored temporary locks; tracked locks must not change and no `bin`/`obj` may be copied.
+The AI A0 documentation freeze is closed in this same commit, with no U6 gate replay. ADR-006 freezes `ChatLlm` and `ImageGeneration` as isolated, exact one-profile/capability/model bindings, with Origin as metadata and explicit independent protocol. It prohibits fallback, undocumented auth, cookie/script/custom-header/DLL/TLS-bypass behavior, secret/raw diagnostic leakage, and automatic Unity writes.
 
-The U6 publication-time gate receipt `u6-final-audit-complete-20260828T150638621Z` is `FAIL`, so it is not final-GO evidence. The new worktree lacked generated `project.assets.json` for the Worker and LocalE2E projects (`NETSDK1004`), preventing Worker, LocalE2E, and solution build completion and therefore a real LocalE2E result; the initial Protocol build also observed a transient generated-`obj` file lock. The partial run recorded Protocol `108/108`, Client `16/16`, Broker `183/183`, schema PASS `22/13/14/236`, and smoke `W24FS001`/`23`, but those partial outcomes do not waive the complete-gate requirement. Its pre/post source manifest is identical at `16607` rows and SHA-256 `2ded369dc466c083499209aa7d21215d79444d7dc60c5035fe8ab809de60a0f9`; frozen-root mismatch count and residue counts are `0`. U6 remains `ACTIVE` with no final GO. A later final-audit agent must bootstrap the approved feed with unique ignored temporary locks before a complete rerun; tracked locks and product source remain frozen.
+`A1 — AI_PROVIDER_FOUNDATION` is the unique `ACTIVE` package. Its exact owned roots are `src/VFXComposer.AI.Contracts/**`, `src/VFXComposer.AI.Providers/**`, `src/VFXComposer.AI.Tests/**`, `docs/schemas/desktop/vfxcomposer-ai-provider-config-v1.schema.json`, `VFXComposer.sln`, `eng/run-phase2-gate.ps1`, and `eng/phase2-baseline-roots.json`; any other path, central package-management change, or external `.csproj` dependency is STOP. A1 has no real Chat/Image HTTP. A2-A6 remain `NOT STARTED`.
 
-AI A0 remains `NOT STARTED`. Its provider two-channel plan is queued after U6 only and does not add USER_MODE main-architecture completion credit.
+After this publication, the current control state is `FINAL STOPPED` for U6 and A0. Only the separately scoped A1 package may proceed.
 
 ---
 

@@ -1,8 +1,8 @@
 # W24 work-package registry
 
-> **CURRENT REGISTRY — U6 USER-MODE FINAL AUDIT PUBLICATION (2026-08-28).** Only U0-U6 below are current delivery nodes. Every pre-U0 package entry retained later in this file is historical provenance, not an active contract, dependency, blocker, or audit queue.
+> **CURRENT REGISTRY — U6 FINAL GO / A0 AI ARCHITECTURE FREEZE (2026-08-28).** ADR-005's USER_MODE route is closed at `100/100`; ADR-006 governs the separate post-U6 AI chain. Every pre-U0 package entry retained later in this file is historical provenance, not an active contract, dependency, blocker, or audit queue.
 >
-> Normative U0 architecture token: `USER_MODE_LOCAL_CREATIVE_TOOL_V1`.
+> Normative tokens: `USER_MODE_LOCAL_CREATIVE_TOOL_V1` and `AI_PROVIDER_TWO_CHANNEL_ROUTING_V1`.
 
 ## Current seven-node registry and integration status
 
@@ -16,10 +16,17 @@ Exact DAG: `U0 -> U1`; `U0 -> U2`; `U1 + U2 -> U3`; `U3 -> U4 -> U5 -> U6`.
 | U3 `USER_PROJECT_SELECTION_READ_CONTAINMENT` | `CLOSED / INTEGRATED`; source commit `0123616e21d656b2374809a13aeb2769f0324e7e`, merged at `027ba07448dd6d4a0741a67937427cd2d37b2649`; exact seven files. | Broker `8/8`, Unity `9/9`, no-tests PASS, unified Broker `179/179`, manifest SHA-256 prefix `b716…`; zero Desktop project I/O and no privileged route. |
 | U4 `DESKTOP_USER_MODE_INTEGRATION` | `CLOSED / INTEGRATED`; source `2295b022348dc1514c72846533b86430bc4762ad`, integration `e1a6a9a37d3125717afbe795d283a07ffa242060`. | Accepted targets Protocol `108/108`, Client `14/14`, Broker `183/183`, Desktop `12/12`; r2 receipt manifest `b741fef9ab35a683363993cfeeb74abd2b1cbc26f5e3988574febfe1349a66eb`. |
 | U5 `WP-USERMODE-LOCAL-E2E` | `CLOSED / SCOPED GO — LOCAL_ORDINARY_USER_E2E`; source `365e7612b1be276aa74f4ab36f40482a0858e1ae`, integrated at `b9de2eb47e4e9d9ea29e0490b9dfc745a4dc307d`, exactly 17 owned files. | Independent acceptance `P0/P1/P2=0/0/0`; Protocol `108/108`, Client `16/16`, Broker `183/183`, LocalE2E `17/17`, real bundle and cleanup evidence accepted. |
-| U6 `WP-USERMODE-FINAL-AUDIT` | `ACTIVE`; sole current package and read-only final audit. | No source edits; independently review frozen U0-U5 bytes, unified gate, real E2E, scope claims, and receipts. Final scoped GO requires `P0/P1/P2=0/0/0`. |
-| Post-U6 AI A0 | `NOT STARTED`. | The two-channel AI-provider plan is queued after U6 only and adds no USER_MODE main-architecture completion credit. |
+| U6 `WP-USERMODE-FINAL-AUDIT` | `CLOSED — FINAL GO — P0/P1/P2=0/0/0`; accepted receipt `u6-independent-final-audit-20260828T232640380Z`. | USER_MODE final closeout; no source repair or reopening. |
+| USER_MODE main architecture | `CLOSED — 100/100`. | ADR-005 scope is complete; no AI-provider capability follows from this accounting. |
+| A0 `AI_PROVIDER_TWO_CHANNEL_ROUTING` | `CLOSED — DOCS ONLY` in this same single documentation commit. | ADR-006 freeze; existing U6 evidence only and no project-gate rerun. |
+| A1 `AI_PROVIDER_FOUNDATION` | `ACTIVE` — sole active package. | Exact owned roots only; contracts/configuration/security/import/Gateway foundation, no real Chat/Image HTTP. |
+| A2 `AI_CHAT_ADAPTER` | `NOT STARTED`. | Waits for closed A1. |
+| A3 `AI_IMAGE_ADAPTER` | `NOT STARTED`. | Waits for closed A1. |
+| A4 `AI_DESKTOP_WIRING` | `NOT STARTED`. | Waits for closed A2 and A3. |
+| A5 `AI_MOCK_E2E` | `NOT STARTED`. | Waits for closed A4. |
+| A6 `AI_INDEPENDENT_FINAL_AUDIT` | `NOT STARTED`. | Waits for closed A5. |
 
-U1 through U5 are closed/integrated or scoped GO. `WP-USERMODE-FINAL-AUDIT` is the sole active current package. AI A0 is not started; there are no other current implementation nodes.
+U1 through U6 are closed/integrated, scoped GO, or final GO. A0 is closed. `A1 — AI_PROVIDER_FOUNDATION` is the sole active package; A2-A6 are not started and there are no other current implementation nodes.
 
 ### U3 exact closed ownership and evidence
 
@@ -89,15 +96,27 @@ Frozen-root replay reports `0` mismatches. The residue snapshot reports `0` runt
 
 The accepted scope is the ADR-005 local ordinary-user route only: Protocol-only Worker, public Desktop/Client -> Broker -> Worker execution, explicit selected-project binding, strict C2 ACK before bounded reads, strict nonce/session/generation/PID-epoch correlation, malformed/path/protocol rejection, crash/cancel/restart/partial-frame handling, and leak cleanup. The cross-user claim remains limited to `CurrentUserOnly` static/IL plus existing unit evidence, with no created-account or literal multi-user E2E claim. No same-user adversary, Service/SCM, privileged, production activation, authority, or installed-package claim is accepted.
 
-### U6 active final frozen-byte audit contract
+### U6 final frozen-byte audit closeout
 
-`WP-USERMODE-FINAL-AUDIT` is the sole active package and is read-only. It may update only `docs/coordination/W24_PROGRAM_CONTROL.md`, `docs/coordination/W24_WORK_PACKAGE_REGISTRY.md`, and `docs/coordination/W24_EVIDENCE_INDEX.md`; it must not alter product source, tests, solution, tracked locks, project bytes, Service/SCM state, runtime behavior, or authority. U5 is stopped as a source package.
+`WP-USERMODE-FINAL-AUDIT` is closed at `FINAL GO — P0/P1/P2=0/0/0`. Its accepted independent receipt is `u6-independent-final-audit-20260828T232640380Z`: the summary is passed, the source manifest has `16607` rows at SHA-256 `592bfeaab629e8cb9b100cf82fd3ce95c5be23972742501be34e57f1908a2284`, frozen-root replay reports `0` mismatches, and point-in-time process/pipe/owned-temp-root residue is empty. This final receipt supersedes the earlier failed U6 publication checkpoint.
 
-The U6 audit must assess the complete frozen U0-U5 integration against ADR-005: the other-user denial boundary; one-use nonce, session, generation, parent/child handle, PID and process-epoch binding; selected-project scope/locator containment/revocation/Worker-only reads; strict protocol and correlation rejection; crash, cancel, restart, disconnect, partial-frame, redaction, and process/pipe/temp-root leaks; and use of the real staged Broker/Worker runtime bundle. It must reject any Service/SCM, `LocalSystem`, privilege, SACL, enrollment, loaded-image, authority, or same-user-threat overclaim.
+The closed U6 result makes the ADR-005 USER_MODE main architecture `100/100`. It preserves the default Broker no-argument behavior `W24FS001`/exit `23`; it does not authorize an AI provider, credential, network request, image cache, Desktop wiring, or Unity/project mutation.
 
-U6 independently reviews or replays the unified `eng/run-phase2-gate.ps1` and real LocalE2E evidence, including solution/schema/smoke, binding, root, and residue receipts. It can close only at `P0/P1/P2=0/0/0`; any finding or byte/evidence drift is a blocker. Fresh gate assets are limited to the approved local feed and unique ignored temporary locks; tracked locks remain unchanged and no `bin`/`obj` may be copied. AI A0 remains `NOT STARTED`; its provider plan is queued only and does not count as USER_MODE architecture completion.
+The formal AI DAG is `A0 -> A1 -> (A2 || A3) -> A4 -> A5 -> A6`. A0 is closed in this same documentation commit; it has no implementation bytes and uses the existing U6 unified-gate evidence only. A1 is uniquely active; A2-A6 are not started. ADR-006's mandatory dual-channel policy requires `ChatLlm` for all LLM/conversation work and `ImageGeneration` for all image generation, with one explicit profile/capability/model per channel, Origin metadata distinct from protocol, and zero fallback.
 
-Publication gate checkpoint: `u6-final-audit-complete-20260828T150638621Z` is `FAIL`, not final-GO evidence. The Worker and LocalE2E projects were missing generated `project.assets.json` (`NETSDK1004`) in this new worktree, so Worker, LocalE2E, and solution builds could not complete and no real LocalE2E result was available; the initial Protocol build also saw a transient generated-`obj` lock. Protocol `108/108`, Client `16/16`, Broker `183/183`, schema `22/13/14/236`, and smoke `W24FS001`/`23` are partial outcomes only. The gate source manifest remained identical pre/post (`16607` rows; `2ded369dc466c083499209aa7d21215d79444d7dc60c5035fe8ab809de60a0f9`), frozen-root mismatch count is `0`, and residue counts are `0`; no source drift is accepted or repaired here. U6 remains `ACTIVE`; a later final-audit agent must bootstrap the approved feed using unique ignored temporary locks before a complete gate rerun.
+`A1 — AI_PROVIDER_FOUNDATION` owns exactly and only:
+
+1. `src/VFXComposer.AI.Contracts/**`
+2. `src/VFXComposer.AI.Providers/**`
+3. `src/VFXComposer.AI.Tests/**`
+4. `docs/schemas/desktop/vfxcomposer-ai-provider-config-v1.schema.json`
+5. `VFXComposer.sln`
+6. `eng/run-phase2-gate.ps1`
+7. `eng/phase2-baseline-roots.json`
+
+Any other path is forbidden. A central package-management change or an external `.csproj` dependency is an immediate STOP. A1 may implement only contracts/profile/channel bindings/schema, strict versioned atomic JSON with `.bak`, DPAPI CurrentUser SecretRef storage, configuration fingerprint, health/adapter-registry skeletons, Tom non-sensitive draft import, resolver, and `IAiGateway`; real Chat/Image HTTP is prohibited. Required tests include canonical configuration, migration/future rejection, corrupt backup, DPAPI no-plaintext/unreadable failure, URI policy, channel/capability fail-closed behavior, no fallback, Tom secret exclusion, internal boundary, and redaction.
+
+After this publication the registry is `FINAL STOPPED` for U6/A0. Only A1 can proceed.
 
 ## Current trust and reuse rules
 
