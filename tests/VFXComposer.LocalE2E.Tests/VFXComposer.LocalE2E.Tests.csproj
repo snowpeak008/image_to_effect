@@ -1,0 +1,39 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <AssemblyName>VFXComposer.LocalE2E.Tests</AssemblyName>
+    <RootNamespace>VFXComposer.LocalE2E.Tests</RootNamespace>
+    <IsPackable>false</IsPackable>
+    <IsTestProject>true</IsTestProject>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" />
+    <PackageReference Include="MSTest.TestAdapter" />
+    <PackageReference Include="MSTest.TestFramework" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\VFXComposer.Client\VFXComposer.Client.csproj" />
+    <ProjectReference Include="..\..\src\VFXComposer.Protocol\VFXComposer.Protocol.csproj" />
+  </ItemGroup>
+
+  <Target Name="StageLocalUserModeRuntimeBundles" AfterTargets="Build">
+    <MSBuild
+      Projects="$(MSBuildThisFileDirectory)..\..\services\VFXComposer.Broker\VFXComposer.Broker.csproj;$(MSBuildThisFileDirectory)..\..\services\VFXComposer.UnityWorker\VFXComposer.UnityWorker.csproj"
+      Targets="Build"
+      Properties="Configuration=$(Configuration);RestoreLockedMode=true" />
+    <ItemGroup>
+      <_BrokerRuntime Include="$(MSBuildThisFileDirectory)..\..\services\VFXComposer.Broker\bin\$(Configuration)\net8.0\*" />
+      <_WorkerRuntime Include="$(MSBuildThisFileDirectory)..\..\services\VFXComposer.UnityWorker\bin\$(Configuration)\net8.0-windows\*" />
+    </ItemGroup>
+    <Copy
+      SourceFiles="@(_BrokerRuntime)"
+      DestinationFiles="@(_BrokerRuntime->'$(OutDir)%(Filename)%(Extension)')"
+      SkipUnchangedFiles="true" />
+    <Copy
+      SourceFiles="@(_WorkerRuntime)"
+      DestinationFiles="@(_WorkerRuntime->'$(OutDir)%(Filename)%(Extension)')"
+      SkipUnchangedFiles="true" />
+  </Target>
+</Project>

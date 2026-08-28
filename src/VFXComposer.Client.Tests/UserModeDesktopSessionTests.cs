@@ -68,6 +68,60 @@ public sealed class UserModeDesktopSessionTests
         Assert.AreEqual(1, first.DisposeCount);
     }
 
+    [TestMethod]
+    public async Task InactiveHostBeforeSelectionEntersRecoveryWithoutAnExchangeAndCanRestart()
+    {
+        var first = new ScriptedBrokerHost(RespondNormally, generation: 1);
+        var second = new ScriptedBrokerHost(RespondNormally, generation: 2);
+        var starts = 0;
+        await using var session = new UserModeDesktopSession((_, _) =>
+            ValueTask.FromResult<IUserModeBrokerProcessHost>(++starts == 1 ? first : second));
+
+        await session.ConnectAsync();
+        first.Deactivate();
+
+        await Assert.ThrowsExactlyAsync<InvalidOperationException>(async () =>
+            await session.SelectAsync("selection-token"));
+
+        Assert.AreEqual(0, first.RequestCount, "Inactive selection must fail before exchange framing.");
+        Assert.AreEqual(UserModeDesktopSessionState.RecoveryRequired, session.State);
+        Assert.AreEqual(1, first.DisposeCount);
+
+        await session.RestartAsync();
+
+        Assert.AreEqual(2L, session.Generation);
+        Assert.AreEqual(UserModeDesktopSessionState.ConnectedNoProject, session.State);
+        Assert.AreEqual(2, starts);
+    }
+
+    [TestMethod]
+    public async Task InactiveHostBeforeReadEntersRecoveryWithoutAnExchangeAndCanRestart()
+    {
+        var first = new ScriptedBrokerHost(RespondNormally, generation: 1);
+        var second = new ScriptedBrokerHost(RespondNormally, generation: 2);
+        var starts = 0;
+        await using var session = new UserModeDesktopSession((_, _) =>
+            ValueTask.FromResult<IUserModeBrokerProcessHost>(++starts == 1 ? first : second));
+
+        await session.ConnectAsync();
+        await session.SelectAsync("selection-token");
+        var requestsBeforeRead = first.RequestCount;
+        first.Deactivate();
+
+        await Assert.ThrowsExactlyAsync<InvalidOperationException>(async () =>
+            await session.ReadAsync());
+
+        Assert.AreEqual(requestsBeforeRead, first.RequestCount, "Inactive read must fail before exchange framing.");
+        Assert.AreEqual(UserModeDesktopSessionState.RecoveryRequired, session.State);
+        Assert.AreEqual(1, first.DisposeCount);
+
+        await session.RestartAsync();
+
+        Assert.AreEqual(2L, session.Generation);
+        Assert.AreEqual(UserModeDesktopSessionState.ConnectedNoProject, session.State);
+        Assert.AreEqual(2, starts);
+    }
+
     private static UserModeDesktopControlMessage RespondNormally(UserModeDesktopControlMessage request)
     {
         if (string.Equals(request.MessageKind, UserModeDesktopControlKinds.Select, StringComparison.Ordinal))
@@ -126,17 +180,22 @@ public sealed class UserModeDesktopSessionTests
         long generation) : IUserModeBrokerProcessHost
     {
         private readonly ScriptedControlStream _transport = new(responder);
+        private int _active = 1;
         private int _disposed;
 
         public int DisposeCount { get; private set; }
+        public int RequestCount => _transport.RequestCount;
         public Stream Transport => _transport;
-        public bool IsActive => Volatile.Read(ref _disposed) == 0;
+        public bool IsActive => Volatile.Read(ref _disposed) == 0 && Volatile.Read(ref _active) != 0;
         public string SessionId { get; } = CanonicalSession(generation);
+
+        public void Deactivate() => Volatile.Write(ref _active, 0);
 
         public ValueTask DisposeAsync()
         {
             if (Interlocked.Exchange(ref _disposed, 1) == 0)
             {
+                Volatile.Write(ref _active, 0);
                 DisposeCount++;
                 _transport.Dispose();
             }
@@ -151,8 +210,10 @@ public sealed class UserModeDesktopSessionTests
         private readonly Func<UserModeDesktopControlMessage, UserModeDesktopControlMessage> _responder = responder;
         private readonly MemoryStream _requestBytes = new();
         private readonly Queue<byte> _responseBytes = new();
+        private int _requestCount;
         private int _disposed;
 
+        public int RequestCount => Volatile.Read(ref _requestCount);
         public override bool CanRead => Volatile.Read(ref _disposed) == 0;
         public override bool CanSeek => false;
         public override bool CanWrite => Volatile.Read(ref _disposed) == 0;
@@ -246,6 +307,7 @@ public sealed class UserModeDesktopSessionTests
                 }
 
                 using var request = UserModeDesktopSessionCodec.Decode(framedRequest.AsSpan(sizeof(int), length));
+                Interlocked.Increment(ref _requestCount);
                 using var response = _responder(request);
                 var encodedResponse = UserModeDesktopSessionCodec.Encode(response);
                 try
