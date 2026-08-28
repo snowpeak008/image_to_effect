@@ -1,6 +1,6 @@
 # W24 program control
 
-> **CURRENT CONTROL PLANE — U5 LOCAL ORDINARY-USER E2E PUBLICATION (2026-08-28).** This section and ADR-005 supersede the pre-U0 control ledger retained below. Old Service/SCM/privileged nodes are historical only and are neither active, schedulable, auditable, nor blockers.
+> **CURRENT CONTROL PLANE — U6 USER-MODE FINAL AUDIT PUBLICATION (2026-08-28).** This section and ADR-005 supersede the pre-U0 control ledger retained below. Old Service/SCM/privileged nodes are historical only and are neither active, schedulable, auditable, nor blockers.
 >
 > Normative U0 architecture token: `USER_MODE_LOCAL_CREATIVE_TOOL_V1`.
 
@@ -13,10 +13,10 @@
 | U2 child-pipe session | `CLOSED / INTEGRATED — USER_MODE_CHILD_PIPE_SESSION` | Commit `4b2f9a81a82911d68b8b64864ae05a03f9690b2e`; its audit recorded `P1=3`, then one remediation closed with `42/42` three times and Broker `171/171`. This is not a claim of a second independent audit. |
 | U3 selection/read | `CLOSED / INTEGRATED — USER_PROJECT_SELECTION_READ_CONTAINMENT` | Source commit `0123616e21d656b2374809a13aeb2769f0324e7e`, merged at `027ba07448dd6d4a0741a67937427cd2d37b2649`; exact seven files; Broker target `8/8`, Unity EditMode `9/9`, no-tests PASS, unified Broker `179/179`, manifest SHA-256 prefix `b716…`. |
 | U4 Desktop integration | `CLOSED / INTEGRATED — DESKTOP_USER_MODE_INTEGRATION` | Source commit `2295b022348dc1514c72846533b86430bc4762ad`, integrated by `e1a6a9a37d3125717afbe795d283a07ffa242060`; accepted targets Protocol `108/108`, Client `14/14`, Broker `183/183`, Desktop `12/12`; r2 gate manifest `b741fef9ab35a683363993cfeeb74abd2b1cbc26f5e3988574febfe1349a66eb`. |
-| U5 local E2E | `ACTIVE — WP-USERMODE-LOCAL-E2E` | Sole active current package; exact 17-file boundary, Protocol-only standalone Worker, and real local Desktop backend E2E contract below. |
-| U6 final audit | `NOT STARTED` | Independent frozen-byte/source/receipt/provenance audit begins only after accepted U5. |
-| Post-U6 AI A0 | `NOT STARTED` | Two-channel AI-provider planning is post-U6 only; it is not U5 source, runtime, or evidence scope. |
-| Runtime | `NO-GO` | Default Broker launch with no arguments remains stderr `W24FS001`, exit `23`; production remains NO-GO through U5 plus U6. |
+| U5 local E2E | `CLOSED / SCOPED GO — LOCAL_ORDINARY_USER_E2E` | Source commit `365e7612b1be276aa74f4ab36f40482a0858e1ae`, integrated at `b9de2eb47e4e9d9ea29e0490b9dfc745a4dc307d`; exact 17-file closeout and independent acceptance `P0/P1/P2=0/0/0`. |
+| U6 final audit | `ACTIVE — WP-USERMODE-FINAL-AUDIT` | Sole active current package; read-only frozen-byte/evidence audit of the integrated U0-U5 route. Source changes are prohibited. |
+| Post-U6 AI A0 | `NOT STARTED` | The two-channel AI-provider plan is queued only; it is not user-mode source, runtime, evidence, or main-architecture completion credit. |
+| Runtime | `NO-GO` | Default Broker launch with no arguments remains stderr `W24FS001`, exit `23`; production remains NO-GO until U6 reaches its scoped final GO. |
 | Planning baseline | `45/100 planning point; 42%-48% band` | Frozen ADR-005 weighted algorithm. Remaining plan is approximately 45%-55% shorter than the superseded privileged route. |
 
 The product trusts the current logged-in user, intentionally launched Desktop/Broker/Worker or Unity host, and explicit user-selected project. It does not defend against malicious same-user software, administrator/kernel control, or offline tampering. It must defend cross-user pipe access, stale/cross-generation sessions, wrong project, protocol drift, PID reuse, unexpected release-layout path, leakage, crash/disconnect, and orphan cleanup.
@@ -32,8 +32,8 @@ The exact current seven-node DAG is:
 | U2 | `CLOSED / INTEGRATED` ordinary-user Broker/Worker child process, pipe, nonce, generation, handle/epoch session and cleanup, commit `4b2f9a81a82911d68b8b64864ae05a03f9690b2e`. | U0; parallel U1 ownership is complete. |
 | U3 | `CLOSED / INTEGRATED` explicit user project selection and restricted Worker-only read containment, source commit `0123616e21d656b2374809a13aeb2769f0324e7e`. | U1 + U2 closed integration outputs. |
 | U4 | `CLOSED / INTEGRATED` Desktop ordinary-user launch, explicit selection, read presentation and fail-closed recovery with zero direct project I/O. | U3 closed integration output. |
-| U5 | `ACTIVE — WP-USERMODE-LOCAL-E2E` standalone ordinary-user Worker artifact plus real local E2E and adversarial/cleanup matrix. | Accepted U4 integration. |
-| U6 | `NOT STARTED` independent final audit, no source edits, scoped P0/P1/P2=0. | U5. |
+| U5 | `CLOSED / SCOPED GO — LOCAL_ORDINARY_USER_E2E`; standalone ordinary-user Worker and real local E2E are accepted at source `365e7612b1be276aa74f4ab36f40482a0858e1ae`, integration `b9de2eb47e4e9d9ea29e0490b9dfc745a4dc307d`. | Accepted U4 integration. |
+| U6 | `ACTIVE — WP-USERMODE-FINAL-AUDIT`; read-only final audit with source changes prohibited and `P0/P1/P2=0/0/0` required for final scoped GO. | Accepted U5 frozen integration. |
 
 ### U3 closed evidence
 
@@ -77,9 +77,9 @@ The stopped first U4 writer remains rejected historical provenance only: it targ
 
 U4 is ordinary-user component integration only. Broker starts no Worker until explicit project selection; after selection the Worker path is fixed as `Path.Combine(AppContext.BaseDirectory, "VFXComposer.UnityWorker.exe")`, the selected canonical root is the child `WorkingDirectory`, U2 admission precedes the U3 locator, and strict C2 acknowledgement precedes `SelectAccepted`. Reselect/restart disposes the old Worker/session. Desktop performs zero project filesystem I/O and never connects directly to Worker. A scripted peer was test-only and is not real Worker/E2E evidence. `Program.cs` retains the exact no-argument Broker behavior: stderr `W24FS001`, exit `23`, with no listener. U4 adds no Service/SCM, privilege, enrollment, strict-SACL, loaded-image, command, mutation, evidence, verdict, or authority capability.
 
-### U5 active exact ownership and runtime/E2E contract
+### U5 closed exact ownership and accepted runtime/E2E evidence
 
-`WP-USERMODE-LOCAL-E2E` is the sole active current package. It owns exactly these 17 files and no others:
+`WP-USERMODE-LOCAL-E2E` is closed and owns exactly these 17 accepted files and no others:
 
 1. `services/VFXComposer.UnityWorker/VFXComposer.UnityWorker.csproj`
 2. `services/VFXComposer.UnityWorker/packages.lock.json`
@@ -99,33 +99,25 @@ U4 is ordinary-user component integration only. Broker starts no Worker until ex
 16. `src/VFXComposer.Client/UserModeDesktopSession.cs`
 17. `src/VFXComposer.Client.Tests/UserModeDesktopSessionTests.cs`
 
-This same-milestone scope correction adds exactly items 16–17; it does not authorize an 18th U5 file. The other 12 U5-new bytes (items 1–12) remain `UNCOMMITTED / UNACCEPTED`. `VFXComposer.sln`, `eng/run-phase2-gate.ps1`, and `eng/phase2-baseline-roots.json` (items 13–15) remain unmodified. This documentation-only correction accepts no source, test, runtime, or E2E evidence and does not change U5's sole-`ACTIVE` status.
+U5 is closed at source commit `365e7612b1be276aa74f4ab36f40482a0858e1ae`, integrated at `b9de2eb47e4e9d9ea29e0490b9dfc745a4dc307d`. Its independent acceptance records `P0/P1/P2=0/0/0`, exact ownership `17/17`, Protocol `108/108`, Client `16/16`, Broker `183/183`, and LocalE2E `17/17`. The external receipt is `U5-local-e2e-independent-acceptance-20260828T144950082Z`: its manifest has `121` rows, frozen-root replay has `0` mismatches, and the point-in-time residue snapshot has `0` Broker/Worker processes, `0` VFX Composer pipes, and `0` owned LocalE2E temporary roots.
 
-The first genuine U5 LocalE2E attempt is `12/17` passed, not an acceptance receipt. Its five open failures are recorded without waiver:
+The same receipt records the Release solution build at `0 warnings / 0 errors`, schema verifier PASS at `22 total / 13 Phase 2 / 14 positive / 236 negative`, and the default Broker smoke with empty stdout, exact stderr `W24FS001`, and exit `23`. Assembly binding before and after tests ties the staged LocalE2E Broker and Worker assemblies to the tested product assemblies by SHA-256/MVID; this is real staged runtime-bundle evidence, not a scripted-peer substitute.
 
-1. **Client product gap:** if the Broker is already dead before `ReadAsync` or `SelectAsync` enters `ExchangeAsync`, `SessionIdFor` throws outside the existing recovery `try/catch`; the session remains `Reading` or `Selecting`, `EnterRecoveryAsync` is not called, and `RestartAsync` is rejected.
-2. **U5-local:** malformed C2 causes an uncaught `WireDecodeException` in the Worker instead of clean exit `31`.
-3. **U5-local:** the reparse test setup cannot create a symbolic link in this environment and needs a safe junction fallback.
-4. **U5-local:** the wrong-user static scan finds its own `CreateUser` assertion literal.
-5. **U5-local:** temporary-project teardown races a lingering file handle after cancellation and needs bounded residue/deletion retry.
+U5 establishes only the ADR-005 ordinary-user route: a standalone Protocol-only `net8.0-windows` `VFXComposer.UnityWorker.exe`, public `UserModeDesktopSession` across Desktop/Client -> Broker -> Worker, explicit selected-root working directory, and strict C2 locator acknowledgement before bounded `LIBRARY_INDEX`/manifest reads. The accepted adversarial and lifecycle coverage addresses nonce/session/generation/PID-epoch correlation, malformed or drifting protocol/locator/path input, marker/traversal/reparse/size/JSON rejection, crash/cancel/restart/partial-frame recovery, and leak cleanup.
 
-The Client correction is acceptance-critical and must not weaken crash recovery: in both `SelectAsync` and `ReadAsync`, `SessionIdFor`, request construction, and `ExchangeAsync` must all be inside the existing recovery `try/catch`. A dead host must transition through `RecoveryRequired` and disposal, then allow `RestartAsync` to reach `ConnectedNoProject`. The existing `UserModeDesktopSessionTests.cs` must genuinely cover pre-exchange inactive-host failure for both read and selection, rather than only an exchange-time failure.
+The other-user denial claim remains deliberately bounded to `CurrentUserOnly` static/IL plus existing unit evidence: no separate Windows account and no literal multi-user E2E result is claimed. It is not a claim against malicious same-user code, administrator/kernel control, offline tampering, or a deliberately malicious selected project. U5 introduces no Service/SCM, `LocalSystem`, privilege, SACL, enrollment, loaded-image, command, mutation, evidence, verdict, or authority capability. Production read remains NO-GO until U6 closes; hashes and signatures remain release-integrity evidence only.
 
-U5 runtime is a standalone Protocol-only `net8.0-windows` `VFXComposer.UnityWorker.exe` that references only Protocol, with zero Unity source links, zero Newtonsoft dependency, and zero `UNITY_INCLUDE_TESTS`. It is the canonical runtime C2 consumer; the Unity package is parity/reference only. U5 may make the minimum local copy of U2's private `UMB1`/`UMH1` bootstrap ABI needed for byte-level compatibility and real Broker coverage. That copy is not a second C2 format: it preserves `CurrentUserOnly`, nonce, session, generation, PID, and epoch correlation.
+### U6 active final frozen-byte audit contract
 
-The real local E2E is driven through public `UserModeDesktopSession` and the real Desktop backend chain Desktop/Client -> Broker -> Worker; it does not require an installed Avalonia release package. The LocalE2E test project stages complete Broker and Worker runtime bundles into its test `AppContext.BaseDirectory` so U4's fixed same-directory Worker path resolves. Standalone Worker normal output is allowed; release-artifact packaging is not a U5 claim.
+`WP-USERMODE-FINAL-AUDIT` is the sole active current package. It is read-only: no source, test, solution, project, package-lock, Service/SCM, runtime, or authority change is permitted. This publication may update only this control document, the work-package registry, and the evidence index; U5 is `CLOSED / SCOPED GO` and stopped as a source package.
 
-Broker launches the Worker only after explicit selection and uses the selected canonical project root as child working directory. The Worker must send strict C2 locator ACK before any actual U3 bounded read, then perform real bounded `LIBRARY_INDEX`/manifest reads. HandleProbe, startup hooks, scripted Worker peers, Services/SCM, privilege, SACL, fake peers, and production/E2E substitutes are prohibited.
+U6 must audit the frozen U0-U5 integration rather than reinterpret it. It verifies: (1) the bounded other-user denial claim and the explicit exclusion of same-user-adversary protection; (2) session, one-use nonce, generation, parent/child handle, PID and process-epoch correlation; (3) explicit selected-project scope, locator containment, revocation, and Worker-only bounded reads; (4) strict protocol/version/schema/message/correlation rejection and C2 acknowledgement ordering; (5) crash, cancel, disconnect, restart, partial-frame, child cleanup, diagnostic redaction, and process/pipe/temp-root leak behavior; and (6) the real staged Broker/Worker runtime bundle rather than a fake peer or an installed-package claim.
 
-The E2E matrix must cover happy path; invalid nonce/session/generation/locator/path/protocol; marker/traversal/reparse/size/JSON rejection; crash/restart/cancel/partial-frame recovery; and zero orphan process, pipe, or temporary-project residue. Wrong-user is only `CurrentUserOnly` static/IL plus existing unit evidence—no second account and no literal wrong-user E2E claim. The default Broker remains exactly `W24FS001`/exit `23`.
+U6 must replay or independently review the unified `eng/run-phase2-gate.ps1` evidence and the real LocalE2E execution, including solution, schema, smoke, binding, frozen-root, and residue receipts. A final scoped GO is possible only with `P0/P1/P2=0/0/0`; any byte drift, failed gate, unbounded claim, missing evidence, Service/SCM or privileged-path reintroduction, or same-user-threat overclaim blocks it. If fresh gate assets are needed, they may come only from the approved local feed with unique ignored temporary locks; tracked locks must not change and no `bin`/`obj` may be copied.
 
-Only the existing unified `eng/run-phase2-gate.ps1` may be extended and run once as U5's final gate; no independent E2E runner is a U5 artifact. If fresh assets are required, use an approved local feed and unique ignored temporary locks; do not alter pre-existing tracked locks or copy `bin`/`obj`. Post-U6 AI A0 is `NOT STARTED` and its two-channel plan is not U5 source, runtime, test, or evidence scope.
+The U6 publication-time gate receipt `u6-final-audit-complete-20260828T150638621Z` is `FAIL`, so it is not final-GO evidence. The new worktree lacked generated `project.assets.json` for the Worker and LocalE2E projects (`NETSDK1004`), preventing Worker, LocalE2E, and solution build completion and therefore a real LocalE2E result; the initial Protocol build also observed a transient generated-`obj` file lock. The partial run recorded Protocol `108/108`, Client `16/16`, Broker `183/183`, schema PASS `22/13/14/236`, and smoke `W24FS001`/`23`, but those partial outcomes do not waive the complete-gate requirement. Its pre/post source manifest is identical at `16607` rows and SHA-256 `2ded369dc466c083499209aa7d21215d79444d7dc60c5035fe8ab809de60a0f9`; frozen-root mismatch count and residue counts are `0`. U6 remains `ACTIVE` with no final GO. A later final-audit agent must bootstrap the approved feed with unique ignored temporary locks before a complete rerun; tracked locks and product source remain frozen.
 
-No stale-baseline unified gate is run or accepted for this documentation-only correction: it is a U5 same-milestone scope correction with no source acceptance. That exception does not relax the final-gate requirement above.
-
-C1/C2 are accepted reuse inputs; ordinary-user-compatible P1/S1 fragments require review in their U-node. D1/D1R, ServiceHost/install, I1, R1, A1, B1 and the old privileged E2E/audit chain must not continue and must not block a U-node. Windows Service/SCM, `LocalSystem`, privileged enrollment, `SeSecurityPrivilege`, `SeRestorePrivilege`, strict-SACL live admission, loaded-image proof, privileged issuer and ServiceHost `Running` are not product prerequisites.
-
-Production read remains NO-GO through U5 plus U6. Hash/signature evidence is release integrity only. Commands, mutation, machine/visual evidence, user verdict, L3 and L4 remain independent later gates.
+AI A0 remains `NOT STARTED`. Its provider two-channel plan is queued after U6 only and does not add USER_MODE main-architecture completion credit.
 
 ---
 
