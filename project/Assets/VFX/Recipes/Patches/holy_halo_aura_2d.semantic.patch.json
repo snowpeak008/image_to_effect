@@ -1,0 +1,7 @@
+[
+  {
+    "op": "set_content_param",
+    "path": "/content/parameters/dust_density",
+    "value": 51.0
+  }
+]

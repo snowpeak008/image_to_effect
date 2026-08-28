@@ -1,0 +1,85 @@
+{
+  "manifestVersion": 1,
+  "rulesVersion": "1.0-draft",
+  "enforcement": "strict",
+  "effectId": "summoning_portal_2d_cosmic",
+  "archetype": "spawn",
+  "recipeVersion": 1,
+  "recipeRevision": 1,
+  "recipeHash": "7ccf01f61bf327688c30e4a77ac48cb4823675cbb88f824ab15380c884e51faf",
+  "buildHash": "f7bcbdbb0587c53c391a2e231ec061d09274bd65d2d42776cb2d829b5d205665",
+  "compilerVersion": "styled-content-4",
+  "unityVersion": "2022.3.62f3c1",
+  "sourceRecipePath": "Assets/VFX/Recipes/StyleSpecials/StylePack2/summoning_portal_2d_cosmic.default.json",
+  "runtimeEntry": {
+    "kind": "prefab",
+    "path": "Assets/VFX/Generated/summoning_portal_2d_cosmic/VFX_summoning_portal_2d_cosmic.prefab",
+    "guid": "8b33f0de667262c49884fd99d4692a6d"
+  },
+  "ownedOutputs": [
+    {
+      "path": "Assets/VFX/Generated/summoning_portal_2d_cosmic/VFX_summoning_portal_2d_cosmic.prefab",
+      "guid": "8b33f0de667262c49884fd99d4692a6d",
+      "assetType": "GameObject",
+      "sha256": "601eabd4bca55a53072230981ee860a7a89a395b4f991f5f7cdfd91c68d8bd4d"
+    }
+  ],
+  "dependencies": [
+    {
+      "path": "Assets/VFX/Shared/Shaders/VfxSoftNoise.shader",
+      "guid": "a6e4e3aa82ac7c84d9dd012aaae56c67",
+      "assetType": "Shader",
+      "version": null,
+      "dependencyHash": "daf4e4d9c28a30f0230301e6f07535a5"
+    },
+    {
+      "path": "Assets/VFX/Shared/Styles/Materials/MAT_Style_cosmic.mat",
+      "guid": "855ac3f51131a06459befd124677d35d",
+      "assetType": "Material",
+      "version": null,
+      "dependencyHash": "a2b9fe33a50718c6d37062d1d294c3fe"
+    },
+    {
+      "path": "Assets/VFX/Shared/Styles/Meshes/M_Style_Burst.asset",
+      "guid": "0def46dac13f1d8449cd98d98de17a15",
+      "assetType": "Mesh",
+      "version": null,
+      "dependencyHash": "56e972a8f8588a864d379a7611c49c63"
+    },
+    {
+      "path": "Assets/VFX/Shared/Styles/Meshes/M_Style_Cone.asset",
+      "guid": "8a296d5e70420f647a6e1f646af993cd",
+      "assetType": "Mesh",
+      "version": null,
+      "dependencyHash": "69fd53314f71778bd2e32f584650207e"
+    },
+    {
+      "path": "Assets/VFX/Shared/Styles/Meshes/M_Style_Ring.asset",
+      "guid": "df59364e370c085418d31c0f952bcf1a",
+      "assetType": "Mesh",
+      "version": null,
+      "dependencyHash": "021f9d0fab5159d1d05310de3284c997"
+    },
+    {
+      "path": "Packages/com.vfxcomposer.unity/Runtime/Components/StyledVfxController.cs",
+      "guid": "ca6f81a249967414c96082671e07dcaa",
+      "assetType": "MonoScript",
+      "version": null,
+      "dependencyHash": "486e1b8ba27b5e00b709bc5fd2b5624a"
+    }
+  ],
+  "cost": {
+    "particles": 0,
+    "particleSystems": 0,
+    "renderers": 3,
+    "materials": 1,
+    "trails": 0,
+    "duration": 1.2000000476837158,
+    "localTextureBytes": 0,
+    "dependencyResidentTextureBytes": 0,
+    "gameObjects": 4,
+    "maxDepth": 1
+  },
+  "audit": [],
+  "generatedAtUtc": "2026-08-24T13:14:29.3674851Z"
+}

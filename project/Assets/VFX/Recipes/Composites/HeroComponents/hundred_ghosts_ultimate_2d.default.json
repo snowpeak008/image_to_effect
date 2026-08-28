@@ -1,0 +1,130 @@
+{
+  "recipeVersion": 1,
+  "revision": 1,
+  "id": "hundred_ghosts_ultimate_2d",
+  "name": "Hundred Ghosts Ultimate 2d",
+  "dimension": "2d",
+  "archetype": "composite",
+  "style": {
+    "token": "stylized",
+    "palette": {
+      "primary": "#222125",
+      "secondary": "#746F78",
+      "accent": "#B9463A"
+    },
+    "outline": 0.1,
+    "shading_steps": 4,
+    "noise_scale": 1.2,
+    "glow_strength": 1.05
+  },
+  "targetProfile": "mobile_medium",
+  "randomSeed": 3686020965,
+  "stages": [
+    {
+      "id": "main",
+      "trigger": "manual",
+      "duration": 4.8,
+      "enabled": true,
+      "modules": [
+        {
+          "id": "body",
+          "kind": "energy_body",
+          "templateId": "PFT_2D_FireCore",
+          "parameters": {
+            "scale": 1.0
+          },
+          "enabled": true
+        }
+      ]
+    }
+  ],
+  "metadata": {
+    "createdBy": "w13-w18-composite",
+    "templateCatalogVersion": "1.0.0"
+  },
+  "timeline": [
+    {
+      "t": 0.0,
+      "ref_id": "ink_dragon_trail_2d",
+      "action": "play",
+      "overrides": {
+        "scale": 1.0,
+        "position": [
+          -1.0,
+          0.2,
+          0.0
+        ],
+        "palette": "hero_component"
+      }
+    },
+    {
+      "t": 0.45,
+      "ref_id": "ink_dragon_trail_2d",
+      "action": "play",
+      "overrides": {
+        "scale": 1.0,
+        "position": [
+          0.0,
+          -0.3,
+          0.0
+        ],
+        "rotation": [
+          0.0,
+          0.0,
+          12.0
+        ],
+        "palette": "hero_component"
+      }
+    },
+    {
+      "t": 0.9,
+      "ref_id": "ink_dragon_trail_2d",
+      "action": "play",
+      "overrides": {
+        "scale": 1.0,
+        "position": [
+          1.0,
+          0.25,
+          0.0
+        ],
+        "rotation": [
+          0.0,
+          0.0,
+          -12.0
+        ],
+        "palette": "hero_component"
+      }
+    },
+    {
+      "t": 1.4,
+      "ref_id": "phantom_wail_area_2d",
+      "action": "play",
+      "overrides": {
+        "scale": 1.6,
+        "palette": "hero_component"
+      }
+    },
+    {
+      "t": 3.0,
+      "ref_id": "shadow_grasp_area_2d",
+      "action": "play",
+      "overrides": {
+        "scale": 1.35,
+        "palette": "hero_component"
+      }
+    }
+  ],
+  "camera_hints": [
+    {
+      "t": 1.4,
+      "type": "slowmo",
+      "strength": 0.3
+    },
+    {
+      "t": 3.0,
+      "type": "shake",
+      "strength": 0.45
+    }
+  ],
+  "gates": []
+}

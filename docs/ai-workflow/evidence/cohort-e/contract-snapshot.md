@@ -1,0 +1,199 @@
+# Cohort E formal contract snapshot
+
+SHA-256: `BAC0A949EE43E806905F8D963980FF9C9792303CEB76B5469A94379C61C0D181`
+
+<!-- BEGIN README.md -->
+# AI workflow for VFX Composer v1
+
+This directory is the complete contract for an AI agent that writes a VFX Recipe or an incremental Patch. Read these files in this order:
+
+1. [Recipe authoring](recipe-authoring.md)
+2. [Generated template parameter table](template-parameters.generated.md)
+3. [Validator report guide](validation-reports.md)
+4. [Patch authoring](patch-authoring.md), only for an existing Recipe change
+
+`recipe-v1.schema.json` is an AI-readable description of the currently supported Recipe shape. It does not replace the Unity Validator: parameter names, types, bounds, template-kind matching, uniqueness, attachment targets, catalog availability, and budget are checked against the live Catalog at validation/build time.
+
+The parameter table is generated from the same resolved `TemplateCatalog` used by Validator and Build. Do not infer fields from prefab names, Unity component properties, older examples, or this prose. Re-export it with `Tools/VFX Composer/AI Workflow/Export Template Parameter Table` whenever a Manifest changes.
+
+No MCP integration exists in v1. There is no S9 CLI/BatchMode entry point: the existing Editor Validator/Build workflow remains the supported route. This is intentional; the S9 evidence shows the report-feedback loop works without adding an unverified command surface.
+
+<!-- END README.md -->
+<!-- BEGIN recipe-authoring.md -->
+# Recipe authoring (v1)
+
+Return one JSON object only: no Markdown fence, explanation, comments, trailing commas, or Patch array. Validate it in the VFX Composer Compiler window, then Build only when the report has no errors.
+
+Start from the shape in `recipe-v1.schema.json`; take every `templateId`, parameter name, parameter type, and parameter min/default/max from `template-parameters.generated.md`. Every manifest-declared parameter must be present exactly once in the module's `parameters` object. Do not create helper fields such as `color`, `intensity`, `position`, `notes`, `durationSeconds`, or per-parameter metadata: unknown fields are errors.
+
+## Current top-level contract
+
+Required fields are `recipeVersion`, `id`, `dimension`, `archetype`, `targetProfile`, `randomSeed`, `stages`, and `metadata`. `name`, `style`, and `revision` are optional.
+
+- `recipeVersion` is the integer `1`.
+- `revision` is an integer at least `1`. It is optional for backward compatibility: omitted v1 JSON is parsed as revision `1`. For a newly authored file, write `"revision": 1` explicitly. Patch application increments it; never increment it manually to bypass an expected-revision failure.
+- `dimension` is `2d` or `3d`; the shipped Catalog currently exposes only 2D templates.
+- `archetype` is only `projectile`; `style`, if present, is only `stylized`.
+- `targetProfile` is `mobile_medium` or `pc_editor`. Budget reports are static preflight, not a device-performance certification.
+- `randomSeed` is an unsigned 32-bit integer (`0` through `4294967295`).
+- `metadata` contains exactly `createdBy` and `templateCatalogVersion`, both strings.
+
+## Stages and modules
+
+A stage contains exactly `id`, `trigger`, `duration`, `enabled`, and `modules`. Allowed triggers are `manual`, `after_previous`, `on_launch`, `on_hit`, and `on_end`. Duration is a finite non-negative JSON number. A module contains exactly `id`, `kind`, `templateId`, `parameters`, `enabled`, plus optional `attachTo`.
+
+For a generated v1 runtime effect, provide the three stage IDs `launch`, `travel`, and `impact`: the Runtime controller has fixed roots for those IDs. Use `on_launch` for `launch`, `after_previous` for `travel`, and `on_hit` for `impact`. The Recipe Validator allows other stage IDs structurally, but Build reports `E601` when the Runtime controller cannot wire its fixed Launch/Travel/Impact roots; therefore they are not buildable v1 runtime recipes.
+
+Recipe stage and module IDs must be nonempty and globally unique under the current Validator. Use simple IDs such as `launch`, `travel`, `impact`, `core`, and `embers`. This is important: Recipe validation does not currently impose an ID character pattern, but the Patch API accepts only IDs beginning with a letter and then letters, digits, `_`, or `-`. Use that Patch-safe subset whenever the Recipe may later receive a Patch.
+
+`attachTo`, when supplied, names an existing module ID in the **same stage**. It is not a hierarchy path. Cross-stage attachment is rejected because the Runtime controller moves the Travel root independently.
+
+The C# Validator is strict about all object fields (`additionalProperties: false` in the Schema). The single intentional exception is `parameters`: its allowed keys are selected dynamically by the module's live Manifest, so the static Schema cannot enumerate them. The generated table and Validator together make that object strict in practice.
+
+There is deliberately no hand-maintained “minimal JSON” here: a supposedly generic example would either omit a schema-required nonempty stage or duplicate live Manifest facts. Compose each stage and module from the Schema plus the generated parameter table, then let the real Validator decide Catalog and budget validity.
+
+<!-- END recipe-authoring.md -->
+<!-- BEGIN template-parameters.generated.md -->
+# Template parameter table (generated)
+
+> Generated by `Tools/VFX Composer/AI Workflow/Export Template Parameter Table` from the resolved `TemplateCatalog` and formal Manifest assets. **Do not edit this file by hand.** Re-export after a Manifest change.
+
+> This table is the only AI-facing source for template IDs, parameter names, types, defaults, ranges, bindings, and cost facts. The C# Validator and Compiler remain authoritative.
+
+| Template ID | Version | Kind | Dimension | Parameter | Type | Min | Default | Max | Binding | Cost (peak particles/materials/trails) |
+|---|---|---|---|---|---|---:|---:|---:|---|---|
+| PFT_2D_Embers | 1.0.0 | secondary_particles | 2d | lifetime | float | 0.25 | 0.55 | 1.1 | embers.lifetime | 40 / 1 / 0 |
+| PFT_2D_Embers | 1.0.0 | secondary_particles | 2d | rate | float | 4 | 18 | 36 | embers.rate | 40 / 1 / 0 |
+| PFT_2D_FireCore | 1.0.0 | energy_body | 2d | scale | float | 0.6 | 1.2 | 2.4 | core.scale | 0 / 1 / 0 |
+| PFT_2D_FireImpact | 1.0.0 | impact_burst | 2d | count | integer | 8 | 24 | 40 | impact.count | 40 / 1 / 0 |
+| PFT_2D_FireImpact | 1.0.0 | impact_burst | 2d | speed | float | 1.5 | 3.5 | 6 | impact.speed | 40 / 1 / 0 |
+| PFT_2D_FireTrail | 1.0.0 | motion_trail | 2d | time | float | 0.08 | 0.22 | 0.4 | trail.time | 0 / 1 / 1 |
+| PFT_2D_FireTrail | 1.0.0 | motion_trail | 2d | width | float | 0.12 | 0.42 | 0.55 | trail.width | 0 / 1 / 1 |
+| PFT_2D_LaunchFlash | 1.0.0 | impact_flash | 2d | lifetime | float | 0.06 | 0.12 | 0.22 | launch.lifetime | 1 / 1 / 0 |
+| PFT_2D_LaunchFlash | 1.0.0 | impact_flash | 2d | size | float | 0.45 | 1 | 1.8 | launch.size | 1 / 1 / 0 |
+| PFT_2D_Shockwave | 1.0.0 | shockwave | 2d | endSize | float | 1.2 | 2.8 | 4 | shockwave.endSize | 1 / 1 / 0 |
+| PFT_2D_Shockwave | 1.0.0 | shockwave | 2d | lifetime | float | 0.12 | 0.28 | 0.5 | shockwave.lifetime | 1 / 1 / 0 |
+
+<!-- END template-parameters.generated.md -->
+<!-- BEGIN recipe-v1.schema.json -->
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://vfxcomposer.local/schema/recipe-v1.schema.json",
+  "title": "VFX Composer Recipe v1",
+  "description": "AI-readable structural contract for the v1 C# parser and validator. Catalog-dependent parameter names, types, ranges, template compatibility, global ID uniqueness, and attachTo targets are validated by C# against the live Catalog.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["recipeVersion", "id", "dimension", "archetype", "targetProfile", "randomSeed", "stages", "metadata"],
+  "properties": {
+    "recipeVersion": { "const": 1 },
+    "revision": { "type": "integer", "minimum": 1, "default": 1, "description": "Optional for backward compatibility: omitted v1 Recipe JSON parses as revision 1." },
+    "id": { "type": "string", "minLength": 1 },
+    "name": { "type": "string" },
+    "dimension": { "enum": ["2d", "3d"] },
+    "archetype": { "const": "projectile" },
+    "style": { "const": "stylized" },
+    "targetProfile": { "enum": ["mobile_medium", "pc_editor"] },
+    "randomSeed": { "type": "integer", "minimum": 0, "maximum": 4294967295 },
+    "stages": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/stage" } },
+    "metadata": { "$ref": "#/$defs/metadata" }
+  },
+  "$defs": {
+    "metadata": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["createdBy", "templateCatalogVersion"],
+      "properties": {
+        "createdBy": { "type": "string" },
+        "templateCatalogVersion": { "type": "string" }
+      }
+    },
+    "stage": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "trigger", "duration", "modules", "enabled"],
+      "properties": {
+        "id": { "type": "string", "minLength": 1 },
+        "trigger": { "enum": ["manual", "after_previous", "on_launch", "on_hit", "on_end"] },
+        "duration": { "type": "number", "minimum": 0 },
+        "enabled": { "type": "boolean" },
+        "modules": { "type": "array", "items": { "$ref": "#/$defs/module" } }
+      }
+    },
+    "module": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "kind", "templateId", "parameters", "enabled"],
+      "properties": {
+        "id": { "type": "string", "minLength": 1 },
+        "kind": { "enum": ["energy_body", "sprite_emitter", "secondary_particles", "motion_trail", "impact_flash", "impact_burst", "shockwave", "sub_effect"] },
+        "templateId": { "type": "string" },
+        "parameters": { "type": "object", "additionalProperties": true, "description": "Keys and value contracts are selected by the resolved live TemplateCatalog Manifest." },
+        "attachTo": { "type": "string" },
+        "enabled": { "type": "boolean" }
+      }
+    }
+  }
+}
+
+<!-- END recipe-v1.schema.json -->
+<!-- BEGIN validation-reports.md -->
+# Reading Validator and Build reports
+
+Each report entry has `code`, `severity`, `path`, `message`, and sometimes `actualValue` and `allowedRange`. Correct only the reported issue and retain unrelated valid fields. Paths for stages and modules use IDs, not array indexes: `/stages/travel/modules/embers/parameters/rate`.
+
+`error` blocks Build. `warning` and `info` do not, but a warning should be reviewed. Return the full corrected JSON object (or the corrected Patch operation array) to the same validation loop; do not reply with a prose description of a fix.
+
+| Code family | Meaning and usual correction |
+|---|---|
+| `E100` | Unknown field. Remove it; v1 does not ignore invented fields. |
+| `E101` / `E102` / `E103` / `E104` / `E105` | Missing field, wrong type, unsupported enum, malformed JSON, or non-finite number. Match the Schema exactly. |
+| `E301`–`E316` | Recipe semantic issue: version, ID/uniqueness, duration, attachment, Catalog/template/kind/dimension, parameter declaration/type/range/finite value, or revision. Use the parameter table for facts. |
+| `E400`–`E404` | Static budget error. Reduce the requested Catalog cost/duration or choose a legal structure; it is not a compiler crash. |
+| `E500` / `E501` | A formal binding is unavailable or failed. Do not invent a binding or parameter; report the raw error to the maintainer. |
+| `E700`–`E711` | Patch shape/path/target/revision/transaction error. Follow the Patch contract; never change `expectedRevision` speculatively. |
+
+For a range error, use the inclusive `allowedRange` from the report. For example, an `E314` at `/stages/travel/modules/embers/parameters/rate` means change exactly that numeric parameter to a value in the live Manifest range. For `E311`, remove the named undeclared parameter rather than renaming it by guesswork. For `E308`, copy one listed `allowedRange` template ID **exactly** (including `PFT_2D_` prefix and case); never normalize, shorten, or infer an ID.
+
+Patch failures may include `Failed operation index`. If it says `post-patch validation (unattributed)`, the final Recipe is invalid but no single operation can be safely blamed; inspect every operation and the full report. Build uses a full-rebuild fallback in v1 even when the impact report identifies only one changed module.
+
+<!-- END validation-reports.md -->
+<!-- BEGIN patch-authoring.md -->
+# Patch authoring (v1)
+
+Return a bare JSON array of operations only: no `{ "operations": ... }` wrapper, recipe object, comments, or Markdown fence. The caller supplies `expectedRevision` separately; it is not a Patch field. A successful apply increments the Recipe revision by exactly one and records history.
+
+Allowed operations are `replace`, `add`, `remove`, `enable`, and `disable`. Each operation has exactly `op` and `path`; `replace` and `add` additionally require `value`. `remove`, `enable`, and `disable` must not have `value` or extra keys.
+
+## Allowed stable paths
+
+- `replace`: `/stages/{stageId}/modules/{moduleId}/parameters/{parameter}`
+- `add` and `remove`: `/stages/{stageId}/modules/{moduleId}`
+- `enable` and `disable` a module: `/stages/{stageId}/modules/{moduleId}`
+- `enable` and `disable` a stage: `/stages/{stageId}`
+
+Every path ID must start with a letter and then contain only letters, digits, `_`, or `-`. Do not use array indexes, RFC 6902 escaping, `~`, `..`, asset paths, or Unity property paths. `replace` only changes an existing declared parameter. Its new value must pass the live Manifest type and inclusive range.
+
+`add` adds a complete module object and its `value.id` must exactly equal `{moduleId}` in the path. That module must satisfy the normal Recipe/Manifest/Catalog contract. `remove` may not remove the required `travel/core` `energy_body` module. `travel/embers` is removable. Enable/disable changes the target object's `enabled` flag.
+
+Examples (facts shown are only examples; consult the generated table before authoring a different template):
+
+```json
+[
+  {
+    "op": "replace",
+    "path": "/stages/travel/modules/embers/parameters/rate",
+    "value": 9
+  }
+]
+```
+
+```json
+[
+  {
+    "op": "disable",
+    "path": "/stages/travel/modules/embers"
+  }
+]
+```
+
+<!-- END patch-authoring.md -->

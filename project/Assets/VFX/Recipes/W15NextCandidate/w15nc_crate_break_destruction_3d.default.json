@@ -1,0 +1,14 @@
+{
+  "recipeVersion": 1,
+  "revision": 1,
+  "id": "w15nc_crate_break_destruction_3d",
+  "name": "Crate Break Next Candidate",
+  "dimension": "3d",
+  "archetype": "destruction",
+  "style": { "token": "cartoon", "palette": { "primary": "#5A2C18", "secondary": "#C77833", "accent": "#FFE0A0" }, "glow_strength": 1.25 },
+  "archetypeParameters": { "piece_count": 10, "explode_force": 2.6, "debris_lifetime": 1.55 },
+  "targetProfile": "mobile_medium",
+  "randomSeed": 2946896798,
+  "stages": [{ "id": "active", "trigger": "manual", "duration": 1.55, "enabled": true, "modules": [{ "id": "core", "kind": "energy_body", "templateId": "PFT_3D_FireCore", "parameters": { "scale": 1.0 }, "enabled": true }, { "id": "fragments", "kind": "impact_burst", "templateId": "PFT_3D_FireImpact", "parameters": { "count": 10, "speed": 2.6 }, "attachTo": "core", "enabled": true }] }],
+  "metadata": { "createdBy": "w15-next-candidate-authoring", "templateCatalogVersion": "formal-1" }
+}

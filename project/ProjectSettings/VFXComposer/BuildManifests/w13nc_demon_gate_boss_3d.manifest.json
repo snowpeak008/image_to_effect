@@ -1,0 +1,184 @@
+{
+  "manifestVersion": 1,
+  "rulesVersion": "1.0-draft",
+  "enforcement": "strict",
+  "effectId": "w13nc_demon_gate_boss_3d",
+  "archetype": "composite",
+  "recipeVersion": 1,
+  "recipeRevision": 1,
+  "recipeHash": "b8c5b472d9fbb418c8807ca92295608a74a2e97a5de125a0ffc31167a8c259d3",
+  "buildHash": "3b676eab0b36a6f7f8f47db9abaac67a77e890b61c896dd4c42bbc629b909665",
+  "compilerVersion": "w11-w13-next-candidate-1",
+  "unityVersion": "2022.3.62f3c1",
+  "sourceRecipePath": "Assets/VFX/Recipes/W11W13NextCandidate/W13/w13nc_demon_gate_boss_3d.default.json",
+  "runtimeEntry": {
+    "kind": "prefab",
+    "path": "Assets/VFX/Generated/W11W13NextCandidate/w13nc_demon_gate_boss_3d/VFX_w13nc_demon_gate_boss_3d.prefab",
+    "guid": "e99071f4d8690504bb30c0c9d26e9afd"
+  },
+  "ownedOutputs": [
+    {
+      "path": "Assets/VFX/Generated/W11W13NextCandidate/w13nc_demon_gate_boss_3d/VFX_w13nc_demon_gate_boss_3d.prefab",
+      "guid": "e99071f4d8690504bb30c0c9d26e9afd",
+      "assetType": "GameObject",
+      "sha256": "f7b6d69060a705aecbd592bb181e534b0690a9cc18a2ebe394d9412d71c661f2"
+    }
+  ],
+  "dependencies": [
+    {
+      "path": "Assets/VFX/Generated/blood_ritual_spawn_3d/VFX_blood_ritual_spawn_3d.prefab",
+      "guid": "4ada9c06626073c4d83a91bd3b63cf8c",
+      "assetType": "GameObject",
+      "version": null,
+      "dependencyHash": "151d259e6301e738e87d1b96daecc02d"
+    },
+    {
+      "path": "Assets/VFX/Generated/demon_eruption_impact_3d/VFX_demon_eruption_impact_3d.prefab",
+      "guid": "c14f3aeb42df0614cae69517608b19f2",
+      "assetType": "GameObject",
+      "version": null,
+      "dependencyHash": "2451b3a6226ad21bc56f025168a69c04"
+    },
+    {
+      "path": "Assets/VFX/Generated/rift_spawn_3d/VFX_rift_spawn_3d.prefab",
+      "guid": "898fe37288553bf40aafd7e79a44200d",
+      "assetType": "GameObject",
+      "version": null,
+      "dependencyHash": "eeb0f73bdc68ab3643b680ea36912bd7"
+    },
+    {
+      "path": "Assets/VFX/Shared/CoverageGalleryB/Materials/MAT_CoverageB_Additive.mat",
+      "guid": "688b79adff1f3474da55fb0deedff137",
+      "assetType": "Material",
+      "version": null,
+      "dependencyHash": "0b0b0e70d4676ffab060eedfd9b3ebea"
+    },
+    {
+      "path": "Assets/VFX/Shared/CoverageGalleryB/Materials/MAT_CoverageB_Alpha.mat",
+      "guid": "a84952a854859674991a6e3fe826514a",
+      "assetType": "Material",
+      "version": null,
+      "dependencyHash": "6f1e099067ca8e046370c9a5c87d8158"
+    },
+    {
+      "path": "Assets/VFX/Shared/CoverageGalleryB/Meshes/M_CoverageB_Quad.asset",
+      "guid": "ea74b7ca76a79bc44b173c14298bbdba",
+      "assetType": "Mesh",
+      "version": null,
+      "dependencyHash": "65761f362d1fc645474a82095f5d7535"
+    },
+    {
+      "path": "Assets/VFX/Shared/CoverageGalleryB/Meshes/M_CoverageB_Ring.asset",
+      "guid": "7a536dcec1985cf4a9e09e6df4dbd583",
+      "assetType": "Mesh",
+      "version": null,
+      "dependencyHash": "2925f46e6811e075fedcad822cb3dfcf"
+    },
+    {
+      "path": "Assets/VFX/Shared/CoverageGalleryB/Prefabs/PF_CoverageB_Particles.prefab",
+      "guid": "70f199efb6fa95243bfdc29f0ac52b45",
+      "assetType": "GameObject",
+      "version": null,
+      "dependencyHash": "4ca484495d85edc18be403e3c11759f1"
+    },
+    {
+      "path": "Assets/VFX/Shared/Shaders/CoverageGalleryBUnlit.shader",
+      "guid": "36a2072c324a26a479dfb498994d4812",
+      "assetType": "Shader",
+      "version": null,
+      "dependencyHash": "677bb5f640200583cb27bcc1f973f0c6"
+    },
+    {
+      "path": "Assets/VFX/Shared/Shaders/VfxDissolveEdge.shader",
+      "guid": "5b0bcf875e86f60489700456c2154aee",
+      "assetType": "Shader",
+      "version": null,
+      "dependencyHash": "30bc399c9c079542d29fbf6700020364"
+    },
+    {
+      "path": "Assets/VFX/Shared/Styles/Materials/MAT_Style_dark.mat",
+      "guid": "06882d319d21ef44f95b00f7814e3463",
+      "assetType": "Material",
+      "version": null,
+      "dependencyHash": "2c79c1062f8c6f82579a1c8f8d0ed21d"
+    },
+    {
+      "path": "Assets/VFX/Shared/Styles/Meshes/M_Style_Burst.asset",
+      "guid": "0def46dac13f1d8449cd98d98de17a15",
+      "assetType": "Mesh",
+      "version": null,
+      "dependencyHash": "56e972a8f8588a864d379a7611c49c63"
+    },
+    {
+      "path": "Assets/VFX/Shared/Styles/Meshes/M_Style_Cone.asset",
+      "guid": "8a296d5e70420f647a6e1f646af993cd",
+      "assetType": "Mesh",
+      "version": null,
+      "dependencyHash": "69fd53314f71778bd2e32f584650207e"
+    },
+    {
+      "path": "Assets/VFX/Shared/Styles/Meshes/M_Style_Ring.asset",
+      "guid": "df59364e370c085418d31c0f952bcf1a",
+      "assetType": "Mesh",
+      "version": null,
+      "dependencyHash": "021f9d0fab5159d1d05310de3284c997"
+    },
+    {
+      "path": "Assets/VFX/Shared/Styles/Meshes/M_Style_Shard.asset",
+      "guid": "506c8c0bcf8b14645948b3dbb02a1b3f",
+      "assetType": "Mesh",
+      "version": null,
+      "dependencyHash": "ff113f023e398b26696f0c501ae28324"
+    },
+    {
+      "path": "Assets/VFX/Shared/W11W13NextCandidate/Materials/MAT_W13_NextCandidate.mat",
+      "guid": "aa31d03054c71ae47a5616b72c59be73",
+      "assetType": "Material",
+      "version": null,
+      "dependencyHash": "c4ba6f1ce68ecf434e52e2dcfddc885e"
+    },
+    {
+      "path": "Assets/VFX/Shared/W11W13NextCandidate/Shaders/W11W13NextCandidateLayeredUnlit.shader",
+      "guid": "70776f9a8b468361c206ba11734f7ef1",
+      "assetType": "Shader",
+      "version": null,
+      "dependencyHash": "125aa7b08bc434ff6314866f483110fc"
+    },
+    {
+      "path": "Packages/com.vfxcomposer.unity/Runtime/Components/CoverageGalleryVfxController.cs",
+      "guid": "18601207a015a6140b357c3de1ce8608",
+      "assetType": "MonoScript",
+      "version": null,
+      "dependencyHash": "b7413138fabc3a05f2522721ad65632e"
+    },
+    {
+      "path": "Packages/com.vfxcomposer.unity/Runtime/Components/StyledVfxController.cs",
+      "guid": "ca6f81a249967414c96082671e07dcaa",
+      "assetType": "MonoScript",
+      "version": null,
+      "dependencyHash": "486e1b8ba27b5e00b709bc5fd2b5624a"
+    },
+    {
+      "path": "Packages/com.vfxcomposer.unity/Runtime/W11W13NextCandidate/W11W13NextCandidateController.cs",
+      "guid": "4405247fb6bbc356ed57a8e09f292951",
+      "assetType": "MonoScript",
+      "version": null,
+      "dependencyHash": "923477f1bea941f1cd5a3c2e72435101"
+    }
+  ],
+  "cost": {
+    "particles": 0,
+    "particleSystems": 0,
+    "renderers": 6,
+    "materials": 1,
+    "trails": 0,
+    "duration": 8.0,
+    "localTextureBytes": 0,
+    "dependencyResidentTextureBytes": 0,
+    "gameObjects": 11,
+    "maxDepth": 2
+  },
+  "audit": [],
+  "formalProduction": null,
+  "generatedAtUtc": "2026-08-25T12:08:37.9794991Z"
+}

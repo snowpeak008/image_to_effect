@@ -1,0 +1,78 @@
+{
+  "manifestVersion": 1,
+  "rulesVersion": "1.0-draft",
+  "enforcement": "strict",
+  "effectId": "dissolve_transform_3d",
+  "archetype": "transform",
+  "recipeVersion": 1,
+  "recipeRevision": 1,
+  "recipeHash": "faf45617bf36cd674c7bec15337969ae26bc6539168ccab92d77ac8975ac3a32",
+  "buildHash": "13f0de1ac2c126c0c854660a3d20b37177689a09829ca7586d68493bee3af905",
+  "compilerVersion": "interaction-gallery-3",
+  "unityVersion": "2022.3.62f3c1",
+  "sourceRecipePath": "Assets/VFX/Recipes/Transform/dissolve_transform_3d.default.json",
+  "runtimeEntry": {
+    "kind": "prefab",
+    "path": "Assets/VFX/Generated/dissolve_transform_3d/VFX_dissolve_transform_3d.prefab",
+    "guid": "d0d68e3e5aa83914a821e3424e320171"
+  },
+  "ownedOutputs": [
+    {
+      "path": "Assets/VFX/Generated/dissolve_transform_3d/VFX_dissolve_transform_3d.prefab",
+      "guid": "d0d68e3e5aa83914a821e3424e320171",
+      "assetType": "GameObject",
+      "sha256": "8db2a13c741f3ff4b8a8e7d6caee0c6bd39ac9779b7dbf0b3e27721c72afcaf0"
+    }
+  ],
+  "dependencies": [
+    {
+      "path": "Assets/VFX/Shared/CoverageGalleryB/Materials/MAT_CoverageB_Additive.mat",
+      "guid": "688b79adff1f3474da55fb0deedff137",
+      "assetType": "Material",
+      "version": null,
+      "dependencyHash": "0b0b0e70d4676ffab060eedfd9b3ebea"
+    },
+    {
+      "path": "Assets/VFX/Shared/CoverageGalleryB/Materials/MAT_CoverageB_Alpha.mat",
+      "guid": "a84952a854859674991a6e3fe826514a",
+      "assetType": "Material",
+      "version": null,
+      "dependencyHash": "6f1e099067ca8e046370c9a5c87d8158"
+    },
+    {
+      "path": "Assets/VFX/Shared/CoverageGalleryB/Meshes/M_CoverageB_Burst.asset",
+      "guid": "39c17e75e16db7843a3bd8cc07912a7c",
+      "assetType": "Mesh",
+      "version": null,
+      "dependencyHash": "331411bc82f007b47c06b680bd4401d2"
+    },
+    {
+      "path": "Assets/VFX/Shared/Shaders/CoverageGalleryBUnlit.shader",
+      "guid": "36a2072c324a26a479dfb498994d4812",
+      "assetType": "Shader",
+      "version": null,
+      "dependencyHash": "64f6028fba878ab561a8418a3ea09753"
+    },
+    {
+      "path": "Packages/com.vfxcomposer.unity/Runtime/Components/InteractionGalleryVfxController.cs",
+      "guid": "9c06fdbb4482a7a40862522ad88717b6",
+      "assetType": "MonoScript",
+      "version": null,
+      "dependencyHash": "856d2bcba33bff8d21dd532335cfda8f"
+    }
+  ],
+  "cost": {
+    "particles": 0,
+    "particleSystems": 0,
+    "renderers": 3,
+    "materials": 2,
+    "trails": 0,
+    "duration": 4.5,
+    "localTextureBytes": 0,
+    "dependencyResidentTextureBytes": 0,
+    "gameObjects": 4,
+    "maxDepth": 1
+  },
+  "audit": [],
+  "generatedAtUtc": "2026-08-24T01:24:54.1639001Z"
+}

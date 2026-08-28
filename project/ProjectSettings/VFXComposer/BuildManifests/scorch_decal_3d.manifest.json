@@ -1,0 +1,92 @@
+{
+  "manifestVersion": 1,
+  "rulesVersion": "1.0-draft",
+  "enforcement": "strict",
+  "effectId": "scorch_decal_3d",
+  "archetype": "decal",
+  "recipeVersion": 1,
+  "recipeRevision": 1,
+  "recipeHash": "a6bf036930c1cded9513d016a101255316c0b2ea71c80d2be5fb9061f793291b",
+  "buildHash": "3f5930848747a8556d04d122112c558daee151ad5384b013885c24cd9ecd3082",
+  "compilerVersion": "styled-content-4",
+  "unityVersion": "2022.3.62f3c1",
+  "sourceRecipePath": "Assets/VFX/Recipes/NewArchetypes/scorch_decal_3d.default.json",
+  "runtimeEntry": {
+    "kind": "prefab",
+    "path": "Assets/VFX/Generated/scorch_decal_3d/VFX_scorch_decal_3d.prefab",
+    "guid": "ef6e299930e2c9a49abeba42404c67ed"
+  },
+  "ownedOutputs": [
+    {
+      "path": "Assets/VFX/Generated/scorch_decal_3d/VFX_scorch_decal_3d.prefab",
+      "guid": "ef6e299930e2c9a49abeba42404c67ed",
+      "assetType": "GameObject",
+      "sha256": "64b57432daacae6b90f9463d70d32d1dbe9774c4e36c65b91ba4de613b84d705"
+    }
+  ],
+  "dependencies": [
+    {
+      "path": "Assets/VFX/Shared/Shaders/VfxDissolveEdge.shader",
+      "guid": "5b0bcf875e86f60489700456c2154aee",
+      "assetType": "Shader",
+      "version": null,
+      "dependencyHash": "30bc399c9c079542d29fbf6700020364"
+    },
+    {
+      "path": "Assets/VFX/Shared/Styles/Materials/MAT_Style_dark.mat",
+      "guid": "06882d319d21ef44f95b00f7814e3463",
+      "assetType": "Material",
+      "version": null,
+      "dependencyHash": "2c79c1062f8c6f82579a1c8f8d0ed21d"
+    },
+    {
+      "path": "Assets/VFX/Shared/Styles/Meshes/M_Style_Burst.asset",
+      "guid": "0def46dac13f1d8449cd98d98de17a15",
+      "assetType": "Mesh",
+      "version": null,
+      "dependencyHash": "56e972a8f8588a864d379a7611c49c63"
+    },
+    {
+      "path": "Assets/VFX/Shared/Styles/Meshes/M_Style_Quad.asset",
+      "guid": "7f415b79b45b04d4ab5e3f4dd61605aa",
+      "assetType": "Mesh",
+      "version": null,
+      "dependencyHash": "01e83f0bfc8392031ac8f5694416ab10"
+    },
+    {
+      "path": "Assets/VFX/Shared/Styles/Meshes/M_Style_Ring.asset",
+      "guid": "df59364e370c085418d31c0f952bcf1a",
+      "assetType": "Mesh",
+      "version": null,
+      "dependencyHash": "021f9d0fab5159d1d05310de3284c997"
+    },
+    {
+      "path": "Assets/VFX/Shared/Styles/Meshes/M_Style_Shard.asset",
+      "guid": "506c8c0bcf8b14645948b3dbb02a1b3f",
+      "assetType": "Mesh",
+      "version": null,
+      "dependencyHash": "ff113f023e398b26696f0c501ae28324"
+    },
+    {
+      "path": "Packages/com.vfxcomposer.unity/Runtime/Components/StyledVfxController.cs",
+      "guid": "ca6f81a249967414c96082671e07dcaa",
+      "assetType": "MonoScript",
+      "version": null,
+      "dependencyHash": "486e1b8ba27b5e00b709bc5fd2b5624a"
+    }
+  ],
+  "cost": {
+    "particles": 16,
+    "particleSystems": 1,
+    "renderers": 4,
+    "materials": 1,
+    "trails": 0,
+    "duration": 3.2000000476837158,
+    "localTextureBytes": 0,
+    "dependencyResidentTextureBytes": 0,
+    "gameObjects": 5,
+    "maxDepth": 1
+  },
+  "audit": [],
+  "generatedAtUtc": "2026-08-24T13:19:54.6051770Z"
+}

@@ -1,0 +1,71 @@
+{
+  "manifestVersion": 1,
+  "rulesVersion": "1.0-draft",
+  "enforcement": "strict",
+  "effectId": "cap_bounce_proj_3d",
+  "archetype": "projectile",
+  "recipeVersion": 1,
+  "recipeRevision": 1,
+  "recipeHash": "bd7def10a3a4b2720fed817ec662b1155a347566d702d5a81210677ba472db3a",
+  "buildHash": "3af9d59dcdf46ba39df9cf38bbac2ab1b7c9b4b6ae206bcb48600514b59f35d8",
+  "compilerVersion": "capability-blank-1",
+  "unityVersion": "2022.3.62f3c1",
+  "sourceRecipePath": "Assets/VFX/Recipes/Capability/cap_bounce_proj_3d.default.json",
+  "runtimeEntry": {
+    "kind": "prefab",
+    "path": "Assets/VFX/Generated/cap_bounce_proj_3d/VFX_cap_bounce_proj_3d.prefab",
+    "guid": "6b5a3b03022e40c4c81bcccc26e8feda"
+  },
+  "ownedOutputs": [
+    {
+      "path": "Assets/VFX/Generated/cap_bounce_proj_3d/VFX_cap_bounce_proj_3d.prefab",
+      "guid": "6b5a3b03022e40c4c81bcccc26e8feda",
+      "assetType": "GameObject",
+      "sha256": "ff4a51b46eeea21f7f7092dfcd00d03340f5d200c6e71015a329bb614197ae20"
+    }
+  ],
+  "dependencies": [
+    {
+      "path": "Assets/VFX/Shared/Capability/MAT_CapabilityBlank_Additive.mat",
+      "guid": "aff74ea56f74fc24c83c43ddf3cd8353",
+      "assetType": "Material",
+      "version": null,
+      "dependencyHash": "187ce0dc5fbfe919f61f6d82759aeedb"
+    },
+    {
+      "path": "Assets/VFX/Shared/CoverageGalleryB/Meshes/M_CoverageB_Ring.asset",
+      "guid": "7a536dcec1985cf4a9e09e6df4dbd583",
+      "assetType": "Mesh",
+      "version": null,
+      "dependencyHash": "2925f46e6811e075fedcad822cb3dfcf"
+    },
+    {
+      "path": "Assets/VFX/Shared/Shaders/CoverageGalleryBUnlit.shader",
+      "guid": "36a2072c324a26a479dfb498994d4812",
+      "assetType": "Shader",
+      "version": null,
+      "dependencyHash": "64f6028fba878ab561a8418a3ea09753"
+    },
+    {
+      "path": "Packages/com.vfxcomposer.unity/Runtime/Components/CapabilityBlankVfxController.cs",
+      "guid": "32f1696d60b6fc14f9ad1a434ec0e77c",
+      "assetType": "MonoScript",
+      "version": null,
+      "dependencyHash": "51e95e6cddadd7836c7e9d08b54ec866"
+    }
+  ],
+  "cost": {
+    "particles": 0,
+    "particleSystems": 0,
+    "renderers": 3,
+    "materials": 1,
+    "trails": 1,
+    "duration": 3.0,
+    "localTextureBytes": 0,
+    "dependencyResidentTextureBytes": 0,
+    "gameObjects": 3,
+    "maxDepth": 1
+  },
+  "audit": [],
+  "generatedAtUtc": "2026-08-24T11:03:06.1796000Z"
+}

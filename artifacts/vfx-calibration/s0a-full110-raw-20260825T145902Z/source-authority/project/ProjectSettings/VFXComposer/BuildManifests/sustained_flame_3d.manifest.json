@@ -1,0 +1,87 @@
+{
+  "manifestVersion": 1,
+  "rulesVersion": "1.0-draft",
+  "enforcement": "strict",
+  "effectId": "sustained_flame_3d",
+  "archetype": "aura",
+  "recipeVersion": 1,
+  "recipeRevision": 1,
+  "recipeHash": "e323fe2504f1f2136e7fe73b2d44a5fe8cce1f0e7af9941fe43584e97b53fe02",
+  "buildHash": "00d9202f1e5b681617b18863753fff4b8b4a5a539af81f081ed791c892c96e0e",
+  "compilerVersion": "w24-s0b-sustained-flame/1.1.1",
+  "unityVersion": "2022.3.62f3c1",
+  "sourceRecipePath": "Assets/VFX/Recipes/Aura/sustained_flame_3d.default.json",
+  "runtimeEntry": {
+    "kind": "prefab",
+    "path": "Assets/VFX/Effects/Aura/sustained_flame_3d/VFX_sustained_flame_3d.prefab",
+    "guid": "02bac75ecb7ce7347969df962c3e1147"
+  },
+  "ownedOutputs": [
+    {
+      "path": "Assets/VFX/Effects/Aura/sustained_flame_3d/Materials/MAT_Flame_Additive.mat",
+      "guid": "b9c8cdd5fbc28f840ab18a68f3fdc300",
+      "assetType": "Material",
+      "sha256": "9d7d1d220782906be2d3ca5713c0de013e8271a8082f632c6c56d5bc3ca02e44"
+    },
+    {
+      "path": "Assets/VFX/Effects/Aura/sustained_flame_3d/Materials/MAT_Flame_Alpha.mat",
+      "guid": "d09a5720177b8a64684fc715c78398c4",
+      "assetType": "Material",
+      "sha256": "681b333365af7791c8bae7f8a51186586a317e581642a7c715d3ac430a79c2b6"
+    },
+    {
+      "path": "Assets/VFX/Effects/Aura/sustained_flame_3d/VFX_sustained_flame_3d.prefab",
+      "guid": "02bac75ecb7ce7347969df962c3e1147",
+      "assetType": "GameObject",
+      "sha256": "624399f651593acb3e1ec043f23ae20fa1c4d311c12b978ad6257b3dc7071d34"
+    }
+  ],
+  "dependencies": [
+    {
+      "path": "Assets/VFX/Shared/Shaders/SHD_URP_FlameParticle.shader",
+      "guid": "0ce078ecfe9c46c5bbc5087bb9e6de9d",
+      "assetType": "Shader",
+      "version": null,
+      "dependencyHash": "c8714052550222d366fe1b8fb8835d83"
+    },
+    {
+      "path": "Packages/com.vfxcomposer.unity/Runtime/Components/SustainedEffectController.cs",
+      "guid": "4a3693c806914c0989f2d15b98e46c85",
+      "assetType": "MonoScript",
+      "version": null,
+      "dependencyHash": "6314e980308f0a299535680efff86528"
+    }
+  ],
+  "cost": {
+    "particles": 144,
+    "particleSystems": 7,
+    "renderers": 7,
+    "materials": 2,
+    "trails": 0,
+    "duration": 5.7,
+    "localTextureBytes": 0,
+    "dependencyResidentTextureBytes": 0,
+    "gameObjects": 10,
+    "maxDepth": 2
+  },
+  "audit": [],
+  "formalProduction": {
+    "contractPath": "docs/vfx-contracts/sustained_flame_3d.contract.json",
+    "contractFileHash": "sha256:4fed7e3e1945be9eb3ee35de5656bc5e6e00be6b7c0c15aa0f5be553981c66e8",
+    "contractHash": "sha256:5e1282e11315baf5b1000bddb93faee9d4a7addeaee74dda3a83479205bb242c",
+    "contractRevision": 17,
+    "tracePath": "docs/vfx-traces/sustained_flame_3d.implementation-trace.json",
+    "traceFileHash": "sha256:d539a67ea63b53131ce3818fef613b96ea95f691ef69c1caed95b0315cef11d2",
+    "visualStatus": "VISUAL_PENDING",
+    "evidenceCorpusPath": null,
+    "evidenceCorpusHash": null,
+    "userVerdictRecordPath": null,
+    "userVerdictRecordHash": null,
+    "visualQaRecordPath": null,
+    "visualQaRecordHash": null,
+    "s0aStatusRecordPath": null,
+    "s0aStatusRecordHash": null,
+    "admissionPhase": "PRE_C0_FIRST_FORMAL_BUILD"
+  },
+  "generatedAtUtc": "2026-08-25T06:20:25.5100186Z"
+}

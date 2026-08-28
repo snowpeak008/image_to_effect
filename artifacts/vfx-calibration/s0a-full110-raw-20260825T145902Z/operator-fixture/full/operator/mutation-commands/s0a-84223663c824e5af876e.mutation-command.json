@@ -1,0 +1,16 @@
+{
+  "schemaVersion": "s0a-operator-mutation-command/v1",
+  "sampleId": "s0a-84223663c824e5af876e",
+  "effectId": "sustained_flame_3d",
+  "fixedSeed": 185767517,
+  "mutationCommands": [
+    {
+      "operation": "set",
+      "targetKey": "Fragments.sharedParentAngularVelocity",
+      "value": "22deg_per_second"
+    }
+  ],
+  "fixtureApplicationStatus": "NOT_APPLIED_BY_UNITY_FIXTURE_ADAPTER",
+  "operatorInstruction": "A later Unity fixture adapter must execute this command and capture evidence.",
+  "commandHash": "sha256:503545c79eb4a741549104fa7e2e732d0c54ac037df177c81f6205df44a9811c"
+}

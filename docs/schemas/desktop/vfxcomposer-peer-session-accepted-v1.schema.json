@@ -1,0 +1,57 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.vfxcomposer.dev/desktop/vfxcomposer-peer-session-accepted-v1.schema.json",
+  "title": "VFX Composer authenticated-pipe peer session receipt v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "protocolVersion",
+    "messageKind",
+    "requestId",
+    "sessionId",
+    "peerRole",
+    "brokerInstanceId",
+    "brokerGeneration",
+    "processEpoch",
+    "negotiatedCapabilities"
+  ],
+  "properties": {
+    "protocolVersion": { "const": "vfxcomposer.protocol/1.0" },
+    "messageKind": { "const": "peer.session.accepted" },
+    "requestId": { "$ref": "#/$defs/token" },
+    "sessionId": { "$ref": "#/$defs/token" },
+    "peerRole": { "enum": ["DESKTOP", "WORKER"] },
+    "brokerInstanceId": { "$ref": "#/$defs/token" },
+    "brokerGeneration": { "type": "integer", "minimum": 1, "maximum": 9223372036854775807 },
+    "processEpoch": { "$ref": "#/$defs/token" },
+    "negotiatedCapabilities": { "$ref": "#/$defs/capabilities" }
+  },
+  "$defs": {
+    "token": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 128,
+      "pattern": "^[A-Za-z0-9._:-]+$"
+    },
+    "capabilities": {
+      "oneOf": [
+        { "const": [] },
+        { "const": ["broker.peer-session.v1"] },
+        { "const": ["project.readonly-query.v1"] },
+        { "const": ["project.registration.v1"] },
+        { "const": ["worker.handle-lifecycle.v1"] },
+        { "const": ["broker.peer-session.v1", "project.readonly-query.v1"] },
+        { "const": ["broker.peer-session.v1", "project.registration.v1"] },
+        { "const": ["broker.peer-session.v1", "worker.handle-lifecycle.v1"] },
+        { "const": ["project.readonly-query.v1", "project.registration.v1"] },
+        { "const": ["project.readonly-query.v1", "worker.handle-lifecycle.v1"] },
+        { "const": ["project.registration.v1", "worker.handle-lifecycle.v1"] },
+        { "const": ["broker.peer-session.v1", "project.readonly-query.v1", "project.registration.v1"] },
+        { "const": ["broker.peer-session.v1", "project.readonly-query.v1", "worker.handle-lifecycle.v1"] },
+        { "const": ["broker.peer-session.v1", "project.registration.v1", "worker.handle-lifecycle.v1"] },
+        { "const": ["project.readonly-query.v1", "project.registration.v1", "worker.handle-lifecycle.v1"] },
+        { "const": ["broker.peer-session.v1", "project.readonly-query.v1", "project.registration.v1", "worker.handle-lifecycle.v1"] }
+      ]
+    }
+  }
+}

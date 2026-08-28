@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<test-run id="2" testcasecount="4" result="Passed" total="4" passed="4" failed="0" inconclusive="0" skipped="0" asserts="0" engine-version="3.5.0.0" clr-version="4.0.30319.42000" start-time="2026-08-25 14:36:43Z" end-time="2026-08-25 14:36:43Z" duration="0.0828785">
+  <test-suite type="TestSuite" id="1541" name="project" fullname="project" runstate="Runnable" testcasecount="442" result="Passed" start-time="2026-08-25 14:36:43Z" end-time="2026-08-25 14:36:43Z" duration="0.082879" total="4" passed="4" failed="0" inconclusive="0" skipped="0" asserts="0">
+    <properties />
+    <test-suite type="Assembly" id="2075" name="VFXComposer.Tests.EditMode.dll" fullname="D:/WorkWork/Assist/image_to_smart/.codex_tmp/w24-fresh-20260825-0628/project/Library/ScriptAssemblies/VFXComposer.Tests.EditMode.dll" runstate="Runnable" testcasecount="440" result="Passed" start-time="2026-08-25 14:36:43Z" end-time="2026-08-25 14:36:43Z" duration="0.068007" total="4" passed="4" failed="0" inconclusive="0" skipped="0" asserts="0">
+      <properties>
+        <property name="_PID" value="29124" />
+        <property name="_APPDOMAIN" value="Unity Child Domain" />
+        <property name="platform" value="EditMode" />
+      </properties>
+      <test-suite type="TestSuite" id="2076" name="VFXComposer" fullname="VFXComposer" runstate="Runnable" testcasecount="440" result="Passed" start-time="2026-08-25 14:36:43Z" end-time="2026-08-25 14:36:43Z" duration="0.064618" total="4" passed="4" failed="0" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <test-suite type="TestSuite" id="2077" name="Tests" fullname="VFXComposer.Tests" runstate="Runnable" testcasecount="440" result="Passed" start-time="2026-08-25 14:36:43Z" end-time="2026-08-25 14:36:43Z" duration="0.061382" total="4" passed="4" failed="0" inconclusive="0" skipped="0" asserts="0">
+          <properties />
+          <test-suite type="TestSuite" id="2078" name="EditMode" fullname="VFXComposer.Tests.EditMode" runstate="Runnable" testcasecount="440" result="Passed" start-time="2026-08-25 14:36:43Z" end-time="2026-08-25 14:36:43Z" duration="0.057820" total="4" passed="4" failed="0" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <test-suite type="TestFixture" id="1988" name="W24TypedBinaryCanonicalEncodingTests" fullname="VFXComposer.Tests.EditMode.W24TypedBinaryCanonicalEncodingTests" classname="VFXComposer.Tests.EditMode.W24TypedBinaryCanonicalEncodingTests" runstate="Runnable" testcasecount="4" result="Passed" start-time="2026-08-25 14:36:43Z" end-time="2026-08-25 14:36:43Z" duration="0.050332" total="4" passed="4" failed="0" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <test-case id="1992" name="MetricsJsonParsers_RejectDuplicateAndNonFiniteAndPinFloatToBinary64" fullname="VFXComposer.Tests.EditMode.W24TypedBinaryCanonicalEncodingTests.MetricsJsonParsers_RejectDuplicateAndNonFiniteAndPinFloatToBinary64" methodname="MetricsJsonParsers_RejectDuplicateAndNonFiniteAndPinFloatToBinary64" classname="VFXComposer.Tests.EditMode.W24TypedBinaryCanonicalEncodingTests" runstate="Runnable" seed="1018462454" result="Passed" start-time="2026-08-25 14:36:43Z" end-time="2026-08-25 14:36:43Z" duration="0.025078" asserts="0">
+                <properties />
+              </test-case>
+              <test-case id="1990" name="NonFiniteAndLoneSurrogateAreRejected" fullname="VFXComposer.Tests.EditMode.W24TypedBinaryCanonicalEncodingTests.NonFiniteAndLoneSurrogateAreRejected" methodname="NonFiniteAndLoneSurrogateAreRejected" classname="VFXComposer.Tests.EditMode.W24TypedBinaryCanonicalEncodingTests" runstate="Runnable" seed="67884083" result="Passed" start-time="2026-08-25 14:36:43Z" end-time="2026-08-25 14:36:43Z" duration="0.001834" asserts="0">
+                <properties />
+              </test-case>
+              <test-case id="1989" name="PythonVectors_PreserveTypesUtf8OrderingAndFiniteDoubleBits" fullname="VFXComposer.Tests.EditMode.W24TypedBinaryCanonicalEncodingTests.PythonVectors_PreserveTypesUtf8OrderingAndFiniteDoubleBits" methodname="PythonVectors_PreserveTypesUtf8OrderingAndFiniteDoubleBits" classname="VFXComposer.Tests.EditMode.W24TypedBinaryCanonicalEncodingTests" runstate="Runnable" seed="1851283218" result="Passed" start-time="2026-08-25 14:36:43Z" end-time="2026-08-25 14:36:43Z" duration="0.009937" asserts="0">
+                <properties />
+              </test-case>
+              <test-case id="1991" name="TypedMetricsCompatibility_OnlyPermitsContractsWithoutTypedDeclarations" fullname="VFXComposer.Tests.EditMode.W24TypedBinaryCanonicalEncodingTests.TypedMetricsCompatibility_OnlyPermitsContractsWithoutTypedDeclarations" methodname="TypedMetricsCompatibility_OnlyPermitsContractsWithoutTypedDeclarations" classname="VFXComposer.Tests.EditMode.W24TypedBinaryCanonicalEncodingTests" runstate="Runnable" seed="1829189282" result="Passed" start-time="2026-08-25 14:36:43Z" end-time="2026-08-25 14:36:43Z" duration="0.004552" asserts="0">
+                <properties />
+              </test-case>
+            </test-suite>
+          </test-suite>
+        </test-suite>
+      </test-suite>
+    </test-suite>
+  </test-suite>
+</test-run>

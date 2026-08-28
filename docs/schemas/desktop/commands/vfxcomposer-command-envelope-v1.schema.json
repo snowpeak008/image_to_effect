@@ -1,0 +1,313 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.vfxcomposer.dev/desktop/commands/vfxcomposer-command-envelope-v1.schema.json",
+  "title": "commands/vfxcomposer-command-envelope-v1.schema.json",
+  "type": "object",
+  "properties": {
+    "protocolVersion": {
+      "const": "vfxcomposer.protocol/1.0"
+    },
+    "requestId": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9._:-]{1,128}$",
+      "maxLength": 128
+    },
+    "commandId": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9._:-]{1,128}$",
+      "maxLength": 128
+    },
+    "idempotencyKey": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9._:-]{1,128}$",
+      "maxLength": 128
+    },
+    "leaseId": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9._:-]{1,128}$",
+      "maxLength": 128
+    },
+    "projectIdentity": {
+      "type": "object",
+      "properties": {
+        "typeTag": {
+          "const": "vfxcomposer.project-identity/1"
+        },
+        "digest": {
+          "type": "string",
+          "pattern": "^sha256:[0-9a-f]{64}$"
+        }
+      },
+      "required": [
+        "typeTag",
+        "digest"
+      ],
+      "additionalProperties": false
+    },
+    "leaseGeneration": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 9223372036854775807
+    },
+    "commandKind": {
+      "enum": [
+        "command.validate-recipe",
+        "command.build-candidate",
+        "command.open-preview-job",
+        "command.close-preview-job",
+        "command.set-preview-playback",
+        "command.validate-patch",
+        "command.apply-patch",
+        "command.run-focused-tests",
+        "command.cancel-job"
+      ]
+    },
+    "commandCapability": {
+      "enum": [
+        "command.validate-recipe.v1",
+        "command.build-candidate.v1",
+        "command.open-preview-job.v1",
+        "command.close-preview-job.v1",
+        "command.set-preview-playback.v1",
+        "command.validate-patch.v1",
+        "command.apply-patch.v1",
+        "command.run-focused-tests.v1",
+        "command.cancel-job.v1"
+      ]
+    },
+    "confirmationPolicy": {
+      "type": "object",
+      "properties": {
+        "policyId": {
+          "const": "confirmation.policy.reference.v1"
+        },
+        "policyIdentity": {
+          "type": "object",
+          "properties": {
+            "typeTag": {
+              "const": "vfxcomposer.confirmation-policy/1"
+            },
+            "digest": {
+              "type": "string",
+              "pattern": "^sha256:[0-9a-f]{64}$"
+            }
+          },
+          "required": [
+            "typeTag",
+            "digest"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "policyId",
+        "policyIdentity"
+      ],
+      "additionalProperties": false
+    },
+    "selfHash": {
+      "type": "object",
+      "properties": {
+        "typeTag": {
+          "const": "vfxcomposer.command-envelope/1"
+        },
+        "digest": {
+          "type": "string",
+          "pattern": "^sha256:[0-9a-f]{64}$"
+        }
+      },
+      "required": [
+        "typeTag",
+        "digest"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "required": [
+    "protocolVersion",
+    "requestId",
+    "commandId",
+    "idempotencyKey",
+    "leaseId",
+    "projectIdentity",
+    "leaseGeneration",
+    "commandKind",
+    "commandCapability",
+    "confirmationPolicy",
+    "selfHash"
+  ],
+  "additionalProperties": false,
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "commandKind": {
+            "const": "command.validate-recipe"
+          }
+        },
+        "required": [
+          "commandKind"
+        ]
+      },
+      "then": {
+        "properties": {
+          "commandCapability": {
+            "const": "command.validate-recipe.v1"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "commandKind": {
+            "const": "command.build-candidate"
+          }
+        },
+        "required": [
+          "commandKind"
+        ]
+      },
+      "then": {
+        "properties": {
+          "commandCapability": {
+            "const": "command.build-candidate.v1"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "commandKind": {
+            "const": "command.open-preview-job"
+          }
+        },
+        "required": [
+          "commandKind"
+        ]
+      },
+      "then": {
+        "properties": {
+          "commandCapability": {
+            "const": "command.open-preview-job.v1"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "commandKind": {
+            "const": "command.close-preview-job"
+          }
+        },
+        "required": [
+          "commandKind"
+        ]
+      },
+      "then": {
+        "properties": {
+          "commandCapability": {
+            "const": "command.close-preview-job.v1"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "commandKind": {
+            "const": "command.set-preview-playback"
+          }
+        },
+        "required": [
+          "commandKind"
+        ]
+      },
+      "then": {
+        "properties": {
+          "commandCapability": {
+            "const": "command.set-preview-playback.v1"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "commandKind": {
+            "const": "command.validate-patch"
+          }
+        },
+        "required": [
+          "commandKind"
+        ]
+      },
+      "then": {
+        "properties": {
+          "commandCapability": {
+            "const": "command.validate-patch.v1"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "commandKind": {
+            "const": "command.apply-patch"
+          }
+        },
+        "required": [
+          "commandKind"
+        ]
+      },
+      "then": {
+        "properties": {
+          "commandCapability": {
+            "const": "command.apply-patch.v1"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "commandKind": {
+            "const": "command.run-focused-tests"
+          }
+        },
+        "required": [
+          "commandKind"
+        ]
+      },
+      "then": {
+        "properties": {
+          "commandCapability": {
+            "const": "command.run-focused-tests.v1"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "commandKind": {
+            "const": "command.cancel-job"
+          }
+        },
+        "required": [
+          "commandKind"
+        ]
+      },
+      "then": {
+        "properties": {
+          "commandCapability": {
+            "const": "command.cancel-job.v1"
+          }
+        }
+      }
+    }
+  ]
+}

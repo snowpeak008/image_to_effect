@@ -1,0 +1,250 @@
+{
+  "succeeded": false,
+  "detail": null,
+  "entries": [
+    {
+      "code": "E101",
+      "severity": "error",
+      "path": "/stages/launch/duration",
+      "message": "Required field is missing.",
+      "actualValue": null,
+      "allowedRange": null
+    },
+    {
+      "code": "E100",
+      "severity": "error",
+      "path": "/stages/launch/modules/launch_flare/semantic",
+      "message": "Unknown field is not allowed.",
+      "actualValue": "launch_flash",
+      "allowedRange": null
+    },
+    {
+      "code": "E100",
+      "severity": "error",
+      "path": "/stages/launch/modules/launch_flare/template",
+      "message": "Unknown field is not allowed.",
+      "actualValue": "PFT_2D_FireImpact",
+      "allowedRange": null
+    },
+    {
+      "code": "E103",
+      "severity": "error",
+      "path": "/stages/launch/modules/launch_flare/kind",
+      "message": "Value is not in the supported enumeration.",
+      "actualValue": "particle",
+      "allowedRange": null
+    },
+    {
+      "code": "E101",
+      "severity": "error",
+      "path": "/stages/launch/modules/launch_flare/templateId",
+      "message": "Required field is missing.",
+      "actualValue": null,
+      "allowedRange": null
+    },
+    {
+      "code": "E101",
+      "severity": "error",
+      "path": "/stages/travel/duration",
+      "message": "Required field is missing.",
+      "actualValue": null,
+      "allowedRange": null
+    },
+    {
+      "code": "E100",
+      "severity": "error",
+      "path": "/stages/travel/modules/energy_body/semantic",
+      "message": "Unknown field is not allowed.",
+      "actualValue": "energy_body",
+      "allowedRange": null
+    },
+    {
+      "code": "E100",
+      "severity": "error",
+      "path": "/stages/travel/modules/energy_body/template",
+      "message": "Unknown field is not allowed.",
+      "actualValue": "PFT_2D_FireCore",
+      "allowedRange": null
+    },
+    {
+      "code": "E103",
+      "severity": "error",
+      "path": "/stages/travel/modules/energy_body/kind",
+      "message": "Value is not in the supported enumeration.",
+      "actualValue": "particle",
+      "allowedRange": null
+    },
+    {
+      "code": "E101",
+      "severity": "error",
+      "path": "/stages/travel/modules/energy_body/templateId",
+      "message": "Required field is missing.",
+      "actualValue": null,
+      "allowedRange": null
+    },
+    {
+      "code": "E100",
+      "severity": "error",
+      "path": "/stages/travel/modules/motion_trail/semantic",
+      "message": "Unknown field is not allowed.",
+      "actualValue": "motion_trail",
+      "allowedRange": null
+    },
+    {
+      "code": "E100",
+      "severity": "error",
+      "path": "/stages/travel/modules/motion_trail/template",
+      "message": "Unknown field is not allowed.",
+      "actualValue": "PFT_2D_FireTrail",
+      "allowedRange": null
+    },
+    {
+      "code": "E100",
+      "severity": "error",
+      "path": "/stages/travel/modules/motion_trail/attachment",
+      "message": "Unknown field is not allowed.",
+      "actualValue": {
+        "targetModuleId": "energy_body",
+        "mode": "follow",
+        "inheritPosition": true,
+        "inheritRotation": true,
+        "inheritScale": false
+      },
+      "allowedRange": null
+    },
+    {
+      "code": "E103",
+      "severity": "error",
+      "path": "/stages/travel/modules/motion_trail/kind",
+      "message": "Value is not in the supported enumeration.",
+      "actualValue": "particle",
+      "allowedRange": null
+    },
+    {
+      "code": "E101",
+      "severity": "error",
+      "path": "/stages/travel/modules/motion_trail/templateId",
+      "message": "Required field is missing.",
+      "actualValue": null,
+      "allowedRange": null
+    },
+    {
+      "code": "E100",
+      "severity": "error",
+      "path": "/stages/travel/modules/embers/semantic",
+      "message": "Unknown field is not allowed.",
+      "actualValue": "embers",
+      "allowedRange": null
+    },
+    {
+      "code": "E100",
+      "severity": "error",
+      "path": "/stages/travel/modules/embers/template",
+      "message": "Unknown field is not allowed.",
+      "actualValue": "PFT_2D_Embers",
+      "allowedRange": null
+    },
+    {
+      "code": "E100",
+      "severity": "error",
+      "path": "/stages/travel/modules/embers/attachment",
+      "message": "Unknown field is not allowed.",
+      "actualValue": {
+        "targetModuleId": "energy_body",
+        "mode": "follow",
+        "inheritPosition": true,
+        "inheritRotation": true,
+        "inheritScale": true
+      },
+      "allowedRange": null
+    },
+    {
+      "code": "E103",
+      "severity": "error",
+      "path": "/stages/travel/modules/embers/kind",
+      "message": "Value is not in the supported enumeration.",
+      "actualValue": "particle",
+      "allowedRange": null
+    },
+    {
+      "code": "E101",
+      "severity": "error",
+      "path": "/stages/travel/modules/embers/templateId",
+      "message": "Required field is missing.",
+      "actualValue": null,
+      "allowedRange": null
+    },
+    {
+      "code": "E101",
+      "severity": "error",
+      "path": "/stages/impact/duration",
+      "message": "Required field is missing.",
+      "actualValue": null,
+      "allowedRange": null
+    },
+    {
+      "code": "E100",
+      "severity": "error",
+      "path": "/stages/impact/modules/impact_burst/semantic",
+      "message": "Unknown field is not allowed.",
+      "actualValue": "impact_burst",
+      "allowedRange": null
+    },
+    {
+      "code": "E100",
+      "severity": "error",
+      "path": "/stages/impact/modules/impact_burst/template",
+      "message": "Unknown field is not allowed.",
+      "actualValue": "PFT_2D_FireImpact",
+      "allowedRange": null
+    },
+    {
+      "code": "E103",
+      "severity": "error",
+      "path": "/stages/impact/modules/impact_burst/kind",
+      "message": "Value is not in the supported enumeration.",
+      "actualValue": "particle",
+      "allowedRange": null
+    },
+    {
+      "code": "E101",
+      "severity": "error",
+      "path": "/stages/impact/modules/impact_burst/templateId",
+      "message": "Required field is missing.",
+      "actualValue": null,
+      "allowedRange": null
+    },
+    {
+      "code": "E100",
+      "severity": "error",
+      "path": "/stages/impact/modules/shockwave/semantic",
+      "message": "Unknown field is not allowed.",
+      "actualValue": "shockwave",
+      "allowedRange": null
+    },
+    {
+      "code": "E100",
+      "severity": "error",
+      "path": "/stages/impact/modules/shockwave/template",
+      "message": "Unknown field is not allowed.",
+      "actualValue": "PFT_2D_Shockwave",
+      "allowedRange": null
+    },
+    {
+      "code": "E103",
+      "severity": "error",
+      "path": "/stages/impact/modules/shockwave/kind",
+      "message": "Value is not in the supported enumeration.",
+      "actualValue": "particle",
+      "allowedRange": null
+    },
+    {
+      "code": "E101",
+      "severity": "error",
+      "path": "/stages/impact/modules/shockwave/templateId",
+      "message": "Required field is missing.",
+      "actualValue": null,
+      "allowedRange": null
+    }
+  ]
+}

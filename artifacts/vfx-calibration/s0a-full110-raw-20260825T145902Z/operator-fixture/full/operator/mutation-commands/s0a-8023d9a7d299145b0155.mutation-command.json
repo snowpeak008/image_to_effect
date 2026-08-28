@@ -1,0 +1,16 @@
+{
+  "schemaVersion": "s0a-operator-mutation-command/v1",
+  "sampleId": "s0a-8023d9a7d299145b0155",
+  "effectId": "sustained_flame_3d",
+  "fixedSeed": 476234600,
+  "mutationCommands": [
+    {
+      "operation": "set",
+      "targetKey": "Flame.steadyStateLinearDrift",
+      "value": "0.90_units_per_second"
+    }
+  ],
+  "fixtureApplicationStatus": "NOT_APPLIED_BY_UNITY_FIXTURE_ADAPTER",
+  "operatorInstruction": "A later Unity fixture adapter must execute this command and capture evidence.",
+  "commandHash": "sha256:6c70547e36643308055d03ac22a0c2e775c572058ccb3b5533e5d58135e446c4"
+}

@@ -1,0 +1,87 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://image-to-smart.local/schemas/s0a-capture-profile-policy/v1",
+  "title": "S0a cohort Capture Profile policy",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "holdoutCohort", "profileTemplateWithoutSeeds", "seedPolicy", "frameTable", "instances", "policyHash"],
+  "properties": {
+    "schemaVersion": {"const": "s0a-capture-profile-policy/v1"},
+    "holdoutCohort": {"enum": ["reduced-36-12-12-6", "full-60-20-20-10"]},
+    "profileTemplateWithoutSeeds": {"$ref": "#/$defs/profileTemplate"},
+    "seedPolicy": {"const": "operator-fixed canonical uint32 + frozen xor-derived robustness pair/v1"},
+    "frameTable": {"$ref": "#/$defs/frameTable"},
+    "instances": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["sampleId", "captureProfileInstanceHash"],
+        "properties": {
+          "sampleId": {"$ref": "#/$defs/sampleId"},
+          "captureProfileInstanceHash": {"$ref": "#/$defs/hash"}
+        }
+      }
+    },
+    "policyHash": {"$ref": "#/$defs/hash"}
+  },
+  "allOf": [
+    {
+      "if": {"properties": {"holdoutCohort": {"const": "reduced-36-12-12-6"}}, "required": ["holdoutCohort"]},
+      "then": {"properties": {"instances": {"minItems": 66, "maxItems": 66}}},
+      "else": {"properties": {"instances": {"minItems": 110, "maxItems": 110}}}
+    }
+  ],
+  "$defs": {
+    "hash": {"type": "string", "pattern": "^sha256:[a-f0-9]{64}$"},
+    "sampleId": {"type": "string", "pattern": "^s0a-[a-f0-9]{20}$"},
+    "hashedReference": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["reference", "sha256"],
+      "properties": {
+        "reference": {"type": "string", "minLength": 1},
+        "sha256": {"$ref": "#/$defs/hash"}
+      }
+    },
+    "profileTemplate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["profileVersion", "unityVersion", "urpVersion", "graphicsApi", "graphicsDevice", "graphicsDriverVersion", "renderTextureFormat", "rendererAsset", "volume", "scenePath", "serializedCameraReference", "resolution", "fps", "background", "colorSpace", "hdr", "msaa", "bloom", "toneMapping", "retainedFrameIndices", "retainedFrameIndicesSha256"],
+      "properties": {
+        "profileVersion": {"const": "w24-s0a-formal-calibration-capture-profile/v1"},
+        "unityVersion": {"type": "string", "minLength": 1},
+        "urpVersion": {"type": "string", "minLength": 1},
+        "graphicsApi": {"type": "string", "minLength": 1},
+        "graphicsDevice": {"type": "string", "minLength": 1},
+        "graphicsDriverVersion": {"type": "string", "minLength": 1},
+        "renderTextureFormat": {"type": "string", "minLength": 1},
+        "rendererAsset": {"$ref": "#/$defs/hashedReference"},
+        "volume": {"$ref": "#/$defs/hashedReference"},
+        "scenePath": {"type": "string", "minLength": 1},
+        "serializedCameraReference": {"type": "string", "minLength": 1},
+        "resolution": {"const": [960, 540]},
+        "fps": {"const": 60},
+        "background": {"type": "array", "minItems": 4, "maxItems": 4, "items": {"type": "number"}},
+        "colorSpace": {"const": "Linear"},
+        "hdr": {"const": false},
+        "msaa": {"const": false},
+        "bloom": {"type": "object", "additionalProperties": false, "required": ["value", "validation"], "properties": {"value": {"const": false}, "validation": {"const": "caller-frozen"}}},
+        "toneMapping": {"type": "object", "additionalProperties": false, "required": ["value", "validation"], "properties": {"value": {"const": "None"}, "validation": {"const": "caller-frozen"}}},
+        "retainedFrameIndices": {"const": [1, 21, 60, 120, 180, 240, 300, 360]},
+        "retainedFrameIndicesSha256": {"$ref": "#/$defs/hash"}
+      }
+    },
+    "frameTable": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["retainedFrameIndices", "seedRows"],
+      "properties": {
+        "retainedFrameIndices": {"const": [1, 21, 60, 120, 180, 240, 300, 360]},
+        "seedRows": {"const": ["canonical", "robustness-1", "robustness-2"]}
+      }
+    }
+  }
+}

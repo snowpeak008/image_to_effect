@@ -1,0 +1,39 @@
+{
+  "reviewVersion": "s0a-visual-qa/1.0",
+  "candidateId": "C0",
+  "contractHash": "sha256:ba44573fabb3416f0e5b9cb4734607d115d97c0594817debc816e18d187323d1",
+  "buildHash": "sha256:00d9202f1e5b681617b18863753fff4b8b4a5a539af81f081ed791c892c96e0e",
+  "captureProfileHash": "sha256:1d9ee0b874721a3eb1e45e1d347744f316bbd0f6b407184afcb37bb9abae18db",
+  "evidenceHashes": [
+    "sha256:4e3233f8e32a03e58410c940481260aacdddb9c013124b0ce49859843e8258ee"
+  ],
+  "imageInputRead": true,
+  "evidenceStatus": "valid",
+  "contractStatus": "unambiguous",
+  "s0aTerminalStatus": null,
+  "qaGateAuthority": "advisory-only",
+  "topLevelRoute": "VISUAL_PASS",
+  "perRequirement": [
+    {
+      "designRequirementId": "s0a.visual.req.dbf1084f474b2705a9d4",
+      "state": "pass",
+      "countable": true,
+      "reasonCode": "OBSERVED",
+      "stateRef": "starting, steady, stopping, and idle states across seed rows 0-2",
+      "frameNumbers": [
+        1,
+        21,
+        60,
+        120,
+        180,
+        240,
+        300,
+        360
+      ],
+      "imageRegion": "Full Beauty frame, including the sustained-flame subject and ground-plane area, across all three seed rows.",
+      "observation": "Across seed rows 0-2, the sustained flame is visible at starting frame 1 and steady frames 21, 60, 120, and 180, then is absent at stopping/cleanup frame 240 and idle frames 300 and 360; the complete lifecycle is observable and coherent."
+    }
+  ],
+  "conflicts": [],
+  "sealedReportHash": "sha256:759b0e7c5524d42fe6e8dfe6f728c3dbb24355c018fcb783884aea5373339220"
+}

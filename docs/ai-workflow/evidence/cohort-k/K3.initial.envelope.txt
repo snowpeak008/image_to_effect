@@ -1,0 +1,1 @@
+You are isolated `gpt-5.6-terra` at `high`. Use exactly one `exec_command` to read only `C:\Users\admin\AppData\Local\Temp\vfxcomposer-s9-cohort-k-r2\K3\K3.initial.payload.md` and verify SHA-256 `EBBAC33AF0719EEF6619575DAAA84DE46C821497DDB70625D6D555A7C8F8D6BD`; use no other resource. Then return only the required bare Patch JSON array.

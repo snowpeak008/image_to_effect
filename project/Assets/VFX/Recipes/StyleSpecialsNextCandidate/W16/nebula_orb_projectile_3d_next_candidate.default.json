@@ -1,0 +1,32 @@
+{
+  "schema": "style-special-next-candidate/v1",
+  "id": "nebula_orb_projectile_3d_next_candidate",
+  "sourceId": "nebula_orb_projectile_3d",
+  "label": "COSMIC · NEW ORB",
+  "group": "w16",
+  "archetype": "projectile",
+  "dimension": "3d",
+  "style": "cosmic",
+  "profile": "CosmicOrbit",
+  "semantic": "deep-core+two-parallax-nebula-layers+orbiting-star-tail",
+  "duration": 1.42,
+  "releaseNormalized": 0.1,
+  "sustainEndNormalized": 0.8,
+  "sustained": false,
+  "seed": 16107,
+  "intensity": 1.12,
+  "palette": {
+    "primary": "#4D2B9C",
+    "secondary": "#6CD6FF",
+    "accent": "#FF7CEB"
+  },
+  "meshes": [
+    "Quad",
+    "Ring",
+    "Burst",
+    "Shard"
+  ],
+  "pairFamily": "cosmic",
+  "pairRole": "new",
+  "sourceBaseId": "nebula_orb_projectile_3d"
+}

@@ -1,0 +1,33 @@
+{
+  "schema": "style-special-next-candidate/v1",
+  "id": "candy_pop_impact_2d_next_candidate",
+  "sourceId": "candy_pop_impact_2d",
+  "label": "CANDY · NEW POP",
+  "group": "w16",
+  "archetype": "impact",
+  "dimension": "2d",
+  "style": "candy",
+  "profile": "CandyBounce",
+  "semantic": "jelly-squash>pop+star-heart-symbols>elastic-settle",
+  "duration": 1.16,
+  "releaseNormalized": 0.24,
+  "sustainEndNormalized": 0.74,
+  "sustained": false,
+  "seed": 16105,
+  "intensity": 1.18,
+  "palette": {
+    "primary": "#FF72B6",
+    "secondary": "#76E8E0",
+    "accent": "#FFF19A"
+  },
+  "meshes": [
+    "Burst",
+    "Quad",
+    "Shard",
+    "Shard",
+    "Burst"
+  ],
+  "pairFamily": "candy",
+  "pairRole": "new",
+  "sourceBaseId": "candy_pop_impact_2d"
+}

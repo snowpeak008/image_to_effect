@@ -1,0 +1,16 @@
+{
+  "schemaVersion": "s0a-operator-mutation-command/v1",
+  "sampleId": "s0a-8954f67fa33773f87eb0",
+  "effectId": "sustained_flame_3d",
+  "fixedSeed": 2390574055,
+  "mutationCommands": [
+    {
+      "operation": "set",
+      "targetKey": "Smoke.subjectOcclusionFraction",
+      "value": "0.78"
+    }
+  ],
+  "fixtureApplicationStatus": "NOT_APPLIED_BY_UNITY_FIXTURE_ADAPTER",
+  "operatorInstruction": "A later Unity fixture adapter must execute this command and capture evidence.",
+  "commandHash": "sha256:5b6c389b793b3f6486733288970bafcf970431bc9b8544e54c3bc767e76ca53e"
+}

@@ -1,0 +1,7 @@
+[
+  {
+    "op": "set_content_param",
+    "path": "/content/parameters/accent_color",
+    "value": "#C93B32_variant"
+  }
+]

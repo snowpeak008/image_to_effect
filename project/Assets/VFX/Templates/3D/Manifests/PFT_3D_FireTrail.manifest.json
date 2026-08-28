@@ -1,0 +1,12 @@
+{
+  "manifestVersion": 1,
+  "templateId": "PFT_3D_FireTrail",
+  "templateVersion": "1.0.0",
+  "kind": "motion_trail",
+  "dimension": "3d",
+  "assetGuid": "837b9a4997d514e44813dd4edee34513",
+  "assetPath": "Assets/VFX/Templates/3D/Prefabs/PFT_3D_FireTrail.prefab",
+  "tags": ["fire", "stylized", "3d", "bounds:template-local", "camera:perspective-reviewed"],
+  "parameters": { "time": { "type": "float", "min": .08, "max": .4, "default": .22, "binding": "3d.trail.time" }, "width": { "type": "float", "min": .12, "max": .55, "default": .42, "binding": "3d.trail.width" } },
+  "cost": { "estimatedPeakParticles": 0, "materials": 1, "trails": 1 }
+}

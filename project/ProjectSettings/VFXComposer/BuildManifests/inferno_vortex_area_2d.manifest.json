@@ -1,0 +1,92 @@
+{
+  "manifestVersion": 1,
+  "rulesVersion": "1.0-draft",
+  "enforcement": "strict",
+  "effectId": "inferno_vortex_area_2d",
+  "archetype": "area",
+  "recipeVersion": 1,
+  "recipeRevision": 1,
+  "recipeHash": "f45ccd93e41ed75f64ff9b665614b1ec313702daeae403dee6c1c7be050e6292",
+  "buildHash": "cd8cb3776e51f4bb188e322f12a5187a445f80aa5a47285418c80214693cb0e7",
+  "compilerVersion": "area2d-10",
+  "unityVersion": "2022.3.62f3c1",
+  "sourceRecipePath": "Assets/VFX/Recipes/Area/inferno_vortex_area_2d.default.json",
+  "runtimeEntry": {
+    "kind": "prefab",
+    "path": "Assets/VFX/Generated/inferno_vortex_area_2d/VFX_inferno_vortex_area_2d.prefab",
+    "guid": "98a7cd2c6ddd20046b8e9cc6acebd175"
+  },
+  "ownedOutputs": [
+    {
+      "path": "Assets/VFX/Generated/inferno_vortex_area_2d/VFX_inferno_vortex_area_2d.prefab",
+      "guid": "98a7cd2c6ddd20046b8e9cc6acebd175",
+      "assetType": "GameObject",
+      "sha256": "d148fbd3cf806b8d8772a870cf4de4ff2248eaff739b59cfde54f65c0ec6f2fc"
+    }
+  ],
+  "dependencies": [
+    {
+      "path": "Assets/VFX/Shared/Fire/Materials/MAT_Fire_AreaBody_Alpha_v1.mat",
+      "guid": "0dc72f4b2dff4e4408c9f9bba1bf3892",
+      "assetType": "Material",
+      "version": null,
+      "dependencyHash": "d74e3e4ee9626562b6c7a142919b6ee1"
+    },
+    {
+      "path": "Assets/VFX/Shared/Fire/Materials/MAT_Fire_AreaHot_Additive_v1.mat",
+      "guid": "19ec53c966f19004492d81feadd73535",
+      "assetType": "Material",
+      "version": null,
+      "dependencyHash": "0dc3b853ae15b6cc01b0ceb494ca10ca"
+    },
+    {
+      "path": "Assets/VFX/Shared/Fire/Meshes/M_Fire_ClosedBand_v1.asset",
+      "guid": "13096c377c96a8d4ca3d7ba1f1ea879b",
+      "assetType": "Mesh",
+      "version": null,
+      "dependencyHash": "0ace42bf4fe3dbdd542d11eac8d31e81"
+    },
+    {
+      "path": "Assets/VFX/Shared/Fire/Meshes/M_Fire_VortexDisc_v1.asset",
+      "guid": "92c039f5b9089904488c0995a76b37f4",
+      "assetType": "Mesh",
+      "version": null,
+      "dependencyHash": "fb28854e18c457221cad21b55ee76feb"
+    },
+    {
+      "path": "Assets/VFX/Shared/Fire/Textures/T_Fire_MaskAtlas_A_v1.png",
+      "guid": "29a20c5762cb2114f904dadfcc6b2743",
+      "assetType": "Texture2D",
+      "version": null,
+      "dependencyHash": "afab30dd20ff8a12295393ce0f595ca5"
+    },
+    {
+      "path": "Assets/VFX/Shared/Shaders/Area2DFireUnlit.shader",
+      "guid": "864f8bb1eed15554d8dbbe7e2eb28ac3",
+      "assetType": "Shader",
+      "version": null,
+      "dependencyHash": "c5ccb90370aeb99b962c5927e7f84af8"
+    },
+    {
+      "path": "Packages/com.vfxcomposer.unity/Runtime/Components/InfernoAreaVfxController.cs",
+      "guid": "1aedfd30c18f3c4458e2bbd4abd183c5",
+      "assetType": "MonoScript",
+      "version": null,
+      "dependencyHash": "aca706e522e1eb6f01260b9c927ec9e8"
+    }
+  ],
+  "cost": {
+    "particles": 48,
+    "particleSystems": 2,
+    "renderers": 7,
+    "materials": 2,
+    "trails": 0,
+    "duration": 1.6,
+    "localTextureBytes": 0,
+    "dependencyResidentTextureBytes": 33448,
+    "gameObjects": 8,
+    "maxDepth": 1
+  },
+  "audit": [],
+  "generatedAtUtc": "2026-08-23T12:28:44.5043106Z"
+}

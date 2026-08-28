@@ -1,0 +1,14 @@
+{
+  "succeeded": false,
+  "detail": null,
+  "entries": [
+    {
+      "code": "E103",
+      "severity": "error",
+      "path": "/targetProfile",
+      "message": "Value is not in the supported enumeration.",
+      "actualValue": "pc",
+      "allowedRange": null
+    }
+  ]
+}

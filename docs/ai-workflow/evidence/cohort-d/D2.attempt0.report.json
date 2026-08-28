@@ -1,0 +1,62 @@
+{
+  "succeeded": false,
+  "detail": null,
+  "entries": [
+    {
+      "code": "E101",
+      "severity": "error",
+      "path": "/id",
+      "message": "Required field is missing.",
+      "actualValue": null,
+      "allowedRange": null
+    },
+    {
+      "code": "E101",
+      "severity": "error",
+      "path": "/randomSeed",
+      "message": "Required field is missing.",
+      "actualValue": null,
+      "allowedRange": null
+    },
+    {
+      "code": "E100",
+      "severity": "error",
+      "path": "/metadata/name",
+      "message": "Unknown field is not allowed.",
+      "actualValue": "d2_heavy_bolt",
+      "allowedRange": null
+    },
+    {
+      "code": "E100",
+      "severity": "error",
+      "path": "/metadata/description",
+      "message": "Unknown field is not allowed.",
+      "actualValue": "Heavy slow stylized bolt with a large travel core, broad trail, dense embers, and a powerful impact burst.",
+      "allowedRange": null
+    },
+    {
+      "code": "E100",
+      "severity": "error",
+      "path": "/metadata/style",
+      "message": "Unknown field is not allowed.",
+      "actualValue": "stylized_fire",
+      "allowedRange": null
+    },
+    {
+      "code": "E101",
+      "severity": "error",
+      "path": "/metadata/createdBy",
+      "message": "Required field is missing.",
+      "actualValue": null,
+      "allowedRange": null
+    },
+    {
+      "code": "E101",
+      "severity": "error",
+      "path": "/metadata/templateCatalogVersion",
+      "message": "Required field is missing.",
+      "actualValue": null,
+      "allowedRange": null
+    }
+  ]
+}

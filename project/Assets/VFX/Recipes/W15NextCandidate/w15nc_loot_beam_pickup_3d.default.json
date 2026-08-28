@@ -1,0 +1,14 @@
+{
+  "recipeVersion": 1,
+  "revision": 1,
+  "id": "w15nc_loot_beam_pickup_3d",
+  "name": "Loot Beam Next Candidate",
+  "dimension": "3d",
+  "archetype": "loot",
+  "style": { "token": "cartoon", "palette": { "primary": "#6A4008", "secondary": "#FFD14A", "accent": "#FFFFFF" }, "glow_strength": 1.25 },
+  "archetypeParameters": { "rarity": 3, "pickup_speed": 4.8, "beam_height": 2.4 },
+  "targetProfile": "mobile_medium",
+  "randomSeed": 2174268709,
+  "stages": [{ "id": "active", "trigger": "manual", "duration": 2.8, "enabled": true, "modules": [{ "id": "core", "kind": "energy_body", "templateId": "PFT_3D_FireCore", "parameters": { "scale": 1.0 }, "enabled": true }, { "id": "secondary", "kind": "secondary_particles", "templateId": "PFT_3D_Embers", "parameters": { "rate": 8.0, "lifetime": 0.45 }, "attachTo": "core", "enabled": true }] }],
+  "metadata": { "createdBy": "w15-next-candidate-authoring", "templateCatalogVersion": "formal-1" }
+}

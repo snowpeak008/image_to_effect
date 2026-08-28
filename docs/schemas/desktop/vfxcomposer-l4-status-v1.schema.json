@@ -1,0 +1,74 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.vfxcomposer.dev/desktop/vfxcomposer-l4-status-v1.schema.json",
+  "title": "VFX Composer L4 status v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "protocolVersion",
+    "state",
+    "provenance"
+  ],
+  "properties": {
+    "protocolVersion": {
+      "const": "vfxcomposer.protocol/1.0"
+    },
+    "state": {
+      "enum": [
+        "NOT_GRANTED",
+        "GRANTED",
+        "REVOKED"
+      ]
+    },
+    "provenance": {
+      "oneOf": [
+        {
+          "type": "null"
+        },
+        {
+          "$ref": "#/$defs/domainProvenance"
+        }
+      ]
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "state": {
+            "enum": [
+              "GRANTED",
+              "REVOKED"
+            ]
+          }
+        },
+        "required": [
+          "state"
+        ]
+      },
+      "then": {
+        "properties": {
+          "provenance": {
+            "$ref": "#/$defs/domainProvenance"
+          }
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "domainProvenance": {
+      "allOf": [
+        {
+          "$ref": "vfxcomposer-status-provenance-v1.schema.json"
+        },
+        {
+          "properties": {
+            "statusDomain": {
+              "const": "L4"
+            }
+          }
+        }
+      ]
+    }
+  }
+}

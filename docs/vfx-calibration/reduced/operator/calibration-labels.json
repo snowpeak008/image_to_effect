@@ -1,0 +1,1265 @@
+{
+  "schemaVersion": "calibration-labels/v2",
+  "holdoutCohort": "reduced-36-12-12-6",
+  "reviewStatus": "TEMPLATE_NOT_REVIEWED",
+  "frozen": false,
+  "reviewer": null,
+  "frozenAt": null,
+  "samples": [
+    {
+      "sampleId": "s0a-d57cd94d921f04919527",
+      "requirementId": "flame.fragments.independent_motion",
+      "groundTruthRoute": null,
+      "perRequirement": [
+        {
+          "requirementId": "flame.fragments.independent_motion",
+          "state": null
+        }
+      ],
+      "labelSource": "PENDING_HUMAN_ADJUDICATION",
+      "reviewer": null,
+      "visuallyObservable": null,
+      "eligibleForVisualMetrics": null,
+      "isBoundary": false,
+      "evidenceHash": null,
+      "verdictVersion": null,
+      "adjudicationNotes": ""
+    },
+    {
+      "sampleId": "s0a-f7e3fa20b8515141d70c",
+      "requirementId": "flame.steady_state.distribution",
+      "groundTruthRoute": null,
+      "perRequirement": [
+        {
+          "requirementId": "flame.steady_state.distribution",
+          "state": null
+        }
+      ],
+      "labelSource": "PENDING_HUMAN_ADJUDICATION",
+      "reviewer": null,
+      "visuallyObservable": null,
+      "eligibleForVisualMetrics": null,
+      "isBoundary": false,
+      "evidenceHash": null,
+      "verdictVersion": null,
+      "adjudicationNotes": ""
+    },
+    {
+      "sampleId": "s0a-114fa96f5ccde54ae6a8",
+      "requirementId": "flame.steady_state.continuity",
+      "groundTruthRoute": null,
+      "perRequirement": [
+        {
+          "requirementId": "flame.steady_state.continuity",
+          "state": null
+        }
+      ],
+      "labelSource": "PENDING_HUMAN_ADJUDICATION",
+      "reviewer": null,
+      "visuallyObservable": null,
+      "eligibleForVisualMetrics": null,
+      "isBoundary": false,
+      "evidenceHash": null,
+      "verdictVersion": null,
+      "adjudicationNotes": ""
+    },
+    {
+      "sampleId": "s0a-d5f5c806670158886606",
+      "requirementId": "flame.cleanup.particles",
+      "groundTruthRoute": null,
+      "perRequirement": [
+        {
+          "requirementId": "flame.cleanup.particles",
+          "state": null
+        }
+      ],
+      "labelSource": "PENDING_HUMAN_ADJUDICATION",
+      "reviewer": null,
+      "visuallyObservable": null,
+      "eligibleForVisualMetrics": null,
+      "isBoundary": false,
+      "evidenceHash": null,
+      "verdictVersion": null,
+      "adjudicationNotes": ""
+    },
+    {
+      "sampleId": "s0a-33091a43ee01b3e6cd6c",
+      "requirementId": "flame.cleanup.light",
+      "groundTruthRoute": null,
+      "perRequirement": [
+        {
+          "requirementId": "flame.cleanup.light",
+          "state": null
+        }
+      ],
+      "labelSource": "PENDING_HUMAN_ADJUDICATION",
+      "reviewer": null,
+      "visuallyObservable": null,
+      "eligibleForVisualMetrics": null,
+      "isBoundary": false,
+      "evidenceHash": null,
+      "verdictVersion": null,
+      "adjudicationNotes": ""
+    },
+    {
+      "sampleId": "s0a-d98b088343a88a02765a",
+      "requirementId": "flame.subject.readability",
+      "groundTruthRoute": null,
+      "perRequirement": [
+        {
+          "requirementId": "flame.subject.readability",
+          "state": null
+        }
+      ],
+      "labelSource": "PENDING_HUMAN_ADJUDICATION",
+      "reviewer": null,
+      "visuallyObservable": null,
+      "eligibleForVisualMetrics": null,
+      "isBoundary": false,
+      "evidenceHash": null,
+      "verdictVersion": null,
+      "adjudicationNotes": ""
+    },
+    {
+      "sampleId": "s0a-618af785af078f913b9c",
+      "requirementId": "flame.layers.primary_before_smoke",
+      "groundTruthRoute": null,
+      "perRequirement": [
+        {
+          "requirementId": "flame.layers.primary_before_smoke",
+          "state": null
+        }
+      ],
+      "labelSource": "PENDING_HUMAN_ADJUDICATION",
+      "reviewer": null,
+      "visuallyObservable": null,
+      "eligibleForVisualMetrics": null,
+      "isBoundary": false,
+      "evidenceHash": null,
+      "verdictVersion": null,
+      "adjudicationNotes": ""
+    },
+    {
+      "sampleId": "s0a-eb7ec9df27c324ba084b",
+      "requirementId": "flame.start.ignition",
+      "groundTruthRoute": null,
+      "perRequirement": [
+        {
+          "requirementId": "flame.start.ignition",
+          "state": null
+        }
+      ],
+      "labelSource": "PENDING_HUMAN_ADJUDICATION",
+      "reviewer": null,
+      "visuallyObservable": null,
+      "eligibleForVisualMetrics": null,
+      "isBoundary": false,
+      "evidenceHash": null,
+      "verdictVersion": null,
+      "adjudicationNotes": ""
+    },
+    {
+      "sampleId": "s0a-50c3c84078795fa5a343",
+      "requirementId": "flame.stop.continuity",
+      "groundTruthRoute": null,
+      "perRequirement": [
+        {
+          "requirementId": "flame.stop.continuity",
+          "state": null
+        }
+      ],
+      "labelSource": "PENDING_HUMAN_ADJUDICATION",
+      "reviewer": null,
+      "visuallyObservable": null,
+      "eligibleForVisualMetrics": null,
+      "isBoundary": false,
+      "evidenceHash": null,
+      "verdictVersion": null,
+      "adjudicationNotes": ""
+    },
+    {
+      "sampleId": "s0a-c07f0d5fc858773c0e25",
+      "requirementId": "flame.lighting.receiver_response",
+      "groundTruthRoute": null,
+      "perRequirement": [
+        {
+          "requirementId": "flame.lighting.receiver_response",
+          "state": null
+        }
+      ],
+      "labelSource": "PENDING_HUMAN_ADJUDICATION",
+      "reviewer": null,
+      "visuallyObservable": null,
+      "eligibleForVisualMetrics": null,
+      "isBoundary": false,
+      "evidenceHash": null,
+      "verdictVersion": null,
+      "adjudicationNotes": ""
+    },
+    {
+      "sampleId": "s0a-045d71c3d7a6dccd12e7",
+      "requirementId": "flame.capture.camera_and_scale",
+      "groundTruthRoute": null,
+      "perRequirement": [
+        {
+          "requirementId": "flame.capture.camera_and_scale",
+          "state": null
+        }
+      ],
+      "labelSource": "PENDING_HUMAN_ADJUDICATION",
+      "reviewer": null,
+      "visuallyObservable": null,
+      "eligibleForVisualMetrics": null,
+      "isBoundary": false,
+      "evidenceHash": null,
+      "verdictVersion": null,
+      "adjudicationNotes": ""
+    },
+    {
+      "sampleId": "s0a-29324fa59817558ac013",
+      "requirementId": "flame.fragments.independent_motion",
+      "groundTruthRoute": null,
+      "perRequirement": [
+        {
+          "requirementId": "flame.fragments.independent_motion",
+          "state": null
+        }
+      ],
+      "labelSource": "PENDING_HUMAN_ADJUDICATION",
+      "reviewer": null,
+      "visuallyObservable": null,
+      "eligibleForVisualMetrics": null,
+      "isBoundary": false,
+      "evidenceHash": null,
+      "verdictVersion": null,
+      "adjudicationNotes": ""
+    },
+    {
+      "sampleId": "s0a-bb15bae0813aa31b2b44",
+      "requirementId": "flame.steady_state.distribution",
+      "groundTruthRoute": null,
+      "perRequirement": [
+        {
+          "requirementId": "flame.steady_state.distribution",
+          "state": null
+        }
+      ],
+      "labelSource": "PENDING_HUMAN_ADJUDICATION",
+      "reviewer": null,
+      "visuallyObservable": null,
+      "eligibleForVisualMetrics": null,
+      "isBoundary": false,
+      "evidenceHash": null,
+      "verdictVersion": null,
+      "adjudicationNotes": ""
+    },
+    {
+      "sampleId": "s0a-c74bd0b176c24a33c0dc",
+      "requirementId": "flame.steady_state.continuity",
+      "groundTruthRoute": null,
+      "perRequirement": [
+        {
+          "requirementId": "flame.steady_state.continuity",
+          "state": null
+        }
+      ],
+      "labelSource": "PENDING_HUMAN_ADJUDICATION",
+      "reviewer": null,
+      "visuallyObservable": null,
+      "eligibleForVisualMetrics": null,
+      "isBoundary": false,
+      "evidenceHash": null,
+      "verdictVersion": null,
+      "adjudicationNotes": ""
+    },
+    {
+      "sampleId": "s0a-596dbffe5c4942eb7577",
+      "requirementId": "flame.cleanup.particles",
+      "groundTruthRoute": null,
+      "perRequirement": [
+        {
+          "requirementId": "flame.cleanup.particles",
+          "state": null
+        }
+      ],
+      "labelSource": "PENDING_HUMAN_ADJUDICATION",
+      "reviewer": null,
+      "visuallyObservable": null,
+      "eligibleForVisualMetrics": null,
+      "isBoundary": false,
+      "evidenceHash": null,
+      "verdictVersion": null,
+      "adjudicationNotes": ""
+    },
+    {
+      "sampleId": "s0a-c9468099f4ca76144b4c",
+      "requirementId": "flame.cleanup.light",
+      "groundTruthRoute": null,
+      "perRequirement": [
+        {
+          "requirementId": "flame.cleanup.light",
+          "state": null
+        }
+      ],
+      "labelSource": "PENDING_HUMAN_ADJUDICATION",
+      "reviewer": null,
+      "visuallyObservable": null,
+      "eligibleForVisualMetrics": null,
+      "isBoundary": false,
+      "evidenceHash": null,
+      "verdictVersion": null,
+      "adjudicationNotes": ""
+    },
+    {
+      "sampleId": "s0a-459d891e938e3756604c",
+      "requirementId": "flame.subject.readability",
+      "groundTruthRoute": null,
+      "perRequirement": [
+        {
+          "requirementId": "flame.subject.readability",
+          "state": null
+        }
+      ],
+      "labelSource": "PENDING_HUMAN_ADJUDICATION",
+      "reviewer": null,
+      "visuallyObservable": null,
+      "eligibleForVisualMetrics": null,
+      "isBoundary": false,
+      "evidenceHash": null,
+      "verdictVersion": null,
+      "adjudicationNotes": ""
+    },
+    {
+      "sampleId": "s0a-8c147cf9e22455bda269",
+      "requirementId": "flame.layers.primary_before_smoke",
+      "groundTruthRoute": null,
+      "perRequirement": [
+        {
+          "requirementId": "flame.layers.primary_before_smoke",
+          "state": null
+        }
+      ],
+      "labelSource": "PENDING_HUMAN_ADJUDICATION",
+      "reviewer": null,
+      "visuallyObservable": null,
+      "eligibleForVisualMetrics": null,
+      "isBoundary": false,
+      "evidenceHash": null,
+      "verdictVersion": null,
+      "adjudicationNotes": ""
+    },
+    {
+      "sampleId": "s0a-7f5cd5ce8ac8abdfa4cb",
+      "requirementId": "flame.start.ignition",
+      "groundTruthRoute": null,
+      "perRequirement": [
+        {
+          "requirementId": "flame.start.ignition",
+          "state": null
+        }
+      ],
+      "labelSource": "PENDING_HUMAN_ADJUDICATION",
+      "reviewer": null,
+      "visuallyObservable": null,
+      "eligibleForVisualMetrics": null,
+      "isBoundary": false,
+      "evidenceHash": null,
+      "verdictVersion": null,
+      "adjudicationNotes": ""
+    },
+    {
+      "sampleId": "s0a-ae7f413b53061daf0ac2",
+      "requirementId": "flame.stop.continuity",
+      "groundTruthRoute": null,
+      "perRequirement": [
+        {
+          "requirementId": "flame.stop.continuity",
+          "state": null
+        }
+      ],
+      "labelSource": "PENDING_HUMAN_ADJUDICATION",
+      "reviewer": null,
+      "visuallyObservable": null,
+      "eligibleForVisualMetrics": null,
+      "isBoundary": false,
+      "evidenceHash": null,
+      "verdictVersion": null,
+      "adjudicationNotes": ""
+    },
+    {
+      "sampleId": "s0a-cc802d1af4d2e6a4038a",
+      "requirementId": "flame.lighting.receiver_response",
+      "groundTruthRoute": null,
+      "perRequirement": [
+        {
+          "requirementId": "flame.lighting.receiver_response",
+          "state": null
+        }
+      ],
+      "labelSource": "PENDING_HUMAN_ADJUDICATION",
+      "reviewer": null,
+      "visuallyObservable": null,
+      "eligibleForVisualMetrics": null,
+      "isBoundary": false,
+      "evidenceHash": null,
+      "verdictVersion": null,
+      "adjudicationNotes": ""
+    },
+    {
+      "sampleId": "s0a-6e4df722101f4ab4c512",
+      "requirementId": "flame.capture.camera_and_scale",
+      "groundTruthRoute": null,
+      "perRequirement": [
+        {
+          "requirementId": "flame.capture.camera_and_scale",
+          "state": null
+        }
+      ],
+      "labelSource": "PENDING_HUMAN_ADJUDICATION",
+      "reviewer": null,
+      "visuallyObservable": null,
+      "eligibleForVisualMetrics": null,
+      "isBoundary": false,
+      "evidenceHash": null,
+      "verdictVersion": null,
+      "adjudicationNotes": ""
+    },
+    {
+      "sampleId": "s0a-f1078728ef9b920ebfcc",
+      "requirementId": "flame.fragments.independent_motion",
+      "groundTruthRoute": null,
+      "perRequirement": [
+        {
+          "requirementId": "flame.fragments.independent_motion",
+          "state": null
+        }
+      ],
+      "labelSource": "PENDING_HUMAN_ADJUDICATION",
+      "reviewer": null,
+      "visuallyObservable": null,
+      "eligibleForVisualMetrics": null,
+      "isBoundary": false,
+      "evidenceHash": null,
+      "verdictVersion": null,
+      "adjudicationNotes": ""
+    },
+    {
+      "sampleId": "s0a-8a2b97a0fbe304484d09",
+      "requirementId": "flame.steady_state.distribution",
+      "groundTruthRoute": null,
+      "perRequirement": [
+        {
+          "requirementId": "flame.steady_state.distribution",
+          "state": null
+        }
+      ],
+      "labelSource": "PENDING_HUMAN_ADJUDICATION",
+      "reviewer": null,
+      "visuallyObservable": null,
+      "eligibleForVisualMetrics": null,
+      "isBoundary": false,
+      "evidenceHash": null,
+      "verdictVersion": null,
+      "adjudicationNotes": ""
+    },
+    {
+      "sampleId": "s0a-24c8141887d34b51a310",
+      "requirementId": "flame.steady_state.continuity",
+      "groundTruthRoute": null,
+      "perRequirement": [
+        {
+          "requirementId": "flame.steady_state.continuity",
+          "state": null
+        }
+      ],
+      "labelSource": "PENDING_HUMAN_ADJUDICATION",
+      "reviewer": null,
+      "visuallyObservable": null,
+      "eligibleForVisualMetrics": null,
+      "isBoundary": false,
+      "evidenceHash": null,
+      "verdictVersion": null,
+      "adjudicationNotes": ""
+    },
+    {
+      "sampleId": "s0a-42416dc4c9968ec01c30",
+      "requirementId": "flame.cleanup.particles",
+      "groundTruthRoute": null,
+      "perRequirement": [
+        {
+          "requirementId": "flame.cleanup.particles",
+          "state": null
+        }
+      ],
+      "labelSource": "PENDING_HUMAN_ADJUDICATION",
+      "reviewer": null,
+      "visuallyObservable": null,
+      "eligibleForVisualMetrics": null,
+      "isBoundary": false,
+      "evidenceHash": null,
+      "verdictVersion": null,
+      "adjudicationNotes": ""
+    },
+    {
+      "sampleId": "s0a-cc1b036989ee4a2aa3d4",
+      "requirementId": "flame.cleanup.light",
+      "groundTruthRoute": null,
+      "perRequirement": [
+        {
+          "requirementId": "flame.cleanup.light",
+          "state": null
+        }
+      ],
+      "labelSource": "PENDING_HUMAN_ADJUDICATION",
+      "reviewer": null,
+      "visuallyObservable": null,
+      "eligibleForVisualMetrics": null,
+      "isBoundary": false,
+      "evidenceHash": null,
+      "verdictVersion": null,
+      "adjudicationNotes": ""
+    },
+    {
+      "sampleId": "s0a-168895b97ac53dbf4a70",
+      "requirementId": "flame.subject.readability",
+      "groundTruthRoute": null,
+      "perRequirement": [
+        {
+          "requirementId": "flame.subject.readability",
+          "state": null
+        }
+      ],
+      "labelSource": "PENDING_HUMAN_ADJUDICATION",
+      "reviewer": null,
+      "visuallyObservable": null,
+      "eligibleForVisualMetrics": null,
+      "isBoundary": false,
+      "evidenceHash": null,
+      "verdictVersion": null,
+      "adjudicationNotes": ""
+    },
+    {
+      "sampleId": "s0a-bede4bded0692f04826f",
+      "requirementId": "flame.layers.primary_before_smoke",
+      "groundTruthRoute": null,
+      "perRequirement": [
+        {
+          "requirementId": "flame.layers.primary_before_smoke",
+          "state": null
+        }
+      ],
+      "labelSource": "PENDING_HUMAN_ADJUDICATION",
+      "reviewer": null,
+      "visuallyObservable": null,
+      "eligibleForVisualMetrics": null,
+      "isBoundary": false,
+      "evidenceHash": null,
+      "verdictVersion": null,
+      "adjudicationNotes": ""
+    },
+    {
+      "sampleId": "s0a-53512a3ad64170769851",
+      "requirementId": "flame.start.ignition",
+      "groundTruthRoute": null,
+      "perRequirement": [
+        {
+          "requirementId": "flame.start.ignition",
+          "state": null
+        }
+      ],
+      "labelSource": "PENDING_HUMAN_ADJUDICATION",
+      "reviewer": null,
+      "visuallyObservable": null,
+      "eligibleForVisualMetrics": null,
+      "isBoundary": false,
+      "evidenceHash": null,
+      "verdictVersion": null,
+      "adjudicationNotes": ""
+    },
+    {
+      "sampleId": "s0a-9bd508bafe66e2f750b0",
+      "requirementId": "flame.stop.continuity",
+      "groundTruthRoute": null,
+      "perRequirement": [
+        {
+          "requirementId": "flame.stop.continuity",
+          "state": null
+        }
+      ],
+      "labelSource": "PENDING_HUMAN_ADJUDICATION",
+      "reviewer": null,
+      "visuallyObservable": null,
+      "eligibleForVisualMetrics": null,
+      "isBoundary": false,
+      "evidenceHash": null,
+      "verdictVersion": null,
+      "adjudicationNotes": ""
+    },
+    {
+      "sampleId": "s0a-b04f81963d605367aac9",
+      "requirementId": "flame.lighting.receiver_response",
+      "groundTruthRoute": null,
+      "perRequirement": [
+        {
+          "requirementId": "flame.lighting.receiver_response",
+          "state": null
+        }
+      ],
+      "labelSource": "PENDING_HUMAN_ADJUDICATION",
+      "reviewer": null,
+      "visuallyObservable": null,
+      "eligibleForVisualMetrics": null,
+      "isBoundary": false,
+      "evidenceHash": null,
+      "verdictVersion": null,
+      "adjudicationNotes": ""
+    },
+    {
+      "sampleId": "s0a-de049980074a1549cff6",
+      "requirementId": "flame.capture.camera_and_scale",
+      "groundTruthRoute": null,
+      "perRequirement": [
+        {
+          "requirementId": "flame.capture.camera_and_scale",
+          "state": null
+        }
+      ],
+      "labelSource": "PENDING_HUMAN_ADJUDICATION",
+      "reviewer": null,
+      "visuallyObservable": null,
+      "eligibleForVisualMetrics": null,
+      "isBoundary": false,
+      "evidenceHash": null,
+      "verdictVersion": null,
+      "adjudicationNotes": ""
+    },
+    {
+      "sampleId": "s0a-18c69cd35d78f968e835",
+      "requirementId": "flame.fragments.independent_motion",
+      "groundTruthRoute": null,
+      "perRequirement": [
+        {
+          "requirementId": "flame.fragments.independent_motion",
+          "state": null
+        }
+      ],
+      "labelSource": "PENDING_HUMAN_ADJUDICATION",
+      "reviewer": null,
+      "visuallyObservable": null,
+      "eligibleForVisualMetrics": null,
+      "isBoundary": false,
+      "evidenceHash": null,
+      "verdictVersion": null,
+      "adjudicationNotes": ""
+    },
+    {
+      "sampleId": "s0a-58d3b957bf125ad8534a",
+      "requirementId": "flame.steady_state.distribution",
+      "groundTruthRoute": null,
+      "perRequirement": [
+        {
+          "requirementId": "flame.steady_state.distribution",
+          "state": null
+        }
+      ],
+      "labelSource": "PENDING_HUMAN_ADJUDICATION",
+      "reviewer": null,
+      "visuallyObservable": null,
+      "eligibleForVisualMetrics": null,
+      "isBoundary": false,
+      "evidenceHash": null,
+      "verdictVersion": null,
+      "adjudicationNotes": ""
+    },
+    {
+      "sampleId": "s0a-0793e1170c44a44614cd",
+      "requirementId": "flame.steady_state.continuity",
+      "groundTruthRoute": null,
+      "perRequirement": [
+        {
+          "requirementId": "flame.steady_state.continuity",
+          "state": null
+        }
+      ],
+      "labelSource": "PENDING_HUMAN_ADJUDICATION",
+      "reviewer": null,
+      "visuallyObservable": null,
+      "eligibleForVisualMetrics": null,
+      "isBoundary": false,
+      "evidenceHash": null,
+      "verdictVersion": null,
+      "adjudicationNotes": ""
+    },
+    {
+      "sampleId": "s0a-06e6939c2ae3ffe2a74d",
+      "requirementId": "flame.baseline.required_visuals",
+      "groundTruthRoute": null,
+      "perRequirement": [
+        {
+          "requirementId": "flame.baseline.required_visuals",
+          "state": null
+        }
+      ],
+      "labelSource": "PENDING_HUMAN_ADJUDICATION",
+      "reviewer": null,
+      "visuallyObservable": null,
+      "eligibleForVisualMetrics": null,
+      "isBoundary": false,
+      "evidenceHash": null,
+      "verdictVersion": null,
+      "adjudicationNotes": ""
+    },
+    {
+      "sampleId": "s0a-81913bd0e4a017b19477",
+      "requirementId": "flame.baseline.required_visuals",
+      "groundTruthRoute": null,
+      "perRequirement": [
+        {
+          "requirementId": "flame.baseline.required_visuals",
+          "state": null
+        }
+      ],
+      "labelSource": "PENDING_HUMAN_ADJUDICATION",
+      "reviewer": null,
+      "visuallyObservable": null,
+      "eligibleForVisualMetrics": null,
+      "isBoundary": false,
+      "evidenceHash": null,
+      "verdictVersion": null,
+      "adjudicationNotes": ""
+    },
+    {
+      "sampleId": "s0a-e47ec1406e120d7869ed",
+      "requirementId": "flame.baseline.required_visuals",
+      "groundTruthRoute": null,
+      "perRequirement": [
+        {
+          "requirementId": "flame.baseline.required_visuals",
+          "state": null
+        }
+      ],
+      "labelSource": "PENDING_HUMAN_ADJUDICATION",
+      "reviewer": null,
+      "visuallyObservable": null,
+      "eligibleForVisualMetrics": null,
+      "isBoundary": false,
+      "evidenceHash": null,
+      "verdictVersion": null,
+      "adjudicationNotes": ""
+    },
+    {
+      "sampleId": "s0a-75db499ced1e6d23b49e",
+      "requirementId": "flame.baseline.required_visuals",
+      "groundTruthRoute": null,
+      "perRequirement": [
+        {
+          "requirementId": "flame.baseline.required_visuals",
+          "state": null
+        }
+      ],
+      "labelSource": "PENDING_HUMAN_ADJUDICATION",
+      "reviewer": null,
+      "visuallyObservable": null,
+      "eligibleForVisualMetrics": null,
+      "isBoundary": false,
+      "evidenceHash": null,
+      "verdictVersion": null,
+      "adjudicationNotes": ""
+    },
+    {
+      "sampleId": "s0a-f0b6c2de8820e51070ae",
+      "requirementId": "flame.baseline.required_visuals",
+      "groundTruthRoute": null,
+      "perRequirement": [
+        {
+          "requirementId": "flame.baseline.required_visuals",
+          "state": null
+        }
+      ],
+      "labelSource": "PENDING_HUMAN_ADJUDICATION",
+      "reviewer": null,
+      "visuallyObservable": null,
+      "eligibleForVisualMetrics": null,
+      "isBoundary": false,
+      "evidenceHash": null,
+      "verdictVersion": null,
+      "adjudicationNotes": ""
+    },
+    {
+      "sampleId": "s0a-6a90050dce710ebab96d",
+      "requirementId": "flame.baseline.required_visuals",
+      "groundTruthRoute": null,
+      "perRequirement": [
+        {
+          "requirementId": "flame.baseline.required_visuals",
+          "state": null
+        }
+      ],
+      "labelSource": "PENDING_HUMAN_ADJUDICATION",
+      "reviewer": null,
+      "visuallyObservable": null,
+      "eligibleForVisualMetrics": null,
+      "isBoundary": false,
+      "evidenceHash": null,
+      "verdictVersion": null,
+      "adjudicationNotes": ""
+    },
+    {
+      "sampleId": "s0a-8fe6107e09f10975b3b1",
+      "requirementId": "flame.baseline.required_visuals",
+      "groundTruthRoute": null,
+      "perRequirement": [
+        {
+          "requirementId": "flame.baseline.required_visuals",
+          "state": null
+        }
+      ],
+      "labelSource": "PENDING_HUMAN_ADJUDICATION",
+      "reviewer": null,
+      "visuallyObservable": null,
+      "eligibleForVisualMetrics": null,
+      "isBoundary": false,
+      "evidenceHash": null,
+      "verdictVersion": null,
+      "adjudicationNotes": ""
+    },
+    {
+      "sampleId": "s0a-2407433c6d49eb1193c6",
+      "requirementId": "flame.baseline.required_visuals",
+      "groundTruthRoute": null,
+      "perRequirement": [
+        {
+          "requirementId": "flame.baseline.required_visuals",
+          "state": null
+        }
+      ],
+      "labelSource": "PENDING_HUMAN_ADJUDICATION",
+      "reviewer": null,
+      "visuallyObservable": null,
+      "eligibleForVisualMetrics": null,
+      "isBoundary": false,
+      "evidenceHash": null,
+      "verdictVersion": null,
+      "adjudicationNotes": ""
+    },
+    {
+      "sampleId": "s0a-9902d4e69562addc0fa6",
+      "requirementId": "flame.baseline.required_visuals",
+      "groundTruthRoute": null,
+      "perRequirement": [
+        {
+          "requirementId": "flame.baseline.required_visuals",
+          "state": null
+        }
+      ],
+      "labelSource": "PENDING_HUMAN_ADJUDICATION",
+      "reviewer": null,
+      "visuallyObservable": null,
+      "eligibleForVisualMetrics": null,
+      "isBoundary": false,
+      "evidenceHash": null,
+      "verdictVersion": null,
+      "adjudicationNotes": ""
+    },
+    {
+      "sampleId": "s0a-d0f2d923b85bfbe436a9",
+      "requirementId": "flame.baseline.required_visuals",
+      "groundTruthRoute": null,
+      "perRequirement": [
+        {
+          "requirementId": "flame.baseline.required_visuals",
+          "state": null
+        }
+      ],
+      "labelSource": "PENDING_HUMAN_ADJUDICATION",
+      "reviewer": null,
+      "visuallyObservable": null,
+      "eligibleForVisualMetrics": null,
+      "isBoundary": false,
+      "evidenceHash": null,
+      "verdictVersion": null,
+      "adjudicationNotes": ""
+    },
+    {
+      "sampleId": "s0a-9e3d6ff9f7445656cb6f",
+      "requirementId": "flame.baseline.required_visuals",
+      "groundTruthRoute": null,
+      "perRequirement": [
+        {
+          "requirementId": "flame.baseline.required_visuals",
+          "state": null
+        }
+      ],
+      "labelSource": "PENDING_HUMAN_ADJUDICATION",
+      "reviewer": null,
+      "visuallyObservable": null,
+      "eligibleForVisualMetrics": null,
+      "isBoundary": false,
+      "evidenceHash": null,
+      "verdictVersion": null,
+      "adjudicationNotes": ""
+    },
+    {
+      "sampleId": "s0a-ffc50125d1907ba088ce",
+      "requirementId": "flame.baseline.required_visuals",
+      "groundTruthRoute": null,
+      "perRequirement": [
+        {
+          "requirementId": "flame.baseline.required_visuals",
+          "state": null
+        }
+      ],
+      "labelSource": "PENDING_HUMAN_ADJUDICATION",
+      "reviewer": null,
+      "visuallyObservable": null,
+      "eligibleForVisualMetrics": null,
+      "isBoundary": false,
+      "evidenceHash": null,
+      "verdictVersion": null,
+      "adjudicationNotes": ""
+    },
+    {
+      "sampleId": "s0a-6bbdbabb4465d783867c",
+      "requirementId": "flame.fragments.independent_motion",
+      "groundTruthRoute": null,
+      "perRequirement": [
+        {
+          "requirementId": "flame.fragments.independent_motion",
+          "state": null
+        }
+      ],
+      "labelSource": "PENDING_HUMAN_ADJUDICATION",
+      "reviewer": null,
+      "visuallyObservable": null,
+      "eligibleForVisualMetrics": null,
+      "isBoundary": true,
+      "evidenceHash": null,
+      "verdictVersion": null,
+      "adjudicationNotes": ""
+    },
+    {
+      "sampleId": "s0a-18a98bc56abe4ede301a",
+      "requirementId": "flame.steady_state.distribution",
+      "groundTruthRoute": null,
+      "perRequirement": [
+        {
+          "requirementId": "flame.steady_state.distribution",
+          "state": null
+        }
+      ],
+      "labelSource": "PENDING_HUMAN_ADJUDICATION",
+      "reviewer": null,
+      "visuallyObservable": null,
+      "eligibleForVisualMetrics": null,
+      "isBoundary": true,
+      "evidenceHash": null,
+      "verdictVersion": null,
+      "adjudicationNotes": ""
+    },
+    {
+      "sampleId": "s0a-22dddf673260d83077b8",
+      "requirementId": "flame.steady_state.continuity",
+      "groundTruthRoute": null,
+      "perRequirement": [
+        {
+          "requirementId": "flame.steady_state.continuity",
+          "state": null
+        }
+      ],
+      "labelSource": "PENDING_HUMAN_ADJUDICATION",
+      "reviewer": null,
+      "visuallyObservable": null,
+      "eligibleForVisualMetrics": null,
+      "isBoundary": true,
+      "evidenceHash": null,
+      "verdictVersion": null,
+      "adjudicationNotes": ""
+    },
+    {
+      "sampleId": "s0a-3550d2ff946bd3409430",
+      "requirementId": "flame.cleanup.particles",
+      "groundTruthRoute": null,
+      "perRequirement": [
+        {
+          "requirementId": "flame.cleanup.particles",
+          "state": null
+        }
+      ],
+      "labelSource": "PENDING_HUMAN_ADJUDICATION",
+      "reviewer": null,
+      "visuallyObservable": null,
+      "eligibleForVisualMetrics": null,
+      "isBoundary": true,
+      "evidenceHash": null,
+      "verdictVersion": null,
+      "adjudicationNotes": ""
+    },
+    {
+      "sampleId": "s0a-2f5ce2cd989f823cf8d0",
+      "requirementId": "flame.cleanup.light",
+      "groundTruthRoute": null,
+      "perRequirement": [
+        {
+          "requirementId": "flame.cleanup.light",
+          "state": null
+        }
+      ],
+      "labelSource": "PENDING_HUMAN_ADJUDICATION",
+      "reviewer": null,
+      "visuallyObservable": null,
+      "eligibleForVisualMetrics": null,
+      "isBoundary": true,
+      "evidenceHash": null,
+      "verdictVersion": null,
+      "adjudicationNotes": ""
+    },
+    {
+      "sampleId": "s0a-e746046435ce99044964",
+      "requirementId": "flame.subject.readability",
+      "groundTruthRoute": null,
+      "perRequirement": [
+        {
+          "requirementId": "flame.subject.readability",
+          "state": null
+        }
+      ],
+      "labelSource": "PENDING_HUMAN_ADJUDICATION",
+      "reviewer": null,
+      "visuallyObservable": null,
+      "eligibleForVisualMetrics": null,
+      "isBoundary": true,
+      "evidenceHash": null,
+      "verdictVersion": null,
+      "adjudicationNotes": ""
+    },
+    {
+      "sampleId": "s0a-84c08dd4af035c8ea0d9",
+      "requirementId": "flame.layers.primary_before_smoke",
+      "groundTruthRoute": null,
+      "perRequirement": [
+        {
+          "requirementId": "flame.layers.primary_before_smoke",
+          "state": null
+        }
+      ],
+      "labelSource": "PENDING_HUMAN_ADJUDICATION",
+      "reviewer": null,
+      "visuallyObservable": null,
+      "eligibleForVisualMetrics": null,
+      "isBoundary": true,
+      "evidenceHash": null,
+      "verdictVersion": null,
+      "adjudicationNotes": ""
+    },
+    {
+      "sampleId": "s0a-08c8cf039360cf6bbd8d",
+      "requirementId": "flame.start.ignition",
+      "groundTruthRoute": null,
+      "perRequirement": [
+        {
+          "requirementId": "flame.start.ignition",
+          "state": null
+        }
+      ],
+      "labelSource": "PENDING_HUMAN_ADJUDICATION",
+      "reviewer": null,
+      "visuallyObservable": null,
+      "eligibleForVisualMetrics": null,
+      "isBoundary": true,
+      "evidenceHash": null,
+      "verdictVersion": null,
+      "adjudicationNotes": ""
+    },
+    {
+      "sampleId": "s0a-542b5642e5d36c2bbcf5",
+      "requirementId": "flame.stop.continuity",
+      "groundTruthRoute": null,
+      "perRequirement": [
+        {
+          "requirementId": "flame.stop.continuity",
+          "state": null
+        }
+      ],
+      "labelSource": "PENDING_HUMAN_ADJUDICATION",
+      "reviewer": null,
+      "visuallyObservable": null,
+      "eligibleForVisualMetrics": null,
+      "isBoundary": true,
+      "evidenceHash": null,
+      "verdictVersion": null,
+      "adjudicationNotes": ""
+    },
+    {
+      "sampleId": "s0a-d45d66e258c5395cefdb",
+      "requirementId": "flame.lighting.receiver_response",
+      "groundTruthRoute": null,
+      "perRequirement": [
+        {
+          "requirementId": "flame.lighting.receiver_response",
+          "state": null
+        }
+      ],
+      "labelSource": "PENDING_HUMAN_ADJUDICATION",
+      "reviewer": null,
+      "visuallyObservable": null,
+      "eligibleForVisualMetrics": null,
+      "isBoundary": true,
+      "evidenceHash": null,
+      "verdictVersion": null,
+      "adjudicationNotes": ""
+    },
+    {
+      "sampleId": "s0a-1f7a25cfec5994b1f1fc",
+      "requirementId": "flame.capture.camera_and_scale",
+      "groundTruthRoute": null,
+      "perRequirement": [
+        {
+          "requirementId": "flame.capture.camera_and_scale",
+          "state": null
+        }
+      ],
+      "labelSource": "PENDING_HUMAN_ADJUDICATION",
+      "reviewer": null,
+      "visuallyObservable": null,
+      "eligibleForVisualMetrics": null,
+      "isBoundary": true,
+      "evidenceHash": null,
+      "verdictVersion": null,
+      "adjudicationNotes": ""
+    },
+    {
+      "sampleId": "s0a-34d40b8eec7135657651",
+      "requirementId": "flame.fragments.independent_motion",
+      "groundTruthRoute": null,
+      "perRequirement": [
+        {
+          "requirementId": "flame.fragments.independent_motion",
+          "state": null
+        }
+      ],
+      "labelSource": "PENDING_HUMAN_ADJUDICATION",
+      "reviewer": null,
+      "visuallyObservable": null,
+      "eligibleForVisualMetrics": null,
+      "isBoundary": true,
+      "evidenceHash": null,
+      "verdictVersion": null,
+      "adjudicationNotes": ""
+    },
+    {
+      "sampleId": "s0a-d2ae7a40025ba3c36ff7",
+      "requirementId": "flame.capture.metadata_integrity",
+      "groundTruthRoute": null,
+      "perRequirement": [
+        {
+          "requirementId": "flame.capture.metadata_integrity",
+          "state": null
+        }
+      ],
+      "labelSource": "PENDING_HUMAN_ADJUDICATION",
+      "reviewer": null,
+      "visuallyObservable": null,
+      "eligibleForVisualMetrics": null,
+      "isBoundary": false,
+      "evidenceHash": null,
+      "verdictVersion": null,
+      "adjudicationNotes": ""
+    },
+    {
+      "sampleId": "s0a-abe390133240299833b2",
+      "requirementId": "flame.capture.metadata_integrity",
+      "groundTruthRoute": null,
+      "perRequirement": [
+        {
+          "requirementId": "flame.capture.metadata_integrity",
+          "state": null
+        }
+      ],
+      "labelSource": "PENDING_HUMAN_ADJUDICATION",
+      "reviewer": null,
+      "visuallyObservable": null,
+      "eligibleForVisualMetrics": null,
+      "isBoundary": false,
+      "evidenceHash": null,
+      "verdictVersion": null,
+      "adjudicationNotes": ""
+    },
+    {
+      "sampleId": "s0a-5e67cd371c5f2d8bda52",
+      "requirementId": "flame.capture.metadata_integrity",
+      "groundTruthRoute": null,
+      "perRequirement": [
+        {
+          "requirementId": "flame.capture.metadata_integrity",
+          "state": null
+        }
+      ],
+      "labelSource": "PENDING_HUMAN_ADJUDICATION",
+      "reviewer": null,
+      "visuallyObservable": null,
+      "eligibleForVisualMetrics": null,
+      "isBoundary": false,
+      "evidenceHash": null,
+      "verdictVersion": null,
+      "adjudicationNotes": ""
+    },
+    {
+      "sampleId": "s0a-2f8f17344ffe20655b50",
+      "requirementId": "flame.capture.metadata_integrity",
+      "groundTruthRoute": null,
+      "perRequirement": [
+        {
+          "requirementId": "flame.capture.metadata_integrity",
+          "state": null
+        }
+      ],
+      "labelSource": "PENDING_HUMAN_ADJUDICATION",
+      "reviewer": null,
+      "visuallyObservable": null,
+      "eligibleForVisualMetrics": null,
+      "isBoundary": false,
+      "evidenceHash": null,
+      "verdictVersion": null,
+      "adjudicationNotes": ""
+    },
+    {
+      "sampleId": "s0a-81c33420d702c12738b9",
+      "requirementId": "flame.capture.metadata_integrity",
+      "groundTruthRoute": null,
+      "perRequirement": [
+        {
+          "requirementId": "flame.capture.metadata_integrity",
+          "state": null
+        }
+      ],
+      "labelSource": "PENDING_HUMAN_ADJUDICATION",
+      "reviewer": null,
+      "visuallyObservable": null,
+      "eligibleForVisualMetrics": null,
+      "isBoundary": false,
+      "evidenceHash": null,
+      "verdictVersion": null,
+      "adjudicationNotes": ""
+    },
+    {
+      "sampleId": "s0a-17ed834a7d1ff140dcb0",
+      "requirementId": "flame.capture.metadata_integrity",
+      "groundTruthRoute": null,
+      "perRequirement": [
+        {
+          "requirementId": "flame.capture.metadata_integrity",
+          "state": null
+        }
+      ],
+      "labelSource": "PENDING_HUMAN_ADJUDICATION",
+      "reviewer": null,
+      "visuallyObservable": null,
+      "eligibleForVisualMetrics": null,
+      "isBoundary": false,
+      "evidenceHash": null,
+      "verdictVersion": null,
+      "adjudicationNotes": ""
+    }
+  ],
+  "manifestHash": "sha256:946e5503cff95074e02965a5dfb414ad3b041fbd04c009c1a9197c9116e511df"
+}

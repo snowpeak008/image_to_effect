@@ -1,0 +1,33 @@
+{
+  "schema": "style-special-next-candidate/v1",
+  "id": "poly_burst_impact_3d_next_candidate",
+  "sourceId": "poly_burst_impact_3d",
+  "label": "LOWPOLY · NEW BURST",
+  "group": "w16",
+  "archetype": "impact",
+  "dimension": "3d",
+  "style": "lowpoly",
+  "profile": "FacetBurst",
+  "semantic": "flat-facet-ball>triangular-shards+hard-color-face-turn",
+  "duration": 1.2,
+  "releaseNormalized": 0.1,
+  "sustainEndNormalized": 0.7,
+  "sustained": false,
+  "seed": 16101,
+  "intensity": 1.08,
+  "palette": {
+    "primary": "#F05B3A",
+    "secondary": "#FFC34A",
+    "accent": "#FFF2C8"
+  },
+  "meshes": [
+    "FacetA",
+    "FacetB",
+    "FacetC",
+    "Shard",
+    "Burst"
+  ],
+  "pairFamily": "lowpoly",
+  "pairRole": "new",
+  "sourceBaseId": "poly_burst_impact_3d"
+}

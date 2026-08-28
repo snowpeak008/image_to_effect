@@ -1,0 +1,14 @@
+{
+  "succeeded": true,
+  "detail": "Assets/VFX/Generated/i2_glass_spark/VFX_I2_Glass_Spark.prefab",
+  "entries": [
+    {
+      "code": "I400",
+      "severity": "info",
+      "path": "/budget",
+      "message": "Static budget preflight completed for profile mobile_medium.",
+      "actualValue": null,
+      "allowedRange": null
+    }
+  ]
+}

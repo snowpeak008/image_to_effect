@@ -1,0 +1,33 @@
+{
+  "schema": "style-special-next-candidate/v1",
+  "id": "smoke_plume_area_3d_next_candidate",
+  "sourceId": "smoke_plume_area_3d",
+  "label": "SEMI-REAL PLUME · LOOP",
+  "group": "w10",
+  "archetype": "area",
+  "dimension": "3d",
+  "style": "semireal",
+  "profile": "SustainedPlume",
+  "semantic": "root-emission>dual-speed-lobes>wind-bent-smoke-column",
+  "duration": 1.55,
+  "releaseNormalized": 0.1,
+  "sustainEndNormalized": 0.84,
+  "sustained": true,
+  "seed": 10102,
+  "intensity": 0.82,
+  "palette": {
+    "primary": "#303239",
+    "secondary": "#6C6E72",
+    "accent": "#FF7A22"
+  },
+  "meshes": [
+    "Cone",
+    "Quad",
+    "Quad",
+    "Quad",
+    "Burst"
+  ],
+  "pairFamily": "",
+  "pairRole": "",
+  "sourceBaseId": ""
+}

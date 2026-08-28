@@ -1,0 +1,32 @@
+{
+  "schema": "style-special-next-candidate/v1",
+  "id": "ink_dragon_trail_2d_next_candidate",
+  "sourceId": "ink_dragon_trail_2d",
+  "label": "INK DRAGON · TRAIL",
+  "group": "w9",
+  "archetype": "trail",
+  "dimension": "2d",
+  "style": "inkwash",
+  "profile": "InkBleed",
+  "semantic": "twoframe-dragon-head+speed-width-body+bleeding-tail",
+  "duration": 1.42,
+  "releaseNormalized": 0.1,
+  "sustainEndNormalized": 0.8,
+  "sustained": false,
+  "seed": 9109,
+  "intensity": 0.94,
+  "palette": {
+    "primary": "#141619",
+    "secondary": "#4C5258",
+    "accent": "#B43B32"
+  },
+  "meshes": [
+    "Ribbon",
+    "Cone",
+    "Shard",
+    "Shard"
+  ],
+  "pairFamily": "",
+  "pairRole": "",
+  "sourceBaseId": ""
+}

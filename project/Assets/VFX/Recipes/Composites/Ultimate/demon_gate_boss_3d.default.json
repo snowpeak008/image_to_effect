@@ -1,0 +1,110 @@
+{
+  "recipeVersion": 1,
+  "revision": 1,
+  "id": "demon_gate_boss_3d",
+  "name": "Demon Gate Boss 3d",
+  "dimension": "3d",
+  "archetype": "composite",
+  "style": {
+    "token": "stylized",
+    "palette": {
+      "primary": "#3A0711",
+      "secondary": "#8E1730",
+      "accent": "#ED473F"
+    },
+    "outline": 0.1,
+    "shading_steps": 4,
+    "noise_scale": 1.2,
+    "glow_strength": 1.05
+  },
+  "targetProfile": "mobile_medium",
+  "randomSeed": 2449336044,
+  "stages": [
+    {
+      "id": "main",
+      "trigger": "manual",
+      "duration": 8.0,
+      "enabled": true,
+      "modules": [
+        {
+          "id": "body",
+          "kind": "energy_body",
+          "templateId": "PFT_3D_FireCore",
+          "parameters": {
+            "scale": 1.0
+          },
+          "enabled": true
+        }
+      ]
+    }
+  ],
+  "metadata": {
+    "createdBy": "w13-w18-composite",
+    "templateCatalogVersion": "1.0.0"
+  },
+  "timeline": [
+    {
+      "t": 0.0,
+      "ref_id": "blood_ritual_spawn_3d",
+      "action": "play",
+      "overrides": {
+        "scale": 1.3,
+        "palette": "ultimate"
+      }
+    },
+    {
+      "t": 1.2,
+      "ref_id": "rift_spawn_3d",
+      "action": "play",
+      "overrides": {
+        "scale": 1.5,
+        "palette": "ultimate"
+      }
+    },
+    {
+      "t": 4.2,
+      "ref_id": "demon_eruption_impact_3d",
+      "action": "play",
+      "overrides": {
+        "scale": 1.6,
+        "palette": "ultimate"
+      }
+    },
+    {
+      "t": 6.2,
+      "ref_id": "phantom_wail_area_2d",
+      "action": "play",
+      "overrides": {
+        "scale": 1.4,
+        "palette": "ultimate"
+      }
+    }
+  ],
+  "camera_hints": [
+    {
+      "t": 1.2,
+      "type": "zoom",
+      "strength": 0.5
+    },
+    {
+      "t": 4.2,
+      "type": "shake",
+      "strength": 1.0
+    },
+    {
+      "t": 6.2,
+      "type": "slowmo",
+      "strength": 0.3
+    }
+  ],
+  "gates": [
+    {
+      "t": 1.2,
+      "wait_for": "gate_formed"
+    },
+    {
+      "t": 4.0,
+      "wait_for": "hand_release"
+    }
+  ]
+}

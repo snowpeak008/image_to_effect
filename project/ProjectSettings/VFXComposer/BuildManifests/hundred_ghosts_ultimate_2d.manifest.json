@@ -1,0 +1,259 @@
+{
+  "manifestVersion": 1,
+  "rulesVersion": "1.0-draft",
+  "enforcement": "strict",
+  "effectId": "hundred_ghosts_ultimate_2d",
+  "archetype": "composite",
+  "recipeVersion": 1,
+  "recipeRevision": 1,
+  "recipeHash": "ab7fe473869af3d4988bfe8c7d2a5fd4dba9c60ab0ff994bf3e1b89e8bb492c6",
+  "buildHash": "4cff961068fb295d692e5b3a9d482324c1794be2b26ed26f712912b67a71974d",
+  "compilerVersion": "composite-runtime-1",
+  "unityVersion": "2022.3.62f3c1",
+  "sourceRecipePath": "Assets/VFX/Recipes/Composites/HeroComponents/hundred_ghosts_ultimate_2d.default.json",
+  "runtimeEntry": {
+    "kind": "prefab",
+    "path": "Assets/VFX/Generated/hundred_ghosts_ultimate_2d/VFX_hundred_ghosts_ultimate_2d.prefab",
+    "guid": "d1571251606475e4484fc102d135ed39"
+  },
+  "ownedOutputs": [
+    {
+      "path": "Assets/VFX/Generated/hundred_ghosts_ultimate_2d/Composition.json",
+      "guid": "c231419bc711c754ea67d0a8685a86fb",
+      "assetType": "TextAsset",
+      "sha256": "88d0bbb358bfcb815e6d87e0017fe786761f149367ee578f1f863b700d6d0af2"
+    },
+    {
+      "path": "Assets/VFX/Generated/hundred_ghosts_ultimate_2d/VFX_hundred_ghosts_ultimate_2d.prefab",
+      "guid": "d1571251606475e4484fc102d135ed39",
+      "assetType": "GameObject",
+      "sha256": "1a5782068a2484aa0a8fdfe02c20f3bb14daa1379d7861c9d2d462241ea9d965"
+    }
+  ],
+  "dependencies": [
+    {
+      "path": "Assets/VFX/Generated/ink_dragon_trail_2d/VFX_ink_dragon_trail_2d.prefab",
+      "guid": "2bb274b911006be44b747aa81dfbcd95",
+      "assetType": "GameObject",
+      "version": null,
+      "dependencyHash": "f99844a410358f480ce4251f2626a20a"
+    },
+    {
+      "path": "Assets/VFX/Generated/phantom_wail_area_2d/VFX_phantom_wail_area_2d.prefab",
+      "guid": "5e6502ab8b088e843bd36a4994874dd8",
+      "assetType": "GameObject",
+      "version": null,
+      "dependencyHash": "eaa87615f65e4e83bfe9408224013cbd"
+    },
+    {
+      "path": "Assets/VFX/Generated/shadow_grasp_area_2d/VFX_shadow_grasp_area_2d.prefab",
+      "guid": "e99b81dded4da0b4e9d8345bcfaabcb4",
+      "assetType": "GameObject",
+      "version": null,
+      "dependencyHash": "7840705603efb63eccf9e9d953c1003f"
+    },
+    {
+      "path": "Assets/VFX/Shared/Shaders/VfxDissolveEdge.shader",
+      "guid": "5b0bcf875e86f60489700456c2154aee",
+      "assetType": "Shader",
+      "version": null,
+      "dependencyHash": "30bc399c9c079542d29fbf6700020364"
+    },
+    {
+      "path": "Assets/VFX/Shared/Shaders/VfxInkBrush.shader",
+      "guid": "1aa4c96a53155d84bb4bbcc0191a7e44",
+      "assetType": "Shader",
+      "version": null,
+      "dependencyHash": "480f54d659ea0471673419623827719f"
+    },
+    {
+      "path": "Assets/VFX/Shared/Shaders/VfxSoftNoise.shader",
+      "guid": "a6e4e3aa82ac7c84d9dd012aaae56c67",
+      "assetType": "Shader",
+      "version": null,
+      "dependencyHash": "daf4e4d9c28a30f0230301e6f07535a5"
+    },
+    {
+      "path": "Assets/VFX/Shared/Styles/Materials/MAT_Style_dark.mat",
+      "guid": "06882d319d21ef44f95b00f7814e3463",
+      "assetType": "Material",
+      "version": null,
+      "dependencyHash": "2c79c1062f8c6f82579a1c8f8d0ed21d"
+    },
+    {
+      "path": "Assets/VFX/Shared/Styles/Materials/MAT_Style_ghost.mat",
+      "guid": "537b7c3b77b57e841a12e48bf1cc1aaf",
+      "assetType": "Material",
+      "version": null,
+      "dependencyHash": "efe1cadbae6aa7b3e1bc9ab8aba7c9b1"
+    },
+    {
+      "path": "Assets/VFX/Shared/Styles/Materials/MAT_Style_inkwash.mat",
+      "guid": "bf25c0c6a91d68548a6c62bb24fcfc83",
+      "assetType": "Material",
+      "version": null,
+      "dependencyHash": "fa1334c7258fcbea505c87de87210648"
+    },
+    {
+      "path": "Assets/VFX/Shared/Styles/Meshes/M_Style_Burst.asset",
+      "guid": "0def46dac13f1d8449cd98d98de17a15",
+      "assetType": "Mesh",
+      "version": null,
+      "dependencyHash": "56e972a8f8588a864d379a7611c49c63"
+    },
+    {
+      "path": "Assets/VFX/Shared/Styles/Meshes/M_Style_Quad.asset",
+      "guid": "7f415b79b45b04d4ab5e3f4dd61605aa",
+      "assetType": "Mesh",
+      "version": null,
+      "dependencyHash": "01e83f0bfc8392031ac8f5694416ab10"
+    },
+    {
+      "path": "Assets/VFX/Shared/Styles/Meshes/M_Style_Ribbon.asset",
+      "guid": "dddd70cae322a2e40b1c5daa80492bd6",
+      "assetType": "Mesh",
+      "version": null,
+      "dependencyHash": "63b4bdca2af28668b73b3c2e60589468"
+    },
+    {
+      "path": "Assets/VFX/Shared/Styles/Meshes/M_Style_Ring.asset",
+      "guid": "df59364e370c085418d31c0f952bcf1a",
+      "assetType": "Mesh",
+      "version": null,
+      "dependencyHash": "021f9d0fab5159d1d05310de3284c997"
+    },
+    {
+      "path": "Assets/VFX/Shared/Styles/Meshes/M_Style_Shard.asset",
+      "guid": "506c8c0bcf8b14645948b3dbb02a1b3f",
+      "assetType": "Mesh",
+      "version": null,
+      "dependencyHash": "ff113f023e398b26696f0c501ae28324"
+    },
+    {
+      "path": "Packages/com.vfxcomposer.unity/Runtime/Components/CompositeVfxController.cs",
+      "guid": "07d8735a81864834c8f1bda23acf4be2",
+      "assetType": "MonoScript",
+      "version": null,
+      "dependencyHash": "570863f0966daccfed5bf3e887baa10e"
+    },
+    {
+      "path": "Packages/com.vfxcomposer.unity/Runtime/Components/StyledVfxController.cs",
+      "guid": "ca6f81a249967414c96082671e07dcaa",
+      "assetType": "MonoScript",
+      "version": null,
+      "dependencyHash": "486e1b8ba27b5e00b709bc5fd2b5624a"
+    }
+  ],
+  "cost": {
+    "particles": 0,
+    "particleSystems": 0,
+    "renderers": 0,
+    "materials": 0,
+    "trails": 0,
+    "duration": 4.8000001907348633,
+    "localTextureBytes": 0,
+    "dependencyResidentTextureBytes": 0,
+    "gameObjects": 1,
+    "maxDepth": 0
+  },
+  "audit": [],
+  "generatedAtUtc": "2026-08-24T13:43:35.2439473Z",
+  "timeline": [
+    {
+      "t": 0.0,
+      "ref_id": "ink_dragon_trail_2d",
+      "action": "play",
+      "overrides": {
+        "scale": 1.0,
+        "position": [
+          -1.0,
+          0.2,
+          0.0
+        ],
+        "palette": "hero_component"
+      }
+    },
+    {
+      "t": 0.45,
+      "ref_id": "ink_dragon_trail_2d",
+      "action": "play",
+      "overrides": {
+        "scale": 1.0,
+        "position": [
+          0.0,
+          -0.3,
+          0.0
+        ],
+        "rotation": [
+          0.0,
+          0.0,
+          12.0
+        ],
+        "palette": "hero_component"
+      }
+    },
+    {
+      "t": 0.9,
+      "ref_id": "ink_dragon_trail_2d",
+      "action": "play",
+      "overrides": {
+        "scale": 1.0,
+        "position": [
+          1.0,
+          0.25,
+          0.0
+        ],
+        "rotation": [
+          0.0,
+          0.0,
+          -12.0
+        ],
+        "palette": "hero_component"
+      }
+    },
+    {
+      "t": 1.4,
+      "ref_id": "phantom_wail_area_2d",
+      "action": "play",
+      "overrides": {
+        "scale": 1.6,
+        "palette": "hero_component"
+      }
+    },
+    {
+      "t": 3.0,
+      "ref_id": "shadow_grasp_area_2d",
+      "action": "play",
+      "overrides": {
+        "scale": 1.35,
+        "palette": "hero_component"
+      }
+    }
+  ],
+  "cameraHints": [
+    {
+      "t": 1.4,
+      "type": "slowmo",
+      "strength": 0.3
+    },
+    {
+      "t": 3.0,
+      "type": "shake",
+      "strength": 0.45
+    }
+  ],
+  "gates": [],
+  "themeId": null,
+  "compositePeakBudget": {
+    "particles": 32,
+    "particleSystems": 2,
+    "materials": 2,
+    "renderers": 10,
+    "limits": {
+      "particles": 200,
+      "particleSystems": 10,
+      "materials": 10,
+      "renderers": 14
+    }
+  }
+}

@@ -1,0 +1,71 @@
+{
+  "manifestVersion": 1,
+  "rulesVersion": "1.0-draft",
+  "enforcement": "strict",
+  "effectId": "crystal_shatter_destruction_3d",
+  "archetype": "destruction",
+  "recipeVersion": 1,
+  "recipeRevision": 1,
+  "recipeHash": "1a2b25ac7728a398ffc983caa10d046545fbf53e8b41cd766727f0679c7a144a",
+  "buildHash": "00ecaaa7d91bc0e0cf58775eb88627cd019ef7cadcddb9f420850a659ec0c146",
+  "compilerVersion": "styled-content-4",
+  "unityVersion": "2022.3.62f3c1",
+  "sourceRecipePath": "Assets/VFX/Recipes/NewArchetypes/crystal_shatter_destruction_3d.default.json",
+  "runtimeEntry": {
+    "kind": "prefab",
+    "path": "Assets/VFX/Generated/crystal_shatter_destruction_3d/VFX_crystal_shatter_destruction_3d.prefab",
+    "guid": "65b4572ec6c5af74ca173d331554bc93"
+  },
+  "ownedOutputs": [
+    {
+      "path": "Assets/VFX/Generated/crystal_shatter_destruction_3d/VFX_crystal_shatter_destruction_3d.prefab",
+      "guid": "65b4572ec6c5af74ca173d331554bc93",
+      "assetType": "GameObject",
+      "sha256": "f1a80120ac5b716eadc19762b6e5cba1c6d35158958524af15b097a57dd08e29"
+    }
+  ],
+  "dependencies": [
+    {
+      "path": "Assets/VFX/Shared/Shaders/VfxHoloFresnel.shader",
+      "guid": "deae41ea852bbc24fbaeed759e6f0519",
+      "assetType": "Shader",
+      "version": null,
+      "dependencyHash": "736c58899b4da5696e81551b737ae1a4"
+    },
+    {
+      "path": "Assets/VFX/Shared/Styles/Materials/MAT_Style_holo.mat",
+      "guid": "7db5cf272022f764dafdea6ec2318707",
+      "assetType": "Material",
+      "version": null,
+      "dependencyHash": "60ab0bd7361013108f8a34875a414491"
+    },
+    {
+      "path": "Assets/VFX/Shared/Styles/Meshes/M_Style_Shard.asset",
+      "guid": "506c8c0bcf8b14645948b3dbb02a1b3f",
+      "assetType": "Mesh",
+      "version": null,
+      "dependencyHash": "ff113f023e398b26696f0c501ae28324"
+    },
+    {
+      "path": "Packages/com.vfxcomposer.unity/Runtime/Components/StyledVfxController.cs",
+      "guid": "ca6f81a249967414c96082671e07dcaa",
+      "assetType": "MonoScript",
+      "version": null,
+      "dependencyHash": "486e1b8ba27b5e00b709bc5fd2b5624a"
+    }
+  ],
+  "cost": {
+    "particles": 24,
+    "particleSystems": 1,
+    "renderers": 11,
+    "materials": 1,
+    "trails": 0,
+    "duration": 1.7000000476837158,
+    "localTextureBytes": 0,
+    "dependencyResidentTextureBytes": 0,
+    "gameObjects": 12,
+    "maxDepth": 1
+  },
+  "audit": [],
+  "generatedAtUtc": "2026-08-24T13:19:57.6170472Z"
+}

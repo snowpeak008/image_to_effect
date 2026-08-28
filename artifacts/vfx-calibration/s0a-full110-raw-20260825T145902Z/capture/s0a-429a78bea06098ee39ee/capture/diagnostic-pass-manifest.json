@@ -1,0 +1,1 @@
+{"schema":"w24-s0a-diagnostic-pass-manifest/v1","passes":[{"passId":"effect-only-rgba","encoding":"rgba8_png","purpose":"minimal effect-only coverage input for machine measurement; not a Beauty frame or an aesthetic conclusion","camera":"same serialized authority Camera","clear":"transparent black","cullingMask":2,"format":"RGBA32 PNG"}]}

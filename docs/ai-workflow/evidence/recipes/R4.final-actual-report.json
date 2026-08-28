@@ -1,0 +1,54 @@
+{
+  "succeeded": false,
+  "detail": null,
+  "entries": [
+    {
+      "code": "E308",
+      "severity": "error",
+      "path": "/stages/launch/modules/launchFlash/templateId",
+      "message": "Template ID does not exist in the catalog.",
+      "actualValue": "launchFlash",
+      "allowedRange": "[PFT_2D_Embers, PFT_2D_FireCore, PFT_2D_FireImpact, PFT_2D_FireTrail, PFT_2D_LaunchFlash, PFT_2D_Shockwave]"
+    },
+    {
+      "code": "E308",
+      "severity": "error",
+      "path": "/stages/launch/modules/fireCore/templateId",
+      "message": "Template ID does not exist in the catalog.",
+      "actualValue": "fireCore",
+      "allowedRange": "[PFT_2D_Embers, PFT_2D_FireCore, PFT_2D_FireImpact, PFT_2D_FireTrail, PFT_2D_LaunchFlash, PFT_2D_Shockwave]"
+    },
+    {
+      "code": "E308",
+      "severity": "error",
+      "path": "/stages/travel/modules/fireTrail/templateId",
+      "message": "Template ID does not exist in the catalog.",
+      "actualValue": "fireTrail",
+      "allowedRange": "[PFT_2D_Embers, PFT_2D_FireCore, PFT_2D_FireImpact, PFT_2D_FireTrail, PFT_2D_LaunchFlash, PFT_2D_Shockwave]"
+    },
+    {
+      "code": "E306",
+      "severity": "error",
+      "path": "/stages/travel/modules/fireTrail/attachTo",
+      "message": "attachTo must reference a module ID in the same stage.",
+      "actualValue": "fireCore",
+      "allowedRange": null
+    },
+    {
+      "code": "E308",
+      "severity": "error",
+      "path": "/stages/impact/modules/fireImpact/templateId",
+      "message": "Template ID does not exist in the catalog.",
+      "actualValue": "fireImpact",
+      "allowedRange": "[PFT_2D_Embers, PFT_2D_FireCore, PFT_2D_FireImpact, PFT_2D_FireTrail, PFT_2D_LaunchFlash, PFT_2D_Shockwave]"
+    },
+    {
+      "code": "E308",
+      "severity": "error",
+      "path": "/stages/impact/modules/shockwave/templateId",
+      "message": "Template ID does not exist in the catalog.",
+      "actualValue": "shockWave",
+      "allowedRange": "[PFT_2D_Embers, PFT_2D_FireCore, PFT_2D_FireImpact, PFT_2D_FireTrail, PFT_2D_LaunchFlash, PFT_2D_Shockwave]"
+    }
+  ]
+}

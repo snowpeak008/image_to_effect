@@ -1,0 +1,7 @@
+[
+  {
+    "op": "set_palette",
+    "path": "/style/palette/accent",
+    "value": "#E8FFFF"
+  }
+]

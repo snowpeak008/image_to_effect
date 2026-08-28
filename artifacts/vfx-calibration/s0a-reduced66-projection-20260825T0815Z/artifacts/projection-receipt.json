@@ -1,0 +1,79 @@
+{
+  "schemaVersion": "s0a-projection-receipt/v3",
+  "projectionToolVersion": "w24-s0a-blind-projection/1.2.0",
+  "projectionToolSourceSchema": "s0a-projection-tool-sources/v2",
+  "projectionToolSources": [
+    {
+      "path": "docs/skills/unity-vfx-visual-qa/calibration/s0a-blind-review-contract.schema.json",
+      "sha256": "sha256:3479a7a1d787b4b96c933d48574627b7e1a0d5e5e852103ae7e8a6388bb41958"
+    },
+    {
+      "path": "docs/skills/unity-vfx-visual-qa/calibration/s0a-capture-profile-policy.schema.json",
+      "sha256": "sha256:1b0dccd60fb9d26f1193ab41bbfefcf2270417ccd4e9589669fa3b2a57e8d218"
+    },
+    {
+      "path": "docs/skills/unity-vfx-visual-qa/calibration/s0a-human-adjudication-worksheet.schema.json",
+      "sha256": "sha256:884e900bc6f7cee7a36b4118a869e42b1deb3564f5cecfcbf13ee084fcd1b4b5"
+    },
+    {
+      "path": "docs/skills/unity-vfx-visual-qa/calibration/s0a-projected-blind-evidence.schema.json",
+      "sha256": "sha256:306779784b16547cd44fb261be82edd7eb45695c6ccccdea887916508531e91b"
+    },
+    {
+      "path": "docs/skills/unity-vfx-visual-qa/calibration/s0a-projected-blind-manifest.schema.json",
+      "sha256": "sha256:a0217d6bb1e201dd4be1b5fc0566b55bba557e40bd4522e47c05806781d29fad"
+    },
+    {
+      "path": "docs/skills/unity-vfx-visual-qa/calibration/s0a-projected-operator-evidence-bundle.schema.json",
+      "sha256": "sha256:f5846edfa086d2eda70995312e8241872015d21f1437967e2b2df85343271ed6"
+    },
+    {
+      "path": "docs/skills/unity-vfx-visual-qa/calibration/s0a-projected-review-freeze-context.schema.json",
+      "sha256": "sha256:a6f7694df3f3679decfca2ef770f849942c9fc4b2567918544817ecfb9587efc"
+    },
+    {
+      "path": "docs/skills/unity-vfx-visual-qa/calibration/s0a-projection-receipt.schema.json",
+      "sha256": "sha256:38c6828d83f4faa58595b7c61caed8984df4a02f0fabd6ab8d6399958858f498"
+    },
+    {
+      "path": "tools/vfx/project_s0a_capture.py",
+      "sha256": "sha256:c870afdf1009020826cc689655a11929e8ead3523fe9dd441df80d4ffca924c6"
+    },
+    {
+      "path": "tools/vfx/s0a_calibration.py",
+      "sha256": "sha256:0e35e7652541dc86af0ea2f83957f007c898dfa2de1ba79b9b7d34f6ac92cc23"
+    },
+    {
+      "path": "tools/vfx/s0a_projection.py",
+      "sha256": "sha256:a81ba38e6561bddc53deb3f6fb14fe18dcca00124685464a86da105cfeaa1479"
+    }
+  ],
+  "projectionToolRuntimeDependencies": [
+    {
+      "name": "Pillow",
+      "version": "12.2.0"
+    }
+  ],
+  "projectionToolSourceHash": "sha256:655c9c9d8e0073fea44284cce4fb3a543ea8fb3e92b104e75ce3840e68821c57",
+  "status": "PROJECTED_NOT_REVIEWED",
+  "holdoutCohort": "reduced-36-12-12-6",
+  "operatorLedgerHash": "sha256:ac3b3a1e45f60e69fdfc9a7fec3c7593606135b0c127be59b18e0ae5ea3b7c6b",
+  "commandSetHash": "sha256:a109f19f7dcfffb9688d825d4351744af2e93a644dbe5cad75cdb32e1b082772",
+  "captureRootIdentityHash": "sha256:8ed0dfcb7d885d3d74991870efd960d52c31e2308c31a55ea6d48d5ce810ee99",
+  "captureProfilePolicyHash": "sha256:1d9ee0b874721a3eb1e45e1d347744f316bbd0f6b407184afcb37bb9abae18db",
+  "reviewContractHash": "sha256:ba44573fabb3416f0e5b9cb4734607d115d97c0594817debc816e18d187323d1",
+  "reviewContextHash": "sha256:3aa1bd5c5d84ee6b8d7ffd01f7faad77cda3aa2bac74565dcadda29cbeec9af4",
+  "blindManifestHash": "sha256:72f0fd64ac54705463299be75c968fa0529d5b695dd9fcf52a27e1ba873d40f9",
+  "operatorEvidenceBundleHash": "sha256:da31322042b27645d5e5a6f1b4eca5de5451059f84d539f925e6153a68baf659",
+  "humanWorksheetHash": "sha256:c30babb5c3e23566d6ab0e81ddba300cf280cd844a4c1e78349c82f17078c8a7",
+  "artifactCountExcludingReceipt": 3368,
+  "artifactTreeHashExcludingReceipt": "sha256:e7a33b0ccf48c7c4db9f42c8473b2972d6c9856e9d6d456e2807ccf0666e04a4",
+  "assertions": {
+    "labelsCreated": false,
+    "labelsFrozen": false,
+    "qaReportsCreated": false,
+    "metricsEmitted": false,
+    "terminalStatusClaimed": false
+  },
+  "receiptHash": "sha256:ae7f85172fb4fa988851a9f7414f5a6a3dc2b2e7c50bc2444240ccc59818a1f8"
+}

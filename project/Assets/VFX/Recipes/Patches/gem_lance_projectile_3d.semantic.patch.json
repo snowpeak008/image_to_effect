@@ -1,0 +1,7 @@
+[
+  {
+    "op": "set_content_param",
+    "path": "/content/parameters/lance_length",
+    "value": 8.0
+  }
+]

@@ -1,0 +1,92 @@
+{
+  "manifestVersion": 1,
+  "rulesVersion": "1.0-draft",
+  "enforcement": "strict",
+  "effectId": "toxic_field_3d",
+  "archetype": "area",
+  "recipeVersion": 1,
+  "recipeRevision": 1,
+  "recipeHash": "8ee2fb61b6a09b023f73021787f6f83ee79560d6a5d37a5076b91eeb61a4bacb",
+  "buildHash": "77299996ee0078f6cafa5bb4929d71da5f335c68e46b86bff0be4d381309d883",
+  "compilerVersion": "coverage-b-4",
+  "unityVersion": "2022.3.62f3c1",
+  "sourceRecipePath": "Assets/VFX/Recipes/Area/toxic_field_3d.default.json",
+  "runtimeEntry": {
+    "kind": "prefab",
+    "path": "Assets/VFX/Generated/toxic_field_3d/VFX_toxic_field_3d.prefab",
+    "guid": "2e6057a60cbbaf44c8d5827f47d167fd"
+  },
+  "ownedOutputs": [
+    {
+      "path": "Assets/VFX/Generated/toxic_field_3d/VFX_toxic_field_3d.prefab",
+      "guid": "2e6057a60cbbaf44c8d5827f47d167fd",
+      "assetType": "GameObject",
+      "sha256": "16cba486b75efc95d6111ff884b8304a265222d54e65377e64dedae241dcd6f2"
+    }
+  ],
+  "dependencies": [
+    {
+      "path": "Assets/VFX/Shared/CoverageGalleryB/Materials/MAT_CoverageB_Additive.mat",
+      "guid": "688b79adff1f3474da55fb0deedff137",
+      "assetType": "Material",
+      "version": null,
+      "dependencyHash": "0b0b0e70d4676ffab060eedfd9b3ebea"
+    },
+    {
+      "path": "Assets/VFX/Shared/CoverageGalleryB/Materials/MAT_CoverageB_Alpha.mat",
+      "guid": "a84952a854859674991a6e3fe826514a",
+      "assetType": "Material",
+      "version": null,
+      "dependencyHash": "6f1e099067ca8e046370c9a5c87d8158"
+    },
+    {
+      "path": "Assets/VFX/Shared/CoverageGalleryB/Meshes/M_CoverageB_Quad.asset",
+      "guid": "ea74b7ca76a79bc44b173c14298bbdba",
+      "assetType": "Mesh",
+      "version": null,
+      "dependencyHash": "65761f362d1fc645474a82095f5d7535"
+    },
+    {
+      "path": "Assets/VFX/Shared/CoverageGalleryB/Meshes/M_CoverageB_Ring.asset",
+      "guid": "7a536dcec1985cf4a9e09e6df4dbd583",
+      "assetType": "Mesh",
+      "version": null,
+      "dependencyHash": "2925f46e6811e075fedcad822cb3dfcf"
+    },
+    {
+      "path": "Assets/VFX/Shared/CoverageGalleryB/Prefabs/PF_CoverageB_Particles.prefab",
+      "guid": "70f199efb6fa95243bfdc29f0ac52b45",
+      "assetType": "GameObject",
+      "version": null,
+      "dependencyHash": "4ca484495d85edc18be403e3c11759f1"
+    },
+    {
+      "path": "Assets/VFX/Shared/Shaders/CoverageGalleryBUnlit.shader",
+      "guid": "36a2072c324a26a479dfb498994d4812",
+      "assetType": "Shader",
+      "version": null,
+      "dependencyHash": "64f6028fba878ab561a8418a3ea09753"
+    },
+    {
+      "path": "Packages/com.vfxcomposer.unity/Runtime/Components/CoverageGalleryVfxController.cs",
+      "guid": "18601207a015a6140b357c3de1ce8608",
+      "assetType": "MonoScript",
+      "version": null,
+      "dependencyHash": "b7413138fabc3a05f2522721ad65632e"
+    }
+  ],
+  "cost": {
+    "particles": 48,
+    "particleSystems": 1,
+    "renderers": 4,
+    "materials": 2,
+    "trails": 0,
+    "duration": 2.5999999046325684,
+    "localTextureBytes": 0,
+    "dependencyResidentTextureBytes": 0,
+    "gameObjects": 5,
+    "maxDepth": 1
+  },
+  "audit": [],
+  "generatedAtUtc": "2026-08-23T15:40:28.7126411Z"
+}

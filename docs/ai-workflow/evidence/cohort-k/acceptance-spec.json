@@ -1,0 +1,30 @@
+{
+  "version": 1,
+  "patches": {
+    "K1": {
+      "expectedRevision": 1,
+      "operation": "replace",
+      "path": "/stages/impact/modules/burst/parameters/speed",
+      "value": 4.4
+    },
+    "K2": {
+      "expectedRevision": 1,
+      "operation": "disable",
+      "path": "/stages/launch/modules/launchFlash",
+      "enabled": false
+    },
+    "K3": {
+      "expectedRevision": 1,
+      "operation": "add",
+      "path": "/stages/travel/modules/sparkle_embers",
+      "module": {
+        "id": "sparkle_embers",
+        "kind": "secondary_particles",
+        "templateId": "PFT_2D_Embers",
+        "parameters": { "rate": 12, "lifetime": 0.65 },
+        "attachTo": "core",
+        "enabled": true
+      }
+    }
+  }
+}

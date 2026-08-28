@@ -1,0 +1,56 @@
+{
+  "recipeVersion": 1,
+  "revision": 1,
+  "id": "talisman_barrier_shield_2d",
+  "name": "Talisman Barrier Shield 2d",
+  "dimension": "2d",
+  "archetype": "shield",
+  "style": {
+    "token": "ghost",
+    "palette": {
+      "primary": "#385A54",
+      "secondary": "#93D7CB",
+      "accent": "#F0FFF9"
+    },
+    "outline": 0.1,
+    "shading_steps": 4,
+    "noise_scale": 1.2,
+    "glow_strength": 1.05
+  },
+  "targetProfile": "mobile_medium",
+  "randomSeed": 191733469,
+  "stages": [
+    {
+      "id": "main",
+      "trigger": "manual",
+      "duration": 1.2,
+      "enabled": true,
+      "modules": [
+        {
+          "id": "body",
+          "kind": "energy_body",
+          "templateId": "PFT_2D_FireCore",
+          "parameters": {
+            "scale": 1.0
+          },
+          "enabled": true
+        }
+      ]
+    }
+  ],
+  "metadata": {
+    "createdBy": "w18-hero-exclusive",
+    "templateCatalogVersion": "1.0.0"
+  },
+  "behavior": {
+    "hit": {
+      "type": "single"
+    },
+    "emission": {
+      "type": "single"
+    },
+    "timing": {
+      "type": "instant"
+    }
+  }
+}

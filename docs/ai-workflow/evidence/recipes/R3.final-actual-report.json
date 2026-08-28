@@ -1,0 +1,54 @@
+{
+  "succeeded": false,
+  "detail": null,
+  "entries": [
+    {
+      "code": "E308",
+      "severity": "error",
+      "path": "/stages/launch/modules/launchFlash/templateId",
+      "message": "Template ID does not exist in the catalog.",
+      "actualValue": "launchFlash",
+      "allowedRange": "[PFT_2D_Embers, PFT_2D_FireCore, PFT_2D_FireImpact, PFT_2D_FireTrail, PFT_2D_LaunchFlash, PFT_2D_Shockwave]"
+    },
+    {
+      "code": "E308",
+      "severity": "error",
+      "path": "/stages/launch/modules/launchCore/templateId",
+      "message": "Template ID does not exist in the catalog.",
+      "actualValue": "fireCore",
+      "allowedRange": "[PFT_2D_Embers, PFT_2D_FireCore, PFT_2D_FireImpact, PFT_2D_FireTrail, PFT_2D_LaunchFlash, PFT_2D_Shockwave]"
+    },
+    {
+      "code": "E308",
+      "severity": "error",
+      "path": "/stages/travel/modules/travelCore/templateId",
+      "message": "Template ID does not exist in the catalog.",
+      "actualValue": "fireCore",
+      "allowedRange": "[PFT_2D_Embers, PFT_2D_FireCore, PFT_2D_FireImpact, PFT_2D_FireTrail, PFT_2D_LaunchFlash, PFT_2D_Shockwave]"
+    },
+    {
+      "code": "E308",
+      "severity": "error",
+      "path": "/stages/impact/modules/impactFlash/templateId",
+      "message": "Template ID does not exist in the catalog.",
+      "actualValue": "launchFlash",
+      "allowedRange": "[PFT_2D_Embers, PFT_2D_FireCore, PFT_2D_FireImpact, PFT_2D_FireTrail, PFT_2D_LaunchFlash, PFT_2D_Shockwave]"
+    },
+    {
+      "code": "E308",
+      "severity": "error",
+      "path": "/stages/impact/modules/impactBurst/templateId",
+      "message": "Template ID does not exist in the catalog.",
+      "actualValue": "fireImpact",
+      "allowedRange": "[PFT_2D_Embers, PFT_2D_FireCore, PFT_2D_FireImpact, PFT_2D_FireTrail, PFT_2D_LaunchFlash, PFT_2D_Shockwave]"
+    },
+    {
+      "code": "E308",
+      "severity": "error",
+      "path": "/stages/impact/modules/impactShockwave/templateId",
+      "message": "Template ID does not exist in the catalog.",
+      "actualValue": "shockwave",
+      "allowedRange": "[PFT_2D_Embers, PFT_2D_FireCore, PFT_2D_FireImpact, PFT_2D_FireTrail, PFT_2D_LaunchFlash, PFT_2D_Shockwave]"
+    }
+  ]
+}

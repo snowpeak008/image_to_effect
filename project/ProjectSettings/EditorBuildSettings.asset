@@ -1,0 +1,47 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1045 &1
+EditorBuildSettings:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Scenes:
+  - enabled: 1
+    path: Assets/VFX/Preview/S7_2D_FireballPreview.unity
+    guid: fec1f6b3deff6ff44b3b1fb8e883abdb
+  - enabled: 1
+    path: Assets/VFX/Preview/S10_3D_FireballPreview.unity
+    guid: ab6629c11d3cc944cafc72140d1740d9
+  - enabled: 1
+    path: Assets/VFX/Preview/S12_SlashGeneratedPreview.unity
+    guid: 4d0e23d093d911a42b780df3d4d0f6d6
+  - enabled: 1
+    path: Assets/VFX/Preview/S12_AI_ValidatedSlash/S12_AI_ValidatedSlashPreview.unity
+    guid: 17db7320fce399f439948cf34c48a1bd
+  - enabled: 1
+    path: Assets/VFX/Preview/VFXPREVIEW_Impact2D.unity
+    guid: d7251c5c83892784f9f6b12dfac1e1a8
+  - enabled: 1
+    path: Assets/VFX/Preview/VFXPREVIEW_Area2D.unity
+    guid: 4b26b4ce2bb3c464b8b74d7961320f15
+  - enabled: 1
+    path: Assets/VFX/Preview/VFXPREVIEW_ValidationGallery_3x3.unity
+    guid: 1c902646908258540899dd73d1fbd947
+  - enabled: 1
+    path: Assets/VFX/Preview/VFXPREVIEW_CoverageGalleryB_3x3.unity
+    guid: 8f866e85d03624640ae0c014bb62311e
+  - enabled: 1
+    path: Assets/VFX/Preview/VFXPREVIEW_DamageWarningUI_Fullscreen.unity
+    guid: d4cc83068e7c5a84a92a81ede369c183
+  - enabled: 1
+    path: Assets/VFX/Preview/VFXPREVIEW_InteractionGallery_3x3.unity
+    guid: 8a46f9c623adda64fbaf51340d3807ff
+  - enabled: 1
+    path: Assets/VFX/Preview/VFXPREVIEW_CapProjectile.unity
+    guid: f0b1a73eff12f3e4f8228778112e1dd0
+  - enabled: 1
+    path: Assets/VFX/Preview/VFXPREVIEW_CapBeam.unity
+    guid: a6708004e94004746a8eca00843f68e2
+  - enabled: 1
+    path: Assets/VFX/Preview/VFXPREVIEW_CapTiming.unity
+    guid: 24f680078fc775a429e4f2cee36ed295
+  m_configObjects: {}

@@ -1,0 +1,92 @@
+{
+  "manifestVersion": 1,
+  "rulesVersion": "1.0-draft",
+  "enforcement": "strict",
+  "effectId": "ice_spike_spawn_3d",
+  "archetype": "spawn",
+  "recipeVersion": 1,
+  "recipeRevision": 1,
+  "recipeHash": "849cbbccda91deb20ca4be32f86e6f41daf10d7c17c3b6d8c9af0330a536db8d",
+  "buildHash": "ff3d295a6552e20ab4542f018d3f9de1ff6b67a0ba3a3f779e989b077c558a61",
+  "compilerVersion": "styled-content-4",
+  "unityVersion": "2022.3.62f3c1",
+  "sourceRecipePath": "Assets/VFX/Recipes/Elements/Frost/ice_spike_spawn_3d.default.json",
+  "runtimeEntry": {
+    "kind": "prefab",
+    "path": "Assets/VFX/Generated/ice_spike_spawn_3d/VFX_ice_spike_spawn_3d.prefab",
+    "guid": "b762e0a6c4f3b1843b7d96f74ffacb34"
+  },
+  "ownedOutputs": [
+    {
+      "path": "Assets/VFX/Generated/ice_spike_spawn_3d/VFX_ice_spike_spawn_3d.prefab",
+      "guid": "b762e0a6c4f3b1843b7d96f74ffacb34",
+      "assetType": "GameObject",
+      "sha256": "4414ade72ea77151fb231c0271a4fd2e9b109e8219e734c5865c182db68f3a05"
+    }
+  ],
+  "dependencies": [
+    {
+      "path": "Assets/VFX/Shared/Shaders/VfxLayeredRamp.shader",
+      "guid": "81928f0d6aa7a2e4c8cb73230126637f",
+      "assetType": "Shader",
+      "version": null,
+      "dependencyHash": "64048683c60561907c22fac9564aba1d"
+    },
+    {
+      "path": "Assets/VFX/Shared/Styles/Materials/MAT_Style_stylized.mat",
+      "guid": "0034e6cb149f4034ca9562644ff7ae8d",
+      "assetType": "Material",
+      "version": null,
+      "dependencyHash": "7f3751282b1f62d6cb78f412797ce124"
+    },
+    {
+      "path": "Assets/VFX/Shared/Styles/Meshes/M_Style_Burst.asset",
+      "guid": "0def46dac13f1d8449cd98d98de17a15",
+      "assetType": "Mesh",
+      "version": null,
+      "dependencyHash": "56e972a8f8588a864d379a7611c49c63"
+    },
+    {
+      "path": "Assets/VFX/Shared/Styles/Meshes/M_Style_Cone.asset",
+      "guid": "8a296d5e70420f647a6e1f646af993cd",
+      "assetType": "Mesh",
+      "version": null,
+      "dependencyHash": "69fd53314f71778bd2e32f584650207e"
+    },
+    {
+      "path": "Assets/VFX/Shared/Styles/Meshes/M_Style_Ring.asset",
+      "guid": "df59364e370c085418d31c0f952bcf1a",
+      "assetType": "Mesh",
+      "version": null,
+      "dependencyHash": "021f9d0fab5159d1d05310de3284c997"
+    },
+    {
+      "path": "Assets/VFX/Shared/Styles/Meshes/M_Style_Shard.asset",
+      "guid": "506c8c0bcf8b14645948b3dbb02a1b3f",
+      "assetType": "Mesh",
+      "version": null,
+      "dependencyHash": "ff113f023e398b26696f0c501ae28324"
+    },
+    {
+      "path": "Packages/com.vfxcomposer.unity/Runtime/Components/StyledVfxController.cs",
+      "guid": "ca6f81a249967414c96082671e07dcaa",
+      "assetType": "MonoScript",
+      "version": null,
+      "dependencyHash": "486e1b8ba27b5e00b709bc5fd2b5624a"
+    }
+  ],
+  "cost": {
+    "particles": 16,
+    "particleSystems": 1,
+    "renderers": 4,
+    "materials": 1,
+    "trails": 0,
+    "duration": 1.1000000238418579,
+    "localTextureBytes": 0,
+    "dependencyResidentTextureBytes": 0,
+    "gameObjects": 5,
+    "maxDepth": 1
+  },
+  "audit": [],
+  "generatedAtUtc": "2026-08-24T13:20:25.5449069Z"
+}

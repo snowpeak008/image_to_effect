@@ -1,0 +1,7 @@
+[
+  {
+    "op": "set_content_param",
+    "path": "/content/parameters/mark_glyph",
+    "value": 3
+  }
+]

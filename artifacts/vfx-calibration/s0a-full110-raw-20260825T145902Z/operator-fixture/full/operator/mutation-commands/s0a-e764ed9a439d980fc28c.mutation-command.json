@@ -1,0 +1,16 @@
+{
+  "schemaVersion": "s0a-operator-mutation-command/v1",
+  "sampleId": "s0a-e764ed9a439d980fc28c",
+  "effectId": "sustained_flame_3d",
+  "fixedSeed": 1426407389,
+  "mutationCommands": [
+    {
+      "operation": "set",
+      "targetKey": "Light.enabled",
+      "value": "false"
+    }
+  ],
+  "fixtureApplicationStatus": "NOT_APPLIED_BY_UNITY_FIXTURE_ADAPTER",
+  "operatorInstruction": "A later Unity fixture adapter must execute this command and capture evidence.",
+  "commandHash": "sha256:fe7d9285e22c7a3ea2b2ff2799fe3a489ae747045234fb9b9499539e9c3b7e08"
+}

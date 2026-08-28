@@ -1,0 +1,92 @@
+{
+  "manifestVersion": 1,
+  "rulesVersion": "1.0-draft",
+  "enforcement": "strict",
+  "effectId": "shadow_grasp_area_2d",
+  "archetype": "area",
+  "recipeVersion": 1,
+  "recipeRevision": 1,
+  "recipeHash": "4ed3cdd8b95f9d0877eeab0fa660850f6188efe1fdaace3e8dedbd207e46aaa2",
+  "buildHash": "b529e6b8b2b738921f66a1ec56f0af0e4417faeffc9575fa9a218f655a222fe9",
+  "compilerVersion": "styled-content-4",
+  "unityVersion": "2022.3.62f3c1",
+  "sourceRecipePath": "Assets/VFX/Recipes/Elements/Magic/shadow_grasp_area_2d.default.json",
+  "runtimeEntry": {
+    "kind": "prefab",
+    "path": "Assets/VFX/Generated/shadow_grasp_area_2d/VFX_shadow_grasp_area_2d.prefab",
+    "guid": "e99b81dded4da0b4e9d8345bcfaabcb4"
+  },
+  "ownedOutputs": [
+    {
+      "path": "Assets/VFX/Generated/shadow_grasp_area_2d/VFX_shadow_grasp_area_2d.prefab",
+      "guid": "e99b81dded4da0b4e9d8345bcfaabcb4",
+      "assetType": "GameObject",
+      "sha256": "f0ba86938c2e7da1b667c4dab11b9b47a42b0c5b921c7cc24a77de7385df789c"
+    }
+  ],
+  "dependencies": [
+    {
+      "path": "Assets/VFX/Shared/Shaders/VfxDissolveEdge.shader",
+      "guid": "5b0bcf875e86f60489700456c2154aee",
+      "assetType": "Shader",
+      "version": null,
+      "dependencyHash": "30bc399c9c079542d29fbf6700020364"
+    },
+    {
+      "path": "Assets/VFX/Shared/Styles/Materials/MAT_Style_dark.mat",
+      "guid": "06882d319d21ef44f95b00f7814e3463",
+      "assetType": "Material",
+      "version": null,
+      "dependencyHash": "2c79c1062f8c6f82579a1c8f8d0ed21d"
+    },
+    {
+      "path": "Assets/VFX/Shared/Styles/Meshes/M_Style_Burst.asset",
+      "guid": "0def46dac13f1d8449cd98d98de17a15",
+      "assetType": "Mesh",
+      "version": null,
+      "dependencyHash": "56e972a8f8588a864d379a7611c49c63"
+    },
+    {
+      "path": "Assets/VFX/Shared/Styles/Meshes/M_Style_Quad.asset",
+      "guid": "7f415b79b45b04d4ab5e3f4dd61605aa",
+      "assetType": "Mesh",
+      "version": null,
+      "dependencyHash": "01e83f0bfc8392031ac8f5694416ab10"
+    },
+    {
+      "path": "Assets/VFX/Shared/Styles/Meshes/M_Style_Ring.asset",
+      "guid": "df59364e370c085418d31c0f952bcf1a",
+      "assetType": "Mesh",
+      "version": null,
+      "dependencyHash": "021f9d0fab5159d1d05310de3284c997"
+    },
+    {
+      "path": "Assets/VFX/Shared/Styles/Meshes/M_Style_Shard.asset",
+      "guid": "506c8c0bcf8b14645948b3dbb02a1b3f",
+      "assetType": "Mesh",
+      "version": null,
+      "dependencyHash": "ff113f023e398b26696f0c501ae28324"
+    },
+    {
+      "path": "Packages/com.vfxcomposer.unity/Runtime/Components/StyledVfxController.cs",
+      "guid": "ca6f81a249967414c96082671e07dcaa",
+      "assetType": "MonoScript",
+      "version": null,
+      "dependencyHash": "486e1b8ba27b5e00b709bc5fd2b5624a"
+    }
+  ],
+  "cost": {
+    "particles": 16,
+    "particleSystems": 1,
+    "renderers": 4,
+    "materials": 1,
+    "trails": 0,
+    "duration": 1.0,
+    "localTextureBytes": 0,
+    "dependencyResidentTextureBytes": 0,
+    "gameObjects": 5,
+    "maxDepth": 1
+  },
+  "audit": [],
+  "generatedAtUtc": "2026-08-24T13:20:51.7661599Z"
+}

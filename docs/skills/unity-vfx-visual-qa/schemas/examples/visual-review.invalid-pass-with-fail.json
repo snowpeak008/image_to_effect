@@ -1,0 +1,18 @@
+{
+  "reviewVersion": "v1",
+  "candidateId": "C0",
+  "contractHash": "sha256:0000000000000000000000000000000000000000000000000000000000000000",
+  "buildHash": "sha256:1111111111111111111111111111111111111111111111111111111111111111",
+  "captureProfileHash": "sha256:2222222222222222222222222222222222222222222222222222222222222222",
+  "evidenceHashes": ["sha256:3333333333333333333333333333333333333333333333333333333333333333"],
+  "imageInputRead": true,
+  "evidenceStatus": "valid",
+  "contractStatus": "unambiguous",
+  "s0aTerminalStatus": "S0A_GATE_QUALIFIED",
+  "qaGateAuthority": "ordinary-l3-gate",
+  "topLevelRoute": "VISUAL_PASS",
+  "perRequirement": [
+    {"designRequirementId": "flame.subject.readability", "state": "fail", "countable": true, "reasonCode": "OBSERVED", "stateRef": "steady", "frameNumbers": [90], "imageRegion": "centre ROI", "observation": "The core is occluded in the contract ROI."}
+  ],
+  "sealedReportHash": "sha256:4444444444444444444444444444444444444444444444444444444444444444"
+}

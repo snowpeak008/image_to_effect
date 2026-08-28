@@ -1,0 +1,71 @@
+{
+  "manifestVersion": 1,
+  "rulesVersion": "1.0-draft",
+  "enforcement": "strict",
+  "effectId": "crate_break_destruction_3d",
+  "archetype": "destruction",
+  "recipeVersion": 1,
+  "recipeRevision": 1,
+  "recipeHash": "6910bc4f97af07818bf1ddf80cac65f9faf94b08cbfcfe923ba56744abadb2f1",
+  "buildHash": "7b288c64f35d85c9c6ee0d571b35a561c4066d9dc57a1bb9d0933f9e614bfede",
+  "compilerVersion": "styled-content-4",
+  "unityVersion": "2022.3.62f3c1",
+  "sourceRecipePath": "Assets/VFX/Recipes/NewArchetypes/crate_break_destruction_3d.default.json",
+  "runtimeEntry": {
+    "kind": "prefab",
+    "path": "Assets/VFX/Generated/crate_break_destruction_3d/VFX_crate_break_destruction_3d.prefab",
+    "guid": "ac8eb6b33214de543b6f1217732ce737"
+  },
+  "ownedOutputs": [
+    {
+      "path": "Assets/VFX/Generated/crate_break_destruction_3d/VFX_crate_break_destruction_3d.prefab",
+      "guid": "ac8eb6b33214de543b6f1217732ce737",
+      "assetType": "GameObject",
+      "sha256": "349f20548109dfb6c6137c8bb7a02650a36bf7e2219bc40f64361decae5bf04a"
+    }
+  ],
+  "dependencies": [
+    {
+      "path": "Assets/VFX/Shared/Shaders/VfxLayeredRamp.shader",
+      "guid": "81928f0d6aa7a2e4c8cb73230126637f",
+      "assetType": "Shader",
+      "version": null,
+      "dependencyHash": "64048683c60561907c22fac9564aba1d"
+    },
+    {
+      "path": "Assets/VFX/Shared/Styles/Materials/MAT_Style_cartoon.mat",
+      "guid": "2ee9c40c235eb2b40aa82abe0083efd5",
+      "assetType": "Material",
+      "version": null,
+      "dependencyHash": "73817bfdee17a69c36a04f8a4e589041"
+    },
+    {
+      "path": "Assets/VFX/Shared/Styles/Meshes/M_Style_Shard.asset",
+      "guid": "506c8c0bcf8b14645948b3dbb02a1b3f",
+      "assetType": "Mesh",
+      "version": null,
+      "dependencyHash": "ff113f023e398b26696f0c501ae28324"
+    },
+    {
+      "path": "Packages/com.vfxcomposer.unity/Runtime/Components/StyledVfxController.cs",
+      "guid": "ca6f81a249967414c96082671e07dcaa",
+      "assetType": "MonoScript",
+      "version": null,
+      "dependencyHash": "486e1b8ba27b5e00b709bc5fd2b5624a"
+    }
+  ],
+  "cost": {
+    "particles": 24,
+    "particleSystems": 1,
+    "renderers": 11,
+    "materials": 1,
+    "trails": 0,
+    "duration": 1.25,
+    "localTextureBytes": 0,
+    "dependencyResidentTextureBytes": 0,
+    "gameObjects": 12,
+    "maxDepth": 1
+  },
+  "audit": [],
+  "generatedAtUtc": "2026-08-24T13:19:57.0145193Z"
+}

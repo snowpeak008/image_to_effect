@@ -1,0 +1,178 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://image-to-smart.local/schemas/vfx-design-contract/w24-s1/v1",
+  "title": "W24 S1 VfxDesignContract",
+  "description": "The strict ten-segment W24 design contract shared by sustained, one-shot, and event-driven effects. contractHash is SHA-256 of canonical UTF-8 JSON with contractHash omitted. Pre-C0 scene/build identities use the explicit pending:formal-build sentinel and are frozen to real hashes before capture.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "contractVersion",
+    "effectId",
+    "contractRevision",
+    "contractHash",
+    "lifecycle",
+    "references",
+    "spatialContract",
+    "captureProfile",
+    "semanticStateMachine",
+    "layers",
+    "allowedSubstitutions",
+    "forbiddenSubstitutions",
+    "cleanup",
+    "budget",
+    "requirements"
+  ],
+  "properties": {
+    "contractVersion": {"type": "string", "minLength": 1},
+    "effectId": {"type": "string", "pattern": "^[a-z][a-z0-9]*(?:_[a-z0-9]+)*$", "description": "Project lower_snake_case identifier, for example sustained_flame_3d."},
+    "contractRevision": {"type": "integer", "minimum": 1},
+    "contractHash": {"$ref": "#/$defs/hash"},
+    "lifecycle": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "start", "steady", "stop", "interrupt"],
+      "properties": {
+        "kind": {"enum": ["sustained", "one_shot", "event_driven"]},
+        "start": {"$ref": "#/$defs/lifecycleStage"},
+        "steady": {"$ref": "#/$defs/lifecycleStage"},
+        "stop": {"$ref": "#/$defs/lifecycleStage"},
+        "interrupt": {"$ref": "#/$defs/lifecycleStage"}
+      }
+    },
+    "references": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/reference"}
+    },
+    "spatialContract": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["coordinateSpace", "origin", "orientationEulerDegrees", "visualAnchor", "designDimensions", "gameplayDistanceDimensions"],
+      "properties": {
+        "coordinateSpace": {"enum": ["world", "local", "screen"]},
+        "origin": {"$ref": "#/$defs/vector3"},
+        "orientationEulerDegrees": {"$ref": "#/$defs/vector3"},
+        "visualAnchor": {"$ref": "#/$defs/anchor"},
+        "designDimensions": {"$ref": "#/$defs/dimensions"},
+        "gameplayDistanceDimensions": {"$ref": "#/$defs/dimensions"}
+      }
+    },
+    "captureProfile": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "captureProfileId",
+        "unityVersion",
+        "urpVersion",
+        "graphicsApi",
+        "graphicsDeviceDriver",
+        "cameraSerializedReference",
+        "cameraPose",
+        "cameraFovDegrees",
+        "sceneSerializedReference",
+        "sceneHash",
+        "prefabManifestSerializedReference",
+        "prefabManifestHash",
+        "rendererAssetSerializedReference",
+        "volumeSerializedReference",
+        "resolution",
+        "fps",
+        "background",
+        "colorSpace",
+        "hdr",
+        "msaaSamples",
+        "renderTextureFormat",
+        "bloom",
+        "toneMapping",
+        "captureToolVersion",
+        "captureToolHash",
+        "canonicalSeed",
+        "robustnessSeeds"
+      ],
+      "properties": {
+        "captureProfileId": {"type": "string", "minLength": 1, "description": "Immutable profile identity frozen before C0."},
+        "unityVersion": {"type": "string", "minLength": 1},
+        "urpVersion": {"type": "string", "minLength": 1},
+        "graphicsApi": {"type": "string", "minLength": 1},
+        "graphicsDeviceDriver": {"type": "string", "minLength": 1},
+        "cameraSerializedReference": {"type": "string", "minLength": 1},
+        "cameraPose": {"type": "object", "additionalProperties": false, "required": ["position", "orientationEulerDegrees"], "properties": {"position": {"$ref": "#/$defs/vector3"}, "orientationEulerDegrees": {"$ref": "#/$defs/vector3"}}},
+        "cameraFovDegrees": {"type": "number", "exclusiveMinimum": 0, "maximum": 179},
+        "sceneSerializedReference": {"type": "string", "minLength": 1},
+        "sceneHash": {"$ref": "#/$defs/captureIdentity", "description": "Canonical content hash of the formal serialized capture scene, or pending:formal-build before the first formal build. Candidate/evidence metadata and embedded contractHash are excluded."},
+        "prefabManifestSerializedReference": {"type": "string", "minLength": 1},
+        "prefabManifestHash": {"$ref": "#/$defs/captureIdentity", "description": "BuildManifest.buildHash, or pending:formal-build before the first formal build. The identity excludes designContractHash, report, and evidence fields and is never the manifest file-byte hash."},
+        "rendererAssetSerializedReference": {"type": "string", "minLength": 1},
+        "volumeSerializedReference": {"type": "string", "minLength": 1},
+        "resolution": {"type": "object", "additionalProperties": false, "required": ["width", "height"], "properties": {"width": {"type": "integer", "minimum": 1}, "height": {"type": "integer", "minimum": 1}}},
+        "fps": {"type": "integer", "minimum": 1},
+        "background": {"type": "string", "minLength": 1},
+        "colorSpace": {"enum": ["Linear", "Gamma"]},
+        "hdr": {"type": "boolean"},
+        "msaaSamples": {"enum": [1, 2, 4, 8]},
+        "renderTextureFormat": {"type": "string", "minLength": 1},
+        "bloom": {"type": "object", "additionalProperties": false, "required": ["enabled", "settingsReference"], "properties": {"enabled": {"type": "boolean"}, "settingsReference": {"type": "string", "minLength": 1}}},
+        "toneMapping": {"type": "string", "minLength": 1},
+        "captureToolVersion": {"type": "string", "minLength": 1},
+        "captureToolHash": {"$ref": "#/$defs/hash", "description": "Canonical hash of the capture tool source and frozen configuration, excluding emitted candidate/evidence paths and manifests."},
+        "canonicalSeed": {"$ref": "#/$defs/seed"},
+        "robustnessSeeds": {"type": "array", "minItems": 2, "maxItems": 2, "uniqueItems": true, "items": {"$ref": "#/$defs/seed"}}
+      }
+    },
+    "semanticStateMachine": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["deterministicForSameSeed", "states", "transitions", "completionExits", "interruptExits"],
+      "properties": {
+        "deterministicForSameSeed": {"const": true},
+        "states": {"type": "array", "minItems": 4, "items": {"$ref": "#/$defs/semanticState"}, "allOf": [{"contains": {"properties": {"role": {"const": "start"}}, "required": ["role"]}}, {"contains": {"properties": {"role": {"const": "steady"}}, "required": ["role"]}}, {"contains": {"properties": {"role": {"const": "stop"}}, "required": ["role"]}}, {"contains": {"properties": {"role": {"const": "interrupt"}}, "required": ["role"]}}]},
+        "transitions": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/transition"}},
+        "completionExits": {"type": "array", "minItems": 1, "items": {"type": "string", "minLength": 1}},
+        "interruptExits": {"type": "array", "minItems": 1, "items": {"type": "string", "minLength": 1}}
+      }
+    },
+    "layers": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/layer"}},
+    "allowedSubstitutions": {"type": "array", "items": {"$ref": "#/$defs/substitution"}},
+    "forbiddenSubstitutions": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/substitution"}},
+    "cleanup": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["cleanupDeadline", "allowedResidualLayers", "lightStopDeadline"],
+      "properties": {
+        "cleanupDeadline": {"type": "number", "minimum": 0},
+        "allowedResidualLayers": {"type": "array", "uniqueItems": true, "items": {"type": "string", "minLength": 1}},
+        "lightStopDeadline": {"type": "number", "minimum": 0}
+      }
+    },
+    "budget": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["particlePeak", "particleSteady", "rendererCount", "materialCount", "lightCount", "textureResidency"],
+      "properties": {
+        "particlePeak": {"type": "integer", "minimum": 0},
+        "particleSteady": {"type": "integer", "minimum": 0},
+        "rendererCount": {"type": "integer", "minimum": 0},
+        "materialCount": {"type": "integer", "minimum": 0},
+        "lightCount": {"type": "integer", "minimum": 0},
+        "textureResidency": {"type": "object", "additionalProperties": false, "required": ["localExclusiveMb", "totalDependencyMb"], "properties": {"localExclusiveMb": {"type": "number", "minimum": 0}, "totalDependencyMb": {"type": "number", "minimum": 0}}}
+      }
+    },
+    "requirements": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/requirement"}},
+    "extensions": {"type": "object"}
+  },
+  "$defs": {
+    "hash": {"type": "string", "pattern": "^sha256:[a-f0-9]{64}$"},
+    "captureIdentity": {"oneOf": [{"$ref": "#/$defs/hash"}, {"const": "pending:formal-build"}]},
+    "seed": {"type": "integer", "minimum": 0, "maximum": 4294967295},
+    "vector3": {"type": "array", "minItems": 3, "maxItems": 3, "items": {"type": "number"}},
+    "dimensions": {"type": "object", "additionalProperties": false, "required": ["width", "height", "depth", "unit"], "properties": {"width": {"type": "number", "exclusiveMinimum": 0}, "height": {"type": "number", "exclusiveMinimum": 0}, "depth": {"type": "number", "minimum": 0}, "unit": {"type": "string", "minLength": 1}}},
+    "anchor": {"type": "object", "additionalProperties": false, "required": ["kind", "reference"], "properties": {"kind": {"enum": ["world-origin", "transform", "socket", "mesh", "bone", "screen"]}, "reference": {"type": "string", "minLength": 1}}},
+    "lifecycleStage": {"type": "object", "additionalProperties": false, "required": ["entryConditions", "deadlineSeconds", "completionConditions"], "properties": {"entryConditions": {"type": "array", "minItems": 1, "items": {"type": "string", "minLength": 1}}, "deadlineSeconds": {"type": "number", "minimum": 0}, "completionConditions": {"type": "array", "minItems": 1, "items": {"type": "string", "minLength": 1}}}},
+    "reference": {"type": "object", "additionalProperties": false, "required": ["source", "hash", "license", "assetUse", "roles", "notRequired"], "properties": {"source": {"type": "string", "minLength": 1}, "hash": {"$ref": "#/$defs/hash"}, "license": {"type": "string", "minLength": 1}, "assetUse": {"enum": ["reference-only", "may-use-as-asset"]}, "roles": {"type": "array", "minItems": 1, "items": {"type": "object", "additionalProperties": false, "required": ["dimension", "weight"], "properties": {"dimension": {"enum": ["composition", "colour", "material", "motion", "atmosphere", "attachment", "lighting", "timing"]}, "weight": {"type": "number", "minimum": 0, "maximum": 1}}}}, "notRequired": {"type": "array", "items": {"type": "string", "minLength": 1}}}},
+    "semanticState": {"type": "object", "additionalProperties": false, "required": ["stateId", "role", "durationSeconds", "entryConditions", "exitConditions", "triggeredEvents", "preservedSemantics"], "properties": {"stateId": {"type": "string", "minLength": 1}, "role": {"enum": ["start", "steady", "stop", "interrupt", "custom"]}, "durationSeconds": {"type": "number", "minimum": 0}, "entryConditions": {"type": "array", "minItems": 1, "items": {"type": "string", "minLength": 1}}, "exitConditions": {"type": "array", "minItems": 1, "items": {"type": "string", "minLength": 1}}, "triggeredEvents": {"type": "array", "items": {"type": "string", "minLength": 1}}, "preservedSemantics": {"type": "array", "items": {"type": "string", "minLength": 1}}}},
+    "transition": {"type": "object", "additionalProperties": false, "required": ["from", "to", "continuityMode", "preservedSemantics", "triggeredEvents"], "properties": {"from": {"type": "string", "minLength": 1}, "to": {"type": "string", "minLength": 1}, "continuityMode": {"enum": ["continuous", "impulse", "replace", "clear"]}, "preservedSemantics": {"type": "array", "items": {"type": "string", "minLength": 1}}, "triggeredEvents": {"type": "array", "items": {"type": "string", "minLength": 1}}}},
+    "layer": {"type": "object", "additionalProperties": false, "required": ["layerId", "responsibility", "carrier", "geometry", "materialModel", "colorRole", "blendMode", "motionModel", "timing", "attachment", "continuityFrom", "continuityTo", "budgetCost", "required"], "properties": {"layerId": {"type": "string", "minLength": 1}, "responsibility": {"type": "string", "minLength": 1}, "carrier": {"type": "string", "minLength": 1}, "geometry": {"type": "string", "minLength": 1}, "materialModel": {"type": "string", "minLength": 1}, "colorRole": {"type": "string", "minLength": 1}, "blendMode": {"type": "string", "minLength": 1}, "motionModel": {"type": "string", "minLength": 1}, "timing": {"type": "string", "minLength": 1}, "attachment": {"type": "string", "minLength": 1}, "continuityFrom": {"type": "array", "items": {"type": "string", "minLength": 1}}, "continuityTo": {"type": "array", "items": {"type": "string", "minLength": 1}}, "budgetCost": {"type": "object", "minProperties": 1}, "required": {"type": "boolean"}}},
+    "substitution": {"type": "object", "additionalProperties": false, "required": ["substitutionId", "from", "to", "rationale"], "properties": {"substitutionId": {"type": "string", "minLength": 1}, "from": {"type": "string", "minLength": 1}, "to": {"type": "string", "minLength": 1}, "rationale": {"type": "string", "minLength": 1}}},
+    "evidenceLocation": {"type": "object", "additionalProperties": false, "required": ["state", "frameInterval"], "properties": {"state": {"type": "string", "minLength": 1}, "frameInterval": {"type": "array", "minItems": 2, "maxItems": 2, "items": {"type": "integer", "minimum": 0}}, "roi": {"type": "string", "minLength": 1}, "layerMask": {"type": "string", "minLength": 1}}, "anyOf": [{"required": ["roi"]}, {"required": ["layerMask"]}]},
+    "requirement": {"type": "object", "additionalProperties": false, "required": ["designRequirementId", "type", "evidenceAuthority", "statement"], "properties": {"designRequirementId": {"type": "string", "pattern": "^[A-Za-z0-9._-]+$"}, "type": {"enum": ["visual-measurable", "visual-semantic", "behavioral", "structural", "budget", "user-signoff"]}, "evidenceAuthority": {"enum": ["telemetry", "diagnostic", "visualQa", "user"]}, "statement": {"type": "string", "minLength": 1}, "visualVerdict": {"type": "object", "additionalProperties": false, "required": ["subject", "expectedCondition", "evidenceLocation"], "properties": {"subject": {"type": "string", "minLength": 1}, "expectedCondition": {"type": "string", "minLength": 1}, "evidenceLocation": {"$ref": "#/$defs/evidenceLocation"}}}}, "allOf": [{"if": {"properties": {"type": {"const": "visual-measurable"}}, "required": ["type"]}, "then": {"properties": {"evidenceAuthority": {"const": "diagnostic"}}, "required": ["visualVerdict"]}}, {"if": {"properties": {"type": {"const": "visual-semantic"}}, "required": ["type"]}, "then": {"properties": {"evidenceAuthority": {"const": "visualQa"}}, "required": ["visualVerdict"]}}, {"if": {"properties": {"type": {"enum": ["behavioral", "structural", "budget"]}}, "required": ["type"]}, "then": {"properties": {"evidenceAuthority": {"const": "telemetry"}}}}, {"if": {"properties": {"type": {"const": "user-signoff"}}, "required": ["type"]}, "then": {"properties": {"evidenceAuthority": {"const": "user"}}}}]}
+  }
+}

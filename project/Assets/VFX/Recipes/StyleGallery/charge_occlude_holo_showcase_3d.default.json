@@ -1,0 +1,15 @@
+{
+  "schema": "w1-style-next-candidate/v1",
+  "recipeVersion": 1,
+  "revision": 1,
+  "id": "charge_occlude_holo_showcase_3d",
+  "displayName": "Charge + Occlude / Holo",
+  "entryKind": "charge_occlude",
+  "archetype": "beam",
+  "dimension": "3d",
+  "styleToken": "holo",
+  "timingProfile": "charge_occlude",
+  "palette": { "primary": "#079FC1", "secondary": "#57F2F1", "accent": "#F0FFFF" },
+  "duration": 2.0,
+  "seed": 310110
+}

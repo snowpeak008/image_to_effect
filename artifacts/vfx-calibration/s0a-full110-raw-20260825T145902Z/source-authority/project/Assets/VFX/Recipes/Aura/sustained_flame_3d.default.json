@@ -1,0 +1,55 @@
+{
+  "recipeVersion": 1,
+  "revision": 1,
+  "id": "sustained_flame_3d",
+  "name": "Sustained Flame 3D",
+  "dimension": "3d",
+  "archetype": "aura",
+  "style": {
+    "token": "semireal",
+    "palette": {
+      "primary": "#FF4A08",
+      "secondary": "#FFB21A",
+      "accent": "#FFF1A0"
+    },
+    "outline": 0.0,
+    "shading_steps": 5,
+    "noise_scale": 2.4,
+    "glow_strength": 1.35
+  },
+  "behavior": {
+    "hit": {"type":"single"},
+    "emission":{"type":"single"},
+    "timing":{"type":"sustained"}
+  },
+  "content": {
+    "family":"fire",
+    "parameters":{
+      "start_duration":0.35,
+      "steady_minimum":4.5,
+      "stop_duration":0.8,
+      "interrupt_duration":0.35,
+      "cleanup_deadline":1.25,
+      "light_intensity":1.25,
+      "core_rate":22,
+      "outer_rate":15,
+      "smoke_rate":5,
+      "ember_rate":4
+    }
+  },
+  "targetProfile":"mobile_medium",
+  "randomSeed":24001,
+  "stages":[{
+    "id":"main","trigger":"manual","duration":5.7,"enabled":true,
+    "modules":[
+      {"id":"core","kind":"energy_body","templateId":"PFT_3D_FireCore","parameters":{"scale":0.72},"enabled":true},
+      {"id":"outer_flame","kind":"motion_trail","templateId":"PFT_3D_FireTrail","parameters":{"time":0.9,"width":0.62},"attachTo":"core","enabled":true},
+      {"id":"embers","kind":"secondary_particles","templateId":"PFT_3D_Embers","parameters":{"rate":4,"lifetime":1.1},"attachTo":"core","enabled":true}
+    ]
+  }],
+  "metadata":{
+    "createdBy":"w24-s0b-vertical-slice",
+    "templateCatalogVersion":"1.0.0",
+    "designContract":"docs/vfx-contracts/sustained_flame_3d.contract.json"
+  }
+}

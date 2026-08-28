@@ -1,0 +1,7 @@
+[
+  {
+    "op": "set_content_param",
+    "path": "/content/parameters/debris_type",
+    "value": "snow"
+  }
+]

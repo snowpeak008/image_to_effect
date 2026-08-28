@@ -1,0 +1,14 @@
+{
+  "question": "K3",
+  "attempt": 1,
+  "agentName": "s9_k_k3",
+  "model": "gpt-5.6-terra",
+  "reasoningEffort": "high",
+  "forkTurns": "none",
+  "threadId": "/root/s9_k_k3",
+  "transport": "followup_task",
+  "disclosure": "No wire payload or child tool trace readback; primary Agent witnessed the short envelope.",
+  "envelopeSha256": "ECAD0233566FE6A54B97713CCCF28ECC14FDF71457C524846B8E7A3ACB695820",
+  "payloadSha256": "4B7E95783A6F2E9A6B3DED2B744E1A1CE693BD66F9E89F18DBEA1840779E37C4",
+  "tempPayloadSha256": "4B7E95783A6F2E9A6B3DED2B744E1A1CE693BD66F9E89F18DBEA1840779E37C4"
+}

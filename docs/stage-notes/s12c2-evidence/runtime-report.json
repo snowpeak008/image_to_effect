@@ -1,0 +1,55 @@
+{
+  "schema": "s12c2-ai-recipe-runtime-evidence/v1",
+  "succeeded": true,
+  "agent": {
+    "model": "gpt-5.6-terra",
+    "reasoning": "high",
+    "fork": "none",
+    "thread": "/root/s12_ai_recipe"
+  },
+  "source": {
+    "attemptPath": "docs/ai-workflow/s12-slash-v3/runtime/recipe.attempt0.json",
+    "frozenAcceptancePath": "docs/ai-workflow/s12-slash-v3/frozen/acceptance-spec.generated.json",
+    "frozenContractPath": "docs/ai-workflow/s12-slash-v3/frozen/contract.generated.json"
+  },
+  "attemptFileBytesSha256": "5B963C3E2CE781DC87F7968EF261C056050735A712009FCF8B8EA6FF06E4DBC7",
+  "recipeCanonicalSha256": "1d5c65bdd3493ec8acb247b89c189ac4908e463c9da37c6cbd0c79053d0d95fa",
+  "buildHash": "8910786deee829f7009c368c60726aeea147937774bb0ec490f81fe5000857f0",
+  "generatedPrefabPath": "Assets/VFX/Generated/slash_3d_stylized/VFX_Slash_3D_Stylized.prefab",
+  "generatedPrefabGuid": "0dc223c2ffbe2c14aa24f424440f1cd2",
+  "actualParameters": {
+    "width": 0.3,
+    "sparkCount": 18,
+    "afterimageAlpha": 0.4
+  },
+  "realOperations": {
+    "parser": true,
+    "validator": true,
+    "budget": true,
+    "dryRun": true,
+    "build": true
+  },
+  "validationReportErrors": {
+    "parser": [],
+    "validator": [],
+    "budget": [],
+    "dryRun": []
+  },
+  "localSnapshot": {
+    "prefabPath": "Assets/VFX/Preview/S12_AI_ValidatedSlash/VFX_Slash_3D_Stylized_AI_Validated.prefab",
+    "prefabGuid": "02b398e39ec931f4d99ecbe66c8162bc",
+    "scenePath": "Assets/VFX/Preview/S12_AI_ValidatedSlash/S12_AI_ValidatedSlashPreview.unity",
+    "materialPaths": [
+      "Assets/VFX/Preview/S12_AI_ValidatedSlash/Materials/S12_S12_SlashAfterimage.mat",
+      "Assets/VFX/Preview/S12_AI_ValidatedSlash/Materials/S12_S12_SlashBlade.mat",
+      "Assets/VFX/Preview/S12_AI_ValidatedSlash/Materials/S12_S12_SlashPrimary.mat",
+      "Assets/VFX/Preview/S12_AI_ValidatedSlash/Materials/S12_S12_SlashSpark.mat"
+    ],
+    "materialGuids": [
+      "87d8b2161e48b854996ed57c7efe2400",
+      "a17c3fd66ffd2134e93fcb2b348a186b",
+      "dcae92f1f0987ee44b2b9cee9765230c",
+      "24f1461d1f883ea44bc62049cdef9fb1"
+    ]
+  }
+}

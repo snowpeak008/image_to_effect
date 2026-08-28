@@ -1,0 +1,16 @@
+<UserControl
+    x:Class="VFXComposer.Desktop.Views.LibraryView"
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:vm="using:VFXComposer.Desktop.ViewModels"
+    x:DataType="vm:LibraryViewModel">
+  <StackPanel Spacing="18">
+    <StackPanel Spacing="5">
+      <TextBlock FontSize="28" FontWeight="SemiBold" Text="{Binding Title}" />
+      <TextBlock Classes="muted" Text="{Binding Description}" TextWrapping="Wrap" />
+    </StackPanel>
+    <Border Classes="card">
+      <TextBlock Classes="muted" Text="{Binding EmptyStateMessage}" />
+    </Border>
+  </StackPanel>
+</UserControl>

@@ -1,0 +1,5 @@
+[
+      { "id": "coreFlash", "kind": "impact_flash", "templateId": "PFT_2D_LaunchFlash", "parameters": { "lifetime": 0.12, "size": 1.0 }, "enabled": true },
+      { "id": "burst", "kind": "impact_burst", "templateId": "PFT_2D_FireImpact", "parameters": { "count": 24, "speed": 3.5 }, "enabled": true },
+      { "id": "shockwave", "kind": "shockwave", "templateId": "PFT_2D_Shockwave", "parameters": { "lifetime": 0.28, "endSize": 2.8 }, "enabled": true }
+    ]

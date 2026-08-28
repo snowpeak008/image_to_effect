@@ -1,0 +1,71 @@
+{
+  "manifestVersion": 1,
+  "rulesVersion": "1.0-draft",
+  "enforcement": "strict",
+  "effectId": "cap_tickpulse_area_2d",
+  "archetype": "area",
+  "recipeVersion": 1,
+  "recipeRevision": 1,
+  "recipeHash": "b1481ee80a70ee0e33f461f4ed5e862419dbb7357a9a27c79a88166f2ea593ef",
+  "buildHash": "1dcf15d2c849e5c3e541ae10bb10d8e7a37ea9468e8e254fdb5a8d53ea92ed1e",
+  "compilerVersion": "capability-blank-1",
+  "unityVersion": "2022.3.62f3c1",
+  "sourceRecipePath": "Assets/VFX/Recipes/Capability/cap_tickpulse_area_2d.default.json",
+  "runtimeEntry": {
+    "kind": "prefab",
+    "path": "Assets/VFX/Generated/cap_tickpulse_area_2d/VFX_cap_tickpulse_area_2d.prefab",
+    "guid": "2d3edc479670af04f8248962eb8336d5"
+  },
+  "ownedOutputs": [
+    {
+      "path": "Assets/VFX/Generated/cap_tickpulse_area_2d/VFX_cap_tickpulse_area_2d.prefab",
+      "guid": "2d3edc479670af04f8248962eb8336d5",
+      "assetType": "GameObject",
+      "sha256": "cf5de2f54dc1330528477493015badb33c6d88f8d84247c858b12f7c626f9c64"
+    }
+  ],
+  "dependencies": [
+    {
+      "path": "Assets/VFX/Shared/Capability/MAT_CapabilityBlank_Additive.mat",
+      "guid": "aff74ea56f74fc24c83c43ddf3cd8353",
+      "assetType": "Material",
+      "version": null,
+      "dependencyHash": "187ce0dc5fbfe919f61f6d82759aeedb"
+    },
+    {
+      "path": "Assets/VFX/Shared/CoverageGalleryB/Meshes/M_CoverageB_Ring.asset",
+      "guid": "7a536dcec1985cf4a9e09e6df4dbd583",
+      "assetType": "Mesh",
+      "version": null,
+      "dependencyHash": "2925f46e6811e075fedcad822cb3dfcf"
+    },
+    {
+      "path": "Assets/VFX/Shared/Shaders/CoverageGalleryBUnlit.shader",
+      "guid": "36a2072c324a26a479dfb498994d4812",
+      "assetType": "Shader",
+      "version": null,
+      "dependencyHash": "64f6028fba878ab561a8418a3ea09753"
+    },
+    {
+      "path": "Packages/com.vfxcomposer.unity/Runtime/Components/CapabilityBlankVfxController.cs",
+      "guid": "32f1696d60b6fc14f9ad1a434ec0e77c",
+      "assetType": "MonoScript",
+      "version": null,
+      "dependencyHash": "51e95e6cddadd7836c7e9d08b54ec866"
+    }
+  ],
+  "cost": {
+    "particles": 0,
+    "particleSystems": 0,
+    "renderers": 3,
+    "materials": 1,
+    "trails": 0,
+    "duration": 2.0,
+    "localTextureBytes": 0,
+    "dependencyResidentTextureBytes": 0,
+    "gameObjects": 4,
+    "maxDepth": 1
+  },
+  "audit": [],
+  "generatedAtUtc": "2026-08-24T11:14:17.2566771Z"
+}

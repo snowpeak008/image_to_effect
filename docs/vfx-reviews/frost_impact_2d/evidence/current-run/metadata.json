@@ -1,0 +1,13 @@
+{
+  "capture": "PlayMode natural Update; one Play call; same serialized Preview Camera; no particle sampling, Emit, SetParticles, or replacement camera",
+  "scene": "Assets/VFX/Preview/VFXPREVIEW_Impact2D.unity",
+  "fps": 60,
+  "camera": { "orthographicSize": 0.84, "background": [0.055,0.065,0.085] },
+  "frames": [
+    { "file": "frame_000_empty.png", "time": 0, "foregroundPixels": 0, "meanLuminance": 0, "p95Luminance": 0, "whiteClipRatio": 0 },
+    { "file": "frame_003_core.png", "time": 0.05, "foregroundPixels": 20536, "meanLuminance": 83.054, "p95Luminance": 238.417, "whiteClipRatio": 0.023325 },
+    { "file": "frame_007_peak.png", "time": 0.116667, "foregroundPixels": 59148, "meanLuminance": 74.663, "p95Luminance": 154.501, "whiteClipRatio": 0.003128 },
+    { "file": "frame_015_decay.png", "time": 0.25, "foregroundPixels": 67813, "meanLuminance": 39.626, "p95Luminance": 77.722, "whiteClipRatio": 0 },
+    { "file": "frame_029_complete.png", "time": 0.483333, "foregroundPixels": 0, "meanLuminance": 0, "p95Luminance": 0, "whiteClipRatio": 0 }
+  ]
+}

@@ -1,0 +1,24 @@
+using System.Collections;
+using System.Linq;
+using NUnit.Framework;
+using UnityEngine;
+using UnityEngine.SceneManagement;
+using UnityEngine.TestTools;
+using VFXComposer;
+
+namespace VFXComposer.Tests.PlayMode
+{
+    public sealed class S12BSlashRuntimeTests
+    {
+        [UnityTest]
+        public IEnumerator S12B_GeneratedSlashSchedulesOverlapClearsStopResetReplayAndKeepsSerializedAlpha()
+        {
+            var operation = SceneManager.LoadSceneAsync("Assets/VFX/Preview/S12_SlashGeneratedPreview.unity", LoadSceneMode.Additive); Assert.That(operation, Is.Not.Null, "Run S12B EditMode first to serialize the generated preview."); yield return operation; var scene = SceneManager.GetSceneByPath("Assets/VFX/Preview/S12_SlashGeneratedPreview.unity"); var drivers = scene.GetRootGameObjects().SelectMany(root => root.GetComponentsInChildren<SlashPreviewPlaybackDriver>(true)).ToArray(); Assert.That(drivers.Length, Is.EqualTo(1)); var driver = drivers.Single(); driver.enabled = false; var controller = scene.GetRootGameObjects().SelectMany(root => root.GetComponentsInChildren<SlashEffectController>(true)).Single(); var instance = controller.gameObject; var afterAlpha = instance.GetComponentInChildren<SlashAfterimageAlpha>(true); Assert.That(afterAlpha, Is.Not.Null); Assert.That(afterAlpha.Alpha, Is.EqualTo(.32f).Within(.0001f));
+            var pose = new Vector3(3f, 1f, -2f); var rotation = Quaternion.Euler(0f, 42f, 0f); controller.PlaySlash(pose, rotation); Assert.That(instance.transform.position, Is.EqualTo(pose)); Assert.That(Quaternion.Angle(instance.transform.rotation, rotation), Is.LessThan(.01f)); Assert.That(controller.IsPhaseVisible("anticipation"), Is.True);
+            yield return new WaitForSeconds(.08f); Assert.That(controller.IsPhaseVisible("primary_arc"), Is.True); Assert.That(controller.IsPhaseVisible("afterimage"), Is.False);
+            yield return new WaitForSeconds(.08f); Assert.That(controller.IsPhaseVisible("primary_arc"), Is.True); Assert.That(controller.IsPhaseVisible("afterimage"), Is.True); Assert.That(controller.IsPhaseVisible("sparks"), Is.True, "Sibling overlap must be scheduled by startTime/duration."); yield return new WaitForSeconds(.02f); var systems = instance.GetComponentsInChildren<ParticleSystem>(true); var sparks = systems.Single(particle => particle.name == "Slash_sparks"); Assert.That(sparks.particleCount, Is.GreaterThanOrEqualTo(5), "At the real ~0.18 s runtime sample, the generated Spark ParticleSystem must naturally produce separated particles."); var sparkParticles = new ParticleSystem.Particle[sparks.particleCount]; var sparkCount = sparks.GetParticles(sparkParticles); Assert.That(sparkParticles.Take(sparkCount).Select(particle => particle.position.ToString("F4")).Distinct().Count(), Is.GreaterThanOrEqualTo(5), "Natural runtime spark positions must be separated, not a stacked burst."); var firstSeeds = systems.Select(particle => particle.randomSeed).ToArray(); Assert.That(systems.Any(particle => particle.particleCount > 0), Is.True, "Generated runtime must play actual ParticleSystems."); Assert.That(systems.Sum(particle => particle.particleCount), Is.LessThanOrEqualTo(systems.Sum(particle => particle.main.maxParticles)));
+            controller.StopEffect(false); yield return new WaitForSeconds(.35f); Assert.That(controller.IsPlaying, Is.False); Assert.That(controller.Phases.All(phase => !phase.Root.activeSelf), Is.True, "Graceful stop must eventually clear mesh roots and particles."); Assert.That(instance.GetComponentsInChildren<ParticleSystem>(true).All(particle => particle.particleCount == 0), Is.True);
+            controller.PlaySlash(Vector3.one, Quaternion.identity); var completionDeadline = Time.time + controller.TimelineDuration + .10f; yield return new WaitUntil(() => !controller.IsPlaying || Time.time > completionDeadline); Assert.That(controller.IsPlaying, Is.False, "Slash must complete within timeline plus one reasonable frame tolerance."); Assert.That(Time.time, Is.LessThanOrEqualTo(completionDeadline)); Assert.That(controller.Phases.All(phase => !phase.Root.activeSelf), Is.True, "0.451+ must leave no visible phase."); controller.ResetForPool(); Assert.That(controller.Phases.All(phase => !phase.Root.activeSelf), Is.True); controller.PlaySlash(Vector3.zero, Quaternion.identity); yield return new WaitForSeconds(.16f); CollectionAssert.AreEqual(firstSeeds, systems.Select(particle => particle.randomSeed).ToArray(), "Same generated seed must survive replay."); Assert.That(systems.Sum(particle => particle.particleCount), Is.LessThanOrEqualTo(systems.Sum(particle => particle.main.maxParticles)), "Replay cannot accumulate particle state."); Assert.That(controller.IsPhaseVisible("primary_arc"), Is.True, "Replay must not retain prior schedule state."); yield return SceneManager.UnloadSceneAsync(scene);
+        }
+    }
+}

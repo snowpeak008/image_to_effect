@@ -1,0 +1,14 @@
+{
+  "recipeVersion": 1,
+  "revision": 1,
+  "id": "w15nc_death_dissolve_lifecycle_3d",
+  "name": "Death Dissolve Next Candidate",
+  "dimension": "3d",
+  "archetype": "lifecycle",
+  "style": { "token": "dark", "palette": { "primary": "#18231D", "secondary": "#668953", "accent": "#FF7B2E" }, "glow_strength": 0.78 },
+  "archetypeParameters": { "duration": 1.4, "direction": "up", "edge_color": "#FF7B2E" },
+  "targetProfile": "mobile_medium",
+  "randomSeed": 2299107967,
+  "stages": [{ "id": "active", "trigger": "manual", "duration": 1.4, "enabled": true, "modules": [{ "id": "core", "kind": "energy_body", "templateId": "PFT_3D_FireCore", "parameters": { "scale": 1.0 }, "enabled": true }, { "id": "secondary", "kind": "secondary_particles", "templateId": "PFT_3D_Embers", "parameters": { "rate": 8.0, "lifetime": 0.45 }, "attachTo": "core", "enabled": true }] }],
+  "metadata": { "createdBy": "w15-next-candidate-authoring", "templateCatalogVersion": "formal-1" }
+}

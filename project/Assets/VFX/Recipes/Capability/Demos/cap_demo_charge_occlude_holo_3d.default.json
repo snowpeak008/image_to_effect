@@ -1,0 +1,31 @@
+{
+  "recipeVersion": 1,
+  "revision": 1,
+  "id": "cap_demo_charge_occlude_holo_3d",
+  "name": "Capability Demo Charge Occlude Holo 3D",
+  "dimension": "3d",
+  "archetype": "beam",
+  "style": {
+    "token": "holo",
+    "palette": { "primary": "#18B9D9", "secondary": "#83F4FF", "accent": "#F2FFFF" },
+    "outline": 0.08,
+    "shading_steps": 4,
+    "noise_scale": 1.4,
+    "glow_strength": 1.15
+  },
+  "behavior": {
+    "hit": { "type": "occlude", "probe_interval": 0.05 },
+    "emission": { "type": "single" },
+    "timing": { "type": "charge_scale", "level_1": 0.3, "level_2": 0.7, "per_level_width": 1.8 }
+  },
+  "targetProfile": "mobile_medium",
+  "randomSeed": 240102,
+  "stages": [
+    { "id": "main", "trigger": "manual", "duration": 1.2, "enabled": true, "modules": [
+      { "id": "core", "kind": "energy_body", "templateId": "PFT_3D_FireCore", "parameters": { "scale": 1.0 }, "enabled": true },
+      { "id": "beamTrail", "kind": "motion_trail", "templateId": "PFT_3D_FireTrail", "parameters": { "time": 0.35, "width": 0.18 }, "attachTo": "core", "enabled": true },
+      { "id": "chargeMotes", "kind": "secondary_particles", "templateId": "PFT_3D_Embers", "parameters": { "rate": 8, "lifetime": 0.45 }, "attachTo": "core", "enabled": true }
+    ] }
+  ],
+  "metadata": { "createdBy": "wc2-skinned-demo", "templateCatalogVersion": "1.0.0" }
+}

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<test-run id="2" testcasecount="5" result="Passed" total="5" passed="5" failed="0" inconclusive="0" skipped="0" asserts="0" engine-version="3.5.0.0" clr-version="4.0.30319.42000" start-time="2026-08-25 14:31:00Z" end-time="2026-08-25 14:31:00Z" duration="0.4506726">
+  <test-suite type="TestSuite" id="1541" name="project" fullname="project" runstate="Runnable" testcasecount="442" result="Passed" start-time="2026-08-25 14:31:00Z" end-time="2026-08-25 14:31:00Z" duration="0.450673" total="5" passed="5" failed="0" inconclusive="0" skipped="0" asserts="0">
+    <properties />
+    <test-suite type="Assembly" id="2075" name="VFXComposer.Tests.EditMode.dll" fullname="D:/WorkWork/Assist/image_to_smart/.codex_tmp/w24-fresh-20260825-0628/project/Library/ScriptAssemblies/VFXComposer.Tests.EditMode.dll" runstate="Runnable" testcasecount="440" result="Passed" start-time="2026-08-25 14:31:00Z" end-time="2026-08-25 14:31:00Z" duration="0.436502" total="5" passed="5" failed="0" inconclusive="0" skipped="0" asserts="0">
+      <properties>
+        <property name="_PID" value="34820" />
+        <property name="_APPDOMAIN" value="Unity Child Domain" />
+        <property name="platform" value="EditMode" />
+      </properties>
+      <test-suite type="TestSuite" id="2076" name="VFXComposer" fullname="VFXComposer" runstate="Runnable" testcasecount="440" result="Passed" start-time="2026-08-25 14:31:00Z" end-time="2026-08-25 14:31:00Z" duration="0.433619" total="5" passed="5" failed="0" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <test-suite type="TestSuite" id="2077" name="Tests" fullname="VFXComposer.Tests" runstate="Runnable" testcasecount="440" result="Passed" start-time="2026-08-25 14:31:00Z" end-time="2026-08-25 14:31:00Z" duration="0.431110" total="5" passed="5" failed="0" inconclusive="0" skipped="0" asserts="0">
+          <properties />
+          <test-suite type="TestSuite" id="2078" name="EditMode" fullname="VFXComposer.Tests.EditMode" runstate="Runnable" testcasecount="440" result="Passed" start-time="2026-08-25 14:31:00Z" end-time="2026-08-25 14:31:00Z" duration="0.427774" total="5" passed="5" failed="0" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <test-suite type="TestFixture" id="1865" name="W24FirstFormalBuildTransactionTests" fullname="VFXComposer.Tests.EditMode.W24FirstFormalBuildTransactionTests" classname="VFXComposer.Tests.EditMode.W24FirstFormalBuildTransactionTests" runstate="Runnable" testcasecount="5" result="Passed" start-time="2026-08-25 14:31:00Z" end-time="2026-08-25 14:31:00Z" duration="0.419769" total="5" passed="5" failed="0" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <test-case id="1870" name="BaselineAuthoring_UsesEffectOwnedMaterials_AndDoesNotNameLegacySharedWriteTargets" fullname="VFXComposer.Tests.EditMode.W24FirstFormalBuildTransactionTests.BaselineAuthoring_UsesEffectOwnedMaterials_AndDoesNotNameLegacySharedWriteTargets" methodname="BaselineAuthoring_UsesEffectOwnedMaterials_AndDoesNotNameLegacySharedWriteTargets" classname="VFXComposer.Tests.EditMode.W24FirstFormalBuildTransactionTests" runstate="Runnable" seed="1740651327" result="Passed" start-time="2026-08-25 14:31:00Z" end-time="2026-08-25 14:31:00Z" duration="0.028254" asserts="0">
+                <properties />
+              </test-case>
+              <test-case id="1866" name="ExistingOwnedState_IsRestoredByteForByte_WhenFaultIsInjectedAfterAllArtifactsAreWritten" fullname="VFXComposer.Tests.EditMode.W24FirstFormalBuildTransactionTests.ExistingOwnedState_IsRestoredByteForByte_WhenFaultIsInjectedAfterAllArtifactsAreWritten" methodname="ExistingOwnedState_IsRestoredByteForByte_WhenFaultIsInjectedAfterAllArtifactsAreWritten" classname="VFXComposer.Tests.EditMode.W24FirstFormalBuildTransactionTests" runstate="Runnable" seed="1416636548" result="Passed" start-time="2026-08-25 14:31:00Z" end-time="2026-08-25 14:31:00Z" duration="0.289325" asserts="0">
+                <properties />
+              </test-case>
+              <test-case id="1867" name="FirstBuildFailure_LeavesNoOwnedArtifactOrMetaResidue" fullname="VFXComposer.Tests.EditMode.W24FirstFormalBuildTransactionTests.FirstBuildFailure_LeavesNoOwnedArtifactOrMetaResidue" methodname="FirstBuildFailure_LeavesNoOwnedArtifactOrMetaResidue" classname="VFXComposer.Tests.EditMode.W24FirstFormalBuildTransactionTests" runstate="Runnable" seed="451890099" result="Passed" start-time="2026-08-25 14:31:00Z" end-time="2026-08-25 14:31:00Z" duration="0.032130" asserts="0">
+                <properties />
+              </test-case>
+              <test-case id="1868" name="FirstBuildFailure_RemovesOnlyParentsCreatedByThisTransaction" fullname="VFXComposer.Tests.EditMode.W24FirstFormalBuildTransactionTests.FirstBuildFailure_RemovesOnlyParentsCreatedByThisTransaction" methodname="FirstBuildFailure_RemovesOnlyParentsCreatedByThisTransaction" classname="VFXComposer.Tests.EditMode.W24FirstFormalBuildTransactionTests" runstate="Runnable" seed="1228409371" result="Passed" start-time="2026-08-25 14:31:00Z" end-time="2026-08-25 14:31:00Z" duration="0.029829" asserts="0">
+                <properties />
+              </test-case>
+              <test-case id="1869" name="TransactionRejectsOutsideRootsAndInconsistentEffectIdentityBeforeSnapshotting" fullname="VFXComposer.Tests.EditMode.W24FirstFormalBuildTransactionTests.TransactionRejectsOutsideRootsAndInconsistentEffectIdentityBeforeSnapshotting" methodname="TransactionRejectsOutsideRootsAndInconsistentEffectIdentityBeforeSnapshotting" classname="VFXComposer.Tests.EditMode.W24FirstFormalBuildTransactionTests" runstate="Runnable" seed="1856210737" result="Passed" start-time="2026-08-25 14:31:00Z" end-time="2026-08-25 14:31:00Z" duration="0.030261" asserts="0">
+                <properties />
+              </test-case>
+            </test-suite>
+          </test-suite>
+        </test-suite>
+      </test-suite>
+    </test-suite>
+  </test-suite>
+</test-run>

@@ -1,0 +1,1 @@
+{"manifestVersion":2,"templateId":"T_Bad","templateVersion":"","kind":"energy_body","dimension":"2d","assetGuid":"","assetPath":"Assets\\VFX\\Templates\\..\\escape.prefab","tags":["fire"],"parameters":{"scale":{"type":"float","min":5,"max":1,"default":2,"binding":""}},"cost":{"estimatedPeakParticles":-1,"materials":-2,"trails":-3}}

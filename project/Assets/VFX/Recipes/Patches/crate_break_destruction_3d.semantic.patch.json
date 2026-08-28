@@ -1,0 +1,7 @@
+[
+  {
+    "op": "set_archetype_param",
+    "path": "/archetypeParameters/explode_force",
+    "value": 3.2
+  }
+]

@@ -1,0 +1,85 @@
+{
+  "manifestVersion": 1,
+  "rulesVersion": "1.0-draft",
+  "enforcement": "strict",
+  "effectId": "snow_weather_volume",
+  "archetype": "environment",
+  "recipeVersion": 1,
+  "recipeRevision": 1,
+  "recipeHash": "e7e547226bb1f8ebd2412b4de280b6bf2e640f76ac7fd78b2d40196c18bc85de",
+  "buildHash": "ef16a09948570fed366e7651d28916dda73f87592bd880961e9a6793c099fb95",
+  "compilerVersion": "coverage-b-4",
+  "unityVersion": "2022.3.62f3c1",
+  "sourceRecipePath": "Assets/VFX/Recipes/Environment/snow_weather_volume.default.json",
+  "runtimeEntry": {
+    "kind": "prefab",
+    "path": "Assets/VFX/Generated/snow_weather_volume/VFX_snow_weather_volume.prefab",
+    "guid": "9e18c951c3090474494c63542759e965"
+  },
+  "ownedOutputs": [
+    {
+      "path": "Assets/VFX/Generated/snow_weather_volume/VFX_snow_weather_volume.prefab",
+      "guid": "9e18c951c3090474494c63542759e965",
+      "assetType": "GameObject",
+      "sha256": "26f19eda8addc72b8a590adc759bba1887ad707240d052b10c5d74bb88c89783"
+    }
+  ],
+  "dependencies": [
+    {
+      "path": "Assets/VFX/Shared/CoverageGalleryB/Materials/MAT_CoverageB_Additive.mat",
+      "guid": "688b79adff1f3474da55fb0deedff137",
+      "assetType": "Material",
+      "version": null,
+      "dependencyHash": "0b0b0e70d4676ffab060eedfd9b3ebea"
+    },
+    {
+      "path": "Assets/VFX/Shared/CoverageGalleryB/Materials/MAT_CoverageB_Alpha.mat",
+      "guid": "a84952a854859674991a6e3fe826514a",
+      "assetType": "Material",
+      "version": null,
+      "dependencyHash": "6f1e099067ca8e046370c9a5c87d8158"
+    },
+    {
+      "path": "Assets/VFX/Shared/CoverageGalleryB/Meshes/M_CoverageB_Cloud.asset",
+      "guid": "53d26abbb26ba274593c671d17278097",
+      "assetType": "Mesh",
+      "version": null,
+      "dependencyHash": "80109da5b4c011ae5027d9dbb3971d56"
+    },
+    {
+      "path": "Assets/VFX/Shared/CoverageGalleryB/Prefabs/PF_CoverageB_Particles.prefab",
+      "guid": "70f199efb6fa95243bfdc29f0ac52b45",
+      "assetType": "GameObject",
+      "version": null,
+      "dependencyHash": "4ca484495d85edc18be403e3c11759f1"
+    },
+    {
+      "path": "Assets/VFX/Shared/Shaders/CoverageGalleryBUnlit.shader",
+      "guid": "36a2072c324a26a479dfb498994d4812",
+      "assetType": "Shader",
+      "version": null,
+      "dependencyHash": "64f6028fba878ab561a8418a3ea09753"
+    },
+    {
+      "path": "Packages/com.vfxcomposer.unity/Runtime/Components/CoverageGalleryVfxController.cs",
+      "guid": "18601207a015a6140b357c3de1ce8608",
+      "assetType": "MonoScript",
+      "version": null,
+      "dependencyHash": "b7413138fabc3a05f2522721ad65632e"
+    }
+  ],
+  "cost": {
+    "particles": 48,
+    "particleSystems": 1,
+    "renderers": 4,
+    "materials": 2,
+    "trails": 0,
+    "duration": 3.0,
+    "localTextureBytes": 0,
+    "dependencyResidentTextureBytes": 0,
+    "gameObjects": 5,
+    "maxDepth": 1
+  },
+  "audit": [],
+  "generatedAtUtc": "2026-08-23T15:40:29.3384681Z"
+}

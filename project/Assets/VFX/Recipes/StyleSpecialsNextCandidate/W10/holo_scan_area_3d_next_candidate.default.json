@@ -1,0 +1,32 @@
+{
+  "schema": "style-special-next-candidate/v1",
+  "id": "holo_scan_area_3d_next_candidate",
+  "sourceId": "holo_scan_area_3d",
+  "label": "HOLO SCAN · MARKERS",
+  "group": "w10",
+  "archetype": "area",
+  "dimension": "3d",
+  "style": "holo",
+  "profile": "HoloScan",
+  "semantic": "periodic-outward-scan+ground-grid+three-raised-markers",
+  "duration": 1.25,
+  "releaseNormalized": 0.16,
+  "sustainEndNormalized": 0.86,
+  "sustained": true,
+  "seed": 10105,
+  "intensity": 1.08,
+  "palette": {
+    "primary": "#2DDAF5",
+    "secondary": "#B4FFFF",
+    "accent": "#FF7148"
+  },
+  "meshes": [
+    "Ring",
+    "Ring",
+    "Burst",
+    "Shard"
+  ],
+  "pairFamily": "",
+  "pairRole": "",
+  "sourceBaseId": ""
+}

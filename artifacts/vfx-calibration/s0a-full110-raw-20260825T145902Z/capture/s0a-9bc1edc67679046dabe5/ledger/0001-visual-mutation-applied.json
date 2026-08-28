@@ -1,0 +1,1 @@
+{"schema":"w24-s0a-fixture-ledger/v2","sequence":1,"kind":"visual-mutation-applied","details":{"target":"LightEnabled","value":"false","cloneOnly":true},"recordedUtc":"2026-08-25T15:21:32.0304148Z","previousEntryHash":"sha256:468d6285f3d85a38de8897b8d2dcd9cef1a5703f4a250b5649ee1790ac342e26","entryHash":"sha256:3bc10f0de69f6b1de3e425c58db801a3389241438495f456d167f611dc39887b"}

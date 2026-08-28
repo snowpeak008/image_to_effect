@@ -1,0 +1,287 @@
+{
+  "manifestVersion": 1,
+  "rulesVersion": "1.0-draft",
+  "enforcement": "strict",
+  "effectId": "mechanical_hunter_kit_showcase_3d",
+  "archetype": "composite",
+  "recipeVersion": 1,
+  "recipeRevision": 1,
+  "recipeHash": "b1077fa32b74fafcbac46b64fedef5f109a0b68d7b023f214c369f0ac253eb95",
+  "buildHash": "09197b50627db04bca5bf9f2b10e25bc61a68234747119a4ecf1eeab5f75f7d5",
+  "compilerVersion": "composite-runtime-1",
+  "unityVersion": "2022.3.62f3c1",
+  "sourceRecipePath": "Assets/VFX/Recipes/Composites/HeroKits/mechanical_hunter_kit_showcase_3d.default.json",
+  "runtimeEntry": {
+    "kind": "prefab",
+    "path": "Assets/VFX/Generated/mechanical_hunter_kit_showcase_3d/VFX_mechanical_hunter_kit_showcase_3d.prefab",
+    "guid": "a0b22375188f52a478a2276d446a052f"
+  },
+  "ownedOutputs": [
+    {
+      "path": "Assets/VFX/Generated/mechanical_hunter_kit_showcase_3d/Composition.json",
+      "guid": "02a7708b735b77c488a610222bdd5f09",
+      "assetType": "TextAsset",
+      "sha256": "7d277e41b881df2bde7b27df390234487378a0489402f2628dae98b4a0ae0fba"
+    },
+    {
+      "path": "Assets/VFX/Generated/mechanical_hunter_kit_showcase_3d/VFX_mechanical_hunter_kit_showcase_3d.prefab",
+      "guid": "a0b22375188f52a478a2276d446a052f",
+      "assetType": "GameObject",
+      "sha256": "7b82f689893aa3f19c61dc25a2d5fb31017831f2bd3816510bd302253cf5a66d"
+    }
+  ],
+  "dependencies": [
+    {
+      "path": "Assets/VFX/Generated/chain_grapple_beam_3d/VFX_chain_grapple_beam_3d.prefab",
+      "guid": "4c4a2fe2d692a884ea937a3b29f999ca",
+      "assetType": "GameObject",
+      "version": null,
+      "dependencyHash": "bda82c54a17f9be90ed6fba07b22f9eb"
+    },
+    {
+      "path": "Assets/VFX/Generated/emp_nova_impact_2d/VFX_emp_nova_impact_2d.prefab",
+      "guid": "f97906afb2044804d9b8f308daef7bae",
+      "assetType": "GameObject",
+      "version": null,
+      "dependencyHash": "154ddf6fd37f7a47fd6b0e00f4c43ba0"
+    },
+    {
+      "path": "Assets/VFX/Generated/glitch_blink_transform_3d/VFX_glitch_blink_transform_3d.prefab",
+      "guid": "44572f2b806913c428c0dfc4c2ffa333",
+      "assetType": "GameObject",
+      "version": null,
+      "dependencyHash": "a352e24e4d8d0856187e31b248382e24"
+    },
+    {
+      "path": "Assets/VFX/Generated/holo_scan_area_3d/VFX_holo_scan_area_3d.prefab",
+      "guid": "7804e9c60bff6ed408047b58380d0b9b",
+      "assetType": "GameObject",
+      "version": null,
+      "dependencyHash": "00600ad0c7cd07ec768f974e4d29216a"
+    },
+    {
+      "path": "Assets/VFX/Generated/muzzle_flash_impact_3d/VFX_muzzle_flash_impact_3d.prefab",
+      "guid": "ec0478fa5e3f6ae4a8325220d6bad1b7",
+      "assetType": "GameObject",
+      "version": null,
+      "dependencyHash": "7c99019ac8594c271871949e753ebd4b"
+    },
+    {
+      "path": "Assets/VFX/Generated/overheat_vent_idle_aura_3d/VFX_overheat_vent_idle_aura_3d.prefab",
+      "guid": "5cf6da47e2fb2c24aacaf125ccf4722e",
+      "assetType": "GameObject",
+      "version": null,
+      "dependencyHash": "efcf5075886ef927677156f1f1df5614"
+    },
+    {
+      "path": "Assets/VFX/Generated/steam_vent_burst_impact_3d/VFX_steam_vent_burst_impact_3d.prefab",
+      "guid": "d5fcbe2cf96b0454485a830b76fc3ceb",
+      "assetType": "GameObject",
+      "version": null,
+      "dependencyHash": "0660ba46d6fdf1ea88a3c5e5d7c2d9e1"
+    },
+    {
+      "path": "Assets/VFX/Shared/Shaders/VfxHoloFresnel.shader",
+      "guid": "deae41ea852bbc24fbaeed759e6f0519",
+      "assetType": "Shader",
+      "version": null,
+      "dependencyHash": "736c58899b4da5696e81551b737ae1a4"
+    },
+    {
+      "path": "Assets/VFX/Shared/Shaders/VfxLayeredRamp.shader",
+      "guid": "81928f0d6aa7a2e4c8cb73230126637f",
+      "assetType": "Shader",
+      "version": null,
+      "dependencyHash": "64048683c60561907c22fac9564aba1d"
+    },
+    {
+      "path": "Assets/VFX/Shared/Shaders/VfxSoftNoise.shader",
+      "guid": "a6e4e3aa82ac7c84d9dd012aaae56c67",
+      "assetType": "Shader",
+      "version": null,
+      "dependencyHash": "daf4e4d9c28a30f0230301e6f07535a5"
+    },
+    {
+      "path": "Assets/VFX/Shared/Styles/Materials/MAT_Style_holo.mat",
+      "guid": "7db5cf272022f764dafdea6ec2318707",
+      "assetType": "Material",
+      "version": null,
+      "dependencyHash": "60ab0bd7361013108f8a34875a414491"
+    },
+    {
+      "path": "Assets/VFX/Shared/Styles/Materials/MAT_Style_semireal.mat",
+      "guid": "a6593efc800a7e848b872ad54cde6b3f",
+      "assetType": "Material",
+      "version": null,
+      "dependencyHash": "fabed6c73355309b4089b8513d6ca8fe"
+    },
+    {
+      "path": "Assets/VFX/Shared/Styles/Materials/MAT_Style_steampunk.mat",
+      "guid": "495290e581cc56b4789b8bdb4d4521ea",
+      "assetType": "Material",
+      "version": null,
+      "dependencyHash": "74e19b970f93025b43ace825827392d8"
+    },
+    {
+      "path": "Assets/VFX/Shared/Styles/Meshes/M_Style_Burst.asset",
+      "guid": "0def46dac13f1d8449cd98d98de17a15",
+      "assetType": "Mesh",
+      "version": null,
+      "dependencyHash": "56e972a8f8588a864d379a7611c49c63"
+    },
+    {
+      "path": "Assets/VFX/Shared/Styles/Meshes/M_Style_Cone.asset",
+      "guid": "8a296d5e70420f647a6e1f646af993cd",
+      "assetType": "Mesh",
+      "version": null,
+      "dependencyHash": "69fd53314f71778bd2e32f584650207e"
+    },
+    {
+      "path": "Assets/VFX/Shared/Styles/Meshes/M_Style_Quad.asset",
+      "guid": "7f415b79b45b04d4ab5e3f4dd61605aa",
+      "assetType": "Mesh",
+      "version": null,
+      "dependencyHash": "01e83f0bfc8392031ac8f5694416ab10"
+    },
+    {
+      "path": "Assets/VFX/Shared/Styles/Meshes/M_Style_Ring.asset",
+      "guid": "df59364e370c085418d31c0f952bcf1a",
+      "assetType": "Mesh",
+      "version": null,
+      "dependencyHash": "021f9d0fab5159d1d05310de3284c997"
+    },
+    {
+      "path": "Assets/VFX/Shared/Styles/Meshes/M_Style_Shard.asset",
+      "guid": "506c8c0bcf8b14645948b3dbb02a1b3f",
+      "assetType": "Mesh",
+      "version": null,
+      "dependencyHash": "ff113f023e398b26696f0c501ae28324"
+    },
+    {
+      "path": "Packages/com.vfxcomposer.unity/Runtime/Components/CompositeVfxController.cs",
+      "guid": "07d8735a81864834c8f1bda23acf4be2",
+      "assetType": "MonoScript",
+      "version": null,
+      "dependencyHash": "570863f0966daccfed5bf3e887baa10e"
+    },
+    {
+      "path": "Packages/com.vfxcomposer.unity/Runtime/Components/StyledVfxController.cs",
+      "guid": "ca6f81a249967414c96082671e07dcaa",
+      "assetType": "MonoScript",
+      "version": null,
+      "dependencyHash": "486e1b8ba27b5e00b709bc5fd2b5624a"
+    }
+  ],
+  "cost": {
+    "particles": 0,
+    "particleSystems": 0,
+    "renderers": 0,
+    "materials": 0,
+    "trails": 0,
+    "duration": 6.5999999046325684,
+    "localTextureBytes": 0,
+    "dependencyResidentTextureBytes": 0,
+    "gameObjects": 1,
+    "maxDepth": 0
+  },
+  "audit": [],
+  "generatedAtUtc": "2026-08-24T13:36:39.9224625Z",
+  "timeline": [
+    {
+      "t": 0.0,
+      "ref_id": "glitch_blink_transform_3d",
+      "action": "play",
+      "overrides": {
+        "scale": 1.0,
+        "palette": "hunter_steam_holo"
+      }
+    },
+    {
+      "t": 0.7,
+      "ref_id": "overheat_vent_idle_aura_3d",
+      "action": "play",
+      "overrides": {
+        "scale": 1.0,
+        "palette": "hunter_steam_holo"
+      }
+    },
+    {
+      "t": 1.2,
+      "ref_id": "muzzle_flash_impact_3d",
+      "action": "play",
+      "overrides": {
+        "scale": 1.0,
+        "palette": "hunter_steam_holo"
+      }
+    },
+    {
+      "t": 1.45,
+      "ref_id": "muzzle_flash_impact_3d",
+      "action": "play",
+      "overrides": {
+        "scale": 1.0,
+        "palette": "hunter_steam_holo"
+      }
+    },
+    {
+      "t": 1.7,
+      "ref_id": "muzzle_flash_impact_3d",
+      "action": "play",
+      "overrides": {
+        "scale": 1.0,
+        "palette": "hunter_steam_holo"
+      }
+    },
+    {
+      "t": 2.3,
+      "ref_id": "steam_vent_burst_impact_3d",
+      "action": "play",
+      "overrides": {
+        "scale": 1.0,
+        "palette": "hunter_steam_holo"
+      }
+    },
+    {
+      "t": 3.0,
+      "ref_id": "holo_scan_area_3d",
+      "action": "play",
+      "overrides": {
+        "scale": 1.0,
+        "palette": "hunter_steam_holo"
+      }
+    },
+    {
+      "t": 4.0,
+      "ref_id": "chain_grapple_beam_3d",
+      "action": "play",
+      "overrides": {
+        "scale": 1.0,
+        "palette": "hunter_steam_holo"
+      }
+    },
+    {
+      "t": 5.2,
+      "ref_id": "emp_nova_impact_2d",
+      "action": "play",
+      "overrides": {
+        "scale": 1.0,
+        "palette": "hunter_steam_holo"
+      }
+    }
+  ],
+  "cameraHints": [],
+  "gates": [],
+  "themeId": "hunter_steam_holo",
+  "compositePeakBudget": {
+    "particles": 32,
+    "particleSystems": 2,
+    "materials": 2,
+    "renderers": 8,
+    "limits": {
+      "particles": 200,
+      "particleSystems": 10,
+      "materials": 10,
+      "renderers": 14
+    }
+  }
+}

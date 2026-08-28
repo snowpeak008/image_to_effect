@@ -1,0 +1,3 @@
+[
+  {"code":"E702","severity":"error","path":"/","message":"Patch must contain at least one operation.","actualValue":null,"allowedRange":null}
+]

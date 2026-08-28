@@ -1,0 +1,10 @@
+{
+  "schemaVersion": "s0a-evidence-template/v2",
+  "sampleId": "s0a-3e1e439a3be62106293f",
+  "contractHash": null,
+  "captureProfileHash": null,
+  "captureStatus": "NOT_CAPTURED",
+  "frames": [],
+  "evidenceHash": null,
+  "note": "Generated fixture placeholder only; no rendered evidence exists yet."
+}

@@ -1,0 +1,85 @@
+{
+  "manifestVersion": 1,
+  "rulesVersion": "1.0-draft",
+  "enforcement": "strict",
+  "effectId": "water_jet_beam_3d",
+  "archetype": "beam",
+  "recipeVersion": 1,
+  "recipeRevision": 1,
+  "recipeHash": "0a5abb94f10b38b28729aba57f0ae4a374eefce4881bbb183154ba7b79f196e7",
+  "buildHash": "6886ac9b7b881dad1112f371eb8f5a3adbe44a9ff880101696c43c6218ab7f56",
+  "compilerVersion": "styled-content-4",
+  "unityVersion": "2022.3.62f3c1",
+  "sourceRecipePath": "Assets/VFX/Recipes/Elements/WaterWind/water_jet_beam_3d.default.json",
+  "runtimeEntry": {
+    "kind": "prefab",
+    "path": "Assets/VFX/Generated/water_jet_beam_3d/VFX_water_jet_beam_3d.prefab",
+    "guid": "9bc34fb1dfbb75e499018199ee4a5383"
+  },
+  "ownedOutputs": [
+    {
+      "path": "Assets/VFX/Generated/water_jet_beam_3d/VFX_water_jet_beam_3d.prefab",
+      "guid": "9bc34fb1dfbb75e499018199ee4a5383",
+      "assetType": "GameObject",
+      "sha256": "cc78b0cb18e778746d2fe60a275011811eb8bdebec374b2dec2dd21742cac47f"
+    }
+  ],
+  "dependencies": [
+    {
+      "path": "Assets/VFX/Shared/Shaders/VfxLayeredRamp.shader",
+      "guid": "81928f0d6aa7a2e4c8cb73230126637f",
+      "assetType": "Shader",
+      "version": null,
+      "dependencyHash": "64048683c60561907c22fac9564aba1d"
+    },
+    {
+      "path": "Assets/VFX/Shared/Styles/Materials/MAT_Style_stylized.mat",
+      "guid": "0034e6cb149f4034ca9562644ff7ae8d",
+      "assetType": "Material",
+      "version": null,
+      "dependencyHash": "7f3751282b1f62d6cb78f412797ce124"
+    },
+    {
+      "path": "Assets/VFX/Shared/Styles/Meshes/M_Style_Burst.asset",
+      "guid": "0def46dac13f1d8449cd98d98de17a15",
+      "assetType": "Mesh",
+      "version": null,
+      "dependencyHash": "56e972a8f8588a864d379a7611c49c63"
+    },
+    {
+      "path": "Assets/VFX/Shared/Styles/Meshes/M_Style_Quad.asset",
+      "guid": "7f415b79b45b04d4ab5e3f4dd61605aa",
+      "assetType": "Mesh",
+      "version": null,
+      "dependencyHash": "01e83f0bfc8392031ac8f5694416ab10"
+    },
+    {
+      "path": "Assets/VFX/Shared/Styles/Meshes/M_Style_Shard.asset",
+      "guid": "506c8c0bcf8b14645948b3dbb02a1b3f",
+      "assetType": "Mesh",
+      "version": null,
+      "dependencyHash": "ff113f023e398b26696f0c501ae28324"
+    },
+    {
+      "path": "Packages/com.vfxcomposer.unity/Runtime/Components/StyledVfxController.cs",
+      "guid": "ca6f81a249967414c96082671e07dcaa",
+      "assetType": "MonoScript",
+      "version": null,
+      "dependencyHash": "486e1b8ba27b5e00b709bc5fd2b5624a"
+    }
+  ],
+  "cost": {
+    "particles": 16,
+    "particleSystems": 1,
+    "renderers": 4,
+    "materials": 1,
+    "trails": 0,
+    "duration": 1.0,
+    "localTextureBytes": 0,
+    "dependencyResidentTextureBytes": 0,
+    "gameObjects": 5,
+    "maxDepth": 1
+  },
+  "audit": [],
+  "generatedAtUtc": "2026-08-24T13:20:35.9375468Z"
+}

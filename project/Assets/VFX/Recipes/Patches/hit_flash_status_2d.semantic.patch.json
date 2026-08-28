@@ -1,0 +1,7 @@
+[
+  {
+    "op": "set_content_param",
+    "path": "/content/parameters/edge_width",
+    "value": 1.0
+  }
+]

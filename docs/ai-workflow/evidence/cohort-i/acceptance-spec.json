@@ -1,0 +1,15 @@
+{
+  "version": 1,
+  "recipes": {
+    "I1": { "id": "i1_river_comet", "profile": "pc_editor", "travel": ["energy_body", "motion_trail"], "forbidTravel": ["secondary_particles"], "compare": { "core.scale": "==", "trail.time": ">", "trail.width": ">", "burst.count": "<=", "burst.speed": "<", "shockwave.endSize": "<" }, "impact": ["impact_burst", "shockwave"] },
+    "I2": { "id": "i2_glass_spark", "profile": "mobile_medium", "travel": ["energy_body", "secondary_particles"], "forbidTravel": ["motion_trail"], "compare": { "core.scale": "<", "embers.rate": "<", "embers.lifetime": ">", "burst.count": ">", "burst.speed": "<", "shockwave.endSize": ">" }, "impact": ["impact_burst", "shockwave"] },
+    "I3": { "id": "i3_brazier_bead", "profile": "pc_editor", "travel": ["energy_body", "motion_trail", "secondary_particles"], "compare": { "core.scale": ">", "trail.time": "<", "trail.width": "<", "embers.rate": ">", "embers.lifetime": "<", "burst.count": "<=", "shockwave.endSize": "<=" }, "impact": ["impact_burst", "shockwave"] },
+    "I4": { "id": "i4_rail_flare", "profile": "mobile_medium", "travel": ["energy_body", "motion_trail"], "forbidTravel": ["secondary_particles"], "compare": { "core.scale": "==", "trail.time": ">", "trail.width": "<", "burst.count": ">", "burst.speed": ">", "shockwave.endSize": "==" }, "impact": ["impact_burst", "shockwave"] },
+    "I5": { "id": "i5_aurora_seed", "profile": "pc_editor", "travel": ["energy_body", "motion_trail", "secondary_particles"], "compare": { "core.scale": "<", "trail.time": "<", "trail.width": ">", "embers.rate": ">", "embers.lifetime": ">", "burst.count": "<=", "burst.speed": "<", "shockwave.endSize": ">" }, "impact": ["impact_burst", "shockwave"] }
+  },
+  "patches": {
+    "P1": { "expectedRevision": 1, "path": "/stages/travel/modules/trail/parameters/width", "value": 0.30 },
+    "P2": { "expectedRevision": 1, "path": "/stages/travel/modules/trail", "enabled": false },
+    "P3": { "expectedRevision": 1, "moduleId": "afterglow_embers", "kind": "secondary_particles", "templateId": "PFT_2D_Embers", "attachTo": "core" }
+  }
+}

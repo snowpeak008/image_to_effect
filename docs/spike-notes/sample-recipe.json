@@ -1,0 +1,62 @@
+{
+  "recipeVersion": 1,
+  "id": "fireball_2d",
+  "name": "Fireball 2D",
+  "dimension": "2d",
+  "archetype": "projectile",
+  "style": "stylized",
+  "targetProfile": "mobile_medium",
+  "randomSeed": 42,
+  "stages": [
+    {
+      "id": "travel",
+      "trigger": "on_launch",
+      "duration": 1.0,
+      "enabled": true,
+      "modules": [
+        {
+          "id": "core",
+          "kind": "energy_body",
+          "templateId": "T_Core",
+          "parameters": {
+            "scale": 1.2
+          },
+          "enabled": true
+        },
+        {
+          "id": "embers",
+          "kind": "secondary_particles",
+          "templateId": "T_Embers",
+          "parameters": {
+            "rate": 18,
+            "lifetime": 0.55
+          },
+          "attachTo": "core",
+          "enabled": true
+        }
+      ]
+    },
+    {
+      "id": "impact",
+      "trigger": "on_hit",
+      "duration": 0.5,
+      "enabled": true,
+      "modules": [
+        {
+          "id": "burst",
+          "kind": "impact_burst",
+          "templateId": "T_Burst",
+          "parameters": {
+            "count": 24,
+            "speed": 3.5
+          },
+          "enabled": true
+        }
+      ]
+    }
+  ],
+  "metadata": {
+    "createdBy": "codex",
+    "templateCatalogVersion": "spike-s1"
+  }
+}

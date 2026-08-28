@@ -1,0 +1,32 @@
+{
+  "schema": "style-special-next-candidate/v1",
+  "id": "anime_smear_slash_2d_next_candidate",
+  "sourceId": "anime_smear_slash_2d",
+  "label": "ANIME SMEAR · 8 FRAME",
+  "group": "w9",
+  "archetype": "slash",
+  "dimension": "2d",
+  "style": "cartoon",
+  "profile": "CelSequence",
+  "semantic": "8frame-stretch>peak-whitecore>thin-tail+speedlines",
+  "duration": 0.86,
+  "releaseNormalized": 0.18,
+  "sustainEndNormalized": 0.72,
+  "sustained": false,
+  "seed": 9104,
+  "intensity": 1.24,
+  "palette": {
+    "primary": "#FF5B2A",
+    "secondary": "#FFD24A",
+    "accent": "#FFFFFF"
+  },
+  "meshes": [
+    "Ribbon",
+    "Ribbon",
+    "Burst",
+    "Shard"
+  ],
+  "pairFamily": "",
+  "pairRole": "",
+  "sourceBaseId": ""
+}

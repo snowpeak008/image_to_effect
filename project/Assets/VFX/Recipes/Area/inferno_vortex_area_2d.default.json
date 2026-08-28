@@ -1,0 +1,14 @@
+{
+  "recipeVersion": 1,
+  "revision": 1,
+  "id": "inferno_vortex_area_2d",
+  "archetype": "area",
+  "dimension": "2d",
+  "lifecycle": "sustained",
+  "targetProfile": "pc_editor",
+  "randomSeed": 90421,
+  "radius": 1.55,
+  "loopDuration": 1.6,
+  "tickInterval": 0.8,
+  "flameCount": 28
+}

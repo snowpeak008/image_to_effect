@@ -1,0 +1,7 @@
+[
+  {
+    "op": "set_archetype_param",
+    "path": "/archetypeParameters/fade_time",
+    "value": 0.12
+  }
+]

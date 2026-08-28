@@ -1,0 +1,108 @@
+{
+  "capture": "real generated AI Recipe Prefab instantiated; SlashEffectController.PlaySlash then deterministic controller sampling with natural template particle simulation; Camera.Render; HDR false; Bloom off; no ParticleSystem.Emit",
+  "cameraIsolation": "dedicated-layer-31",
+  "sourcePrefabPath": "Assets/VFX/Generated/slash_3d_stylized/VFX_Slash_3D_Stylized.prefab",
+  "sourcePrefabGuid": "0dc223c2ffbe2c14aa24f424440f1cd2",
+  "recipeCanonicalSha256": "1d5c65bdd3493ec8acb247b89c189ac4908e463c9da37c6cbd0c79053d0d95fa",
+  "buildHash": "8910786deee829f7009c368c60726aeea147937774bb0ec490f81fe5000857f0",
+  "actualParameters": {
+    "width": 0.3,
+    "sparkCount": 18,
+    "afterimageAlpha": 0.4
+  },
+  "fov": 60,
+  "timelineFrames": [
+    {
+      "phase": "primary_overlap",
+      "time": 0.18,
+      "file": "time_primary_overlap.png",
+      "sha256": "0B1733AD37590FFCF769A52F85CE45CA15C21E1E0D1C5D3941F732363F2B2E58",
+      "particles": [
+        {
+          "name": "PrimarySweepRunner",
+          "particleCount": 1,
+          "distinctPositions": 1
+        },
+        {
+          "name": "Slash_sparks",
+          "particleCount": 18,
+          "distinctPositions": 18
+        },
+        {
+          "name": "Slash_dissipation",
+          "particleCount": 0,
+          "distinctPositions": 0
+        }
+      ]
+    },
+    {
+      "phase": "afterimage",
+      "time": 0.24,
+      "file": "time_afterimage.png",
+      "sha256": "ACBFE3D551FAD738C9884A748FBCBD071FDE193878D8C66D3324F3E71288F65F",
+      "particles": [
+        {
+          "name": "PrimarySweepRunner",
+          "particleCount": 0,
+          "distinctPositions": 0
+        },
+        {
+          "name": "Slash_sparks",
+          "particleCount": 18,
+          "distinctPositions": 18
+        },
+        {
+          "name": "Slash_dissipation",
+          "particleCount": 5,
+          "distinctPositions": 5
+        }
+      ]
+    },
+    {
+      "phase": "dissipation",
+      "time": 0.38,
+      "file": "time_dissipation.png",
+      "sha256": "097B9C7E18C1D131B8A8E2D5DF9F898048E4603D98552C62DB64D624A112463A",
+      "particles": [
+        {
+          "name": "PrimarySweepRunner",
+          "particleCount": 0,
+          "distinctPositions": 0
+        },
+        {
+          "name": "Slash_sparks",
+          "particleCount": 0,
+          "distinctPositions": 0
+        },
+        {
+          "name": "Slash_dissipation",
+          "particleCount": 6,
+          "distinctPositions": 6
+        }
+      ]
+    },
+    {
+      "phase": "complete",
+      "time": 0.451,
+      "file": "time_complete.png",
+      "sha256": "4362C2FBDC97C5B28E8530D54B80F12C33F5A97E3FB68D6BE75AB1003C8A16AF",
+      "particles": [
+        {
+          "name": "PrimarySweepRunner",
+          "particleCount": 0,
+          "distinctPositions": 0
+        },
+        {
+          "name": "Slash_sparks",
+          "particleCount": 0,
+          "distinctPositions": 0
+        },
+        {
+          "name": "Slash_dissipation",
+          "particleCount": 0,
+          "distinctPositions": 0
+        }
+      ]
+    }
+  ]
+}

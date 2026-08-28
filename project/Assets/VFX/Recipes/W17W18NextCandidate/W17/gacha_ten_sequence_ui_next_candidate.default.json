@@ -1,0 +1,13 @@
+{
+  "schema": "w17-ui-next-candidate/v1",
+  "id": "gacha_ten_sequence_ui_next_candidate",
+  "workPackage": "W17",
+  "candidateStatus": "NEXT_CANDIDATE_VISUAL_PENDING",
+  "userVisualVerdict": null,
+  "preserveRejectedCandidate": true,
+  "effect": "gacha_ten_sequence",
+  "lifecycle": "event",
+  "protocols": ["rarities_exactly_10", "skip_to_reveal", "highest_rarity_last"],
+  "visualCarriers": ["ten_real_card_rects", "two_by_five_landing", "highest_slot_pulse"],
+  "budget": { "uiElements": 11, "materials": 1, "particleSystems": 0, "limit": 48 }
+}

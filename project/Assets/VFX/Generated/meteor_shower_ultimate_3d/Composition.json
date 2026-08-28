@@ -1,0 +1,154 @@
+{
+  "schema": "vfx-composition/1",
+  "id": "meteor_shower_ultimate_3d",
+  "group": "ultimate",
+  "duration": 5.0,
+  "theme": null,
+  "shapeLanguage": null,
+  "palette": {
+    "primary": "#D8491E",
+    "secondary": "#FF9E31",
+    "accent": "#F2D0A2"
+  },
+  "timeline": [
+    {
+      "t": 0.0,
+      "ref_id": "warning_telegraph_3d",
+      "action": "play",
+      "overrides": {
+        "scale": 1.0,
+        "palette": "ultimate"
+      }
+    },
+    {
+      "t": 0.9,
+      "ref_id": "warning_telegraph_3d",
+      "action": "stop",
+      "overrides": {}
+    },
+    {
+      "t": 1.0,
+      "ref_id": "meteor_impact_3d",
+      "action": "play",
+      "overrides": {
+        "scale": 1.0,
+        "position": [
+          -1.5,
+          0.7,
+          0.0
+        ],
+        "palette": "ultimate"
+      }
+    },
+    {
+      "t": 1.5,
+      "ref_id": "meteor_impact_3d",
+      "action": "play",
+      "overrides": {
+        "scale": 0.9,
+        "position": [
+          0.9,
+          0.3,
+          0.0
+        ],
+        "palette": "ultimate"
+      }
+    },
+    {
+      "t": 2.0,
+      "ref_id": "meteor_impact_3d",
+      "action": "play",
+      "overrides": {
+        "scale": 1.2,
+        "position": [
+          -0.4,
+          -0.3,
+          0.0
+        ],
+        "palette": "ultimate"
+      }
+    },
+    {
+      "t": 2.5,
+      "ref_id": "meteor_impact_3d",
+      "action": "play",
+      "overrides": {
+        "scale": 0.85,
+        "position": [
+          1.5,
+          -0.5,
+          0.0
+        ],
+        "palette": "ultimate"
+      }
+    },
+    {
+      "t": 3.0,
+      "ref_id": "meteor_impact_3d",
+      "action": "play",
+      "overrides": {
+        "scale": 1.15,
+        "position": [
+          0.2,
+          0.6,
+          0.0
+        ],
+        "palette": "ultimate"
+      }
+    },
+    {
+      "t": 3.5,
+      "ref_id": "meteor_impact_3d",
+      "action": "play",
+      "overrides": {
+        "scale": 1.0,
+        "position": [
+          -1.0,
+          -0.8,
+          0.0
+        ],
+        "palette": "ultimate"
+      }
+    },
+    {
+      "t": 4.6,
+      "ref_id": "smoke_plume_area_3d",
+      "action": "play",
+      "overrides": {
+        "scale": 1.35,
+        "palette": "ultimate"
+      }
+    }
+  ],
+  "camera_hints": [
+    {
+      "t": 0.9,
+      "type": "zoom",
+      "strength": 0.3
+    },
+    {
+      "t": 2.0,
+      "type": "shake",
+      "strength": 0.7
+    },
+    {
+      "t": 3.5,
+      "type": "shake",
+      "strength": 0.9
+    }
+  ],
+  "gates": [],
+  "peakBudget": {
+    "particles": 144,
+    "particleSystems": 3,
+    "materials": 3,
+    "renderers": 12,
+    "limits": {
+      "particles": 200,
+      "particleSystems": 10,
+      "materials": 10,
+      "renderers": 14
+    }
+  },
+  "ownership": "dependency-reference-only"
+}

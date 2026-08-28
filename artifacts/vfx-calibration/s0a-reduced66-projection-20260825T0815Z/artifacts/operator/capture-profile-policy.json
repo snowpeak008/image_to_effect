@@ -1,0 +1,341 @@
+{
+  "schemaVersion": "s0a-capture-profile-policy/v1",
+  "holdoutCohort": "reduced-36-12-12-6",
+  "profileTemplateWithoutSeeds": {
+    "profileVersion": "w24-s0a-formal-calibration-capture-profile/v1",
+    "unityVersion": "2022.3.62f3c1",
+    "urpVersion": "14.0.12",
+    "graphicsApi": "Direct3D11",
+    "graphicsDevice": "NVIDIA GeForce RTX 1050 Ti",
+    "graphicsDriverVersion": "Direct3D 11.0 [level 11.1]",
+    "renderTextureFormat": "ARGB32",
+    "rendererAsset": {
+      "reference": "Assets/Settings/VFXPreviewUniversalRenderer.asset",
+      "sha256": "sha256:075958f8aca6fa4cd41444d379f147b69f94b449cafde66e3a0aebb9a5a55fb1"
+    },
+    "volume": {
+      "reference": "ProjectSettings/GraphicsSettings.asset (no per-scene Volume; bloom/tone mapping caller-frozen)",
+      "sha256": "sha256:282bf468a046e673273b350d4f400f75215281182dc789830a3373cc1968b26e"
+    },
+    "scenePath": "Assets/VFX/Preview/VFXPREVIEW_SustainedFlame.unity",
+    "serializedCameraReference": "Assets/VFX/Preview/VFXPREVIEW_SustainedFlame.unity#MainCamera",
+    "resolution": [
+      960,
+      540
+    ],
+    "fps": 60,
+    "background": [
+      0.035,
+      0.04,
+      0.055,
+      1
+    ],
+    "colorSpace": "Linear",
+    "hdr": false,
+    "msaa": false,
+    "bloom": {
+      "value": false,
+      "validation": "caller-frozen"
+    },
+    "toneMapping": {
+      "value": "None",
+      "validation": "caller-frozen"
+    },
+    "retainedFrameIndices": [
+      1,
+      21,
+      60,
+      120,
+      180,
+      240,
+      300,
+      360
+    ],
+    "retainedFrameIndicesSha256": "sha256:cd049cef4ca10e7513d6d3eeda19103a5a30396081f25ba2ce559130e9ec2407"
+  },
+  "seedPolicy": "operator-fixed canonical uint32 + frozen xor-derived robustness pair/v1",
+  "frameTable": {
+    "retainedFrameIndices": [
+      1,
+      21,
+      60,
+      120,
+      180,
+      240,
+      300,
+      360
+    ],
+    "seedRows": [
+      "canonical",
+      "robustness-1",
+      "robustness-2"
+    ]
+  },
+  "instances": [
+    {
+      "sampleId": "s0a-045d71c3d7a6dccd12e7",
+      "captureProfileInstanceHash": "sha256:c6453987f7858fc5322e7f7f3510f917ce5d4543733219c68d75d1eadab51e00"
+    },
+    {
+      "sampleId": "s0a-06e6939c2ae3ffe2a74d",
+      "captureProfileInstanceHash": "sha256:ec65ba3fc166b2d4428fc8ddfe9c4baea0c0addda75685c4f0caeca9094b294b"
+    },
+    {
+      "sampleId": "s0a-0793e1170c44a44614cd",
+      "captureProfileInstanceHash": "sha256:859bc7d89f29b35c5a2112081bb0a00cda6fb3bc504e5ea2d279155865abf34e"
+    },
+    {
+      "sampleId": "s0a-08c8cf039360cf6bbd8d",
+      "captureProfileInstanceHash": "sha256:ce6f25d946b62c0cd459ae922c4f2269b82ab630283854723ee31ecc4dac9147"
+    },
+    {
+      "sampleId": "s0a-114fa96f5ccde54ae6a8",
+      "captureProfileInstanceHash": "sha256:3dc75eab54cd7756272f0e4b1d7db3701ded52ca5adfabe98eaa5e7bee6ab850"
+    },
+    {
+      "sampleId": "s0a-168895b97ac53dbf4a70",
+      "captureProfileInstanceHash": "sha256:bb5ff925b5556153c0df2893b494f1bb22fe7fe757e9ea6027cb500e2a186428"
+    },
+    {
+      "sampleId": "s0a-17ed834a7d1ff140dcb0",
+      "captureProfileInstanceHash": "sha256:eab824a0c87b2f695425c944c2929dc4d999b6a917aec3aec08c688e97fea21d"
+    },
+    {
+      "sampleId": "s0a-18a98bc56abe4ede301a",
+      "captureProfileInstanceHash": "sha256:cfa16beb925230eae9b61d15e3b7a81bdf153d2d998c0ce763be3502c28d197d"
+    },
+    {
+      "sampleId": "s0a-18c69cd35d78f968e835",
+      "captureProfileInstanceHash": "sha256:2db97aebe57a0291613191067391001a10dee307e50471993379ad83e91a755d"
+    },
+    {
+      "sampleId": "s0a-1f7a25cfec5994b1f1fc",
+      "captureProfileInstanceHash": "sha256:2367c8784890c845fee6f5f6a3064fa532142a25f94527a9adf5f4231bc27ff3"
+    },
+    {
+      "sampleId": "s0a-22dddf673260d83077b8",
+      "captureProfileInstanceHash": "sha256:aa75421eacb463301570aefdc10c907c8582f79a37eba15a6d26678910dbf098"
+    },
+    {
+      "sampleId": "s0a-2407433c6d49eb1193c6",
+      "captureProfileInstanceHash": "sha256:c2497288384cf76a2c9fd46cb217a8c78603f8c62b9625e6bf10372e9a0f6cf2"
+    },
+    {
+      "sampleId": "s0a-24c8141887d34b51a310",
+      "captureProfileInstanceHash": "sha256:0496ba44611af49f7e3df6085b3a137b8b5492cd34d97bd8ea54375b110cd75e"
+    },
+    {
+      "sampleId": "s0a-29324fa59817558ac013",
+      "captureProfileInstanceHash": "sha256:d2946f7a4b1d14ebf5f5b50af832093a8c0c09bc09966b8fda49aff4875b3cdc"
+    },
+    {
+      "sampleId": "s0a-2f5ce2cd989f823cf8d0",
+      "captureProfileInstanceHash": "sha256:cef378b3ff92cc86396aa3395a69fa26db662b9c451c8b5c11a502d10ebac6f5"
+    },
+    {
+      "sampleId": "s0a-2f8f17344ffe20655b50",
+      "captureProfileInstanceHash": "sha256:fb1852e10934c55427cfaaf75bf4de94e15abd384554e4d8a75f3d666e631460"
+    },
+    {
+      "sampleId": "s0a-33091a43ee01b3e6cd6c",
+      "captureProfileInstanceHash": "sha256:2a45c09879ab89e0eb5eb8ecf11fe87e49d8fc67e761d3961d20b4054b06ea0c"
+    },
+    {
+      "sampleId": "s0a-34d40b8eec7135657651",
+      "captureProfileInstanceHash": "sha256:dcf9396dc091f662e5d9fa19b95d14b417f67c91cc4bf016196af14b2bc8369e"
+    },
+    {
+      "sampleId": "s0a-3550d2ff946bd3409430",
+      "captureProfileInstanceHash": "sha256:690dac27e1e5a4ffb4cfd195abf4043cd3253dcdb0d42771e9fa0c863f2db2eb"
+    },
+    {
+      "sampleId": "s0a-42416dc4c9968ec01c30",
+      "captureProfileInstanceHash": "sha256:9072a5584f31eff97e47632ded020329de7c3260b10c709ca0f8a2f84aeeed11"
+    },
+    {
+      "sampleId": "s0a-459d891e938e3756604c",
+      "captureProfileInstanceHash": "sha256:af67d7d25538c7cdd8697e3a026a7e9a0ab035fdb2e9bfcd3d96397e49b7f814"
+    },
+    {
+      "sampleId": "s0a-50c3c84078795fa5a343",
+      "captureProfileInstanceHash": "sha256:3cb3c51f037d1cd74eb354e0b23b131d868e2eebcdba46c5d2cc8ba540fbf3c3"
+    },
+    {
+      "sampleId": "s0a-53512a3ad64170769851",
+      "captureProfileInstanceHash": "sha256:1d91065a8d09e301ea6d93395707fa663db94809ea68755e59d8243326220180"
+    },
+    {
+      "sampleId": "s0a-542b5642e5d36c2bbcf5",
+      "captureProfileInstanceHash": "sha256:0fb629f729270e55245b9d139178490653837bde3712e85635f4826ed7aefd0e"
+    },
+    {
+      "sampleId": "s0a-58d3b957bf125ad8534a",
+      "captureProfileInstanceHash": "sha256:3aeb8c9754abb2c57b53144be2d4e01bbc3a7fd83c2a45a1e6554b4d400e40a4"
+    },
+    {
+      "sampleId": "s0a-596dbffe5c4942eb7577",
+      "captureProfileInstanceHash": "sha256:f6fd829c5053082183ac31938712695f8d7b4fd8f527844241cc66d80d0fe23f"
+    },
+    {
+      "sampleId": "s0a-5e67cd371c5f2d8bda52",
+      "captureProfileInstanceHash": "sha256:f86c330d9d41145d1967c5f1ff2f2d7909d13b2a71c8cc07cf7aa314fc26e3b8"
+    },
+    {
+      "sampleId": "s0a-618af785af078f913b9c",
+      "captureProfileInstanceHash": "sha256:34022d678b4df3cdc53066a0354abc74f5c20486e9d7872512a0db6129d87c2b"
+    },
+    {
+      "sampleId": "s0a-6a90050dce710ebab96d",
+      "captureProfileInstanceHash": "sha256:470c99742e3995e870a3095a1cd9245c16b67d647b80cc2d2c72f5832eb01c98"
+    },
+    {
+      "sampleId": "s0a-6bbdbabb4465d783867c",
+      "captureProfileInstanceHash": "sha256:e9cb65132b31352bc06e7b0028177198119d27e5f99f779249bc5c1c32821c2c"
+    },
+    {
+      "sampleId": "s0a-6e4df722101f4ab4c512",
+      "captureProfileInstanceHash": "sha256:a6ba3f01ead0bec5cc9d511b533d6fabd95564231eac4563e648519487b20052"
+    },
+    {
+      "sampleId": "s0a-75db499ced1e6d23b49e",
+      "captureProfileInstanceHash": "sha256:b1281f70c4dfba9b7dfc1bdd2d7761a3af9c69f0d17ae669ca969d0c2a6d026f"
+    },
+    {
+      "sampleId": "s0a-7f5cd5ce8ac8abdfa4cb",
+      "captureProfileInstanceHash": "sha256:52da917253888fb1d899e8c1c464db3370ca70c94d94fdf8879e94349ccd93f7"
+    },
+    {
+      "sampleId": "s0a-81913bd0e4a017b19477",
+      "captureProfileInstanceHash": "sha256:41fcdbcef7fde82dc5d23c5a3169ee71241f3eba72ca1bd19e6f6bb4b10d03af"
+    },
+    {
+      "sampleId": "s0a-81c33420d702c12738b9",
+      "captureProfileInstanceHash": "sha256:9aeb738ca46a394b563df25838c63bc75470499340c74ded142f60fb744d2d68"
+    },
+    {
+      "sampleId": "s0a-84c08dd4af035c8ea0d9",
+      "captureProfileInstanceHash": "sha256:b34f0c9a9ad474e6859bfdf8097b908e14040ad5aa4b8d5742f9ccce460120f7"
+    },
+    {
+      "sampleId": "s0a-8a2b97a0fbe304484d09",
+      "captureProfileInstanceHash": "sha256:a48a1bbbea4cac46233b1c1fce58638de97c1f260e2a7272497631cc29c2007f"
+    },
+    {
+      "sampleId": "s0a-8c147cf9e22455bda269",
+      "captureProfileInstanceHash": "sha256:a58c86a4471a628acc9ff7b5ad1f69d62aedaf85207f322b1059dcaf666c0c6d"
+    },
+    {
+      "sampleId": "s0a-8fe6107e09f10975b3b1",
+      "captureProfileInstanceHash": "sha256:09842c9f2ac756b7beb15389803425f77893d628bbf5e05bca5533c4e1de9f45"
+    },
+    {
+      "sampleId": "s0a-9902d4e69562addc0fa6",
+      "captureProfileInstanceHash": "sha256:ef2c527d75a053e93cf2bffbabb8974b652338999990a0f72efcc926cfb6798d"
+    },
+    {
+      "sampleId": "s0a-9bd508bafe66e2f750b0",
+      "captureProfileInstanceHash": "sha256:0b1cb671e003565f02493de8982a75d3b9ba8b324b50a2a4de74896bad89ada9"
+    },
+    {
+      "sampleId": "s0a-9e3d6ff9f7445656cb6f",
+      "captureProfileInstanceHash": "sha256:d5d0e59730cad5c422b585eca9bb67a4df811011b35fdeb98d6089a48f066037"
+    },
+    {
+      "sampleId": "s0a-abe390133240299833b2",
+      "captureProfileInstanceHash": "sha256:43ce34436e7f6c31c052c7c7ac03b82a655f19a02518ab2b2cfbd9df3b1e3ecb"
+    },
+    {
+      "sampleId": "s0a-ae7f413b53061daf0ac2",
+      "captureProfileInstanceHash": "sha256:8277d98e5ce030e727003a76e3fc7962c8e9d45c375dfd6a2df70b641f03e319"
+    },
+    {
+      "sampleId": "s0a-b04f81963d605367aac9",
+      "captureProfileInstanceHash": "sha256:105202c53a529bcc04ef17799b940a1aae0eb980e4f7e992a2f37eba5324d6bd"
+    },
+    {
+      "sampleId": "s0a-bb15bae0813aa31b2b44",
+      "captureProfileInstanceHash": "sha256:277536d5bde537ded210113f3a54a72069c02f90bd928c5065c7ee5e7f0d9687"
+    },
+    {
+      "sampleId": "s0a-bede4bded0692f04826f",
+      "captureProfileInstanceHash": "sha256:015a7e7df01f7ea14e6e8488ba49ea78ff4117a00dbe62c8ac005f5da227a980"
+    },
+    {
+      "sampleId": "s0a-c07f0d5fc858773c0e25",
+      "captureProfileInstanceHash": "sha256:128011bf728f5a0ea77c53ae8190f25a42c217e607e382459faf4ac3c242d09f"
+    },
+    {
+      "sampleId": "s0a-c74bd0b176c24a33c0dc",
+      "captureProfileInstanceHash": "sha256:89b667044ba34712f600f92b5b3af65a7e1d88225012918f2b03b21a4477e604"
+    },
+    {
+      "sampleId": "s0a-c9468099f4ca76144b4c",
+      "captureProfileInstanceHash": "sha256:663a434b6f38a06ff01d03f5842948c951e7a9ec4331d2fddbcb99de41fee9e7"
+    },
+    {
+      "sampleId": "s0a-cc1b036989ee4a2aa3d4",
+      "captureProfileInstanceHash": "sha256:cc652279a7ae0e7eeb8707a5ce34a4333c94a9d7bda0e899f1e4ba9f0d3a6312"
+    },
+    {
+      "sampleId": "s0a-cc802d1af4d2e6a4038a",
+      "captureProfileInstanceHash": "sha256:77ebfc39269ccf08df89f7ab3608ac33d37cf7e18bac79ae6dc20d99bef6a5d8"
+    },
+    {
+      "sampleId": "s0a-d0f2d923b85bfbe436a9",
+      "captureProfileInstanceHash": "sha256:9a59e3402992591bdf9238447f3caa913a781f6aa11f47ed0b58b97a06f3d08e"
+    },
+    {
+      "sampleId": "s0a-d2ae7a40025ba3c36ff7",
+      "captureProfileInstanceHash": "sha256:d9d671936512cd58acd33485c8544958457e7765837e1241ac54104be3229f25"
+    },
+    {
+      "sampleId": "s0a-d45d66e258c5395cefdb",
+      "captureProfileInstanceHash": "sha256:9e7fe573dbe448f3f86393afab853eeeebc56c6839eb4dcd316162231432b94a"
+    },
+    {
+      "sampleId": "s0a-d57cd94d921f04919527",
+      "captureProfileInstanceHash": "sha256:c51aeec2c42dbbb9378a778f2ec60dd7dcf20225d53547162ef26dd30cfef172"
+    },
+    {
+      "sampleId": "s0a-d5f5c806670158886606",
+      "captureProfileInstanceHash": "sha256:a3ea24d931b82e79392954a635caef5d0868df2d5880b1ae516eefd77ff5713b"
+    },
+    {
+      "sampleId": "s0a-d98b088343a88a02765a",
+      "captureProfileInstanceHash": "sha256:eb99e8be3e65e684dfe3bc3c5001a0c7c2286742ca123b1d9622df38bcad2e52"
+    },
+    {
+      "sampleId": "s0a-de049980074a1549cff6",
+      "captureProfileInstanceHash": "sha256:2d5b2b08fcd7c4e27c5bc931b135d3f1bf52f8c5e597fd07e767016bedbe3a36"
+    },
+    {
+      "sampleId": "s0a-e47ec1406e120d7869ed",
+      "captureProfileInstanceHash": "sha256:8df4eeb85124b5cb527277bcdcc466f773f3f6b2c5a21e64ab1558946f40bf25"
+    },
+    {
+      "sampleId": "s0a-e746046435ce99044964",
+      "captureProfileInstanceHash": "sha256:eb4b5c042e6f5e618cf1450e4e642591c91e9360f6520a5a58865cb1448665d7"
+    },
+    {
+      "sampleId": "s0a-eb7ec9df27c324ba084b",
+      "captureProfileInstanceHash": "sha256:84e8691fdfdb89a27b033102365cc8f9a219f6f4fcaadaa379f5820279e66bd7"
+    },
+    {
+      "sampleId": "s0a-f0b6c2de8820e51070ae",
+      "captureProfileInstanceHash": "sha256:5a2addb91c79c99cbfec045b6666c8e2857c58dae1c89a026df4fe3a3675a4da"
+    },
+    {
+      "sampleId": "s0a-f1078728ef9b920ebfcc",
+      "captureProfileInstanceHash": "sha256:b66f7cb918fa6980d410620e4e0a72e4153d644f88561356e0faacc60890878a"
+    },
+    {
+      "sampleId": "s0a-f7e3fa20b8515141d70c",
+      "captureProfileInstanceHash": "sha256:6a11be3cdb961b01739c968dc1fcb35b183d99cdad0bc6f94385abe0efbb638c"
+    },
+    {
+      "sampleId": "s0a-ffc50125d1907ba088ce",
+      "captureProfileInstanceHash": "sha256:295aac054bce48afdcce903d9b73afc5dd2023a6a5446bdf512fd071df7b2339"
+    }
+  ],
+  "policyHash": "sha256:1d9ee0b874721a3eb1e45e1d347744f316bbd0f6b407184afcb37bb9abae18db"
+}

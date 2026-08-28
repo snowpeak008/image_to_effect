@@ -1,0 +1,74 @@
+{
+  "s0a-08c8cf039360cf6bbd8d": {
+    "topLevelRoute": "VISUAL_FAIL",
+    "state": "fail",
+    "stateRef": "starting; seed 0",
+    "frameNumbers": [1],
+    "imageRegion": "central emitter and ground-plane region in the seed 0 Beauty frame",
+    "observation": "At the declared starting state in seed 0 frame 1, the emitter region contains no visible flame, while the other two starting rows do; the start of the required sustained-flame lifecycle is not coherent across all three seeds."
+  },
+  "s0a-24c8141887d34b51a310": {
+    "topLevelRoute": "VISUAL_FAIL",
+    "state": "fail",
+    "stateRef": "starting through steady; seeds 0-2",
+    "frameNumbers": [1, 21, 60, 120, 180],
+    "imageRegion": "central-to-right ground-plane region across all three seed rows",
+    "observation": "Across all three seeds the flame moves systematically from the central emitter toward the right during the declared steady interval, ending roughly one-sixth of the image width away by frame 180; the sustained phase is visibly not spatially coherent."
+  },
+  "s0a-53512a3ad64170769851": {
+    "topLevelRoute": "VISUAL_FAIL",
+    "state": "fail",
+    "stateRef": "starting; seed 0",
+    "frameNumbers": [1],
+    "imageRegion": "central emitter and ground-plane region in the seed 0 Beauty frame",
+    "observation": "At the declared starting state in seed 0 frame 1, the emitter region contains no visible flame, while the other two starting rows do; the start of the required sustained-flame lifecycle is not coherent across all three seeds."
+  },
+  "s0a-58d3b957bf125ad8534a": {
+    "topLevelRoute": "VISUAL_FAIL",
+    "state": "fail",
+    "stateRef": "steady; seeds 0-2",
+    "frameNumbers": [21, 60, 120, 180],
+    "imageRegion": "central-to-right ground plane and right image boundary across all three seed rows",
+    "observation": "During the declared steady interval the flame travels from the central emitter to the right boundary in every seed; by frame 180 the flame is partially outside the Beauty frame and visibly clipped, so the sustained phase is not spatially coherent."
+  },
+  "s0a-7f5cd5ce8ac8abdfa4cb": {
+    "topLevelRoute": "VISUAL_FAIL",
+    "state": "fail",
+    "stateRef": "starting; seeds 0-2",
+    "frameNumbers": [1],
+    "imageRegion": "central emitter and ground-plane region across all three starting Beauty frames",
+    "observation": "All three declared starting frames show the emitter region without a visible flame; the first visible flame appears only in steady-state evidence, so the required start phase is not visibly observable."
+  },
+  "s0a-bb15bae0813aa31b2b44": {
+    "topLevelRoute": "VISUAL_FAIL",
+    "state": "fail",
+    "stateRef": "steady; seeds 0-2",
+    "frameNumbers": [21, 60, 120, 180],
+    "imageRegion": "central-to-right ground plane and right image boundary across all three seed rows",
+    "observation": "During the declared steady interval the flame travels from the central emitter to the right boundary in every seed; by frame 180 the flame is partially outside the Beauty frame and visibly clipped, so the sustained phase is not spatially coherent."
+  },
+  "s0a-c74bd0b176c24a33c0dc": {
+    "topLevelRoute": "VISUAL_FAIL",
+    "state": "fail",
+    "stateRef": "starting through steady; seeds 0-2",
+    "frameNumbers": [1, 21, 60, 120, 180],
+    "imageRegion": "central-to-right ground-plane region across all three seed rows",
+    "observation": "Across all three seeds the flame moves systematically from the central emitter toward the right during the declared steady interval, ending roughly one-sixth of the image width away by frame 180; the sustained phase is visibly not spatially coherent."
+  },
+  "s0a-eb7ec9df27c324ba084b": {
+    "topLevelRoute": "VISUAL_FAIL",
+    "state": "fail",
+    "stateRef": "starting; seeds 0-2",
+    "frameNumbers": [1],
+    "imageRegion": "central emitter and ground-plane region across all three starting Beauty frames",
+    "observation": "All three declared starting frames show the emitter region without a visible flame; the first visible flame appears only in steady-state evidence, so the required start phase is not visibly observable."
+  },
+  "s0a-f7e3fa20b8515141d70c": {
+    "topLevelRoute": "VISUAL_FAIL",
+    "state": "fail",
+    "stateRef": "steady; seeds 0-2",
+    "frameNumbers": [21, 60, 120, 180],
+    "imageRegion": "central-to-right ground plane and right image boundary across all three seed rows",
+    "observation": "During the declared steady interval the flame travels from the central emitter to the right boundary in every seed; by frame 180 the flame is partially outside the Beauty frame and visibly clipped, so the sustained phase is not spatially coherent."
+  }
+}

@@ -1,0 +1,172 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://image-to-smart.local/schemas/s0a-isolated-review-session/v3",
+  "title": "Projected S0a isolated review session",
+  "oneOf": [
+    {"$ref": "#/$defs/simpleSession"},
+    {"$ref": "#/$defs/richSessionV1Reduced"},
+    {"$ref": "#/$defs/richSessionV2Reduced"},
+    {"$ref": "#/$defs/richSessionV2Full"}
+  ],
+  "$defs": {
+    "hash": {"type": "string", "pattern": "^sha256:[a-f0-9]{64}$"},
+    "sampleId": {"type": "string", "pattern": "^s0a-[a-f0-9]{20}$"},
+    "reviewRecord": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["sampleId", "report"],
+      "properties": {
+        "sampleId": {"$ref": "#/$defs/sampleId"},
+        "report": {"$ref": "https://image-to-smart.local/schemas/s0a-projected-visual-review/v1"}
+      }
+    },
+    "simpleSession": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["sessionId", "reviewerSessionId", "isolated", "startedAt", "completedAt", "reviews", "sessionHash"],
+      "properties": {
+        "sessionId": {"type": "string", "minLength": 1},
+        "reviewerSessionId": {"type": "string", "minLength": 1},
+        "isolated": {"const": true},
+        "startedAt": {"type": "string", "format": "date-time"},
+        "completedAt": {"type": "string", "format": "date-time"},
+        "reviews": {"oneOf": [{"type": "array", "minItems": 66, "maxItems": 66, "items": {"$ref": "#/$defs/reviewRecord"}}, {"type": "array", "minItems": 110, "maxItems": 110, "items": {"$ref": "#/$defs/reviewRecord"}}]},
+        "sessionHash": {"$ref": "#/$defs/hash"}
+      }
+    },
+    "reviewedSlot": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["seedOrdinal", "frameNumber", "availability"],
+      "properties": {
+        "seedOrdinal": {"type": "integer", "minimum": 0, "maximum": 2},
+        "frameNumber": {"enum": [1, 21, 60, 120, 180, 240, 300, 360]},
+        "availability": {"enum": ["present", "missing"]}
+      }
+    },
+    "richReviewRecord": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["sampleId", "reportFile", "evidenceHash", "imageReviewComplete", "reviewedSeedOrdinals", "reviewedFrameNumbers", "expectedBeautyFrameCount", "presentBeautyFrameCount", "reviewedBeautySlotCount", "reviewedBeautySlots", "report"],
+      "properties": {
+        "sampleId": {"$ref": "#/$defs/sampleId"},
+        "reportFile": {"type": "string", "pattern": "^reports/s0a-[a-f0-9]{20}\\.(?:report|review)\\.json$"},
+        "evidenceHash": {"$ref": "#/$defs/hash"},
+        "imageReviewComplete": {"const": true},
+        "reviewedSeedOrdinals": {"const": [0, 1, 2]},
+        "reviewedFrameNumbers": {"const": [1, 21, 60, 120, 180, 240, 300, 360]},
+        "expectedBeautyFrameCount": {"const": 24},
+        "presentBeautyFrameCount": {"type": "integer", "minimum": 0, "maximum": 24},
+        "reviewedBeautySlotCount": {"const": 24},
+        "reviewedBeautySlots": {"type": "array", "minItems": 24, "maxItems": 24, "items": {"$ref": "#/$defs/reviewedSlot"}},
+        "report": {"$ref": "https://image-to-smart.local/schemas/s0a-projected-visual-review/v1"}
+      }
+    },
+    "routeCounts": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["VISUAL_PASS", "VISUAL_FAIL", "EVIDENCE_INVALID", "CONTRACT_AMBIGUOUS", "VISUAL_UNCERTAIN"],
+      "properties": {
+        "VISUAL_PASS": {"type": "integer", "minimum": 0},
+        "VISUAL_FAIL": {"type": "integer", "minimum": 0},
+        "EVIDENCE_INVALID": {"type": "integer", "minimum": 0},
+        "CONTRACT_AMBIGUOUS": {"type": "integer", "minimum": 0},
+        "VISUAL_UNCERTAIN": {"type": "integer", "minimum": 0}
+      }
+    },
+    "validationChecks66": {
+      "type": "array",
+      "minItems": 6,
+      "maxItems": 6,
+      "uniqueItems": true,
+      "items": {
+        "enum": [
+          "schema-valid-66",
+          "sealed-report-hash-valid-66",
+          "session-hash-valid",
+          "unique-sample-ids-66",
+          "embedded-report-file-json-equal-66",
+          "reviewed-seeds-3-and-frame-slots-8-per-seed"
+        ]
+      }
+    },
+    "validationChecks110": {
+      "type": "array",
+      "minItems": 6,
+      "maxItems": 6,
+      "uniqueItems": true,
+      "items": {
+        "enum": [
+          "schema-valid-110",
+          "sealed-report-hash-valid-110",
+          "session-hash-valid",
+          "unique-sample-ids-110",
+          "embedded-report-file-json-equal-110",
+          "reviewed-seeds-3-and-frame-slots-8-per-seed"
+        ]
+      }
+    },
+    "richSessionBase": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schemaVersion", "reviewVersion", "sessionId", "reviewerSessionId", "candidateId", "contractHash", "buildHash", "captureProfileHash", "isolated", "qaGateAuthority", "s0aTerminalStatus", "sampleCount", "routeCounts", "validationChecks", "reports", "sessionHash"],
+      "properties": {
+        "schemaVersion": {"enum": ["s0a-visual-qa-session/1.0", "s0a-visual-qa-session/2.0"]},
+        "reviewVersion": {"const": "s0a-visual-qa/1.0"},
+        "sessionId": {"type": "string", "minLength": 1},
+        "reviewerSessionId": {"type": "string", "minLength": 1},
+        "candidateId": {"const": "C0"},
+        "contractHash": {"$ref": "#/$defs/hash"},
+        "buildHash": {"$ref": "#/$defs/hash"},
+        "captureProfileHash": {"$ref": "#/$defs/hash"},
+        "isolated": {"const": true},
+        "qaGateAuthority": {"const": "advisory-only"},
+        "s0aTerminalStatus": {"const": null},
+        "sampleCount": {"enum": [66, 110]},
+        "routeCounts": {"$ref": "#/$defs/routeCounts"},
+        "validationChecks": {"type": "array", "minItems": 6, "maxItems": 6, "uniqueItems": true},
+        "reports": {"oneOf": [{"type": "array", "minItems": 66, "maxItems": 66, "items": {"$ref": "#/$defs/richReviewRecord"}}, {"type": "array", "minItems": 110, "maxItems": 110, "items": {"$ref": "#/$defs/richReviewRecord"}}]},
+        "sessionHash": {"$ref": "#/$defs/hash"}
+      }
+    },
+    "richSessionV1Reduced": {
+      "allOf": [
+        {"$ref": "#/$defs/richSessionBase"},
+        {
+          "properties": {
+            "schemaVersion": {"const": "s0a-visual-qa-session/1.0"},
+            "sampleCount": {"const": 66},
+            "validationChecks": {"$ref": "#/$defs/validationChecks66"},
+            "reports": {"type": "array", "minItems": 66, "maxItems": 66, "items": {"$ref": "#/$defs/richReviewRecord"}}
+          }
+        }
+      ]
+    },
+    "richSessionV2Reduced": {
+      "allOf": [
+        {"$ref": "#/$defs/richSessionBase"},
+        {
+          "properties": {
+            "schemaVersion": {"const": "s0a-visual-qa-session/2.0"},
+            "sampleCount": {"const": 66},
+            "validationChecks": {"$ref": "#/$defs/validationChecks66"},
+            "reports": {"type": "array", "minItems": 66, "maxItems": 66, "items": {"$ref": "#/$defs/richReviewRecord"}}
+          }
+        }
+      ]
+    },
+    "richSessionV2Full": {
+      "allOf": [
+        {"$ref": "#/$defs/richSessionBase"},
+        {
+          "properties": {
+            "schemaVersion": {"const": "s0a-visual-qa-session/2.0"},
+            "sampleCount": {"const": 110},
+            "validationChecks": {"$ref": "#/$defs/validationChecks110"},
+            "reports": {"type": "array", "minItems": 110, "maxItems": 110, "items": {"$ref": "#/$defs/richReviewRecord"}}
+          }
+        }
+      ]
+    }
+  }
+}

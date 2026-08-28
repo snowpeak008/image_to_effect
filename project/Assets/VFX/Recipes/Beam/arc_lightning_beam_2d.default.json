@@ -1,0 +1,11 @@
+{
+  "recipeVersion": 1,
+  "revision": 2,
+  "id": "arc_lightning_beam_2d",
+  "archetype": "beam",
+  "dimension": "2d",
+  "lifecycle": "event_driven",
+  "duration": 1.2,
+  "primaryColor": "#4168FF",
+  "secondaryColor": "#B8F7FF"
+}

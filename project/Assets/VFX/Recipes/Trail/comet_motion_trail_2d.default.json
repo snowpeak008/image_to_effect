@@ -1,0 +1,11 @@
+{
+  "recipeVersion": 1,
+  "revision": 2,
+  "id": "comet_motion_trail_2d",
+  "archetype": "trail",
+  "dimension": "2d",
+  "lifecycle": "sustained",
+  "duration": 2.4,
+  "primaryColor": "#9245F2",
+  "secondaryColor": "#FFB0FA"
+}

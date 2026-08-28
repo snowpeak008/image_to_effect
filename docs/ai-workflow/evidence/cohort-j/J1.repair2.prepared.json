@@ -1,0 +1,13 @@
+{
+  "Key": "J1",
+  "Attempt": 2,
+  "AgentName": "s9_j_j1",
+  "EnvelopePath": "D:\\WorkWork\\Assist\\image_to_smart\\docs\\ai-workflow\\evidence\\cohort-j\\J1.repair2.envelope.txt",
+  "EnvelopeSha256": "AFF56A68B3FFB48DB0FAFCF99B301FD1C12E3E54C5DE9472617D37D62EA8482C",
+  "PayloadPath": "D:\\WorkWork\\Assist\\image_to_smart\\docs\\ai-workflow\\evidence\\cohort-j\\J1.repair2.payload.md",
+  "PayloadSha256": "DAFB3B2066BE142BD334921B353DEDA4AD202E19D01D000616EC356A8E722C60",
+  "TempPayloadPath": "C:\\Users\\admin\\AppData\\Local\\Temp\\vfxcomposer-s9-cohort-j\\J1\\J1.repair2.payload.md",
+  "TempPayloadSha256": "DAFB3B2066BE142BD334921B353DEDA4AD202E19D01D000616EC356A8E722C60",
+  "PriorReportPath": "D:\\WorkWork\\Assist\\image_to_smart\\docs\\ai-workflow\\evidence\\cohort-j\\J1.attempt1.report.json",
+  "PriorReportSha256": "EA77A4D2197E162D68BA1FA54C2DA79A9924BFB293FA83E1C98C2518FDFD1B99"
+}

@@ -1,0 +1,7 @@
+[
+  {
+    "op": "set_archetype_param",
+    "path": "/archetypeParameters/duration",
+    "value": 1.1
+  }
+]

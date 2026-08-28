@@ -1,0 +1,31 @@
+{
+  "successes": 4,
+  "total": 5,
+  "outcomes": [
+    {
+      "key": "G1",
+      "succeeded": true,
+      "detail": "build and semantic assertion passed"
+    },
+    {
+      "key": "G2",
+      "succeeded": true,
+      "detail": "build and semantic assertion passed"
+    },
+    {
+      "key": "G3",
+      "succeeded": true,
+      "detail": "build and semantic assertion passed"
+    },
+    {
+      "key": "G4",
+      "succeeded": false,
+      "detail": "E100 /platform Unknown field is not allowed. | E101 /recipeVersion Required field is missing. | E101 /dimension Required field is missing. | E101 /archetype Required field is missing. | E101 /targetProfile Required field is missing. | E101 /randomSeed Required field is missing. | E101 /stages/launch/modules/{invalid-module}/id Required field is missing. | E100 /stages/launch/modules/{invalid-module}/template Unknown field is not allowed. | E100 /stages/launch/modules/{invalid-module}/params Unknown field is not allowed. | E101 /stages/launch/modules/{invalid-module}/kind Required field is missing. | E101 /stages/launch/modules/{invalid-module}/templateId Required field is missing. | E101 /stages/launch/modules/{invalid-module}/enabled Required field is missing. | E101 /stages/launch/modules/{invalid-module}/parameters Required field is missing. | E101 /stages/travel/modules/{invalid-module}/id Required field is missing. | E100 /stages/travel/modules/{invalid-module}/template Unknown field is not allowed. | E100 /stages/travel/modules/{invalid-module}/params Unknown field is not allowed. | E101 /stages/travel/modules/{invalid-module}/kind Required field is missing. | E101 /stages/travel/modules/{invalid-module}/templateId Required field is missing. | E101 /stages/travel/modules/{invalid-module}/enabled Required field is missing. | E101 /stages/travel/modules/{invalid-module}/parameters Required field is missing. | E101 /stages/travel/modules/{invalid-module}/id Required field is missing. | E100 /stages/travel/modules/{invalid-module}/template Unknown field is not allowed. | E100 /stages/travel/modules/{invalid-module}/params Unknown field is not allowed. | E101 /stages/travel/modules/{invalid-module}/kind Required field is missing. | E101 /stages/travel/modules/{invalid-module}/templateId Required field is missing. | E101 /stages/travel/modules/{invalid-module}/enabled Required field is missing. | E101 /stages/travel/modules/{invalid-module}/parameters Required field is missing. | E101 /stages/impact/modules/{invalid-module}/id Required field is missing. | E100 /stages/impact/modules/{invalid-module}/template Unknown field is not allowed. | E100 /stages/impact/modules/{invalid-module}/params Unknown field is not allowed. | E101 /stages/impact/modules/{invalid-module}/kind Required field is missing. | E101 /stages/impact/modules/{invalid-module}/templateId Required field is missing. | E101 /stages/impact/modules/{invalid-module}/enabled Required field is missing. | E101 /stages/impact/modules/{invalid-module}/parameters Required field is missing. | E101 /metadata Required field is missing."
+    },
+    {
+      "key": "G5",
+      "succeeded": true,
+      "detail": "build and semantic assertion passed"
+    }
+  ]
+}

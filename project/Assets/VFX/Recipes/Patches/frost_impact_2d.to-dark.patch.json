@@ -1,0 +1,6 @@
+[
+  { "op": "set_style_token", "path": "/style/token", "value": "dark" },
+  { "op": "set_palette", "path": "/style/palette/primary", "value": "#10051F" },
+  { "op": "set_palette", "path": "/style/palette/secondary", "value": "#55217A" },
+  { "op": "set_palette", "path": "/style/palette/accent", "value": "#C834FF" }
+]

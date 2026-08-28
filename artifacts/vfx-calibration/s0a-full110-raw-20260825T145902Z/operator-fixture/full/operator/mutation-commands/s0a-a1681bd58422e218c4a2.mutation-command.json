@@ -1,0 +1,16 @@
+{
+  "schemaVersion": "s0a-operator-mutation-command/v1",
+  "sampleId": "s0a-a1681bd58422e218c4a2",
+  "effectId": "sustained_flame_3d",
+  "fixedSeed": 265298984,
+  "mutationCommands": [
+    {
+      "operation": "set",
+      "targetKey": "Particles.stopResidualSeconds",
+      "value": "2.50_seconds"
+    }
+  ],
+  "fixtureApplicationStatus": "NOT_APPLIED_BY_UNITY_FIXTURE_ADAPTER",
+  "operatorInstruction": "A later Unity fixture adapter must execute this command and capture evidence.",
+  "commandHash": "sha256:30fb6cd0ee752e3bf2416c7739cb4e2a939ab2d82d3ef3d53926d157591af349"
+}

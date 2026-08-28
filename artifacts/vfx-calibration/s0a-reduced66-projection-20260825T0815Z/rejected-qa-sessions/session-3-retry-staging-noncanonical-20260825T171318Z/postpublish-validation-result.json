@@ -1,0 +1,24 @@
+{
+  "validationStatus": "PASS",
+  "errors": [],
+  "checks": {
+    "exactSampleCount": 66,
+    "diskReportCount": 66,
+    "schemaValidReportCount": 66,
+    "sealedReportHashMatchCount": 66,
+    "embeddedCanonicalByteAndSemanticMatchCount": 66,
+    "reviewedBeautySlotCount": 1584,
+    "captureProfileInstanceHashVerifiedCount": 66,
+    "captureProfilePolicyHashMatchCount": 66,
+    "captureProfilePolicyHashDistinctCount": 1,
+    "advisoryNullTerminalReportCount": 66,
+    "routeCounts": {
+      "VISUAL_PASS": 51,
+      "VISUAL_FAIL": 9,
+      "EVIDENCE_INVALID": 6,
+      "CONTRACT_AMBIGUOUS": 0,
+      "VISUAL_UNCERTAIN": 0
+    },
+    "sessionHash": "sha256:82071b222e0e9373ad959034fdcb5e748614cd373a6bfd13e929de5e4033419e"
+  }
+}

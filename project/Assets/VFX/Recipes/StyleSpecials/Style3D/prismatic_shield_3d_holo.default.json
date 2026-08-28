@@ -1,0 +1,90 @@
+{
+  "recipeVersion": 1,
+  "revision": 1,
+  "id": "prismatic_shield_3d_holo",
+  "name": "Prismatic Shield 3d Holo",
+  "dimension": "3d",
+  "archetype": "shield",
+  "style": {
+    "token": "holo",
+    "glitch_rate": 4,
+    "glitch_offset": 0.05,
+    "palette": {
+      "primary": "#21D5F0",
+      "secondary": "#A8FFFF",
+      "accent": "#FF6B42"
+    },
+    "outline": 0.12,
+    "shading_steps": 4,
+    "noise_scale": 1.2,
+    "glow_strength": 1.1
+  },
+  "behavior": {
+    "hit": {
+      "type": "single"
+    },
+    "emission": {
+      "type": "single"
+    },
+    "timing": {
+      "type": "instant"
+    }
+  },
+  "targetProfile": "mobile_medium",
+  "randomSeed": 3862073950,
+  "stages": [
+    {
+      "id": "main",
+      "trigger": "manual",
+      "duration": 1.2,
+      "enabled": true,
+      "modules": [
+        {
+          "id": "body",
+          "kind": "energy_body",
+          "templateId": "PFT_3D_FireCore",
+          "parameters": {
+            "scale": 1.0
+          },
+          "enabled": true
+        },
+        {
+          "id": "flow",
+          "kind": "motion_trail",
+          "templateId": "PFT_3D_FireTrail",
+          "parameters": {
+            "time": 0.3,
+            "width": 0.28
+          },
+          "enabled": true,
+          "attachTo": "body"
+        },
+        {
+          "id": "secondary",
+          "kind": "secondary_particles",
+          "templateId": "PFT_3D_Embers",
+          "parameters": {
+            "rate": 12,
+            "lifetime": 0.5
+          },
+          "enabled": true,
+          "attachTo": "body"
+        },
+        {
+          "id": "accent",
+          "kind": "shockwave",
+          "templateId": "PFT_3D_Shockwave",
+          "parameters": {
+            "lifetime": 0.3,
+            "endSize": 2.2
+          },
+          "enabled": true
+        }
+      ]
+    }
+  ],
+  "metadata": {
+    "createdBy": "w9-w10-w16-style-special",
+    "templateCatalogVersion": "1.0.0"
+  }
+}

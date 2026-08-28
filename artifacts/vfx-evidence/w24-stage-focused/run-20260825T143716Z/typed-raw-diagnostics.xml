@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<test-run id="2" testcasecount="5" result="Passed" total="5" passed="5" failed="0" inconclusive="0" skipped="0" asserts="0" engine-version="3.5.0.0" clr-version="4.0.30319.42000" start-time="2026-08-25 14:36:56Z" end-time="2026-08-25 14:36:56Z" duration="0.1812132">
+  <test-suite type="TestSuite" id="1541" name="project" fullname="project" runstate="Runnable" testcasecount="442" result="Passed" start-time="2026-08-25 14:36:56Z" end-time="2026-08-25 14:36:56Z" duration="0.181213" total="5" passed="5" failed="0" inconclusive="0" skipped="0" asserts="0">
+    <properties />
+    <test-suite type="Assembly" id="2075" name="VFXComposer.Tests.EditMode.dll" fullname="D:/WorkWork/Assist/image_to_smart/.codex_tmp/w24-fresh-20260825-0628/project/Library/ScriptAssemblies/VFXComposer.Tests.EditMode.dll" runstate="Runnable" testcasecount="440" result="Passed" start-time="2026-08-25 14:36:56Z" end-time="2026-08-25 14:36:56Z" duration="0.165794" total="5" passed="5" failed="0" inconclusive="0" skipped="0" asserts="0">
+      <properties>
+        <property name="_PID" value="33408" />
+        <property name="_APPDOMAIN" value="Unity Child Domain" />
+        <property name="platform" value="EditMode" />
+      </properties>
+      <test-suite type="TestSuite" id="2076" name="VFXComposer" fullname="VFXComposer" runstate="Runnable" testcasecount="440" result="Passed" start-time="2026-08-25 14:36:56Z" end-time="2026-08-25 14:36:56Z" duration="0.161476" total="5" passed="5" failed="0" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <test-suite type="TestSuite" id="2077" name="Tests" fullname="VFXComposer.Tests" runstate="Runnable" testcasecount="440" result="Passed" start-time="2026-08-25 14:36:56Z" end-time="2026-08-25 14:36:56Z" duration="0.157987" total="5" passed="5" failed="0" inconclusive="0" skipped="0" asserts="0">
+          <properties />
+          <test-suite type="TestSuite" id="2078" name="EditMode" fullname="VFXComposer.Tests.EditMode" runstate="Runnable" testcasecount="440" result="Passed" start-time="2026-08-25 14:36:56Z" end-time="2026-08-25 14:36:56Z" duration="0.154094" total="5" passed="5" failed="0" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <test-suite type="TestFixture" id="1993" name="W24TypedRawDiagnosticCaptureTests" fullname="VFXComposer.Tests.EditMode.W24TypedRawDiagnosticCaptureTests" classname="VFXComposer.Tests.EditMode.W24TypedRawDiagnosticCaptureTests" runstate="Runnable" testcasecount="5" result="Passed" start-time="2026-08-25 14:36:56Z" end-time="2026-08-25 14:36:56Z" duration="0.120194" total="5" passed="5" failed="0" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <test-case id="1994" name="Float32Npy_HwcRgbAndRgba_AreFiniteCContiguousAndExactShape" fullname="VFXComposer.Tests.EditMode.W24TypedRawDiagnosticCaptureTests.Float32Npy_HwcRgbAndRgba_AreFiniteCContiguousAndExactShape" methodname="Float32Npy_HwcRgbAndRgba_AreFiniteCContiguousAndExactShape" classname="VFXComposer.Tests.EditMode.W24TypedRawDiagnosticCaptureTests" runstate="Runnable" seed="825946284" result="Passed" start-time="2026-08-25 14:36:56Z" end-time="2026-08-25 14:36:56Z" duration="0.014448" asserts="0">
+                <properties />
+              </test-case>
+              <test-case id="1995" name="RendererMask_PreflightRejectsEmptyNullDisabledInactiveAndDuplicateMembership" fullname="VFXComposer.Tests.EditMode.W24TypedRawDiagnosticCaptureTests.RendererMask_PreflightRejectsEmptyNullDisabledInactiveAndDuplicateMembership" methodname="RendererMask_PreflightRejectsEmptyNullDisabledInactiveAndDuplicateMembership" classname="VFXComposer.Tests.EditMode.W24TypedRawDiagnosticCaptureTests" runstate="Runnable" seed="84992445" result="Passed" start-time="2026-08-25 14:36:56Z" end-time="2026-08-25 14:36:56Z" duration="0.085876" asserts="0">
+                <properties />
+              </test-case>
+              <test-case id="1998" name="TypedRawCaptureCameraState_RestoresSerializedMainCameraAfterFailure" fullname="VFXComposer.Tests.EditMode.W24TypedRawDiagnosticCaptureTests.TypedRawCaptureCameraState_RestoresSerializedMainCameraAfterFailure" methodname="TypedRawCaptureCameraState_RestoresSerializedMainCameraAfterFailure" classname="VFXComposer.Tests.EditMode.W24TypedRawDiagnosticCaptureTests" runstate="Runnable" seed="748248134" result="Passed" start-time="2026-08-25 14:36:56Z" end-time="2026-08-25 14:36:56Z" duration="0.005732" asserts="0">
+                <properties />
+              </test-case>
+              <test-case id="1996" name="TypedRawCapturePolicies_FailClosedWithoutFormatsOrFixedLdrCameraState" fullname="VFXComposer.Tests.EditMode.W24TypedRawDiagnosticCaptureTests.TypedRawCapturePolicies_FailClosedWithoutFormatsOrFixedLdrCameraState" methodname="TypedRawCapturePolicies_FailClosedWithoutFormatsOrFixedLdrCameraState" classname="VFXComposer.Tests.EditMode.W24TypedRawDiagnosticCaptureTests" runstate="Runnable" seed="600730792" result="Passed" start-time="2026-08-25 14:36:56Z" end-time="2026-08-25 14:36:56Z" duration="0.003611" asserts="0">
+                <properties />
+              </test-case>
+              <test-case id="1997" name="TypedRawLdrResult_OnlyProvidesNpyAndDoesNotEncodePresentationPng" fullname="VFXComposer.Tests.EditMode.W24TypedRawDiagnosticCaptureTests.TypedRawLdrResult_OnlyProvidesNpyAndDoesNotEncodePresentationPng" methodname="TypedRawLdrResult_OnlyProvidesNpyAndDoesNotEncodePresentationPng" classname="VFXComposer.Tests.EditMode.W24TypedRawDiagnosticCaptureTests" runstate="Runnable" seed="1734073999" result="Passed" start-time="2026-08-25 14:36:56Z" end-time="2026-08-25 14:36:56Z" duration="0.000884" asserts="0">
+                <properties />
+              </test-case>
+            </test-suite>
+          </test-suite>
+        </test-suite>
+      </test-suite>
+    </test-suite>
+  </test-suite>
+</test-run>

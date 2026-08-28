@@ -1,0 +1,12 @@
+{
+  "scene": "Assets/VFX/Preview/VFXPREVIEW_ValidationGallery_3x3.unity",
+  "capture": "one serialized Camera; natural Update; synchronized preview-only scheduler",
+  "fps": 60,
+  "frames": [
+    { "file": "gallery_018.png", "time": 0.3, "aliveEntries": 9, "foregroundPixels": 97497, "cellForegroundPixels": [6508,7624,2333,18430,6178,9267,9724,12436,13630], "whiteClipRatio": 0.017406 },
+    { "file": "gallery_048.png", "time": 0.8, "aliveEntries": 7, "foregroundPixels": 99453, "cellForegroundPixels": [14406,189,0,18512,8077,9285,10087,12436,13699], "whiteClipRatio": 0.01833 },
+    { "file": "gallery_086.png", "time": 1.433, "aliveEntries": 9, "foregroundPixels": 94749, "cellForegroundPixels": [0,6230,982,20529,8046,9297,9581,17142,13829], "whiteClipRatio": 0.01809 },
+    { "file": "gallery_132.png", "time": 2.2, "aliveEntries": 9, "foregroundPixels": 84316, "cellForegroundPixels": [0,5134,781,18700,8105,9276,8978,12527,13730], "whiteClipRatio": 0.02289 },
+    { "file": "gallery_228.png", "time": 3.8, "aliveEntries": 5, "foregroundPixels": 65189, "cellForegroundPixels": [0,0,0,18820,8230,9277,10198,12527,0], "whiteClipRatio": 0.023593 }
+  ]
+}

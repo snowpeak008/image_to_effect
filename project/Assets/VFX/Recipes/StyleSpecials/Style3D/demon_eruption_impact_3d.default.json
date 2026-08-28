@@ -1,0 +1,96 @@
+{
+  "recipeVersion": 1,
+  "revision": 1,
+  "id": "demon_eruption_impact_3d",
+  "name": "Demon Eruption Impact 3d",
+  "dimension": "3d",
+  "archetype": "impact",
+  "style": {
+    "token": "dark",
+    "palette": {
+      "primary": "#280B11",
+      "secondary": "#641220",
+      "accent": "#E04432"
+    },
+    "outline": 0.12,
+    "shading_steps": 4,
+    "noise_scale": 1.2,
+    "glow_strength": 0.78
+  },
+  "behavior": {
+    "hit": {
+      "type": "single"
+    },
+    "emission": {
+      "type": "single"
+    },
+    "timing": {
+      "type": "instant"
+    }
+  },
+  "targetProfile": "mobile_medium",
+  "randomSeed": 1455212518,
+  "stages": [
+    {
+      "id": "main",
+      "trigger": "on_hit",
+      "duration": 1.1,
+      "enabled": true,
+      "modules": [
+        {
+          "id": "body",
+          "kind": "energy_body",
+          "templateId": "PFT_3D_FireCore",
+          "parameters": {
+            "scale": 1.0
+          },
+          "enabled": true
+        },
+        {
+          "id": "flow",
+          "kind": "motion_trail",
+          "templateId": "PFT_3D_FireTrail",
+          "parameters": {
+            "time": 0.3,
+            "width": 0.28
+          },
+          "enabled": true,
+          "attachTo": "body"
+        },
+        {
+          "id": "secondary",
+          "kind": "secondary_particles",
+          "templateId": "PFT_3D_Embers",
+          "parameters": {
+            "rate": 12,
+            "lifetime": 0.5
+          },
+          "enabled": true,
+          "attachTo": "body"
+        },
+        {
+          "id": "accent",
+          "kind": "shockwave",
+          "templateId": "PFT_3D_Shockwave",
+          "parameters": {
+            "lifetime": 0.3,
+            "endSize": 2.2
+          },
+          "enabled": true
+        }
+      ]
+    }
+  ],
+  "metadata": {
+    "createdBy": "w9-w10-w16-style-special",
+    "templateCatalogVersion": "1.0.0"
+  },
+  "content": {
+    "family": "style_special",
+    "parameters": {
+      "hand_scale": 1.4,
+      "black_fire_amount": 0.7,
+      "ash_lifetime": 1.4
+    }
+  }
+}

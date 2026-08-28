@@ -1,0 +1,32 @@
+{
+  "schema": "style-special-next-candidate/v1",
+  "id": "pixel_burst_impact_2d_next_candidate",
+  "sourceId": "pixel_burst_impact_2d",
+  "label": "PIXEL BURST · 12 FPS",
+  "group": "w9",
+  "archetype": "impact",
+  "dimension": "2d",
+  "style": "pixel",
+  "profile": "PixelSequence",
+  "semantic": "12fps-whiteflash>orange-cluster>smoke-ring+8way-debris",
+  "duration": 1.05,
+  "releaseNormalized": 0.08,
+  "sustainEndNormalized": 0.68,
+  "sustained": false,
+  "seed": 9101,
+  "intensity": 1.22,
+  "palette": {
+    "primary": "#FF7A1A",
+    "secondary": "#FFD84D",
+    "accent": "#FFFFFF"
+  },
+  "meshes": [
+    "Burst",
+    "Ring",
+    "Shard",
+    "Shard"
+  ],
+  "pairFamily": "",
+  "pairRole": "",
+  "sourceBaseId": ""
+}

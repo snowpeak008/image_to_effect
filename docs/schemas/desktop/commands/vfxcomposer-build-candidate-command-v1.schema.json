@@ -1,0 +1,215 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.vfxcomposer.dev/desktop/commands/vfxcomposer-build-candidate-command-v1.schema.json",
+  "title": "commands/vfxcomposer-build-candidate-command-v1.schema.json",
+  "type": "object",
+  "properties": {
+    "protocolVersion": {
+      "const": "vfxcomposer.protocol/1.0"
+    },
+    "messageKind": {
+      "const": "command.build-candidate"
+    },
+    "envelope": {
+      "type": "object",
+      "properties": {
+        "protocolVersion": {
+          "const": "vfxcomposer.protocol/1.0"
+        },
+        "requestId": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9._:-]{1,128}$",
+          "maxLength": 128
+        },
+        "commandId": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9._:-]{1,128}$",
+          "maxLength": 128
+        },
+        "idempotencyKey": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9._:-]{1,128}$",
+          "maxLength": 128
+        },
+        "leaseId": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9._:-]{1,128}$",
+          "maxLength": 128
+        },
+        "projectIdentity": {
+          "type": "object",
+          "properties": {
+            "typeTag": {
+              "const": "vfxcomposer.project-identity/1"
+            },
+            "digest": {
+              "type": "string",
+              "pattern": "^sha256:[0-9a-f]{64}$"
+            }
+          },
+          "required": [
+            "typeTag",
+            "digest"
+          ],
+          "additionalProperties": false
+        },
+        "leaseGeneration": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 9223372036854775807
+        },
+        "commandKind": {
+          "const": "command.build-candidate"
+        },
+        "commandCapability": {
+          "const": "command.build-candidate.v1"
+        },
+        "confirmationPolicy": {
+          "type": "object",
+          "properties": {
+            "policyId": {
+              "const": "confirmation.policy.reference.v1"
+            },
+            "policyIdentity": {
+              "type": "object",
+              "properties": {
+                "typeTag": {
+                  "const": "vfxcomposer.confirmation-policy/1"
+                },
+                "digest": {
+                  "type": "string",
+                  "pattern": "^sha256:[0-9a-f]{64}$"
+                }
+              },
+              "required": [
+                "typeTag",
+                "digest"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "policyId",
+            "policyIdentity"
+          ],
+          "additionalProperties": false
+        },
+        "selfHash": {
+          "type": "object",
+          "properties": {
+            "typeTag": {
+              "const": "vfxcomposer.command-envelope/1"
+            },
+            "digest": {
+              "type": "string",
+              "pattern": "^sha256:[0-9a-f]{64}$"
+            }
+          },
+          "required": [
+            "typeTag",
+            "digest"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "protocolVersion",
+        "requestId",
+        "commandId",
+        "idempotencyKey",
+        "leaseId",
+        "projectIdentity",
+        "leaseGeneration",
+        "commandKind",
+        "commandCapability",
+        "confirmationPolicy",
+        "selfHash"
+      ],
+      "additionalProperties": false
+    },
+    "recipeId": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9._:-]{1,128}$",
+      "maxLength": 128
+    },
+    "recipeValidationHash": {
+      "type": "object",
+      "properties": {
+        "typeTag": {
+          "const": "vfxcomposer.recipe-validation/1"
+        },
+        "digest": {
+          "type": "string",
+          "pattern": "^sha256:[0-9a-f]{64}$"
+        }
+      },
+      "required": [
+        "typeTag",
+        "digest"
+      ],
+      "additionalProperties": false
+    },
+    "buildDefinitionHash": {
+      "type": "object",
+      "properties": {
+        "typeTag": {
+          "const": "vfxcomposer.build-definition/1"
+        },
+        "digest": {
+          "type": "string",
+          "pattern": "^sha256:[0-9a-f]{64}$"
+        }
+      },
+      "required": [
+        "typeTag",
+        "digest"
+      ],
+      "additionalProperties": false
+    },
+    "candidateIdentity": {
+      "type": "object",
+      "properties": {
+        "typeTag": {
+          "const": "vfxcomposer.candidate-identity/1"
+        },
+        "digest": {
+          "type": "string",
+          "pattern": "^sha256:[0-9a-f]{64}$"
+        }
+      },
+      "required": [
+        "typeTag",
+        "digest"
+      ],
+      "additionalProperties": false
+    },
+    "selfHash": {
+      "type": "object",
+      "properties": {
+        "typeTag": {
+          "const": "vfxcomposer.command.build-candidate/1"
+        },
+        "digest": {
+          "type": "string",
+          "pattern": "^sha256:[0-9a-f]{64}$"
+        }
+      },
+      "required": [
+        "typeTag",
+        "digest"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "required": [
+    "protocolVersion",
+    "messageKind",
+    "envelope",
+    "recipeId",
+    "recipeValidationHash",
+    "buildDefinitionHash",
+    "candidateIdentity",
+    "selfHash"
+  ],
+  "additionalProperties": false
+}

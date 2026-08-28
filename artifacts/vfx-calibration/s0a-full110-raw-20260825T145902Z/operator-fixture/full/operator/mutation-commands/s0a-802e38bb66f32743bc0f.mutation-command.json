@@ -1,0 +1,16 @@
+{
+  "schemaVersion": "s0a-operator-mutation-command/v1",
+  "sampleId": "s0a-802e38bb66f32743bc0f",
+  "effectId": "sustained_flame_3d",
+  "fixedSeed": 2636844483,
+  "mutationCommands": [
+    {
+      "operation": "set",
+      "targetKey": "Capture.cameraScaleOffset",
+      "value": "scale_1.12"
+    }
+  ],
+  "fixtureApplicationStatus": "NOT_APPLIED_BY_UNITY_FIXTURE_ADAPTER",
+  "operatorInstruction": "A later Unity fixture adapter must execute this command and capture evidence.",
+  "commandHash": "sha256:68d2745e44f42254677531034a1f1a71d5c54bd906679e363d903fd45a8d247e"
+}

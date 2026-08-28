@@ -1,0 +1,7 @@
+[
+  {
+    "op": "set_content_param",
+    "path": "/content/parameters/blink_distance",
+    "value": 30.0
+  }
+]

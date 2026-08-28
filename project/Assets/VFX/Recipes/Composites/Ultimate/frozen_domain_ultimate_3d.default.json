@@ -1,0 +1,101 @@
+{
+  "recipeVersion": 1,
+  "revision": 1,
+  "id": "frozen_domain_ultimate_3d",
+  "name": "Frozen Domain Ultimate 3d",
+  "dimension": "3d",
+  "archetype": "composite",
+  "style": {
+    "token": "stylized",
+    "palette": {
+      "primary": "#2B8FD5",
+      "secondary": "#8DE8FF",
+      "accent": "#F2FFFF"
+    },
+    "outline": 0.1,
+    "shading_steps": 4,
+    "noise_scale": 1.2,
+    "glow_strength": 1.05
+  },
+  "targetProfile": "mobile_medium",
+  "randomSeed": 211130828,
+  "stages": [
+    {
+      "id": "main",
+      "trigger": "manual",
+      "duration": 6.0,
+      "enabled": true,
+      "modules": [
+        {
+          "id": "body",
+          "kind": "energy_body",
+          "templateId": "PFT_3D_FireCore",
+          "parameters": {
+            "scale": 1.0
+          },
+          "enabled": true
+        }
+      ]
+    }
+  ],
+  "metadata": {
+    "createdBy": "w13-w18-composite",
+    "templateCatalogVersion": "1.0.0"
+  },
+  "timeline": [
+    {
+      "t": 0.0,
+      "ref_id": "focus_charge_3d",
+      "action": "play",
+      "overrides": {
+        "scale": 1.0,
+        "palette": "ultimate"
+      }
+    },
+    {
+      "t": 0.6,
+      "ref_id": "blizzard_area_3d",
+      "action": "play",
+      "overrides": {
+        "scale": 1.35,
+        "palette": "ultimate"
+      }
+    },
+    {
+      "t": 2.2,
+      "ref_id": "flash_freeze_transform_3d",
+      "action": "play",
+      "overrides": {
+        "scale": 1.2,
+        "palette": "ultimate"
+      }
+    },
+    {
+      "t": 4.8,
+      "ref_id": "ice_spike_spawn_3d",
+      "action": "play",
+      "overrides": {
+        "scale": 1.45,
+        "palette": "ultimate"
+      }
+    }
+  ],
+  "camera_hints": [
+    {
+      "t": 0.5,
+      "type": "zoom",
+      "strength": 0.4
+    },
+    {
+      "t": 2.2,
+      "type": "slowmo",
+      "strength": 0.65
+    },
+    {
+      "t": 4.8,
+      "type": "shake",
+      "strength": 0.75
+    }
+  ],
+  "gates": []
+}

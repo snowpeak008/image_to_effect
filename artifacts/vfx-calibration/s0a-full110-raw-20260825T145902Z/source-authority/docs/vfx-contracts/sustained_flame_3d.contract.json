@@ -1,0 +1,434 @@
+{
+  "contractVersion": "w24-s0/1.0",
+  "effectId": "sustained_flame_3d",
+  "contractRevision": 17,
+  "contractHash": "sha256:5e1282e11315baf5b1000bddb93faee9d4a7addeaee74dda3a83479205bb242c",
+  "lifecycle": {
+    "kind": "sustained",
+    "start": {
+      "entryConditions": ["PlayWithSeed is called while idle"],
+      "deadlineSeconds": 0.35,
+      "completionConditions": ["ignition completes and steady layers are active"]
+    },
+    "steady": {
+      "entryConditions": ["start completes without stop or interrupt"],
+      "deadlineSeconds": 0,
+      "completionConditions": ["continues until an explicit Stop or Interrupt request"]
+    },
+    "stop": {
+      "entryConditions": ["Stop is requested from start or steady"],
+      "deadlineSeconds": 0.8,
+      "completionConditions": ["emission has stopped and the allowed tail has completed"]
+    },
+    "interrupt": {
+      "entryConditions": ["Interrupt is requested from start or steady"],
+      "deadlineSeconds": 0.35,
+      "completionConditions": ["interrupt burst completes and all controlled layers are cleared"]
+    }
+  },
+  "references": [
+    {
+      "source": "docs/vfx-contracts/references/sustained_flame_3d.brief.md",
+      "hash": "sha256:d4c1b2f6c8c368775208375c074a9bae7f7544d105c2a77c69ee85dcb556984a",
+      "license": "project-internal",
+      "assetUse": "reference-only",
+      "roles": [
+        {"dimension": "composition", "weight": 0.25},
+        {"dimension": "colour", "weight": 0.15},
+        {"dimension": "motion", "weight": 0.45},
+        {"dimension": "atmosphere", "weight": 0.15}
+      ],
+      "notRequired": [
+        "photorealism",
+        "cinematic bloom",
+        "a fixed copied flame silhouette",
+        "a runtime texture"
+      ]
+    }
+  ],
+  "spatialContract": {
+    "coordinateSpace": "local",
+    "origin": [0.0, 0.0, 0.0],
+    "orientationEulerDegrees": [0.0, 0.0, 0.0],
+    "visualAnchor": {
+      "kind": "transform",
+      "reference": "Runtime Entry root"
+    },
+    "designDimensions": {"width": 1.6, "height": 2.3, "depth": 1.4, "unit": "metre"},
+    "gameplayDistanceDimensions": {"width": 1.2, "height": 1.8, "depth": 1.0, "unit": "metre"}
+  },
+  "captureProfile": {
+    "captureProfileId": "w24_s0b_sustained_flame_dx11_v1",
+    "unityVersion": "2022.3.62f3c1",
+    "urpVersion": "14.0.12",
+    "graphicsApi": "Direct3D11",
+    "graphicsDeviceDriver": "NVIDIA GeForce RTX 1050 Ti / Direct3D 11.0 [level 11.1]",
+    "cameraSerializedReference": "Assets/VFX/Preview/VFXPREVIEW_SustainedFlame.unity#MainCamera",
+    "cameraPose": {
+      "position": [0.0, 1.12, -4.35],
+      "orientationEulerDegrees": [6.56, 0.0, 0.0]
+    },
+    "cameraFovDegrees": 38.0,
+    "sceneSerializedReference": "Assets/VFX/Preview/VFXPREVIEW_SustainedFlame.unity",
+    "sceneHash": "pending:formal-build",
+    "prefabManifestSerializedReference": "ProjectSettings/VFXComposer/BuildManifests/sustained_flame_3d.manifest.json#buildHash",
+    "prefabManifestHash": "pending:formal-build",
+    "rendererAssetSerializedReference": "Assets/Settings/VFXPreviewUniversalRenderer.asset",
+    "volumeSerializedReference": "none; bloom and tone mapping disabled",
+    "resolution": {"width": 960, "height": 540},
+    "fps": 60,
+    "background": "linear RGBA (0.035, 0.040, 0.055, 1.000)",
+    "colorSpace": "Linear",
+    "hdr": false,
+    "msaaSamples": 1,
+    "renderTextureFormat": "ARGB32",
+    "bloom": {"enabled": false, "settingsReference": "none"},
+    "toneMapping": "None",
+    "captureToolVersion": "w24-s0b-formal-capture/1.2.12",
+    "captureToolHash": "sha256:42954a33ed5aff61d8e3daf794efc5b0d0c2d4a655f20f52180b66b703dd4fff",
+    "canonicalSeed": 24001,
+    "robustnessSeeds": [24011, 24021]
+  },
+  "semanticStateMachine": {
+    "deterministicForSameSeed": true,
+    "states": [
+      {
+        "stateId": "idle",
+        "role": "custom",
+        "durationSeconds": 0,
+        "entryConditions": ["entry is constructed or cleanup completes"],
+        "exitConditions": ["PlayWithSeed is called"],
+        "triggeredEvents": [],
+        "preservedSemantics": ["local anchor", "seed contract"]
+      },
+      {
+        "stateId": "starting",
+        "role": "start",
+        "durationSeconds": 0.35,
+        "entryConditions": ["PlayWithSeed from idle"],
+        "exitConditions": ["start duration elapses", "Stop", "Interrupt"],
+        "triggeredEvents": ["Started"],
+        "preservedSemantics": ["local anchor", "energy origin", "seed"]
+      },
+      {
+        "stateId": "steady",
+        "role": "steady",
+        "durationSeconds": 0,
+        "entryConditions": ["starting completes"],
+        "exitConditions": ["Stop", "Interrupt"],
+        "triggeredEvents": ["SteadyEntered"],
+        "preservedSemantics": ["local anchor", "energy origin", "seed", "continuous heat source"]
+      },
+      {
+        "stateId": "stopping",
+        "role": "stop",
+        "durationSeconds": 0.8,
+        "entryConditions": ["Stop request"],
+        "exitConditions": ["tail duration or cleanup deadline elapses"],
+        "triggeredEvents": ["StopStarted", "Cleared"],
+        "preservedSemantics": ["local anchor", "fading heat source"]
+      },
+      {
+        "stateId": "interrupted",
+        "role": "interrupt",
+        "durationSeconds": 0.35,
+        "entryConditions": ["Interrupt request"],
+        "exitConditions": ["interrupt duration or cleanup deadline elapses"],
+        "triggeredEvents": ["Interrupted", "Cleared"],
+        "preservedSemantics": ["local anchor", "released energy origin"]
+      }
+    ],
+    "transitions": [
+      {"from": "idle", "to": "starting", "continuityMode": "impulse", "preservedSemantics": ["local anchor", "seed"], "triggeredEvents": ["Started"]},
+      {"from": "starting", "to": "steady", "continuityMode": "continuous", "preservedSemantics": ["local anchor", "energy origin", "seed"], "triggeredEvents": ["SteadyEntered"]},
+      {"from": "starting", "to": "stopping", "continuityMode": "continuous", "preservedSemantics": ["local anchor", "fading heat source"], "triggeredEvents": ["StopStarted"]},
+      {"from": "steady", "to": "stopping", "continuityMode": "continuous", "preservedSemantics": ["local anchor", "fading heat source"], "triggeredEvents": ["StopStarted"]},
+      {"from": "starting", "to": "interrupted", "continuityMode": "impulse", "preservedSemantics": ["local anchor", "released energy origin"], "triggeredEvents": ["Interrupted"]},
+      {"from": "steady", "to": "interrupted", "continuityMode": "impulse", "preservedSemantics": ["local anchor", "released energy origin"], "triggeredEvents": ["Interrupted"]},
+      {"from": "stopping", "to": "idle", "continuityMode": "clear", "preservedSemantics": ["seed contract"], "triggeredEvents": ["Cleared"]},
+      {"from": "interrupted", "to": "idle", "continuityMode": "clear", "preservedSemantics": ["seed contract"], "triggeredEvents": ["Cleared"]}
+    ],
+    "completionExits": ["stopping to idle"],
+    "interruptExits": ["interrupted to idle"]
+  },
+  "layers": [
+    {
+      "layerId": "ignition",
+      "responsibility": "establish the flame origin and transition into steady combustion",
+      "carrier": "Shuriken ParticleSystem",
+      "geometry": "camera-facing procedural flame cards",
+      "materialModel": "URP unlit procedural flame",
+      "colorRole": "white-yellow ignition core",
+      "blendMode": "additive",
+      "motionModel": "short outward cone burst",
+      "timing": "starting 0.00-0.35 s",
+      "attachment": "Runtime Entry local origin",
+      "continuityFrom": ["idle anchor"],
+      "continuityTo": ["core_flame", "outer_flame"],
+      "budgetCost": {"maxParticles": 16, "renderers": 1},
+      "required": true
+    },
+    {
+      "layerId": "core_flame",
+      "responsibility": "maintain the hottest readable flame core",
+      "carrier": "Shuriken ParticleSystem",
+      "geometry": "camera-facing procedural flame cards",
+      "materialModel": "URP unlit procedural flame",
+      "colorRole": "white-yellow hot core",
+      "blendMode": "additive",
+      "motionModel": "local upward emission with independent noise",
+      "timing": "entire steady state",
+      "attachment": "Steady local origin",
+      "continuityFrom": ["ignition"],
+      "continuityTo": ["stop_tail", "interrupt_burst"],
+      "budgetCost": {"maxParticles": 32, "renderers": 1},
+      "required": true
+    },
+    {
+      "layerId": "outer_flame",
+      "responsibility": "provide a broader red-orange flame body subordinate to the core",
+      "carrier": "Shuriken ParticleSystem",
+      "geometry": "camera-facing procedural flame cards",
+      "materialModel": "URP unlit procedural flame",
+      "colorRole": "orange-red outer heat",
+      "blendMode": "alpha",
+      "motionModel": "local upward emission with independent noise",
+      "timing": "entire steady state",
+      "attachment": "Steady local origin",
+      "continuityFrom": ["ignition"],
+      "continuityTo": ["stop_tail", "interrupt_burst"],
+      "budgetCost": {"maxParticles": 28, "renderers": 1},
+      "required": true
+    },
+    {
+      "layerId": "smoke",
+      "responsibility": "supply sparse dark exhaust without obscuring the flame core",
+      "carrier": "Shuriken ParticleSystem",
+      "geometry": "camera-facing procedural soft cards",
+      "materialModel": "URP unlit procedural smoke",
+      "colorRole": "low-contrast warm grey",
+      "blendMode": "alpha",
+      "motionModel": "slow rise with independent noise",
+      "timing": "steady state and permitted stop tail",
+      "attachment": "Steady local origin",
+      "continuityFrom": ["ignition"],
+      "continuityTo": ["stop_tail"],
+      "budgetCost": {"maxParticles": 18, "renderers": 1},
+      "required": true
+    },
+    {
+      "layerId": "embers",
+      "responsibility": "show sparse detached hot fragments that move independently",
+      "carrier": "Shuriken ParticleSystem",
+      "geometry": "small camera-facing procedural cards",
+      "materialModel": "URP unlit procedural ember",
+      "colorRole": "orange-yellow accents",
+      "blendMode": "additive",
+      "motionModel": "independent cone velocities and per-particle fade",
+      "timing": "steady state",
+      "attachment": "Steady local origin",
+      "continuityFrom": ["ignition"],
+      "continuityTo": ["interrupt_burst"],
+      "budgetCost": {"maxParticles": 16, "renderers": 1},
+      "required": true
+    },
+    {
+      "layerId": "real_light",
+      "responsibility": "illuminate a separate scene receiver with an actual bounded point light",
+      "carrier": "UnityEngine.Light",
+      "geometry": "point light volume",
+      "materialModel": "URP Forward real-time lighting",
+      "colorRole": "warm flame illumination",
+      "blendMode": "physical light contribution",
+      "motionModel": "controller-driven bounded intensity",
+      "timing": "starting and steady; disabled during bounded cleanup",
+      "attachment": "Runtime Entry local origin",
+      "continuityFrom": ["ignition"],
+      "continuityTo": ["stop_tail", "interrupt_burst"],
+      "budgetCost": {"lights": 1, "shadowedLights": 0},
+      "required": true
+    },
+    {
+      "layerId": "stop_tail",
+      "responsibility": "make a graceful emission stop while existing heat dissipates",
+      "carrier": "Shuriken ParticleSystem",
+      "geometry": "camera-facing procedural smoke cards",
+      "materialModel": "URP unlit procedural smoke",
+      "colorRole": "dim warm-grey residue",
+      "blendMode": "alpha",
+      "motionModel": "short outward fade",
+      "timing": "stopping 0.00-0.80 s",
+      "attachment": "Runtime Entry local origin",
+      "continuityFrom": ["core_flame", "outer_flame", "smoke"],
+      "continuityTo": ["idle"],
+      "budgetCost": {"maxParticles": 14, "renderers": 1},
+      "required": true
+    },
+    {
+      "layerId": "interrupt_burst",
+      "responsibility": "differentiate cancellation from a graceful stop",
+      "carrier": "Shuriken ParticleSystem",
+      "geometry": "small camera-facing procedural cards",
+      "materialModel": "URP unlit procedural ember",
+      "colorRole": "brief orange released-energy accents",
+      "blendMode": "additive",
+      "motionModel": "fast short cone burst",
+      "timing": "interrupted 0.00-0.35 s",
+      "attachment": "Runtime Entry local origin",
+      "continuityFrom": ["core_flame", "outer_flame", "embers"],
+      "continuityTo": ["idle"],
+      "budgetCost": {"maxParticles": 20, "renderers": 1},
+      "required": true
+    }
+  ],
+  "allowedSubstitutions": [
+    {
+      "substitutionId": "allow_noise_implementation",
+      "from": "procedural turbulence described by this contract",
+      "to": "an equivalent deterministic procedural noise function",
+      "rationale": "noise implementation may change while preserving independent turbulent motion and the same evidence gates"
+    },
+    {
+      "substitutionId": "allow_light_api",
+      "from": "one UnityEngine.Light point light",
+      "to": "one platform-equivalent project-approved real light adapter",
+      "rationale": "future platforms may use an adapter, but additive sprite brightness remains forbidden"
+    }
+  ],
+  "forbiddenSubstitutions": [
+    {
+      "substitutionId": "forbid_full_image_loop",
+      "from": "independently simulated flame layers",
+      "to": "a whole rendered flame picture rotating, scaling, or looping as one card",
+      "rationale": "whole-image motion does not implement sustained combustion semantics"
+    },
+    {
+      "substitutionId": "forbid_fake_light",
+      "from": "actual point light and receiver luminance change",
+      "to": "additive glow or bloom with no receiver lighting",
+      "rationale": "self-bright pixels are not scene illumination"
+    },
+    {
+      "substitutionId": "forbid_hard_stop",
+      "from": "bounded graceful stop or distinct interrupt",
+      "to": "instant disabling of every layer for both exits",
+      "rationale": "stop and interrupt are separate semantic exits"
+    },
+    {
+      "substitutionId": "forbid_single_layer",
+      "from": "independent core, outer flame, smoke, embers and light",
+      "to": "one carrier that visually bakes all required layers together",
+      "rationale": "required layers need independent telemetry, tuning and cleanup"
+    },
+    {
+      "substitutionId": "forbid_runtime_png",
+      "from": "zero-texture procedural baseline",
+      "to": "a runtime PNG, flipbook, or copied full flame image",
+      "rationale": "S0b intentionally validates the minimal procedural carrier and its size budget"
+    }
+  ],
+  "cleanup": {
+    "cleanupDeadline": 1.25,
+    "allowedResidualLayers": [],
+    "lightStopDeadline": 0.8
+  },
+  "budget": {
+    "particlePeak": 144,
+    "particleSteady": 94,
+    "rendererCount": 7,
+    "materialCount": 2,
+    "lightCount": 1,
+    "textureResidency": {"localExclusiveMb": 0.0, "totalDependencyMb": 0.0}
+  },
+  "requirements": [
+    {
+      "designRequirementId": "REQ-LIFECYCLE-START",
+      "type": "behavioral",
+      "evidenceAuthority": "telemetry",
+      "statement": "PlayWithSeed enters starting once and reaches steady within 0.35 seconds unless explicitly stopped or interrupted."
+    },
+    {
+      "designRequirementId": "REQ-LIFECYCLE-STEADY",
+      "type": "behavioral",
+      "evidenceAuthority": "telemetry",
+      "statement": "Steady combustion remains active for at least three observable statistical cycles and has no implicit duration limit."
+    },
+    {
+      "designRequirementId": "REQ-LIFECYCLE-STOP",
+      "type": "behavioral",
+      "evidenceAuthority": "telemetry",
+      "statement": "Stop ends emission, preserves only the bounded stop tail, disables light on time, and returns to idle by the cleanup deadline."
+    },
+    {
+      "designRequirementId": "REQ-LIFECYCLE-INTERRUPT",
+      "type": "behavioral",
+      "evidenceAuthority": "telemetry",
+      "statement": "Interrupt uses a distinct burst exit and returns to idle by the cleanup deadline."
+    },
+    {
+      "designRequirementId": "REQ-LAYERS-INDEPENDENT",
+      "type": "structural",
+      "evidenceAuthority": "telemetry",
+      "statement": "Core flame, outer flame, smoke, embers, exits, and light are independently addressable carriers with deterministic seeds where applicable."
+    },
+    {
+      "designRequirementId": "REQ-LIGHT-REAL",
+      "type": "structural",
+      "evidenceAuthority": "telemetry",
+      "statement": "Exactly one enabled-at-runtime UnityEngine.Light exists, has no shadows, and stays within the declared intensity and range budget."
+    },
+    {
+      "designRequirementId": "REQ-LIGHT-RECEIVER",
+      "type": "visual-measurable",
+      "evidenceAuthority": "diagnostic",
+      "statement": "With simulation frozen, toggling only the point light causes a measurable positive linear-luminance delta on the separate receiver outside the effect mask.",
+      "visualVerdict": {
+        "subject": "Preview_LightReceiver",
+        "expectedCondition": "receiver linear luminance with light on exceeds the matched light-off capture",
+        "evidenceLocation": {"state": "steady", "frameInterval": [60, 180], "roi": "receiver-only mask excluding the flame silhouette"}
+      }
+    },
+    {
+      "designRequirementId": "REQ-VISUAL-STEADY",
+      "type": "visual-semantic",
+      "evidenceAuthority": "visualQa",
+      "statement": "The steady state reads as one continuous flame with a hot core, subordinate outer flame, sparse smoke, and independently detached embers rather than a rotating whole image.",
+      "visualVerdict": {
+        "subject": "steady flame composition and motion",
+        "expectedCondition": "readable hot core; subordinate outer body; smoke does not obscure the core; detached embers do not move as one parent card; no visible loop seam or long-term drift",
+        "evidenceLocation": {"state": "steady", "frameInterval": [21, 291], "roi": "effect bounding region in Beauty filmstrip"}
+      }
+    },
+    {
+      "designRequirementId": "REQ-VISUAL-EXITS",
+      "type": "visual-semantic",
+      "evidenceAuthority": "visualQa",
+      "statement": "Graceful stop and interrupt are visually distinguishable, causally continuous exits and neither ends with an unexplained hard cut.",
+      "visualVerdict": {
+        "subject": "stop and interrupt transitions",
+        "expectedCondition": "stop dissipates; interrupt releases a brief burst; both preserve the origin and clear by their deadlines",
+        "evidenceLocation": {"state": "stopping and interrupted branches", "frameInterval": [0, 75], "roi": "effect bounding region in both exit filmstrips"}
+      }
+    },
+    {
+      "designRequirementId": "REQ-BUDGET-S0B",
+      "type": "budget",
+      "evidenceAuthority": "telemetry",
+      "statement": "The Runtime Entry stays within 144 particle capacity, 7 particle renderers, 2 blend-state materials, 1 unshadowed light, and zero runtime texture residency."
+    },
+    {
+      "designRequirementId": "REQ-USER-L4",
+      "type": "user-signoff",
+      "evidenceAuthority": "user",
+      "statement": "Final dynamic visual quality and commercial suitability remain pending until the user signs this contract revision, build hash, and capture profile."
+    }
+  ],
+  "extensions": {
+    "visualStatus": "VISUAL_PENDING",
+    "captureBindingStatus": "PENDING_FIRST_FORMAL_BUILD",
+    "runtimeEntry": "Assets/VFX/Effects/Aura/sustained_flame_3d/VFX_sustained_flame_3d.prefab",
+    "previewScene": "Assets/VFX/Preview/VFXPREVIEW_SustainedFlame.unity",
+    "recipe": "Assets/VFX/Recipes/Aura/sustained_flame_3d.default.json",
+    "implementationTrace": "docs/vfx-traces/sustained_flame_3d.implementation-trace.json"
+  }
+}

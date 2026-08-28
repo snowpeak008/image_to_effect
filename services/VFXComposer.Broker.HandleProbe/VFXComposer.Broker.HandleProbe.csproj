@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <AssemblyName>VFXComposer.Broker.HandleProbe</AssemblyName>
+    <RootNamespace>VFXComposer.Broker.HandleProbe</RootNamespace>
+    <IsPackable>false</IsPackable>
+    <IsPublishable>false</IsPublishable>
+    <VFXComposerTestOnlyArtifact>true</VFXComposerTestOnlyArtifact>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\VFXComposer.Broker\VFXComposer.Broker.csproj" />
+    <ProjectReference Include="..\..\src\VFXComposer.Protocol\VFXComposer.Protocol.csproj" />
+  </ItemGroup>
+</Project>

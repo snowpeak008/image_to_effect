@@ -1,0 +1,12 @@
+{
+  "manifestVersion": 1,
+  "templateId": "PFT_2D_FireTrail",
+  "templateVersion": "1.0.0",
+  "kind": "motion_trail",
+  "dimension": "2d",
+  "assetGuid": "53612997992ca0b458f1c243f2147a37",
+  "assetPath": "Assets/VFX/Templates/2D/Prefabs/PFT_2D_FireTrail.prefab",
+  "tags": ["fire", "stylized", "2d"],
+  "parameters": { "time": { "type": "float", "min": .08, "max": .4, "default": .22, "binding": "trail.time" }, "width": { "type": "float", "min": .12, "max": .55, "default": .42, "binding": "trail.width" } },
+  "cost": { "estimatedPeakParticles": 0, "materials": 1, "trails": 1 }
+}

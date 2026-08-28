@@ -1,0 +1,65 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://image-to-smart.local/schemas/s0a-projected-operator-evidence-bundle/v1",
+  "title": "Projected S0a operator evidence bundle",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "holdoutCohort", "freezeStatus", "operatorLedgerHash", "commandSetHash", "blindManifestHash", "reviewContextHash", "captureProfilePolicyHash", "samples", "bundleHash"],
+  "properties": {
+    "schemaVersion": {"const": "s0a-projected-operator-evidence-bundle/v1"},
+    "holdoutCohort": {"enum": ["reduced-36-12-12-6", "full-60-20-20-10"]},
+    "freezeStatus": {"const": "FROZEN_FOR_BLIND_REVIEW"},
+    "operatorLedgerHash": {"$ref": "#/$defs/hash"},
+    "commandSetHash": {"$ref": "#/$defs/hash"},
+    "blindManifestHash": {"$ref": "#/$defs/hash"},
+    "reviewContextHash": {"$ref": "#/$defs/hash"},
+    "captureProfilePolicyHash": {"$ref": "#/$defs/hash"},
+    "samples": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/sample"}},
+    "bundleHash": {"$ref": "#/$defs/hash"}
+  },
+  "allOf": [
+    {
+      "if": {"properties": {"holdoutCohort": {"const": "reduced-36-12-12-6"}}, "required": ["holdoutCohort"]},
+      "then": {"properties": {"samples": {"minItems": 66, "maxItems": 66}}},
+      "else": {"properties": {"samples": {"minItems": 110, "maxItems": 110}}}
+    }
+  ],
+  "$defs": {
+    "hash": {"type": "string", "pattern": "^sha256:[a-f0-9]{64}$"},
+    "nullableHash": {"type": ["string", "null"], "pattern": "^sha256:[a-f0-9]{64}$"},
+    "sampleId": {"type": "string", "pattern": "^s0a-[a-f0-9]{20}$"},
+    "integrityPair": {"type": "object", "additionalProperties": false, "required": ["file", "declaredHash", "actualHash"], "properties": {"file": {"type": "string", "minLength": 1}, "declaredHash": {"$ref": "#/$defs/hash"}, "actualHash": {"$ref": "#/$defs/hash"}}},
+    "hashedFile": {"type": "object", "additionalProperties": false, "required": ["file", "sha256"], "properties": {"file": {"type": "string", "minLength": 1}, "sha256": {"$ref": "#/$defs/hash"}}},
+    "diagnosticFrame": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["seedOrdinal", "frameIndex", "file", "declaredHash", "actualHash"],
+      "properties": {
+        "seedOrdinal": {"type": "integer", "minimum": 0, "maximum": 2},
+        "frameIndex": {"enum": [1, 21, 60, 120, 180, 240, 300, 360]},
+        "file": {"type": "string", "minLength": 1},
+        "declaredHash": {"$ref": "#/$defs/hash"},
+        "actualHash": {"$ref": "#/$defs/hash"}
+      }
+    },
+    "sample": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["sampleId", "commandHash", "completionHash", "rawCaptureSealFileHash", "selectedEvidenceDerivationHash", "ledgerTailHash", "captureProfileInstanceHash", "blindEvidenceHash", "blindEvidenceManifest", "selectedCaptureMetadata", "semanticTelemetry", "diagnosticFrames"],
+      "properties": {
+        "sampleId": {"$ref": "#/$defs/sampleId"},
+        "commandHash": {"$ref": "#/$defs/hash"},
+        "completionHash": {"$ref": "#/$defs/hash"},
+        "rawCaptureSealFileHash": {"$ref": "#/$defs/hash"},
+        "selectedEvidenceDerivationHash": {"$ref": "#/$defs/nullableHash"},
+        "ledgerTailHash": {"$ref": "#/$defs/hash"},
+        "captureProfileInstanceHash": {"$ref": "#/$defs/hash"},
+        "blindEvidenceHash": {"$ref": "#/$defs/hash"},
+        "blindEvidenceManifest": {"type": "string", "minLength": 1},
+        "selectedCaptureMetadata": {"$ref": "#/$defs/integrityPair"},
+        "semanticTelemetry": {"$ref": "#/$defs/hashedFile"},
+        "diagnosticFrames": {"type": "array", "minItems": 24, "maxItems": 24, "items": {"$ref": "#/$defs/diagnosticFrame"}}
+      }
+    }
+  }
+}

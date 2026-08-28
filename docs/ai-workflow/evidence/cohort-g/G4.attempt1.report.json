@@ -1,0 +1,302 @@
+{
+  "succeeded": false,
+  "detail": null,
+  "entries": [
+    {
+      "code": "E100",
+      "severity": "error",
+      "path": "/platform",
+      "message": "Unknown field is not allowed.",
+      "actualValue": "pc_editor",
+      "allowedRange": null
+    },
+    {
+      "code": "E101",
+      "severity": "error",
+      "path": "/recipeVersion",
+      "message": "Required field is missing.",
+      "actualValue": null,
+      "allowedRange": null
+    },
+    {
+      "code": "E101",
+      "severity": "error",
+      "path": "/dimension",
+      "message": "Required field is missing.",
+      "actualValue": null,
+      "allowedRange": null
+    },
+    {
+      "code": "E101",
+      "severity": "error",
+      "path": "/archetype",
+      "message": "Required field is missing.",
+      "actualValue": null,
+      "allowedRange": null
+    },
+    {
+      "code": "E101",
+      "severity": "error",
+      "path": "/targetProfile",
+      "message": "Required field is missing.",
+      "actualValue": null,
+      "allowedRange": null
+    },
+    {
+      "code": "E101",
+      "severity": "error",
+      "path": "/randomSeed",
+      "message": "Required field is missing.",
+      "actualValue": null,
+      "allowedRange": null
+    },
+    {
+      "code": "E101",
+      "severity": "error",
+      "path": "/stages/launch/modules/{invalid-module}/id",
+      "message": "Required field is missing.",
+      "actualValue": null,
+      "allowedRange": null
+    },
+    {
+      "code": "E100",
+      "severity": "error",
+      "path": "/stages/launch/modules/{invalid-module}/template",
+      "message": "Unknown field is not allowed.",
+      "actualValue": "core",
+      "allowedRange": null
+    },
+    {
+      "code": "E100",
+      "severity": "error",
+      "path": "/stages/launch/modules/{invalid-module}/params",
+      "message": "Unknown field is not allowed.",
+      "actualValue": {
+        "intensity": 0.45,
+        "scale": 0.6
+      },
+      "allowedRange": null
+    },
+    {
+      "code": "E101",
+      "severity": "error",
+      "path": "/stages/launch/modules/{invalid-module}/kind",
+      "message": "Required field is missing.",
+      "actualValue": null,
+      "allowedRange": null
+    },
+    {
+      "code": "E101",
+      "severity": "error",
+      "path": "/stages/launch/modules/{invalid-module}/templateId",
+      "message": "Required field is missing.",
+      "actualValue": null,
+      "allowedRange": null
+    },
+    {
+      "code": "E101",
+      "severity": "error",
+      "path": "/stages/launch/modules/{invalid-module}/enabled",
+      "message": "Required field is missing.",
+      "actualValue": null,
+      "allowedRange": null
+    },
+    {
+      "code": "E101",
+      "severity": "error",
+      "path": "/stages/launch/modules/{invalid-module}/parameters",
+      "message": "Required field is missing.",
+      "actualValue": null,
+      "allowedRange": null
+    },
+    {
+      "code": "E101",
+      "severity": "error",
+      "path": "/stages/travel/modules/{invalid-module}/id",
+      "message": "Required field is missing.",
+      "actualValue": null,
+      "allowedRange": null
+    },
+    {
+      "code": "E100",
+      "severity": "error",
+      "path": "/stages/travel/modules/{invalid-module}/template",
+      "message": "Unknown field is not allowed.",
+      "actualValue": "core",
+      "allowedRange": null
+    },
+    {
+      "code": "E100",
+      "severity": "error",
+      "path": "/stages/travel/modules/{invalid-module}/params",
+      "message": "Unknown field is not allowed.",
+      "actualValue": {
+        "intensity": 0.5,
+        "scale": 0.55
+      },
+      "allowedRange": null
+    },
+    {
+      "code": "E101",
+      "severity": "error",
+      "path": "/stages/travel/modules/{invalid-module}/kind",
+      "message": "Required field is missing.",
+      "actualValue": null,
+      "allowedRange": null
+    },
+    {
+      "code": "E101",
+      "severity": "error",
+      "path": "/stages/travel/modules/{invalid-module}/templateId",
+      "message": "Required field is missing.",
+      "actualValue": null,
+      "allowedRange": null
+    },
+    {
+      "code": "E101",
+      "severity": "error",
+      "path": "/stages/travel/modules/{invalid-module}/enabled",
+      "message": "Required field is missing.",
+      "actualValue": null,
+      "allowedRange": null
+    },
+    {
+      "code": "E101",
+      "severity": "error",
+      "path": "/stages/travel/modules/{invalid-module}/parameters",
+      "message": "Required field is missing.",
+      "actualValue": null,
+      "allowedRange": null
+    },
+    {
+      "code": "E101",
+      "severity": "error",
+      "path": "/stages/travel/modules/{invalid-module}/id",
+      "message": "Required field is missing.",
+      "actualValue": null,
+      "allowedRange": null
+    },
+    {
+      "code": "E100",
+      "severity": "error",
+      "path": "/stages/travel/modules/{invalid-module}/template",
+      "message": "Unknown field is not allowed.",
+      "actualValue": "trail",
+      "allowedRange": null
+    },
+    {
+      "code": "E100",
+      "severity": "error",
+      "path": "/stages/travel/modules/{invalid-module}/params",
+      "message": "Unknown field is not allowed.",
+      "actualValue": {
+        "width": 0.12,
+        "length": 0.65,
+        "intensity": 0.28,
+        "embers": false
+      },
+      "allowedRange": null
+    },
+    {
+      "code": "E101",
+      "severity": "error",
+      "path": "/stages/travel/modules/{invalid-module}/kind",
+      "message": "Required field is missing.",
+      "actualValue": null,
+      "allowedRange": null
+    },
+    {
+      "code": "E101",
+      "severity": "error",
+      "path": "/stages/travel/modules/{invalid-module}/templateId",
+      "message": "Required field is missing.",
+      "actualValue": null,
+      "allowedRange": null
+    },
+    {
+      "code": "E101",
+      "severity": "error",
+      "path": "/stages/travel/modules/{invalid-module}/enabled",
+      "message": "Required field is missing.",
+      "actualValue": null,
+      "allowedRange": null
+    },
+    {
+      "code": "E101",
+      "severity": "error",
+      "path": "/stages/travel/modules/{invalid-module}/parameters",
+      "message": "Required field is missing.",
+      "actualValue": null,
+      "allowedRange": null
+    },
+    {
+      "code": "E101",
+      "severity": "error",
+      "path": "/stages/impact/modules/{invalid-module}/id",
+      "message": "Required field is missing.",
+      "actualValue": null,
+      "allowedRange": null
+    },
+    {
+      "code": "E100",
+      "severity": "error",
+      "path": "/stages/impact/modules/{invalid-module}/template",
+      "message": "Unknown field is not allowed.",
+      "actualValue": "burst",
+      "allowedRange": null
+    },
+    {
+      "code": "E100",
+      "severity": "error",
+      "path": "/stages/impact/modules/{invalid-module}/params",
+      "message": "Unknown field is not allowed.",
+      "actualValue": {
+        "intensity": 0.4,
+        "scale": 0.7,
+        "speed": 0.45,
+        "shockwave": false
+      },
+      "allowedRange": null
+    },
+    {
+      "code": "E101",
+      "severity": "error",
+      "path": "/stages/impact/modules/{invalid-module}/kind",
+      "message": "Required field is missing.",
+      "actualValue": null,
+      "allowedRange": null
+    },
+    {
+      "code": "E101",
+      "severity": "error",
+      "path": "/stages/impact/modules/{invalid-module}/templateId",
+      "message": "Required field is missing.",
+      "actualValue": null,
+      "allowedRange": null
+    },
+    {
+      "code": "E101",
+      "severity": "error",
+      "path": "/stages/impact/modules/{invalid-module}/enabled",
+      "message": "Required field is missing.",
+      "actualValue": null,
+      "allowedRange": null
+    },
+    {
+      "code": "E101",
+      "severity": "error",
+      "path": "/stages/impact/modules/{invalid-module}/parameters",
+      "message": "Required field is missing.",
+      "actualValue": null,
+      "allowedRange": null
+    },
+    {
+      "code": "E101",
+      "severity": "error",
+      "path": "/metadata",
+      "message": "Required field is missing.",
+      "actualValue": null,
+      "allowedRange": null
+    }
+  ]
+}

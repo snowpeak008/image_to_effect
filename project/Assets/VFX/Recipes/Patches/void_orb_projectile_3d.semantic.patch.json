@@ -1,0 +1,7 @@
+[
+  {
+    "op": "set_content_param",
+    "path": "/content/parameters/implode_scale",
+    "value": 3.125
+  }
+]

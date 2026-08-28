@@ -1,0 +1,12 @@
+{
+  "manifestVersion": 1,
+  "templateId": "PFT_3D_FireCore",
+  "templateVersion": "1.0.0",
+  "kind": "energy_body",
+  "dimension": "3d",
+  "assetGuid": "39025b13b4ad89b4a8aa54833fba71c1",
+  "assetPath": "Assets/VFX/Templates/3D/Prefabs/PFT_3D_FireCore.prefab",
+  "tags": ["fire", "stylized", "3d", "bounds:template-local", "camera:perspective-reviewed"],
+  "parameters": { "scale": { "type": "float", "min": .6, "max": 2.4, "default": 1.2, "binding": "3d.core.scale" } },
+  "cost": { "estimatedPeakParticles": 0, "materials": 2, "trails": 0 }
+}

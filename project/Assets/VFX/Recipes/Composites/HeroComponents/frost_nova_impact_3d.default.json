@@ -1,0 +1,64 @@
+{
+  "recipeVersion": 1,
+  "revision": 1,
+  "id": "frost_nova_impact_3d",
+  "name": "Frost Nova Impact 3d",
+  "dimension": "3d",
+  "archetype": "impact",
+  "style": {
+    "token": "crystal",
+    "palette": {
+      "primary": "#328CD0",
+      "secondary": "#8DE8FF",
+      "accent": "#FFFFFF"
+    },
+    "outline": 0.1,
+    "shading_steps": 4,
+    "noise_scale": 1.2,
+    "glow_strength": 1.05
+  },
+  "targetProfile": "mobile_medium",
+  "randomSeed": 1704901487,
+  "stages": [
+    {
+      "id": "main",
+      "trigger": "manual",
+      "duration": 0.75,
+      "enabled": true,
+      "modules": [
+        {
+          "id": "body",
+          "kind": "energy_body",
+          "templateId": "PFT_3D_FireCore",
+          "parameters": {
+            "scale": 1.0
+          },
+          "enabled": true
+        }
+      ]
+    }
+  ],
+  "metadata": {
+    "createdBy": "w18-hero-exclusive",
+    "templateCatalogVersion": "1.0.0"
+  },
+  "behavior": {
+    "motion": {
+      "type": "expand_ring",
+      "max_radius": 4,
+      "expand_speed": 5,
+      "edge_thickness": 0.2
+    },
+    "hit": {
+      "type": "single"
+    },
+    "emission": {
+      "type": "ring",
+      "count": 10,
+      "ring_radius": 1
+    },
+    "timing": {
+      "type": "instant"
+    }
+  }
+}

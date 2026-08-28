@@ -1,0 +1,88 @@
+using System;
+using System.Collections.Generic;
+using System.Globalization;
+using System.IO;
+using System.Linq;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using UnityEditor;
+using UnityEditor.SceneManagement;
+using UnityEngine;
+using VFXComposer.Editor.Validation;
+
+namespace VFXComposer.Editor.Style
+{
+    public sealed class StyleSpecialEntry
+    {
+        public string Id,Group,Archetype,Dimension,Style,Primary,Secondary,Accent,ContentJson,StyleJson,BehaviorJson,BaseId;
+        public float Duration;public bool Sustained;
+    }
+
+    public static class StyleSpecialCatalog
+    {
+        public static readonly StyleSpecialEntry[] All={
+            E("pixel_burst_impact_2d","style2d","impact","2d","pixel","#FF7A1A","#FFD84D","#FFFFFF",.55f,false,"{'burst_scale':1.2,'debris_count':8}","{'snap_fps':12,'palette_lut':'warm_fire','virtual_res':96}"),
+            E("pixel_sword_slash_2d","style2d","slash","2d","pixel","#58B8FF","#D8F4FF","#FFFFFF",.32f,false,"{'arc_frames':3,'star_count':4}","{'snap_fps':12,'palette_lut':'cold_frost','virtual_res':96}"),
+            E("pixel_heal_aura_2d","style2d","aura","2d","pixel","#52D878","#C8FFB5","#FFFFFF",1f,true,"{'symbol_mix':'cross_dot','rise_speed':1.5}","{'snap_fps':12,'palette_lut':'heal_green','virtual_res':64}"),
+            E("anime_smear_slash_2d","style2d","slash","2d","cartoon","#FF5B2A","#FFD24A","#FFFFFF",.42f,false,"{'smear_scale':1.25,'speedline_count':4,'palette':'warm'}","{'atlas_id':'AnimeSmearAtlas','atlas_fps':24,'loop_mode':'once'}"),
+            E("poof_smoke_spawn_2d","style2d","spawn","2d","cartoon","#D7D8E0","#FFFFFF","#8C91A3",.65f,false,"{'poof_scale':1.3,'satellite_count':4}","{'atlas_id':'AnimeSmearAtlas','atlas_fps':18,'loop_mode':'once'}"),
+            E("anime_charge_aura_2d","style2d","aura","2d","cartoon","#3DA7FF","#BDEBFF","#FFFFFF",1f,true,"{'flame_atlas_row':0,'intensity':2}","{'atlas_id':'AnimeSmearAtlas','atlas_fps':18,'loop_mode':'loop'}"),
+            E("ink_slash_2d","style2d","slash","2d","inkwash","#1B1D20","#565B61","#C93B32",.48f,false,"{'stroke_width':.62,'accent_color':'#C93B32'}","{'ink_density':.82,'bleed_radius':.32,'flyaway_threshold':.58}"),
+            E("ink_splash_impact_2d","style2d","impact","2d","inkwash","#111214","#45494E","#B6382F",.6f,false,"{'splash_count':6,'bleed_time':.35}","{'ink_density':.88,'bleed_radius':.5,'flyaway_threshold':.46}"),
+            E("ink_dragon_trail_2d","style2d","trail","2d","inkwash","#141619","#4C5258","#B43B32",.9f,false,"{'body_width':.42,'fade_bleed':.55}","{'ink_density':.76,'bleed_radius':.42,'flyaway_threshold':.65}","{'motion':{'type':'wave','speed':3,'amplitude':.2,'frequency':1.2},'hit':{'type':'single'},'emission':{'type':'single'},'timing':{'type':'instant'}}"),
+            V("fireball_2d_pixel","style2d","projectile","2d","pixel","#FF641C","#FFD34A","#FFFFFF",1.1f,"fireball_2d","{'snap_fps':12,'palette_lut':'warm_fire','virtual_res':96}","{'motion':{'type':'linear','speed':4},'hit':{'type':'single'},'emission':{'type':'single'},'timing':{'type':'instant'}}"),
+
+            E("real_explosion_impact_3d","style3d","impact","3d","semireal","#E53A0B","#FF9A22","#FFF1C0",1.8f,false,"{'blast_scale':1.4,'fireball_count':4,'dust_ring':true,'smoke_lifetime':1.8}","{'noise_primary_speed':.3,'noise_detail_speed':1.7}"),
+            E("smoke_plume_area_3d","style3d","area","3d","semireal","#303239","#6C6E72","#FF7A22",1.5f,true,"{'plume_height':4.2,'wind_bend':.7,'ember_glow':true}","{'noise_primary_speed':.3,'noise_detail_speed':1.7}"),
+            E("muzzle_flash_impact_3d","style3d","impact","3d","semireal","#FF9C20","#FFE47A","#FFFFFF",.12f,false,"{'flash_scale':1.1,'petal_count':5}","{'noise_primary_speed':.3,'noise_detail_speed':1.7}"),
+            E("holo_barrier_shield_3d","style3d","shield","3d","holo","#27D6F2","#8FFAFF","#FF633E",1.2f,false,"{'hex_density':12,'scan_speed':2.4,'barrier_shape':'arc'}","{'glitch_rate':5,'glitch_offset':.08}"),
+            E("holo_scan_area_3d","style3d","area","3d","holo","#2DDAF5","#B4FFFF","#FF7148",1.2f,true,"{'scan_interval':.65,'mark_count':3}","{'glitch_rate':4,'glitch_offset':.06}"),
+            E("glitch_blink_transform_3d","style3d","transform","3d","holo","#34DFFF","#B7FFFF","#FF4B38",.65f,false,"{'voxel_size':.16,'blink_distance':4,'reassemble_time':.28}","{'glitch_rate':12,'glitch_offset':.16}","{'motion':{'type':'dash','distance':4,'duration':.3},'hit':{'type':'single'},'emission':{'type':'single'},'timing':{'type':'instant'}}"),
+            E("blood_ritual_spawn_3d","style3d","spawn","3d","dark","#521015","#9A1E25","#FF5A42",1.2f,false,"{'circle_radius':2.2,'rune_set':'blood_a','candle_count':5,'smoke_height':3.4}","{}"),
+            E("soul_drain_beam_3d","style3d","beam","3d","dark","#351344","#7F2A8E","#C95CE0",1.1f,true,"{'drain_rate':10,'wisp_count':8,'sag':.35}","{}","{'hit':{'type':'arc_link','hop_count':1,'sag':.35,'jitter':.03},'emission':{'type':'single'},'timing':{'type':'sustained'}}"),
+            E("demon_eruption_impact_3d","style3d","impact","3d","dark","#280B11","#641220","#E04432",1.1f,false,"{'hand_scale':1.4,'black_fire_amount':.7,'ash_lifetime':1.4}","{}"),
+            V("prismatic_shield_3d_holo","style3d","shield","3d","holo","#21D5F0","#A8FFFF","#FF6B42",1.2f,"prismatic_shield_3d","{'glitch_rate':4,'glitch_offset':.05}"),
+
+            E("poly_burst_impact_3d","pack2","impact","3d","lowpoly","#F05B3A","#FFC34A","#FFF2C8",.65f,false,"{'piece_count':14,'spread':2.8}","{'flat_shading':true,'facet_mesh':'Facet_A'}"),
+            E("gem_lance_projectile_3d","pack2","projectile","3d","crystal","#45BFFF","#D9F8FF","#FF8CF4",1.2f,false,"{'lance_length':2.4,'refraction':.72}","{'dispersion_strength':.35}","{'motion':{'type':'linear','speed':5},'hit':{'type':'single'},'emission':{'type':'single'},'timing':{'type':'instant'}}"),
+            E("candy_pop_impact_2d","pack2","impact","2d","candy","#FF72B6","#76E8E0","#FFF19A",.65f,false,"{'symbol_count':12,'bounce':.75}","{'squash_curve':'candy_bounce_v1'}"),
+            E("nebula_orb_projectile_3d","pack2","projectile","3d","cosmic","#4D2B9C","#6CD6FF","#FF7CEB",1.35f,false,"{'star_density':.72,'parallax':.6}","{'nebula_noise':'NebulaA+NebulaB'}","{'motion':{'type':'linear','speed':3.2},'hit':{'type':'single'},'emission':{'type':'single'},'timing':{'type':'instant'}}"),
+            E("steam_vent_burst_impact_3d","pack2","impact","3d","steampunk","#9B6B2F","#D9B56A","#EEF3E7",.8f,false,"{'gear_count':6,'steam_pressure':5.5}","{'step_fps':8}"),
+            E("phantom_wail_area_2d","pack2","area","2d","ghost","#62C9BC","#B9F1E9","#EFFFFB",1.2f,true,"{'ghost_count':5,'drift':.8}","{'ghost_pulse_fps':1.5}"),
+            V("boulder_projectile_3d_lowpoly","pack2","projectile","3d","lowpoly","#8B6A48","#C9A777","#F1D5A5",1.3f,"boulder_projectile_3d","{'flat_shading':true,'facet_mesh':'Facet_B'}","{'motion':{'type':'parabola','apex_height':2,'flight_time':1.2},'hit':{'type':'single'},'emission':{'type':'single'},'timing':{'type':'instant'}}"),
+            V("crystal_shield_3d_crystal","pack2","shield","3d","crystal","#52D9FF","#E8FFFF","#FF8CF4",1f,"crystal_shield_3d","{'dispersion_strength':.42}"),
+            V("healing_bloom_aura_2d_candy","pack2","aura","2d","candy","#77E49A","#FF9BCB","#FFF3A1",1f,"healing_bloom_aura_2d","{'squash_curve':'candy_bounce_v1'}",null,true),
+            V("summoning_portal_2d_cosmic","pack2","spawn","2d","cosmic","#5933B7","#61D1FF","#FF77E4",1.2f,"summoning_portal_2d","{'nebula_noise':'NebulaA+NebulaB'}"),
+            V("volt_shield_3d_steampunk","pack2","shield","3d","steampunk","#9C7138","#E0C377","#8FE8FF",1f,"volt_shield_3d","{'step_fps':8}"),
+            V("spectral_trail_3d_ghost","pack2","trail","3d","ghost","#54BDAF","#B4EEE6","#F1FFFC",1.1f,"spectral_trail_3d","{'ghost_pulse_fps':1.5}","{'motion':{'type':'wave','speed':2.4,'amplitude':.18,'frequency':1.1},'hit':{'type':'single'},'emission':{'type':'single'},'timing':{'type':'instant'}}")
+        };
+
+        public static IEnumerable<StyleSpecialEntry> Group(string group){return All.Where(v=>v.Group==group);}
+        private static StyleSpecialEntry E(string id,string group,string archetype,string dimension,string style,string primary,string secondary,string accent,float duration,bool sustained,string content,string styleJson,string behavior=null){return new StyleSpecialEntry{Id=id,Group=group,Archetype=archetype,Dimension=dimension,Style=style,Primary=primary,Secondary=secondary,Accent=accent,Duration=duration,Sustained=sustained,ContentJson=content,StyleJson=styleJson,BehaviorJson=behavior??(sustained?Sustained():Instant())};}
+        private static StyleSpecialEntry V(string id,string group,string archetype,string dimension,string style,string primary,string secondary,string accent,float duration,string baseId,string styleJson,string behavior=null,bool sustained=false){var value=E(id,group,archetype,dimension,style,primary,secondary,accent,duration,sustained,null,styleJson,behavior);value.BaseId=baseId;return value;}
+        private static string Instant(){return "{'hit':{'type':'single'},'emission':{'type':'single'},'timing':{'type':'instant'}}";}
+        private static string Sustained(){return "{'hit':{'type':'single'},'emission':{'type':'single'},'timing':{'type':'sustained'}}";}
+    }
+
+    public static class StyleSpecialAuthoring
+    {
+        public const string RecipeRoot="Assets/VFX/Recipes/StyleSpecials";public const string PatchRoot="Assets/VFX/Recipes/Patches";public const string PreviewRoot="Assets/VFX/Preview";
+        private static readonly Dictionary<string,string> PreviewNames=new Dictionary<string,string>{{"style2d","VFXPREVIEW_Style2D.unity"},{"style3d","VFXPREVIEW_Style3D.unity"},{"pack2","VFXPREVIEW_StylePack2.unity"}};
+        [MenuItem("Tools/VFX Composer/Style/Build W9 W10 W16")]
+        public static void BuildAll(){BuildEntries();foreach(var group in PreviewNames.Keys)BuildPreview(group);AssetDatabase.SaveAssets();AssetDatabase.Refresh();}
+        public static void BuildEntries(){WriteAllRecipes();AssetDatabase.Refresh(ImportAssetOptions.ForceSynchronousImport);foreach(var entry in StyleSpecialCatalog.All){var result=StyledContentCompiler.BuildAsset(RecipePath(entry));if(!result.Succeeded)throw new InvalidOperationException(entry.Id+": "+string.Join(" | ",result.Report.Entries.Select(v=>v.Code+" "+v.Path+" "+v.Message)));}AssetDatabase.SaveAssets();AssetDatabase.Refresh();}
+        public static void WriteAllRecipes(){VfxStyleSharedLibrary.EnsureFolder(RecipeRoot);VfxStyleSharedLibrary.EnsureFolder(PatchRoot);foreach(var entry in StyleSpecialCatalog.All){var folder=RecipeRoot+"/"+Folder(entry.Group);VfxStyleSharedLibrary.EnsureFolder(folder);Write(folder+"/"+entry.Id+".default.json",Recipe(entry));WritePatch(entry);}}
+        public static string RecipePath(StyleSpecialEntry entry){return RecipeRoot+"/"+Folder(entry.Group)+"/"+entry.Id+".default.json";}
+        public static string PreviewPath(string group){return PreviewRoot+"/"+PreviewNames[group];}
+        private static JObject Recipe(StyleSpecialEntry entry){var style=JObject.Parse(entry.StyleJson.Replace(":.",":0."));style.AddFirst(new JProperty("token",entry.Style));style["palette"]=new JObject{{"primary",entry.Primary},{"secondary",entry.Secondary},{"accent",entry.Accent}};if(style["outline"]==null)style["outline"]=.12;if(style["shading_steps"]==null)style["shading_steps"]=entry.Style=="lowpoly"?2:4;if(style["noise_scale"]==null)style["noise_scale"]=entry.Style=="cosmic"?4.8:1.2;if(style["glow_strength"]==null)style["glow_strength"]=entry.Style=="dark"?.78:1.1;var recipe=new JObject{{"recipeVersion",1},{"revision",1},{"id",entry.Id},{"name",Title(entry.Id)},{"dimension",entry.Dimension},{"archetype",entry.Archetype},{"style",style},{"behavior",JObject.Parse(entry.BehaviorJson.Replace(":.",":0."))},{"targetProfile","mobile_medium"},{"randomSeed",Seed(entry.Id)},{"stages",Stages(entry)},{"metadata",new JObject{{"createdBy","w9-w10-w16-style-special"},{"templateCatalogVersion","1.0.0"}}}};if(entry.ContentJson!=null)recipe["content"]=new JObject{{"family","style_special"},{"parameters",JObject.Parse(entry.ContentJson.Replace(":.",":0."))}};return recipe;}
+        private static JArray Stages(StyleSpecialEntry e){var d=e.Dimension=="2d"?"2D":"3D";var core="PFT_"+d+"_FireCore";var trail="PFT_"+d+"_FireTrail";var particles="PFT_"+d+"_Embers";var shock="PFT_"+d+"_Shockwave";var trigger=e.Archetype=="impact"?"on_hit":"manual";return new JArray{new JObject{{"id","main"},{"trigger",trigger},{"duration",e.Duration},{"enabled",true},{"modules",new JArray{Module("body","energy_body",core,new JObject{{"scale",1.0}}),Module("flow","motion_trail",trail,new JObject{{"time",.3},{"width",.28}},"body"),Module("secondary","secondary_particles",particles,new JObject{{"rate",12},{"lifetime",.5}},"body"),Module("accent","shockwave",shock,new JObject{{"lifetime",.3},{"endSize",2.2}})}}}};}
+        private static JObject Module(string id,string kind,string template,JObject parameters,string attach=null){var value=new JObject{{"id",id},{"kind",kind},{"templateId",template},{"parameters",parameters},{"enabled",true}};if(attach!=null)value["attachTo"]=attach;return value;}
+        private static void WritePatch(StyleSpecialEntry entry){var patch=new JArray();ContentDefinition definition;if(entry.ContentJson!=null&&ContentParameterRegistry.TryGet(entry.Id,out definition)){var parameter=definition.Parameters.Values.OrderBy(v=>v.Name,StringComparer.Ordinal).First();var values=JObject.Parse(entry.ContentJson.Replace(":.",":0."));patch.Add(new JObject{{"op","set_content_param"},{"path","/content/parameters/"+parameter.Name},{"value",Alternative(parameter,values[parameter.Name])}});}else patch.Add(new JObject{{"op","set_palette"},{"path","/style/palette/accent"},{"value","#E8FFFF"}});Write(PatchRoot+"/"+entry.Id+".semantic.patch.json",patch);}
+        private static JToken Alternative(ContentParameterDefinition d,JToken current){if(d.Kind==ContentParameterKind.Boolean)return new JValue(!(bool)current);if(d.Kind==ContentParameterKind.Enum)return new JValue(d.Values.First(v=>v!=(string)current));if(d.Kind==ContentParameterKind.Integer)return new JValue((int)current==(int)d.Max?(int)d.Min:(int)d.Max);if(d.Kind==ContentParameterKind.Number)return new JValue(Math.Abs((double)current-d.Max)<.0001?d.Min:d.Max);return new JValue((string)current+"_variant");}
+        private static void BuildPreview(string group){VfxStyleSharedLibrary.EnsureFolder(PreviewRoot);var scene=EditorSceneManager.NewScene(NewSceneSetup.EmptyScene,NewSceneMode.Single);var cameraGo=new GameObject("StyleSpecialReviewCamera");var camera=cameraGo.AddComponent<Camera>();camera.tag="MainCamera";camera.clearFlags=CameraClearFlags.SolidColor;camera.backgroundColor=new Color(.015f,.018f,.025f);camera.orthographic=true;camera.orthographicSize=group=="pack2"?5.8f:5.1f;camera.transform.position=new Vector3(0,0,-12);camera.allowHDR=false;camera.allowMSAA=false;if(group=="style3d"){var oblique=new GameObject("Style3DObliqueReviewCamera").AddComponent<Camera>();oblique.enabled=false;oblique.clearFlags=camera.clearFlags;oblique.backgroundColor=camera.backgroundColor;oblique.transform.position=new Vector3(6,5,-9);oblique.transform.LookAt(Vector3.zero);oblique.fieldOfView=45;oblique.allowHDR=false;oblique.allowMSAA=false;}var entries=StyleSpecialCatalog.Group(group).ToArray();var controllers=new List<StyledVfxController>();for(var i=0;i<entries.Length;i++){var entry=entries[i];var row=i/3;var col=i%3;var cell=new GameObject("Cell_"+(i+1).ToString("00",CultureInfo.InvariantCulture)+"_"+entry.Id);cell.transform.position=new Vector3((col-1)*3.3f,3.8f-row*2.3f,0);var prefab=AssetDatabase.LoadAssetAtPath<GameObject>("Assets/VFX/Generated/"+entry.Id+"/VFX_"+entry.Id+".prefab");var instance=(GameObject)PrefabUtility.InstantiatePrefab(prefab,scene);instance.transform.SetParent(cell.transform,false);instance.transform.localScale=Vector3.one*.7f;if(entry.Dimension=="3d")instance.transform.localRotation=Quaternion.Euler(22,-18,0);controllers.Add(instance.GetComponent<StyledVfxController>());var label=new GameObject("Label");label.transform.SetParent(cell.transform,false);label.transform.localPosition=new Vector3(0,-.9f,0);var text=label.AddComponent<TextMesh>();text.text=(i+1)+" "+entry.Id;text.anchor=TextAnchor.MiddleCenter;text.fontSize=38;text.characterSize=.03f;text.color=new Color(.68f,.75f,.84f);}var driverGo=new GameObject("ElementFamilyPreviewDriver");var driver=driverGo.AddComponent<ElementFamilyPreviewDriver>();var so=new SerializedObject(driver);var p=so.FindProperty("entries");p.arraySize=controllers.Count;for(var i=0;i<controllers.Count;i++)p.GetArrayElementAtIndex(i).objectReferenceValue=controllers[i];so.ApplyModifiedPropertiesWithoutUndo();EditorSceneManager.SaveScene(scene,PreviewPath(group));}
+        private static string Folder(string group){return group=="style2d"?"Style2D":group=="style3d"?"Style3D":"StylePack2";}
+        private static string Title(string id){return string.Join(" ",id.Split('_').Select(v=>v.Length==0?v:char.ToUpperInvariant(v[0])+v.Substring(1)));}
+        private static uint Seed(string id){unchecked{uint h=2166136261;foreach(var c in id){h^=c;h*=16777619;}return h;}}
+        private static void Write(string path,JToken token){var absolute=Path.GetFullPath(Path.Combine(Directory.GetParent(Application.dataPath).FullName,path.Replace('/',Path.DirectorySeparatorChar)));Directory.CreateDirectory(Path.GetDirectoryName(absolute));File.WriteAllText(absolute,token.ToString(Formatting.Indented).Replace("\r\n","\n"));}
+    }
+}

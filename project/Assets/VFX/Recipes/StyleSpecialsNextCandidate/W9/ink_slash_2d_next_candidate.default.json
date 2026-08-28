@@ -1,0 +1,31 @@
+{
+  "schema": "style-special-next-candidate/v1",
+  "id": "ink_slash_2d_next_candidate",
+  "sourceId": "ink_slash_2d",
+  "label": "INK SLASH · DRY END",
+  "group": "w9",
+  "archetype": "slash",
+  "dimension": "2d",
+  "style": "inkwash",
+  "profile": "InkBleed",
+  "semantic": "heavy-start>crescent-brush>negative-space+dry-flyaway",
+  "duration": 1.08,
+  "releaseNormalized": 0.16,
+  "sustainEndNormalized": 0.7,
+  "sustained": false,
+  "seed": 9107,
+  "intensity": 0.96,
+  "palette": {
+    "primary": "#1B1D20",
+    "secondary": "#565B61",
+    "accent": "#C93B32"
+  },
+  "meshes": [
+    "Ribbon",
+    "Ribbon",
+    "Shard"
+  ],
+  "pairFamily": "",
+  "pairRole": "",
+  "sourceBaseId": ""
+}

@@ -1,0 +1,254 @@
+{
+  "recipeVersion": 1,
+  "revision": 1,
+  "id": "blade_tempest_ultimate_3d",
+  "name": "Blade Tempest Ultimate 3d",
+  "dimension": "3d",
+  "archetype": "composite",
+  "style": {
+    "token": "stylized",
+    "palette": {
+      "primary": "#C52319",
+      "secondary": "#FF6A24",
+      "accent": "#FFD776"
+    },
+    "outline": 0.1,
+    "shading_steps": 4,
+    "noise_scale": 1.2,
+    "glow_strength": 1.05
+  },
+  "targetProfile": "mobile_medium",
+  "randomSeed": 104514412,
+  "stages": [
+    {
+      "id": "main",
+      "trigger": "manual",
+      "duration": 5.0,
+      "enabled": true,
+      "modules": [
+        {
+          "id": "body",
+          "kind": "energy_body",
+          "templateId": "PFT_3D_FireCore",
+          "parameters": {
+            "scale": 1.0
+          },
+          "enabled": true
+        }
+      ]
+    }
+  ],
+  "metadata": {
+    "createdBy": "w13-w18-composite",
+    "templateCatalogVersion": "1.0.0"
+  },
+  "timeline": [
+    {
+      "t": 0.0,
+      "ref_id": "focus_charge_3d",
+      "action": "play",
+      "overrides": {
+        "scale": 1.0,
+        "palette": "ultimate"
+      }
+    },
+    {
+      "t": 0.55,
+      "ref_id": "focus_charge_3d",
+      "action": "stop"
+    },
+    {
+      "t": 0.6,
+      "ref_id": "slash_3d_stylized",
+      "action": "play",
+      "overrides": {
+        "scale": 0.85,
+        "position": [
+          -0.8,
+          0.3,
+          0.0
+        ],
+        "rotation": [
+          0.0,
+          0.0,
+          -25.0
+        ],
+        "palette": "ultimate"
+      }
+    },
+    {
+      "t": 0.65,
+      "ref_id": "gale_dash_trail_2d",
+      "action": "play",
+      "overrides": {
+        "scale": 1.3,
+        "palette": "ultimate"
+      }
+    },
+    {
+      "t": 0.88,
+      "ref_id": "gale_dash_trail_2d",
+      "action": "stop"
+    },
+    {
+      "t": 0.9,
+      "ref_id": "slash_3d_stylized",
+      "action": "play",
+      "overrides": {
+        "scale": 0.9,
+        "position": [
+          0.7,
+          0.2,
+          0.0
+        ],
+        "rotation": [
+          0.0,
+          0.0,
+          155.0
+        ],
+        "palette": "ultimate"
+      }
+    },
+    {
+      "t": 1.2,
+      "ref_id": "slash_3d_stylized",
+      "action": "play",
+      "overrides": {
+        "scale": 1.0,
+        "position": [
+          -0.4,
+          -0.5,
+          0.0
+        ],
+        "rotation": [
+          0.0,
+          0.0,
+          15.0
+        ],
+        "palette": "ultimate"
+      }
+    },
+    {
+      "t": 1.5,
+      "ref_id": "slash_3d_stylized",
+      "action": "play",
+      "overrides": {
+        "scale": 1.05,
+        "position": [
+          0.5,
+          -0.4,
+          0.0
+        ],
+        "rotation": [
+          0.0,
+          0.0,
+          195.0
+        ],
+        "palette": "ultimate"
+      }
+    },
+    {
+      "t": 1.8,
+      "ref_id": "slash_3d_stylized",
+      "action": "play",
+      "overrides": {
+        "scale": 1.12,
+        "position": [
+          -0.2,
+          0.7,
+          0.0
+        ],
+        "rotation": [
+          0.0,
+          0.0,
+          -55.0
+        ],
+        "palette": "ultimate"
+      }
+    },
+    {
+      "t": 2.1,
+      "ref_id": "slash_3d_stylized",
+      "action": "play",
+      "overrides": {
+        "scale": 1.18,
+        "position": [
+          0.2,
+          -0.7,
+          0.0
+        ],
+        "rotation": [
+          0.0,
+          0.0,
+          125.0
+        ],
+        "palette": "ultimate"
+      }
+    },
+    {
+      "t": 2.4,
+      "ref_id": "slash_3d_stylized",
+      "action": "play",
+      "overrides": {
+        "scale": 1.25,
+        "position": [
+          -0.1,
+          0.0,
+          0.0
+        ],
+        "rotation": [
+          0.0,
+          0.0,
+          -5.0
+        ],
+        "palette": "ultimate"
+      }
+    },
+    {
+      "t": 2.7,
+      "ref_id": "slash_3d_stylized",
+      "action": "play",
+      "overrides": {
+        "scale": 1.4,
+        "position": [
+          0.1,
+          0.0,
+          0.0
+        ],
+        "rotation": [
+          0.0,
+          0.0,
+          175.0
+        ],
+        "palette": "ultimate"
+      }
+    },
+    {
+      "t": 3.5,
+      "ref_id": "parry_spark_impact_3d",
+      "action": "play",
+      "overrides": {
+        "scale": 1.25,
+        "palette": "ultimate"
+      }
+    }
+  ],
+  "camera_hints": [
+    {
+      "t": 0.6,
+      "type": "slowmo",
+      "strength": 0.2
+    },
+    {
+      "t": 2.7,
+      "type": "shake",
+      "strength": 0.75
+    },
+    {
+      "t": 3.5,
+      "type": "zoom",
+      "strength": 0.4
+    }
+  ],
+  "gates": []
+}

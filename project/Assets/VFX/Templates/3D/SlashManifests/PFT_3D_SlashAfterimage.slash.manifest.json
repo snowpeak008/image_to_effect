@@ -1,0 +1,14 @@
+{
+  "slashManifestVersion": 2,
+  "templateId": "PFT_3D_SlashAfterimage",
+  "templateVersion": "1.0.0",
+  "phaseKind": "afterimage",
+  "moduleKind": "arc_afterimage",
+  "dimension": "3d",
+  "assetGuid": "29cec62af6cdc6b47a97c516a340059a",
+  "assetPath": "Assets/VFX/Templates/3D/Slash/Prefabs/PFT_3D_SlashAfterimage.prefab",
+  "tags": ["slash", "s12a", "bloom-off"],
+  "materialGuids": ["15b161df09ca0c846bfd296047a94bc8"],
+  "parameters": { "count": { "type": "integer", "min": 1, "default": 2, "max": 2, "binding": "3d.slash.afterimage.count" }, "alpha": { "type": "float", "min": 0.18, "default": 0.32, "max": 0.45, "binding": "3d.slash.afterimage.alpha" } },
+  "cost": { "estimatedPeakParticles": 0, "particleSystems": 0, "materials": 1, "transparentRenderers": 1 }
+}

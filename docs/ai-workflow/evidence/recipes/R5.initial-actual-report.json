@@ -1,0 +1,14 @@
+{
+  "succeeded": true,
+  "detail": "Assets/VFX/Generated/steady_comet/VFX_Steady_Comet.prefab",
+  "entries": [
+    {
+      "code": "I400",
+      "severity": "info",
+      "path": "/budget",
+      "message": "Static budget preflight completed for profile pc_editor.",
+      "actualValue": null,
+      "allowedRange": null
+    }
+  ]
+}

@@ -1,0 +1,1 @@
+[{"op":"add","path":"/stages/travel/modules/lighterEmbers","value":{"id":"lighterEmbers","kind":"secondary_particles","templateId":"PFT_2D_Embers","parameters":{"rate":9,"lifetime":0.4},"attachTo":"core","enabled":true}}]

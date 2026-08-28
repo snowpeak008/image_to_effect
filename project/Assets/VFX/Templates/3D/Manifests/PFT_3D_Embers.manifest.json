@@ -1,0 +1,12 @@
+{
+  "manifestVersion": 1,
+  "templateId": "PFT_3D_Embers",
+  "templateVersion": "1.0.0",
+  "kind": "secondary_particles",
+  "dimension": "3d",
+  "assetGuid": "960d30658a5aa5f4e8a48a4dac171c6c",
+  "assetPath": "Assets/VFX/Templates/3D/Prefabs/PFT_3D_Embers.prefab",
+  "tags": ["fire", "stylized", "3d", "bounds:template-local", "camera:perspective-reviewed"],
+  "parameters": { "rate": { "type": "float", "min": 4, "max": 36, "default": 18, "binding": "3d.embers.rate" }, "lifetime": { "type": "float", "min": .25, "max": 1.1, "default": .55, "binding": "3d.embers.lifetime" } },
+  "cost": { "estimatedPeakParticles": 40, "materials": 1, "trails": 0 }
+}

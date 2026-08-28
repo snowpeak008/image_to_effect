@@ -1,0 +1,71 @@
+{
+  "manifestVersion": 1,
+  "rulesVersion": "1.0-draft",
+  "enforcement": "strict",
+  "effectId": "spectral_trail_3d",
+  "archetype": "trail",
+  "recipeVersion": 1,
+  "recipeRevision": 1,
+  "recipeHash": "7506ae471d2c1b19a0dad6f95e33b294d20ce457ac2b161f64a439f923adb13b",
+  "buildHash": "04ebbb1f1a723aa70fad9bf0df9457496ca1d05c90c55ef3c85d7d11b7efd092",
+  "compilerVersion": "coverage-b-4",
+  "unityVersion": "2022.3.62f3c1",
+  "sourceRecipePath": "Assets/VFX/Recipes/Trail/spectral_trail_3d.default.json",
+  "runtimeEntry": {
+    "kind": "prefab",
+    "path": "Assets/VFX/Generated/spectral_trail_3d/VFX_spectral_trail_3d.prefab",
+    "guid": "c00b70fdd847ebc479f2aafb439e1af7"
+  },
+  "ownedOutputs": [
+    {
+      "path": "Assets/VFX/Generated/spectral_trail_3d/VFX_spectral_trail_3d.prefab",
+      "guid": "c00b70fdd847ebc479f2aafb439e1af7",
+      "assetType": "GameObject",
+      "sha256": "e90f65778d867982b357fac9037cf7dbfad6b40dd67d578df24220040a17c7d8"
+    }
+  ],
+  "dependencies": [
+    {
+      "path": "Assets/VFX/Shared/CoverageGalleryB/Materials/MAT_CoverageB_Additive.mat",
+      "guid": "688b79adff1f3474da55fb0deedff137",
+      "assetType": "Material",
+      "version": null,
+      "dependencyHash": "0b0b0e70d4676ffab060eedfd9b3ebea"
+    },
+    {
+      "path": "Assets/VFX/Shared/CoverageGalleryB/Prefabs/PF_CoverageB_Particles.prefab",
+      "guid": "70f199efb6fa95243bfdc29f0ac52b45",
+      "assetType": "GameObject",
+      "version": null,
+      "dependencyHash": "4ca484495d85edc18be403e3c11759f1"
+    },
+    {
+      "path": "Assets/VFX/Shared/Shaders/CoverageGalleryBUnlit.shader",
+      "guid": "36a2072c324a26a479dfb498994d4812",
+      "assetType": "Shader",
+      "version": null,
+      "dependencyHash": "64f6028fba878ab561a8418a3ea09753"
+    },
+    {
+      "path": "Packages/com.vfxcomposer.unity/Runtime/Components/CoverageGalleryVfxController.cs",
+      "guid": "18601207a015a6140b357c3de1ce8608",
+      "assetType": "MonoScript",
+      "version": null,
+      "dependencyHash": "b7413138fabc3a05f2522721ad65632e"
+    }
+  ],
+  "cost": {
+    "particles": 48,
+    "particleSystems": 1,
+    "renderers": 3,
+    "materials": 1,
+    "trails": 1,
+    "duration": 2.0,
+    "localTextureBytes": 0,
+    "dependencyResidentTextureBytes": 0,
+    "gameObjects": 4,
+    "maxDepth": 2
+  },
+  "audit": [],
+  "generatedAtUtc": "2026-08-23T15:40:28.9420426Z"
+}

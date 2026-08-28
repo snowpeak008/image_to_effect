@@ -1,0 +1,32 @@
+{
+  "schema": "style-special-next-candidate/v1",
+  "id": "glitch_blink_transform_3d_next_candidate",
+  "sourceId": "glitch_blink_transform_3d",
+  "label": "GLITCH BLINK · OUT/IN",
+  "group": "w10",
+  "archetype": "transform",
+  "dimension": "3d",
+  "style": "holo",
+  "profile": "GlitchBlink",
+  "semantic": "voxel-out-left>visibility-gap>deterministic-reassembly-right",
+  "duration": 1.15,
+  "releaseNormalized": 0.31,
+  "sustainEndNormalized": 0.72,
+  "sustained": false,
+  "seed": 10106,
+  "intensity": 1.18,
+  "palette": {
+    "primary": "#34DFFF",
+    "secondary": "#B7FFFF",
+    "accent": "#FF4B38"
+  },
+  "meshes": [
+    "Quad",
+    "Shard",
+    "Shard",
+    "Shard"
+  ],
+  "pairFamily": "",
+  "pairRole": "",
+  "sourceBaseId": ""
+}

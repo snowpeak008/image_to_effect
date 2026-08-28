@@ -1,0 +1,118 @@
+{
+  "succeeded": false,
+  "detail": null,
+  "entries": [
+    {
+      "code": "E101",
+      "severity": "error",
+      "path": "/stages/launch/duration",
+      "message": "Required field is missing.",
+      "actualValue": null,
+      "allowedRange": null
+    },
+    {
+      "code": "E101",
+      "severity": "error",
+      "path": "/stages/launch/enabled",
+      "message": "Required field is missing.",
+      "actualValue": null,
+      "allowedRange": null
+    },
+    {
+      "code": "E103",
+      "severity": "error",
+      "path": "/stages/launch/modules/launch_flash/kind",
+      "message": "Value is not in the supported enumeration.",
+      "actualValue": "effect",
+      "allowedRange": null
+    },
+    {
+      "code": "E101",
+      "severity": "error",
+      "path": "/stages/travel/duration",
+      "message": "Required field is missing.",
+      "actualValue": null,
+      "allowedRange": null
+    },
+    {
+      "code": "E101",
+      "severity": "error",
+      "path": "/stages/travel/enabled",
+      "message": "Required field is missing.",
+      "actualValue": null,
+      "allowedRange": null
+    },
+    {
+      "code": "E103",
+      "severity": "error",
+      "path": "/stages/travel/modules/energy_body/kind",
+      "message": "Value is not in the supported enumeration.",
+      "actualValue": "effect",
+      "allowedRange": null
+    },
+    {
+      "code": "E103",
+      "severity": "error",
+      "path": "/stages/travel/modules/motion_trail/kind",
+      "message": "Value is not in the supported enumeration.",
+      "actualValue": "effect",
+      "allowedRange": null
+    },
+    {
+      "code": "E103",
+      "severity": "error",
+      "path": "/stages/travel/modules/secondary_particles/kind",
+      "message": "Value is not in the supported enumeration.",
+      "actualValue": "effect",
+      "allowedRange": null
+    },
+    {
+      "code": "E101",
+      "severity": "error",
+      "path": "/stages/impact/duration",
+      "message": "Required field is missing.",
+      "actualValue": null,
+      "allowedRange": null
+    },
+    {
+      "code": "E101",
+      "severity": "error",
+      "path": "/stages/impact/enabled",
+      "message": "Required field is missing.",
+      "actualValue": null,
+      "allowedRange": null
+    },
+    {
+      "code": "E103",
+      "severity": "error",
+      "path": "/stages/impact/modules/impact_flash/kind",
+      "message": "Value is not in the supported enumeration.",
+      "actualValue": "effect",
+      "allowedRange": null
+    },
+    {
+      "code": "E103",
+      "severity": "error",
+      "path": "/stages/impact/modules/impact_burst/kind",
+      "message": "Value is not in the supported enumeration.",
+      "actualValue": "effect",
+      "allowedRange": null
+    },
+    {
+      "code": "E103",
+      "severity": "error",
+      "path": "/stages/impact/modules/shockwave/kind",
+      "message": "Value is not in the supported enumeration.",
+      "actualValue": "effect",
+      "allowedRange": null
+    },
+    {
+      "code": "E102",
+      "severity": "error",
+      "path": "/metadata/templateCatalogVersion",
+      "message": "Value has an invalid type.",
+      "actualValue": 1,
+      "allowedRange": "string"
+    }
+  ]
+}

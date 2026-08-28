@@ -1,0 +1,111 @@
+{
+  "schema": "vfx-composition/1",
+  "id": "hundred_ghosts_ultimate_2d",
+  "group": "hero_component",
+  "duration": 4.8,
+  "theme": null,
+  "shapeLanguage": null,
+  "palette": {
+    "primary": "#222125",
+    "secondary": "#746F78",
+    "accent": "#B9463A"
+  },
+  "timeline": [
+    {
+      "t": 0.0,
+      "ref_id": "ink_dragon_trail_2d",
+      "action": "play",
+      "overrides": {
+        "scale": 1.0,
+        "position": [
+          -1.0,
+          0.2,
+          0.0
+        ],
+        "palette": "hero_component"
+      }
+    },
+    {
+      "t": 0.45,
+      "ref_id": "ink_dragon_trail_2d",
+      "action": "play",
+      "overrides": {
+        "scale": 1.0,
+        "position": [
+          0.0,
+          -0.3,
+          0.0
+        ],
+        "rotation": [
+          0.0,
+          0.0,
+          12.0
+        ],
+        "palette": "hero_component"
+      }
+    },
+    {
+      "t": 0.9,
+      "ref_id": "ink_dragon_trail_2d",
+      "action": "play",
+      "overrides": {
+        "scale": 1.0,
+        "position": [
+          1.0,
+          0.25,
+          0.0
+        ],
+        "rotation": [
+          0.0,
+          0.0,
+          -12.0
+        ],
+        "palette": "hero_component"
+      }
+    },
+    {
+      "t": 1.4,
+      "ref_id": "phantom_wail_area_2d",
+      "action": "play",
+      "overrides": {
+        "scale": 1.6,
+        "palette": "hero_component"
+      }
+    },
+    {
+      "t": 3.0,
+      "ref_id": "shadow_grasp_area_2d",
+      "action": "play",
+      "overrides": {
+        "scale": 1.35,
+        "palette": "hero_component"
+      }
+    }
+  ],
+  "camera_hints": [
+    {
+      "t": 1.4,
+      "type": "slowmo",
+      "strength": 0.3
+    },
+    {
+      "t": 3.0,
+      "type": "shake",
+      "strength": 0.45
+    }
+  ],
+  "gates": [],
+  "peakBudget": {
+    "particles": 32,
+    "particleSystems": 2,
+    "materials": 2,
+    "renderers": 10,
+    "limits": {
+      "particles": 200,
+      "particleSystems": 10,
+      "materials": 10,
+      "renderers": 14
+    }
+  },
+  "ownership": "dependency-reference-only"
+}

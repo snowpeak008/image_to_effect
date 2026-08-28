@@ -1,0 +1,28 @@
+{
+  "schema": "s12c3-real-patch-evidence/v1",
+  "succeeded": true,
+  "agent": {
+    "model": "gpt-5.6-terra",
+    "reasoning": "high",
+    "fork": "none",
+    "thread": "/root/s12_patch_alpha"
+  },
+  "patchAttemptPath": "docs/ai-workflow/s12-slash-v3/runtime/patch-afterimage-alpha.attempt0.json",
+  "patchRawBytesSha256": "F2E0B7E981E06A7AACFF704E5320154C5A33FF3742B2CCF1876789C8F06CAA96",
+  "beforeRevision": 1,
+  "afterRevision": 2,
+  "affectedPath": "/phases/afterimage/modules/arc_afterimage/parameters/alpha",
+  "actualValue": 0.4,
+  "buildHash": "4dbf86fda2f86ddbc75f0bac009448c664b34d9d7fde7f3ce5543e0eb785ce81",
+  "prefabGuid": "0dc223c2ffbe2c14aa24f424440f1cd2",
+  "errors": {
+    "apply": []
+  },
+  "history": {
+    "beforeRevision": 1,
+    "afterRevision": 2,
+    "affectedPaths": [
+      "/phases/afterimage/modules/arc_afterimage/parameters/alpha"
+    ]
+  }
+}

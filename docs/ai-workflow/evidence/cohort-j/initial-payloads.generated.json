@@ -1,0 +1,30 @@
+{
+  "protocol": "cohort-j-patch-only",
+  "tempRoot": "C:\\Users\\admin\\AppData\\Local\\Temp\\vfxcomposer-s9-cohort-j",
+  "initialPayloads": {
+    "J1": {
+      "envelopeFile": "J1.initial.envelope.txt",
+      "envelopeSha256": "2983C75337E3B0223BFC155693D2C63EF8A746BDD6020D848AEC70244B962098",
+      "payloadFile": "J1.initial.payload.md",
+      "payloadSha256": "736319DFC4DD11F22D45AB9326E6D428619DB2F34366BA77BB84C1E287A821E9",
+      "tempPayloadPath": "C:\\Users\\admin\\AppData\\Local\\Temp\\vfxcomposer-s9-cohort-j\\J1\\J1.initial.payload.md",
+      "tempPayloadSha256": "736319DFC4DD11F22D45AB9326E6D428619DB2F34366BA77BB84C1E287A821E9"
+    },
+    "J2": {
+      "envelopeFile": "J2.initial.envelope.txt",
+      "envelopeSha256": "E81174E772A1759894D93E5C41A88229117ECA5054210B5399DE0E65A423104D",
+      "payloadFile": "J2.initial.payload.md",
+      "payloadSha256": "10BA3CA118549E5E5EBDFEF692A55F69E3273E7ACFC8B534D2BBFB89B3E325AF",
+      "tempPayloadPath": "C:\\Users\\admin\\AppData\\Local\\Temp\\vfxcomposer-s9-cohort-j\\J2\\J2.initial.payload.md",
+      "tempPayloadSha256": "10BA3CA118549E5E5EBDFEF692A55F69E3273E7ACFC8B534D2BBFB89B3E325AF"
+    },
+    "J3": {
+      "envelopeFile": "J3.initial.envelope.txt",
+      "envelopeSha256": "B3C8DF8B99076F1BC8050921E2D0DFAD017737741C0E4AE7DC0E231D1C5D7377",
+      "payloadFile": "J3.initial.payload.md",
+      "payloadSha256": "72FB77A58861A424A1AFC9F594050A99E68C2AEA8800F97028BBBF80BF1F33D8",
+      "tempPayloadPath": "C:\\Users\\admin\\AppData\\Local\\Temp\\vfxcomposer-s9-cohort-j\\J3\\J3.initial.payload.md",
+      "tempPayloadSha256": "72FB77A58861A424A1AFC9F594050A99E68C2AEA8800F97028BBBF80BF1F33D8"
+    }
+  }
+}

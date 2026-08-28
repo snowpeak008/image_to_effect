@@ -1,0 +1,16 @@
+{
+  "schemaVersion": "s0a-operator-mutation-command/v1",
+  "sampleId": "s0a-ae7f413b53061daf0ac2",
+  "effectId": "sustained_flame_3d",
+  "fixedSeed": 3800117537,
+  "mutationCommands": [
+    {
+      "operation": "set",
+      "targetKey": "StateMachine.stopContinuityMode",
+      "value": "clear_immediate"
+    }
+  ],
+  "fixtureApplicationStatus": "NOT_APPLIED_BY_UNITY_FIXTURE_ADAPTER",
+  "operatorInstruction": "A later Unity fixture adapter must execute this command and capture evidence.",
+  "commandHash": "sha256:91016b9936f8e71ad27a9bfc36f439347fd4a7c3d15f4effe3869c6631009089"
+}

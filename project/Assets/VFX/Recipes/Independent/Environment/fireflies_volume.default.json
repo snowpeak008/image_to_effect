@@ -1,0 +1,98 @@
+{
+  "recipeVersion": 1,
+  "revision": 1,
+  "id": "fireflies_volume",
+  "name": "Fireflies Volume",
+  "dimension": "3d",
+  "archetype": "environment",
+  "style": {
+    "token": "stylized",
+    "palette": {
+      "primary": "#BFFF67",
+      "secondary": "#FFF6A0",
+      "accent": "#FFFFFF"
+    },
+    "outline": 0.12,
+    "shading_steps": 4,
+    "noise_scale": 1.2,
+    "glow_strength": 1.1
+  },
+  "behavior": {
+    "hit": {
+      "type": "single"
+    },
+    "emission": {
+      "type": "single"
+    },
+    "timing": {
+      "type": "sustained"
+    }
+  },
+  "content": {
+    "family": "environment",
+    "parameters": {
+      "intensity": 0.65,
+      "wind_strength": 1,
+      "area_size": 15,
+      "camera_follow": true,
+      "wander_speed": 0.8
+    }
+  },
+  "targetProfile": "mobile_medium",
+  "randomSeed": 93777573,
+  "stages": [
+    {
+      "id": "main",
+      "trigger": "manual",
+      "duration": 2.0,
+      "enabled": true,
+      "modules": [
+        {
+          "id": "body",
+          "kind": "energy_body",
+          "templateId": "PFT_3D_FireCore",
+          "parameters": {
+            "scale": 1.0
+          },
+          "enabled": true
+        },
+        {
+          "id": "flow",
+          "kind": "motion_trail",
+          "templateId": "PFT_3D_FireTrail",
+          "parameters": {
+            "time": 0.3,
+            "width": 0.25
+          },
+          "enabled": true,
+          "attachTo": "body"
+        },
+        {
+          "id": "secondary",
+          "kind": "secondary_particles",
+          "templateId": "PFT_3D_Embers",
+          "parameters": {
+            "rate": 10,
+            "lifetime": 0.55
+          },
+          "enabled": true,
+          "attachTo": "body"
+        },
+        {
+          "id": "accent",
+          "kind": "shockwave",
+          "templateId": "PFT_3D_Shockwave",
+          "parameters": {
+            "lifetime": 0.3,
+            "endSize": 2.1
+          },
+          "enabled": true
+        }
+      ]
+    }
+  ],
+  "metadata": {
+    "createdBy": "w11-w17-independent-content",
+    "templateCatalogVersion": "1.0.0"
+  }
+}

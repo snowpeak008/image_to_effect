@@ -1,0 +1,15 @@
+{
+  "succeeded": false,
+  "detail": null,
+  "entries": [
+    {"code":"E100","severity":"error","path":"/error","message":"Unknown field is not allowed.","actualValue":"Recipe JSON object not found","allowedRange":null},
+    {"code":"E101","severity":"error","path":"/recipeVersion","message":"Required field is missing.","actualValue":null,"allowedRange":null},
+    {"code":"E101","severity":"error","path":"/id","message":"Required field is missing.","actualValue":null,"allowedRange":null},
+    {"code":"E101","severity":"error","path":"/dimension","message":"Required field is missing.","actualValue":null,"allowedRange":null},
+    {"code":"E101","severity":"error","path":"/archetype","message":"Required field is missing.","actualValue":null,"allowedRange":null},
+    {"code":"E101","severity":"error","path":"/targetProfile","message":"Required field is missing.","actualValue":null,"allowedRange":null},
+    {"code":"E101","severity":"error","path":"/randomSeed","message":"Required field is missing.","actualValue":null,"allowedRange":null},
+    {"code":"E101","severity":"error","path":"/stages","message":"Required field is missing.","actualValue":null,"allowedRange":null},
+    {"code":"E101","severity":"error","path":"/metadata","message":"Required field is missing.","actualValue":null,"allowedRange":null}
+  ]
+}

@@ -1,0 +1,3 @@
+# Security and evidence manifests in this repository bind exact physical bytes.
+# Keep working-tree bytes unchanged across the initial baseline and all worktrees.
+* -text whitespace=cr-at-eol

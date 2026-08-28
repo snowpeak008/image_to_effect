@@ -1,0 +1,14 @@
+{
+  "slashManifestVersion": 2,
+  "templateId": "PFT_3D_SlashDissipation",
+  "templateVersion": "1.0.0",
+  "phaseKind": "dissipation",
+  "moduleKind": "slash_dissipation",
+  "dimension": "3d",
+  "assetGuid": "e9686ac4490bb724287136211bdcfcfa",
+  "assetPath": "Assets/VFX/Templates/3D/Slash/Prefabs/PFT_3D_SlashDissipation.prefab",
+  "tags": ["slash", "s12a", "bloom-off"],
+  "materialGuids": ["933da8cc0a77c2045905b900f48c3f56", "15b161df09ca0c846bfd296047a94bc8"],
+  "parameters": { "lifetime": { "type": "float", "min": 0.12, "default": 0.22, "max": 0.28, "binding": "3d.slash.dissipation.lifetime" } },
+  "cost": { "estimatedPeakParticles": 12, "particleSystems": 1, "materials": 2, "transparentRenderers": 2 }
+}

@@ -1,0 +1,32 @@
+{
+  "schema": "style-special-next-candidate/v1",
+  "id": "prismatic_shield_3d_holo_next_candidate",
+  "sourceId": "prismatic_shield_3d_holo",
+  "label": "PRISMATIC · HOLO REUSE",
+  "group": "w10",
+  "archetype": "shield",
+  "dimension": "3d",
+  "style": "holo",
+  "profile": "HoloBarrier",
+  "semantic": "existing-shield-geometry+holo-scan+deterministic-hit-ripples",
+  "duration": 1.5,
+  "releaseNormalized": 0.3,
+  "sustainEndNormalized": 0.8,
+  "sustained": true,
+  "seed": 10110,
+  "intensity": 1.12,
+  "palette": {
+    "primary": "#21D5F0",
+    "secondary": "#A8FFFF",
+    "accent": "#FF6B42"
+  },
+  "meshes": [
+    "Quad",
+    "Ring",
+    "Ring",
+    "Burst"
+  ],
+  "pairFamily": "",
+  "pairRole": "",
+  "sourceBaseId": ""
+}

@@ -1,0 +1,101 @@
+{
+  "recipeVersion": 1,
+  "revision": 1,
+  "id": "judgement_ray_ultimate_3d",
+  "name": "Judgement Ray Ultimate 3d",
+  "dimension": "3d",
+  "archetype": "composite",
+  "style": {
+    "token": "stylized",
+    "palette": {
+      "primary": "#E6B735",
+      "secondary": "#FFF18A",
+      "accent": "#FFFFFF"
+    },
+    "outline": 0.1,
+    "shading_steps": 4,
+    "noise_scale": 1.2,
+    "glow_strength": 1.05
+  },
+  "targetProfile": "mobile_medium",
+  "randomSeed": 2834417871,
+  "stages": [
+    {
+      "id": "main",
+      "trigger": "manual",
+      "duration": 4.0,
+      "enabled": true,
+      "modules": [
+        {
+          "id": "body",
+          "kind": "energy_body",
+          "templateId": "PFT_3D_FireCore",
+          "parameters": {
+            "scale": 1.0
+          },
+          "enabled": true
+        }
+      ]
+    }
+  ],
+  "metadata": {
+    "createdBy": "w13-w18-composite",
+    "templateCatalogVersion": "1.0.0"
+  },
+  "timeline": [
+    {
+      "t": 0.0,
+      "ref_id": "arcane_rune_spawn_2d",
+      "action": "play",
+      "overrides": {
+        "scale": 1.4,
+        "palette": "ultimate"
+      }
+    },
+    {
+      "t": 0.8,
+      "ref_id": "focus_charge_3d",
+      "action": "play",
+      "overrides": {
+        "scale": 1.0,
+        "palette": "ultimate"
+      }
+    },
+    {
+      "t": 1.8,
+      "ref_id": "divine_smite_impact_3d",
+      "action": "play",
+      "overrides": {
+        "scale": 1.6,
+        "palette": "ultimate"
+      }
+    },
+    {
+      "t": 2.9,
+      "ref_id": "resurrection_spawn_3d",
+      "action": "play",
+      "overrides": {
+        "scale": 0.72,
+        "palette": "ultimate"
+      }
+    }
+  ],
+  "camera_hints": [
+    {
+      "t": 1.7,
+      "type": "slowmo",
+      "strength": 0.45
+    },
+    {
+      "t": 1.8,
+      "type": "shake",
+      "strength": 0.8
+    },
+    {
+      "t": 2.0,
+      "type": "zoom",
+      "strength": 0.55
+    }
+  ],
+  "gates": []
+}

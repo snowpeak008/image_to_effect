@@ -1,0 +1,12 @@
+{
+  "schema": "w18-theme-next-candidate/v1",
+  "id": "ghost_curse_shrine_kit_next_candidate",
+  "workPackage": "W18",
+  "candidateStatus": "NEXT_CANDIDATE_VISUAL_PENDING",
+  "userVisualVerdict": null,
+  "preserveRejectedCandidate": true,
+  "theme": { "paletteReference": "theme.ghost_curse_shrine.next", "shapeLanguage": "ink ribbons + eight talismans", "primary": "#2A193B", "secondary": "#73509A", "accent": "#E9D7B2" },
+  "skillChain": ["talisman_idle", "ink_missile", "ghost_hand", "phantom_domain", "curse_mark", "hundred_ghosts", "death", "entrance"],
+  "attachments": ["weapon", "hand", "chest", "feet"],
+  "budget": { "renderers": 10, "materials": 1, "particleSystems": 0, "limits": { "renderers": 14, "materials": 3, "particleSystems": 1, "particleCapacity": 16 } }
+}

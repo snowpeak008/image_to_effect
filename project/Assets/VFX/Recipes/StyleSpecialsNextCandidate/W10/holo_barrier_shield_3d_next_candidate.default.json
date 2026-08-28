@@ -1,0 +1,32 @@
+{
+  "schema": "style-special-next-candidate/v1",
+  "id": "holo_barrier_shield_3d_next_candidate",
+  "sourceId": "holo_barrier_shield_3d",
+  "label": "HOLO BARRIER · HIT",
+  "group": "w10",
+  "archetype": "shield",
+  "dimension": "3d",
+  "style": "holo",
+  "profile": "HoloBarrier",
+  "semantic": "hex-plane+fresnel-edge+scan>hit-three-ripples+bounded-glitch",
+  "duration": 1.55,
+  "releaseNormalized": 0.28,
+  "sustainEndNormalized": 0.78,
+  "sustained": false,
+  "seed": 10104,
+  "intensity": 1.14,
+  "palette": {
+    "primary": "#27D6F2",
+    "secondary": "#8FFAFF",
+    "accent": "#FF633E"
+  },
+  "meshes": [
+    "Quad",
+    "Ring",
+    "Ring",
+    "Shard"
+  ],
+  "pairFamily": "",
+  "pairRole": "",
+  "sourceBaseId": ""
+}

@@ -1,0 +1,85 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://image-to-smart.local/schemas/calibration-labels/v2",
+  "title": "Frozen S0a calibration labels",
+  "description": "Canonical labels manifest. JSON Schema validates shape; the calibration scorer validates manifestHash content and perRequirement requirementId equality.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "holdoutCohort", "reviewStatus", "frozen", "reviewer", "frozenAt", "samples", "manifestHash"],
+  "properties": {
+    "schemaVersion": {"const": "calibration-labels/v2"},
+    "holdoutCohort": {"enum": ["reduced-36-12-12-6", "extension-24-8-8-4", "full-60-20-20-10"]},
+    "reviewStatus": {"enum": ["TEMPLATE_NOT_REVIEWED", "HUMAN_REVIEWED"]},
+    "frozen": {"type": "boolean"},
+    "reviewer": {"type": ["string", "null"]},
+    "frozenAt": {"type": ["string", "null"], "format": "date-time"},
+    "samples": {"type": "array", "minItems": 1},
+    "manifestHash": {"$ref": "#/$defs/hash"}
+  },
+  "allOf": [
+    {
+      "if": {"properties": {"reviewStatus": {"const": "TEMPLATE_NOT_REVIEWED"}}, "required": ["reviewStatus"]},
+      "then": {
+        "properties": {
+          "frozen": {"const": false},
+          "reviewer": {"const": null},
+          "frozenAt": {"const": null},
+          "samples": {"items": {"$ref": "#/$defs/templateSample"}}
+        }
+      }
+    },
+    {
+      "if": {"properties": {"reviewStatus": {"const": "HUMAN_REVIEWED"}}, "required": ["reviewStatus"]},
+      "then": {
+        "properties": {
+          "frozen": {"const": true},
+          "reviewer": {"type": "string", "minLength": 1},
+          "frozenAt": {"type": "string", "format": "date-time", "minLength": 1},
+          "samples": {"items": {"$ref": "#/$defs/humanReviewedSample"}}
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "hash": {"type": "string", "pattern": "^sha256:[a-f0-9]{64}$"},
+    "requirementId": {"type": "string", "minLength": 1},
+    "templateSample": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["sampleId", "requirementId", "groundTruthRoute", "perRequirement", "labelSource", "reviewer", "visuallyObservable", "eligibleForVisualMetrics", "isBoundary", "evidenceHash", "verdictVersion"],
+      "properties": {
+        "sampleId": {"type": "string", "minLength": 1},
+        "requirementId": {"$ref": "#/$defs/requirementId"},
+        "groundTruthRoute": {"const": null},
+        "perRequirement": {"type": "array", "minItems": 1, "items": {"type": "object", "additionalProperties": false, "required": ["requirementId", "state"], "properties": {"requirementId": {"$ref": "#/$defs/requirementId"}, "state": {"const": null}}}},
+        "labelSource": {"const": "PENDING_HUMAN_ADJUDICATION"},
+        "reviewer": {"const": null},
+        "visuallyObservable": {"const": null},
+        "eligibleForVisualMetrics": {"const": null},
+        "isBoundary": {"type": "boolean"},
+        "evidenceHash": {"const": null},
+        "verdictVersion": {"const": null},
+        "adjudicationNotes": {"type": "string"}
+      }
+    },
+    "humanReviewedSample": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["sampleId", "requirementId", "groundTruthRoute", "perRequirement", "labelSource", "reviewer", "visuallyObservable", "eligibleForVisualMetrics", "isBoundary", "evidenceHash", "verdictVersion"],
+      "properties": {
+        "sampleId": {"type": "string", "minLength": 1},
+        "requirementId": {"$ref": "#/$defs/requirementId"},
+        "groundTruthRoute": {"enum": ["VISUAL_PASS", "VISUAL_FAIL", "EVIDENCE_INVALID", "CONTRACT_AMBIGUOUS", "VISUAL_UNCERTAIN"]},
+        "perRequirement": {"type": "array", "minItems": 1, "items": {"type": "object", "additionalProperties": false, "required": ["requirementId", "state"], "properties": {"requirementId": {"$ref": "#/$defs/requirementId"}, "state": {"enum": ["pass", "fail", "uncertain"]}}}},
+        "labelSource": {"type": "string", "minLength": 1, "not": {"const": "PENDING_HUMAN_ADJUDICATION"}},
+        "reviewer": {"type": "string", "minLength": 1},
+        "visuallyObservable": {"type": "boolean"},
+        "eligibleForVisualMetrics": {"type": "boolean"},
+        "isBoundary": {"type": "boolean"},
+        "evidenceHash": {"$ref": "#/$defs/hash"},
+        "verdictVersion": {"type": "string", "minLength": 1},
+        "adjudicationNotes": {"type": "string"}
+      }
+    }
+  }
+}

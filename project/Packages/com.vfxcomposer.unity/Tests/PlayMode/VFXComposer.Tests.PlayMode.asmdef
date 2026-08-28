@@ -1,0 +1,21 @@
+{
+  "name": "VFXComposer.Tests.PlayMode",
+  "rootNamespace": "VFXComposer.Tests.PlayMode",
+  "references": [
+    "VFXComposer.Runtime"
+  ],
+  "includePlatforms": [],
+  "excludePlatforms": [],
+  "allowUnsafeCode": false,
+  "overrideReferences": false,
+  "precompiledReferences": [
+    "Newtonsoft.Json.dll"
+  ],
+  "autoReferenced": false,
+  "defineConstraints": [],
+  "versionDefines": [],
+  "noEngineReferences": false,
+  "optionalUnityReferences": [
+    "TestAssemblies"
+  ]
+}

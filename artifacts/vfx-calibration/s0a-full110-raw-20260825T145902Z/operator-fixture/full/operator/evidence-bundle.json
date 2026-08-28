@@ -1,0 +1,451 @@
+{
+  "schemaVersion": "s0a-evidence-bundle/v2",
+  "holdoutCohort": "full-60-20-20-10",
+  "freezeStatus": "TEMPLATE_NOT_FROZEN",
+  "operatorLedgerHash": "sha256:77724f558d0565ba749c8edb57103ecd0d1cf745a423554a407b94bdb6e4eb5a",
+  "blindManifestHash": null,
+  "captureProfileHash": null,
+  "samples": [
+    {
+      "sampleId": "s0a-564f4f7af75c77d504b8",
+      "evidenceHash": null
+    },
+    {
+      "sampleId": "s0a-88dde50883c6f1b6f535",
+      "evidenceHash": null
+    },
+    {
+      "sampleId": "s0a-80288f5650f6d8679efe",
+      "evidenceHash": null
+    },
+    {
+      "sampleId": "s0a-642889b4e39713806a04",
+      "evidenceHash": null
+    },
+    {
+      "sampleId": "s0a-91bb235638f337fbe6e8",
+      "evidenceHash": null
+    },
+    {
+      "sampleId": "s0a-f9f2a325017744e1bfc5",
+      "evidenceHash": null
+    },
+    {
+      "sampleId": "s0a-b8e0e61d038a6d36deb3",
+      "evidenceHash": null
+    },
+    {
+      "sampleId": "s0a-4385bcc329da10434156",
+      "evidenceHash": null
+    },
+    {
+      "sampleId": "s0a-d773c9eab4e1be7cb3be",
+      "evidenceHash": null
+    },
+    {
+      "sampleId": "s0a-9bc1edc67679046dabe5",
+      "evidenceHash": null
+    },
+    {
+      "sampleId": "s0a-6e6c1d696d6b77dc2feb",
+      "evidenceHash": null
+    },
+    {
+      "sampleId": "s0a-84223663c824e5af876e",
+      "evidenceHash": null
+    },
+    {
+      "sampleId": "s0a-2708ae84b78455277b42",
+      "evidenceHash": null
+    },
+    {
+      "sampleId": "s0a-024fc3c167176c175f32",
+      "evidenceHash": null
+    },
+    {
+      "sampleId": "s0a-4fdf65f8ea672ef2951d",
+      "evidenceHash": null
+    },
+    {
+      "sampleId": "s0a-098e18402845280a2e06",
+      "evidenceHash": null
+    },
+    {
+      "sampleId": "s0a-099b5f163fe46518fec3",
+      "evidenceHash": null
+    },
+    {
+      "sampleId": "s0a-6ffa14f628d8d956aa44",
+      "evidenceHash": null
+    },
+    {
+      "sampleId": "s0a-2460f5f6043ddd923b55",
+      "evidenceHash": null
+    },
+    {
+      "sampleId": "s0a-79214a6d0bb7e1511925",
+      "evidenceHash": null
+    },
+    {
+      "sampleId": "s0a-6f563b5925f00f0e75d8",
+      "evidenceHash": null
+    },
+    {
+      "sampleId": "s0a-2ad6ff9067c7c226cad5",
+      "evidenceHash": null
+    },
+    {
+      "sampleId": "s0a-c90b80b1f3bccbd14325",
+      "evidenceHash": null
+    },
+    {
+      "sampleId": "s0a-ae378e96e9a06f3a3a82",
+      "evidenceHash": null
+    },
+    {
+      "sampleId": "s0a-7c88ea214ffb00428424",
+      "evidenceHash": null
+    },
+    {
+      "sampleId": "s0a-3bbca0d7337332aa90fc",
+      "evidenceHash": null
+    },
+    {
+      "sampleId": "s0a-39cb89f0c87b1e601cf1",
+      "evidenceHash": null
+    },
+    {
+      "sampleId": "s0a-1eeb062cd27684f94465",
+      "evidenceHash": null
+    },
+    {
+      "sampleId": "s0a-40ca7f76731b4c837fb4",
+      "evidenceHash": null
+    },
+    {
+      "sampleId": "s0a-62704742bb084f891c44",
+      "evidenceHash": null
+    },
+    {
+      "sampleId": "s0a-b0b8fa4acc526d83b4bd",
+      "evidenceHash": null
+    },
+    {
+      "sampleId": "s0a-a9aeb828690411a983c2",
+      "evidenceHash": null
+    },
+    {
+      "sampleId": "s0a-024693e19330c9db2f7a",
+      "evidenceHash": null
+    },
+    {
+      "sampleId": "s0a-b60aefd99674988b03c3",
+      "evidenceHash": null
+    },
+    {
+      "sampleId": "s0a-8023d9a7d299145b0155",
+      "evidenceHash": null
+    },
+    {
+      "sampleId": "s0a-dbb88fcd4a9019767ed5",
+      "evidenceHash": null
+    },
+    {
+      "sampleId": "s0a-a1681bd58422e218c4a2",
+      "evidenceHash": null
+    },
+    {
+      "sampleId": "s0a-3d9d9dd71376a158bff2",
+      "evidenceHash": null
+    },
+    {
+      "sampleId": "s0a-1be0ec5d579216fe37fd",
+      "evidenceHash": null
+    },
+    {
+      "sampleId": "s0a-e914b32f2fa219bebec9",
+      "evidenceHash": null
+    },
+    {
+      "sampleId": "s0a-a27821704940bd4893f4",
+      "evidenceHash": null
+    },
+    {
+      "sampleId": "s0a-533c790af7a910c1df39",
+      "evidenceHash": null
+    },
+    {
+      "sampleId": "s0a-e764ed9a439d980fc28c",
+      "evidenceHash": null
+    },
+    {
+      "sampleId": "s0a-7975294740bdaa04d016",
+      "evidenceHash": null
+    },
+    {
+      "sampleId": "s0a-c388e351eec58aeaf10f",
+      "evidenceHash": null
+    },
+    {
+      "sampleId": "s0a-211e7d7bb73dbbe892e7",
+      "evidenceHash": null
+    },
+    {
+      "sampleId": "s0a-dbdec13fe4f88afd22ca",
+      "evidenceHash": null
+    },
+    {
+      "sampleId": "s0a-47eb966e6f358f0edae9",
+      "evidenceHash": null
+    },
+    {
+      "sampleId": "s0a-8267b092c34dcbc7ee17",
+      "evidenceHash": null
+    },
+    {
+      "sampleId": "s0a-8954f67fa33773f87eb0",
+      "evidenceHash": null
+    },
+    {
+      "sampleId": "s0a-4c142f370cd6d5b3e3e6",
+      "evidenceHash": null
+    },
+    {
+      "sampleId": "s0a-a8edc8444c0b105d2fd9",
+      "evidenceHash": null
+    },
+    {
+      "sampleId": "s0a-023d790b9b597baf6d02",
+      "evidenceHash": null
+    },
+    {
+      "sampleId": "s0a-a81f5a0f3c586f955a24",
+      "evidenceHash": null
+    },
+    {
+      "sampleId": "s0a-43367d61b4bd54a1daab",
+      "evidenceHash": null
+    },
+    {
+      "sampleId": "s0a-0c1a7fc702b7c40b4299",
+      "evidenceHash": null
+    },
+    {
+      "sampleId": "s0a-1b59e9928e9ad6a656df",
+      "evidenceHash": null
+    },
+    {
+      "sampleId": "s0a-b89108a326acf2660d7e",
+      "evidenceHash": null
+    },
+    {
+      "sampleId": "s0a-cb6e37a2f4963a47f328",
+      "evidenceHash": null
+    },
+    {
+      "sampleId": "s0a-8b546f9c5ce282ecd4ea",
+      "evidenceHash": null
+    },
+    {
+      "sampleId": "s0a-9bbe8399600c74d5c4b5",
+      "evidenceHash": null
+    },
+    {
+      "sampleId": "s0a-235dc7a3a574e2514f6c",
+      "evidenceHash": null
+    },
+    {
+      "sampleId": "s0a-dfd66f52b60239c0e7b5",
+      "evidenceHash": null
+    },
+    {
+      "sampleId": "s0a-ef6d316e582208ab3ab5",
+      "evidenceHash": null
+    },
+    {
+      "sampleId": "s0a-b18828b0bb465ff81af3",
+      "evidenceHash": null
+    },
+    {
+      "sampleId": "s0a-1543b5993867c6a0bf10",
+      "evidenceHash": null
+    },
+    {
+      "sampleId": "s0a-429a78bea06098ee39ee",
+      "evidenceHash": null
+    },
+    {
+      "sampleId": "s0a-838cdf720f2667a28dc0",
+      "evidenceHash": null
+    },
+    {
+      "sampleId": "s0a-c1d3f4882c62b102dde5",
+      "evidenceHash": null
+    },
+    {
+      "sampleId": "s0a-28e453571e6fa35b408c",
+      "evidenceHash": null
+    },
+    {
+      "sampleId": "s0a-aef756c200ec28c6baf8",
+      "evidenceHash": null
+    },
+    {
+      "sampleId": "s0a-50f3c9d0c832cf22ffb6",
+      "evidenceHash": null
+    },
+    {
+      "sampleId": "s0a-7dcd6a7f24bd50d309b4",
+      "evidenceHash": null
+    },
+    {
+      "sampleId": "s0a-5641edd758b6c0f431cc",
+      "evidenceHash": null
+    },
+    {
+      "sampleId": "s0a-3885104efe8bcf3b60e5",
+      "evidenceHash": null
+    },
+    {
+      "sampleId": "s0a-eb806bc66b671c6b5d25",
+      "evidenceHash": null
+    },
+    {
+      "sampleId": "s0a-66e2acc1e16871cddd80",
+      "evidenceHash": null
+    },
+    {
+      "sampleId": "s0a-af4544f6e70bb5ac32af",
+      "evidenceHash": null
+    },
+    {
+      "sampleId": "s0a-f4657284ea7cbba38c8d",
+      "evidenceHash": null
+    },
+    {
+      "sampleId": "s0a-8e6b7aedcb25fbdac904",
+      "evidenceHash": null
+    },
+    {
+      "sampleId": "s0a-0837de36b1d82e879685",
+      "evidenceHash": null
+    },
+    {
+      "sampleId": "s0a-c1a48fea76f92ea7742f",
+      "evidenceHash": null
+    },
+    {
+      "sampleId": "s0a-282a26ab3573e6e396eb",
+      "evidenceHash": null
+    },
+    {
+      "sampleId": "s0a-c42f88e9247a006e34b9",
+      "evidenceHash": null
+    },
+    {
+      "sampleId": "s0a-eaac76b43871d96328dd",
+      "evidenceHash": null
+    },
+    {
+      "sampleId": "s0a-3e1e439a3be62106293f",
+      "evidenceHash": null
+    },
+    {
+      "sampleId": "s0a-04a615301c9bf1133044",
+      "evidenceHash": null
+    },
+    {
+      "sampleId": "s0a-d428da9fd444d4590055",
+      "evidenceHash": null
+    },
+    {
+      "sampleId": "s0a-812a8d84ae294962d09a",
+      "evidenceHash": null
+    },
+    {
+      "sampleId": "s0a-4cf1402cefeb4308db4f",
+      "evidenceHash": null
+    },
+    {
+      "sampleId": "s0a-802e38bb66f32743bc0f",
+      "evidenceHash": null
+    },
+    {
+      "sampleId": "s0a-eacd31f515da70dd64eb",
+      "evidenceHash": null
+    },
+    {
+      "sampleId": "s0a-aa3eb97b3baed907ab79",
+      "evidenceHash": null
+    },
+    {
+      "sampleId": "s0a-bf53556b4226551b2261",
+      "evidenceHash": null
+    },
+    {
+      "sampleId": "s0a-ac59992b891e47edba25",
+      "evidenceHash": null
+    },
+    {
+      "sampleId": "s0a-0c3d8977d4fbff7d77ec",
+      "evidenceHash": null
+    },
+    {
+      "sampleId": "s0a-f1804f09cee981edd29a",
+      "evidenceHash": null
+    },
+    {
+      "sampleId": "s0a-2ddfd92e29dbcf9a47d8",
+      "evidenceHash": null
+    },
+    {
+      "sampleId": "s0a-f24131e2010e88ef6dac",
+      "evidenceHash": null
+    },
+    {
+      "sampleId": "s0a-4a820e0e88704c8a8bf6",
+      "evidenceHash": null
+    },
+    {
+      "sampleId": "s0a-26da6f47027066a131ae",
+      "evidenceHash": null
+    },
+    {
+      "sampleId": "s0a-eeafbdced7b24b9b044b",
+      "evidenceHash": null
+    },
+    {
+      "sampleId": "s0a-f5be631a09e8620eac0f",
+      "evidenceHash": null
+    },
+    {
+      "sampleId": "s0a-e595c82e7570fac4317c",
+      "evidenceHash": null
+    },
+    {
+      "sampleId": "s0a-c4e953a858ec6cd3bf12",
+      "evidenceHash": null
+    },
+    {
+      "sampleId": "s0a-7949842d50019fc1384e",
+      "evidenceHash": null
+    },
+    {
+      "sampleId": "s0a-1bd8739c24e445904512",
+      "evidenceHash": null
+    },
+    {
+      "sampleId": "s0a-7730cc26301692816ab8",
+      "evidenceHash": null
+    },
+    {
+      "sampleId": "s0a-f09e485812e0db400dfa",
+      "evidenceHash": null
+    },
+    {
+      "sampleId": "s0a-d582c499b9b18a7716d9",
+      "evidenceHash": null
+    }
+  ],
+  "bundleHash": "sha256:a775a89c1a72255efca37f54134d6cc7e65c0cee6b0767f15856f19ef7190be6"
+}

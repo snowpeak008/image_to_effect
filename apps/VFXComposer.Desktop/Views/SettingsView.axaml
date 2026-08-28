@@ -1,0 +1,19 @@
+<UserControl
+    x:Class="VFXComposer.Desktop.Views.SettingsView"
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:vm="using:VFXComposer.Desktop.ViewModels"
+    x:DataType="vm:SettingsViewModel">
+  <StackPanel Spacing="18">
+    <StackPanel Spacing="5">
+      <TextBlock FontSize="28" FontWeight="SemiBold" Text="{Binding Title}" />
+      <TextBlock Classes="muted" Text="{Binding Description}" TextWrapping="Wrap" />
+    </StackPanel>
+    <Border Classes="card">
+      <StackPanel Spacing="8">
+        <TextBlock Classes="muted" Text="{Binding EmptyStateMessage}" />
+        <TextBlock Foreground="#F1D39A" Text="{Binding SecurityNotice}" TextWrapping="Wrap" />
+      </StackPanel>
+    </Border>
+  </StackPanel>
+</UserControl>

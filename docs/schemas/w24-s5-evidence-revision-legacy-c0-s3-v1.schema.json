@@ -1,0 +1,282 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "w24-s5-evidence-revision-legacy-c0-s3/1",
+  "title": "W24 S5 immutable evidence revision descriptor — legacy C0 S3",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "descriptorStatus",
+    "writer",
+    "effectId",
+    "candidateId",
+    "candidateRevision",
+    "contractRevision",
+    "evidenceRevision",
+    "candidate",
+    "rawCapture",
+    "captureTool",
+    "evaluationInput",
+    "predecessor",
+    "selfHashEncoding",
+    "selfHash"
+  ],
+  "properties": {
+    "schema": {"const": "w24-s5-evidence-revision-legacy-c0-s3/1"},
+    "descriptorStatus": {"const": "RAW_CAPTURE_SEALED"},
+    "writer": {"$ref": "#/$defs/writer"},
+    "effectId": {"$ref": "#/$defs/effectId"},
+    "candidateId": {"const": "C0"},
+    "candidateRevision": {"const": 0},
+    "contractRevision": {"$ref": "#/$defs/positiveRevision"},
+    "evidenceRevision": {"const": 1},
+    "candidate": {"$ref": "#/$defs/legacyCandidate"},
+    "rawCapture": {"$ref": "#/$defs/legacyE1RawCapture"},
+    "captureTool": {"$ref": "#/$defs/captureTool"},
+    "evaluationInput": {"$ref": "#/$defs/s3EvaluationInput"},
+    "predecessor": {"$ref": "#/$defs/e1Predecessor"},
+    "selfHashEncoding": {"const": "w24-typed-binary-v1"},
+    "selfHash": {"$ref": "#/$defs/sha256"}
+  },
+  "$defs": {
+    "sha256": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "effectId": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 96,
+      "pattern": "^[a-z][a-z0-9]*(?:_[a-z0-9]+)*$"
+    },
+    "positiveRevision": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 1000000
+    },
+    "boundedToken": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 96,
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]*$"
+    },
+    "versionToken": {
+      "type": "string",
+      "minLength": 3,
+      "maxLength": 96,
+      "pattern": "^[a-z0-9][a-z0-9._-]*/[0-9]+(?:\\.[0-9]+){0,3}$"
+    },
+    "repositoryPath": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 512,
+      "pattern": "^(?!/)(?!.*//)(?!.*(?:^|/)\\.\\.?(?:/|$))[A-Za-z0-9_.-]{1,128}(?:/[A-Za-z0-9_.-]{1,128})*$"
+    },
+    "assetPath": {
+      "type": "string",
+      "minLength": 8,
+      "maxLength": 512,
+      "pattern": "^Assets/[A-Za-z0-9_.-]{1,128}(?:/[A-Za-z0-9_.-]{1,128})*$"
+    },
+    "guid": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{32}$"
+    },
+    "writerSourceSnapshot": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["ordinal", "sourcePath", "sourceSha256", "snapshotPath", "snapshotFileHash"],
+      "properties": {
+        "ordinal": {"type": "integer", "minimum": 0, "maximum": 127},
+        "sourcePath": {"$ref": "#/$defs/repositoryPath"},
+        "sourceSha256": {"$ref": "#/$defs/sha256"},
+        "snapshotPath": {"type": "string", "maxLength": 512, "pattern": "^docs/vfx-candidates/[a-z][a-z0-9]*(?:_[a-z0-9]+)*/C0/evidence/E1/snapshots/writer/sources/[A-Za-z0-9_.-]{1,128}(?:/[A-Za-z0-9_.-]{1,128})*$"},
+        "snapshotFileHash": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "writer": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "writerId",
+        "writerVersion",
+        "bundleSnapshotPath",
+        "bundleSnapshotFileHash",
+        "bundleTypedHash",
+        "sourceSnapshots",
+        "sourceSetTypedHash",
+        "descriptorSchemaSnapshotPath",
+        "descriptorSchemaSnapshotFileHash"
+      ],
+      "properties": {
+        "writerId": {"$ref": "#/$defs/boundedToken"},
+        "writerVersion": {"$ref": "#/$defs/versionToken"},
+        "bundleSnapshotPath": {"type": "string", "maxLength": 512, "pattern": "^docs/vfx-candidates/[a-z][a-z0-9]*(?:_[a-z0-9]+)*/C0/evidence/E1/snapshots/writer/writer\\.bundle\\.json$"},
+        "bundleSnapshotFileHash": {"$ref": "#/$defs/sha256"},
+        "bundleTypedHash": {"$ref": "#/$defs/sha256"},
+        "sourceSnapshots": {"type": "array", "minItems": 1, "maxItems": 128, "uniqueItems": true, "items": {"$ref": "#/$defs/writerSourceSnapshot"}},
+        "sourceSetTypedHash": {"$ref": "#/$defs/sha256"},
+        "descriptorSchemaSnapshotPath": {"type": "string", "maxLength": 512, "pattern": "^docs/vfx-candidates/[a-z][a-z0-9]*(?:_[a-z0-9]+)*/C0/evidence/E1/snapshots/schema/w24-s5-evidence-revision-legacy-c0-s3-v1\\.schema\\.json$"},
+        "descriptorSchemaSnapshotFileHash": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "legacyCandidate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "receiptPath",
+        "receiptFileHash",
+        "receiptVersion",
+        "contractPath",
+        "contractFileHash",
+        "contractHash",
+        "pendingTracePath",
+        "pendingTraceFileHash",
+        "bootstrapManifestSnapshotPath",
+        "bootstrapManifestSnapshotFileHash",
+        "buildHash",
+        "captureProfileHash",
+        "runtimeEntryPath",
+        "runtimeEntryGuid",
+        "previewScenePath",
+        "previewSceneFileHash"
+      ],
+      "properties": {
+        "receiptPath": {"type": "string", "maxLength": 512, "pattern": "^docs/vfx-candidates/[a-z][a-z0-9]*(?:_[a-z0-9]+)*/C0/candidate-receipt\\.json$"},
+        "receiptFileHash": {"$ref": "#/$defs/sha256"},
+        "receiptVersion": {"const": "w24-candidate/1.0"},
+        "contractPath": {"type": "string", "maxLength": 512, "pattern": "^docs/vfx-candidates/[a-z][a-z0-9]*(?:_[a-z0-9]+)*/C0/design-contract\\.json$"},
+        "contractFileHash": {"$ref": "#/$defs/sha256"},
+        "contractHash": {"$ref": "#/$defs/sha256"},
+        "pendingTracePath": {"type": "string", "maxLength": 512, "pattern": "^docs/vfx-candidates/[a-z][a-z0-9]*(?:_[a-z0-9]+)*/C0/implementation-trace\\.json$"},
+        "pendingTraceFileHash": {"$ref": "#/$defs/sha256"},
+        "bootstrapManifestSnapshotPath": {"type": "string", "maxLength": 512, "pattern": "^docs/vfx-candidates/[a-z][a-z0-9]*(?:_[a-z0-9]+)*/C0/bootstrap-manifest\\.json$"},
+        "bootstrapManifestSnapshotFileHash": {"$ref": "#/$defs/sha256"},
+        "buildHash": {"$ref": "#/$defs/sha256"},
+        "captureProfileHash": {"$ref": "#/$defs/sha256"},
+        "runtimeEntryPath": {"$ref": "#/$defs/assetPath"},
+        "runtimeEntryGuid": {"$ref": "#/$defs/guid"},
+        "previewScenePath": {"$ref": "#/$defs/assetPath"},
+        "previewSceneFileHash": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "rawCaptureBase": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "layout",
+        "root",
+        "captureMetadataPath",
+        "captureMetadataFileHash",
+        "evidenceSealPath",
+        "evidenceSealFileHash",
+        "evidenceSealHash",
+        "evidenceLockPath",
+        "evidenceLockFileHash",
+        "diagnosticPassManifestPath",
+        "diagnosticPassManifestFileHash",
+        "artifactCount",
+        "totalBytes",
+        "fileSetTypedHash"
+      ],
+      "properties": {
+        "layout": {"const": "LEGACY_C0_FLAT_E1"},
+        "root": {"$ref": "#/$defs/repositoryPath"},
+        "captureMetadataPath": {"$ref": "#/$defs/repositoryPath"},
+        "captureMetadataFileHash": {"$ref": "#/$defs/sha256"},
+        "evidenceSealPath": {"$ref": "#/$defs/repositoryPath"},
+        "evidenceSealFileHash": {"$ref": "#/$defs/sha256"},
+        "evidenceSealHash": {"$ref": "#/$defs/sha256"},
+        "evidenceLockPath": {"$ref": "#/$defs/repositoryPath"},
+        "evidenceLockFileHash": {"$ref": "#/$defs/sha256"},
+        "diagnosticPassManifestPath": {"$ref": "#/$defs/repositoryPath"},
+        "diagnosticPassManifestFileHash": {"$ref": "#/$defs/sha256"},
+        "artifactCount": {"type": "integer", "minimum": 4, "maximum": 512},
+        "totalBytes": {"type": "integer", "minimum": 1, "maximum": 1073741824},
+        "fileSetTypedHash": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "legacyE1RawCapture": {
+      "allOf": [
+        {"$ref": "#/$defs/rawCaptureBase"},
+        {
+          "properties": {
+            "layout": {"const": "LEGACY_C0_FLAT_E1"},
+            "root": {"type": "string", "pattern": "^artifacts/vfx-evidence/[a-z][a-z0-9]*(?:_[a-z0-9]+)*/C0$"},
+            "captureMetadataPath": {"type": "string", "pattern": "^artifacts/vfx-evidence/[a-z][a-z0-9]*(?:_[a-z0-9]+)*/C0/capture-metadata\\.json$"},
+            "evidenceSealPath": {"type": "string", "pattern": "^artifacts/vfx-evidence/[a-z][a-z0-9]*(?:_[a-z0-9]+)*/C0/evidence-seal\\.json$"},
+            "evidenceLockPath": {"type": "string", "pattern": "^artifacts/vfx-evidence/[a-z][a-z0-9]*(?:_[a-z0-9]+)*/C0/evidence-lock\\.json$"},
+            "diagnosticPassManifestPath": {"type": "string", "pattern": "^artifacts/vfx-evidence/[a-z][a-z0-9]*(?:_[a-z0-9]+)*/C0/diagnostic-pass-manifest\\.json$"}
+          }
+        }
+      ]
+    },
+    "sourceSnapshot": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["ordinal", "sourcePath", "sourceSha256", "snapshotPath", "snapshotFileHash"],
+      "properties": {
+        "ordinal": {"type": "integer", "minimum": 0, "maximum": 127},
+        "sourcePath": {"$ref": "#/$defs/repositoryPath"},
+        "sourceSha256": {"$ref": "#/$defs/sha256"},
+        "snapshotPath": {"type": "string", "maxLength": 512, "pattern": "^docs/vfx-candidates/[a-z][a-z0-9]*(?:_[a-z0-9]+)*/C0/evidence/E1/snapshots/capture-tool/sources/[A-Za-z0-9_.-]{1,128}(?:/[A-Za-z0-9_.-]{1,128})*$"},
+        "snapshotFileHash": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "captureTool": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["toolVersion", "bundleSnapshotPath", "bundleSnapshotFileHash", "bundleCanonicalHash", "sourceSnapshots", "sourceSetTypedHash"],
+      "properties": {
+        "toolVersion": {"$ref": "#/$defs/versionToken"},
+        "bundleSnapshotPath": {"type": "string", "maxLength": 512, "pattern": "^docs/vfx-candidates/[a-z][a-z0-9]*(?:_[a-z0-9]+)*/C0/evidence/E1/snapshots/capture-tool/capture-tool\\.bundle\\.json$"},
+        "bundleSnapshotFileHash": {"$ref": "#/$defs/sha256"},
+        "bundleCanonicalHash": {"$ref": "#/$defs/sha256"},
+        "sourceSnapshots": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 128,
+          "uniqueItems": true,
+          "items": {"$ref": "#/$defs/sourceSnapshot"}
+        },
+        "sourceSetTypedHash": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "s3EvaluationInput": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema",
+        "metricsInputPath",
+        "metricsInputFileHash",
+        "capturedMetricsReportPath",
+        "capturedMetricsReportFileHash",
+        "metricsToolSnapshotPath",
+        "metricsToolSnapshotFileHash",
+        "metricsEnvironmentPath",
+        "metricsEnvironmentFileHash",
+        "requiredEvidenceMatrixHash",
+        "typedRawSetHash"
+      ],
+      "properties": {
+        "schema": {"const": "w24-s5-eval-input-s3-render-metrics/1"},
+        "metricsInputPath": {"type": "string", "maxLength": 512, "pattern": "^artifacts/vfx-evidence/[a-z][a-z0-9]*(?:_[a-z0-9]+)*/C0/diagnostics/metrics-input\\.json$"},
+        "metricsInputFileHash": {"$ref": "#/$defs/sha256"},
+        "capturedMetricsReportPath": {"type": "string", "maxLength": 512, "pattern": "^artifacts/vfx-evidence/[a-z][a-z0-9]*(?:_[a-z0-9]+)*/C0/diagnostics/metrics-report\\.json$"},
+        "capturedMetricsReportFileHash": {"$ref": "#/$defs/sha256"},
+        "metricsToolSnapshotPath": {"type": "string", "maxLength": 512, "pattern": "^docs/vfx-candidates/[a-z][a-z0-9]*(?:_[a-z0-9]+)*/C0/evidence/E1/snapshots/evaluation/render_metrics\\.py$"},
+        "metricsToolSnapshotFileHash": {"$ref": "#/$defs/sha256"},
+        "metricsEnvironmentPath": {"type": "string", "maxLength": 512, "pattern": "^docs/vfx-candidates/[a-z][a-z0-9]*(?:_[a-z0-9]+)*/C0/evidence/E1/snapshots/evaluation/metrics-environment\\.json$"},
+        "metricsEnvironmentFileHash": {"$ref": "#/$defs/sha256"},
+        "requiredEvidenceMatrixHash": {"$ref": "#/$defs/sha256"},
+        "typedRawSetHash": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "e1Predecessor": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind"],
+      "properties": {"kind": {"const": "NONE"}}
+    }
+  }
+}

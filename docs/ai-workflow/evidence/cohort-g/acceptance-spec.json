@@ -1,0 +1,15 @@
+{
+  "version": 1,
+  "recipes": {
+    "G1": { "id": "g1_cinder", "profile": "mobile_medium", "travel": ["energy_body", "motion_trail", "secondary_particles"], "compare": { "core.scale": "<", "trail.width": "<", "embers.rate": "<", "burst.count": "<=" } },
+    "G2": { "id": "g2_lantern", "profile": "pc_editor", "travel": ["energy_body", "motion_trail", "secondary_particles"], "compare": { "core.scale": ">", "trail.time": ">", "embers.lifetime": ">", "shockwave.endSize": ">" } },
+    "G3": { "id": "g3_needle", "profile": "mobile_medium", "travel": ["energy_body"], "forbidTravel": ["motion_trail", "secondary_particles"], "compare": { "core.scale": "<", "burst.count": "<=" } },
+    "G4": { "id": "g4_whisper", "profile": "pc_editor", "travel": ["energy_body", "motion_trail"], "forbidTravel": ["secondary_particles"], "compare": { "trail.width": "<", "burst.speed": "<", "shockwave.endSize": "<=" } },
+    "G5": { "id": "g5_flare", "profile": "mobile_medium", "travel": ["energy_body", "motion_trail", "secondary_particles"], "compare": { "core.scale": ">=", "embers.rate": ">=", "burst.count": ">", "shockwave.endSize": ">" } }
+  },
+  "patches": {
+    "P1": { "expectedRevision": 1, "path": "/stages/travel/modules/embers/parameters/rate", "value": 9 },
+    "P2": { "expectedRevision": 1, "path": "/stages/travel/modules/embers", "enabled": false },
+    "P3": { "expectedRevision": 1, "path": "/stages/travel/modules/lighter_embers", "id": "lighter_embers", "kind": "secondary_particles", "templateId": "PFT_2D_Embers", "attachTo": "core" }
+  }
+}

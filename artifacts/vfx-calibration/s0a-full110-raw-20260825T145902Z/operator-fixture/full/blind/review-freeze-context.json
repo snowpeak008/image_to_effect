@@ -1,0 +1,22 @@
+{
+  "schemaVersion": "s0a-review-freeze-context/v2",
+  "holdoutCohort": "full-60-20-20-10",
+  "freezeStatus": "TEMPLATE_NOT_FROZEN",
+  "holdoutIsolationMode": "FRESH_INDEPENDENT_FULL",
+  "operatorLedgerHash": "sha256:77724f558d0565ba749c8edb57103ecd0d1cf745a423554a407b94bdb6e4eb5a",
+  "reducedMetricsHash": null,
+  "qaPromptHash": null,
+  "modelVersionHash": null,
+  "imageInputStrategyHash": null,
+  "threeStateRulesHash": null,
+  "aggregationRulesHash": null,
+  "visualReviewSchemaHash": null,
+  "contractHash": null,
+  "buildHash": null,
+  "captureProfileHash": null,
+  "frameTableHash": null,
+  "sceneHash": null,
+  "prefabManifestHash": null,
+  "captureToolHash": null,
+  "contextHash": "sha256:a3d22b3f82c847947fd829c636ed4f9a6699df4ace72ba474584b1ae844fffd9"
+}

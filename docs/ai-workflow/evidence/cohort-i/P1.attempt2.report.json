@@ -1,0 +1,14 @@
+{
+  "succeeded": false,
+  "detail": "revision 1->0",
+  "entries": [
+    {
+      "code": "E702",
+      "severity": "error",
+      "path": "/0/op",
+      "message": "Patch operation requires op.",
+      "actualValue": null,
+      "allowedRange": null
+    }
+  ]
+}

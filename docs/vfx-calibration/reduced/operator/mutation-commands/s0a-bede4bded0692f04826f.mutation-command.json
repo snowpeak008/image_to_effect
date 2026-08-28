@@ -1,0 +1,16 @@
+{
+  "schemaVersion": "s0a-operator-mutation-command/v1",
+  "sampleId": "s0a-bede4bded0692f04826f",
+  "effectId": "sustained_flame_3d",
+  "fixedSeed": 1685213917,
+  "mutationCommands": [
+    {
+      "operation": "set",
+      "targetKey": "Renderer.primarySmokeSortingOrder",
+      "value": "inverted"
+    }
+  ],
+  "fixtureApplicationStatus": "NOT_APPLIED_BY_UNITY_FIXTURE_ADAPTER",
+  "operatorInstruction": "A later Unity fixture adapter must execute this command and capture evidence.",
+  "commandHash": "sha256:5311668d3425cc9c69f27ff6ce24b2e94f5f5a2e7ed4dc08e9bba0b0d1a7a63c"
+}

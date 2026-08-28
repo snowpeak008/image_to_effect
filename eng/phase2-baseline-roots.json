@@ -1,0 +1,61 @@
+{
+  "formatVersion": 1,
+  "algorithm": "SHA-256 of UTF-8(no BOM) lines: lowercase file hash, two spaces, repository-relative forward-slash path, LF; paths sorted before row construction with StringComparer.Ordinal; bin/obj segments excluded",
+  "capturedUtc": "2026-08-28T05:32:05.0499358+00:00",
+  "roots": [
+    {
+      "path": "src/VFXComposer.Protocol",
+      "kind": "directory",
+      "count": 70,
+      "sha256": "0ce0420ff218a43b06599bdac1afdc3ff327ab2df93fc99e697b0248ebbb01b4"
+    },
+    {
+      "path": "src/VFXComposer.Protocol.Tests",
+      "kind": "directory",
+      "count": 25,
+      "sha256": "d5fcf76c8d52387effd9a3d2733d458af816dbabda7f8cd60ff5f85002587622"
+    },
+    {
+      "path": "docs/schemas/desktop",
+      "kind": "directory",
+      "count": 36,
+      "sha256": "0e41683a2c93c832e5ea6d86667c726eaad3ce65336ce25bb1d9be6b5cb47538"
+    },
+    {
+      "path": "services/VFXComposer.Broker",
+      "kind": "directory",
+      "count": 42,
+      "sha256": "3d3306953327ac1e9360db424d5e53b7124c800097c9e910feeea1b8c47b6dff"
+    },
+    {
+      "path": "services/VFXComposer.Broker.Tests",
+      "kind": "directory",
+      "count": 20,
+      "sha256": "14427f84c1e7892bbf3aa0bffbe5321cbc97a8378bc3540658bcdd355d066513"
+    },
+    {
+      "path": "services/VFXComposer.Broker.ServiceHost",
+      "kind": "directory",
+      "count": 8,
+      "sha256": "0073c96df90b67863845e328c810469b862e228ccc5f5e3721ac50bba0eb9103"
+    },
+    {
+      "path": "services/VFXComposer.Broker.ServiceHost.Tests",
+      "kind": "directory",
+      "count": 6,
+      "sha256": "69ba819bce918379e8141b2a6900b34f8d738531c612899ce5fc360a16eca83c"
+    },
+    {
+      "path": "project/Packages/com.vfxcomposer.unity",
+      "kind": "directory",
+      "count": 769,
+      "sha256": "506068f8338ee96d432987968b95da9e17f8effa723a2b3251be81680680f19f"
+    },
+    {
+      "path": "VFXComposer.sln",
+      "kind": "file",
+      "count": 1,
+      "sha256": "b8804af2170986371d2c804b4b832f8c2c1d2ef904a63cf0a1824d60d7adf689"
+    }
+  ]
+}

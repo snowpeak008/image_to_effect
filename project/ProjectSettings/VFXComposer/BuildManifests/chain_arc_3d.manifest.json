@@ -1,0 +1,64 @@
+{
+  "manifestVersion": 1,
+  "rulesVersion": "1.0-draft",
+  "enforcement": "strict",
+  "effectId": "chain_arc_3d",
+  "archetype": "beam",
+  "recipeVersion": 1,
+  "recipeRevision": 1,
+  "recipeHash": "54662d6d05b37e77d45c2577ba2fa8bb615a1f2fe2318e1238d4f6daaa11fbc4",
+  "buildHash": "8e2fb1cff4c1464f01198b598d34b63bc4d8ab3431740993b0f5dc3421e24be6",
+  "compilerVersion": "interaction-gallery-3",
+  "unityVersion": "2022.3.62f3c1",
+  "sourceRecipePath": "Assets/VFX/Recipes/Beam/chain_arc_3d.default.json",
+  "runtimeEntry": {
+    "kind": "prefab",
+    "path": "Assets/VFX/Generated/chain_arc_3d/VFX_chain_arc_3d.prefab",
+    "guid": "17d6f86f9cc84004b95dd2fb2ff0971b"
+  },
+  "ownedOutputs": [
+    {
+      "path": "Assets/VFX/Generated/chain_arc_3d/VFX_chain_arc_3d.prefab",
+      "guid": "17d6f86f9cc84004b95dd2fb2ff0971b",
+      "assetType": "GameObject",
+      "sha256": "1522e47f0604fd135331f726a7f4026236b247c37e3aa69a7c3e97e58957c4ef"
+    }
+  ],
+  "dependencies": [
+    {
+      "path": "Assets/VFX/Shared/CoverageGalleryB/Materials/MAT_CoverageB_Additive.mat",
+      "guid": "688b79adff1f3474da55fb0deedff137",
+      "assetType": "Material",
+      "version": null,
+      "dependencyHash": "0b0b0e70d4676ffab060eedfd9b3ebea"
+    },
+    {
+      "path": "Assets/VFX/Shared/Shaders/CoverageGalleryBUnlit.shader",
+      "guid": "36a2072c324a26a479dfb498994d4812",
+      "assetType": "Shader",
+      "version": null,
+      "dependencyHash": "64f6028fba878ab561a8418a3ea09753"
+    },
+    {
+      "path": "Packages/com.vfxcomposer.unity/Runtime/Components/InteractionGalleryVfxController.cs",
+      "guid": "9c06fdbb4482a7a40862522ad88717b6",
+      "assetType": "MonoScript",
+      "version": null,
+      "dependencyHash": "856d2bcba33bff8d21dd532335cfda8f"
+    }
+  ],
+  "cost": {
+    "particles": 0,
+    "particleSystems": 0,
+    "renderers": 7,
+    "materials": 1,
+    "trails": 0,
+    "duration": 4.0,
+    "localTextureBytes": 0,
+    "dependencyResidentTextureBytes": 0,
+    "gameObjects": 8,
+    "maxDepth": 1
+  },
+  "audit": [],
+  "generatedAtUtc": "2026-08-24T01:24:54.0625330Z"
+}

@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<test-run id="2" testcasecount="8" result="Passed" total="8" passed="8" failed="0" inconclusive="0" skipped="0" asserts="0" engine-version="3.5.0.0" clr-version="4.0.30319.42000" start-time="2026-08-25 14:35:37Z" end-time="2026-08-25 14:35:37Z" duration="0.0560194">
+  <test-suite type="TestSuite" id="1541" name="project" fullname="project" runstate="Runnable" testcasecount="442" result="Passed" start-time="2026-08-25 14:35:37Z" end-time="2026-08-25 14:35:37Z" duration="0.056019" total="8" passed="8" failed="0" inconclusive="0" skipped="0" asserts="0">
+    <properties />
+    <test-suite type="Assembly" id="2075" name="VFXComposer.Tests.EditMode.dll" fullname="D:/WorkWork/Assist/image_to_smart/.codex_tmp/w24-fresh-20260825-0628/project/Library/ScriptAssemblies/VFXComposer.Tests.EditMode.dll" runstate="Runnable" testcasecount="440" result="Passed" start-time="2026-08-25 14:35:37Z" end-time="2026-08-25 14:35:37Z" duration="0.041195" total="8" passed="8" failed="0" inconclusive="0" skipped="0" asserts="0">
+      <properties>
+        <property name="_PID" value="32784" />
+        <property name="_APPDOMAIN" value="Unity Child Domain" />
+        <property name="platform" value="EditMode" />
+      </properties>
+      <test-suite type="TestSuite" id="2076" name="VFXComposer" fullname="VFXComposer" runstate="Runnable" testcasecount="440" result="Passed" start-time="2026-08-25 14:35:37Z" end-time="2026-08-25 14:35:37Z" duration="0.037550" total="8" passed="8" failed="0" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <test-suite type="TestSuite" id="2077" name="Tests" fullname="VFXComposer.Tests" runstate="Runnable" testcasecount="440" result="Passed" start-time="2026-08-25 14:35:37Z" end-time="2026-08-25 14:35:37Z" duration="0.034420" total="8" passed="8" failed="0" inconclusive="0" skipped="0" asserts="0">
+          <properties />
+          <test-suite type="TestSuite" id="2078" name="EditMode" fullname="VFXComposer.Tests.EditMode" runstate="Runnable" testcasecount="440" result="Passed" start-time="2026-08-25 14:35:37Z" end-time="2026-08-25 14:35:37Z" duration="0.031388" total="8" passed="8" failed="0" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <test-suite type="TestFixture" id="1961" name="W24S6McpOperationEnvelopeTests" fullname="VFXComposer.Tests.EditMode.W24S6McpOperationEnvelopeTests" classname="VFXComposer.Tests.EditMode.W24S6McpOperationEnvelopeTests" runstate="Runnable" testcasecount="8" result="Passed" start-time="2026-08-25 14:35:37Z" end-time="2026-08-25 14:35:37Z" duration="0.025179" total="8" passed="8" failed="0" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <test-case id="1963" name="ApplyMode_TokensAndL4OrMigrationAuthority_AreRejected" fullname="VFXComposer.Tests.EditMode.W24S6McpOperationEnvelopeTests.ApplyMode_TokensAndL4OrMigrationAuthority_AreRejected" methodname="ApplyMode_TokensAndL4OrMigrationAuthority_AreRejected" classname="VFXComposer.Tests.EditMode.W24S6McpOperationEnvelopeTests" runstate="Runnable" seed="1274841335" result="Passed" start-time="2026-08-25 14:35:37Z" end-time="2026-08-25 14:35:37Z" duration="0.012449" asserts="0">
+                <properties />
+              </test-case>
+              <test-case id="1962" name="ExactReviewedDryRunPlan_WithAllowListedSemanticOperation_IsAccepted" fullname="VFXComposer.Tests.EditMode.W24S6McpOperationEnvelopeTests.ExactReviewedDryRunPlan_WithAllowListedSemanticOperation_IsAccepted" methodname="ExactReviewedDryRunPlan_WithAllowListedSemanticOperation_IsAccepted" classname="VFXComposer.Tests.EditMode.W24S6McpOperationEnvelopeTests" runstate="Runnable" seed="1107414651" result="Passed" start-time="2026-08-25 14:35:37Z" end-time="2026-08-25 14:35:37Z" duration="0.000486" asserts="0">
+                <properties />
+              </test-case>
+              <test-suite type="ParameterizedMethod" id="1969" name="PathsOutsideOperationRoot_AndTraversal_AreRejected" fullname="VFXComposer.Tests.EditMode.W24S6McpOperationEnvelopeTests.PathsOutsideOperationRoot_AndTraversal_AreRejected" classname="VFXComposer.Tests.EditMode.W24S6McpOperationEnvelopeTests" runstate="Runnable" testcasecount="3" result="Passed" start-time="2026-08-25 14:35:37Z" end-time="2026-08-25 14:35:37Z" duration="0.001972" total="3" passed="3" failed="0" inconclusive="0" skipped="0" asserts="0">
+                <properties />
+                <test-case id="1966" name="PathsOutsideOperationRoot_AndTraversal_AreRejected(&quot;Assets/VFX/Generated/delete.prefab&quot;)" fullname="VFXComposer.Tests.EditMode.W24S6McpOperationEnvelopeTests.PathsOutsideOperationRoot_AndTraversal_AreRejected(&quot;Assets/VFX/Generated/delete.prefab&quot;)" methodname="PathsOutsideOperationRoot_AndTraversal_AreRejected" classname="VFXComposer.Tests.EditMode.W24S6McpOperationEnvelopeTests" runstate="Runnable" seed="1748823049" result="Passed" start-time="2026-08-25 14:35:37Z" end-time="2026-08-25 14:35:37Z" duration="0.000353" asserts="0">
+                  <properties />
+                </test-case>
+                <test-case id="1967" name="PathsOutsideOperationRoot_AndTraversal_AreRejected(&quot;Assets/VFX/Recipes/../Generated/delete.json&quot;)" fullname="VFXComposer.Tests.EditMode.W24S6McpOperationEnvelopeTests.PathsOutsideOperationRoot_AndTraversal_AreRejected(&quot;Assets/VFX/Recipes/../Generated/delete.json&quot;)" methodname="PathsOutsideOperationRoot_AndTraversal_AreRejected" classname="VFXComposer.Tests.EditMode.W24S6McpOperationEnvelopeTests" runstate="Runnable" seed="1848167666" result="Passed" start-time="2026-08-25 14:35:37Z" end-time="2026-08-25 14:35:37Z" duration="0.000112" asserts="0">
+                  <properties />
+                </test-case>
+                <test-case id="1968" name="PathsOutsideOperationRoot_AndTraversal_AreRejected(&quot;C:/outside.json&quot;)" fullname="VFXComposer.Tests.EditMode.W24S6McpOperationEnvelopeTests.PathsOutsideOperationRoot_AndTraversal_AreRejected(&quot;C:/outside.json&quot;)" methodname="PathsOutsideOperationRoot_AndTraversal_AreRejected" classname="VFXComposer.Tests.EditMode.W24S6McpOperationEnvelopeTests" runstate="Runnable" seed="1673296394" result="Passed" start-time="2026-08-25 14:35:37Z" end-time="2026-08-25 14:35:37Z" duration="0.000074" asserts="0">
+                  <properties />
+                </test-case>
+              </test-suite>
+              <test-case id="1965" name="TamperedEnvelopeHash_IsRejectedWithTheDedicatedIntegrityError" fullname="VFXComposer.Tests.EditMode.W24S6McpOperationEnvelopeTests.TamperedEnvelopeHash_IsRejectedWithTheDedicatedIntegrityError" methodname="TamperedEnvelopeHash_IsRejectedWithTheDedicatedIntegrityError" classname="VFXComposer.Tests.EditMode.W24S6McpOperationEnvelopeTests" runstate="Runnable" seed="2068478039" result="Passed" start-time="2026-08-25 14:35:37Z" end-time="2026-08-25 14:35:37Z" duration="0.001499" asserts="0">
+                <properties />
+              </test-case>
+              <test-case id="1970" name="UnknownOperationKind_IsRejected_AndNoShellCsharpOrAssetDatabaseOperationExistsInVocabulary" fullname="VFXComposer.Tests.EditMode.W24S6McpOperationEnvelopeTests.UnknownOperationKind_IsRejected_AndNoShellCsharpOrAssetDatabaseOperationExistsInVocabulary" methodname="UnknownOperationKind_IsRejected_AndNoShellCsharpOrAssetDatabaseOperationExistsInVocabulary" classname="VFXComposer.Tests.EditMode.W24S6McpOperationEnvelopeTests" runstate="Runnable" seed="633212318" result="Passed" start-time="2026-08-25 14:35:37Z" end-time="2026-08-25 14:35:37Z" duration="0.000259" asserts="0">
+                <properties />
+              </test-case>
+              <test-case id="1964" name="UnreviewedButInternallyBoundPlan_IsRejectedWithTheDedicatedReviewedPlanError" fullname="VFXComposer.Tests.EditMode.W24S6McpOperationEnvelopeTests.UnreviewedButInternallyBoundPlan_IsRejectedWithTheDedicatedReviewedPlanError" methodname="UnreviewedButInternallyBoundPlan_IsRejectedWithTheDedicatedReviewedPlanError" classname="VFXComposer.Tests.EditMode.W24S6McpOperationEnvelopeTests" runstate="Runnable" seed="1512734542" result="Passed" start-time="2026-08-25 14:35:37Z" end-time="2026-08-25 14:35:37Z" duration="0.000415" asserts="0">
+                <properties />
+              </test-case>
+            </test-suite>
+          </test-suite>
+        </test-suite>
+      </test-suite>
+    </test-suite>
+  </test-suite>
+</test-run>

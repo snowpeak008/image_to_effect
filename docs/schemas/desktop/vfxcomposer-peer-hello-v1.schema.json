@@ -1,0 +1,66 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.vfxcomposer.dev/desktop/vfxcomposer-peer-hello-v1.schema.json",
+  "title": "VFX Composer authenticated-pipe peer hello v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "protocolVersion",
+    "messageKind",
+    "requestId",
+    "peerRole",
+    "peerInstanceId",
+    "processId",
+    "processEpoch",
+    "offeredCapabilities",
+    "imageIdentity"
+  ],
+  "properties": {
+    "protocolVersion": { "const": "vfxcomposer.protocol/1.0" },
+    "messageKind": { "const": "peer.hello" },
+    "requestId": { "$ref": "#/$defs/token" },
+    "peerRole": { "enum": ["DESKTOP", "WORKER"] },
+    "peerInstanceId": { "$ref": "#/$defs/token" },
+    "processId": { "type": "integer", "minimum": 1, "maximum": 2147483647 },
+    "processEpoch": { "$ref": "#/$defs/token" },
+    "offeredCapabilities": { "$ref": "#/$defs/capabilities" },
+    "imageIdentity": { "$ref": "#/$defs/imageIdentity" }
+  },
+  "$defs": {
+    "token": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 128,
+      "pattern": "^[A-Za-z0-9._:-]+$"
+    },
+    "capabilities": {
+      "oneOf": [
+        { "const": [] },
+        { "const": ["broker.peer-session.v1"] },
+        { "const": ["project.readonly-query.v1"] },
+        { "const": ["project.registration.v1"] },
+        { "const": ["worker.handle-lifecycle.v1"] },
+        { "const": ["broker.peer-session.v1", "project.readonly-query.v1"] },
+        { "const": ["broker.peer-session.v1", "project.registration.v1"] },
+        { "const": ["broker.peer-session.v1", "worker.handle-lifecycle.v1"] },
+        { "const": ["project.readonly-query.v1", "project.registration.v1"] },
+        { "const": ["project.readonly-query.v1", "worker.handle-lifecycle.v1"] },
+        { "const": ["project.registration.v1", "worker.handle-lifecycle.v1"] },
+        { "const": ["broker.peer-session.v1", "project.readonly-query.v1", "project.registration.v1"] },
+        { "const": ["broker.peer-session.v1", "project.readonly-query.v1", "worker.handle-lifecycle.v1"] },
+        { "const": ["broker.peer-session.v1", "project.registration.v1", "worker.handle-lifecycle.v1"] },
+        { "const": ["project.readonly-query.v1", "project.registration.v1", "worker.handle-lifecycle.v1"] },
+        { "const": ["broker.peer-session.v1", "project.readonly-query.v1", "project.registration.v1", "worker.handle-lifecycle.v1"] }
+      ]
+    },
+    "imageIdentity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["typeTag", "digest"],
+      "properties": {
+        "typeTag": { "const": "vfxcomposer.process-image/1" },
+        "digest": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" }
+      }
+    }
+  }
+}

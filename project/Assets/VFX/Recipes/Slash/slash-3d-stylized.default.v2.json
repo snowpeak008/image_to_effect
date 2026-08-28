@@ -1,0 +1,29 @@
+{
+  "recipeVersion": 2,
+  "revision": 1,
+  "id": "slash_3d_stylized",
+  "name": "Stylized Arc Slash 3D",
+  "dimension": "3d",
+  "archetype": "slash",
+  "targetProfile": "mobile_medium",
+  "randomSeed": 12045,
+  "timeline": { "duration": 0.45 },
+  "phases": [
+    { "id": "anticipation", "kind": "anticipation", "startTime": 0.00, "duration": 0.07, "enabled": true, "modules": [
+      { "id": "anticipation_glint", "kind": "anticipation_glint", "templateId": "PFT_3D_SlashAnticipation", "enabled": true, "parameters": {} }
+    ] },
+    { "id": "primary_arc", "kind": "primary_arc", "startTime": 0.04, "duration": 0.16, "enabled": true, "modules": [
+      { "id": "arc_sweep", "kind": "arc_sweep", "templateId": "PFT_3D_SlashArcSweep", "enabled": true, "parameters": { "scale": 1.0, "width": 0.24, "duration": 0.16 } }
+    ] },
+    { "id": "afterimage", "kind": "afterimage", "startTime": 0.12, "duration": 0.18, "enabled": true, "modules": [
+      { "id": "arc_afterimage", "kind": "arc_afterimage", "templateId": "PFT_3D_SlashAfterimage", "enabled": true, "parameters": { "count": 2, "alpha": 0.32 } }
+    ] },
+    { "id": "sparks", "kind": "sparks", "startTime": 0.14, "duration": 0.22, "enabled": true, "modules": [
+      { "id": "slash_sparks", "kind": "slash_sparks", "templateId": "PFT_3D_SlashSparks", "enabled": true, "parameters": { "count": 8, "speed": 2.2, "lifetime": 0.18 } }
+    ] },
+    { "id": "dissipation", "kind": "dissipation", "startTime": 0.20, "duration": 0.25, "enabled": true, "modules": [
+      { "id": "slash_dissipation", "kind": "slash_dissipation", "templateId": "PFT_3D_SlashDissipation", "enabled": true, "parameters": { "lifetime": 0.22 } }
+    ] }
+  ],
+  "metadata": { "createdBy": "s12a_formal", "templateCatalogVersion": "1.0.0" }
+}

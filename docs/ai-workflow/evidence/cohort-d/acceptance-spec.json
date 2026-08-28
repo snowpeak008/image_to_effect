@@ -1,0 +1,12 @@
+{
+  "version": 1,
+  "recipeRules": {
+    "common": {"requiredStages":{"launch":"on_launch","travel":"after_previous","impact":"on_hit"},"sameStageAttachTo":true},
+    "D1": {"profile":"pc_editor","travel":{"coreScale":{"maxExclusive":1.2},"trailWidth":{"maxExclusive":0.42},"embersRate":{"maxExclusive":18}},"impact":{"burstCount":{"maxInclusive":24},"shockwaveEndSize":{"maxInclusive":2.8}}},
+    "D2": {"profile":"mobile_medium","travel":{"coreScale":{"minExclusive":1.2},"trailWidth":{"minExclusive":0.42},"embersRate":{"minInclusive":18}},"impact":{"burstCount":{"minExclusive":24}}},
+    "D3": {"profile":"pc_editor","travel":{"coreScale":{"maxExclusive":1.2},"forbidKinds":["motion_trail"]},"impact":{"burstCount":{"maxInclusive":24},"shockwaveEndSize":{"maxInclusive":2.8}}},
+    "D4": {"profile":"mobile_medium","travel":{"coreScale":{"minInclusive":1.2},"trailWidth":{"maxExclusive":0.42},"forbidKinds":["secondary_particles"]},"impact":{"burstCount":{"maxInclusive":24},"shockwaveEndSize":{"maxInclusive":2.8}}},
+    "D5": {"profile":"pc_editor","travel":{"coreScale":{"minInclusive":1.2},"trailWidth":{"minInclusive":0.42},"embersRate":{"minInclusive":18}},"impact":{"burstCount":{"minExclusive":24},"shockwaveEndSize":{"minExclusive":2.8}}}
+  },
+  "patchRules": {"P1":{"expectedRevision":1,"op":"replace","path":"/stages/travel/modules/embers/parameters/rate","expectedValue":9},"P2":{"expectedRevision":1,"op":"disable","path":"/stages/travel/modules/embers","expectedEnabled":false},"P3":{"expectedRevision":1,"op":"add","path":"/stages/travel/modules/lighter_embers","expectedTemplateId":"PFT_2D_Embers","expectedKind":"secondary_particles","expectedAttachTo":"core"}}
+}

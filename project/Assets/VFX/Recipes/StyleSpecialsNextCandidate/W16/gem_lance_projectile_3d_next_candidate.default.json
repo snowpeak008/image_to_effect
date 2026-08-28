@@ -1,0 +1,32 @@
+{
+  "schema": "style-special-next-candidate/v1",
+  "id": "gem_lance_projectile_3d_next_candidate",
+  "sourceId": "gem_lance_projectile_3d",
+  "label": "CRYSTAL · NEW LANCE",
+  "group": "w16",
+  "archetype": "projectile",
+  "dimension": "3d",
+  "style": "crystal",
+  "profile": "LanceFlight",
+  "semantic": "faceted-lance+dispersion-edge+layered-refractive-tail",
+  "duration": 1.24,
+  "releaseNormalized": 0.1,
+  "sustainEndNormalized": 0.78,
+  "sustained": false,
+  "seed": 16103,
+  "intensity": 1.14,
+  "palette": {
+    "primary": "#45BFFF",
+    "secondary": "#D9F8FF",
+    "accent": "#FF8CF4"
+  },
+  "meshes": [
+    "Shard",
+    "Ribbon",
+    "Ring",
+    "Burst"
+  ],
+  "pairFamily": "crystal",
+  "pairRole": "new",
+  "sourceBaseId": "gem_lance_projectile_3d"
+}

@@ -1,0 +1,32 @@
+{
+  "schema": "style-special-next-candidate/v1",
+  "id": "volt_shield_3d_steampunk_next_candidate",
+  "sourceId": "volt_shield_3d_steampunk",
+  "label": "STEAM · VOLT VARIANT",
+  "group": "w16",
+  "archetype": "shield",
+  "dimension": "3d",
+  "style": "steampunk",
+  "profile": "SteamBurst",
+  "semantic": "volt-shield-content+brass-coils+ratchet-step+electric-spark",
+  "duration": 1.42,
+  "releaseNormalized": 0.28,
+  "sustainEndNormalized": 0.82,
+  "sustained": true,
+  "seed": 16110,
+  "intensity": 1.08,
+  "palette": {
+    "primary": "#9C7138",
+    "secondary": "#E0C377",
+    "accent": "#8FE8FF"
+  },
+  "meshes": [
+    "GearA",
+    "GearB",
+    "Ring",
+    "Shard"
+  ],
+  "pairFamily": "steampunk",
+  "pairRole": "variant",
+  "sourceBaseId": "volt_shield_3d"
+}

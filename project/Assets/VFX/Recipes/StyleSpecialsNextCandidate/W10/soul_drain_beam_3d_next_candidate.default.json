@@ -1,0 +1,33 @@
+{
+  "schema": "style-special-next-candidate/v1",
+  "id": "soul_drain_beam_3d_next_candidate",
+  "sourceId": "soul_drain_beam_3d",
+  "label": "SOUL DRAIN · REVERSE FLOW",
+  "group": "w10",
+  "archetype": "beam",
+  "dimension": "3d",
+  "style": "dark",
+  "profile": "SoulDrain",
+  "semantic": "ninepoint-sag-link+target-mist+wisps-flow-target-to-caster",
+  "duration": 1.45,
+  "releaseNormalized": 0.12,
+  "sustainEndNormalized": 0.86,
+  "sustained": true,
+  "seed": 10108,
+  "intensity": 1.02,
+  "palette": {
+    "primary": "#351344",
+    "secondary": "#7F2A8E",
+    "accent": "#C95CE0"
+  },
+  "meshes": [
+    "Line",
+    "Quad",
+    "Shard",
+    "Shard",
+    "Shard"
+  ],
+  "pairFamily": "",
+  "pairRole": "",
+  "sourceBaseId": ""
+}

@@ -1,0 +1,605 @@
+{
+  "schemaVersion": "s0a-blind-evidence-index/v3",
+  "holdoutCohort": "reduced-36-12-12-6",
+  "freezeStatus": "TEMPLATE_NOT_FROZEN",
+  "contractHash": null,
+  "captureProfileHash": null,
+  "reviewContextHash": null,
+  "samples": [
+    {
+      "sampleId": "s0a-f1078728ef9b920ebfcc",
+      "evidence": {
+        "evidenceManifest": "evidence/s0a-f1078728ef9b920ebfcc.evidence.json",
+        "evidenceIdentity": "s0a-f1078728ef9b920ebfcc"
+      },
+      "contractHash": null,
+      "captureProfileHash": null
+    },
+    {
+      "sampleId": "s0a-de049980074a1549cff6",
+      "evidence": {
+        "evidenceManifest": "evidence/s0a-de049980074a1549cff6.evidence.json",
+        "evidenceIdentity": "s0a-de049980074a1549cff6"
+      },
+      "contractHash": null,
+      "captureProfileHash": null
+    },
+    {
+      "sampleId": "s0a-84c08dd4af035c8ea0d9",
+      "evidence": {
+        "evidenceManifest": "evidence/s0a-84c08dd4af035c8ea0d9.evidence.json",
+        "evidenceIdentity": "s0a-84c08dd4af035c8ea0d9"
+      },
+      "contractHash": null,
+      "captureProfileHash": null
+    },
+    {
+      "sampleId": "s0a-c9468099f4ca76144b4c",
+      "evidence": {
+        "evidenceManifest": "evidence/s0a-c9468099f4ca76144b4c.evidence.json",
+        "evidenceIdentity": "s0a-c9468099f4ca76144b4c"
+      },
+      "contractHash": null,
+      "captureProfileHash": null
+    },
+    {
+      "sampleId": "s0a-17ed834a7d1ff140dcb0",
+      "evidence": {
+        "evidenceManifest": "evidence/s0a-17ed834a7d1ff140dcb0.evidence.json",
+        "evidenceIdentity": "s0a-17ed834a7d1ff140dcb0"
+      },
+      "contractHash": null,
+      "captureProfileHash": null
+    },
+    {
+      "sampleId": "s0a-58d3b957bf125ad8534a",
+      "evidence": {
+        "evidenceManifest": "evidence/s0a-58d3b957bf125ad8534a.evidence.json",
+        "evidenceIdentity": "s0a-58d3b957bf125ad8534a"
+      },
+      "contractHash": null,
+      "captureProfileHash": null
+    },
+    {
+      "sampleId": "s0a-42416dc4c9968ec01c30",
+      "evidence": {
+        "evidenceManifest": "evidence/s0a-42416dc4c9968ec01c30.evidence.json",
+        "evidenceIdentity": "s0a-42416dc4c9968ec01c30"
+      },
+      "contractHash": null,
+      "captureProfileHash": null
+    },
+    {
+      "sampleId": "s0a-c74bd0b176c24a33c0dc",
+      "evidence": {
+        "evidenceManifest": "evidence/s0a-c74bd0b176c24a33c0dc.evidence.json",
+        "evidenceIdentity": "s0a-c74bd0b176c24a33c0dc"
+      },
+      "contractHash": null,
+      "captureProfileHash": null
+    },
+    {
+      "sampleId": "s0a-50c3c84078795fa5a343",
+      "evidence": {
+        "evidenceManifest": "evidence/s0a-50c3c84078795fa5a343.evidence.json",
+        "evidenceIdentity": "s0a-50c3c84078795fa5a343"
+      },
+      "contractHash": null,
+      "captureProfileHash": null
+    },
+    {
+      "sampleId": "s0a-75db499ced1e6d23b49e",
+      "evidence": {
+        "evidenceManifest": "evidence/s0a-75db499ced1e6d23b49e.evidence.json",
+        "evidenceIdentity": "s0a-75db499ced1e6d23b49e"
+      },
+      "contractHash": null,
+      "captureProfileHash": null
+    },
+    {
+      "sampleId": "s0a-8a2b97a0fbe304484d09",
+      "evidence": {
+        "evidenceManifest": "evidence/s0a-8a2b97a0fbe304484d09.evidence.json",
+        "evidenceIdentity": "s0a-8a2b97a0fbe304484d09"
+      },
+      "contractHash": null,
+      "captureProfileHash": null
+    },
+    {
+      "sampleId": "s0a-b04f81963d605367aac9",
+      "evidence": {
+        "evidenceManifest": "evidence/s0a-b04f81963d605367aac9.evidence.json",
+        "evidenceIdentity": "s0a-b04f81963d605367aac9"
+      },
+      "contractHash": null,
+      "captureProfileHash": null
+    },
+    {
+      "sampleId": "s0a-5e67cd371c5f2d8bda52",
+      "evidence": {
+        "evidenceManifest": "evidence/s0a-5e67cd371c5f2d8bda52.evidence.json",
+        "evidenceIdentity": "s0a-5e67cd371c5f2d8bda52"
+      },
+      "contractHash": null,
+      "captureProfileHash": null
+    },
+    {
+      "sampleId": "s0a-8fe6107e09f10975b3b1",
+      "evidence": {
+        "evidenceManifest": "evidence/s0a-8fe6107e09f10975b3b1.evidence.json",
+        "evidenceIdentity": "s0a-8fe6107e09f10975b3b1"
+      },
+      "contractHash": null,
+      "captureProfileHash": null
+    },
+    {
+      "sampleId": "s0a-6bbdbabb4465d783867c",
+      "evidence": {
+        "evidenceManifest": "evidence/s0a-6bbdbabb4465d783867c.evidence.json",
+        "evidenceIdentity": "s0a-6bbdbabb4465d783867c"
+      },
+      "contractHash": null,
+      "captureProfileHash": null
+    },
+    {
+      "sampleId": "s0a-6a90050dce710ebab96d",
+      "evidence": {
+        "evidenceManifest": "evidence/s0a-6a90050dce710ebab96d.evidence.json",
+        "evidenceIdentity": "s0a-6a90050dce710ebab96d"
+      },
+      "contractHash": null,
+      "captureProfileHash": null
+    },
+    {
+      "sampleId": "s0a-34d40b8eec7135657651",
+      "evidence": {
+        "evidenceManifest": "evidence/s0a-34d40b8eec7135657651.evidence.json",
+        "evidenceIdentity": "s0a-34d40b8eec7135657651"
+      },
+      "contractHash": null,
+      "captureProfileHash": null
+    },
+    {
+      "sampleId": "s0a-eb7ec9df27c324ba084b",
+      "evidence": {
+        "evidenceManifest": "evidence/s0a-eb7ec9df27c324ba084b.evidence.json",
+        "evidenceIdentity": "s0a-eb7ec9df27c324ba084b"
+      },
+      "contractHash": null,
+      "captureProfileHash": null
+    },
+    {
+      "sampleId": "s0a-459d891e938e3756604c",
+      "evidence": {
+        "evidenceManifest": "evidence/s0a-459d891e938e3756604c.evidence.json",
+        "evidenceIdentity": "s0a-459d891e938e3756604c"
+      },
+      "contractHash": null,
+      "captureProfileHash": null
+    },
+    {
+      "sampleId": "s0a-7f5cd5ce8ac8abdfa4cb",
+      "evidence": {
+        "evidenceManifest": "evidence/s0a-7f5cd5ce8ac8abdfa4cb.evidence.json",
+        "evidenceIdentity": "s0a-7f5cd5ce8ac8abdfa4cb"
+      },
+      "contractHash": null,
+      "captureProfileHash": null
+    },
+    {
+      "sampleId": "s0a-9e3d6ff9f7445656cb6f",
+      "evidence": {
+        "evidenceManifest": "evidence/s0a-9e3d6ff9f7445656cb6f.evidence.json",
+        "evidenceIdentity": "s0a-9e3d6ff9f7445656cb6f"
+      },
+      "contractHash": null,
+      "captureProfileHash": null
+    },
+    {
+      "sampleId": "s0a-cc802d1af4d2e6a4038a",
+      "evidence": {
+        "evidenceManifest": "evidence/s0a-cc802d1af4d2e6a4038a.evidence.json",
+        "evidenceIdentity": "s0a-cc802d1af4d2e6a4038a"
+      },
+      "contractHash": null,
+      "captureProfileHash": null
+    },
+    {
+      "sampleId": "s0a-0793e1170c44a44614cd",
+      "evidence": {
+        "evidenceManifest": "evidence/s0a-0793e1170c44a44614cd.evidence.json",
+        "evidenceIdentity": "s0a-0793e1170c44a44614cd"
+      },
+      "contractHash": null,
+      "captureProfileHash": null
+    },
+    {
+      "sampleId": "s0a-18a98bc56abe4ede301a",
+      "evidence": {
+        "evidenceManifest": "evidence/s0a-18a98bc56abe4ede301a.evidence.json",
+        "evidenceIdentity": "s0a-18a98bc56abe4ede301a"
+      },
+      "contractHash": null,
+      "captureProfileHash": null
+    },
+    {
+      "sampleId": "s0a-cc1b036989ee4a2aa3d4",
+      "evidence": {
+        "evidenceManifest": "evidence/s0a-cc1b036989ee4a2aa3d4.evidence.json",
+        "evidenceIdentity": "s0a-cc1b036989ee4a2aa3d4"
+      },
+      "contractHash": null,
+      "captureProfileHash": null
+    },
+    {
+      "sampleId": "s0a-1f7a25cfec5994b1f1fc",
+      "evidence": {
+        "evidenceManifest": "evidence/s0a-1f7a25cfec5994b1f1fc.evidence.json",
+        "evidenceIdentity": "s0a-1f7a25cfec5994b1f1fc"
+      },
+      "contractHash": null,
+      "captureProfileHash": null
+    },
+    {
+      "sampleId": "s0a-6e4df722101f4ab4c512",
+      "evidence": {
+        "evidenceManifest": "evidence/s0a-6e4df722101f4ab4c512.evidence.json",
+        "evidenceIdentity": "s0a-6e4df722101f4ab4c512"
+      },
+      "contractHash": null,
+      "captureProfileHash": null
+    },
+    {
+      "sampleId": "s0a-2f5ce2cd989f823cf8d0",
+      "evidence": {
+        "evidenceManifest": "evidence/s0a-2f5ce2cd989f823cf8d0.evidence.json",
+        "evidenceIdentity": "s0a-2f5ce2cd989f823cf8d0"
+      },
+      "contractHash": null,
+      "captureProfileHash": null
+    },
+    {
+      "sampleId": "s0a-c07f0d5fc858773c0e25",
+      "evidence": {
+        "evidenceManifest": "evidence/s0a-c07f0d5fc858773c0e25.evidence.json",
+        "evidenceIdentity": "s0a-c07f0d5fc858773c0e25"
+      },
+      "contractHash": null,
+      "captureProfileHash": null
+    },
+    {
+      "sampleId": "s0a-f0b6c2de8820e51070ae",
+      "evidence": {
+        "evidenceManifest": "evidence/s0a-f0b6c2de8820e51070ae.evidence.json",
+        "evidenceIdentity": "s0a-f0b6c2de8820e51070ae"
+      },
+      "contractHash": null,
+      "captureProfileHash": null
+    },
+    {
+      "sampleId": "s0a-24c8141887d34b51a310",
+      "evidence": {
+        "evidenceManifest": "evidence/s0a-24c8141887d34b51a310.evidence.json",
+        "evidenceIdentity": "s0a-24c8141887d34b51a310"
+      },
+      "contractHash": null,
+      "captureProfileHash": null
+    },
+    {
+      "sampleId": "s0a-596dbffe5c4942eb7577",
+      "evidence": {
+        "evidenceManifest": "evidence/s0a-596dbffe5c4942eb7577.evidence.json",
+        "evidenceIdentity": "s0a-596dbffe5c4942eb7577"
+      },
+      "contractHash": null,
+      "captureProfileHash": null
+    },
+    {
+      "sampleId": "s0a-168895b97ac53dbf4a70",
+      "evidence": {
+        "evidenceManifest": "evidence/s0a-168895b97ac53dbf4a70.evidence.json",
+        "evidenceIdentity": "s0a-168895b97ac53dbf4a70"
+      },
+      "contractHash": null,
+      "captureProfileHash": null
+    },
+    {
+      "sampleId": "s0a-29324fa59817558ac013",
+      "evidence": {
+        "evidenceManifest": "evidence/s0a-29324fa59817558ac013.evidence.json",
+        "evidenceIdentity": "s0a-29324fa59817558ac013"
+      },
+      "contractHash": null,
+      "captureProfileHash": null
+    },
+    {
+      "sampleId": "s0a-22dddf673260d83077b8",
+      "evidence": {
+        "evidenceManifest": "evidence/s0a-22dddf673260d83077b8.evidence.json",
+        "evidenceIdentity": "s0a-22dddf673260d83077b8"
+      },
+      "contractHash": null,
+      "captureProfileHash": null
+    },
+    {
+      "sampleId": "s0a-ae7f413b53061daf0ac2",
+      "evidence": {
+        "evidenceManifest": "evidence/s0a-ae7f413b53061daf0ac2.evidence.json",
+        "evidenceIdentity": "s0a-ae7f413b53061daf0ac2"
+      },
+      "contractHash": null,
+      "captureProfileHash": null
+    },
+    {
+      "sampleId": "s0a-f7e3fa20b8515141d70c",
+      "evidence": {
+        "evidenceManifest": "evidence/s0a-f7e3fa20b8515141d70c.evidence.json",
+        "evidenceIdentity": "s0a-f7e3fa20b8515141d70c"
+      },
+      "contractHash": null,
+      "captureProfileHash": null
+    },
+    {
+      "sampleId": "s0a-53512a3ad64170769851",
+      "evidence": {
+        "evidenceManifest": "evidence/s0a-53512a3ad64170769851.evidence.json",
+        "evidenceIdentity": "s0a-53512a3ad64170769851"
+      },
+      "contractHash": null,
+      "captureProfileHash": null
+    },
+    {
+      "sampleId": "s0a-3550d2ff946bd3409430",
+      "evidence": {
+        "evidenceManifest": "evidence/s0a-3550d2ff946bd3409430.evidence.json",
+        "evidenceIdentity": "s0a-3550d2ff946bd3409430"
+      },
+      "contractHash": null,
+      "captureProfileHash": null
+    },
+    {
+      "sampleId": "s0a-8c147cf9e22455bda269",
+      "evidence": {
+        "evidenceManifest": "evidence/s0a-8c147cf9e22455bda269.evidence.json",
+        "evidenceIdentity": "s0a-8c147cf9e22455bda269"
+      },
+      "contractHash": null,
+      "captureProfileHash": null
+    },
+    {
+      "sampleId": "s0a-06e6939c2ae3ffe2a74d",
+      "evidence": {
+        "evidenceManifest": "evidence/s0a-06e6939c2ae3ffe2a74d.evidence.json",
+        "evidenceIdentity": "s0a-06e6939c2ae3ffe2a74d"
+      },
+      "contractHash": null,
+      "captureProfileHash": null
+    },
+    {
+      "sampleId": "s0a-d0f2d923b85bfbe436a9",
+      "evidence": {
+        "evidenceManifest": "evidence/s0a-d0f2d923b85bfbe436a9.evidence.json",
+        "evidenceIdentity": "s0a-d0f2d923b85bfbe436a9"
+      },
+      "contractHash": null,
+      "captureProfileHash": null
+    },
+    {
+      "sampleId": "s0a-9bd508bafe66e2f750b0",
+      "evidence": {
+        "evidenceManifest": "evidence/s0a-9bd508bafe66e2f750b0.evidence.json",
+        "evidenceIdentity": "s0a-9bd508bafe66e2f750b0"
+      },
+      "contractHash": null,
+      "captureProfileHash": null
+    },
+    {
+      "sampleId": "s0a-08c8cf039360cf6bbd8d",
+      "evidence": {
+        "evidenceManifest": "evidence/s0a-08c8cf039360cf6bbd8d.evidence.json",
+        "evidenceIdentity": "s0a-08c8cf039360cf6bbd8d"
+      },
+      "contractHash": null,
+      "captureProfileHash": null
+    },
+    {
+      "sampleId": "s0a-d57cd94d921f04919527",
+      "evidence": {
+        "evidenceManifest": "evidence/s0a-d57cd94d921f04919527.evidence.json",
+        "evidenceIdentity": "s0a-d57cd94d921f04919527"
+      },
+      "contractHash": null,
+      "captureProfileHash": null
+    },
+    {
+      "sampleId": "s0a-d98b088343a88a02765a",
+      "evidence": {
+        "evidenceManifest": "evidence/s0a-d98b088343a88a02765a.evidence.json",
+        "evidenceIdentity": "s0a-d98b088343a88a02765a"
+      },
+      "contractHash": null,
+      "captureProfileHash": null
+    },
+    {
+      "sampleId": "s0a-33091a43ee01b3e6cd6c",
+      "evidence": {
+        "evidenceManifest": "evidence/s0a-33091a43ee01b3e6cd6c.evidence.json",
+        "evidenceIdentity": "s0a-33091a43ee01b3e6cd6c"
+      },
+      "contractHash": null,
+      "captureProfileHash": null
+    },
+    {
+      "sampleId": "s0a-d2ae7a40025ba3c36ff7",
+      "evidence": {
+        "evidenceManifest": "evidence/s0a-d2ae7a40025ba3c36ff7.evidence.json",
+        "evidenceIdentity": "s0a-d2ae7a40025ba3c36ff7"
+      },
+      "contractHash": null,
+      "captureProfileHash": null
+    },
+    {
+      "sampleId": "s0a-bb15bae0813aa31b2b44",
+      "evidence": {
+        "evidenceManifest": "evidence/s0a-bb15bae0813aa31b2b44.evidence.json",
+        "evidenceIdentity": "s0a-bb15bae0813aa31b2b44"
+      },
+      "contractHash": null,
+      "captureProfileHash": null
+    },
+    {
+      "sampleId": "s0a-e47ec1406e120d7869ed",
+      "evidence": {
+        "evidenceManifest": "evidence/s0a-e47ec1406e120d7869ed.evidence.json",
+        "evidenceIdentity": "s0a-e47ec1406e120d7869ed"
+      },
+      "contractHash": null,
+      "captureProfileHash": null
+    },
+    {
+      "sampleId": "s0a-618af785af078f913b9c",
+      "evidence": {
+        "evidenceManifest": "evidence/s0a-618af785af078f913b9c.evidence.json",
+        "evidenceIdentity": "s0a-618af785af078f913b9c"
+      },
+      "contractHash": null,
+      "captureProfileHash": null
+    },
+    {
+      "sampleId": "s0a-542b5642e5d36c2bbcf5",
+      "evidence": {
+        "evidenceManifest": "evidence/s0a-542b5642e5d36c2bbcf5.evidence.json",
+        "evidenceIdentity": "s0a-542b5642e5d36c2bbcf5"
+      },
+      "contractHash": null,
+      "captureProfileHash": null
+    },
+    {
+      "sampleId": "s0a-bede4bded0692f04826f",
+      "evidence": {
+        "evidenceManifest": "evidence/s0a-bede4bded0692f04826f.evidence.json",
+        "evidenceIdentity": "s0a-bede4bded0692f04826f"
+      },
+      "contractHash": null,
+      "captureProfileHash": null
+    },
+    {
+      "sampleId": "s0a-abe390133240299833b2",
+      "evidence": {
+        "evidenceManifest": "evidence/s0a-abe390133240299833b2.evidence.json",
+        "evidenceIdentity": "s0a-abe390133240299833b2"
+      },
+      "contractHash": null,
+      "captureProfileHash": null
+    },
+    {
+      "sampleId": "s0a-2407433c6d49eb1193c6",
+      "evidence": {
+        "evidenceManifest": "evidence/s0a-2407433c6d49eb1193c6.evidence.json",
+        "evidenceIdentity": "s0a-2407433c6d49eb1193c6"
+      },
+      "contractHash": null,
+      "captureProfileHash": null
+    },
+    {
+      "sampleId": "s0a-d45d66e258c5395cefdb",
+      "evidence": {
+        "evidenceManifest": "evidence/s0a-d45d66e258c5395cefdb.evidence.json",
+        "evidenceIdentity": "s0a-d45d66e258c5395cefdb"
+      },
+      "contractHash": null,
+      "captureProfileHash": null
+    },
+    {
+      "sampleId": "s0a-114fa96f5ccde54ae6a8",
+      "evidence": {
+        "evidenceManifest": "evidence/s0a-114fa96f5ccde54ae6a8.evidence.json",
+        "evidenceIdentity": "s0a-114fa96f5ccde54ae6a8"
+      },
+      "contractHash": null,
+      "captureProfileHash": null
+    },
+    {
+      "sampleId": "s0a-045d71c3d7a6dccd12e7",
+      "evidence": {
+        "evidenceManifest": "evidence/s0a-045d71c3d7a6dccd12e7.evidence.json",
+        "evidenceIdentity": "s0a-045d71c3d7a6dccd12e7"
+      },
+      "contractHash": null,
+      "captureProfileHash": null
+    },
+    {
+      "sampleId": "s0a-81913bd0e4a017b19477",
+      "evidence": {
+        "evidenceManifest": "evidence/s0a-81913bd0e4a017b19477.evidence.json",
+        "evidenceIdentity": "s0a-81913bd0e4a017b19477"
+      },
+      "contractHash": null,
+      "captureProfileHash": null
+    },
+    {
+      "sampleId": "s0a-ffc50125d1907ba088ce",
+      "evidence": {
+        "evidenceManifest": "evidence/s0a-ffc50125d1907ba088ce.evidence.json",
+        "evidenceIdentity": "s0a-ffc50125d1907ba088ce"
+      },
+      "contractHash": null,
+      "captureProfileHash": null
+    },
+    {
+      "sampleId": "s0a-d5f5c806670158886606",
+      "evidence": {
+        "evidenceManifest": "evidence/s0a-d5f5c806670158886606.evidence.json",
+        "evidenceIdentity": "s0a-d5f5c806670158886606"
+      },
+      "contractHash": null,
+      "captureProfileHash": null
+    },
+    {
+      "sampleId": "s0a-9902d4e69562addc0fa6",
+      "evidence": {
+        "evidenceManifest": "evidence/s0a-9902d4e69562addc0fa6.evidence.json",
+        "evidenceIdentity": "s0a-9902d4e69562addc0fa6"
+      },
+      "contractHash": null,
+      "captureProfileHash": null
+    },
+    {
+      "sampleId": "s0a-2f8f17344ffe20655b50",
+      "evidence": {
+        "evidenceManifest": "evidence/s0a-2f8f17344ffe20655b50.evidence.json",
+        "evidenceIdentity": "s0a-2f8f17344ffe20655b50"
+      },
+      "contractHash": null,
+      "captureProfileHash": null
+    },
+    {
+      "sampleId": "s0a-81c33420d702c12738b9",
+      "evidence": {
+        "evidenceManifest": "evidence/s0a-81c33420d702c12738b9.evidence.json",
+        "evidenceIdentity": "s0a-81c33420d702c12738b9"
+      },
+      "contractHash": null,
+      "captureProfileHash": null
+    },
+    {
+      "sampleId": "s0a-e746046435ce99044964",
+      "evidence": {
+        "evidenceManifest": "evidence/s0a-e746046435ce99044964.evidence.json",
+        "evidenceIdentity": "s0a-e746046435ce99044964"
+      },
+      "contractHash": null,
+      "captureProfileHash": null
+    },
+    {
+      "sampleId": "s0a-18c69cd35d78f968e835",
+      "evidence": {
+        "evidenceManifest": "evidence/s0a-18c69cd35d78f968e835.evidence.json",
+        "evidenceIdentity": "s0a-18c69cd35d78f968e835"
+      },
+      "contractHash": null,
+      "captureProfileHash": null
+    }
+  ],
+  "manifestHash": "sha256:0d88100005659f6c9c85f345ab9c79f142f52e13936b5ae5999206026a39b52a"
+}

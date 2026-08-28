@@ -1,0 +1,65 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://image-to-smart.local/schemas/s0a-projected-visual-review/v1",
+  "title": "Projected S0a sealed Visual QA report",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["reviewVersion", "candidateId", "contractHash", "buildHash", "captureProfileHash", "evidenceHashes", "imageInputRead", "evidenceStatus", "contractStatus", "s0aTerminalStatus", "qaGateAuthority", "topLevelRoute", "perRequirement", "sealedReportHash"],
+  "properties": {
+    "reviewVersion": {"const": "s0a-visual-qa/1.0"},
+    "candidateId": {"const": "C0"},
+    "contractHash": {"$ref": "#/$defs/hash"},
+    "buildHash": {"$ref": "#/$defs/hash"},
+    "captureProfileHash": {"$ref": "#/$defs/hash"},
+    "evidenceHashes": {"type": "array", "minItems": 1, "maxItems": 1, "items": {"$ref": "#/$defs/hash"}},
+    "imageInputRead": {"type": "boolean"},
+    "evidenceStatus": {"enum": ["valid", "invalid"]},
+    "contractStatus": {"enum": ["unambiguous", "ambiguous"]},
+    "s0aTerminalStatus": {"const": null},
+    "qaGateAuthority": {"const": "advisory-only"},
+    "topLevelRoute": {"enum": ["VISUAL_PASS", "VISUAL_FAIL", "EVIDENCE_INVALID", "CONTRACT_AMBIGUOUS", "VISUAL_UNCERTAIN"]},
+    "perRequirement": {"type": "array", "minItems": 1, "maxItems": 1, "items": {"$ref": "#/$defs/requirementReview"}},
+    "conflicts": {"type": "array", "items": {"type": "string", "minLength": 1}},
+    "sealedReportHash": {"$ref": "#/$defs/hash"}
+  },
+  "allOf": [
+    {"if": {"properties": {"topLevelRoute": {"const": "VISUAL_PASS"}}}, "then": {"properties": {"imageInputRead": {"const": true}, "evidenceStatus": {"const": "valid"}, "contractStatus": {"const": "unambiguous"}, "perRequirement": {"items": {"properties": {"state": {"const": "pass"}, "countable": {"const": true}, "reasonCode": {"const": "OBSERVED"}}}}}}},
+    {"if": {"properties": {"topLevelRoute": {"const": "VISUAL_FAIL"}}}, "then": {"properties": {"imageInputRead": {"const": true}, "evidenceStatus": {"const": "valid"}, "contractStatus": {"const": "unambiguous"}, "perRequirement": {"contains": {"properties": {"state": {"const": "fail"}, "countable": {"const": true}, "reasonCode": {"const": "OBSERVED"}}}}}}},
+    {
+      "if": {"properties": {"topLevelRoute": {"const": "VISUAL_UNCERTAIN"}}},
+      "then": {
+        "properties": {
+          "imageInputRead": {"const": true},
+          "evidenceStatus": {"const": "valid"},
+          "contractStatus": {"const": "unambiguous"},
+          "perRequirement": {
+            "allOf": [
+              {"contains": {"properties": {"state": {"const": "uncertain"}, "countable": {"const": true}, "reasonCode": {"const": "VISUAL_UNCERTAIN"}}}},
+              {"not": {"contains": {"properties": {"state": {"const": "fail"}}, "required": ["state"]}}}
+            ]
+          }
+        }
+      }
+    },
+    {"if": {"properties": {"topLevelRoute": {"const": "EVIDENCE_INVALID"}}}, "then": {"properties": {"evidenceStatus": {"const": "invalid"}, "perRequirement": {"items": {"properties": {"state": {"const": "uncertain"}, "countable": {"const": false}, "reasonCode": {"const": "EVIDENCE_INVALID"}}}}}}},
+    {"if": {"properties": {"topLevelRoute": {"const": "CONTRACT_AMBIGUOUS"}}}, "then": {"properties": {"evidenceStatus": {"const": "valid"}, "contractStatus": {"const": "ambiguous"}, "perRequirement": {"items": {"properties": {"state": {"const": "uncertain"}, "countable": {"const": false}, "reasonCode": {"const": "CONTRACT_AMBIGUOUS"}}}}}}}
+  ],
+  "$defs": {
+    "hash": {"type": "string", "pattern": "^sha256:[a-f0-9]{64}$"},
+    "requirementReview": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["designRequirementId", "state", "countable", "reasonCode", "stateRef", "frameNumbers", "imageRegion", "observation"],
+      "properties": {
+        "designRequirementId": {"type": "string", "pattern": "^s0a\\.visual\\.req\\.[a-f0-9]{20}$"},
+        "state": {"enum": ["pass", "fail", "uncertain"]},
+        "countable": {"type": "boolean"},
+        "reasonCode": {"enum": ["OBSERVED", "EVIDENCE_INVALID", "CONTRACT_AMBIGUOUS", "VISUAL_UNCERTAIN"]},
+        "stateRef": {"type": "string", "minLength": 1},
+        "frameNumbers": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"enum": [1, 21, 60, 120, 180, 240, 300, 360]}},
+        "imageRegion": {"type": "string", "minLength": 1},
+        "observation": {"type": "string", "minLength": 1}
+      }
+    }
+  }
+}

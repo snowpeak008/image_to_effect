@@ -1,0 +1,110 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &1161313006328475422
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5454878662296925632}
+  - component: {fileID: 140622884702052347}
+  m_Layer: 0
+  m_Name: VFX_dragon_breath_ultimate_3d
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5454878662296925632
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1161313006328475422}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &140622884702052347
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1161313006328475422}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 07d8735a81864834c8f1bda23acf4be2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  compositionId: dragon_breath_ultimate_3d
+  duration: 4
+  sourcePrefabs:
+  - {fileID: 4604391042401296737, guid: af94060cc32f7ef41bdcb604ce105ab6, type: 3}
+  - {fileID: 6452914577468111932, guid: b415cb73e1755da4285ceb86def15a6d, type: 3}
+  - {fileID: 8530460272250619019, guid: 9d6d48c8aff9dd4429ba86ceb0fcacca, type: 3}
+  - {fileID: 6237196147329729375, guid: 4b83a4b465a340949a07a80d7b348968, type: 3}
+  timeline:
+  - Time: 0
+    SourceIndex: 0
+    RefId: focus_charge_3d
+    Action: play
+    Position: {x: 0, y: 0, z: 0}
+    Rotation: {x: 0, y: 0, z: 0}
+    Scale: 1
+    HasPalette: 1
+    Primary: {r: 1, g: 0.28627452, b: 0.10980392, a: 1}
+    Secondary: {r: 1, g: 0.7019608, b: 0.18431373, a: 1}
+    Accent: {r: 1, g: 0.9529412, b: 0.6901961, a: 1}
+  - Time: 0.8
+    SourceIndex: 1
+    RefId: flamethrower_beam_3d
+    Action: play
+    Position: {x: 0, y: 0, z: 0}
+    Rotation: {x: 0, y: 0, z: 0}
+    Scale: 1.25
+    HasPalette: 1
+    Primary: {r: 1, g: 0.28627452, b: 0.10980392, a: 1}
+    Secondary: {r: 1, g: 0.7019608, b: 0.18431373, a: 1}
+    Accent: {r: 1, g: 0.9529412, b: 0.6901961, a: 1}
+  - Time: 1.3
+    SourceIndex: 2
+    RefId: ember_rain_area_3d
+    Action: play
+    Position: {x: 0, y: 0, z: 0}
+    Rotation: {x: 0, y: 0, z: 0}
+    Scale: 1
+    HasPalette: 1
+    Primary: {r: 1, g: 0.28627452, b: 0.10980392, a: 1}
+    Secondary: {r: 1, g: 0.7019608, b: 0.18431373, a: 1}
+    Accent: {r: 1, g: 0.9529412, b: 0.6901961, a: 1}
+  - Time: 3.2
+    SourceIndex: 3
+    RefId: fire_nova_burst_3d
+    Action: play
+    Position: {x: 0, y: 0, z: 0}
+    Rotation: {x: 0, y: 0, z: 0}
+    Scale: 1.3
+    HasPalette: 1
+    Primary: {r: 1, g: 0.28627452, b: 0.10980392, a: 1}
+    Secondary: {r: 1, g: 0.7019608, b: 0.18431373, a: 1}
+    Accent: {r: 1, g: 0.9529412, b: 0.6901961, a: 1}
+  cameraHints:
+  - Time: 0.7
+    Type: zoom
+    Strength: 0.45
+  - Time: 1
+    Type: shake
+    Strength: 0.55
+  - Time: 3.2
+    Type: slowmo
+    Strength: 0.35
+  gates: []
+  descriptor: {fileID: 4900000, guid: 621dfa46cf8b57d4899fa7613a072112, type: 3}

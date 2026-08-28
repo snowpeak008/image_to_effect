@@ -1,0 +1,13 @@
+{
+  "schema": "w17-ui-next-candidate/v1",
+  "id": "button_confirm_burst_ui_next_candidate",
+  "workPackage": "W17",
+  "candidateStatus": "NEXT_CANDIDATE_VISUAL_PENDING",
+  "userVisualVerdict": null,
+  "preserveRejectedCandidate": true,
+  "effect": "button_confirm",
+  "lifecycle": "event",
+  "protocols": ["anchor_rect", "follow_mode", "button_rect_size"],
+  "visualCarriers": ["expanding_ring", "eight_radial_rays", "rounded_perimeter_sweep"],
+  "budget": { "uiElements": 11, "materials": 1, "particleSystems": 0 }
+}

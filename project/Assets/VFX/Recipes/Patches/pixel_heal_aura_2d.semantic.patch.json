@@ -1,0 +1,7 @@
+[
+  {
+    "op": "set_content_param",
+    "path": "/content/parameters/rise_speed",
+    "value": 10.0
+  }
+]

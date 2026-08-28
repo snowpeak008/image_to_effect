@@ -1,0 +1,92 @@
+{
+  "manifestVersion": 1,
+  "rulesVersion": "1.0-draft",
+  "enforcement": "strict",
+  "effectId": "glitch_blink_transform_3d",
+  "archetype": "transform",
+  "recipeVersion": 1,
+  "recipeRevision": 1,
+  "recipeHash": "b8d1e7f5b0afdc10e2957acfff2908715541e5029bf135b75e56ed972590b169",
+  "buildHash": "31078a4ec01b3b91e4b434c488d9e1741e0d04ea06b8460a6b1b2759554304b1",
+  "compilerVersion": "styled-content-4",
+  "unityVersion": "2022.3.62f3c1",
+  "sourceRecipePath": "Assets/VFX/Recipes/StyleSpecials/Style3D/glitch_blink_transform_3d.default.json",
+  "runtimeEntry": {
+    "kind": "prefab",
+    "path": "Assets/VFX/Generated/glitch_blink_transform_3d/VFX_glitch_blink_transform_3d.prefab",
+    "guid": "44572f2b806913c428c0dfc4c2ffa333"
+  },
+  "ownedOutputs": [
+    {
+      "path": "Assets/VFX/Generated/glitch_blink_transform_3d/VFX_glitch_blink_transform_3d.prefab",
+      "guid": "44572f2b806913c428c0dfc4c2ffa333",
+      "assetType": "GameObject",
+      "sha256": "1dd6e2b4ca04085c27bd56b4e6c7f629aac1edb248ef1315540ea7a370fcf5ad"
+    }
+  ],
+  "dependencies": [
+    {
+      "path": "Assets/VFX/Shared/Shaders/VfxHoloFresnel.shader",
+      "guid": "deae41ea852bbc24fbaeed759e6f0519",
+      "assetType": "Shader",
+      "version": null,
+      "dependencyHash": "736c58899b4da5696e81551b737ae1a4"
+    },
+    {
+      "path": "Assets/VFX/Shared/Styles/Materials/MAT_Style_holo.mat",
+      "guid": "7db5cf272022f764dafdea6ec2318707",
+      "assetType": "Material",
+      "version": null,
+      "dependencyHash": "60ab0bd7361013108f8a34875a414491"
+    },
+    {
+      "path": "Assets/VFX/Shared/Styles/Meshes/M_Style_Burst.asset",
+      "guid": "0def46dac13f1d8449cd98d98de17a15",
+      "assetType": "Mesh",
+      "version": null,
+      "dependencyHash": "56e972a8f8588a864d379a7611c49c63"
+    },
+    {
+      "path": "Assets/VFX/Shared/Styles/Meshes/M_Style_Cone.asset",
+      "guid": "8a296d5e70420f647a6e1f646af993cd",
+      "assetType": "Mesh",
+      "version": null,
+      "dependencyHash": "69fd53314f71778bd2e32f584650207e"
+    },
+    {
+      "path": "Assets/VFX/Shared/Styles/Meshes/M_Style_Ring.asset",
+      "guid": "df59364e370c085418d31c0f952bcf1a",
+      "assetType": "Mesh",
+      "version": null,
+      "dependencyHash": "021f9d0fab5159d1d05310de3284c997"
+    },
+    {
+      "path": "Assets/VFX/Shared/Styles/Meshes/M_Style_Shard.asset",
+      "guid": "506c8c0bcf8b14645948b3dbb02a1b3f",
+      "assetType": "Mesh",
+      "version": null,
+      "dependencyHash": "ff113f023e398b26696f0c501ae28324"
+    },
+    {
+      "path": "Packages/com.vfxcomposer.unity/Runtime/Components/StyledVfxController.cs",
+      "guid": "ca6f81a249967414c96082671e07dcaa",
+      "assetType": "MonoScript",
+      "version": null,
+      "dependencyHash": "486e1b8ba27b5e00b709bc5fd2b5624a"
+    }
+  ],
+  "cost": {
+    "particles": 16,
+    "particleSystems": 1,
+    "renderers": 4,
+    "materials": 1,
+    "trails": 0,
+    "duration": 0.64999997615814209,
+    "localTextureBytes": 0,
+    "dependencyResidentTextureBytes": 0,
+    "gameObjects": 5,
+    "maxDepth": 1
+  },
+  "audit": [],
+  "generatedAtUtc": "2026-08-24T13:14:20.7177042Z"
+}

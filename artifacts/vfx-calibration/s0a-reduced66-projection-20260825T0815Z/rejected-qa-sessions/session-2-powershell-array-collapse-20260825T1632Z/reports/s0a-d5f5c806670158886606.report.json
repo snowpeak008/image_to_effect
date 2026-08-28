@@ -1,0 +1,39 @@
+{
+  "reviewVersion": "s0a-visual-qa/1.0",
+  "candidateId": "C0",
+  "contractHash": "sha256:ba44573fabb3416f0e5b9cb4734607d115d97c0594817debc816e18d187323d1",
+  "buildHash": "sha256:00d9202f1e5b681617b18863753fff4b8b4a5a539af81f081ed791c892c96e0e",
+  "captureProfileHash": "sha256:1d9ee0b874721a3eb1e45e1d347744f316bbd0f6b407184afcb37bb9abae18db",
+  "evidenceHashes": [
+    "sha256:03119cb6747c14fc98a4c88d7eb05b330d05c321133e3dbf5a5e868c2d08c956"
+  ],
+  "imageInputRead": true,
+  "evidenceStatus": "valid",
+  "contractStatus": "unambiguous",
+  "s0aTerminalStatus": null,
+  "qaGateAuthority": "advisory-only",
+  "topLevelRoute": "VISUAL_FAIL",
+  "perRequirement": [
+    {
+      "designRequirementId": "s0a.visual.req.548ec0ad9f341b93a1e4",
+      "state": "fail",
+      "countable": true,
+      "reasonCode": "OBSERVED",
+      "stateRef": "stopping and idle cleanup states across seed rows 0-2",
+      "frameNumbers": [
+        1,
+        21,
+        60,
+        120,
+        180,
+        240,
+        300,
+        360
+      ],
+      "imageRegion": "Sustained-flame subject area near the center of the full Beauty frame across all three seed rows.",
+      "observation": "Across seed rows 0-2, visible flame and ember geometry remains at stopping frame 240 and idle frame 300, only clearing by frame 360; the required stop-and-cleanup lifecycle is therefore not coherent."
+    }
+  ],
+  "conflicts": [],
+  "sealedReportHash": "sha256:1a8233f6c220802cca70b895426080cb6371ff92fdc9ff9ff6c28cc43e3e20b1"
+}

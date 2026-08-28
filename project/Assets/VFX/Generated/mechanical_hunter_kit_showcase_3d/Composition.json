@@ -1,0 +1,111 @@
+{
+  "schema": "vfx-composition/1",
+  "id": "mechanical_hunter_kit_showcase_3d",
+  "group": "hero_kit",
+  "duration": 6.6,
+  "theme": "hunter_steam_holo",
+  "shapeLanguage": "gear_line",
+  "palette": {
+    "primary": "#8C642E",
+    "secondary": "#D9B96E",
+    "accent": "#7FEAFF"
+  },
+  "timeline": [
+    {
+      "t": 0.0,
+      "ref_id": "glitch_blink_transform_3d",
+      "action": "play",
+      "overrides": {
+        "scale": 1.0,
+        "palette": "hunter_steam_holo"
+      }
+    },
+    {
+      "t": 0.7,
+      "ref_id": "overheat_vent_idle_aura_3d",
+      "action": "play",
+      "overrides": {
+        "scale": 1.0,
+        "palette": "hunter_steam_holo"
+      }
+    },
+    {
+      "t": 1.2,
+      "ref_id": "muzzle_flash_impact_3d",
+      "action": "play",
+      "overrides": {
+        "scale": 1.0,
+        "palette": "hunter_steam_holo"
+      }
+    },
+    {
+      "t": 1.45,
+      "ref_id": "muzzle_flash_impact_3d",
+      "action": "play",
+      "overrides": {
+        "scale": 1.0,
+        "palette": "hunter_steam_holo"
+      }
+    },
+    {
+      "t": 1.7,
+      "ref_id": "muzzle_flash_impact_3d",
+      "action": "play",
+      "overrides": {
+        "scale": 1.0,
+        "palette": "hunter_steam_holo"
+      }
+    },
+    {
+      "t": 2.3,
+      "ref_id": "steam_vent_burst_impact_3d",
+      "action": "play",
+      "overrides": {
+        "scale": 1.0,
+        "palette": "hunter_steam_holo"
+      }
+    },
+    {
+      "t": 3.0,
+      "ref_id": "holo_scan_area_3d",
+      "action": "play",
+      "overrides": {
+        "scale": 1.0,
+        "palette": "hunter_steam_holo"
+      }
+    },
+    {
+      "t": 4.0,
+      "ref_id": "chain_grapple_beam_3d",
+      "action": "play",
+      "overrides": {
+        "scale": 1.0,
+        "palette": "hunter_steam_holo"
+      }
+    },
+    {
+      "t": 5.2,
+      "ref_id": "emp_nova_impact_2d",
+      "action": "play",
+      "overrides": {
+        "scale": 1.0,
+        "palette": "hunter_steam_holo"
+      }
+    }
+  ],
+  "camera_hints": [],
+  "gates": [],
+  "peakBudget": {
+    "particles": 32,
+    "particleSystems": 2,
+    "materials": 2,
+    "renderers": 8,
+    "limits": {
+      "particles": 200,
+      "particleSystems": 10,
+      "materials": 10,
+      "renderers": 14
+    }
+  },
+  "ownership": "dependency-reference-only"
+}

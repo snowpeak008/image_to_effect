@@ -1,0 +1,10 @@
+{
+  "schemaVersion": "s0a-operator-mutation-command/v1",
+  "sampleId": "s0a-66e2acc1e16871cddd80",
+  "effectId": "sustained_flame_3d",
+  "fixedSeed": 867691047,
+  "mutationCommands": [],
+  "fixtureApplicationStatus": "NOT_APPLIED_BY_UNITY_FIXTURE_ADAPTER",
+  "operatorInstruction": "A later Unity fixture adapter must execute this command and capture evidence.",
+  "commandHash": "sha256:f3704d53eae598d0f7396b26173f8377053cc104b4767730f956d776bf4591c4"
+}

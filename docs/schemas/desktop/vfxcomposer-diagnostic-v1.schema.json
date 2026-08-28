@@ -1,0 +1,162 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.vfxcomposer.dev/desktop/vfxcomposer-diagnostic-v1.schema.json",
+  "title": "VFX Composer stable diagnostic v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "protocolVersion",
+    "messageKind",
+    "code",
+    "severity",
+    "message",
+    "retryable"
+  ],
+  "properties": {
+    "protocolVersion": {
+      "const": "vfxcomposer.protocol/1.0"
+    },
+    "messageKind": {
+      "const": "diagnostic"
+    },
+    "code": {
+      "enum": [
+        "VFXP0001",
+        "VFXP0002",
+        "VFXP0003",
+        "VFXP0004",
+        "VFXP0005",
+        "VFXP0006",
+        "VFXP0007",
+        "VFXP0008",
+        "VFXP0009"
+      ]
+    },
+    "severity": {
+      "enum": [
+        "INFO",
+        "WARNING",
+        "ERROR"
+      ]
+    },
+    "message": {
+      "enum": [
+        "No broker or Unity worker connection is active.",
+        "The wire message is malformed.",
+        "The protocol version is unsupported.",
+        "The wire message kind is unsupported.",
+        "The requested capability is unsupported.",
+        "Status provenance is invalid.",
+        "The project lease is unavailable or no longer current.",
+        "The requested project document is unavailable.",
+        "The project document does not match the requested content identity."
+      ]
+    },
+    "retryable": {
+      "type": "boolean"
+    }
+  },
+  "oneOf": [
+    {
+      "$ref": "#/$defs/disconnected"
+    },
+    {
+      "$ref": "#/$defs/malformedMessage"
+    },
+    {
+      "$ref": "#/$defs/unsupportedProtocolVersion"
+    },
+    {
+      "$ref": "#/$defs/unsupportedMessageKind"
+    },
+    {
+      "$ref": "#/$defs/capabilityRejected"
+    },
+    {
+      "$ref": "#/$defs/invalidStatusProvenance"
+    },
+    {
+      "$ref": "#/$defs/projectLeaseRejected"
+    },
+    {
+      "$ref": "#/$defs/projectDocumentUnavailable"
+    },
+    {
+      "$ref": "#/$defs/projectDocumentContentMismatch"
+    }
+  ],
+  "$defs": {
+    "disconnected": {
+      "properties": {
+        "code": { "const": "VFXP0001" },
+        "severity": { "const": "INFO" },
+        "message": { "const": "No broker or Unity worker connection is active." },
+        "retryable": { "const": true }
+      }
+    },
+    "malformedMessage": {
+      "properties": {
+        "code": { "const": "VFXP0002" },
+        "severity": { "const": "ERROR" },
+        "message": { "const": "The wire message is malformed." },
+        "retryable": { "const": false }
+      }
+    },
+    "unsupportedProtocolVersion": {
+      "properties": {
+        "code": { "const": "VFXP0003" },
+        "severity": { "const": "ERROR" },
+        "message": { "const": "The protocol version is unsupported." },
+        "retryable": { "const": false }
+      }
+    },
+    "unsupportedMessageKind": {
+      "properties": {
+        "code": { "const": "VFXP0004" },
+        "severity": { "const": "ERROR" },
+        "message": { "const": "The wire message kind is unsupported." },
+        "retryable": { "const": false }
+      }
+    },
+    "capabilityRejected": {
+      "properties": {
+        "code": { "const": "VFXP0005" },
+        "severity": { "const": "ERROR" },
+        "message": { "const": "The requested capability is unsupported." },
+        "retryable": { "const": false }
+      }
+    },
+    "invalidStatusProvenance": {
+      "properties": {
+        "code": { "const": "VFXP0006" },
+        "severity": { "const": "ERROR" },
+        "message": { "const": "Status provenance is invalid." },
+        "retryable": { "const": false }
+      }
+    },
+    "projectLeaseRejected": {
+      "properties": {
+        "code": { "const": "VFXP0007" },
+        "severity": { "const": "ERROR" },
+        "message": { "const": "The project lease is unavailable or no longer current." },
+        "retryable": { "const": true }
+      }
+    },
+    "projectDocumentUnavailable": {
+      "properties": {
+        "code": { "const": "VFXP0008" },
+        "severity": { "const": "ERROR" },
+        "message": { "const": "The requested project document is unavailable." },
+        "retryable": { "const": true }
+      }
+    },
+    "projectDocumentContentMismatch": {
+      "properties": {
+        "code": { "const": "VFXP0009" },
+        "severity": { "const": "ERROR" },
+        "message": { "const": "The project document does not match the requested content identity." },
+        "retryable": { "const": true }
+      }
+    }
+  }
+}

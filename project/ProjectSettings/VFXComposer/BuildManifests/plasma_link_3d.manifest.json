@@ -1,0 +1,71 @@
+{
+  "manifestVersion": 1,
+  "rulesVersion": "1.0-draft",
+  "enforcement": "strict",
+  "effectId": "plasma_link_3d",
+  "archetype": "beam",
+  "recipeVersion": 1,
+  "recipeRevision": 1,
+  "recipeHash": "771edb8474dccbb6d8c7928e2f286d49d3ad59ebc13f1527d21186cbc9d00467",
+  "buildHash": "e15ebb2823623bdc52c72d5fbf3a4368b205ae3927c8fd1953d037301445ccb2",
+  "compilerVersion": "coverage-b-4",
+  "unityVersion": "2022.3.62f3c1",
+  "sourceRecipePath": "Assets/VFX/Recipes/Beam/plasma_link_3d.default.json",
+  "runtimeEntry": {
+    "kind": "prefab",
+    "path": "Assets/VFX/Generated/plasma_link_3d/VFX_plasma_link_3d.prefab",
+    "guid": "c1a7acc5735712243a1979a78151efe1"
+  },
+  "ownedOutputs": [
+    {
+      "path": "Assets/VFX/Generated/plasma_link_3d/VFX_plasma_link_3d.prefab",
+      "guid": "c1a7acc5735712243a1979a78151efe1",
+      "assetType": "GameObject",
+      "sha256": "b28d55ef87472c0af03f3e934bd8f50e90367326ea3cc6ae57319eff9e901745"
+    }
+  ],
+  "dependencies": [
+    {
+      "path": "Assets/VFX/Shared/CoverageGalleryB/Materials/MAT_CoverageB_Additive.mat",
+      "guid": "688b79adff1f3474da55fb0deedff137",
+      "assetType": "Material",
+      "version": null,
+      "dependencyHash": "0b0b0e70d4676ffab060eedfd9b3ebea"
+    },
+    {
+      "path": "Assets/VFX/Shared/CoverageGalleryB/Prefabs/PF_CoverageB_Particles.prefab",
+      "guid": "70f199efb6fa95243bfdc29f0ac52b45",
+      "assetType": "GameObject",
+      "version": null,
+      "dependencyHash": "4ca484495d85edc18be403e3c11759f1"
+    },
+    {
+      "path": "Assets/VFX/Shared/Shaders/CoverageGalleryBUnlit.shader",
+      "guid": "36a2072c324a26a479dfb498994d4812",
+      "assetType": "Shader",
+      "version": null,
+      "dependencyHash": "64f6028fba878ab561a8418a3ea09753"
+    },
+    {
+      "path": "Packages/com.vfxcomposer.unity/Runtime/Components/CoverageGalleryVfxController.cs",
+      "guid": "18601207a015a6140b357c3de1ce8608",
+      "assetType": "MonoScript",
+      "version": null,
+      "dependencyHash": "b7413138fabc3a05f2522721ad65632e"
+    }
+  ],
+  "cost": {
+    "particles": 48,
+    "particleSystems": 1,
+    "renderers": 6,
+    "materials": 1,
+    "trails": 0,
+    "duration": 1.3999999761581421,
+    "localTextureBytes": 0,
+    "dependencyResidentTextureBytes": 0,
+    "gameObjects": 7,
+    "maxDepth": 1
+  },
+  "audit": [],
+  "generatedAtUtc": "2026-08-23T15:40:28.8011861Z"
+}

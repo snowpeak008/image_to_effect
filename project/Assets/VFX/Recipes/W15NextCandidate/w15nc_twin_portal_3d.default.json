@@ -1,0 +1,14 @@
+{
+  "recipeVersion": 1,
+  "revision": 1,
+  "id": "w15nc_twin_portal_3d",
+  "name": "Twin Portal Next Candidate",
+  "dimension": "3d",
+  "archetype": "portal",
+  "style": { "token": "holo", "palette": { "primary": "#28116F", "secondary": "#9A5BFF", "accent": "#72F5FF" }, "glow_strength": 1.25 },
+  "archetypeParameters": { "pair_id": "w15_next_twin_pair", "portal_radius": 1.0, "swirl_speed": 2.8 },
+  "targetProfile": "mobile_medium",
+  "randomSeed": 2814345413,
+  "stages": [{ "id": "active", "trigger": "manual", "duration": 2.8, "enabled": true, "modules": [{ "id": "core", "kind": "energy_body", "templateId": "PFT_3D_FireCore", "parameters": { "scale": 1.0 }, "enabled": true }, { "id": "flow", "kind": "motion_trail", "templateId": "PFT_3D_FireTrail", "parameters": { "time": 0.22, "width": 0.3 }, "attachTo": "core", "enabled": true }] }],
+  "metadata": { "createdBy": "w15-next-candidate-authoring", "templateCatalogVersion": "formal-1" }
+}

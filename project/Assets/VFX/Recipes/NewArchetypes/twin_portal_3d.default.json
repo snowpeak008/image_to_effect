@@ -1,0 +1,58 @@
+{
+  "recipeVersion": 1,
+  "revision": 1,
+  "id": "twin_portal_3d",
+  "name": "Twin Portal",
+  "dimension": "3d",
+  "archetype": "portal",
+  "style": {
+    "token": "holo",
+    "palette": {
+      "primary": "#3A1A91",
+      "secondary": "#A46BFF",
+      "accent": "#89FFFF"
+    },
+    "glow_strength": 1.2
+  },
+  "archetypeParameters": {
+    "pair_id": "twin_portal_default",
+    "portal_radius": 1.0,
+    "swirl_speed": 2.8
+  },
+  "targetProfile": "mobile_medium",
+  "randomSeed": 3152909627,
+  "stages": [
+    {
+      "id": "active",
+      "trigger": "manual",
+      "duration": 2.8,
+      "enabled": true,
+      "modules": [
+        {
+          "id": "core",
+          "kind": "energy_body",
+          "templateId": "PFT_3D_FireCore",
+          "parameters": {
+            "scale": 1.0
+          },
+          "enabled": true
+        },
+        {
+          "id": "flow",
+          "kind": "motion_trail",
+          "templateId": "PFT_3D_FireTrail",
+          "parameters": {
+            "time": 0.22,
+            "width": 0.3
+          },
+          "attachTo": "core",
+          "enabled": true
+        }
+      ]
+    }
+  ],
+  "metadata": {
+    "createdBy": "w15-authoring",
+    "templateCatalogVersion": "formal-1"
+  }
+}

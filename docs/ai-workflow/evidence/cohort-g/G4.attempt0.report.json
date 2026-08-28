@@ -1,0 +1,54 @@
+{
+  "succeeded": false,
+  "detail": null,
+  "entries": [
+    {
+      "code": "E101",
+      "severity": "error",
+      "path": "/stages/launch/duration",
+      "message": "Required field is missing.",
+      "actualValue": null,
+      "allowedRange": null
+    },
+    {
+      "code": "E101",
+      "severity": "error",
+      "path": "/stages/launch/enabled",
+      "message": "Required field is missing.",
+      "actualValue": null,
+      "allowedRange": null
+    },
+    {
+      "code": "E101",
+      "severity": "error",
+      "path": "/stages/travel/duration",
+      "message": "Required field is missing.",
+      "actualValue": null,
+      "allowedRange": null
+    },
+    {
+      "code": "E101",
+      "severity": "error",
+      "path": "/stages/travel/enabled",
+      "message": "Required field is missing.",
+      "actualValue": null,
+      "allowedRange": null
+    },
+    {
+      "code": "E101",
+      "severity": "error",
+      "path": "/stages/impact/duration",
+      "message": "Required field is missing.",
+      "actualValue": null,
+      "allowedRange": null
+    },
+    {
+      "code": "E101",
+      "severity": "error",
+      "path": "/stages/impact/enabled",
+      "message": "Required field is missing.",
+      "actualValue": null,
+      "allowedRange": null
+    }
+  ]
+}

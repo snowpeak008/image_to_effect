@@ -1,0 +1,84 @@
+{
+  "schema": "vfx-composition/1",
+  "id": "ghost_curse_shrine_kit_showcase_2d",
+  "group": "hero_kit",
+  "duration": 7.0,
+  "theme": "ghost_ink",
+  "shapeLanguage": "ribbon_talisman",
+  "palette": {
+    "primary": "#24252A",
+    "secondary": "#78757E",
+    "accent": "#B84A42"
+  },
+  "timeline": [
+    {
+      "t": 0.0,
+      "ref_id": "talisman_barrier_shield_2d",
+      "action": "play",
+      "overrides": {
+        "scale": 1.0,
+        "palette": "ghost_ink"
+      }
+    },
+    {
+      "t": 0.8,
+      "ref_id": "arcane_missile_projectile_2d",
+      "action": "play",
+      "overrides": {
+        "scale": 1.0,
+        "palette": "ghost_ink"
+      }
+    },
+    {
+      "t": 1.7,
+      "ref_id": "shadow_grasp_area_2d",
+      "action": "play",
+      "overrides": {
+        "scale": 1.0,
+        "palette": "ghost_ink"
+      }
+    },
+    {
+      "t": 2.6,
+      "ref_id": "curse_mark_status_2d",
+      "action": "play",
+      "overrides": {
+        "scale": 1.0,
+        "palette": "ghost_ink"
+      }
+    },
+    {
+      "t": 3.4,
+      "ref_id": "phantom_wail_area_2d",
+      "action": "play",
+      "overrides": {
+        "scale": 1.0,
+        "palette": "ghost_ink"
+      }
+    },
+    {
+      "t": 4.5,
+      "ref_id": "hundred_ghosts_ultimate_2d",
+      "action": "play",
+      "overrides": {
+        "scale": 0.75,
+        "palette": "ghost_ink"
+      }
+    }
+  ],
+  "camera_hints": [],
+  "gates": [],
+  "peakBudget": {
+    "particles": 48,
+    "particleSystems": 3,
+    "materials": 3,
+    "renderers": 14,
+    "limits": {
+      "particles": 200,
+      "particleSystems": 10,
+      "materials": 10,
+      "renderers": 14
+    }
+  },
+  "ownership": "dependency-reference-only"
+}

@@ -1,0 +1,22 @@
+{
+  "schemaVersion": "s0a-projected-review-freeze-context/v1",
+  "holdoutCohort": "reduced-36-12-12-6",
+  "freezeStatus": "FROZEN_FOR_BLIND_REVIEW",
+  "holdoutIsolationMode": "INITIAL_REDUCED",
+  "operatorLedgerHash": "sha256:ac3b3a1e45f60e69fdfc9a7fec3c7593606135b0c127be59b18e0ae5ea3b7c6b",
+  "reducedMetricsHash": null,
+  "qaPromptHash": "sha256:d7a1321fa37ff6a1b28a952e0a41355d966b2d2412b641ce80d3fd98d004fe9c",
+  "imageInputStrategyHash": "sha256:b885eeb31252afe112a74eb4f44df1fc072748ce2831f0a0064fc1d7c4e124c9",
+  "threeStateRulesHash": "sha256:b885eeb31252afe112a74eb4f44df1fc072748ce2831f0a0064fc1d7c4e124c9",
+  "aggregationRulesHash": "sha256:b885eeb31252afe112a74eb4f44df1fc072748ce2831f0a0064fc1d7c4e124c9",
+  "visualReviewSchemaHash": "sha256:83d5cbcc81a2f771e3206f0e6559ce0a17f8db1b742a0859c9fab5335a7ca09f",
+  "modelVersionHash": "sha256:284423d514dacec2a236d44fa2ac96d3b595bcec83e06785d85b12731e537dce",
+  "reviewContractHash": "sha256:ba44573fabb3416f0e5b9cb4734607d115d97c0594817debc816e18d187323d1",
+  "buildHash": "sha256:00d9202f1e5b681617b18863753fff4b8b4a5a539af81f081ed791c892c96e0e",
+  "captureProfilePolicyHash": "sha256:1d9ee0b874721a3eb1e45e1d347744f316bbd0f6b407184afcb37bb9abae18db",
+  "frameTableHash": "sha256:6b7d0a07b46b5c8d9e7dc7be268a4d078fb292fc416ad8ca80bfe462bee09009",
+  "sceneHash": "sha256:61214a0abbab8f98ca98cee4c2bb601ef085b2dbc2d339ef82b51f6e308b7651",
+  "prefabManifestHash": "sha256:c90bddf857b2ad38cdc016bfa1c7092b78b10f0dd291fb03babd25cb0b668e36",
+  "captureToolHash": "sha256:7719219522abb7bf7c3e59b2da726cd4586776c7986f17e96743de52a8438245",
+  "contextHash": "sha256:3aa1bd5c5d84ee6b8d7ffd01f7faad77cda3aa2bac74565dcadda29cbeec9af4"
+}

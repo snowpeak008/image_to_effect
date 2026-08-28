@@ -1,0 +1,22 @@
+{
+  "name": "VFXComposer.Tests.PlayMode.W24S0aFormal",
+  "rootNamespace": "VFXComposer.Tests.PlayMode.W24S0aFormal",
+  "references": [
+    "VFXComposer.Runtime",
+    "VFXComposer.Editor"
+  ],
+  "includePlatforms": [
+    "Editor"
+  ],
+  "excludePlatforms": [],
+  "allowUnsafeCode": false,
+  "overrideReferences": false,
+  "precompiledReferences": [],
+  "autoReferenced": false,
+  "defineConstraints": [],
+  "versionDefines": [],
+  "noEngineReferences": false,
+  "optionalUnityReferences": [
+    "TestAssemblies"
+  ]
+}

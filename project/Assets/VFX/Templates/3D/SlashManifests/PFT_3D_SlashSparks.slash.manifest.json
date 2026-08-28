@@ -1,0 +1,14 @@
+{
+  "slashManifestVersion": 2,
+  "templateId": "PFT_3D_SlashSparks",
+  "templateVersion": "1.0.0",
+  "phaseKind": "sparks",
+  "moduleKind": "slash_sparks",
+  "dimension": "3d",
+  "assetGuid": "faba429c88597e847a49e5e1af318342",
+  "assetPath": "Assets/VFX/Templates/3D/Slash/Prefabs/PFT_3D_SlashSparks.prefab",
+  "tags": ["slash", "s12a", "bloom-off"],
+  "materialGuids": ["933da8cc0a77c2045905b900f48c3f56"],
+  "parameters": { "count": { "type": "integer", "min": 4, "default": 8, "max": 24, "binding": "3d.slash.sparks.count" }, "speed": { "type": "float", "min": 1.2, "default": 2.2, "max": 3.6, "binding": "3d.slash.sparks.speed" }, "lifetime": { "type": "float", "min": 0.1, "default": 0.18, "max": 0.28, "binding": "3d.slash.sparks.lifetime" } },
+  "cost": { "estimatedPeakParticles": 24, "particleSystems": 1, "materials": 1, "transparentRenderers": 1 }
+}

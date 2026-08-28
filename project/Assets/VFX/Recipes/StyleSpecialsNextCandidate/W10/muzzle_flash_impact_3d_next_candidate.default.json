@@ -1,0 +1,31 @@
+{
+  "schema": "style-special-next-candidate/v1",
+  "id": "muzzle_flash_impact_3d_next_candidate",
+  "sourceId": "muzzle_flash_impact_3d",
+  "label": "MUZZLE FLASH · 0.24S",
+  "group": "w10",
+  "archetype": "impact",
+  "dimension": "3d",
+  "style": "semireal",
+  "profile": "MuzzleFlash",
+  "semantic": "oneframe-star+cross-plane-flame>side-spark>hard-clear",
+  "duration": 0.24,
+  "releaseNormalized": 0.05,
+  "sustainEndNormalized": 0.52,
+  "sustained": false,
+  "seed": 10103,
+  "intensity": 1.58,
+  "palette": {
+    "primary": "#FF9C20",
+    "secondary": "#FFE47A",
+    "accent": "#FFFFFF"
+  },
+  "meshes": [
+    "Burst",
+    "Cone",
+    "Shard"
+  ],
+  "pairFamily": "",
+  "pairRole": "",
+  "sourceBaseId": ""
+}

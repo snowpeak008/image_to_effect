@@ -1,0 +1,154 @@
+{
+  "manifestVersion": 1,
+  "rulesVersion": "1.0-draft",
+  "enforcement": "legacy_audit",
+  "effectId": "i1_river_comet",
+  "archetype": "projectile",
+  "recipeVersion": 1,
+  "recipeRevision": 1,
+  "recipeHash": "200db7dec086add80abe3dfbb54f99c7ad26f7119c39aaa0086d83b6f60a364e",
+  "buildHash": "c458271c74e6781a3febb2425bb41bb6f872bf8f540f975cc2927f7a1776da4f",
+  "compilerVersion": "0.1.0",
+  "unityVersion": "2022.3.62f3c1",
+  "sourceRecipePath": null,
+  "runtimeEntry": {
+    "kind": "prefab",
+    "path": "Assets/VFX/Generated/i1_river_comet/VFX_I1_River_Comet.prefab",
+    "guid": "a616b1539e6f07f449826a1915ed2dfa"
+  },
+  "ownedOutputs": [
+    {
+      "path": "Assets/VFX/Generated/i1_river_comet/VFX_I1_River_Comet.prefab",
+      "guid": "a616b1539e6f07f449826a1915ed2dfa",
+      "assetType": "GameObject",
+      "sha256": "3ee0230b746225353e70b5fa17891bf670dc0f4a856c9c61d53f7a06b3a9ed3c"
+    },
+    {
+      "path": "Assets/VFX/Generated/i1_river_comet/burst_Material_0.mat",
+      "guid": "a6b932bbc8c3b2b4f8d407cef81c3454",
+      "assetType": "Material",
+      "sha256": "ea75762140a87a96bb6b3a8ab7aa791aed4b3e40bd214b7b24b08fa88dea0e28"
+    },
+    {
+      "path": "Assets/VFX/Generated/i1_river_comet/coreFlash_Material_0.mat",
+      "guid": "db854adbbffc3834fa14816fef47f898",
+      "assetType": "Material",
+      "sha256": "7435cb15faa7a93682f459fe18759a3cd812fa7e52dac117c0867ee21979e110"
+    },
+    {
+      "path": "Assets/VFX/Generated/i1_river_comet/core_Material_0.mat",
+      "guid": "d694b9ca305b61a49bd40d1a08a654c3",
+      "assetType": "Material",
+      "sha256": "3053d60ae8349675833c7604aa45ac645bc0767c1af17e527884e246a56a17fe"
+    },
+    {
+      "path": "Assets/VFX/Generated/i1_river_comet/launchFlash_Material_0.mat",
+      "guid": "cf10024b5d2198a4abe5d82d4ac81986",
+      "assetType": "Material",
+      "sha256": "b5ea4ce59eec20fdb738d3ffb2814ed5bba42617412724e3725d7d509981bfc2"
+    },
+    {
+      "path": "Assets/VFX/Generated/i1_river_comet/shockwave_Material_0.mat",
+      "guid": "a46c86bb4118e334bbf568a26ce7ef5a",
+      "assetType": "Material",
+      "sha256": "4b6c47995319b21507237ec759a66bad061fc8e0c5d63831cfef86267c473531"
+    },
+    {
+      "path": "Assets/VFX/Generated/i1_river_comet/trail_Material_0.mat",
+      "guid": "8c7d0a6fc1cb15b4daf5750151801f5c",
+      "assetType": "Material",
+      "sha256": "2443b2d2c3eb871a1fbc85182808c79b932e066aaf42737b35081c932158e513"
+    }
+  ],
+  "dependencies": [
+    {
+      "path": "Assets/VFX/Templates/2D/Textures/VFX2D_FireCore.png",
+      "guid": "db1681a7fbdc4a94f89153d768ed4ab0",
+      "assetType": "Texture2D",
+      "version": null,
+      "dependencyHash": "d1d83a1d4bb80328bfc1b8db9576b7d4"
+    },
+    {
+      "path": "Assets/VFX/Templates/2D/Textures/VFX2D_FireTrail.png",
+      "guid": "1a5cacac18736f940b624e020d7854d7",
+      "assetType": "Texture2D",
+      "version": null,
+      "dependencyHash": "fe88e46317792133ae1c2ccb52571ad6"
+    },
+    {
+      "path": "Assets/VFX/Templates/2D/Textures/VFX2D_ImpactStreak.png",
+      "guid": "d17050d159af2e541865ec8ca2c1dcaa",
+      "assetType": "Texture2D",
+      "version": null,
+      "dependencyHash": "511d8bec4f2a706008cdf5dcf58e5386"
+    },
+    {
+      "path": "Assets/VFX/Templates/2D/Textures/VFX2D_LaunchFlash.png",
+      "guid": "ee295a0c1599b7b458b940a1ac2fbbf1",
+      "assetType": "Texture2D",
+      "version": null,
+      "dependencyHash": "ec0bb98bf282dcabf092d445b2231b46"
+    },
+    {
+      "path": "Assets/VFX/Templates/2D/Textures/VFX2D_ShockwaveRing.png",
+      "guid": "bc036c3d227550f42beae2c8a8a34637",
+      "assetType": "Texture2D",
+      "version": null,
+      "dependencyHash": "288a47224e147722adc50c5881c40126"
+    },
+    {
+      "path": "Packages/com.unity.render-pipelines.universal/Editor/AssetVersion.cs",
+      "guid": "d0353a89b1f911e48b9e16bdc9f2e058",
+      "assetType": "MonoScript",
+      "version": null,
+      "dependencyHash": "32658fcbbe1a332050004e3b27abb4a3"
+    },
+    {
+      "path": "Packages/com.unity.render-pipelines.universal/Shaders/Particles/ParticlesUnlit.shader",
+      "guid": "0406db5a14f94604a8c57ccfbc9f3b46",
+      "assetType": "Shader",
+      "version": null,
+      "dependencyHash": "b7b185925fcbf7b0661368a240b860d4"
+    },
+    {
+      "path": "Packages/com.vfxcomposer.unity/Runtime/Components/GeneratedVfxController.cs",
+      "guid": "95375c27028a27440aba608c4070f13c",
+      "assetType": "MonoScript",
+      "version": null,
+      "dependencyHash": "84f23e5ab123318ec5a468206d637ab8"
+    }
+  ],
+  "cost": {
+    "particles": 51,
+    "particleSystems": 4,
+    "renderers": 6,
+    "materials": 6,
+    "trails": 1,
+    "duration": 1.4000000000000001,
+    "localTextureBytes": 0,
+    "dependencyResidentTextureBytes": 3106120,
+    "gameObjects": 10,
+    "maxDepth": 3
+  },
+  "audit": [
+    {
+      "code": "R8014",
+      "severity": "warning",
+      "path": "/runtimeEntry/path",
+      "message": "Runtime Prefab name must be VFX_<effectId>."
+    },
+    {
+      "code": "R8004",
+      "severity": "warning",
+      "path": "/structure/maxDepth",
+      "message": "Runtime Entry exceeds the configured hierarchy depth."
+    },
+    {
+      "code": "R8011",
+      "severity": "warning",
+      "path": "/ownedOutputs/materials",
+      "message": "Effect exceeds the recommended local Material count."
+    }
+  ],
+  "generatedAtUtc": "2026-08-24T11:24:46.6361841Z"
+}

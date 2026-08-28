@@ -1,0 +1,12 @@
+{
+  "schema": "w18-theme-next-candidate/v1",
+  "id": "ice_moon_mage_kit_next_candidate",
+  "workPackage": "W18",
+  "candidateStatus": "NEXT_CANDIDATE_VISUAL_PENDING",
+  "userVisualVerdict": null,
+  "preserveRejectedCandidate": true,
+  "theme": { "paletteReference": "theme.ice_moon_mage.next", "shapeLanguage": "hexagons + moon circles", "primary": "#1D4C88", "secondary": "#58C8F4", "accent": "#E7FCFF" },
+  "skillChain": ["staff_idle", "ice_shard_x3", "moonwheel", "frost_nova", "crystal_shield", "frozen_domain", "death", "entrance"],
+  "attachments": ["weapon", "hand", "chest", "feet"],
+  "budget": { "renderers": 12, "materials": 1, "particleSystems": 0, "limits": { "renderers": 14, "materials": 3, "particleSystems": 1, "particleCapacity": 16 } }
+}

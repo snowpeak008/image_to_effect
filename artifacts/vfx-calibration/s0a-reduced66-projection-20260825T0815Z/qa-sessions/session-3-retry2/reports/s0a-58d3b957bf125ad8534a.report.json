@@ -1,0 +1,33 @@
+{
+  "reviewVersion": "s0a-visual-qa/1.0",
+  "candidateId": "C0",
+  "contractHash": "sha256:ba44573fabb3416f0e5b9cb4734607d115d97c0594817debc816e18d187323d1",
+  "buildHash": "sha256:00d9202f1e5b681617b18863753fff4b8b4a5a539af81f081ed791c892c96e0e",
+  "captureProfileHash": "sha256:1d9ee0b874721a3eb1e45e1d347744f316bbd0f6b407184afcb37bb9abae18db",
+  "evidenceHashes": [
+    "sha256:c412a79cb574d9387de523c685bd35e71e4e96e90f029bf9115e05a75e423cc0"
+  ],
+  "imageInputRead": true,
+  "evidenceStatus": "valid",
+  "contractStatus": "unambiguous",
+  "s0aTerminalStatus": null,
+  "qaGateAuthority": "advisory-only",
+  "topLevelRoute": "VISUAL_FAIL",
+  "perRequirement": [
+    {
+      "designRequirementId": "s0a.visual.req.ffd3b51e898f5725d6c7",
+      "state": "fail",
+      "countable": true,
+      "reasonCode": "OBSERVED",
+      "stateRef": "steady",
+      "frameNumbers": [
+        60,
+        120,
+        180
+      ],
+      "imageRegion": "flame subject and right image boundary in seed rows 0, 1, and 2",
+      "observation": "In every seed row the flame moves progressively right from steady frame 60 to frame 120, and at steady frame 180 it is cropped by the right image boundary, so the sustained phase is not spatially coherent or fully observable."
+    }
+  ],
+  "sealedReportHash": "sha256:72ba0083dc49f8f6c85633685074add032493a920da376ad92d8adf1c601bcca"
+}

@@ -1,0 +1,11 @@
+{
+  "source": "Runtime controller public API state samples rendered with Camera.Render",
+  "movement": "Full sequence calls SetTravelTransform every frame; small Travel steps retain TrailRenderer segments, while first/large steps clear after pose assignment.",
+  "samples": [
+    { "t": 0.00, "stage": "Launch", "position": [-3, 0, 0] },
+    { "t": 0.12, "stage": "Travel", "position": [-3, 0, 0] },
+    { "t": 0.50, "stage": "Travel", "position": [0, 0, 0] },
+    { "t": 1.12, "stage": "Impact", "position": [3, 0, 0] },
+    { "t": 1.20, "stage": "None", "position": [0, 0, 0], "trailPositionCount": 0 }
+  ]
+}

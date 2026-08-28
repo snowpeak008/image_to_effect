@@ -1,0 +1,110 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &3243762949943959307
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2655907902999771070}
+  - component: {fileID: 483567785039117900}
+  m_Layer: 0
+  m_Name: VFX_judgement_ray_ultimate_3d
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2655907902999771070
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3243762949943959307}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &483567785039117900
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3243762949943959307}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 07d8735a81864834c8f1bda23acf4be2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  compositionId: judgement_ray_ultimate_3d
+  duration: 4
+  sourcePrefabs:
+  - {fileID: 8952631103293757248, guid: c3aec333b2b2a2d4a8b63dbbdf2c57e6, type: 3}
+  - {fileID: 4604391042401296737, guid: af94060cc32f7ef41bdcb604ce105ab6, type: 3}
+  - {fileID: 8541231255220336318, guid: 3ebfb62c5ebc7fe448a83c75dd8c0e4a, type: 3}
+  - {fileID: 6458942413688378604, guid: efb96a910edabe849ad2a9ce193d48c9, type: 3}
+  timeline:
+  - Time: 0
+    SourceIndex: 0
+    RefId: arcane_rune_spawn_2d
+    Action: play
+    Position: {x: 0, y: 0, z: 0}
+    Rotation: {x: 0, y: 0, z: 0}
+    Scale: 1.4
+    HasPalette: 1
+    Primary: {r: 0.9019608, g: 0.7176471, b: 0.20784314, a: 1}
+    Secondary: {r: 1, g: 0.94509804, b: 0.5411765, a: 1}
+    Accent: {r: 1, g: 1, b: 1, a: 1}
+  - Time: 0.8
+    SourceIndex: 1
+    RefId: focus_charge_3d
+    Action: play
+    Position: {x: 0, y: 0, z: 0}
+    Rotation: {x: 0, y: 0, z: 0}
+    Scale: 1
+    HasPalette: 1
+    Primary: {r: 0.9019608, g: 0.7176471, b: 0.20784314, a: 1}
+    Secondary: {r: 1, g: 0.94509804, b: 0.5411765, a: 1}
+    Accent: {r: 1, g: 1, b: 1, a: 1}
+  - Time: 1.8
+    SourceIndex: 2
+    RefId: divine_smite_impact_3d
+    Action: play
+    Position: {x: 0, y: 0, z: 0}
+    Rotation: {x: 0, y: 0, z: 0}
+    Scale: 1.6
+    HasPalette: 1
+    Primary: {r: 0.9019608, g: 0.7176471, b: 0.20784314, a: 1}
+    Secondary: {r: 1, g: 0.94509804, b: 0.5411765, a: 1}
+    Accent: {r: 1, g: 1, b: 1, a: 1}
+  - Time: 2.9
+    SourceIndex: 3
+    RefId: resurrection_spawn_3d
+    Action: play
+    Position: {x: 0, y: 0, z: 0}
+    Rotation: {x: 0, y: 0, z: 0}
+    Scale: 0.72
+    HasPalette: 1
+    Primary: {r: 0.9019608, g: 0.7176471, b: 0.20784314, a: 1}
+    Secondary: {r: 1, g: 0.94509804, b: 0.5411765, a: 1}
+    Accent: {r: 1, g: 1, b: 1, a: 1}
+  cameraHints:
+  - Time: 1.7
+    Type: slowmo
+    Strength: 0.45
+  - Time: 1.8
+    Type: shake
+    Strength: 0.8
+  - Time: 2
+    Type: zoom
+    Strength: 0.55
+  gates: []
+  descriptor: {fileID: 4900000, guid: 96a7fe2f0c4634d4e8c297105dd106ad, type: 3}

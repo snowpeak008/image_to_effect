@@ -1,0 +1,33 @@
+{
+  "schema": "style-special-next-candidate/v1",
+  "id": "steam_vent_burst_impact_3d_next_candidate",
+  "sourceId": "steam_vent_burst_impact_3d",
+  "label": "STEAM · NEW VENT",
+  "group": "w16",
+  "archetype": "impact",
+  "dimension": "3d",
+  "style": "steampunk",
+  "profile": "SteamBurst",
+  "semantic": "8fps-ratchet-gears>pressure-release+layered-steam-cone",
+  "duration": 1.28,
+  "releaseNormalized": 0.22,
+  "sustainEndNormalized": 0.72,
+  "sustained": false,
+  "seed": 16109,
+  "intensity": 1.04,
+  "palette": {
+    "primary": "#9B6B2F",
+    "secondary": "#D9B56A",
+    "accent": "#EEF3E7"
+  },
+  "meshes": [
+    "GearA",
+    "GearB",
+    "GearC",
+    "Cone",
+    "Burst"
+  ],
+  "pairFamily": "steampunk",
+  "pairRole": "new",
+  "sourceBaseId": "steam_vent_burst_impact_3d"
+}

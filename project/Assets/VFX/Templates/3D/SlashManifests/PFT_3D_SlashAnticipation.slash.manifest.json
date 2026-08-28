@@ -1,0 +1,14 @@
+{
+  "slashManifestVersion": 2,
+  "templateId": "PFT_3D_SlashAnticipation",
+  "templateVersion": "1.0.0",
+  "phaseKind": "anticipation",
+  "moduleKind": "anticipation_glint",
+  "dimension": "3d",
+  "assetGuid": "ad946f09e4ac67e4ead6eee0594b447b",
+  "assetPath": "Assets/VFX/Templates/3D/Slash/Prefabs/PFT_3D_SlashAnticipation.prefab",
+  "tags": ["slash", "s12a", "bloom-off"],
+  "materialGuids": ["e9bb8c6c808569a4c89572b019026f3d", "933da8cc0a77c2045905b900f48c3f56"],
+  "parameters": {  },
+  "cost": { "estimatedPeakParticles": 0, "particleSystems": 0, "materials": 2, "transparentRenderers": 1 }
+}

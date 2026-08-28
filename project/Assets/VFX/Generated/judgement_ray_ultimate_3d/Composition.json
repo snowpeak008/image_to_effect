@@ -1,0 +1,82 @@
+{
+  "schema": "vfx-composition/1",
+  "id": "judgement_ray_ultimate_3d",
+  "group": "ultimate",
+  "duration": 4.0,
+  "theme": null,
+  "shapeLanguage": null,
+  "palette": {
+    "primary": "#E6B735",
+    "secondary": "#FFF18A",
+    "accent": "#FFFFFF"
+  },
+  "timeline": [
+    {
+      "t": 0.0,
+      "ref_id": "arcane_rune_spawn_2d",
+      "action": "play",
+      "overrides": {
+        "scale": 1.4,
+        "palette": "ultimate"
+      }
+    },
+    {
+      "t": 0.8,
+      "ref_id": "focus_charge_3d",
+      "action": "play",
+      "overrides": {
+        "scale": 1.0,
+        "palette": "ultimate"
+      }
+    },
+    {
+      "t": 1.8,
+      "ref_id": "divine_smite_impact_3d",
+      "action": "play",
+      "overrides": {
+        "scale": 1.6,
+        "palette": "ultimate"
+      }
+    },
+    {
+      "t": 2.9,
+      "ref_id": "resurrection_spawn_3d",
+      "action": "play",
+      "overrides": {
+        "scale": 0.72,
+        "palette": "ultimate"
+      }
+    }
+  ],
+  "camera_hints": [
+    {
+      "t": 1.7,
+      "type": "slowmo",
+      "strength": 0.45
+    },
+    {
+      "t": 1.8,
+      "type": "shake",
+      "strength": 0.8
+    },
+    {
+      "t": 2.0,
+      "type": "zoom",
+      "strength": 0.55
+    }
+  ],
+  "gates": [],
+  "peakBudget": {
+    "particles": 16,
+    "particleSystems": 1,
+    "materials": 2,
+    "renderers": 9,
+    "limits": {
+      "particles": 200,
+      "particleSystems": 10,
+      "materials": 10,
+      "renderers": 14
+    }
+  },
+  "ownership": "dependency-reference-only"
+}

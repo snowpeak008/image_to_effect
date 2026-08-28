@@ -1,0 +1,32 @@
+{
+  "schema": "style-special-next-candidate/v1",
+  "id": "summoning_portal_2d_cosmic_next_candidate",
+  "sourceId": "summoning_portal_2d_cosmic",
+  "label": "COSMIC · PORTAL VARIANT",
+  "group": "w16",
+  "archetype": "spawn",
+  "dimension": "2d",
+  "style": "cosmic",
+  "profile": "CosmicOrbit",
+  "semantic": "portal-content+counter-rotating-nebula+star-parallax-center",
+  "duration": 1.55,
+  "releaseNormalized": 0.34,
+  "sustainEndNormalized": 0.84,
+  "sustained": true,
+  "seed": 16108,
+  "intensity": 1.08,
+  "palette": {
+    "primary": "#5933B7",
+    "secondary": "#61D1FF",
+    "accent": "#FF77E4"
+  },
+  "meshes": [
+    "Ring",
+    "Ring",
+    "Burst",
+    "Cone"
+  ],
+  "pairFamily": "cosmic",
+  "pairRole": "variant",
+  "sourceBaseId": "summoning_portal_2d"
+}

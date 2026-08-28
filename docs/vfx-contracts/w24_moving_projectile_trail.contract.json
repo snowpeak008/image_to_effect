@@ -1,0 +1,94 @@
+{
+  "contractVersion": "w24-s1/1.0",
+  "effectId": "w24_moving_projectile_trail",
+  "contractRevision": 26,
+  "contractHash": "sha256:93fce950b2bbea9de590bdbc9594f43bce5894ebf4ccbacafbe370af8d279b58",
+  "lifecycle": {
+    "kind": "one_shot",
+    "start": {"entryConditions": ["Play or launch event"], "deadlineSeconds": 0.12, "completionConditions": ["travel starts"]},
+    "steady": {"entryConditions": ["travel event"], "deadlineSeconds": 1.2, "completionConditions": ["impact or stop event"]},
+    "stop": {"entryConditions": ["impact or stop event"], "deadlineSeconds": 0.5, "completionConditions": ["trail clears or reaches its bounded tail"]},
+    "interrupt": {"entryConditions": ["cancel or pool reset"], "deadlineSeconds": 0.1, "completionConditions": ["all trail vertices and particles are cleared"]}
+  },
+  "references": [{
+    "source": "project-internal W24 S3 baseline brief", "hash": "sha256:ae4dbd3c55c3e6e2d2e8579e9faefa3593171f1b91e024baa2beb7b69fb3a353", "license": "project-internal", "assetUse": "reference-only",
+    "roles": [{"dimension": "motion", "weight": 0.7}, {"dimension": "composition", "weight": 0.3}], "notRequired": ["copied texture silhouette", "static decorative line"]
+  }],
+  "spatialContract": {
+    "coordinateSpace": "world", "origin": [0, 0, 0], "orientationEulerDegrees": [0, 0, 0], "visualAnchor": {"kind": "transform", "reference": "Runtime Entry root"},
+    "designDimensions": {"width": 3.5, "height": 0.35, "depth": 0.35, "unit": "metre"}, "gameplayDistanceDimensions": {"width": 3.5, "height": 0.35, "depth": 0.35, "unit": "metre"}
+  },
+  "captureProfile": {
+    "captureProfileId": "w24-s3-projectile-dx11-v1", "unityVersion": "2022.3.62f3c1", "urpVersion": "14.0.12", "graphicsApi": "Direct3D11", "graphicsDeviceDriver": "NVIDIA GeForce RTX 1050 Ti / Direct3D 11.0 [level 11.1]",
+    "cameraSerializedReference": "Assets/VFX/Preview/W24S3/VFXPREVIEW_MovingProjectileTrail.unity#MainCamera", "cameraPose": {"position": [0, 1.3, -6.3], "orientationEulerDegrees": [4.537772, 0, 0]}, "cameraFovDegrees": 60,
+    "sceneSerializedReference": "Assets/VFX/Preview/W24S3/VFXPREVIEW_MovingProjectileTrail.unity", "sceneHash": "pending:formal-build",
+    "prefabManifestSerializedReference": "ProjectSettings/VFXComposer/BuildManifests/w24_moving_projectile_trail.manifest.json#buildHash", "prefabManifestHash": "pending:formal-build",
+    "rendererAssetSerializedReference": "Assets/Settings/VFXPreviewUniversalRenderer.asset", "volumeSerializedReference": "ProjectSettings/GraphicsSettings.asset (no per-scene Volume; bloom/tone mapping disabled)", "resolution": {"width": 960, "height": 540}, "fps": 60,
+    "background": "dark neutral", "colorSpace": "Linear", "hdr": false, "msaaSamples": 1, "renderTextureFormat": "ARGB32", "bloom": {"enabled": false, "settingsReference": "none"}, "toneMapping": "None",
+    "captureToolVersion": "w24-s3-capture/3.5", "captureToolHash": "sha256:f605aacf4d27128347a2a8434a29cebc95aa789af73df55cc26c6fd7a0e42726", "canonicalSeed": 24101, "robustnessSeeds": [24111, 24121]
+  },
+  "semanticStateMachine": {
+    "deterministicForSameSeed": true,
+    "states": [
+      {"stateId": "launch", "role": "start", "durationSeconds": 0.12, "entryConditions": ["Play"], "exitConditions": ["launch deadline"], "triggeredEvents": ["launch"], "preservedSemantics": ["emitter identity"]},
+      {"stateId": "travel", "role": "steady", "durationSeconds": 1.2, "entryConditions": ["launch completed"], "exitConditions": ["impact or stop"], "triggeredEvents": ["travel"], "preservedSemantics": ["world direction", "emitter identity"]},
+      {"stateId": "impact", "role": "stop", "durationSeconds": 0.5, "entryConditions": ["impact or stop"], "exitConditions": ["bounded residue completed"], "triggeredEvents": ["impact"], "preservedSemantics": ["impact location"]},
+      {"stateId": "cancel", "role": "interrupt", "durationSeconds": 0.1, "entryConditions": ["cancel or reset"], "exitConditions": ["all runtime state cleared"], "triggeredEvents": ["interrupt"], "preservedSemantics": []}
+    ],
+    "transitions": [
+      {"from": "launch", "to": "travel", "continuityMode": "continuous", "preservedSemantics": ["emitter identity", "world direction"], "triggeredEvents": ["travel"]},
+      {"from": "travel", "to": "impact", "continuityMode": "impulse", "preservedSemantics": ["impact location"], "triggeredEvents": ["impact"]},
+      {"from": "travel", "to": "cancel", "continuityMode": "clear", "preservedSemantics": [], "triggeredEvents": ["interrupt"]}
+    ],
+    "completionExits": ["impact residue reaches its bounded tail"], "interruptExits": ["cancel clears all historic trail state"]
+  },
+  "layers": [
+    {"layerId": "moving_emitter", "responsibility": "advance the projectile anchor in world space", "carrier": "Transform", "geometry": "projectile anchor", "materialModel": "none", "colorRole": "none", "blendMode": "none", "motionModel": "external real transform updates", "timing": "launch through impact", "attachment": "world projectile root", "continuityFrom": [], "continuityTo": ["world_trail"], "budgetCost": {"transforms": 1}, "required": true},
+    {"layerId": "world_trail", "responsibility": "retain historical path after the emitter leaves", "carrier": "TrailRenderer", "geometry": "world-space polyline", "materialModel": "URP Lit shared material", "colorRole": "subordinate travel trace", "blendMode": "alpha", "motionModel": "vertices sampled only from actual emitter displacement", "timing": "travel and bounded tail", "attachment": "Travel child", "continuityFrom": ["moving_emitter"], "continuityTo": ["impact_residue"], "budgetCost": {"renderers": 1, "trailVerticesMaximum": 96}, "required": true},
+    {"layerId": "impact_residue", "responsibility": "show a distinct impact result", "carrier": "ParticleSystem", "geometry": "small burst", "materialModel": "URP Lit shared material", "colorRole": "impact accent", "blendMode": "alpha", "motionModel": "short impulse", "timing": "impact", "attachment": "impact point", "continuityFrom": ["world_trail"], "continuityTo": [], "budgetCost": {"particlesPeak": 14, "renderers": 1}, "required": true}
+  ],
+  "allowedSubstitutions": [{"substitutionId": "allow_equivalent_world_trail", "from": "TrailRenderer", "to": "motion-sampled world-space ribbon with identical reset telemetry", "rationale": "carrier may change only if emitter-history and cleanup evidence remain equivalent"}],
+  "forbiddenSubstitutions": [
+    {"substitutionId": "forbid_static_trail", "from": "motion-sampled world trail", "to": "fixed line, ribbon, or parented card", "rationale": "a static line cannot prove emitter history"},
+    {"substitutionId": "forbid_uncleared_pool_path", "from": "cleared trail on reuse", "to": "reusing visible vertices from a prior owner", "rationale": "old world trajectory is invalid after pool reset"}
+  ],
+  "cleanup": {"cleanupDeadline": 0.5, "allowedResidualLayers": ["impact_residue"], "lightStopDeadline": 0},
+  "budget": {"particlePeak": 42, "particleSteady": 18, "rendererCount": 4, "materialCount": 1, "lightCount": 0, "textureResidency": {"localExclusiveMb": 0, "totalDependencyMb": 0}},
+  "requirements": [
+    {"designRequirementId": "REQ-B-MOTION", "type": "behavioral", "evidenceAuthority": "telemetry", "statement": "The emitter follows real Transform displacement during travel and stationary frames add no new trail head."},
+    {"designRequirementId": "REQ-B-WORLD-TRAIL", "type": "structural", "evidenceAuthority": "telemetry", "statement": "TrailRenderer vertices derive from motion samples and remain in world space after the projectile has moved on."},
+    {"designRequirementId": "REQ-B-TRAIL-CORRIDOR", "type": "visual-measurable", "evidenceAuthority": "diagnostic", "statement": "trail-only mask follows the recorded emitter-history corridor.", "visualVerdict": {"subject": "world_trail", "expectedCondition": "trail mask covers the past world path rather than a static origin line", "evidenceLocation": {"state": "travel", "frameInterval": [8, 72], "layerMask": "world_trail"}}},
+    {"designRequirementId": "REQ-B-POOL-CLEAR", "type": "behavioral", "evidenceAuthority": "telemetry", "statement": "Immediate stop and ResetForPool clear all historic TrailRenderer vertices before reuse."},
+    {"designRequirementId": "REQ-B-VISUAL-CAUSALITY", "type": "visual-semantic", "evidenceAuthority": "visualQa", "statement": "Filmstrip reads as launch, motion-generated trail, impact and bounded residue rather than unrelated cards.", "visualVerdict": {"subject": "whole projectile sequence", "expectedCondition": "cause and result are continuous; no static fake trail", "evidenceLocation": {"state": "launch-travel-impact", "frameInterval": [0, 90], "roi": "effect bounds"}}},
+    {"designRequirementId": "REQ-B-USER", "type": "user-signoff", "evidenceAuthority": "user", "statement": "Dynamic visual acceptance remains pending user signature."}
+  ],
+  "extensions": {
+    "typedDiagnostics": {
+      "metricsTool": {"path": "tools/vfx/metrics/render_metrics.py", "sha256": "sha256:8e32e6d3df25e002c402f3ec9af98bbfbc10da57b3d545f9bd86fcf4a078b8b6"},
+      "metricsEnvironment": {"pythonExecutablePath": "C:/Program Files/Python312/python.exe", "pythonExecutableSha256": "sha256:fd5c46d73d29ba21b04c844bbaf9096066136526911230645a2a040d23fb612b", "pythonVersion": "Python 3.12.4", "numpyVersion": "2.4.5", "pillowVersion": "12.2.0", "environmentSha256": "sha256:c4fe189aa8e53cf7add49138dd96830056e545cdac44c82a69251e5112df5c49"},
+      "requiredEvidenceMatrix": [
+        {"evidenceId": "b-trail-24101-f18", "passId": "trail-only-mask", "seed": 24101, "viewId": "projectile_front_main", "logicalFrameIndex": 18},
+        {"evidenceId": "b-trail-24101-f48", "passId": "trail-only-mask", "seed": 24101, "viewId": "projectile_front_main", "logicalFrameIndex": 48},
+        {"evidenceId": "b-trail-24101-f72", "passId": "trail-only-mask", "seed": 24101, "viewId": "projectile_front_main", "logicalFrameIndex": 72},
+        {"evidenceId": "b-trail-24111-f18", "passId": "trail-only-mask", "seed": 24111, "viewId": "projectile_front_main", "logicalFrameIndex": 18},
+        {"evidenceId": "b-trail-24111-f48", "passId": "trail-only-mask", "seed": 24111, "viewId": "projectile_front_main", "logicalFrameIndex": 48},
+        {"evidenceId": "b-trail-24111-f72", "passId": "trail-only-mask", "seed": 24111, "viewId": "projectile_front_main", "logicalFrameIndex": 72},
+        {"evidenceId": "b-trail-24121-f18", "passId": "trail-only-mask", "seed": 24121, "viewId": "projectile_front_main", "logicalFrameIndex": 18},
+        {"evidenceId": "b-trail-24121-f48", "passId": "trail-only-mask", "seed": 24121, "viewId": "projectile_front_main", "logicalFrameIndex": 48},
+        {"evidenceId": "b-trail-24121-f72", "passId": "trail-only-mask", "seed": 24121, "viewId": "projectile_front_main", "logicalFrameIndex": 72}
+      ],
+      "trailCorridor": {
+        "requirementId": "REQ-B-TRAIL-CORRIDOR",
+        "artifact": {"kind": "trail-only-binary-mask", "graphicsFormat": "R8_UNorm", "npyDtype": "|u1", "allowedValues": [0, 255], "beautyFallbackAllowed": false},
+        "frozenView": {"viewId": "projectile_front_main", "cameraSerializedReference": "Assets/VFX/Preview/W24S3/VFXPREVIEW_MovingProjectileTrail.unity#MainCamera", "position": [0, 1.3, -6.3], "orientationEulerDegrees": [4.537772, 0, 0], "fovDegrees": 60, "matrixPolicy": "snapshot explicit worldToCamera and GPU projection from this same serialized MainCamera at the retained frame"},
+        "historySource": "W24MovingEmitterTrailProtocol accepted external world emitter samples; TrailRenderer vertices are forbidden as history input",
+        "thresholds": {"minimumHistorySamples": 2, "minimumForegroundPixels": 1, "corridorCoverageMinimum": 0.8, "offCorridorFractionMaximum": 0.2, "corridorRadiusPixels": 8.0, "maximumMeanNearestHistoryDistancePixels": 8.0},
+        "metricPlan": {"tool": "tools/vfx/metrics/render_metrics.py", "bridge": "W24MetricsEvidenceDag", "kind": "trail", "checkIdPattern": "trail-corridor-{seed}-{logicalFrame}", "retainedTravelFrames": [18, 48, 72], "inputFields": ["trail", "historyProjectedPx", "radiusPx", "maxMeanNearestDistancePx", "minCorridorCoverage"], "passRule": "corridorCoverage >= 0.8 and offCorridorFraction <= 0.2 (the latter is 1 - corridorCoverage)"},
+        "seedConsumptionPlan": {"orderedSeeds": [24101, 24111, 24121], "oneRestartPerSeed": true, "restartClearsPriorHistory": true, "normalStopFreezesTailHistoryUntilPoolReset": true, "poolResetMustReportEmptyHistory": true}
+      }
+    },
+    "runtimeEntry": "Assets/VFX/Generated/w24_moving_projectile_trail/VFX_w24_moving_projectile_trail.prefab", "previewScene": "Assets/VFX/Preview/W24S3/VFXPREVIEW_MovingProjectileTrail.unity",
+    "manifest": "ProjectSettings/VFXComposer/BuildManifests/w24_moving_projectile_trail.manifest.json", "implementationTrace": "docs/vfx-traces/w24_moving_projectile_trail.implementation-trace.json",
+    "captureToolBundle": "docs/vfx-contracts/capture-tools/w24-s3-capture-tool.bundle.json", "captureBindingStatus": "PENDING_FIRST_FORMAL_BUILD", "visualStatus": "VISUAL_PENDING"
+  }
+}

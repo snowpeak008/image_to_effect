@@ -1,0 +1,11 @@
+{
+  "scene": "Assets/VFX/Preview/VFXPREVIEW_CoverageGalleryB_3x3.unity",
+  "capture": "one serialized perspective Camera; natural Update; seven sustained entries; preview-only impact readability replay; two one-shot Runtime Entries",
+  "fps": 60,
+  "frames": [
+    { "file": "coverage_b_018.png", "time": 0.3, "aliveEntries": 9, "foregroundPixels": 64077, "cellForegroundPixels": [1951,2156,1157,1044,607,2881,7795,6882,29449], "whiteClipRatio": 0.003262 },
+    { "file": "coverage_b_072.png", "time": 1.2, "aliveEntries": 9, "foregroundPixels": 73989, "cellForegroundPixels": [1749,2293,1682,2381,2668,3949,7233,9646,29690], "whiteClipRatio": 0.005366 },
+    { "file": "coverage_b_180.png", "time": 3, "aliveEntries": 8, "foregroundPixels": 50984, "cellForegroundPixels": [1732,964,1281,1046,791,2643,218,5462,29383], "whiteClipRatio": 0.003158 },
+    { "file": "coverage_b_240.png", "time": 4, "aliveEntries": 9, "foregroundPixels": 63618, "cellForegroundPixels": [2414,1637,1292,1093,785,2138,7705,7043,29230], "whiteClipRatio": 0.00338 }
+  ]
+}

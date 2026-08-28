@@ -1,0 +1,13 @@
+{
+  "schema": "w17-ui-next-candidate/v1",
+  "id": "chest_open_burst_ui_next_candidate",
+  "workPackage": "W17",
+  "candidateStatus": "NEXT_CANDIDATE_VISUAL_PENDING",
+  "userVisualVerdict": null,
+  "preserveRejectedCandidate": true,
+  "effect": "chest_open",
+  "lifecycle": "event",
+  "protocols": ["anchor_rect", "follow_mode", "tease_count_3_5"],
+  "visualCarriers": ["waiting_leak", "hinged_lid", "gold_burst", "five_reward_teasers"],
+  "budget": { "uiElements": 9, "materials": 1, "particleSystems": 0 }
+}

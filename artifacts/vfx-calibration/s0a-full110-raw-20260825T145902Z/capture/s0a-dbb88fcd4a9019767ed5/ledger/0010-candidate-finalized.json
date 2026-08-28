@@ -1,0 +1,1 @@
+{"schema":"w24-s0a-fixture-ledger/v2","sequence":10,"kind":"candidate-finalized","details":{"captureDirectory":"capture","invalidEvidenceRequired":false},"recordedUtc":"2026-08-25T15:30:20.8101222Z","previousEntryHash":"sha256:fd3749fefb253fc3033dc8c22ffcb7900bd875ca6e62fdf3b857113535c47219","entryHash":"sha256:81e9091145d89a9a14916872415305d1ad55e03af7bec55465a7943e9f0d4b76"}

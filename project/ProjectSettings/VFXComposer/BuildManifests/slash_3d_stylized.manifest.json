@@ -1,0 +1,249 @@
+{
+  "manifestVersion": 1,
+  "rulesVersion": "1.0-draft",
+  "enforcement": "legacy_audit",
+  "effectId": "slash_3d_stylized",
+  "archetype": "slash",
+  "recipeVersion": 2,
+  "recipeRevision": 1,
+  "recipeHash": "5128519947144509ec1e56c11bb19db4d805a1bf7424213095f2ee79ab35ecf7",
+  "buildHash": "b8f0afc606e05515d1f4a0590b7252b1dd21b3f990a1415deaa055e91bfec337",
+  "compilerVersion": "s12b-3",
+  "unityVersion": "2022.3.62f3c1",
+  "sourceRecipePath": "Assets/VFX/Recipes/Slash/slash-3d-stylized.default.v2.json",
+  "runtimeEntry": {
+    "kind": "prefab",
+    "path": "Assets/VFX/Generated/slash_3d_stylized/VFX_Slash_3D_Stylized.prefab",
+    "guid": "0dc223c2ffbe2c14aa24f424440f1cd2"
+  },
+  "ownedOutputs": [
+    {
+      "path": "Assets/VFX/Generated/slash_3d_stylized/S12_S12_SlashAfterimage.mat",
+      "guid": "c71f25238ec6de849a1963449b1ecaa7",
+      "assetType": "Material",
+      "sha256": "718c09d5dc003b8c4ebf6bd2f4c9faf917ef3c2690d9e15155e4305afa3f4f27"
+    },
+    {
+      "path": "Assets/VFX/Generated/slash_3d_stylized/S12_S12_SlashBlade.mat",
+      "guid": "7c6dae8ef3dfba7408f636b68717b7a4",
+      "assetType": "Material",
+      "sha256": "994220c1694c7e924dd6db599cb64a955f161d7427339d10072c91ef21675e7d"
+    },
+    {
+      "path": "Assets/VFX/Generated/slash_3d_stylized/S12_S12_SlashPrimary.mat",
+      "guid": "6488d5a34c05ddf40b62789a86458e3c",
+      "assetType": "Material",
+      "sha256": "b8de7be9de05668217952f0b2b90394090deaa06315d4946914ae609109fbb7e"
+    },
+    {
+      "path": "Assets/VFX/Generated/slash_3d_stylized/S12_S12_SlashSpark.mat",
+      "guid": "9d44d163c73a61c46a11d45cb8ffda9f",
+      "assetType": "Material",
+      "sha256": "6987c40fc41be03504a67b643f55ebc662018a16e00c208b822925f5a6a46c25"
+    },
+    {
+      "path": "Assets/VFX/Generated/slash_3d_stylized/VFX_Slash_3D_Stylized.prefab",
+      "guid": "0dc223c2ffbe2c14aa24f424440f1cd2",
+      "assetType": "GameObject",
+      "sha256": "f5e99c5048f383840bf917e2a4952c3ac4479761f7bb7ae16404dcb7c23c51d7"
+    }
+  ],
+  "dependencies": [
+    {
+      "path": "Assets/VFX/Templates/3D/Slash/Materials/S12SlashRevealUnlit.shader",
+      "guid": "ea2cafe5706f4254c80e4024370e8f19",
+      "assetType": "Shader",
+      "version": null,
+      "dependencyHash": "1c7c3e697cdc0826ae47f44cf4f4c791"
+    },
+    {
+      "path": "Assets/VFX/Templates/3D/Slash/Materials/S15PaintedCrescentUnlit.shader",
+      "guid": "9255784678cd56b439e24ec610ecf846",
+      "assetType": "Shader",
+      "version": null,
+      "dependencyHash": "27a12f3b7b4cf114bf93b75a29b2de5c"
+    },
+    {
+      "path": "Assets/VFX/Templates/3D/Slash/Materials/S15SparkAtlasUnlit.shader",
+      "guid": "51dbfee3510116f4bb159a1d5f5e7aa9",
+      "assetType": "Shader",
+      "version": null,
+      "dependencyHash": "bc4da47f3f52e29529c459de9b37b2a4"
+    },
+    {
+      "path": "Assets/VFX/Templates/3D/Slash/Meshes/MESH_S12A_DiamondSpark.asset",
+      "guid": "c6dc773ad0d047d4c8579dc6c0379e67",
+      "assetType": "Mesh",
+      "version": null,
+      "dependencyHash": "0181217483d441e71c67d4210de9261d"
+    },
+    {
+      "path": "Assets/VFX/Templates/3D/Slash/Meshes/MESH_S15_IgnitionCombined.asset",
+      "guid": "cb17f7d7d56b001409bfebf9fcee9468",
+      "assetType": "Mesh",
+      "version": null,
+      "dependencyHash": "d3214a870c677a59f3cc4cf0dfd05cc7"
+    },
+    {
+      "path": "Assets/VFX/Templates/3D/Slash/Meshes/MESH_S15_PaintedAfterimagePlane.asset",
+      "guid": "60bb375f5dc0f8d4aaf666cab88d26a6",
+      "assetType": "Mesh",
+      "version": null,
+      "dependencyHash": "af31919e2b4b598c41031e780416b62c"
+    },
+    {
+      "path": "Assets/VFX/Templates/3D/Slash/Meshes/MESH_S15_PaintedCrescentActionPlane.asset",
+      "guid": "6cc4f35676c007e4ba903c83a3a540db",
+      "assetType": "Mesh",
+      "version": null,
+      "dependencyHash": "bc9c847c36e6e7237775e01ae18aaff1"
+    },
+    {
+      "path": "Assets/VFX/Templates/3D/Slash/Meshes/MESH_S15_PaintedResiduePlane.asset",
+      "guid": "88fce47444e46c945a137e9803fe280c",
+      "assetType": "Mesh",
+      "version": null,
+      "dependencyHash": "3f64455df761fb56bdded165574dadd2"
+    },
+    {
+      "path": "Assets/VFX/Templates/3D/Slash/Meshes/MESH_S15_SparkAtlasQuad.asset",
+      "guid": "2bbeadd5b7ee2dd438c733f3ad3cfae3",
+      "assetType": "Mesh",
+      "version": null,
+      "dependencyHash": "0217a94e52b8baf27baeaec477acd53d"
+    },
+    {
+      "path": "Assets/VFX/Templates/3D/Slash/Meshes/MESH_S15_SparkOuterEdgeSpawn.asset",
+      "guid": "19d7083a1d904a0489d2c2c83b7c4563",
+      "assetType": "Mesh",
+      "version": null,
+      "dependencyHash": "e390930d3584d159e8348c22e2b7064e"
+    },
+    {
+      "path": "Assets/VFX/Templates/3D/Slash/Textures/S15_FieryCrescent_Main_v1.png",
+      "guid": "c9716fca2971a1b4da71af9f19a99547",
+      "assetType": "Texture2D",
+      "version": null,
+      "dependencyHash": "2a839a97b3674287dcc43e4b22b1506f"
+    },
+    {
+      "path": "Assets/VFX/Templates/3D/Slash/Textures/S15_SlashBreakupNoise_v1.png",
+      "guid": "65313cd0f2b9eee4085ad69983cd5bd1",
+      "assetType": "Texture2D",
+      "version": null,
+      "dependencyHash": "c6e7167636c6fd972f6de42de14a508b"
+    },
+    {
+      "path": "Assets/VFX/Templates/3D/Slash/Textures/S15_SparkAtlas_v1.png",
+      "guid": "7d6f8a3fc2e5c0d4a993efafe1bc815b",
+      "assetType": "Texture2D",
+      "version": null,
+      "dependencyHash": "5a47a1b0e0f3ab643dcff65b908a9db6"
+    },
+    {
+      "path": "Packages/com.unity.render-pipelines.universal/Editor/AssetVersion.cs",
+      "guid": "d0353a89b1f911e48b9e16bdc9f2e058",
+      "assetType": "MonoScript",
+      "version": null,
+      "dependencyHash": "32658fcbbe1a332050004e3b27abb4a3"
+    },
+    {
+      "path": "Packages/com.unity.render-pipelines.universal/Shaders/Particles/ParticlesUnlit.shader",
+      "guid": "0406db5a14f94604a8c57ccfbc9f3b46",
+      "assetType": "Shader",
+      "version": null,
+      "dependencyHash": "b7b185925fcbf7b0661368a240b860d4"
+    },
+    {
+      "path": "Packages/com.vfxcomposer.unity/Runtime/Components/SlashAfterimageAlpha.cs",
+      "guid": "2c1e1ba4cf17323429541298eff6252a",
+      "assetType": "MonoScript",
+      "version": null,
+      "dependencyHash": "ed78896b37721f1ffa55a2233cd3ebf5"
+    },
+    {
+      "path": "Packages/com.vfxcomposer.unity/Runtime/Components/SlashArcSweepReveal.cs",
+      "guid": "be3e53d50cc00a846b261073b00c1a9e",
+      "assetType": "MonoScript",
+      "version": null,
+      "dependencyHash": "f7a37848f7367101983836d611fed0e2"
+    },
+    {
+      "path": "Packages/com.vfxcomposer.unity/Runtime/Components/SlashEffectController.cs",
+      "guid": "348e18c253d102c46875b0c84289b40e",
+      "assetType": "MonoScript",
+      "version": null,
+      "dependencyHash": "4cb3fab25aa808be9b5088e5187c4779"
+    },
+    {
+      "path": "Packages/com.vfxcomposer.unity/Runtime/Components/SlashPaintedLayerFade.cs",
+      "guid": "f3ac579e54504bf479543da28fe31ee5",
+      "assetType": "MonoScript",
+      "version": null,
+      "dependencyHash": "2bceaef53a8ed2272515842fcf6fd557"
+    }
+  ],
+  "cost": {
+    "particles": 37,
+    "particleSystems": 3,
+    "renderers": 7,
+    "materials": 4,
+    "trails": 0,
+    "duration": 0.45,
+    "localTextureBytes": 0,
+    "dependencyResidentTextureBytes": 2623480,
+    "gameObjects": 17,
+    "maxDepth": 4
+  },
+  "audit": [
+    {
+      "code": "R8014",
+      "severity": "warning",
+      "path": "/runtimeEntry/path",
+      "message": "Runtime Prefab name must be VFX_<effectId>."
+    },
+    {
+      "code": "R8003",
+      "severity": "warning",
+      "path": "/structure/gameObjects",
+      "message": "Runtime Entry exceeds the configured GameObject budget."
+    },
+    {
+      "code": "R8004",
+      "severity": "warning",
+      "path": "/structure/maxDepth",
+      "message": "Runtime Entry exceeds the configured hierarchy depth."
+    },
+    {
+      "code": "R8018",
+      "severity": "warning",
+      "path": "/ownedOutputs",
+      "message": "Production asset name contains a forbidden development token: S12_S12_SlashAfterimage.mat"
+    },
+    {
+      "code": "R8018",
+      "severity": "warning",
+      "path": "/ownedOutputs",
+      "message": "Production asset name contains a forbidden development token: S12_S12_SlashBlade.mat"
+    },
+    {
+      "code": "R8018",
+      "severity": "warning",
+      "path": "/ownedOutputs",
+      "message": "Production asset name contains a forbidden development token: S12_S12_SlashPrimary.mat"
+    },
+    {
+      "code": "R8018",
+      "severity": "warning",
+      "path": "/ownedOutputs",
+      "message": "Production asset name contains a forbidden development token: S12_S12_SlashSpark.mat"
+    },
+    {
+      "code": "R8011",
+      "severity": "warning",
+      "path": "/ownedOutputs/materials",
+      "message": "Effect exceeds the recommended local Material count."
+    }
+  ],
+  "generatedAtUtc": "2026-08-24T14:10:50.0813345Z"
+}

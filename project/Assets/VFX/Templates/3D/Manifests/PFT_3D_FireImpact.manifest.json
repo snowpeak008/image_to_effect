@@ -1,0 +1,12 @@
+{
+  "manifestVersion": 1,
+  "templateId": "PFT_3D_FireImpact",
+  "templateVersion": "1.0.0",
+  "kind": "impact_burst",
+  "dimension": "3d",
+  "assetGuid": "150a97a57fb7d134b8a4732b6dc81840",
+  "assetPath": "Assets/VFX/Templates/3D/Prefabs/PFT_3D_FireImpact.prefab",
+  "tags": ["fire", "stylized", "3d", "bounds:template-local", "camera:perspective-reviewed"],
+  "parameters": { "count": { "type": "integer", "min": 8, "max": 40, "default": 24, "binding": "3d.impact.count" }, "speed": { "type": "float", "min": 1.5, "max": 6, "default": 3.5, "binding": "3d.impact.speed" } },
+  "cost": { "estimatedPeakParticles": 40, "materials": 1, "trails": 0 }
+}

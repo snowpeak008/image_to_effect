@@ -1,0 +1,38 @@
+{
+  "reviewVersion": "s0a-visual-qa/1.0",
+  "candidateId": "C0",
+  "contractHash": "sha256:ba44573fabb3416f0e5b9cb4734607d115d97c0594817debc816e18d187323d1",
+  "buildHash": "sha256:00d9202f1e5b681617b18863753fff4b8b4a5a539af81f081ed791c892c96e0e",
+  "captureProfileHash": "sha256:1d9ee0b874721a3eb1e45e1d347744f316bbd0f6b407184afcb37bb9abae18db",
+  "evidenceHashes": [
+    "sha256:1922f663b75c9380c539679463d3a653df8c7aaf728710d2519e4513b0235087"
+  ],
+  "imageInputRead": true,
+  "evidenceStatus": "valid",
+  "contractStatus": "unambiguous",
+  "s0aTerminalStatus": null,
+  "qaGateAuthority": "advisory-only",
+  "topLevelRoute": "VISUAL_PASS",
+  "perRequirement": [
+    {
+      "designRequirementId": "s0a.visual.req.8fce7529ac5220d65f12",
+      "state": "pass",
+      "countable": true,
+      "reasonCode": "OBSERVED",
+      "stateRef": "start-steady-stop-cleanup",
+      "frameNumbers": [
+        1,
+        21,
+        60,
+        120,
+        180,
+        240,
+        300,
+        360
+      ],
+      "imageRegion": "flame subject and ground-plane area in all three seed rows",
+      "observation": "Across seeds 0, 1, and 2, the fixed slots collectively show flame onset, a visible sustained flame through frames 21, 60, 120, and 180, extinction in the stop/cleanup sequence, and a cleared final frame 360."
+    }
+  ],
+  "sealedReportHash": "sha256:d786f6f0a12e928627edae4b9e29767f5137813fa0c8ded02de6bfdfee13f98c"
+}

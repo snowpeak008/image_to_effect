@@ -1,0 +1,7 @@
+[
+  {
+    "op": "set_content_param",
+    "path": "/content/parameters/drain_rate",
+    "value": 50.0
+  }
+]

@@ -1,0 +1,50 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.vfxcomposer.dev/desktop/vfxcomposer-handshake-request-v1.schema.json",
+  "title": "VFX Composer handshake request v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "protocolVersion",
+    "messageKind",
+    "requestId",
+    "clientInstanceId",
+    "offeredCapabilities"
+  ],
+  "properties": {
+    "protocolVersion": {
+      "const": "vfxcomposer.protocol/1.0"
+    },
+    "messageKind": {
+      "const": "handshake.request"
+    },
+    "requestId": {
+      "$ref": "#/$defs/correlationToken"
+    },
+    "clientInstanceId": {
+      "$ref": "#/$defs/correlationToken"
+    },
+    "offeredCapabilities": {
+      "type": "array",
+      "maxItems": 64,
+      "uniqueItems": true,
+      "items": {
+        "$ref": "#/$defs/capabilityId"
+      }
+    }
+  },
+  "$defs": {
+    "correlationToken": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 128,
+      "pattern": "^[A-Za-z0-9._:-]+$"
+    },
+    "capabilityId": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 128,
+      "pattern": "^[A-Za-z0-9._:-]+$"
+    }
+  }
+}

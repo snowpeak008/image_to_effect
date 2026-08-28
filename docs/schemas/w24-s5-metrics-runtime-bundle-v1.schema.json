@@ -1,0 +1,173 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://vfxcomposer.local/schemas/w24-s5-metrics-runtime-bundle-v1.schema.json",
+  "title": "W24 S5 synthetic metrics runtime bundle scaffold",
+  "description": "Test/scaffold manifest only. It is not a trusted publication, verification, or execution authority.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "bundleStatus",
+    "platform",
+    "architecture",
+    "pythonVersion",
+    "numpyVersion",
+    "pillowVersion",
+    "entryCommandPolicy",
+    "componentHashes",
+    "files",
+    "fileSetTypedHash",
+    "bundleHashEncoding",
+    "bundleTypedHash"
+  ],
+  "properties": {
+    "schema": {"const": "w24-s5-metrics-runtime-bundle/1"},
+    "bundleStatus": {"const": "SYNTHETIC_SCAFFOLD_ONLY"},
+    "platform": {"const": "windows"},
+    "architecture": {"const": "x86_64"},
+    "pythonVersion": {"type": "string", "pattern": "^Python 3\\.12\\.[0-9]{1,3}$"},
+    "numpyVersion": {"$ref": "#/$defs/versionToken"},
+    "pillowVersion": {"$ref": "#/$defs/versionToken"},
+    "entryCommandPolicy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "executable",
+        "fixedArguments",
+        "ambientPathAllowed",
+        "userSiteAllowed",
+        "networkAllowed",
+        "packageMutationAllowed"
+      ],
+      "properties": {
+        "executable": {
+          "allOf": [
+            {"$ref": "#/$defs/relativePath"},
+            {"pattern": "\\.exe$"}
+          ]
+        },
+        "fixedArguments": {
+          "type": "array",
+          "prefixItems": [{"const": "-I"}, {"const": "-s"}],
+          "items": false,
+          "minItems": 2,
+          "maxItems": 2
+        },
+        "ambientPathAllowed": {"const": false},
+        "userSiteAllowed": {"const": false},
+        "networkAllowed": {"const": false},
+        "packageMutationAllowed": {"const": false}
+      }
+    },
+    "componentHashes": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["python", "numpy", "pillow"],
+      "properties": {
+        "python": {"$ref": "#/$defs/hash"},
+        "numpy": {"$ref": "#/$defs/hash"},
+        "pillow": {"$ref": "#/$defs/hash"}
+      }
+    },
+    "files": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 20000,
+      "items": {"$ref": "#/$defs/file"},
+      "allOf": [
+        {
+          "contains": {
+            "type": "object",
+            "required": ["kind"],
+            "properties": {"kind": {"const": "python-executable"}}
+          },
+          "minContains": 1,
+          "maxContains": 1
+        },
+        {
+          "contains": {
+            "type": "object",
+            "required": ["kind"],
+            "properties": {"kind": {"const": "stdlib"}}
+          },
+          "minContains": 1
+        },
+        {
+          "contains": {
+            "type": "object",
+            "required": ["kind"],
+            "properties": {"kind": {"const": "numpy"}}
+          },
+          "minContains": 1
+        },
+        {
+          "contains": {
+            "type": "object",
+            "required": ["kind"],
+            "properties": {"kind": {"const": "pillow"}}
+          },
+          "minContains": 1
+        }
+      ]
+    },
+    "fileSetTypedHash": {"$ref": "#/$defs/hash"},
+    "bundleHashEncoding": {"const": "w24-typed-binary-v1"},
+    "bundleTypedHash": {"$ref": "#/$defs/hash"}
+  },
+  "$defs": {
+    "hash": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "versionToken": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 96,
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._+-]*$"
+    },
+    "relativePath": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 512,
+      "allOf": [
+        {"pattern": "^[A-Za-z0-9_.+-]{0,127}[A-Za-z0-9_+-](?:/[A-Za-z0-9_.+-]{0,127}[A-Za-z0-9_+-]){0,11}$"},
+        {"not": {"pattern": "(^|/)(?:[Cc][Oo][Nn]|[Pp][Rr][Nn]|[Aa][Uu][Xx]|[Nn][Uu][Ll]|[Cc][Oo][Mm][1-9]|[Ll][Pp][Tt][1-9])(?:\\.|/|$)"}}
+      ]
+    },
+    "file": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "sha256", "byteLength", "component", "kind"],
+      "properties": {
+        "path": {"$ref": "#/$defs/relativePath"},
+        "sha256": {"$ref": "#/$defs/hash"},
+        "byteLength": {"type": "integer", "minimum": 0, "maximum": 134217728},
+        "component": {"enum": ["python", "numpy", "pillow"]},
+        "kind": {
+          "enum": [
+            "python-executable",
+            "python-runtime",
+            "stdlib",
+            "native-dependency",
+            "numpy",
+            "pillow"
+          ]
+        }
+      },
+      "allOf": [
+        {
+          "if": {"properties": {"kind": {"enum": ["python-executable", "python-runtime", "stdlib"]}}},
+          "then": {"properties": {"component": {"const": "python"}}}
+        },
+        {
+          "if": {"properties": {"kind": {"const": "numpy"}}},
+          "then": {"properties": {"component": {"const": "numpy"}}}
+        },
+        {
+          "if": {"properties": {"kind": {"const": "pillow"}}},
+          "then": {"properties": {"component": {"const": "pillow"}}}
+        }
+      ]
+    }
+  }
+}

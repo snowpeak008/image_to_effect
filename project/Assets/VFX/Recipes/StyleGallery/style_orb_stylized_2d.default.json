@@ -1,0 +1,15 @@
+{
+  "schema": "w1-style-next-candidate/v1",
+  "recipeVersion": 1,
+  "revision": 1,
+  "id": "style_orb_stylized_2d",
+  "displayName": "Stylized Orb",
+  "entryKind": "style_token",
+  "archetype": "impact",
+  "dimension": "2d",
+  "styleToken": "stylized",
+  "timingProfile": "painted_sweep",
+  "palette": { "primary": "#E84A1A", "secondary": "#FFB52E", "accent": "#FFF2B8" },
+  "duration": 2.0,
+  "seed": 310101
+}

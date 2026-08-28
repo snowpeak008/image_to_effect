@@ -1,0 +1,14 @@
+{
+  "succeeded": true,
+  "detail": "Assets/VFX/Generated/f1_cinder/VFX_F1_Cinder.prefab",
+  "entries": [
+    {
+      "code": "I400",
+      "severity": "info",
+      "path": "/budget",
+      "message": "Static budget preflight completed for profile mobile_medium.",
+      "actualValue": null,
+      "allowedRange": null
+    }
+  ]
+}

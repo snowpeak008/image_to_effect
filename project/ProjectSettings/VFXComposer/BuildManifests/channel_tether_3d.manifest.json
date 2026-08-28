@@ -1,0 +1,64 @@
+{
+  "manifestVersion": 1,
+  "rulesVersion": "1.0-draft",
+  "enforcement": "strict",
+  "effectId": "channel_tether_3d",
+  "archetype": "beam",
+  "recipeVersion": 1,
+  "recipeRevision": 1,
+  "recipeHash": "de7dc1a5c108642883c203c77c80411a43800b420f09212268271147f706a7ba",
+  "buildHash": "e017ab773c7b93661f91910b5a902f4e3d2beb7060102fb3b47d92519a942f58",
+  "compilerVersion": "interaction-gallery-3",
+  "unityVersion": "2022.3.62f3c1",
+  "sourceRecipePath": "Assets/VFX/Recipes/Beam/channel_tether_3d.default.json",
+  "runtimeEntry": {
+    "kind": "prefab",
+    "path": "Assets/VFX/Generated/channel_tether_3d/VFX_channel_tether_3d.prefab",
+    "guid": "d9ea02582fcd8eb4bbc12d0bdfe091ba"
+  },
+  "ownedOutputs": [
+    {
+      "path": "Assets/VFX/Generated/channel_tether_3d/VFX_channel_tether_3d.prefab",
+      "guid": "d9ea02582fcd8eb4bbc12d0bdfe091ba",
+      "assetType": "GameObject",
+      "sha256": "941e852d70540e3b4a9620b1b8147b9f4be46d91b47a30304ea1c7d8c10c1cc7"
+    }
+  ],
+  "dependencies": [
+    {
+      "path": "Assets/VFX/Shared/CoverageGalleryB/Materials/MAT_CoverageB_Additive.mat",
+      "guid": "688b79adff1f3474da55fb0deedff137",
+      "assetType": "Material",
+      "version": null,
+      "dependencyHash": "0b0b0e70d4676ffab060eedfd9b3ebea"
+    },
+    {
+      "path": "Assets/VFX/Shared/Shaders/CoverageGalleryBUnlit.shader",
+      "guid": "36a2072c324a26a479dfb498994d4812",
+      "assetType": "Shader",
+      "version": null,
+      "dependencyHash": "64f6028fba878ab561a8418a3ea09753"
+    },
+    {
+      "path": "Packages/com.vfxcomposer.unity/Runtime/Components/InteractionGalleryVfxController.cs",
+      "guid": "9c06fdbb4482a7a40862522ad88717b6",
+      "assetType": "MonoScript",
+      "version": null,
+      "dependencyHash": "856d2bcba33bff8d21dd532335cfda8f"
+    }
+  ],
+  "cost": {
+    "particles": 0,
+    "particleSystems": 0,
+    "renderers": 5,
+    "materials": 1,
+    "trails": 0,
+    "duration": 3.0,
+    "localTextureBytes": 0,
+    "dependencyResidentTextureBytes": 0,
+    "gameObjects": 6,
+    "maxDepth": 1
+  },
+  "audit": [],
+  "generatedAtUtc": "2026-08-24T01:24:54.0126298Z"
+}

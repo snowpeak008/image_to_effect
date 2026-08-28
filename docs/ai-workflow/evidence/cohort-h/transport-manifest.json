@@ -1,0 +1,24 @@
+{
+  "version": 1,
+  "cohort": "H",
+  "status": "preregistered_pending_approval",
+  "wireReadback": "unavailable; local payload SHA-256 plus primary-Agent witnessed followup_task is not end-to-end wire proof",
+  "normalization": "Only CRLF and CR normalize to LF for inclusion of a prior machine report. Payload SHA-256 is computed over exact UTF-8 file bytes.",
+  "questions": {
+    "H1": { "kind": "recipe", "agentName": "s9_h_h1", "model": "gpt-5.6-terra", "reasoningEffort": "high", "forkTurns": "none" },
+    "H2": { "kind": "recipe", "agentName": "s9_h_h2", "model": "gpt-5.6-terra", "reasoningEffort": "high", "forkTurns": "none" },
+    "H3": { "kind": "recipe", "agentName": "s9_h_h3", "model": "gpt-5.6-terra", "reasoningEffort": "high", "forkTurns": "none" },
+    "H4": { "kind": "recipe", "agentName": "s9_h_h4", "model": "gpt-5.6-terra", "reasoningEffort": "high", "forkTurns": "none" },
+    "H5": { "kind": "recipe", "agentName": "s9_h_h5", "model": "gpt-5.6-terra", "reasoningEffort": "high", "forkTurns": "none" },
+    "P1": { "kind": "patch", "agentName": "s9_h_p1", "model": "gpt-5.6-terra", "reasoningEffort": "high", "forkTurns": "none" },
+    "P2": { "kind": "patch", "agentName": "s9_h_p2", "model": "gpt-5.6-terra", "reasoningEffort": "high", "forkTurns": "none" },
+    "P3": { "kind": "patch", "agentName": "s9_h_p3", "model": "gpt-5.6-terra", "reasoningEffort": "high", "forkTurns": "none" }
+  },
+  "protocol": {
+    "initialPayload": "{key}.initial.prompt.md; complete frozen contract snapshot plus only that key's original requirement; transport=spawn_agent",
+    "repairPayload": "{key}.repair{1|2}.prompt.md; fixed instruction plus full prior machine report LF-normalized; transport=followup_task in same initial thread",
+    "preparedRecord": "{key}.repair{1|2}.prepared.json; written before pause, records payload and report SHA-256",
+    "actualWitness": "{key}.attempt{0|1|2}.transport.json; write-once asserted local payload hash, actual agent/thread identifiers, and continuity; not wire capture",
+    "limits": "At most attempts 0, 1, 2; final evidence is byte-identical to last attempt; report files are write-once."
+  }
+}

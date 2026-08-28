@@ -1,0 +1,13 @@
+{
+  "recipeVersion": 1,
+  "revision": 3,
+  "id": "frost_impact_2d",
+  "archetype": "impact",
+  "dimension": "2d",
+  "lifecycle": "one_shot",
+  "targetProfile": "pc_editor",
+  "randomSeed": 240817,
+  "duration": 0.48,
+  "shardCount": 12,
+  "ringScale": 1.9
+}

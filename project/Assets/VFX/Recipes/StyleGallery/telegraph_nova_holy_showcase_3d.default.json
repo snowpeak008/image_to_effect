@@ -1,0 +1,15 @@
+{
+  "schema": "w1-style-next-candidate/v1",
+  "recipeVersion": 1,
+  "revision": 1,
+  "id": "telegraph_nova_holy_showcase_3d",
+  "displayName": "Telegraph + Nova / Holy",
+  "entryKind": "telegraph_nova",
+  "archetype": "impact",
+  "dimension": "3d",
+  "styleToken": "stylized",
+  "timingProfile": "telegraph_nova",
+  "palette": { "primary": "#DFAF28", "secondary": "#FFE476", "accent": "#FFFFFF" },
+  "duration": 2.0,
+  "seed": 310111
+}

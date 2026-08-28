@@ -1,0 +1,244 @@
+{
+  "manifestVersion": 1,
+  "rulesVersion": "1.0-draft",
+  "enforcement": "strict",
+  "effectId": "dragon_breath_ultimate_3d",
+  "archetype": "composite",
+  "recipeVersion": 1,
+  "recipeRevision": 1,
+  "recipeHash": "c75fed93e5cf81e2e74e7c2ad559e0e810bb650f9b6c20b5a43110085392a31f",
+  "buildHash": "12fbb691b9f129b07329a126b875671bbf3740aee44994b41798dc59fea9162b",
+  "compilerVersion": "composite-runtime-1",
+  "unityVersion": "2022.3.62f3c1",
+  "sourceRecipePath": "Assets/VFX/Recipes/Composites/Ultimate/dragon_breath_ultimate_3d.default.json",
+  "runtimeEntry": {
+    "kind": "prefab",
+    "path": "Assets/VFX/Generated/dragon_breath_ultimate_3d/VFX_dragon_breath_ultimate_3d.prefab",
+    "guid": "1977c457ec49e7b4fbf95b579a845e88"
+  },
+  "ownedOutputs": [
+    {
+      "path": "Assets/VFX/Generated/dragon_breath_ultimate_3d/Composition.json",
+      "guid": "621dfa46cf8b57d4899fa7613a072112",
+      "assetType": "TextAsset",
+      "sha256": "c56d7e65b7ef1bd734cf830baa176c140643f0ccac51c5f8d3b737791e0e3552"
+    },
+    {
+      "path": "Assets/VFX/Generated/dragon_breath_ultimate_3d/VFX_dragon_breath_ultimate_3d.prefab",
+      "guid": "1977c457ec49e7b4fbf95b579a845e88",
+      "assetType": "GameObject",
+      "sha256": "a1253a333e1a7f1ac38c6cc69e4e41b43173040cd47e4708fdaae44f554e301d"
+    }
+  ],
+  "dependencies": [
+    {
+      "path": "Assets/VFX/Generated/ember_rain_area_3d/VFX_ember_rain_area_3d.prefab",
+      "guid": "9d6d48c8aff9dd4429ba86ceb0fcacca",
+      "assetType": "GameObject",
+      "version": null,
+      "dependencyHash": "dada7238ecee78fe93886490e6cb3983"
+    },
+    {
+      "path": "Assets/VFX/Generated/fire_nova_burst_3d/VFX_fire_nova_burst_3d.prefab",
+      "guid": "4b83a4b465a340949a07a80d7b348968",
+      "assetType": "GameObject",
+      "version": null,
+      "dependencyHash": "76f459aba6d7a4e70e088ba8cbcaf0fa"
+    },
+    {
+      "path": "Assets/VFX/Generated/flamethrower_beam_3d/VFX_flamethrower_beam_3d.prefab",
+      "guid": "b415cb73e1755da4285ceb86def15a6d",
+      "assetType": "GameObject",
+      "version": null,
+      "dependencyHash": "328b6897b0d893151287cbddab66f7e6"
+    },
+    {
+      "path": "Assets/VFX/Generated/focus_charge_3d/VFX_focus_charge_3d.prefab",
+      "guid": "af94060cc32f7ef41bdcb604ce105ab6",
+      "assetType": "GameObject",
+      "version": null,
+      "dependencyHash": "17843b6257154fd13af415822265d1ae"
+    },
+    {
+      "path": "Assets/VFX/Shared/CoverageGalleryB/Materials/MAT_CoverageB_Additive.mat",
+      "guid": "688b79adff1f3474da55fb0deedff137",
+      "assetType": "Material",
+      "version": null,
+      "dependencyHash": "0b0b0e70d4676ffab060eedfd9b3ebea"
+    },
+    {
+      "path": "Assets/VFX/Shared/CoverageGalleryB/Meshes/M_CoverageB_Ring.asset",
+      "guid": "7a536dcec1985cf4a9e09e6df4dbd583",
+      "assetType": "Mesh",
+      "version": null,
+      "dependencyHash": "2925f46e6811e075fedcad822cb3dfcf"
+    },
+    {
+      "path": "Assets/VFX/Shared/Shaders/CoverageGalleryBUnlit.shader",
+      "guid": "36a2072c324a26a479dfb498994d4812",
+      "assetType": "Shader",
+      "version": null,
+      "dependencyHash": "64f6028fba878ab561a8418a3ea09753"
+    },
+    {
+      "path": "Assets/VFX/Shared/Shaders/VfxLayeredRamp.shader",
+      "guid": "81928f0d6aa7a2e4c8cb73230126637f",
+      "assetType": "Shader",
+      "version": null,
+      "dependencyHash": "64048683c60561907c22fac9564aba1d"
+    },
+    {
+      "path": "Assets/VFX/Shared/Shaders/VfxSoftNoise.shader",
+      "guid": "a6e4e3aa82ac7c84d9dd012aaae56c67",
+      "assetType": "Shader",
+      "version": null,
+      "dependencyHash": "daf4e4d9c28a30f0230301e6f07535a5"
+    },
+    {
+      "path": "Assets/VFX/Shared/Styles/Materials/MAT_Style_semireal.mat",
+      "guid": "a6593efc800a7e848b872ad54cde6b3f",
+      "assetType": "Material",
+      "version": null,
+      "dependencyHash": "fabed6c73355309b4089b8513d6ca8fe"
+    },
+    {
+      "path": "Assets/VFX/Shared/Styles/Materials/MAT_Style_stylized.mat",
+      "guid": "0034e6cb149f4034ca9562644ff7ae8d",
+      "assetType": "Material",
+      "version": null,
+      "dependencyHash": "7f3751282b1f62d6cb78f412797ce124"
+    },
+    {
+      "path": "Assets/VFX/Shared/Styles/Meshes/M_Style_Burst.asset",
+      "guid": "0def46dac13f1d8449cd98d98de17a15",
+      "assetType": "Mesh",
+      "version": null,
+      "dependencyHash": "56e972a8f8588a864d379a7611c49c63"
+    },
+    {
+      "path": "Assets/VFX/Shared/Styles/Meshes/M_Style_Quad.asset",
+      "guid": "7f415b79b45b04d4ab5e3f4dd61605aa",
+      "assetType": "Mesh",
+      "version": null,
+      "dependencyHash": "01e83f0bfc8392031ac8f5694416ab10"
+    },
+    {
+      "path": "Assets/VFX/Shared/Styles/Meshes/M_Style_Ring.asset",
+      "guid": "df59364e370c085418d31c0f952bcf1a",
+      "assetType": "Mesh",
+      "version": null,
+      "dependencyHash": "021f9d0fab5159d1d05310de3284c997"
+    },
+    {
+      "path": "Assets/VFX/Shared/Styles/Meshes/M_Style_Shard.asset",
+      "guid": "506c8c0bcf8b14645948b3dbb02a1b3f",
+      "assetType": "Mesh",
+      "version": null,
+      "dependencyHash": "ff113f023e398b26696f0c501ae28324"
+    },
+    {
+      "path": "Packages/com.vfxcomposer.unity/Runtime/Components/CompositeVfxController.cs",
+      "guid": "07d8735a81864834c8f1bda23acf4be2",
+      "assetType": "MonoScript",
+      "version": null,
+      "dependencyHash": "570863f0966daccfed5bf3e887baa10e"
+    },
+    {
+      "path": "Packages/com.vfxcomposer.unity/Runtime/Components/InteractionGalleryVfxController.cs",
+      "guid": "9c06fdbb4482a7a40862522ad88717b6",
+      "assetType": "MonoScript",
+      "version": null,
+      "dependencyHash": "856d2bcba33bff8d21dd532335cfda8f"
+    },
+    {
+      "path": "Packages/com.vfxcomposer.unity/Runtime/Components/StyledVfxController.cs",
+      "guid": "ca6f81a249967414c96082671e07dcaa",
+      "assetType": "MonoScript",
+      "version": null,
+      "dependencyHash": "486e1b8ba27b5e00b709bc5fd2b5624a"
+    }
+  ],
+  "cost": {
+    "particles": 0,
+    "particleSystems": 0,
+    "renderers": 0,
+    "materials": 0,
+    "trails": 0,
+    "duration": 4.0,
+    "localTextureBytes": 0,
+    "dependencyResidentTextureBytes": 0,
+    "gameObjects": 1,
+    "maxDepth": 0
+  },
+  "audit": [],
+  "generatedAtUtc": "2026-08-24T13:35:41.8183933Z",
+  "timeline": [
+    {
+      "t": 0.0,
+      "ref_id": "focus_charge_3d",
+      "action": "play",
+      "overrides": {
+        "scale": 1.0,
+        "palette": "ultimate"
+      }
+    },
+    {
+      "t": 0.8,
+      "ref_id": "flamethrower_beam_3d",
+      "action": "play",
+      "overrides": {
+        "scale": 1.25,
+        "palette": "ultimate"
+      }
+    },
+    {
+      "t": 1.3,
+      "ref_id": "ember_rain_area_3d",
+      "action": "play",
+      "overrides": {
+        "scale": 1.0,
+        "palette": "ultimate"
+      }
+    },
+    {
+      "t": 3.2,
+      "ref_id": "fire_nova_burst_3d",
+      "action": "play",
+      "overrides": {
+        "scale": 1.3,
+        "palette": "ultimate"
+      }
+    }
+  ],
+  "cameraHints": [
+    {
+      "t": 0.7,
+      "type": "zoom",
+      "strength": 0.45
+    },
+    {
+      "t": 1.0,
+      "type": "shake",
+      "strength": 0.55
+    },
+    {
+      "t": 3.2,
+      "type": "slowmo",
+      "strength": 0.35
+    }
+  ],
+  "gates": [],
+  "themeId": null,
+  "compositePeakBudget": {
+    "particles": 32,
+    "particleSystems": 2,
+    "materials": 3,
+    "renderers": 13,
+    "limits": {
+      "particles": 200,
+      "particleSystems": 10,
+      "materials": 10,
+      "renderers": 14
+    }
+  }
+}

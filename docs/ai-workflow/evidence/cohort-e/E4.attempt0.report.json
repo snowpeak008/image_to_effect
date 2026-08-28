@@ -1,0 +1,54 @@
+{
+  "succeeded": false,
+  "detail": null,
+  "entries": [
+    {
+      "code": "E103",
+      "severity": "error",
+      "path": "/stages/launch/modules/launch_flash/kind",
+      "message": "Value is not in the supported enumeration.",
+      "actualValue": "particle",
+      "allowedRange": null
+    },
+    {
+      "code": "E103",
+      "severity": "error",
+      "path": "/stages/travel/modules/energy_body/kind",
+      "message": "Value is not in the supported enumeration.",
+      "actualValue": "particle",
+      "allowedRange": null
+    },
+    {
+      "code": "E103",
+      "severity": "error",
+      "path": "/stages/travel/modules/motion_trail/kind",
+      "message": "Value is not in the supported enumeration.",
+      "actualValue": "particle",
+      "allowedRange": null
+    },
+    {
+      "code": "E103",
+      "severity": "error",
+      "path": "/stages/impact/modules/impact_flash/kind",
+      "message": "Value is not in the supported enumeration.",
+      "actualValue": "particle",
+      "allowedRange": null
+    },
+    {
+      "code": "E103",
+      "severity": "error",
+      "path": "/stages/impact/modules/impact_burst/kind",
+      "message": "Value is not in the supported enumeration.",
+      "actualValue": "particle",
+      "allowedRange": null
+    },
+    {
+      "code": "E103",
+      "severity": "error",
+      "path": "/stages/impact/modules/shockwave/kind",
+      "message": "Value is not in the supported enumeration.",
+      "actualValue": "particle",
+      "allowedRange": null
+    }
+  ]
+}

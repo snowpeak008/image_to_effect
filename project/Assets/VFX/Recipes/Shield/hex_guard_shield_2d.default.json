@@ -1,0 +1,11 @@
+{
+  "recipeVersion": 1,
+  "revision": 2,
+  "id": "hex_guard_shield_2d",
+  "archetype": "shield",
+  "dimension": "2d",
+  "lifecycle": "event_driven",
+  "duration": 2.0,
+  "primaryColor": "#18AFC7",
+  "secondaryColor": "#B2FFF6"
+}

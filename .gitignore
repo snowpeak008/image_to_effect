@@ -1,0 +1,65 @@
+# Unity-generated folders are anchored to the nested Unity project.  Do not use
+# an unanchored Build/ (or similar) pattern: Packages contain formal Editor/Build
+# source and its .meta files.
+/project/[Ll]ibrary/
+/project/[Tt]emp/
+/project/[Oo]bj/
+/project/[Bb]uild/
+/project/[Bb]uilds/
+/project/[Ll]ogs/
+/project/[Uu]ser[Ss]ettings/
+/project/[Mm]emoryCaptures/
+/project/[Rr]ecordings/
+
+# Unity-generated project files, also anchored so formal Assets/Packages files
+# with the same extensions remain versionable.
+/project/*.csproj
+/project/*.sln
+/project/*.user
+/project/*.pidb
+/project/*.booproj
+/project/*.svd
+/project/*.pdb
+/project/*.mdb
+/project/*.opendb
+/project/*.VC.db
+/project/*.unityproj
+/project/*.suo
+/project/*.tmp
+/project/*.userprefs
+/project/*.log
+/project/*.stackdump
+/project/sysinfo.txt
+
+# IDE/build caches are project or repository-root scoped, never recursive.
+/.vs/
+/.idea/
+/.vscode/
+/project/.vs/
+/project/.idea/
+/project/.vscode/
+/project/.gradle/
+/project/.consulo/
+/project/ExportedObj/
+
+# Repository-generated verification output and disposable spike projects.
+/test-results/
+/project/test-results/
+/spike/
+/.codex_tmp/
+/project/.codex_tmp/
+
+# Standalone .NET build outputs. Keep these anchored under the new product roots.
+/apps/**/bin/
+/apps/**/obj/
+/src/**/bin/
+/src/**/obj/
+/services/**/bin/
+/services/**/obj/
+
+# Local Python bytecode/cache from deterministic VFX tooling tests.
+**/__pycache__/
+*.py[cod]
+
+# Assets/, Packages/, ProjectSettings/, and every .meta file are intentionally
+# not ignored. Run tools/audit-gitignore.bat after changing this file.

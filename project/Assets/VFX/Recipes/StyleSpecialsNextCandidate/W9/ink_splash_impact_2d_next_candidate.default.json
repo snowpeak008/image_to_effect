@@ -1,0 +1,32 @@
+{
+  "schema": "style-special-next-candidate/v1",
+  "id": "ink_splash_impact_2d_next_candidate",
+  "sourceId": "ink_splash_impact_2d",
+  "label": "INK SPLASH · BLEED",
+  "group": "w9",
+  "archetype": "impact",
+  "dimension": "2d",
+  "style": "inkwash",
+  "profile": "InkBleed",
+  "semantic": "falling-drop>crown-splash>paper-bleed+ink-dots",
+  "duration": 1.16,
+  "releaseNormalized": 0.19,
+  "sustainEndNormalized": 0.78,
+  "sustained": false,
+  "seed": 9108,
+  "intensity": 0.98,
+  "palette": {
+    "primary": "#111214",
+    "secondary": "#45494E",
+    "accent": "#B6382F"
+  },
+  "meshes": [
+    "Burst",
+    "Ring",
+    "Quad",
+    "Shard"
+  ],
+  "pairFamily": "",
+  "pairRole": "",
+  "sourceBaseId": ""
+}

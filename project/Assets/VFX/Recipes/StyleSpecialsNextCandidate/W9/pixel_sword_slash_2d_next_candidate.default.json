@@ -1,0 +1,31 @@
+{
+  "schema": "style-special-next-candidate/v1",
+  "id": "pixel_sword_slash_2d_next_candidate",
+  "sourceId": "pixel_sword_slash_2d",
+  "label": "PIXEL SLASH · 3 FRAME",
+  "group": "w9",
+  "archetype": "slash",
+  "dimension": "2d",
+  "style": "pixel",
+  "profile": "PixelSequence",
+  "semantic": "3frame-wide>narrow>fragment+fourpoint-hit-star",
+  "duration": 0.72,
+  "releaseNormalized": 0.12,
+  "sustainEndNormalized": 0.64,
+  "sustained": false,
+  "seed": 9102,
+  "intensity": 1.16,
+  "palette": {
+    "primary": "#58B8FF",
+    "secondary": "#D8F4FF",
+    "accent": "#FFFFFF"
+  },
+  "meshes": [
+    "Ribbon",
+    "Shard",
+    "Burst"
+  ],
+  "pairFamily": "",
+  "pairRole": "",
+  "sourceBaseId": ""
+}

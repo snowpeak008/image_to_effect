@@ -1,0 +1,58 @@
+{
+  "recipeVersion": 1,
+  "revision": 1,
+  "id": "hero_entrance_lifecycle_3d",
+  "name": "Hero Entrance",
+  "dimension": "3d",
+  "archetype": "lifecycle",
+  "style": {
+    "token": "semireal",
+    "palette": {
+      "primary": "#B27516",
+      "secondary": "#FFD659",
+      "accent": "#FFFFFF"
+    },
+    "glow_strength": 1.2
+  },
+  "archetypeParameters": {
+    "duration": 1.25,
+    "direction": "down",
+    "edge_color": "#FFF0A0"
+  },
+  "targetProfile": "mobile_medium",
+  "randomSeed": 2642804094,
+  "stages": [
+    {
+      "id": "active",
+      "trigger": "manual",
+      "duration": 1.25,
+      "enabled": true,
+      "modules": [
+        {
+          "id": "core",
+          "kind": "energy_body",
+          "templateId": "PFT_3D_FireCore",
+          "parameters": {
+            "scale": 1.0
+          },
+          "enabled": true
+        },
+        {
+          "id": "secondary",
+          "kind": "secondary_particles",
+          "templateId": "PFT_3D_Embers",
+          "parameters": {
+            "rate": 8.0,
+            "lifetime": 0.45
+          },
+          "attachTo": "core",
+          "enabled": true
+        }
+      ]
+    }
+  ],
+  "metadata": {
+    "createdBy": "w15-authoring",
+    "templateCatalogVersion": "formal-1"
+  }
+}

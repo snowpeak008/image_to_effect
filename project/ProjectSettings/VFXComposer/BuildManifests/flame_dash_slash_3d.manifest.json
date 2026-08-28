@@ -1,0 +1,78 @@
+{
+  "manifestVersion": 1,
+  "rulesVersion": "1.0-draft",
+  "enforcement": "strict",
+  "effectId": "flame_dash_slash_3d",
+  "archetype": "slash",
+  "recipeVersion": 1,
+  "recipeRevision": 1,
+  "recipeHash": "c5f525e24f8b3b6f6ae43a3cfaaf076922dcc2b0e6e7c2ab31f872b784fbc57f",
+  "buildHash": "a3738f653e305f498f6086766504e12c78a30c3480a727e972b917c06fc07efa",
+  "compilerVersion": "styled-content-4",
+  "unityVersion": "2022.3.62f3c1",
+  "sourceRecipePath": "Assets/VFX/Recipes/Composites/HeroComponents/flame_dash_slash_3d.default.json",
+  "runtimeEntry": {
+    "kind": "prefab",
+    "path": "Assets/VFX/Generated/flame_dash_slash_3d/VFX_flame_dash_slash_3d.prefab",
+    "guid": "cde63db081c25ad4f9f792b8ff0717c3"
+  },
+  "ownedOutputs": [
+    {
+      "path": "Assets/VFX/Generated/flame_dash_slash_3d/VFX_flame_dash_slash_3d.prefab",
+      "guid": "cde63db081c25ad4f9f792b8ff0717c3",
+      "assetType": "GameObject",
+      "sha256": "cc567ac065a70b8e69bedefa4381deb4690662c2ac61d3eaf89f196d732d5892"
+    }
+  ],
+  "dependencies": [
+    {
+      "path": "Assets/VFX/Shared/Shaders/VfxLayeredRamp.shader",
+      "guid": "81928f0d6aa7a2e4c8cb73230126637f",
+      "assetType": "Shader",
+      "version": null,
+      "dependencyHash": "64048683c60561907c22fac9564aba1d"
+    },
+    {
+      "path": "Assets/VFX/Shared/Styles/Materials/MAT_Style_stylized.mat",
+      "guid": "0034e6cb149f4034ca9562644ff7ae8d",
+      "assetType": "Material",
+      "version": null,
+      "dependencyHash": "7f3751282b1f62d6cb78f412797ce124"
+    },
+    {
+      "path": "Assets/VFX/Shared/Styles/Meshes/M_Style_Burst.asset",
+      "guid": "0def46dac13f1d8449cd98d98de17a15",
+      "assetType": "Mesh",
+      "version": null,
+      "dependencyHash": "56e972a8f8588a864d379a7611c49c63"
+    },
+    {
+      "path": "Assets/VFX/Shared/Styles/Meshes/M_Style_Ribbon.asset",
+      "guid": "dddd70cae322a2e40b1c5daa80492bd6",
+      "assetType": "Mesh",
+      "version": null,
+      "dependencyHash": "63b4bdca2af28668b73b3c2e60589468"
+    },
+    {
+      "path": "Packages/com.vfxcomposer.unity/Runtime/Components/StyledVfxController.cs",
+      "guid": "ca6f81a249967414c96082671e07dcaa",
+      "assetType": "MonoScript",
+      "version": null,
+      "dependencyHash": "486e1b8ba27b5e00b709bc5fd2b5624a"
+    }
+  ],
+  "cost": {
+    "particles": 0,
+    "particleSystems": 0,
+    "renderers": 3,
+    "materials": 1,
+    "trails": 0,
+    "duration": 0.550000011920929,
+    "localTextureBytes": 0,
+    "dependencyResidentTextureBytes": 0,
+    "gameObjects": 4,
+    "maxDepth": 1
+  },
+  "audit": [],
+  "generatedAtUtc": "2026-08-24T13:34:55.2519557Z"
+}

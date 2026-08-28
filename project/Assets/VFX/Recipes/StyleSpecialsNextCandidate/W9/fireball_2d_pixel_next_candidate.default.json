@@ -1,0 +1,32 @@
+{
+  "schema": "style-special-next-candidate/v1",
+  "id": "fireball_2d_pixel_next_candidate",
+  "sourceId": "fireball_2d_pixel",
+  "label": "FIREBALL · PIXEL REUSE",
+  "group": "w9",
+  "archetype": "projectile",
+  "dimension": "2d",
+  "style": "pixel",
+  "profile": "PixelSequence",
+  "semantic": "reused-fireball-body+12fps-palette+stepped-tail",
+  "duration": 1.18,
+  "releaseNormalized": 0.12,
+  "sustainEndNormalized": 0.77,
+  "sustained": false,
+  "seed": 9110,
+  "intensity": 1.2,
+  "palette": {
+    "primary": "#FF641C",
+    "secondary": "#FFD34A",
+    "accent": "#FFFFFF"
+  },
+  "meshes": [
+    "Quad",
+    "Ring",
+    "Shard",
+    "Shard"
+  ],
+  "pairFamily": "",
+  "pairRole": "",
+  "sourceBaseId": ""
+}

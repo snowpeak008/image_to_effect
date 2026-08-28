@@ -1,0 +1,7 @@
+[
+  {
+    "op": "set_content_param",
+    "path": "/content/parameters/arc_swap_interval",
+    "value": 2.65
+  }
+]

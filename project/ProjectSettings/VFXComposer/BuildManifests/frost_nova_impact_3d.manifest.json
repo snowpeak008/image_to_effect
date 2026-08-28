@@ -1,0 +1,85 @@
+{
+  "manifestVersion": 1,
+  "rulesVersion": "1.0-draft",
+  "enforcement": "strict",
+  "effectId": "frost_nova_impact_3d",
+  "archetype": "impact",
+  "recipeVersion": 1,
+  "recipeRevision": 1,
+  "recipeHash": "323f9836f88393362c74d4845d41d1014a966ae125cfcfc48421661e236f9371",
+  "buildHash": "8121bca5bf4d8c641f27e6317bc3ad9262a0d02286e023a6dc891aea63592ad7",
+  "compilerVersion": "styled-content-4",
+  "unityVersion": "2022.3.62f3c1",
+  "sourceRecipePath": "Assets/VFX/Recipes/Composites/HeroComponents/frost_nova_impact_3d.default.json",
+  "runtimeEntry": {
+    "kind": "prefab",
+    "path": "Assets/VFX/Generated/frost_nova_impact_3d/VFX_frost_nova_impact_3d.prefab",
+    "guid": "a2188b135ad8bc848aa40ffd45bb1d27"
+  },
+  "ownedOutputs": [
+    {
+      "path": "Assets/VFX/Generated/frost_nova_impact_3d/VFX_frost_nova_impact_3d.prefab",
+      "guid": "a2188b135ad8bc848aa40ffd45bb1d27",
+      "assetType": "GameObject",
+      "sha256": "a7ea5cae4723a903374759a47a70d127843b9c0e7822e81828388f2b3a576852"
+    }
+  ],
+  "dependencies": [
+    {
+      "path": "Assets/VFX/Shared/Shaders/VfxHoloFresnel.shader",
+      "guid": "deae41ea852bbc24fbaeed759e6f0519",
+      "assetType": "Shader",
+      "version": null,
+      "dependencyHash": "736c58899b4da5696e81551b737ae1a4"
+    },
+    {
+      "path": "Assets/VFX/Shared/Styles/Materials/MAT_Style_crystal.mat",
+      "guid": "bc24d66004c330e4d8096b92f36347e0",
+      "assetType": "Material",
+      "version": null,
+      "dependencyHash": "99713934b57ce100227f4c9e9cd65221"
+    },
+    {
+      "path": "Assets/VFX/Shared/Styles/Meshes/M_Style_Burst.asset",
+      "guid": "0def46dac13f1d8449cd98d98de17a15",
+      "assetType": "Mesh",
+      "version": null,
+      "dependencyHash": "56e972a8f8588a864d379a7611c49c63"
+    },
+    {
+      "path": "Assets/VFX/Shared/Styles/Meshes/M_Style_Ring.asset",
+      "guid": "df59364e370c085418d31c0f952bcf1a",
+      "assetType": "Mesh",
+      "version": null,
+      "dependencyHash": "021f9d0fab5159d1d05310de3284c997"
+    },
+    {
+      "path": "Assets/VFX/Shared/Styles/Meshes/M_Style_Shard.asset",
+      "guid": "506c8c0bcf8b14645948b3dbb02a1b3f",
+      "assetType": "Mesh",
+      "version": null,
+      "dependencyHash": "ff113f023e398b26696f0c501ae28324"
+    },
+    {
+      "path": "Packages/com.vfxcomposer.unity/Runtime/Components/StyledVfxController.cs",
+      "guid": "ca6f81a249967414c96082671e07dcaa",
+      "assetType": "MonoScript",
+      "version": null,
+      "dependencyHash": "486e1b8ba27b5e00b709bc5fd2b5624a"
+    }
+  ],
+  "cost": {
+    "particles": 0,
+    "particleSystems": 0,
+    "renderers": 3,
+    "materials": 1,
+    "trails": 0,
+    "duration": 0.75,
+    "localTextureBytes": 0,
+    "dependencyResidentTextureBytes": 0,
+    "gameObjects": 4,
+    "maxDepth": 1
+  },
+  "audit": [],
+  "generatedAtUtc": "2026-08-24T13:34:57.0147602Z"
+}

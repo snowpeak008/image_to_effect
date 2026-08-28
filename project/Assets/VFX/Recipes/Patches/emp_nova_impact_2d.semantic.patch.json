@@ -1,0 +1,7 @@
+[
+  {
+    "op": "set_content_param",
+    "path": "/content/parameters/glitch_strength",
+    "value": 0.725
+  }
+]

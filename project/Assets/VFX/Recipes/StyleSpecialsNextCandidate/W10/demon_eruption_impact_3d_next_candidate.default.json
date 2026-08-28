@@ -1,0 +1,33 @@
+{
+  "schema": "style-special-next-candidate/v1",
+  "id": "demon_eruption_impact_3d_next_candidate",
+  "sourceId": "demon_eruption_impact_3d",
+  "label": "DEMON ERUPTION · RISE",
+  "group": "w10",
+  "archetype": "impact",
+  "dimension": "3d",
+  "style": "dark",
+  "profile": "DemonEruption",
+  "semantic": "ground-crack>hand-reveal-rise>black-fire-ring+ash-tail",
+  "duration": 1.48,
+  "releaseNormalized": 0.24,
+  "sustainEndNormalized": 0.76,
+  "sustained": false,
+  "seed": 10109,
+  "intensity": 1.16,
+  "palette": {
+    "primary": "#280B11",
+    "secondary": "#641220",
+    "accent": "#E04432"
+  },
+  "meshes": [
+    "Cone",
+    "Ring",
+    "Shard",
+    "Burst",
+    "FacetA"
+  ],
+  "pairFamily": "",
+  "pairRole": "",
+  "sourceBaseId": ""
+}

@@ -1,0 +1,85 @@
+{
+  "manifestVersion": 1,
+  "rulesVersion": "1.0-draft",
+  "enforcement": "strict",
+  "effectId": "prismatic_shield_3d_holo",
+  "archetype": "shield",
+  "recipeVersion": 1,
+  "recipeRevision": 1,
+  "recipeHash": "e3744740428716c6b89b50386f646899b714bd198b58473b35e9a9f115273b2a",
+  "buildHash": "3252d208c66a2cfe2e8797c603b5e521ed0ed3c7fb0b96433257f4493c058b5a",
+  "compilerVersion": "styled-content-4",
+  "unityVersion": "2022.3.62f3c1",
+  "sourceRecipePath": "Assets/VFX/Recipes/StyleSpecials/Style3D/prismatic_shield_3d_holo.default.json",
+  "runtimeEntry": {
+    "kind": "prefab",
+    "path": "Assets/VFX/Generated/prismatic_shield_3d_holo/VFX_prismatic_shield_3d_holo.prefab",
+    "guid": "162e066bf411a5747b7ea39d6f1ddf40"
+  },
+  "ownedOutputs": [
+    {
+      "path": "Assets/VFX/Generated/prismatic_shield_3d_holo/VFX_prismatic_shield_3d_holo.prefab",
+      "guid": "162e066bf411a5747b7ea39d6f1ddf40",
+      "assetType": "GameObject",
+      "sha256": "59151c29e8e5c4d2f49956603d9866309ac9ca185d0cde8d81dde53869aac43e"
+    }
+  ],
+  "dependencies": [
+    {
+      "path": "Assets/VFX/Shared/Shaders/VfxHoloFresnel.shader",
+      "guid": "deae41ea852bbc24fbaeed759e6f0519",
+      "assetType": "Shader",
+      "version": null,
+      "dependencyHash": "736c58899b4da5696e81551b737ae1a4"
+    },
+    {
+      "path": "Assets/VFX/Shared/Styles/Materials/MAT_Style_holo.mat",
+      "guid": "7db5cf272022f764dafdea6ec2318707",
+      "assetType": "Material",
+      "version": null,
+      "dependencyHash": "60ab0bd7361013108f8a34875a414491"
+    },
+    {
+      "path": "Assets/VFX/Shared/Styles/Meshes/M_Style_Burst.asset",
+      "guid": "0def46dac13f1d8449cd98d98de17a15",
+      "assetType": "Mesh",
+      "version": null,
+      "dependencyHash": "56e972a8f8588a864d379a7611c49c63"
+    },
+    {
+      "path": "Assets/VFX/Shared/Styles/Meshes/M_Style_Quad.asset",
+      "guid": "7f415b79b45b04d4ab5e3f4dd61605aa",
+      "assetType": "Mesh",
+      "version": null,
+      "dependencyHash": "01e83f0bfc8392031ac8f5694416ab10"
+    },
+    {
+      "path": "Assets/VFX/Shared/Styles/Meshes/M_Style_Ring.asset",
+      "guid": "df59364e370c085418d31c0f952bcf1a",
+      "assetType": "Mesh",
+      "version": null,
+      "dependencyHash": "021f9d0fab5159d1d05310de3284c997"
+    },
+    {
+      "path": "Packages/com.vfxcomposer.unity/Runtime/Components/StyledVfxController.cs",
+      "guid": "ca6f81a249967414c96082671e07dcaa",
+      "assetType": "MonoScript",
+      "version": null,
+      "dependencyHash": "486e1b8ba27b5e00b709bc5fd2b5624a"
+    }
+  ],
+  "cost": {
+    "particles": 0,
+    "particleSystems": 0,
+    "renderers": 3,
+    "materials": 1,
+    "trails": 0,
+    "duration": 1.2000000476837158,
+    "localTextureBytes": 0,
+    "dependencyResidentTextureBytes": 0,
+    "gameObjects": 4,
+    "maxDepth": 1
+  },
+  "audit": [],
+  "generatedAtUtc": "2026-08-24T13:14:23.1718097Z"
+}

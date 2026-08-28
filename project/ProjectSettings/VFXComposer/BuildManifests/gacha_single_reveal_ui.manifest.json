@@ -1,0 +1,78 @@
+{
+  "manifestVersion": 1,
+  "rulesVersion": "1.0-draft",
+  "enforcement": "strict",
+  "effectId": "gacha_single_reveal_ui",
+  "archetype": "screen_ui",
+  "recipeVersion": 1,
+  "recipeRevision": 1,
+  "recipeHash": "9ecfce738fabaeb62e212ece9a33b427fcccc6b92ed782bd1525f12c5aa754ca",
+  "buildHash": "2353c11ef365fc0390960a41812bf265c3b7fd10521f5a00ca8a979dfbfc55bd",
+  "compilerVersion": "planned-independent-2",
+  "unityVersion": "2022.3.62f3c1",
+  "sourceRecipePath": "Assets/VFX/Recipes/Independent/GameUI/gacha_single_reveal_ui.default.json",
+  "runtimeEntry": {
+    "kind": "prefab",
+    "path": "Assets/VFX/Generated/gacha_single_reveal_ui/VFX_gacha_single_reveal_ui.prefab",
+    "guid": "6b2191276dce3ec47b9d7faca08fbdfa"
+  },
+  "ownedOutputs": [
+    {
+      "path": "Assets/VFX/Generated/gacha_single_reveal_ui/VFX_gacha_single_reveal_ui.prefab",
+      "guid": "6b2191276dce3ec47b9d7faca08fbdfa",
+      "assetType": "GameObject",
+      "sha256": "d48fa471b25639a6860e55ef12513a5d31ac67b02591a89ce559d0c563d81f08"
+    }
+  ],
+  "dependencies": [
+    {
+      "path": "Packages/com.unity.ugui/Runtime/UI/Core/GraphicRaycaster.cs",
+      "guid": "dc42784cf147c0c48a680349fa168899",
+      "assetType": "MonoScript",
+      "version": null,
+      "dependencyHash": "b7687e7a35fa9aee9d2ef6ea5ac3fec6"
+    },
+    {
+      "path": "Packages/com.unity.ugui/Runtime/UI/Core/Layout/CanvasScaler.cs",
+      "guid": "0cd44c1031e13a943bb63640046fad76",
+      "assetType": "MonoScript",
+      "version": null,
+      "dependencyHash": "8f04981e71e8731b76704ae9194bc1c9"
+    },
+    {
+      "path": "Packages/com.unity.ugui/Runtime/UI/Core/RectMask2D.cs",
+      "guid": "3312d7739989d2b4e91e6319e9a96d76",
+      "assetType": "MonoScript",
+      "version": null,
+      "dependencyHash": "497e9b61d943029bfd8c54ad482e20fe"
+    },
+    {
+      "path": "Packages/com.vfxcomposer.unity/Runtime/Components/CoverageScreenFeedbackGraphic.cs",
+      "guid": "248bab7dd7dd64f4690557e97da3d0f8",
+      "assetType": "MonoScript",
+      "version": null,
+      "dependencyHash": "87a0361bfb2da4fd09d14b8a4da9c827"
+    },
+    {
+      "path": "Packages/com.vfxcomposer.unity/Runtime/Components/PlannedContentVfxController.cs",
+      "guid": "d7026b029b67ff34ab508d467bebadb9",
+      "assetType": "MonoScript",
+      "version": null,
+      "dependencyHash": "c187aa39e7cac5a6339214f4fce2a150"
+    }
+  ],
+  "cost": {
+    "particles": 0,
+    "particleSystems": 0,
+    "renderers": 0,
+    "materials": 0,
+    "trails": 0,
+    "duration": 1.3999999761581421,
+    "localTextureBytes": 0,
+    "dependencyResidentTextureBytes": 0,
+    "gameObjects": 8,
+    "maxDepth": 2
+  },
+  "audit": [],
+  "generatedAtUtc": "2026-08-24T13:19:49.5383625Z"
+}

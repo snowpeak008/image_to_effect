@@ -1,0 +1,103 @@
+{
+  "recipeVersion": 1,
+  "revision": 1,
+  "id": "ghost_curse_shrine_kit_showcase_2d",
+  "name": "Ghost Curse Shrine Kit Showcase 2d",
+  "dimension": "2d",
+  "archetype": "composite",
+  "style": {
+    "token": "stylized",
+    "palette": {
+      "primary": "#24252A",
+      "secondary": "#78757E",
+      "accent": "#B84A42"
+    },
+    "outline": 0.1,
+    "shading_steps": 4,
+    "noise_scale": 1.2,
+    "glow_strength": 1.05
+  },
+  "targetProfile": "mobile_medium",
+  "randomSeed": 4130084105,
+  "stages": [
+    {
+      "id": "main",
+      "trigger": "manual",
+      "duration": 7.0,
+      "enabled": true,
+      "modules": [
+        {
+          "id": "body",
+          "kind": "energy_body",
+          "templateId": "PFT_2D_FireCore",
+          "parameters": {
+            "scale": 1.0
+          },
+          "enabled": true
+        }
+      ]
+    }
+  ],
+  "metadata": {
+    "createdBy": "w13-w18-composite",
+    "templateCatalogVersion": "1.0.0"
+  },
+  "timeline": [
+    {
+      "t": 0.0,
+      "ref_id": "talisman_barrier_shield_2d",
+      "action": "play",
+      "overrides": {
+        "scale": 1.0,
+        "palette": "ghost_ink"
+      }
+    },
+    {
+      "t": 0.8,
+      "ref_id": "arcane_missile_projectile_2d",
+      "action": "play",
+      "overrides": {
+        "scale": 1.0,
+        "palette": "ghost_ink"
+      }
+    },
+    {
+      "t": 1.7,
+      "ref_id": "shadow_grasp_area_2d",
+      "action": "play",
+      "overrides": {
+        "scale": 1.0,
+        "palette": "ghost_ink"
+      }
+    },
+    {
+      "t": 2.6,
+      "ref_id": "curse_mark_status_2d",
+      "action": "play",
+      "overrides": {
+        "scale": 1.0,
+        "palette": "ghost_ink"
+      }
+    },
+    {
+      "t": 3.4,
+      "ref_id": "phantom_wail_area_2d",
+      "action": "play",
+      "overrides": {
+        "scale": 1.0,
+        "palette": "ghost_ink"
+      }
+    },
+    {
+      "t": 4.5,
+      "ref_id": "hundred_ghosts_ultimate_2d",
+      "action": "play",
+      "overrides": {
+        "scale": 0.75,
+        "palette": "ghost_ink"
+      }
+    }
+  ],
+  "camera_hints": [],
+  "gates": []
+}

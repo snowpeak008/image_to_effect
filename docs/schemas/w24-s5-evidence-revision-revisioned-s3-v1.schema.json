@@ -1,0 +1,281 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "w24-s5-evidence-revision-revisioned-s3/1",
+  "title": "W24 S5 immutable evidence revision descriptor — revisioned S3 candidate",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "descriptorStatus",
+    "writer",
+    "effectId",
+    "candidateId",
+    "candidateRevision",
+    "contractRevision",
+    "evidenceRevision",
+    "candidate",
+    "rawCapture",
+    "captureTool",
+    "evaluationInput",
+    "predecessor",
+    "selfHashEncoding",
+    "selfHash"
+  ],
+  "properties": {
+    "schema": {"const": "w24-s5-evidence-revision-revisioned-s3/1"},
+    "descriptorStatus": {"const": "RAW_CAPTURE_SEALED"},
+    "writer": {"$ref": "#/$defs/writer"},
+    "effectId": {"$ref": "#/$defs/effectId"},
+    "candidateId": {"enum": ["C1", "C2"]},
+    "candidateRevision": {"enum": [1, 2]},
+    "contractRevision": {"$ref": "#/$defs/positiveRevision"},
+    "evidenceRevision": {"enum": [1, 2]},
+    "candidate": {"$ref": "#/$defs/revisionedCandidate"},
+    "rawCapture": {"$ref": "#/$defs/rawCaptureBase"},
+    "captureTool": {"$ref": "#/$defs/captureTool"},
+    "evaluationInput": {"$ref": "#/$defs/s3EvaluationInput"},
+    "predecessor": {"oneOf": [{"$ref": "#/$defs/e1Predecessor"}, {"$ref": "#/$defs/e2Predecessor"}]},
+    "selfHashEncoding": {"const": "w24-typed-binary-v1"},
+    "selfHash": {"$ref": "#/$defs/sha256"}
+  },
+  "allOf": [
+    {
+      "oneOf": [
+        {"properties": {"candidateId": {"const": "C1"}, "candidateRevision": {"const": 1}}},
+        {"properties": {"candidateId": {"const": "C2"}, "candidateRevision": {"const": 2}}}
+      ]
+    },
+    {
+      "oneOf": [
+        {
+          "properties": {
+            "evidenceRevision": {"const": 1},
+            "rawCapture": {"$ref": "#/$defs/revisionedE1RawCapture"},
+            "predecessor": {"$ref": "#/$defs/e1Predecessor"}
+          }
+        },
+        {
+          "properties": {
+            "evidenceRevision": {"const": 2},
+            "rawCapture": {"$ref": "#/$defs/revisionedE2RawCapture"},
+            "predecessor": {"$ref": "#/$defs/e2Predecessor"}
+          }
+        }
+      ]
+    }
+  ],
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
+    "effectId": {"type": "string", "minLength": 1, "maxLength": 96, "pattern": "^[a-z0-9]+(?:_[a-z0-9]+)*$"},
+    "positiveRevision": {"type": "integer", "minimum": 1, "maximum": 1000000},
+    "boundedToken": {"type": "string", "minLength": 1, "maxLength": 96, "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]*$"},
+    "versionToken": {"type": "string", "minLength": 3, "maxLength": 96, "pattern": "^[a-z0-9][a-z0-9._-]*/[0-9]+(?:\\.[0-9]+){0,3}$"},
+    "repositoryPath": {"type": "string", "minLength": 1, "maxLength": 512, "pattern": "^(?!/)(?!.*//)(?!.*(?:^|/)\\.\\.?(?:/|$))[A-Za-z0-9_.-]+(?:/[A-Za-z0-9_.-]+)*$"},
+    "assetPath": {"type": "string", "minLength": 8, "maxLength": 260, "pattern": "^Assets/[A-Za-z0-9_.-]+(?:/[A-Za-z0-9_.-]+)*$"},
+    "guid": {"type": "string", "pattern": "^[0-9a-f]{32}$"},
+    "writerSourceSnapshot": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["ordinal", "sourcePath", "sourceSha256", "snapshotPath", "snapshotFileHash"],
+      "properties": {
+        "ordinal": {"type": "integer", "minimum": 0, "maximum": 127},
+        "sourcePath": {"$ref": "#/$defs/repositoryPath"},
+        "sourceSha256": {"$ref": "#/$defs/sha256"},
+        "snapshotPath": {"type": "string", "maxLength": 512, "pattern": "^docs/vfx-candidates/[a-z0-9]+(?:_[a-z0-9]+)*/R[1-9][0-9]*/C[12]/evidence/E[12]/snapshots/writer/sources/[A-Za-z0-9_.-]+(?:/[A-Za-z0-9_.-]+)*$"},
+        "snapshotFileHash": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "writer": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "writerId",
+        "writerVersion",
+        "bundleSnapshotPath",
+        "bundleSnapshotFileHash",
+        "bundleTypedHash",
+        "sourceSnapshots",
+        "sourceSetTypedHash",
+        "descriptorSchemaSnapshotPath",
+        "descriptorSchemaSnapshotFileHash"
+      ],
+      "properties": {
+        "writerId": {"$ref": "#/$defs/boundedToken"},
+        "writerVersion": {"$ref": "#/$defs/versionToken"},
+        "bundleSnapshotPath": {"type": "string", "maxLength": 512, "pattern": "^docs/vfx-candidates/[a-z0-9]+(?:_[a-z0-9]+)*/R[1-9][0-9]*/C[12]/evidence/E[12]/snapshots/writer/writer\\.bundle\\.json$"},
+        "bundleSnapshotFileHash": {"$ref": "#/$defs/sha256"},
+        "bundleTypedHash": {"$ref": "#/$defs/sha256"},
+        "sourceSnapshots": {"type": "array", "minItems": 1, "maxItems": 128, "uniqueItems": true, "items": {"$ref": "#/$defs/writerSourceSnapshot"}},
+        "sourceSetTypedHash": {"$ref": "#/$defs/sha256"},
+        "descriptorSchemaSnapshotPath": {"type": "string", "maxLength": 512, "pattern": "^docs/vfx-candidates/[a-z0-9]+(?:_[a-z0-9]+)*/R[1-9][0-9]*/C[12]/evidence/E[12]/snapshots/schema/w24-s5-evidence-revision-revisioned-s3-v1\\.schema\\.json$"},
+        "descriptorSchemaSnapshotFileHash": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "revisionedCandidate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "receiptPath",
+        "receiptFileHash",
+        "receiptVersion",
+        "contractRevisionNamespace",
+        "previousCandidateReceiptPath",
+        "previousCandidateReceiptFileHash",
+        "contractPath",
+        "contractFileHash",
+        "contractHash",
+        "pendingTracePath",
+        "pendingTraceFileHash",
+        "productionManifestSnapshotPath",
+        "productionManifestSnapshotFileHash",
+        "productionManifestInputFileHash",
+        "buildHash",
+        "captureProfileHash",
+        "ownedOutputRoot",
+        "runtimeEntryPath",
+        "runtimeEntryGuid",
+        "previewScenePath",
+        "previewSceneFileHash"
+      ],
+      "properties": {
+        "receiptPath": {"type": "string", "maxLength": 512, "pattern": "^docs/vfx-candidates/[a-z0-9]+(?:_[a-z0-9]+)*/R[1-9][0-9]*/C[12]/candidate-receipt\\.json$"},
+        "receiptFileHash": {"$ref": "#/$defs/sha256"},
+        "receiptVersion": {"const": "w24-candidate-revision/2.0"},
+        "contractRevisionNamespace": {"type": "string", "pattern": "^R[1-9][0-9]*$", "maxLength": 11},
+        "previousCandidateReceiptPath": {
+          "type": "string",
+          "maxLength": 512,
+          "oneOf": [
+            {"pattern": "^docs/vfx-candidates/[a-z0-9]+(?:_[a-z0-9]+)*/C0/candidate-receipt\\.json$"},
+            {"pattern": "^docs/vfx-candidates/[a-z0-9]+(?:_[a-z0-9]+)*/R[1-9][0-9]*/C1/candidate-receipt\\.json$"}
+          ]
+        },
+        "previousCandidateReceiptFileHash": {"$ref": "#/$defs/sha256"},
+        "contractPath": {"type": "string", "maxLength": 512, "pattern": "^docs/vfx-candidates/[a-z0-9]+(?:_[a-z0-9]+)*/R[1-9][0-9]*/C[12]/design-contract\\.json$"},
+        "contractFileHash": {"$ref": "#/$defs/sha256"},
+        "contractHash": {"$ref": "#/$defs/sha256"},
+        "pendingTracePath": {"type": "string", "maxLength": 512, "pattern": "^docs/vfx-candidates/[a-z0-9]+(?:_[a-z0-9]+)*/R[1-9][0-9]*/C[12]/implementation-trace\\.json$"},
+        "pendingTraceFileHash": {"$ref": "#/$defs/sha256"},
+        "productionManifestSnapshotPath": {"type": "string", "maxLength": 512, "pattern": "^docs/vfx-candidates/[a-z0-9]+(?:_[a-z0-9]+)*/R[1-9][0-9]*/C[12]/production-manifest\\.json$"},
+        "productionManifestSnapshotFileHash": {"$ref": "#/$defs/sha256"},
+        "productionManifestInputFileHash": {"$ref": "#/$defs/sha256"},
+        "buildHash": {"$ref": "#/$defs/sha256"},
+        "captureProfileHash": {"$ref": "#/$defs/sha256"},
+        "ownedOutputRoot": {"type": "string", "maxLength": 260, "pattern": "^Assets/VFX/Candidates/R(?:[1-9][0-9]{0,5}|1000000)/C[12]/[a-z0-9]+(?:_[a-z0-9]+)*$"},
+        "runtimeEntryPath": {"type": "string", "maxLength": 260, "pattern": "^Assets/VFX/Candidates/R(?:[1-9][0-9]{0,5}|1000000)/C[12]/[a-z0-9]+(?:_[a-z0-9]+)*/[A-Za-z0-9_.-]+(?:/[A-Za-z0-9_.-]+)*\\.prefab$"},
+        "runtimeEntryGuid": {"$ref": "#/$defs/guid"},
+        "previewScenePath": {"type": "string", "maxLength": 260, "pattern": "^Assets/VFX/Candidates/R(?:[1-9][0-9]{0,5}|1000000)/C[12]/[a-z0-9]+(?:_[a-z0-9]+)*/Preview/[A-Za-z0-9_.-]+(?:/[A-Za-z0-9_.-]+)*\\.unity$"},
+        "previewSceneFileHash": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "rawCaptureBase": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["layout", "root", "captureMetadataPath", "captureMetadataFileHash", "evidenceSealPath", "evidenceSealFileHash", "evidenceSealHash", "evidenceLockPath", "evidenceLockFileHash", "diagnosticPassManifestPath", "diagnosticPassManifestFileHash", "artifactCount", "totalBytes", "fileSetTypedHash"],
+      "properties": {
+        "layout": {"const": "EVIDENCE_REVISION_RAW"},
+        "root": {"$ref": "#/$defs/repositoryPath"},
+        "captureMetadataPath": {"$ref": "#/$defs/repositoryPath"},
+        "captureMetadataFileHash": {"$ref": "#/$defs/sha256"},
+        "evidenceSealPath": {"$ref": "#/$defs/repositoryPath"},
+        "evidenceSealFileHash": {"$ref": "#/$defs/sha256"},
+        "evidenceSealHash": {"$ref": "#/$defs/sha256"},
+        "evidenceLockPath": {"$ref": "#/$defs/repositoryPath"},
+        "evidenceLockFileHash": {"$ref": "#/$defs/sha256"},
+        "diagnosticPassManifestPath": {"$ref": "#/$defs/repositoryPath"},
+        "diagnosticPassManifestFileHash": {"$ref": "#/$defs/sha256"},
+        "artifactCount": {"type": "integer", "minimum": 4, "maximum": 512},
+        "totalBytes": {"type": "integer", "minimum": 1, "maximum": 1073741824},
+        "fileSetTypedHash": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "revisionedE1RawCapture": {
+      "allOf": [
+        {"$ref": "#/$defs/rawCaptureBase"},
+        {"properties": {
+          "root": {"type": "string", "pattern": "^artifacts/vfx-evidence/[a-z0-9]+(?:_[a-z0-9]+)*/R[1-9][0-9]*/C[12]/E1/raw$"},
+          "captureMetadataPath": {"type": "string", "pattern": "^artifacts/vfx-evidence/[a-z0-9]+(?:_[a-z0-9]+)*/R[1-9][0-9]*/C[12]/E1/raw/capture-metadata\\.json$"},
+          "evidenceSealPath": {"type": "string", "pattern": "^artifacts/vfx-evidence/[a-z0-9]+(?:_[a-z0-9]+)*/R[1-9][0-9]*/C[12]/E1/raw/evidence-seal\\.json$"},
+          "evidenceLockPath": {"type": "string", "pattern": "^artifacts/vfx-evidence/[a-z0-9]+(?:_[a-z0-9]+)*/R[1-9][0-9]*/C[12]/E1/raw/evidence-lock\\.json$"},
+          "diagnosticPassManifestPath": {"type": "string", "pattern": "^artifacts/vfx-evidence/[a-z0-9]+(?:_[a-z0-9]+)*/R[1-9][0-9]*/C[12]/E1/raw/diagnostic-pass-manifest\\.json$"}
+        }}
+      ]
+    },
+    "revisionedE2RawCapture": {
+      "allOf": [
+        {"$ref": "#/$defs/rawCaptureBase"},
+        {"properties": {
+          "root": {"type": "string", "pattern": "^artifacts/vfx-evidence/[a-z0-9]+(?:_[a-z0-9]+)*/R[1-9][0-9]*/C[12]/E2/raw$"},
+          "captureMetadataPath": {"type": "string", "pattern": "^artifacts/vfx-evidence/[a-z0-9]+(?:_[a-z0-9]+)*/R[1-9][0-9]*/C[12]/E2/raw/capture-metadata\\.json$"},
+          "evidenceSealPath": {"type": "string", "pattern": "^artifacts/vfx-evidence/[a-z0-9]+(?:_[a-z0-9]+)*/R[1-9][0-9]*/C[12]/E2/raw/evidence-seal\\.json$"},
+          "evidenceLockPath": {"type": "string", "pattern": "^artifacts/vfx-evidence/[a-z0-9]+(?:_[a-z0-9]+)*/R[1-9][0-9]*/C[12]/E2/raw/evidence-lock\\.json$"},
+          "diagnosticPassManifestPath": {"type": "string", "pattern": "^artifacts/vfx-evidence/[a-z0-9]+(?:_[a-z0-9]+)*/R[1-9][0-9]*/C[12]/E2/raw/diagnostic-pass-manifest\\.json$"}
+        }}
+      ]
+    },
+    "captureToolSourceSnapshot": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["ordinal", "sourcePath", "sourceSha256", "snapshotPath", "snapshotFileHash"],
+      "properties": {
+        "ordinal": {"type": "integer", "minimum": 0, "maximum": 127},
+        "sourcePath": {"$ref": "#/$defs/repositoryPath"},
+        "sourceSha256": {"$ref": "#/$defs/sha256"},
+        "snapshotPath": {"type": "string", "maxLength": 512, "pattern": "^docs/vfx-candidates/[a-z0-9]+(?:_[a-z0-9]+)*/R[1-9][0-9]*/C[12]/evidence/E[12]/snapshots/capture-tool/sources/[A-Za-z0-9_.-]+(?:/[A-Za-z0-9_.-]+)*$"},
+        "snapshotFileHash": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "captureTool": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["toolVersion", "bundleSnapshotPath", "bundleSnapshotFileHash", "bundleCanonicalHash", "sourceSnapshots", "sourceSetTypedHash"],
+      "properties": {
+        "toolVersion": {"$ref": "#/$defs/versionToken"},
+        "bundleSnapshotPath": {"type": "string", "maxLength": 512, "pattern": "^docs/vfx-candidates/[a-z0-9]+(?:_[a-z0-9]+)*/R[1-9][0-9]*/C[12]/evidence/E[12]/snapshots/capture-tool/capture-tool\\.bundle\\.json$"},
+        "bundleSnapshotFileHash": {"$ref": "#/$defs/sha256"},
+        "bundleCanonicalHash": {"$ref": "#/$defs/sha256"},
+        "sourceSnapshots": {"type": "array", "minItems": 1, "maxItems": 128, "uniqueItems": true, "items": {"$ref": "#/$defs/captureToolSourceSnapshot"}},
+        "sourceSetTypedHash": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "s3EvaluationInput": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schema", "metricsInputPath", "metricsInputFileHash", "capturedMetricsReportPath", "capturedMetricsReportFileHash", "metricsToolSnapshotPath", "metricsToolSnapshotFileHash", "metricsEnvironmentPath", "metricsEnvironmentFileHash", "requiredEvidenceMatrixHash", "typedRawSetHash"],
+      "properties": {
+        "schema": {"const": "w24-s5-eval-input-s3-render-metrics/1"},
+        "metricsInputPath": {"type": "string", "maxLength": 512, "pattern": "^artifacts/vfx-evidence/[a-z0-9]+(?:_[a-z0-9]+)*/R[1-9][0-9]*/C[12]/E[12]/raw/diagnostics/metrics-input\\.json$"},
+        "metricsInputFileHash": {"$ref": "#/$defs/sha256"},
+        "capturedMetricsReportPath": {"type": "string", "maxLength": 512, "pattern": "^artifacts/vfx-evidence/[a-z0-9]+(?:_[a-z0-9]+)*/R[1-9][0-9]*/C[12]/E[12]/raw/diagnostics/metrics-report\\.json$"},
+        "capturedMetricsReportFileHash": {"$ref": "#/$defs/sha256"},
+        "metricsToolSnapshotPath": {"type": "string", "maxLength": 512, "pattern": "^docs/vfx-candidates/[a-z0-9]+(?:_[a-z0-9]+)*/R[1-9][0-9]*/C[12]/evidence/E[12]/snapshots/evaluation/render_metrics\\.py$"},
+        "metricsToolSnapshotFileHash": {"$ref": "#/$defs/sha256"},
+        "metricsEnvironmentPath": {"type": "string", "maxLength": 512, "pattern": "^docs/vfx-candidates/[a-z0-9]+(?:_[a-z0-9]+)*/R[1-9][0-9]*/C[12]/evidence/E[12]/snapshots/evaluation/metrics-environment\\.json$"},
+        "metricsEnvironmentFileHash": {"$ref": "#/$defs/sha256"},
+        "requiredEvidenceMatrixHash": {"$ref": "#/$defs/sha256"},
+        "typedRawSetHash": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "e1Predecessor": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind"],
+      "properties": {"kind": {"const": "NONE"}}
+    },
+    "e2Predecessor": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "evidenceRevision", "descriptorPath", "descriptorFileHash", "gateReportPath", "gateReportFileHash", "evidenceInvalidReceiptPath", "evidenceInvalidReceiptFileHash"],
+      "properties": {
+        "kind": {"const": "EVIDENCE_INVALID"},
+        "evidenceRevision": {"const": 1},
+        "descriptorPath": {"type": "string", "maxLength": 512, "pattern": "^docs/vfx-candidates/[a-z0-9]+(?:_[a-z0-9]+)*/R[1-9][0-9]*/C[12]/evidence/E1/evidence-revision\\.json$"},
+        "descriptorFileHash": {"$ref": "#/$defs/sha256"},
+        "gateReportPath": {"type": "string", "maxLength": 512, "pattern": "^docs/vfx-candidates/[a-z0-9]+(?:_[a-z0-9]+)*/R[1-9][0-9]*/C[12]/evidence/E1/terminal/machine-gate-report\\.json$"},
+        "gateReportFileHash": {"$ref": "#/$defs/sha256"},
+        "evidenceInvalidReceiptPath": {"type": "string", "maxLength": 512, "pattern": "^docs/vfx-candidates/[a-z0-9]+(?:_[a-z0-9]+)*/R[1-9][0-9]*/C[12]/evidence/E1/terminal/evidence-invalid-receipt\\.json$"},
+        "evidenceInvalidReceiptFileHash": {"$ref": "#/$defs/sha256"}
+      }
+    }
+  }
+}

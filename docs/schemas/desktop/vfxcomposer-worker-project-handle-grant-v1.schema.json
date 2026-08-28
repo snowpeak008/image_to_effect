@@ -1,0 +1,99 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.vfxcomposer.dev/desktop/vfxcomposer-worker-project-handle-grant-v1.schema.json",
+  "title": "VFX Composer Worker-only project handle grant v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "protocolVersion",
+    "messageKind",
+    "requestId",
+    "leaseId",
+    "registeredProjectId",
+    "projectIdentity",
+    "volumeIdentity",
+    "repositoryIdentity",
+    "projectRootIdentity",
+    "brokerGeneration",
+    "registrationGeneration",
+    "leaseGeneration",
+    "workerSessionId",
+    "workerProcessEpoch",
+    "handleEncoding",
+    "volumeHandle",
+    "repositoryHandle",
+    "projectRootHandle",
+    "selfHash"
+  ],
+  "properties": {
+    "protocolVersion": { "const": "vfxcomposer.protocol/1.0" },
+    "messageKind": { "const": "worker.project.handle.grant" },
+    "requestId": { "$ref": "#/$defs/token" },
+    "leaseId": { "$ref": "#/$defs/token" },
+    "registeredProjectId": { "$ref": "#/$defs/token" },
+    "projectIdentity": { "$ref": "#/$defs/projectIdentity" },
+    "volumeIdentity": { "$ref": "#/$defs/volumeIdentity" },
+    "repositoryIdentity": { "$ref": "#/$defs/directoryIdentity" },
+    "projectRootIdentity": { "$ref": "#/$defs/directoryIdentity" },
+    "brokerGeneration": { "$ref": "#/$defs/positiveGeneration" },
+    "registrationGeneration": { "$ref": "#/$defs/positiveGeneration" },
+    "leaseGeneration": { "$ref": "#/$defs/positiveGeneration" },
+    "workerSessionId": { "$ref": "#/$defs/token" },
+    "workerProcessEpoch": { "$ref": "#/$defs/token" },
+    "handleEncoding": { "const": "win-handle-u64-lower-hex/1" },
+    "volumeHandle": { "$ref": "#/$defs/handle" },
+    "repositoryHandle": { "$ref": "#/$defs/handle" },
+    "projectRootHandle": { "$ref": "#/$defs/handle" },
+    "selfHash": { "$ref": "#/$defs/selfHash" }
+  },
+  "$defs": {
+    "token": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 128,
+      "pattern": "^[A-Za-z0-9._:-]+$"
+    },
+    "positiveGeneration": { "type": "integer", "minimum": 1, "maximum": 9223372036854775807 },
+    "handle": {
+      "type": "string",
+      "pattern": "^(?!0000000000000000$)(?!ffffffffffffffff$)[0-9a-f]{16}$"
+    },
+    "digest": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" },
+    "projectIdentity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["typeTag", "digest"],
+      "properties": {
+        "typeTag": { "const": "vfxcomposer.project-identity/1" },
+        "digest": { "$ref": "#/$defs/digest" }
+      }
+    },
+    "volumeIdentity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["typeTag", "digest"],
+      "properties": {
+        "typeTag": { "const": "vfxcomposer.volume-identity/1" },
+        "digest": { "$ref": "#/$defs/digest" }
+      }
+    },
+    "directoryIdentity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["typeTag", "digest"],
+      "properties": {
+        "typeTag": { "const": "vfxcomposer.directory-identity/1" },
+        "digest": { "$ref": "#/$defs/digest" }
+      }
+    },
+    "selfHash": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["typeTag", "digest"],
+      "properties": {
+        "typeTag": { "const": "vfxcomposer.worker-project-handle-grant/1" },
+        "digest": { "$ref": "#/$defs/digest" }
+      }
+    }
+  }
+}

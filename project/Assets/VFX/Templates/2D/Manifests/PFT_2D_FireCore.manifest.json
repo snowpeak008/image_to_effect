@@ -1,0 +1,12 @@
+{
+  "manifestVersion": 1,
+  "templateId": "PFT_2D_FireCore",
+  "templateVersion": "1.0.0",
+  "kind": "energy_body",
+  "dimension": "2d",
+  "assetGuid": "dd90f48c6171c0749a07eee8b939a0a2",
+  "assetPath": "Assets/VFX/Templates/2D/Prefabs/PFT_2D_FireCore.prefab",
+  "tags": ["fire", "stylized", "2d"],
+  "parameters": { "scale": { "type": "float", "min": .6, "max": 2.4, "default": 1.2, "binding": "core.scale" } },
+  "cost": { "estimatedPeakParticles": 0, "materials": 1, "trails": 0 }
+}

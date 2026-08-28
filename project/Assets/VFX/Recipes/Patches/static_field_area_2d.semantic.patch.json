@@ -1,0 +1,7 @@
+[
+  {
+    "op": "set_content_param",
+    "path": "/content/parameters/arc_frequency",
+    "value": 0.65
+  }
+]

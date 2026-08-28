@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<test-run id="2" testcasecount="12" result="Passed" total="12" passed="12" failed="0" inconclusive="0" skipped="0" asserts="0" engine-version="3.5.0.0" clr-version="4.0.30319.42000" start-time="2026-08-25 14:36:06Z" end-time="2026-08-25 14:36:06Z" duration="0.3221778">
+  <test-suite type="TestSuite" id="1541" name="project" fullname="project" runstate="Runnable" testcasecount="442" result="Passed" start-time="2026-08-25 14:36:06Z" end-time="2026-08-25 14:36:06Z" duration="0.322178" total="12" passed="12" failed="0" inconclusive="0" skipped="0" asserts="0">
+    <properties />
+    <test-suite type="Assembly" id="2075" name="VFXComposer.Tests.EditMode.dll" fullname="D:/WorkWork/Assist/image_to_smart/.codex_tmp/w24-fresh-20260825-0628/project/Library/ScriptAssemblies/VFXComposer.Tests.EditMode.dll" runstate="Runnable" testcasecount="440" result="Passed" start-time="2026-08-25 14:36:06Z" end-time="2026-08-25 14:36:06Z" duration="0.307171" total="12" passed="12" failed="0" inconclusive="0" skipped="0" asserts="0">
+      <properties>
+        <property name="_PID" value="20464" />
+        <property name="_APPDOMAIN" value="Unity Child Domain" />
+        <property name="platform" value="EditMode" />
+      </properties>
+      <test-suite type="TestSuite" id="2076" name="VFXComposer" fullname="VFXComposer" runstate="Runnable" testcasecount="440" result="Passed" start-time="2026-08-25 14:36:06Z" end-time="2026-08-25 14:36:06Z" duration="0.303698" total="12" passed="12" failed="0" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <test-suite type="TestSuite" id="2077" name="Tests" fullname="VFXComposer.Tests" runstate="Runnable" testcasecount="440" result="Passed" start-time="2026-08-25 14:36:06Z" end-time="2026-08-25 14:36:06Z" duration="0.300502" total="12" passed="12" failed="0" inconclusive="0" skipped="0" asserts="0">
+          <properties />
+          <test-suite type="TestSuite" id="2078" name="EditMode" fullname="VFXComposer.Tests.EditMode" runstate="Runnable" testcasecount="440" result="Passed" start-time="2026-08-25 14:36:06Z" end-time="2026-08-25 14:36:06Z" duration="0.297054" total="12" passed="12" failed="0" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <test-suite type="TestFixture" id="1921" name="W24S4MigrationAuditTests" fullname="VFXComposer.Tests.EditMode.W24S4MigrationAuditTests" classname="VFXComposer.Tests.EditMode.W24S4MigrationAuditTests" runstate="Runnable" testcasecount="12" result="Passed" start-time="2026-08-25 14:36:06Z" end-time="2026-08-25 14:36:06Z" duration="0.290211" total="12" passed="12" failed="0" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <test-case id="1932" name="Apply_PreservesBothPrimaryAndRollbackFailures" fullname="VFXComposer.Tests.EditMode.W24S4MigrationAuditTests.Apply_PreservesBothPrimaryAndRollbackFailures" methodname="Apply_PreservesBothPrimaryAndRollbackFailures" classname="VFXComposer.Tests.EditMode.W24S4MigrationAuditTests" runstate="Runnable" seed="863904315" result="Passed" start-time="2026-08-25 14:36:06Z" end-time="2026-08-25 14:36:06Z" duration="0.113732" asserts="0">
+                <properties />
+              </test-case>
+              <test-case id="1933" name="Apply_RefusesWhenLiveOwnershipCannotBeReverified" fullname="VFXComposer.Tests.EditMode.W24S4MigrationAuditTests.Apply_RefusesWhenLiveOwnershipCannotBeReverified" methodname="Apply_RefusesWhenLiveOwnershipCannotBeReverified" classname="VFXComposer.Tests.EditMode.W24S4MigrationAuditTests" runstate="Runnable" seed="1880969676" result="Passed" start-time="2026-08-25 14:36:06Z" end-time="2026-08-25 14:36:06Z" duration="0.014232" asserts="0">
+                <properties />
+              </test-case>
+              <test-case id="1931" name="Apply_RollsBackWhenTransactionFails" fullname="VFXComposer.Tests.EditMode.W24S4MigrationAuditTests.Apply_RollsBackWhenTransactionFails" methodname="Apply_RollsBackWhenTransactionFails" classname="VFXComposer.Tests.EditMode.W24S4MigrationAuditTests" runstate="Runnable" seed="1584811963" result="Passed" start-time="2026-08-25 14:36:06Z" end-time="2026-08-25 14:36:06Z" duration="0.012619" asserts="0">
+                <properties />
+              </test-case>
+              <test-case id="1929" name="ApplyToken_IsBoundToExactPlanAndOperationBytes" fullname="VFXComposer.Tests.EditMode.W24S4MigrationAuditTests.ApplyToken_IsBoundToExactPlanAndOperationBytes" methodname="ApplyToken_IsBoundToExactPlanAndOperationBytes" classname="VFXComposer.Tests.EditMode.W24S4MigrationAuditTests" runstate="Runnable" seed="1489208750" result="Passed" start-time="2026-08-25 14:36:06Z" end-time="2026-08-25 14:36:06Z" duration="0.014935" asserts="0">
+                <properties />
+              </test-case>
+              <test-case id="1928" name="ApplyToken_IsInvalidatedWhenAuthoritativeAdrBytesChange" fullname="VFXComposer.Tests.EditMode.W24S4MigrationAuditTests.ApplyToken_IsInvalidatedWhenAuthoritativeAdrBytesChange" methodname="ApplyToken_IsInvalidatedWhenAuthoritativeAdrBytesChange" classname="VFXComposer.Tests.EditMode.W24S4MigrationAuditTests" runstate="Runnable" seed="926928168" result="Passed" start-time="2026-08-25 14:36:06Z" end-time="2026-08-25 14:36:06Z" duration="0.019250" asserts="0">
+                <properties />
+              </test-case>
+              <test-case id="1930" name="BatchToken_CannotAuthorizeAnUnlistedOperation" fullname="VFXComposer.Tests.EditMode.W24S4MigrationAuditTests.BatchToken_CannotAuthorizeAnUnlistedOperation" methodname="BatchToken_CannotAuthorizeAnUnlistedOperation" classname="VFXComposer.Tests.EditMode.W24S4MigrationAuditTests" runstate="Runnable" seed="1867256633" result="Passed" start-time="2026-08-25 14:36:06Z" end-time="2026-08-25 14:36:06Z" duration="0.021124" asserts="0">
+                <properties />
+              </test-case>
+              <test-case id="1927" name="DefaultPlan_CannotApplyWhileAdr001RemainsUnapproved" fullname="VFXComposer.Tests.EditMode.W24S4MigrationAuditTests.DefaultPlan_CannotApplyWhileAdr001RemainsUnapproved" methodname="DefaultPlan_CannotApplyWhileAdr001RemainsUnapproved" classname="VFXComposer.Tests.EditMode.W24S4MigrationAuditTests" runstate="Runnable" seed="1526689833" result="Passed" start-time="2026-08-25 14:36:06Z" end-time="2026-08-25 14:36:06Z" duration="0.012752" asserts="0">
+                <properties />
+              </test-case>
+              <test-case id="1926" name="DryRunPlan_RequiresMatchingExplicitUserTokenAndOwnershipBeforeApply" fullname="VFXComposer.Tests.EditMode.W24S4MigrationAuditTests.DryRunPlan_RequiresMatchingExplicitUserTokenAndOwnershipBeforeApply" methodname="DryRunPlan_RequiresMatchingExplicitUserTokenAndOwnershipBeforeApply" classname="VFXComposer.Tests.EditMode.W24S4MigrationAuditTests" runstate="Runnable" seed="622122203" result="Passed" start-time="2026-08-25 14:36:06Z" end-time="2026-08-25 14:36:06Z" duration="0.016240" asserts="0">
+                <properties />
+              </test-case>
+              <test-case id="1925" name="LegacyAudit_RemainsLegacyRetention_AndDoesNotBecomeAnApproval" fullname="VFXComposer.Tests.EditMode.W24S4MigrationAuditTests.LegacyAudit_RemainsLegacyRetention_AndDoesNotBecomeAnApproval" methodname="LegacyAudit_RemainsLegacyRetention_AndDoesNotBecomeAnApproval" classname="VFXComposer.Tests.EditMode.W24S4MigrationAuditTests" runstate="Runnable" seed="1937409628" result="Passed" start-time="2026-08-25 14:36:06Z" end-time="2026-08-25 14:36:06Z" duration="0.011499" asserts="0">
+                <properties />
+              </test-case>
+              <test-case id="1922" name="ScanProject_IsDeterministic_ReadOnly_AndNeverAssignsAMaturityLevel" fullname="VFXComposer.Tests.EditMode.W24S4MigrationAuditTests.ScanProject_IsDeterministic_ReadOnly_AndNeverAssignsAMaturityLevel" methodname="ScanProject_IsDeterministic_ReadOnly_AndNeverAssignsAMaturityLevel" classname="VFXComposer.Tests.EditMode.W24S4MigrationAuditTests" runstate="Runnable" seed="1578773219" result="Passed" start-time="2026-08-25 14:36:06Z" end-time="2026-08-25 14:36:06Z" duration="0.012022" asserts="0">
+                <properties />
+              </test-case>
+              <test-case id="1924" name="ScanProject_RejectsTamperedNonEntryOwnedOutput" fullname="VFXComposer.Tests.EditMode.W24S4MigrationAuditTests.ScanProject_RejectsTamperedNonEntryOwnedOutput" methodname="ScanProject_RejectsTamperedNonEntryOwnedOutput" classname="VFXComposer.Tests.EditMode.W24S4MigrationAuditTests" runstate="Runnable" seed="1316095443" result="Passed" start-time="2026-08-25 14:36:06Z" end-time="2026-08-25 14:36:06Z" duration="0.020854" asserts="0">
+                <properties />
+              </test-case>
+              <test-case id="1923" name="ScanProject_RejectsTamperedOwnedOutput_AndRoutesOnlyToQuarantineReview" fullname="VFXComposer.Tests.EditMode.W24S4MigrationAuditTests.ScanProject_RejectsTamperedOwnedOutput_AndRoutesOnlyToQuarantineReview" methodname="ScanProject_RejectsTamperedOwnedOutput_AndRoutesOnlyToQuarantineReview" classname="VFXComposer.Tests.EditMode.W24S4MigrationAuditTests" runstate="Runnable" seed="2007197020" result="Passed" start-time="2026-08-25 14:36:06Z" end-time="2026-08-25 14:36:06Z" duration="0.010994" asserts="0">
+                <properties />
+              </test-case>
+            </test-suite>
+          </test-suite>
+        </test-suite>
+      </test-suite>
+    </test-suite>
+  </test-suite>
+</test-run>

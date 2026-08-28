@@ -1,0 +1,476 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.vfxcomposer.dev/desktop/commands/vfxcomposer-cancel-job-command-v1.schema.json",
+  "title": "commands/vfxcomposer-cancel-job-command-v1.schema.json",
+  "type": "object",
+  "properties": {
+    "protocolVersion": {
+      "const": "vfxcomposer.protocol/1.0"
+    },
+    "messageKind": {
+      "const": "command.cancel-job"
+    },
+    "envelope": {
+      "type": "object",
+      "properties": {
+        "protocolVersion": {
+          "const": "vfxcomposer.protocol/1.0"
+        },
+        "requestId": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9._:-]{1,128}$",
+          "maxLength": 128
+        },
+        "commandId": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9._:-]{1,128}$",
+          "maxLength": 128
+        },
+        "idempotencyKey": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9._:-]{1,128}$",
+          "maxLength": 128
+        },
+        "leaseId": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9._:-]{1,128}$",
+          "maxLength": 128
+        },
+        "projectIdentity": {
+          "type": "object",
+          "properties": {
+            "typeTag": {
+              "const": "vfxcomposer.project-identity/1"
+            },
+            "digest": {
+              "type": "string",
+              "pattern": "^sha256:[0-9a-f]{64}$"
+            }
+          },
+          "required": [
+            "typeTag",
+            "digest"
+          ],
+          "additionalProperties": false
+        },
+        "leaseGeneration": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 9223372036854775807
+        },
+        "commandKind": {
+          "const": "command.cancel-job"
+        },
+        "commandCapability": {
+          "const": "command.cancel-job.v1"
+        },
+        "confirmationPolicy": {
+          "type": "object",
+          "properties": {
+            "policyId": {
+              "const": "confirmation.policy.reference.v1"
+            },
+            "policyIdentity": {
+              "type": "object",
+              "properties": {
+                "typeTag": {
+                  "const": "vfxcomposer.confirmation-policy/1"
+                },
+                "digest": {
+                  "type": "string",
+                  "pattern": "^sha256:[0-9a-f]{64}$"
+                }
+              },
+              "required": [
+                "typeTag",
+                "digest"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "policyId",
+            "policyIdentity"
+          ],
+          "additionalProperties": false
+        },
+        "selfHash": {
+          "type": "object",
+          "properties": {
+            "typeTag": {
+              "const": "vfxcomposer.command-envelope/1"
+            },
+            "digest": {
+              "type": "string",
+              "pattern": "^sha256:[0-9a-f]{64}$"
+            }
+          },
+          "required": [
+            "typeTag",
+            "digest"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "protocolVersion",
+        "requestId",
+        "commandId",
+        "idempotencyKey",
+        "leaseId",
+        "projectIdentity",
+        "leaseGeneration",
+        "commandKind",
+        "commandCapability",
+        "confirmationPolicy",
+        "selfHash"
+      ],
+      "additionalProperties": false
+    },
+    "targetJob": {
+      "type": "object",
+      "properties": {
+        "jobId": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9._:-]{1,128}$",
+          "maxLength": 128
+        },
+        "originRequestId": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9._:-]{1,128}$",
+          "maxLength": 128
+        },
+        "originCommandId": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9._:-]{1,128}$",
+          "maxLength": 128
+        },
+        "originIdempotencyKey": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9._:-]{1,128}$",
+          "maxLength": 128
+        },
+        "originCommandKind": {
+          "enum": [
+            "command.validate-recipe",
+            "command.build-candidate",
+            "command.open-preview-job",
+            "command.close-preview-job",
+            "command.set-preview-playback",
+            "command.validate-patch",
+            "command.apply-patch",
+            "command.run-focused-tests",
+            "command.cancel-job"
+          ]
+        },
+        "originCommandSelfHash": {
+          "type": "object",
+          "properties": {
+            "typeTag": {
+              "type": "string",
+              "pattern": "^[a-z][a-z0-9._-]*/[a-z0-9._-]+$",
+              "maxLength": 96
+            },
+            "digest": {
+              "type": "string",
+              "pattern": "^sha256:[0-9a-f]{64}$"
+            }
+          },
+          "required": [
+            "typeTag",
+            "digest"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "jobId",
+        "originRequestId",
+        "originCommandId",
+        "originIdempotencyKey",
+        "originCommandKind",
+        "originCommandSelfHash"
+      ],
+      "additionalProperties": false,
+      "oneOf": [
+        {
+          "properties": {
+            "originCommandKind": {
+              "const": "command.validate-recipe"
+            },
+            "originCommandSelfHash": {
+              "type": "object",
+              "properties": {
+                "typeTag": {
+                  "const": "vfxcomposer.command.validate-recipe/1"
+                },
+                "digest": {
+                  "type": "string",
+                  "pattern": "^sha256:[0-9a-f]{64}$"
+                }
+              },
+              "required": [
+                "typeTag",
+                "digest"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "originCommandKind",
+            "originCommandSelfHash"
+          ]
+        },
+        {
+          "properties": {
+            "originCommandKind": {
+              "const": "command.build-candidate"
+            },
+            "originCommandSelfHash": {
+              "type": "object",
+              "properties": {
+                "typeTag": {
+                  "const": "vfxcomposer.command.build-candidate/1"
+                },
+                "digest": {
+                  "type": "string",
+                  "pattern": "^sha256:[0-9a-f]{64}$"
+                }
+              },
+              "required": [
+                "typeTag",
+                "digest"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "originCommandKind",
+            "originCommandSelfHash"
+          ]
+        },
+        {
+          "properties": {
+            "originCommandKind": {
+              "const": "command.open-preview-job"
+            },
+            "originCommandSelfHash": {
+              "type": "object",
+              "properties": {
+                "typeTag": {
+                  "const": "vfxcomposer.command.open-preview-job/1"
+                },
+                "digest": {
+                  "type": "string",
+                  "pattern": "^sha256:[0-9a-f]{64}$"
+                }
+              },
+              "required": [
+                "typeTag",
+                "digest"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "originCommandKind",
+            "originCommandSelfHash"
+          ]
+        },
+        {
+          "properties": {
+            "originCommandKind": {
+              "const": "command.close-preview-job"
+            },
+            "originCommandSelfHash": {
+              "type": "object",
+              "properties": {
+                "typeTag": {
+                  "const": "vfxcomposer.command.close-preview-job/1"
+                },
+                "digest": {
+                  "type": "string",
+                  "pattern": "^sha256:[0-9a-f]{64}$"
+                }
+              },
+              "required": [
+                "typeTag",
+                "digest"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "originCommandKind",
+            "originCommandSelfHash"
+          ]
+        },
+        {
+          "properties": {
+            "originCommandKind": {
+              "const": "command.set-preview-playback"
+            },
+            "originCommandSelfHash": {
+              "type": "object",
+              "properties": {
+                "typeTag": {
+                  "const": "vfxcomposer.command.set-preview-playback/1"
+                },
+                "digest": {
+                  "type": "string",
+                  "pattern": "^sha256:[0-9a-f]{64}$"
+                }
+              },
+              "required": [
+                "typeTag",
+                "digest"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "originCommandKind",
+            "originCommandSelfHash"
+          ]
+        },
+        {
+          "properties": {
+            "originCommandKind": {
+              "const": "command.validate-patch"
+            },
+            "originCommandSelfHash": {
+              "type": "object",
+              "properties": {
+                "typeTag": {
+                  "const": "vfxcomposer.command.validate-patch/1"
+                },
+                "digest": {
+                  "type": "string",
+                  "pattern": "^sha256:[0-9a-f]{64}$"
+                }
+              },
+              "required": [
+                "typeTag",
+                "digest"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "originCommandKind",
+            "originCommandSelfHash"
+          ]
+        },
+        {
+          "properties": {
+            "originCommandKind": {
+              "const": "command.apply-patch"
+            },
+            "originCommandSelfHash": {
+              "type": "object",
+              "properties": {
+                "typeTag": {
+                  "const": "vfxcomposer.command.apply-patch/1"
+                },
+                "digest": {
+                  "type": "string",
+                  "pattern": "^sha256:[0-9a-f]{64}$"
+                }
+              },
+              "required": [
+                "typeTag",
+                "digest"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "originCommandKind",
+            "originCommandSelfHash"
+          ]
+        },
+        {
+          "properties": {
+            "originCommandKind": {
+              "const": "command.run-focused-tests"
+            },
+            "originCommandSelfHash": {
+              "type": "object",
+              "properties": {
+                "typeTag": {
+                  "const": "vfxcomposer.command.run-focused-tests/1"
+                },
+                "digest": {
+                  "type": "string",
+                  "pattern": "^sha256:[0-9a-f]{64}$"
+                }
+              },
+              "required": [
+                "typeTag",
+                "digest"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "originCommandKind",
+            "originCommandSelfHash"
+          ]
+        },
+        {
+          "properties": {
+            "originCommandKind": {
+              "const": "command.cancel-job"
+            },
+            "originCommandSelfHash": {
+              "type": "object",
+              "properties": {
+                "typeTag": {
+                  "const": "vfxcomposer.command.cancel-job/1"
+                },
+                "digest": {
+                  "type": "string",
+                  "pattern": "^sha256:[0-9a-f]{64}$"
+                }
+              },
+              "required": [
+                "typeTag",
+                "digest"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "originCommandKind",
+            "originCommandSelfHash"
+          ]
+        }
+      ]
+    },
+    "selfHash": {
+      "type": "object",
+      "properties": {
+        "typeTag": {
+          "const": "vfxcomposer.command.cancel-job/1"
+        },
+        "digest": {
+          "type": "string",
+          "pattern": "^sha256:[0-9a-f]{64}$"
+        }
+      },
+      "required": [
+        "typeTag",
+        "digest"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "required": [
+    "protocolVersion",
+    "messageKind",
+    "envelope",
+    "targetJob",
+    "selfHash"
+  ],
+  "additionalProperties": false
+}

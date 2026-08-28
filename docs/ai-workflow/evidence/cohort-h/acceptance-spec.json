@@ -1,0 +1,15 @@
+{
+  "version": 1,
+  "recipes": {
+    "H1": { "id": "h1_cinder_shower", "profile": "pc_editor", "travel": ["energy_body", "secondary_particles"], "forbidTravel": ["motion_trail"], "compare": { "core.scale": "<", "embers.rate": ">", "embers.lifetime": "<", "burst.count": ">", "shockwave.endSize": "<=" }, "impact": ["impact_burst", "shockwave"] },
+    "H2": { "id": "h2_clean_sun", "profile": "mobile_medium", "travel": ["energy_body"], "forbidTravel": ["motion_trail", "secondary_particles"], "compare": { "core.scale": ">", "burst.count": ">", "shockwave.endSize": ">" }, "impact": ["impact_burst", "shockwave"] },
+    "H3": { "id": "h3_filament", "profile": "pc_editor", "travel": ["energy_body", "motion_trail", "secondary_particles"], "compare": { "core.scale": "<", "trail.time": ">", "trail.width": "<", "embers.rate": "<", "embers.lifetime": ">", "burst.count": "<=", "burst.speed": "<", "shockwave.endSize": "<=" }, "impact": ["impact_burst", "shockwave"] },
+    "H4": { "id": "h4_comet_veil", "profile": "mobile_medium", "travel": ["energy_body", "motion_trail", "secondary_particles"], "compare": { "core.scale": "==", "trail.time": "<", "trail.width": ">", "embers.rate": "==", "embers.lifetime": "==", "burst.count": "<=", "shockwave.endSize": ">" }, "impact": ["impact_burst", "shockwave"] },
+    "H5": { "id": "h5_forge_hammer", "profile": "pc_editor", "travel": ["energy_body", "motion_trail"], "forbidTravel": ["secondary_particles"], "compare": { "core.scale": ">", "trail.time": "<", "trail.width": ">", "burst.count": ">", "burst.speed": "<", "shockwave.endSize": ">" }, "impact": ["impact_burst", "shockwave"] }
+  },
+  "patches": {
+    "P1": { "expectedRevision": 1, "path": "/stages/travel/modules/embers/parameters/rate", "value": 10 },
+    "P2": { "expectedRevision": 1, "path": "/stages/travel/modules/embers", "enabled": false },
+    "P3": { "expectedRevision": 1, "moduleId": "echo_embers", "kind": "secondary_particles", "templateId": "PFT_2D_Embers", "attachTo": "core" }
+  }
+}

@@ -1,0 +1,253 @@
+{
+  "schema": "w24-phase1-approved-packages/1",
+  "acquisitionDate": "2026-08-26",
+  "source": "https://api.nuget.org/v3/index.json",
+  "sourcePolicy": "one-time-acquisition-only; formal restore uses NuGet.config local source",
+  "sdkVersion": "8.0.420",
+  "directPackages": [
+    "Avalonia/11.3.2",
+    "Avalonia.Desktop/11.3.2",
+    "Avalonia.Themes.Fluent/11.3.2",
+    "CommunityToolkit.Mvvm/8.4.2",
+    "Microsoft.NET.Test.Sdk/18.9.0",
+    "MSTest.TestAdapter/4.3.3",
+    "MSTest.TestFramework/4.3.3"
+  ],
+  "packageCount": 39,
+  "packages": [
+    {
+      "id": "avalonia",
+      "version": "11.3.2",
+      "nupkgFile": "avalonia.11.3.2.nupkg",
+      "sha512": "40a2fd96ba1bcb55474a695f187bc85e24300af88ddc7b32fbf6d41c424b644b2cb775ad5ec2f625102b727587f8d6b03fa3b2942b68b1c8ccc631a020dbd83d"
+    },
+    {
+      "id": "avalonia.angle.windows.natives",
+      "version": "2.1.25547.20250602",
+      "nupkgFile": "avalonia.angle.windows.natives.2.1.25547.20250602.nupkg",
+      "sha512": "5cf4ba739c4fe0bf9e36ad2b4d481338239ea98216e6188f8c2f7af5efbdcb8926ce7d6af2df951071f8d9294d4d25ce1e52835f2bf4ac08c3dceba5e503ae60"
+    },
+    {
+      "id": "avalonia.buildservices",
+      "version": "0.0.31",
+      "nupkgFile": "avalonia.buildservices.0.0.31.nupkg",
+      "sha512": "00490f7472cfb971e4042e1176c64391254d7be14f6fbdd04371610b67b450b2d1fc6271b82b3ba9d3ec967b9522cbf855ccf5c03ae8ffddedad5c31dfbb22b8"
+    },
+    {
+      "id": "avalonia.desktop",
+      "version": "11.3.2",
+      "nupkgFile": "avalonia.desktop.11.3.2.nupkg",
+      "sha512": "1c9ae2156272c7a02d0fbda4d0176ce222da68e59a46d07fa798de1b7830a528100b888d660f743be84113e3c854b784e58431678cd971dbbe6e85bfe4dc850e"
+    },
+    {
+      "id": "avalonia.freedesktop",
+      "version": "11.3.2",
+      "nupkgFile": "avalonia.freedesktop.11.3.2.nupkg",
+      "sha512": "4c48d200ba6154735f9e7e78b252a7dc5d32e1c05ee6b81569698dc4d54e5894c888f37603b6fb945f3086677058e1d045f3e5c8859ed8737163d4f81ee12081"
+    },
+    {
+      "id": "avalonia.native",
+      "version": "11.3.2",
+      "nupkgFile": "avalonia.native.11.3.2.nupkg",
+      "sha512": "e3972a650b6fe12edec335e04edf2a03cebe143e217265c59282938c5213364e7664f56018f4583f186ffcccafde9e4e66e403661a1af8d966d5751a7450ba6c"
+    },
+    {
+      "id": "avalonia.remote.protocol",
+      "version": "11.3.2",
+      "nupkgFile": "avalonia.remote.protocol.11.3.2.nupkg",
+      "sha512": "cb5716d8dce52788b19f860193f4675c8f16b2ece8d97c0f716ee77a594b45241a2d34b918174beab94f6cc7048ccdfa8d55d6a245f4762cb42ea76062f8252b"
+    },
+    {
+      "id": "avalonia.skia",
+      "version": "11.3.2",
+      "nupkgFile": "avalonia.skia.11.3.2.nupkg",
+      "sha512": "6ac40091447721c492b09641c68ee8c1af45953395c3551d3e6492b7975d444e49aa181e55ac4768c50abba2a1efaf7135b0919ecc5da9a99f0eb1e98c9ee5b6"
+    },
+    {
+      "id": "avalonia.themes.fluent",
+      "version": "11.3.2",
+      "nupkgFile": "avalonia.themes.fluent.11.3.2.nupkg",
+      "sha512": "6bd94a2a2bea48694a30e342dda92cfcf567ca192b683e596c45fbfb5775108bee66fe4c8171d7ea7386551f4188a942cb44f248b31b85c26d3fa507b239b8a7"
+    },
+    {
+      "id": "avalonia.win32",
+      "version": "11.3.2",
+      "nupkgFile": "avalonia.win32.11.3.2.nupkg",
+      "sha512": "47cf2d4ea6739d60331416dd9ae5fdeac9e61da4c6175ce5238fbb3c56071387012f3a7bfc8058e3ca254d727f122cd03ff0d67f78ee9ac2042239357801d2c2"
+    },
+    {
+      "id": "avalonia.x11",
+      "version": "11.3.2",
+      "nupkgFile": "avalonia.x11.11.3.2.nupkg",
+      "sha512": "eeba7df3c0b3a7b8e828b0a2c789e730f795038fb0c44a19a8d2d3844a7e9f5bf4568157069542fcc5f3890ee8061fabaddfed7bf1ca68cfe0aa683eb131fcbe"
+    },
+    {
+      "id": "communitytoolkit.mvvm",
+      "version": "8.4.2",
+      "nupkgFile": "communitytoolkit.mvvm.8.4.2.nupkg",
+      "sha512": "45a30676f54742dfd748065a6952b4563bd9f8aa19877f592f9b54bd464bf34fadc982c4b3f1c7170d92fb34d59966d5bd05f6a7906abfae60a127eaa0edca53"
+    },
+    {
+      "id": "harfbuzzsharp",
+      "version": "8.3.1.1",
+      "nupkgFile": "harfbuzzsharp.8.3.1.1.nupkg",
+      "sha512": "ed1d94447956fa595c4867fe3eeb4a7b67c97e00e0da5a72762362212cbf25e62be5936e59617c94a1cbd4e6bbd0ac902854d0d36866bd920ed6a85ae663ac8c"
+    },
+    {
+      "id": "harfbuzzsharp.nativeassets.linux",
+      "version": "8.3.1.1",
+      "nupkgFile": "harfbuzzsharp.nativeassets.linux.8.3.1.1.nupkg",
+      "sha512": "4dbffeb5d07c377b5f6d7d54a658c6e272fa786869c4e6a6fdbf8bbf85f89d01a606ddfe240592f36ddd37807470f0546bbc7de9a6eb0508da15e91d14a95617"
+    },
+    {
+      "id": "harfbuzzsharp.nativeassets.macos",
+      "version": "8.3.1.1",
+      "nupkgFile": "harfbuzzsharp.nativeassets.macos.8.3.1.1.nupkg",
+      "sha512": "063155862a999d07c01e4df3b2df2d23aa320c25ee62509b0bde657ec8797e0c6fe95fe4b29e9f6b2e9a0120dc76df431c547f7baf9faa19936c5a9eb78da2e6"
+    },
+    {
+      "id": "harfbuzzsharp.nativeassets.webassembly",
+      "version": "8.3.1.1",
+      "nupkgFile": "harfbuzzsharp.nativeassets.webassembly.8.3.1.1.nupkg",
+      "sha512": "746d52bf1820d897211982b466d274477dc2e698a97827cb6dc5303b2355ad9ec7929902d484be205282bec2ebaad2824952d7096ae3b03c4a9be5ee8384d9db"
+    },
+    {
+      "id": "harfbuzzsharp.nativeassets.win32",
+      "version": "8.3.1.1",
+      "nupkgFile": "harfbuzzsharp.nativeassets.win32.8.3.1.1.nupkg",
+      "sha512": "5bf6504c34f9040445d6f88d975896b289cb622b4de109761e721cb83e8d3301686eedd6a67a9dd5e4742feba6d5ed1d106932372f43159926712ad6f1e02af3"
+    },
+    {
+      "id": "microcom.runtime",
+      "version": "0.11.0",
+      "nupkgFile": "microcom.runtime.0.11.0.nupkg",
+      "sha512": "c00731176e34ea7b936ad58a38639843c790b027b714ed5d3ea828b85ea94b14a502ded52ca7f60bb10c0ac0e744bd6e62fdcce0108ebaaf9731c408eece031e"
+    },
+    {
+      "id": "microsoft.applicationinsights",
+      "version": "2.23.0",
+      "nupkgFile": "microsoft.applicationinsights.2.23.0.nupkg",
+      "sha512": "dd497bfad0c65e54a4f78d2a1644f3d0854d4cd01dd83ba506f8d5d53635e28152c7c13210dd5dd3985780aab146a7620de3ebaead8ef12c6f87088676c2157f"
+    },
+    {
+      "id": "microsoft.codecoverage",
+      "version": "18.9.0",
+      "nupkgFile": "microsoft.codecoverage.18.9.0.nupkg",
+      "sha512": "86b3564ca56c05cdb1cae80ff8096e8d1d28c467538d56260bfcc0d521f4bcc503768162d3a7a4d42a995fa68782141df7ed3791de43089746fdde3d4603530c"
+    },
+    {
+      "id": "microsoft.net.test.sdk",
+      "version": "18.9.0",
+      "nupkgFile": "microsoft.net.test.sdk.18.9.0.nupkg",
+      "sha512": "b0fe8acc173bd3928f1548ea71cbad93dbb61bfe4d779406ebc4074c871148955fd69ce28e7425fbc003dfa806fc5e1fb0106ce91a5381ad424a19ae5abe9a3a"
+    },
+    {
+      "id": "microsoft.testing.extensions.telemetry",
+      "version": "2.3.3",
+      "nupkgFile": "microsoft.testing.extensions.telemetry.2.3.3.nupkg",
+      "sha512": "29ef9bcb94c69510e98955753b451b602ee89d52e47cc80fb0d974fb0c778ba41e0c21600d049b3ee9466a8828f73b8b2cad5eeb3c0d2c896b4e57970d4b30c5"
+    },
+    {
+      "id": "microsoft.testing.extensions.trxreport.abstractions",
+      "version": "2.3.3",
+      "nupkgFile": "microsoft.testing.extensions.trxreport.abstractions.2.3.3.nupkg",
+      "sha512": "caf1285f0960a0c9eca162be1076c3174f58bb7edab8249e224d4411809699b58608be2397eb1fd8f7bd1f3772293847e0c2379b209f34b07b37dffe17dc8b87"
+    },
+    {
+      "id": "microsoft.testing.extensions.vstestbridge",
+      "version": "2.3.3",
+      "nupkgFile": "microsoft.testing.extensions.vstestbridge.2.3.3.nupkg",
+      "sha512": "4dfec80a78fe4184dd0bab75d978b64adbfda12fd74ef3cf6a43e760319997540b29063158f3082980004bcee4d008c5e73b91c49ad7812e80daece8d3478063"
+    },
+    {
+      "id": "microsoft.testing.platform",
+      "version": "2.3.3",
+      "nupkgFile": "microsoft.testing.platform.2.3.3.nupkg",
+      "sha512": "9183e317ec3afc0add0b63b9c4857b9b3b648ece1b615d79ee19b760fbb5838da93bf8039c91d38e5e09b23e02f0523d929cddd242bd0dc6b524ad08e20d6546"
+    },
+    {
+      "id": "microsoft.testing.platform.msbuild",
+      "version": "2.3.3",
+      "nupkgFile": "microsoft.testing.platform.msbuild.2.3.3.nupkg",
+      "sha512": "692fbb2dddd2068099a213f1d350d327fe1fef15c8ecf069a2b10776ef5b111193cab716786b4b4d09623beb9fe3b0f4267b8ebd5413f5015beff9eea8cad19a"
+    },
+    {
+      "id": "microsoft.testplatform.objectmodel",
+      "version": "18.9.0",
+      "nupkgFile": "microsoft.testplatform.objectmodel.18.9.0.nupkg",
+      "sha512": "6179355a0c93d1fb57aa1dd24f8f612b97ef699a92c8db206426da6f5fa43bf3896f41c98ed36752e6f300caf43a4753a98b21c9b37fc9a9dde08c86dd070947"
+    },
+    {
+      "id": "microsoft.testplatform.testhost",
+      "version": "18.9.0",
+      "nupkgFile": "microsoft.testplatform.testhost.18.9.0.nupkg",
+      "sha512": "3420ae97b3fd78d1d42fb20f110d6eea53614d28ff492ad6c82923f7ba55c0f2c0716e637bd12a5e6f440a0da113821c307f6e265d2e719379e3aa3f8d26ca4f"
+    },
+    {
+      "id": "mstest.analyzers",
+      "version": "4.3.3",
+      "nupkgFile": "mstest.analyzers.4.3.3.nupkg",
+      "sha512": "76e0d93a89f09ca4a49f1db814946caab89b1bb0bb9310e49de995294d7e33ee69ef2d6206cdd8f2cc5352bfd8c4d528ccce2876bc96262d540d9fbffcb1d321"
+    },
+    {
+      "id": "mstest.testadapter",
+      "version": "4.3.3",
+      "nupkgFile": "mstest.testadapter.4.3.3.nupkg",
+      "sha512": "133c42f31c5251828d94523f5d029226ac841635a814390f33a446a77d1936d8abceb2907ae74a46cb6b8731c360e38364fd3035353a21d656d4e704a77981ba"
+    },
+    {
+      "id": "mstest.testframework",
+      "version": "4.3.3",
+      "nupkgFile": "mstest.testframework.4.3.3.nupkg",
+      "sha512": "3aaa8805e268a2726894a1356ed606ff19925884f7202ddb42f540773812e70e68fe5b34f4605a478121cbf30b1b505e87fc04d8561245782de40482ab9bf25f"
+    },
+    {
+      "id": "skiasharp",
+      "version": "2.88.9",
+      "nupkgFile": "skiasharp.2.88.9.nupkg",
+      "sha512": "3a2ffa5e05f45cdb80e6735ee947e91e08ff145fc50c7882e75d44b6ae0c2cd733420d15b6a4274a186b3a79d463a1273e27ff7fd79a51d0937251ebb6ef761d"
+    },
+    {
+      "id": "skiasharp.nativeassets.linux",
+      "version": "2.88.9",
+      "nupkgFile": "skiasharp.nativeassets.linux.2.88.9.nupkg",
+      "sha512": "5c6a3e93a18e70e6adcd548bd2f76fa311114346ce4d812e520f250d33342d5ad8d05ea285433bd15cb19bbc48d9bbf2ef7d1f1725dd71705accefaba3f46892"
+    },
+    {
+      "id": "skiasharp.nativeassets.macos",
+      "version": "2.88.9",
+      "nupkgFile": "skiasharp.nativeassets.macos.2.88.9.nupkg",
+      "sha512": "74cfb865746f2911935290bfb92469b331e50415d5abeda87598ebdb4049c52af84a5daeda41ebcb0bbaec6a7debb42d83cdc6c9f61cea55d43c720a78c3ebce"
+    },
+    {
+      "id": "skiasharp.nativeassets.webassembly",
+      "version": "2.88.9",
+      "nupkgFile": "skiasharp.nativeassets.webassembly.2.88.9.nupkg",
+      "sha512": "c1815d86904c25e1bc3e43b22cc4b2db0ec931c13dd4d9505a2b6cb0ca1d24329f725bce650af1b0dc12bc70d8352cc19f2ac452aab462e7af4787d4601e0e0a"
+    },
+    {
+      "id": "skiasharp.nativeassets.win32",
+      "version": "2.88.9",
+      "nupkgFile": "skiasharp.nativeassets.win32.2.88.9.nupkg",
+      "sha512": "d18bd8194041c7ffb79302d4f1be584e8c024e88b12cb4669a738cae551da3d3e3924087bb0aa42d34a9003cfb35037d73637894e67d02223d100a1b4215eeec"
+    },
+    {
+      "id": "system.diagnostics.diagnosticsource",
+      "version": "5.0.0",
+      "nupkgFile": "system.diagnostics.diagnosticsource.5.0.0.nupkg",
+      "sha512": "ba21118bad3b362fc480708c71e239368d4bccbf2b2e0e5c83577d54205db26b162f46e24b4fb846b641ebe80f4fa341790b0aec8e725a0978f01b165e3bddd7"
+    },
+    {
+      "id": "system.io.pipelines",
+      "version": "8.0.0",
+      "nupkgFile": "system.io.pipelines.8.0.0.nupkg",
+      "sha512": "57eb6a11e84f40a48b57b1dc5786a01aa9852122b7d15363490d8a12c9a458bf99a8ddf4c0c0247be98559c2b42e769a10bda2c5a9817735484d960dc652eb12"
+    },
+    {
+      "id": "tmds.dbus.protocol",
+      "version": "0.21.2",
+      "nupkgFile": "tmds.dbus.protocol.0.21.2.nupkg",
+      "sha512": "01e55dad6b1b3060cf3022727231db50ae1272f8d71112783f9213fe1adc930cd8ee60227f7b5569711287858086a9e882beda137ebd08c279fda23c89af25f2"
+    }
+  ]
+}

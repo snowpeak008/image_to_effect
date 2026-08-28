@@ -1,0 +1,22 @@
+{
+  "name": "VFXComposer.Tests.EditMode",
+  "rootNamespace": "VFXComposer.Tests.EditMode",
+  "references": [
+    "VFXComposer.Runtime",
+    "VFXComposer.Editor"
+  ],
+  "includePlatforms": [
+    "Editor"
+  ],
+  "excludePlatforms": [],
+  "allowUnsafeCode": false,
+  "overrideReferences": false,
+  "precompiledReferences": ["Newtonsoft.Json.dll"],
+  "autoReferenced": false,
+  "defineConstraints": [],
+  "versionDefines": [],
+  "noEngineReferences": false,
+  "optionalUnityReferences": [
+    "TestAssemblies"
+  ]
+}

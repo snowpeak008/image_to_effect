@@ -1,0 +1,105 @@
+{
+  "traceVersion": "w24-s1/1.0",
+  "traceStatus": "PENDING_FIRST_FORMAL_BUILD_BINDING",
+  "effectId": "sustained_flame_3d",
+  "contractRevision": 17,
+  "contractHash": "sha256:5e1282e11315baf5b1000bddb93faee9d4a7addeaee74dda3a83479205bb242c",
+  "buildHash": "pending:formal-build",
+  "captureProfileHash": "pending:formal-build",
+  "runtimeEntryAssetPath": "Assets/VFX/Effects/Aura/sustained_flame_3d/VFX_sustained_flame_3d.prefab",
+  "runtimeEntryGuid": "pending:formal-build",
+  "requirementTraces": [
+    {
+      "designRequirementId": "REQ-LIFECYCLE-START",
+      "evidenceAuthority": "telemetry",
+      "objects": [{"assetPath": "Assets/VFX/Effects/Aura/sustained_flame_3d/VFX_sustained_flame_3d.prefab", "hierarchyPath": "/VFX_sustained_flame_3d", "componentType": "SustainedEffectController", "componentInstanceId": "Assets/VFX/Effects/Aura/sustained_flame_3d/VFX_sustained_flame_3d.prefab#/VFX_sustained_flame_3d#SustainedEffectController"}],
+      "stateIds": ["starting"],
+      "layerIds": ["ignition"]
+    },
+    {
+      "designRequirementId": "REQ-LIFECYCLE-STEADY",
+      "evidenceAuthority": "telemetry",
+      "objects": [{"assetPath": "Assets/VFX/Effects/Aura/sustained_flame_3d/VFX_sustained_flame_3d.prefab", "hierarchyPath": "/VFX_sustained_flame_3d", "componentType": "SustainedEffectController", "componentInstanceId": "Assets/VFX/Effects/Aura/sustained_flame_3d/VFX_sustained_flame_3d.prefab#/VFX_sustained_flame_3d#SustainedEffectController"}],
+      "stateIds": ["steady"],
+      "layerIds": ["core_flame", "outer_flame", "smoke", "embers", "real_light"]
+    },
+    {
+      "designRequirementId": "REQ-LIFECYCLE-STOP",
+      "evidenceAuthority": "telemetry",
+      "objects": [
+        {"assetPath": "Assets/VFX/Effects/Aura/sustained_flame_3d/VFX_sustained_flame_3d.prefab", "hierarchyPath": "/VFX_sustained_flame_3d", "componentType": "SustainedEffectController", "componentInstanceId": "Assets/VFX/Effects/Aura/sustained_flame_3d/VFX_sustained_flame_3d.prefab#/VFX_sustained_flame_3d#SustainedEffectController"},
+        {"assetPath": "Assets/VFX/Effects/Aura/sustained_flame_3d/VFX_sustained_flame_3d.prefab", "hierarchyPath": "/VFX_sustained_flame_3d/FlameLight", "componentType": "Light", "componentInstanceId": "Assets/VFX/Effects/Aura/sustained_flame_3d/VFX_sustained_flame_3d.prefab#/VFX_sustained_flame_3d/FlameLight#Light"}
+      ],
+      "stateIds": ["stopping", "idle"],
+      "layerIds": ["stop_tail", "real_light"]
+    },
+    {
+      "designRequirementId": "REQ-LIFECYCLE-INTERRUPT",
+      "evidenceAuthority": "telemetry",
+      "objects": [{"assetPath": "Assets/VFX/Effects/Aura/sustained_flame_3d/VFX_sustained_flame_3d.prefab", "hierarchyPath": "/VFX_sustained_flame_3d", "componentType": "SustainedEffectController", "componentInstanceId": "Assets/VFX/Effects/Aura/sustained_flame_3d/VFX_sustained_flame_3d.prefab#/VFX_sustained_flame_3d#SustainedEffectController"}],
+      "stateIds": ["interrupted", "idle"],
+      "layerIds": ["interrupt_burst", "real_light"]
+    },
+    {
+      "designRequirementId": "REQ-LAYERS-INDEPENDENT",
+      "evidenceAuthority": "telemetry",
+      "objects": [
+        {"assetPath": "Assets/VFX/Effects/Aura/sustained_flame_3d/VFX_sustained_flame_3d.prefab", "hierarchyPath": "/VFX_sustained_flame_3d/Steady/CoreFlame", "componentType": "ParticleSystem", "componentInstanceId": "Assets/VFX/Effects/Aura/sustained_flame_3d/VFX_sustained_flame_3d.prefab#/VFX_sustained_flame_3d/Steady/CoreFlame#ParticleSystem"},
+        {"assetPath": "Assets/VFX/Effects/Aura/sustained_flame_3d/VFX_sustained_flame_3d.prefab", "hierarchyPath": "/VFX_sustained_flame_3d/Steady/OuterFlame", "componentType": "ParticleSystem", "componentInstanceId": "Assets/VFX/Effects/Aura/sustained_flame_3d/VFX_sustained_flame_3d.prefab#/VFX_sustained_flame_3d/Steady/OuterFlame#ParticleSystem"},
+        {"assetPath": "Assets/VFX/Effects/Aura/sustained_flame_3d/VFX_sustained_flame_3d.prefab", "hierarchyPath": "/VFX_sustained_flame_3d/Steady/Smoke", "componentType": "ParticleSystem", "componentInstanceId": "Assets/VFX/Effects/Aura/sustained_flame_3d/VFX_sustained_flame_3d.prefab#/VFX_sustained_flame_3d/Steady/Smoke#ParticleSystem"},
+        {"assetPath": "Assets/VFX/Effects/Aura/sustained_flame_3d/VFX_sustained_flame_3d.prefab", "hierarchyPath": "/VFX_sustained_flame_3d/Steady/Embers", "componentType": "ParticleSystem", "componentInstanceId": "Assets/VFX/Effects/Aura/sustained_flame_3d/VFX_sustained_flame_3d.prefab#/VFX_sustained_flame_3d/Steady/Embers#ParticleSystem"},
+        {"assetPath": "Assets/VFX/Effects/Aura/sustained_flame_3d/VFX_sustained_flame_3d.prefab", "hierarchyPath": "/VFX_sustained_flame_3d/FlameLight", "componentType": "Light", "componentInstanceId": "Assets/VFX/Effects/Aura/sustained_flame_3d/VFX_sustained_flame_3d.prefab#/VFX_sustained_flame_3d/FlameLight#Light"}
+      ],
+      "stateIds": ["steady"],
+      "layerIds": ["core_flame", "outer_flame", "smoke", "embers"]
+    },
+    {
+      "designRequirementId": "REQ-LIGHT-REAL",
+      "evidenceAuthority": "telemetry",
+      "objects": [{"assetPath": "Assets/VFX/Effects/Aura/sustained_flame_3d/VFX_sustained_flame_3d.prefab", "hierarchyPath": "/VFX_sustained_flame_3d/FlameLight", "componentType": "Light", "componentInstanceId": "Assets/VFX/Effects/Aura/sustained_flame_3d/VFX_sustained_flame_3d.prefab#/VFX_sustained_flame_3d/FlameLight#Light"}],
+      "stateIds": ["starting", "steady", "stopping", "interrupted"],
+      "layerIds": ["real_light"]
+    },
+    {
+      "designRequirementId": "REQ-LIGHT-RECEIVER",
+      "evidenceAuthority": "diagnostic",
+      "objects": [
+        {"assetPath": "Assets/VFX/Effects/Aura/sustained_flame_3d/VFX_sustained_flame_3d.prefab", "hierarchyPath": "/VFX_sustained_flame_3d/FlameLight", "componentType": "Light", "componentInstanceId": "Assets/VFX/Effects/Aura/sustained_flame_3d/VFX_sustained_flame_3d.prefab#/VFX_sustained_flame_3d/FlameLight#Light"}
+      ],
+      "stateIds": ["steady"],
+      "layerIds": ["real_light"]
+    },
+    {
+      "designRequirementId": "REQ-VISUAL-STEADY",
+      "evidenceAuthority": "visualQa",
+      "objects": [],
+      "stateIds": ["steady"],
+      "layerIds": ["core_flame", "outer_flame", "smoke", "embers", "real_light"]
+    },
+    {
+      "designRequirementId": "REQ-VISUAL-EXITS",
+      "evidenceAuthority": "visualQa",
+      "objects": [],
+      "stateIds": ["stopping", "interrupted", "idle"],
+      "layerIds": ["stop_tail", "interrupt_burst"]
+    },
+    {
+      "designRequirementId": "REQ-BUDGET-S0B",
+      "evidenceAuthority": "telemetry",
+      "objects": [
+        {"assetPath": "Assets/VFX/Effects/Aura/sustained_flame_3d/VFX_sustained_flame_3d.prefab", "hierarchyPath": "/VFX_sustained_flame_3d", "componentType": "SustainedEffectController", "componentInstanceId": "Assets/VFX/Effects/Aura/sustained_flame_3d/VFX_sustained_flame_3d.prefab#/VFX_sustained_flame_3d#SustainedEffectController"},
+        {"assetPath": "Assets/VFX/Effects/Aura/sustained_flame_3d/VFX_sustained_flame_3d.prefab", "hierarchyPath": "/VFX_sustained_flame_3d/FlameLight", "componentType": "Light", "componentInstanceId": "Assets/VFX/Effects/Aura/sustained_flame_3d/VFX_sustained_flame_3d.prefab#/VFX_sustained_flame_3d/FlameLight#Light"}
+      ],
+      "stateIds": ["starting", "steady", "stopping", "interrupted", "idle"],
+      "layerIds": ["ignition", "core_flame", "outer_flame", "smoke", "embers", "real_light", "stop_tail", "interrupt_burst"],
+      "semanticTokens": ["budget-readback"]
+    },
+    {
+      "designRequirementId": "REQ-USER-L4",
+      "evidenceAuthority": "user",
+      "objects": [],
+      "stateIds": [],
+      "layerIds": []
+    }
+  ]
+}

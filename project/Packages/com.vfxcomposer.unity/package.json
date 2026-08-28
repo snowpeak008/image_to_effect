@@ -1,0 +1,15 @@
+{
+  "name": "com.vfxcomposer.unity",
+  "version": "0.1.0",
+  "displayName": "VFX Composer",
+  "description": "Template-driven VFX composition runtime and editor tooling.",
+  "unity": "2022.3",
+  "keywords": [
+    "vfx",
+    "composer",
+    "urp"
+  ],
+  "dependencies": {
+    "com.unity.nuget.newtonsoft-json": "3.0.2"
+  }
+}

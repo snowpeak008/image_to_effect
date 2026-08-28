@@ -1,0 +1,12 @@
+{
+  "schema": "w18-theme-next-candidate/v1",
+  "id": "flame_blade_samurai_kit_next_candidate",
+  "workPackage": "W18",
+  "candidateStatus": "NEXT_CANDIDATE_VISUAL_PENDING",
+  "userVisualVerdict": null,
+  "preserveRejectedCandidate": true,
+  "theme": { "paletteReference": "theme.flame_blade_samurai.next", "shapeLanguage": "sharp crescents + rising blade diagonals", "primary": "#8C160D", "secondary": "#F04A13", "accent": "#FFD15A" },
+  "skillChain": ["sheath_idle", "basic_x3", "dash", "flame_slash", "blade_tempest", "parry", "death", "entrance"],
+  "attachments": ["weapon", "hand", "chest", "feet"],
+  "budget": { "renderers": 12, "materials": 1, "particleSystems": 0, "limits": { "renderers": 14, "materials": 3, "particleSystems": 1, "particleCapacity": 16 } }
+}

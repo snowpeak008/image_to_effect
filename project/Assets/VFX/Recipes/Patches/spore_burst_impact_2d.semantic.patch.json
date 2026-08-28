@@ -1,0 +1,7 @@
+[
+  {
+    "op": "set_content_param",
+    "path": "/content/parameters/cloud_radius",
+    "value": 5.2
+  }
+]

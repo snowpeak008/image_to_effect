@@ -1,0 +1,12 @@
+{
+  "Key": "K3",
+  "Attempt": 1,
+  "EnvelopePath": "D:\\WorkWork\\Assist\\image_to_smart\\docs\\ai-workflow\\evidence\\cohort-k\\K3.repair1.envelope.txt",
+  "EnvelopeSha256": "ECAD0233566FE6A54B97713CCCF28ECC14FDF71457C524846B8E7A3ACB695820",
+  "PayloadPath": "D:\\WorkWork\\Assist\\image_to_smart\\docs\\ai-workflow\\evidence\\cohort-k\\K3.repair1.payload.md",
+  "PayloadSha256": "4B7E95783A6F2E9A6B3DED2B744E1A1CE693BD66F9E89F18DBEA1840779E37C4",
+  "TempPayloadPath": "C:\\Users\\admin\\AppData\\Local\\Temp\\vfxcomposer-s9-cohort-k-r2\\K3\\K3.repair1.payload.md",
+  "TempPayloadSha256": "4B7E95783A6F2E9A6B3DED2B744E1A1CE693BD66F9E89F18DBEA1840779E37C4",
+  "PriorReportPath": "D:\\WorkWork\\Assist\\image_to_smart\\docs\\ai-workflow\\evidence\\cohort-k\\K3.attempt0.report.json",
+  "PriorReportSha256": "8BC97FD143A7DEB0FD9B8EF38DFF5D4D5BB45E7757C8B0825340332F53215460"
+}

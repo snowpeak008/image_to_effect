@@ -1,0 +1,12 @@
+{
+  "schema": "w18-theme-next-candidate/v1",
+  "id": "mechanical_hunter_kit_next_candidate",
+  "workPackage": "W18",
+  "candidateStatus": "NEXT_CANDIDATE_VISUAL_PENDING",
+  "userVisualVerdict": null,
+  "preserveRejectedCandidate": true,
+  "theme": { "paletteReference": "theme.mechanical_hunter.next", "shapeLanguage": "gears + straight targeting lines", "primary": "#5C3B21", "secondary": "#E28B2C", "accent": "#5CE7FF" },
+  "skillChain": ["overheat_idle", "muzzle_x3", "steam_dash", "holo_scan", "emp", "chain_grapple", "death", "entrance"],
+  "attachments": ["weapon", "hand", "chest", "feet"],
+  "budget": { "renderers": 12, "materials": 1, "particleSystems": 0, "limits": { "renderers": 14, "materials": 3, "particleSystems": 1, "particleCapacity": 16 } }
+}

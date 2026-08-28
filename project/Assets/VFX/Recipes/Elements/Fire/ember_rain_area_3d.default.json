@@ -1,0 +1,99 @@
+{
+  "recipeVersion": 1,
+  "revision": 1,
+  "id": "ember_rain_area_3d",
+  "name": "Ember Rain Area 3d",
+  "dimension": "3d",
+  "archetype": "area",
+  "style": {
+    "token": "stylized",
+    "palette": {
+      "primary": "#FF6A00",
+      "secondary": "#FFD84D",
+      "accent": "#FFF6E0"
+    },
+    "outline": 0.12,
+    "shading_steps": 4,
+    "noise_scale": 1.1,
+    "glow_strength": 1.25
+  },
+  "behavior": {
+    "hit": {
+      "type": "single"
+    },
+    "emission": {
+      "type": "single"
+    },
+    "timing": {
+      "type": "tick_pulse",
+      "tick_interval": 0.5,
+      "tick_visual_slot": "cap_hexflash_impact_2d"
+    }
+  },
+  "content": {
+    "family": "fire",
+    "parameters": {
+      "radius": 5,
+      "rain_density": 48,
+      "tick_interval": 0.5,
+      "burn_patch_count": 5
+    }
+  },
+  "targetProfile": "mobile_medium",
+  "randomSeed": 961236205,
+  "stages": [
+    {
+      "id": "main",
+      "trigger": "manual",
+      "duration": 1.2000000476837158,
+      "enabled": true,
+      "modules": [
+        {
+          "id": "body",
+          "kind": "energy_body",
+          "templateId": "PFT_3D_FireCore",
+          "parameters": {
+            "scale": 1.0
+          },
+          "enabled": true
+        },
+        {
+          "id": "flow",
+          "kind": "motion_trail",
+          "templateId": "PFT_3D_FireTrail",
+          "parameters": {
+            "time": 0.28,
+            "width": 0.25
+          },
+          "attachTo": "body",
+          "enabled": true
+        },
+        {
+          "id": "secondary",
+          "kind": "secondary_particles",
+          "templateId": "PFT_3D_Embers",
+          "parameters": {
+            "rate": 12,
+            "lifetime": 0.55
+          },
+          "attachTo": "body",
+          "enabled": true
+        },
+        {
+          "id": "accent",
+          "kind": "shockwave",
+          "templateId": "PFT_3D_Shockwave",
+          "parameters": {
+            "lifetime": 0.3,
+            "endSize": 2.4
+          },
+          "enabled": true
+        }
+      ]
+    }
+  ],
+  "metadata": {
+    "createdBy": "w3-w8-element-family",
+    "templateCatalogVersion": "1.0.0"
+  }
+}

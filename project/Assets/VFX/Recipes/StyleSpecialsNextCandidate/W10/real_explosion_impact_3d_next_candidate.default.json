@@ -1,0 +1,34 @@
+{
+  "schema": "style-special-next-candidate/v1",
+  "id": "real_explosion_impact_3d_next_candidate",
+  "sourceId": "real_explosion_impact_3d",
+  "label": "SEMI-REAL EXPLOSION",
+  "group": "w10",
+  "archetype": "impact",
+  "dimension": "3d",
+  "style": "semireal",
+  "profile": "Explosion",
+  "semantic": "flash>.08-fire-clusters>.30-smoke+1.80-tail-dust-ring",
+  "duration": 1.8,
+  "releaseNormalized": 0.045,
+  "sustainEndNormalized": 0.74,
+  "sustained": false,
+  "seed": 10101,
+  "intensity": 1.34,
+  "palette": {
+    "primary": "#E53A0B",
+    "secondary": "#FF9A22",
+    "accent": "#FFF1C0"
+  },
+  "meshes": [
+    "Burst",
+    "FacetA",
+    "FacetB",
+    "FacetC",
+    "Ring",
+    "Shard"
+  ],
+  "pairFamily": "",
+  "pairRole": "",
+  "sourceBaseId": ""
+}

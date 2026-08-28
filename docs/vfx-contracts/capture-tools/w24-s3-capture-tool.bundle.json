@@ -1,0 +1,135 @@
+{
+  "bundleVersion": "w24-capture-tool-bundle/1",
+  "toolVersion": "w24-s3-capture/3.5",
+  "sources": [
+    {
+      "path": "project/Packages/com.vfxcomposer.unity/Runtime/Diagnostics/W24CaptureProfile.cs",
+      "sha256": "sha256:bfd3b9c28ce5b045524f89418d43f178a3d05b45b8269609eaff8b872ff9eba2"
+    },
+    {
+      "path": "project/Packages/com.vfxcomposer.unity/Runtime/Diagnostics/W24ContinuousCaptureRecorder.cs",
+      "sha256": "sha256:4c26ab7f52333f7f757a86a343ec048df6cc43d3966cb9caf4dabcda94dec4e9"
+    },
+    {
+      "path": "project/Packages/com.vfxcomposer.unity/Runtime/Diagnostics/W24EvidenceStore.cs",
+      "sha256": "sha256:4f77d976a1feaf9af1b6b2fcbda287c2ab09a4a3aae471ce236bcdba74733a43"
+    },
+    {
+      "path": "project/Packages/com.vfxcomposer.unity/Tests/PlayMode/W24S3GraphicsCaptureEvidenceTests.cs",
+      "sha256": "sha256:3c5ba683b9d1ea9eb770e4aa4d33a001bb243523caf49ca51e58b7a2ff234c7f"
+    },
+    {
+      "path": "project/Packages/com.vfxcomposer.unity/Runtime/W24/W24S3PreviewDriver.cs",
+      "sha256": "sha256:1a5b03a4fae04e1345d8e3b7ea90cf87f67eb44d953517d193cc9e7f2a31568c"
+    },
+    {
+      "path": "project/Packages/com.vfxcomposer.unity/Runtime/W24/W24S3RuntimeEntry.cs",
+      "sha256": "sha256:17889fc5e411870ebf76f06af9365b3156ca6565beeaf49b2fc6704bdce2fc85"
+    },
+    {
+      "path": "project/Packages/com.vfxcomposer.unity/Runtime/W24/W24MovingEmitterTrailProtocol.cs",
+      "sha256": "sha256:446f22ca7e87820254f59116aaba9a478c60744e8125685c82a759c9f89c0ae9"
+    },
+    {
+      "path": "project/Packages/com.vfxcomposer.unity/Editor/W24/S3/W24S3BaselineAuthoring.cs",
+      "sha256": "sha256:27749de98934cadd6d679b7d6d7b64da2521c89f9dd2a6393376ccef055d7d35"
+    },
+    {
+      "path": "project/Packages/com.vfxcomposer.unity/Editor/W24/S5/W24MetricsEvidenceDag.cs",
+      "sha256": "sha256:22e561a73f85bc815c0d420ec5e1d0f56da86b684362cbc5eba744b7e581d2de"
+    },
+    {
+      "path": "project/Packages/com.vfxcomposer.unity/Editor/W24/S5/W24TypedBinaryCanonicalEncoding.cs",
+      "sha256": "sha256:359b25b48ad156b26113fcdb02eed77edd5a7376788fd0b0bb65220fd724db2c"
+    },
+    {
+      "path": "tools/vfx/metrics/render_metrics.py",
+      "sha256": "sha256:8e32e6d3df25e002c402f3ec9af98bbfbc10da57b3d545f9bd86fcf4a078b8b6"
+    },
+    {
+      "path": "project/Packages/com.vfxcomposer.unity/Runtime/Diagnostics/W24TrailMaskDiagnosticCapture.cs",
+      "sha256": "sha256:436472cf3f847c3f429500929cabc60fb15f238c0f4c99f819867c901974a403"
+    },
+    {
+      "path": "project/Packages/com.vfxcomposer.unity/Runtime/Diagnostics/W24ObjectIdDepthDiagnosticCapture.cs",
+      "sha256": "sha256:3191a16f6b0995acd538fdb879972c2df2c329803addbd97e0b73e865c96a54a"
+    },
+    {
+      "path": "project/Packages/com.vfxcomposer.unity/Runtime/Diagnostics/W24LinearLdrDiagnosticCapture.cs",
+      "sha256": "sha256:854972524d879e8a30f078fab3eb3d4dab2d33cfec9e7abbb82cd5db0b3b070f"
+    },
+    {
+      "path": "project/Packages/com.vfxcomposer.unity/Runtime/Diagnostics/W24RendererMaskDiagnosticCapture.cs",
+      "sha256": "sha256:a5dd283fabfbf46021ddb866b69ed8a155ceb969e9c52ec666aa310cdffbb247"
+    },
+    {
+      "path": "project/Packages/com.vfxcomposer.unity/Runtime/Diagnostics/W24NpyWriter.cs",
+      "sha256": "sha256:94a0ab21c0e5c7fce8feecd15afde41e5331e3a6c2c54cd553b92694868909bc"
+    },
+    {
+      "path": "project/Packages/com.vfxcomposer.unity/Runtime/Diagnostics/W24DiagnosticObjectRegistration.cs",
+      "sha256": "sha256:54f9eedcb0a94308bc6aef7f8ddaa19b00b61de5e2321e7f54a0acdc86ff8e67"
+    },
+    {
+      "path": "project/Assets/VFX/Shared/Shaders/Hidden/W24DiagnosticTrailMask.shader",
+      "sha256": "sha256:93014a884820e3d74035bc5530d72e777789ae52c3b78ea9f3b27de8044e83a9"
+    },
+    {
+      "path": "project/Assets/VFX/Shared/Shaders/Hidden/W24DiagnosticObjectIdDepth.shader",
+      "sha256": "sha256:2a110161b763ebc402e831ecf47d3db8c89d582f1e1d98b476bfe079442f2d83"
+    },
+    {
+      "path": "project/Assets/VFX/Shared/Shaders/Hidden/W24DiagnosticRendererMask.shader",
+      "sha256": "sha256:46c584ddee1114e1204d7c4447971cfe5f9e07c86cb45056154085a0f224a72a"
+    },
+    {
+      "path": "project/Packages/com.vfxcomposer.unity/Runtime/W24/W24FragmentMotionSystem.cs",
+      "sha256": "sha256:cce43b4774e35e315a065336ab6e28fd8c7a14ed041f8d0ccb292b2ed316a351"
+    },
+    {
+      "path": "project/Packages/com.vfxcomposer.unity/Runtime/W24/W24ModelBindingAdapter.cs",
+      "sha256": "sha256:19e98908cd0fadf6070421478dba80d6173ed1a44e6c113fa9ce07d6a4d6fc9d"
+    },
+    {
+      "path": "project/Packages/com.vfxcomposer.unity/Runtime/W24/W24RealLightingModule.cs",
+      "sha256": "sha256:25dfda6c5cd549d0e81a53555ed3cb4648de886e1c6ee68fb3b2e18056b097d8"
+    },
+    {
+      "path": "project/Packages/com.vfxcomposer.unity/Runtime/W24/W24SemanticTelemetry.cs",
+      "sha256": "sha256:1eb807e436f71595cce4e83e9881e4cac042de89823e59da089e2807216416be"
+    },
+    {
+      "path": "project/Packages/com.vfxcomposer.unity/Runtime/W24/W24SemanticTimeline.cs",
+      "sha256": "sha256:0d73cabdba85a7f558e9016a683dba29acc759378ad31c5baf00dd6e80b58d16"
+    },
+    {
+      "path": "project/Packages/com.vfxcomposer.unity/Editor/W24/S1/VfxDesignContract.cs",
+      "sha256": "sha256:536d17b08e4b1263afe374bbbf96fed14f73d05f9a026c0dcc44cb299d6ca445"
+    },
+    {
+      "path": "project/Packages/com.vfxcomposer.unity/Editor/W24/S1/VfxImplementationTrace.cs",
+      "sha256": "sha256:f9aee2aae52de859cbba8ae912e71be8573d531822bf95b84d7c6cced9fcb67b"
+    },
+    {
+      "path": "project/Packages/com.vfxcomposer.unity/Editor/W24/S5/W24S5EvidenceTransition.cs",
+      "sha256": "sha256:44f1bd9cf5cdbac08d014344002a6f448f25482a2624d55b4e19eb49459b0ce1"
+    },
+    {
+      "path": "project/Packages/com.vfxcomposer.unity/Editor/W24/S5/W24S5ProductionGate.cs",
+      "sha256": "sha256:81dcd9b853b13f1a8fd82a9e6054115612de3c58920bdc76ca1e68eceb20d7f7"
+    },
+    {
+      "path": "project/Packages/com.vfxcomposer.unity/Editor/W24/S5/W24S5RecorderCaptureCompletion.cs",
+      "sha256": "sha256:44034500d02246cb5322f89aa0f751afd43b38f081442d6752c8478fdb8e3203"
+    },
+    {
+      "path": "tools/vfx/metrics/w24-render-metrics-input.schema.json",
+      "sha256": "sha256:e970941b79216f1a94e5d647cb28d4bfad20f615400a59b3e64385ce4883eb87"
+    }
+  ],
+  "configuration": {
+    "authority": "W24ContinuousCaptureRecorder plus W24S3GraphicsCaptureEvidenceTests",
+    "emittedEvidenceExcludedFromIdentity": true,
+    "candidatePathsExcludedFromIdentity": true
+  }
+}

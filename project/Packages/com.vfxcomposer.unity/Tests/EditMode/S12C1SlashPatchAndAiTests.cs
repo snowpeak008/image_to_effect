@@ -1,0 +1,61 @@
+using System.IO;
+using System.Linq;
+using Newtonsoft.Json.Linq;
+using NUnit.Framework;
+using UnityEditor;
+using VFXComposer.Editor.Build;
+using VFXComposer.Editor.Catalog;
+using VFXComposer.Editor.Domain;
+using VFXComposer.Editor.Patch;
+using VFXComposer.Editor.Preview;
+using VFXComposer.Editor.SlashV2;
+using VFXComposer.Editor.UI;
+using VFXComposer.Editor.Workflow;
+using VFXComposer.Editor.Validation;
+
+namespace VFXComposer.Tests.EditMode
+{
+    public sealed class S12C1SlashPatchAndAiTests
+    {
+        private const string RecipePath = "Assets/VFX/Recipes/Slash/slash-3d-stylized.default.v2.json";
+        [Test] public void S12C1_DispatcherUiPreviewAndV2PatchRoutesAreVersionSafe()
+        {
+            var canonical = File.ReadAllText(Absolute(RecipePath)); var v1 = File.ReadAllText(Absolute("Assets/VFX/Recipes/fireball-2d.default.json")); Assert.That(new S12CompilerDispatcher().DryRun(v1).IsBlocked, Is.False); Assert.That(new S12CompilerDispatcher().DryRun(canonical).IsBlocked, Is.False); var badId = JObject.Parse(canonical); badId["id"] = "other_slash"; Assert.That(new S12CompilerDispatcher().DryRun(badId.ToString()).IsBlocked, Is.True); Assert.That(VfxCompilerWindow.PreviewSelectedRecipe(null, out var ignored), Is.False);
+            foreach (var entry in new[] { new { p = "/phases/primary_arc/modules/arc_sweep/parameters/width", v = (JToken)new JValue(.31) }, new { p = "/phases/sparks/modules/slash_sparks/parameters/count", v = (JToken)new JValue(16) }, new { p = "/phases/afterimage/modules/arc_afterimage/parameters/alpha", v = (JToken)new JValue(.4) } }) { var patch = new JArray(new JObject { ["op"] = "replace", ["path"] = entry.p, ["value"] = entry.v }).ToString(); var result = new S12SlashPatchService().Validate(canonical, patch, 1); Assert.That(result.IsValid, Is.True, entry.p); Assert.That(result.AfterRevision, Is.EqualTo(2)); }
+            Assert.That(new VfxPatchService().Validate(canonical, "[]", 1).IsValid, Is.False);
+        }
+        [Test] public void S12C1_SelectedVariantPreviewAndAiContractAreDerivedAndBounded()
+        {
+            var canonical = File.ReadAllText(Absolute(RecipePath)); var variant = JObject.Parse(canonical); variant["revision"] = 2; var afterimage = ((JArray)variant["phases"]).Children<JObject>().Single(x => (string)x["id"] == "afterimage"); ((JObject)((JArray)afterimage["modules"])[0])["parameters"]["alpha"] = .4; try { S12SlashGeneratedPreview.BuildSceneForBatch(variant.ToString()); var manifest = JObject.Parse(File.ReadAllText(Absolute(S12SlashCompiler.ManifestPath))); Assert.That((int)manifest["recipeRevision"], Is.EqualTo(2)); Assert.That((string)manifest["recipeHash"], Is.EqualTo(RecipeCanonicalizer.ComputeSha256(variant.ToString()))); Assert.That(S12SlashAiExporter.VerifyExisting(), Is.True); var contract = JObject.Parse(File.ReadAllText(Path.Combine(Directory.GetParent(Directory.GetParent(UnityEngine.Application.dataPath).FullName).FullName, S12SlashAiExporter.FrozenRoot, "contract.generated.json"))); CollectionAssert.AreEquivalent(new[] { "anticipation", "primary_arc", "afterimage", "sparks", "dissipation" }, ((JArray)contract["recipeSkeleton"]["phases"]).Select(x => (string)x["id"]).ToArray()); } finally { Assert.That(new S12SlashCompiler().Build(canonical).Succeeded, Is.True); }
+        }
+        [Test] public void S12C1_ThreeRealSlashPatchesWriteHistoryAndRestoreCanonical()
+        {
+            const string temporary = "Assets/VFX/Recipes/Slash/s12c1_patch_temp.v2.json"; var canonical = File.ReadAllText(Absolute(RecipePath)); var absolute = Absolute(temporary); var history = absolute + S12SlashPatchService.HistorySuffix; try
+            {
+                foreach (var entry in new[] { new { path = "/phases/primary_arc/modules/arc_sweep/parameters/width", value = (JToken)new JValue(.31) }, new { path = "/phases/sparks/modules/slash_sparks/parameters/count", value = (JToken)new JValue(16) }, new { path = "/phases/afterimage/modules/arc_afterimage/parameters/alpha", value = (JToken)new JValue(.4) } })
+                { File.WriteAllText(absolute, canonical); AssetDatabase.ImportAsset(temporary, ImportAssetOptions.ForceUpdate); var patch = new JArray(new JObject { ["op"] = "replace", ["path"] = entry.path, ["value"] = entry.value }).ToString(); var result = new S12SlashPatchService().ApplyToAsset(temporary, patch, 1); Assert.That(result.IsValid, Is.True, entry.path); var written = JObject.Parse(File.ReadAllText(absolute)); var parts = entry.path.Split('/'); var phase = ((JArray)written["phases"]).Children<JObject>().Single(x => (string)x["id"] == parts[2]); var module = ((JArray)phase["modules"]).Children<JObject>().Single(x => (string)x["id"] == parts[4]); Assert.That(JToken.DeepEquals(module["parameters"][parts[6]], entry.value), Is.True); var last = (JObject)JArray.Parse(File.ReadAllText(history)).Last; Assert.That((int)last["beforeRevision"], Is.EqualTo(1)); Assert.That((int)last["afterRevision"], Is.EqualTo(2)); Assert.That((string)((JArray)last["affectedPaths"])[0], Is.EqualTo(entry.path)); if (File.Exists(history)) File.Delete(history); if (File.Exists(history + ".meta")) File.Delete(history + ".meta"); }
+            }
+            finally { if (File.Exists(absolute)) File.Delete(absolute); if (File.Exists(absolute + ".meta")) File.Delete(absolute + ".meta"); if (File.Exists(history)) File.Delete(history); if (File.Exists(history + ".meta")) File.Delete(history + ".meta"); AssetDatabase.Refresh(); Assert.That(new S12SlashCompiler().Build(canonical).Succeeded, Is.True); }
+        }
+        [Test] public void S12C1_PatchGrammarAndBadInputsNeverWriteOrThrow()
+        {
+            var canonical = File.ReadAllText(Absolute(RecipePath)); var invalid = new[] { "[]", "{}", "[{\"op\":\"add\",\"path\":\"/phases/primary_arc/modules/arc_sweep/parameters/width\",\"value\":.3}]", "[{\"op\":\"replace\",\"path\":\"/phases/0/modules/arc_sweep/parameters/width\",\"value\":.3}]", "[{\"op\":\"replace\",\"path\":\"/phases/primary_arc/modules/arc_sweep/parameters/width\",\"value\":\"wide\"}]", "[{\"op\":\"replace\",\"path\":\"/phases/primary_arc/modules/arc_sweep/parameters/width\",\"value\":99}]" }; foreach (var patch in invalid) { VfxPatchResult result = null; Assert.DoesNotThrow(() => result = new S12SlashPatchService().Validate(canonical, patch, 1)); Assert.That(result.IsValid, Is.False); } var range = new S12SlashPatchService().Validate(canonical, invalid.Last(), 1); Assert.That(range.FailedOperationIndex, Is.EqualTo(0)); var entry = range.Report.Entries.Single(x => x.Code == "E1293"); Assert.That(entry.ActualValue, Is.Not.Null); Assert.That(entry.AllowedRange, Is.Not.Empty);
+            var duplicate = canonical.Replace("\"id\": \"sparks\"", "\"id\": \"afterimage\""); Assert.DoesNotThrow(() => new S12SlashPatchService().Validate(duplicate, "[]", 1));
+        }
+        [Test] public void S12C1_SnapshotFailureIsReportedBeforeAnyWrite()
+        {
+            var canonical = File.ReadAllText(Absolute(RecipePath)); var patch = new JArray(new JObject { ["op"] = "replace", ["path"] = "/phases/primary_arc/modules/arc_sweep/parameters/width", ["value"] = .31 }).ToString(); var temporary = "Assets/VFX/Recipes/Slash/s12c1_snapshot_temp.v2.json"; var absolute = Absolute(temporary); try { File.WriteAllText(absolute, canonical); AssetDatabase.ImportAsset(temporary, ImportAssetOptions.ForceUpdate); var before = File.ReadAllText(absolute); var result = new S12SlashPatchService(() => { throw new System.InvalidOperationException("injected snapshot"); }, null, null).ApplyToAsset(temporary, patch, 1); Assert.That(result.IsValid, Is.False); Assert.That(result.Report.Contains("E1285", "/transaction/snapshot"), Is.True); Assert.That(File.ReadAllText(absolute), Is.EqualTo(before)); } finally { if (File.Exists(absolute)) File.Delete(absolute); if (File.Exists(absolute + ".meta")) File.Delete(absolute + ".meta"); AssetDatabase.Refresh(); }
+        }
+        [Test] public void S12C1_RollbackMatrixRestoresTextHistoryMetasGeneratedAndResidue()
+        {
+            var canonical = File.ReadAllText(Absolute(RecipePath)); var patch = new JArray(new JObject { ["op"] = "replace", ["path"] = "/phases/primary_arc/modules/arc_sweep/parameters/width", ["value"] = .31 }).ToString();
+            try { foreach (var compilerFault in new[] { false, true }) foreach (var historyExists in new[] { false, true })
+                {
+                    var asset = "Assets/VFX/Recipes/Slash/s12c1_rb_" + (compilerFault ? "compiler" : "text") + (historyExists ? "_history" : "_fresh") + ".v2.json"; var recipe = Absolute(asset); var history = recipe + S12SlashPatchService.HistorySuffix; File.WriteAllText(recipe, canonical); if (historyExists) File.WriteAllText(history, "[]"); AssetDatabase.ImportAsset(asset, ImportAssetOptions.ForceUpdate); if (historyExists) AssetDatabase.ImportAsset(asset + S12SlashPatchService.HistorySuffix, ImportAssetOptions.ForceUpdate); var beforeRecipe = File.ReadAllBytes(recipe); var beforeRecipeMeta = File.ReadAllBytes(recipe + ".meta"); var beforeRecipeGuid = AssetDatabase.AssetPathToGUID(asset); var beforeHistory = historyExists ? File.ReadAllBytes(history) : null; var beforeHistoryMeta = historyExists ? File.ReadAllBytes(history + ".meta") : null; var generated = SnapshotGenerated(); var service = compilerFault ? new S12SlashPatchService(null, null, new ThrowCommit()) : new S12SlashPatchService(null, () => { throw new System.InvalidOperationException("after recipe"); }, null); var result = service.ApplyToAsset(asset, patch, 1); Assert.That(result.IsValid, Is.False); CollectionAssert.AreEqual(beforeRecipe, File.ReadAllBytes(recipe)); CollectionAssert.AreEqual(beforeRecipeMeta, File.ReadAllBytes(recipe + ".meta")); Assert.That(AssetDatabase.AssetPathToGUID(asset), Is.EqualTo(beforeRecipeGuid)); if (historyExists) { CollectionAssert.AreEqual(beforeHistory, File.ReadAllBytes(history)); CollectionAssert.AreEqual(beforeHistoryMeta, File.ReadAllBytes(history + ".meta")); } else { Assert.That(File.Exists(history), Is.False); Assert.That(File.Exists(history + ".meta"), Is.False); } CollectionAssert.AreEquivalent(generated, SnapshotGenerated()); Assert.That(Directory.GetFiles(Path.GetDirectoryName(recipe), "*.pending", SearchOption.AllDirectories).Length, Is.EqualTo(0)); Assert.That(Directory.GetFiles(Absolute(S12SlashCompiler.GeneratedRoot), "*.pending", SearchOption.AllDirectories).Length, Is.EqualTo(0)); Assert.That(Directory.GetDirectories(Absolute(S12SlashCompiler.GeneratedRoot), "s12btmp_*", SearchOption.TopDirectoryOnly).Length, Is.EqualTo(0)); Assert.That(Directory.GetDirectories(System.IO.Path.GetTempPath(), "vfxcomposer_s12c1_backup_*", SearchOption.TopDirectoryOnly).Length, Is.EqualTo(0)); Assert.That(Directory.GetDirectories(System.IO.Path.GetTempPath(), "vfxcomposer_s12b_*", SearchOption.TopDirectoryOnly).Length, Is.EqualTo(0)); File.Delete(recipe); if (File.Exists(recipe + ".meta")) File.Delete(recipe + ".meta"); if (File.Exists(history)) File.Delete(history); if (File.Exists(history + ".meta")) File.Delete(history + ".meta"); AssetDatabase.Refresh();
+                } } finally { Assert.That(new S12SlashCompiler().Build(canonical).Succeeded, Is.True); }
+        }
+        private sealed class ThrowCommit : IS12SlashBuildHook { public void AfterPrefabAndMaterialsSaved(string outputFolder) { throw new System.InvalidOperationException("commit injected"); } }
+        private static string[] SnapshotGenerated() { var root = Absolute(S12SlashCompiler.OutputFolderPath); var values = Directory.GetFiles(root, "*", SearchOption.AllDirectories).OrderBy(x => x, System.StringComparer.Ordinal).Select(x => x.Substring(root.Length).Replace('\\', '/') + ":" + System.BitConverter.ToString(System.Security.Cryptography.SHA256.Create().ComputeHash(File.ReadAllBytes(x)))).ToList(); values.Add("ROOTMETA:" + System.BitConverter.ToString(System.Security.Cryptography.SHA256.Create().ComputeHash(File.ReadAllBytes(root + ".meta")))); values.Add("PREFABGUID:" + AssetDatabase.AssetPathToGUID(S12SlashCompiler.OutputPrefabPath)); return values.ToArray(); }
+        private static string Absolute(string path) { return Path.Combine(UnityEngine.Application.dataPath, path.Substring("Assets/".Length)); }
+    }
+}

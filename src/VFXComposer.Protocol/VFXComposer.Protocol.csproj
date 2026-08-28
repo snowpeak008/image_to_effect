@@ -1,0 +1,7 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <AssemblyName>VFXComposer.Protocol</AssemblyName>
+    <RootNamespace>VFXComposer.Protocol</RootNamespace>
+    <Description>Pure BCL wire protocol and shared status contracts for VFX Composer.</Description>
+  </PropertyGroup>
+</Project>

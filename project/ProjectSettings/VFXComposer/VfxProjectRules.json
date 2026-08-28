@@ -1,0 +1,93 @@
+{
+  "schemaVersion": 1,
+  "rulesVersion": "1.0-draft",
+  "defaultEnforcement": "strict",
+  "legacyEffectIds": [
+    "fireball_2d",
+    "fireball_3d",
+    "slash_3d_stylized",
+    "fireball_2d_s7test",
+    "fireball_2d_s8test",
+    "fireball_3d_s10test",
+    "s11_a5",
+    "s11_a6",
+    "s9_canonical_patch_export_base",
+    "i1_river_comet",
+    "i2_glass_spark",
+    "i3_brazier_bead",
+    "i4_rail_flare",
+    "i5_aurora_seed",
+    "s9_cohort_k_final_k1",
+    "s9_cohort_k_final_k2",
+    "s9_cohort_k_final_k3"
+  ],
+  "simple": {
+    "maxGameObjects": 10,
+    "maxDepth": 2,
+    "maxLocalMaterials": 2,
+    "maxLocalTextures": 3
+  },
+  "complex": {
+    "maxGameObjects": 16,
+    "maxDepth": 3,
+    "maxLocalMaterials": 2,
+    "maxLocalTextures": 3
+  },
+  "archetypeProfiles": {
+    "projectile": "simple",
+    "impact": "simple",
+    "slash": "simple",
+    "aura": "simple",
+    "area": "complex",
+    "beam": "simple",
+    "trail": "simple",
+    "shield": "simple",
+    "spawn": "complex",
+    "summon": "complex",
+    "transform": "complex",
+    "environment": "complex",
+    "screen_ui": "simple",
+    "status": "simple",
+    "composite": "complex",
+    "decal": "simple",
+    "weapon_trail": "simple",
+    "destruction": "complex",
+    "lifecycle": "complex",
+    "portal": "complex",
+    "loot": "simple"
+  },
+  "forbiddenRuntimeComponentTypeNames": [
+    "VfxPreviewSequenceDriver",
+    "SlashPreviewPlaybackDriver",
+    "SlashContinuousCaptureHook",
+    "ImpactPreviewPlaybackDriver",
+    "AreaPreviewPlaybackDriver",
+    "ValidationGalleryPlaybackDriver",
+    "BeamCapabilityPreviewDriver",
+    "TimingAreaCapabilityPreviewDriver",
+    "CoverageGalleryBPlaybackDriver",
+    "InteractionGalleryPlaybackDriver",
+    "NewArchetypePreviewDriver",
+    "ElementFamilyPreviewDriver",
+    "PlannedContentPreviewDriver",
+    "CompositePreviewDriver",
+    "SustainedEffectPreviewDriver"
+  ],
+  "forbiddenProductionNameTokens": [
+    "S12_",
+    "S15_",
+    "final_final",
+    " copy",
+    "_copy"
+  ],
+  "allowedDependencyRoots": [
+    "Assets/VFX/Generated/",
+    "Assets/VFX/Effects/",
+    "Assets/VFX/Shared/",
+    "Assets/VFX/Templates/",
+    "Packages/com.vfxcomposer.unity/Runtime/",
+    "Packages/com.unity.render-pipelines.core/",
+    "Packages/com.unity.render-pipelines.universal/",
+    "Packages/com.unity.ugui/"
+  ]
+}

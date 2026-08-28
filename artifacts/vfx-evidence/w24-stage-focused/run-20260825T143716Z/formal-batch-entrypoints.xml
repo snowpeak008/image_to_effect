@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<test-run id="2" testcasecount="8" result="Skipped:Ignored" total="8" passed="7" failed="0" inconclusive="0" skipped="1" asserts="0" engine-version="3.5.0.0" clr-version="4.0.30319.42000" start-time="2026-08-25 14:37:15Z" end-time="2026-08-25 14:37:15Z" duration="0.1447944">
+  <test-suite type="TestSuite" id="1541" name="project" fullname="project" runstate="Runnable" testcasecount="442" result="Skipped" label="Ignored" start-time="2026-08-25 14:37:15Z" end-time="2026-08-25 14:37:15Z" duration="0.144794" total="8" passed="7" failed="0" inconclusive="0" skipped="1" asserts="0">
+    <properties />
+    <reason>
+      <message><![CDATA[One or more child tests were ignored]]></message>
+    </reason>
+    <test-suite type="Assembly" id="2075" name="VFXComposer.Tests.EditMode.dll" fullname="D:/WorkWork/Assist/image_to_smart/.codex_tmp/w24-fresh-20260825-0628/project/Library/ScriptAssemblies/VFXComposer.Tests.EditMode.dll" runstate="Runnable" testcasecount="440" result="Skipped" label="Ignored" start-time="2026-08-25 14:37:15Z" end-time="2026-08-25 14:37:15Z" duration="0.105083" total="8" passed="7" failed="0" inconclusive="0" skipped="1" asserts="0">
+      <properties>
+        <property name="_PID" value="32704" />
+        <property name="_APPDOMAIN" value="Unity Child Domain" />
+        <property name="platform" value="EditMode" />
+      </properties>
+      <reason>
+        <message><![CDATA[One or more child tests were ignored]]></message>
+      </reason>
+      <test-suite type="TestSuite" id="2076" name="VFXComposer" fullname="VFXComposer" runstate="Runnable" testcasecount="440" result="Skipped" label="Ignored" start-time="2026-08-25 14:37:15Z" end-time="2026-08-25 14:37:15Z" duration="0.095060" total="8" passed="7" failed="0" inconclusive="0" skipped="1" asserts="0">
+        <properties />
+        <reason>
+          <message><![CDATA[One or more child tests were ignored]]></message>
+        </reason>
+        <test-suite type="TestSuite" id="2077" name="Tests" fullname="VFXComposer.Tests" runstate="Runnable" testcasecount="440" result="Skipped" label="Ignored" start-time="2026-08-25 14:37:15Z" end-time="2026-08-25 14:37:15Z" duration="0.092172" total="8" passed="7" failed="0" inconclusive="0" skipped="1" asserts="0">
+          <properties />
+          <reason>
+            <message><![CDATA[One or more child tests were ignored]]></message>
+          </reason>
+          <test-suite type="TestSuite" id="2078" name="EditMode" fullname="VFXComposer.Tests.EditMode" runstate="Runnable" testcasecount="440" result="Skipped" label="Ignored" start-time="2026-08-25 14:37:15Z" end-time="2026-08-25 14:37:15Z" duration="0.089290" total="8" passed="7" failed="0" inconclusive="0" skipped="1" asserts="0">
+            <properties />
+            <reason>
+              <message><![CDATA[One or more child tests were ignored]]></message>
+            </reason>
+            <test-suite type="TestFixture" id="1871" name="W24FormalBatchAuthoringEntrypointsTests" fullname="VFXComposer.Tests.EditMode.W24FormalBatchAuthoringEntrypointsTests" classname="VFXComposer.Tests.EditMode.W24FormalBatchAuthoringEntrypointsTests" runstate="Runnable" testcasecount="8" result="Skipped" label="Ignored" start-time="2026-08-25 14:37:15Z" end-time="2026-08-25 14:37:15Z" duration="0.081947" total="8" passed="7" failed="0" inconclusive="0" skipped="1" asserts="0">
+              <properties />
+              <reason>
+                <message><![CDATA[One or more child tests were ignored]]></message>
+              </reason>
+              <test-case id="1872" name="BatchEntryPoints_ArePublicStaticVoidExecuteMethods_AndAuthoringNeedsNoGraphicsDevice" fullname="VFXComposer.Tests.EditMode.W24FormalBatchAuthoringEntrypointsTests.BatchEntryPoints_ArePublicStaticVoidExecuteMethods_AndAuthoringNeedsNoGraphicsDevice" methodname="BatchEntryPoints_ArePublicStaticVoidExecuteMethods_AndAuthoringNeedsNoGraphicsDevice" classname="VFXComposer.Tests.EditMode.W24FormalBatchAuthoringEntrypointsTests" runstate="Runnable" seed="1263812671" result="Passed" start-time="2026-08-25 14:37:15Z" end-time="2026-08-25 14:37:15Z" duration="0.010019" asserts="0">
+                <properties />
+              </test-case>
+              <test-case id="1873" name="BatchEntryPoints_FailClosedInTheInteractiveEditor_BeforeAnyAuthoringCall" fullname="VFXComposer.Tests.EditMode.W24FormalBatchAuthoringEntrypointsTests.BatchEntryPoints_FailClosedInTheInteractiveEditor_BeforeAnyAuthoringCall" methodname="BatchEntryPoints_FailClosedInTheInteractiveEditor_BeforeAnyAuthoringCall" classname="VFXComposer.Tests.EditMode.W24FormalBatchAuthoringEntrypointsTests" runstate="Runnable" seed="379432631" result="Skipped" label="Ignored" start-time="2026-08-25 14:37:15Z" end-time="2026-08-25 14:37:15Z" duration="0.002900" asserts="0">
+                <properties />
+                <reason>
+                  <message><![CDATA[This guard is exercised only by the interactive Editor test runner.]]></message>
+                </reason>
+              </test-case>
+              <test-case id="1877" name="EntryPointSource_UsesOnlyAuthoringAndIdentityVerification_NotCaptureQaOrSignoff" fullname="VFXComposer.Tests.EditMode.W24FormalBatchAuthoringEntrypointsTests.EntryPointSource_UsesOnlyAuthoringAndIdentityVerification_NotCaptureQaOrSignoff" methodname="EntryPointSource_UsesOnlyAuthoringAndIdentityVerification_NotCaptureQaOrSignoff" classname="VFXComposer.Tests.EditMode.W24FormalBatchAuthoringEntrypointsTests" runstate="Runnable" seed="1713608274" result="Passed" start-time="2026-08-25 14:37:15Z" end-time="2026-08-25 14:37:15Z" duration="0.017666" asserts="0">
+                <properties />
+              </test-case>
+              <test-case id="1876" name="IsolatedShadowValidation_RequiresTempShadowExactDeclarationAndSeparateExistingCanonicalRoot" fullname="VFXComposer.Tests.EditMode.W24FormalBatchAuthoringEntrypointsTests.IsolatedShadowValidation_RequiresTempShadowExactDeclarationAndSeparateExistingCanonicalRoot" methodname="IsolatedShadowValidation_RequiresTempShadowExactDeclarationAndSeparateExistingCanonicalRoot" classname="VFXComposer.Tests.EditMode.W24FormalBatchAuthoringEntrypointsTests" runstate="Runnable" seed="1580176591" result="Passed" start-time="2026-08-25 14:37:15Z" end-time="2026-08-25 14:37:15Z" duration="0.005850" asserts="0">
+                <properties />
+              </test-case>
+              <test-case id="1879" name="PostconditionVerification_IsInsideBothAuthoringTransactionsBeforeFaultAndCommit" fullname="VFXComposer.Tests.EditMode.W24FormalBatchAuthoringEntrypointsTests.PostconditionVerification_IsInsideBothAuthoringTransactionsBeforeFaultAndCommit" methodname="PostconditionVerification_IsInsideBothAuthoringTransactionsBeforeFaultAndCommit" classname="VFXComposer.Tests.EditMode.W24FormalBatchAuthoringEntrypointsTests" runstate="Runnable" seed="1316757781" result="Passed" start-time="2026-08-25 14:37:15Z" end-time="2026-08-25 14:37:15Z" duration="0.025792" asserts="0">
+                <properties />
+              </test-case>
+              <test-case id="1875" name="PreviewForwardRenderer_CanBeAppliedToAnEphemeralAuthorityCamera" fullname="VFXComposer.Tests.EditMode.W24FormalBatchAuthoringEntrypointsTests.PreviewForwardRenderer_CanBeAppliedToAnEphemeralAuthorityCamera" methodname="PreviewForwardRenderer_CanBeAppliedToAnEphemeralAuthorityCamera" classname="VFXComposer.Tests.EditMode.W24FormalBatchAuthoringEntrypointsTests" runstate="Runnable" seed="1891894246" result="Passed" start-time="2026-08-25 14:37:15Z" end-time="2026-08-25 14:37:15Z" duration="0.006445" asserts="0">
+                <properties />
+              </test-case>
+              <test-case id="1874" name="PreviewForwardRenderer_IsRegisteredOnceAsSecondary_And2DRendererRemainsDefault" fullname="VFXComposer.Tests.EditMode.W24FormalBatchAuthoringEntrypointsTests.PreviewForwardRenderer_IsRegisteredOnceAsSecondary_And2DRendererRemainsDefault" methodname="PreviewForwardRenderer_IsRegisteredOnceAsSecondary_And2DRendererRemainsDefault" classname="VFXComposer.Tests.EditMode.W24FormalBatchAuthoringEntrypointsTests" runstate="Runnable" seed="1981478214" result="Passed" start-time="2026-08-25 14:37:15Z" end-time="2026-08-25 14:37:15Z" duration="0.001850" asserts="0">
+                <properties />
+              </test-case>
+              <test-case id="1878" name="VerificationApi_IsPublicStaticAndReadOnlyByContract" fullname="VFXComposer.Tests.EditMode.W24FormalBatchAuthoringEntrypointsTests.VerificationApi_IsPublicStaticAndReadOnlyByContract" methodname="VerificationApi_IsPublicStaticAndReadOnlyByContract" classname="VFXComposer.Tests.EditMode.W24FormalBatchAuthoringEntrypointsTests" runstate="Runnable" seed="2085498221" result="Passed" start-time="2026-08-25 14:37:15Z" end-time="2026-08-25 14:37:15Z" duration="0.000559" asserts="0">
+                <properties />
+              </test-case>
+            </test-suite>
+          </test-suite>
+        </test-suite>
+      </test-suite>
+    </test-suite>
+  </test-suite>
+</test-run>

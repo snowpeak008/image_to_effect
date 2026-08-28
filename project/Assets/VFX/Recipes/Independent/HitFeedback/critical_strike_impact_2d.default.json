@@ -1,0 +1,96 @@
+{
+  "recipeVersion": 1,
+  "revision": 1,
+  "id": "critical_strike_impact_2d",
+  "name": "Critical Strike Impact 2d",
+  "dimension": "2d",
+  "archetype": "impact",
+  "style": {
+    "token": "stylized",
+    "palette": {
+      "primary": "#FFD84D",
+      "secondary": "#FF7138",
+      "accent": "#FFFFFF"
+    },
+    "outline": 0.12,
+    "shading_steps": 4,
+    "noise_scale": 1.2,
+    "glow_strength": 1.1
+  },
+  "behavior": {
+    "hit": {
+      "type": "single"
+    },
+    "emission": {
+      "type": "single"
+    },
+    "timing": {
+      "type": "instant"
+    }
+  },
+  "content": {
+    "family": "hit_feedback",
+    "parameters": {
+      "crack_count": 8,
+      "star_scale": 1.4,
+      "palette": "gold"
+    }
+  },
+  "targetProfile": "mobile_medium",
+  "randomSeed": 1679238465,
+  "stages": [
+    {
+      "id": "main",
+      "trigger": "on_hit",
+      "duration": 0.35,
+      "enabled": true,
+      "modules": [
+        {
+          "id": "body",
+          "kind": "energy_body",
+          "templateId": "PFT_2D_FireCore",
+          "parameters": {
+            "scale": 1.0
+          },
+          "enabled": true
+        },
+        {
+          "id": "flow",
+          "kind": "motion_trail",
+          "templateId": "PFT_2D_FireTrail",
+          "parameters": {
+            "time": 0.3,
+            "width": 0.25
+          },
+          "enabled": true,
+          "attachTo": "body"
+        },
+        {
+          "id": "secondary",
+          "kind": "secondary_particles",
+          "templateId": "PFT_2D_Embers",
+          "parameters": {
+            "rate": 10,
+            "lifetime": 0.55
+          },
+          "enabled": true,
+          "attachTo": "body"
+        },
+        {
+          "id": "accent",
+          "kind": "shockwave",
+          "templateId": "PFT_2D_Shockwave",
+          "parameters": {
+            "lifetime": 0.3,
+            "endSize": 2.1
+          },
+          "enabled": true
+        }
+      ]
+    }
+  ],
+  "metadata": {
+    "createdBy": "w11-w17-independent-content",
+    "templateCatalogVersion": "1.0.0"
+  }
+}

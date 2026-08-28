@@ -1,0 +1,51 @@
+{
+  "bundleVersion": "w24-capture-tool-bundle/1",
+  "toolVersion": "w24-s0b-formal-capture/1.2.12",
+  "sources": [
+    {
+      "path": "project/Packages/com.vfxcomposer.unity/Runtime/Diagnostics/W24CaptureProfile.cs",
+      "sha256": "sha256:bfd3b9c28ce5b045524f89418d43f178a3d05b45b8269609eaff8b872ff9eba2"
+    },
+    {
+      "path": "project/Packages/com.vfxcomposer.unity/Runtime/Diagnostics/W24ContinuousCaptureRecorder.cs",
+      "sha256": "sha256:4c26ab7f52333f7f757a86a343ec048df6cc43d3966cb9caf4dabcda94dec4e9"
+    },
+    {
+      "path": "project/Packages/com.vfxcomposer.unity/Runtime/Diagnostics/W24EvidenceStore.cs",
+      "sha256": "sha256:4f77d976a1feaf9af1b6b2fcbda287c2ab09a4a3aae471ce236bcdba74733a43"
+    },
+    {
+      "path": "project/Packages/com.vfxcomposer.unity/Editor/Validation/RecipeCanonicalizer.cs",
+      "sha256": "sha256:10c93332fd39c4f144808f8dc378ca02944855cd8643fa56ab6fa5de130b9159"
+    },
+    {
+      "path": "project/Packages/com.vfxcomposer.unity/Editor/W24/S1/VfxDesignContract.cs",
+      "sha256": "sha256:536d17b08e4b1263afe374bbbf96fed14f73d05f9a026c0dcc44cb299d6ca445"
+    },
+    {
+      "path": "project/Packages/com.vfxcomposer.unity/Editor/W24/S1/VfxImplementationTrace.cs",
+      "sha256": "sha256:f9aee2aae52de859cbba8ae912e71be8573d531822bf95b84d7c6cced9fcb67b"
+    },
+    {
+      "path": "project/Packages/com.vfxcomposer.unity/Editor/W24/S5/W24S5EvidenceTransition.cs",
+      "sha256": "sha256:44f1bd9cf5cdbac08d014344002a6f448f25482a2624d55b4e19eb49459b0ce1"
+    },
+    {
+      "path": "project/Packages/com.vfxcomposer.unity/Editor/W24/S5/W24S5ProductionGate.cs",
+      "sha256": "sha256:81dcd9b853b13f1a8fd82a9e6054115612de3c58920bdc76ca1e68eceb20d7f7"
+    },
+    {
+      "path": "project/Packages/com.vfxcomposer.unity/Editor/W24/S5/W24S5RecorderCaptureCompletion.cs",
+      "sha256": "sha256:44034500d02246cb5322f89aa0f751afd43b38f081442d6752c8478fdb8e3203"
+    },
+    {
+      "path": "project/Packages/com.vfxcomposer.unity/Tests/PlayMode/W24SustainedFlameFormalEvidenceTests.cs",
+      "sha256": "sha256:b40085ff2722cfc48ea74154e1cdb8ff888bb3ca346d3a45f0aa8f3b6253a64a"
+    }
+  ],
+  "configuration": {
+    "authority": "S0b profile/store/recorder, formal PlayMode producer, S5 completion/production-gate/evidence-transition, strict Contract/Trace validators, and canonical JSON hashing; no typed-metrics or Python authority is used by S0b",
+    "emittedEvidenceExcludedFromIdentity": true,
+    "candidatePathsExcludedFromIdentity": true
+  }
+}

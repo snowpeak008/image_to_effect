@@ -1,0 +1,92 @@
+{
+  "manifestVersion": 1,
+  "rulesVersion": "1.0-draft",
+  "enforcement": "strict",
+  "effectId": "pixel_heal_aura_2d",
+  "archetype": "aura",
+  "recipeVersion": 1,
+  "recipeRevision": 1,
+  "recipeHash": "baf837a2d83e3a70ad7e689205b4cd38b65acde41c2023ac2b8c68aeedc9eab3",
+  "buildHash": "effae0966d99a41bd26c74463cdf855f30f9231cf2299d1c0075ab198dd06874",
+  "compilerVersion": "styled-content-4",
+  "unityVersion": "2022.3.62f3c1",
+  "sourceRecipePath": "Assets/VFX/Recipes/StyleSpecials/Style2D/pixel_heal_aura_2d.default.json",
+  "runtimeEntry": {
+    "kind": "prefab",
+    "path": "Assets/VFX/Generated/pixel_heal_aura_2d/VFX_pixel_heal_aura_2d.prefab",
+    "guid": "ac3b6d8b996e0bf49a779e5b6a4945ff"
+  },
+  "ownedOutputs": [
+    {
+      "path": "Assets/VFX/Generated/pixel_heal_aura_2d/VFX_pixel_heal_aura_2d.prefab",
+      "guid": "ac3b6d8b996e0bf49a779e5b6a4945ff",
+      "assetType": "GameObject",
+      "sha256": "3ea337b179ff79a1dea7cc14cd1c663dd1f7b537c6925ebc62355f89fd76c3db"
+    }
+  ],
+  "dependencies": [
+    {
+      "path": "Assets/VFX/Shared/Shaders/VfxPixelQuantize.shader",
+      "guid": "bdc3cb6322de4d646bbd8908f2ff8a0c",
+      "assetType": "Shader",
+      "version": null,
+      "dependencyHash": "eec8a3daa1ca2372eefcb6dbf3b949fc"
+    },
+    {
+      "path": "Assets/VFX/Shared/Styles/Materials/MAT_Style_pixel.mat",
+      "guid": "8d5a4206888cc594d93525e9aca83538",
+      "assetType": "Material",
+      "version": null,
+      "dependencyHash": "5923c10b18d8296e71109c10436af1ac"
+    },
+    {
+      "path": "Assets/VFX/Shared/Styles/Meshes/M_Style_Burst.asset",
+      "guid": "0def46dac13f1d8449cd98d98de17a15",
+      "assetType": "Mesh",
+      "version": null,
+      "dependencyHash": "56e972a8f8588a864d379a7611c49c63"
+    },
+    {
+      "path": "Assets/VFX/Shared/Styles/Meshes/M_Style_Quad.asset",
+      "guid": "7f415b79b45b04d4ab5e3f4dd61605aa",
+      "assetType": "Mesh",
+      "version": null,
+      "dependencyHash": "01e83f0bfc8392031ac8f5694416ab10"
+    },
+    {
+      "path": "Assets/VFX/Shared/Styles/Meshes/M_Style_Ring.asset",
+      "guid": "df59364e370c085418d31c0f952bcf1a",
+      "assetType": "Mesh",
+      "version": null,
+      "dependencyHash": "021f9d0fab5159d1d05310de3284c997"
+    },
+    {
+      "path": "Assets/VFX/Shared/Styles/Meshes/M_Style_Shard.asset",
+      "guid": "506c8c0bcf8b14645948b3dbb02a1b3f",
+      "assetType": "Mesh",
+      "version": null,
+      "dependencyHash": "ff113f023e398b26696f0c501ae28324"
+    },
+    {
+      "path": "Packages/com.vfxcomposer.unity/Runtime/Components/StyledVfxController.cs",
+      "guid": "ca6f81a249967414c96082671e07dcaa",
+      "assetType": "MonoScript",
+      "version": null,
+      "dependencyHash": "486e1b8ba27b5e00b709bc5fd2b5624a"
+    }
+  ],
+  "cost": {
+    "particles": 16,
+    "particleSystems": 1,
+    "renderers": 4,
+    "materials": 1,
+    "trails": 0,
+    "duration": 1.0,
+    "localTextureBytes": 0,
+    "dependencyResidentTextureBytes": 0,
+    "gameObjects": 5,
+    "maxDepth": 1
+  },
+  "audit": [],
+  "generatedAtUtc": "2026-08-24T13:14:12.8377255Z"
+}

@@ -1,0 +1,23 @@
+[
+  {
+    "caseId": "effect-id-must-be-lower-snake-case",
+    "baseFixture": "s0-contract.valid.json",
+    "jsonPointer": "/effectId",
+    "replacement": "Sustained-Flame-3D",
+    "expectedInvalid": true
+  },
+  {
+    "caseId": "missing-required-spatial-segment",
+    "baseFixture": "s0-contract.valid.json",
+    "jsonPointer": "/spatialContract",
+    "operation": "remove",
+    "expectedInvalid": true
+  },
+  {
+    "caseId": "visual-semantic-requires-visual-qa-authority",
+    "baseFixture": "s0-contract.valid.json",
+    "jsonPointer": "/requirements/0/evidenceAuthority",
+    "replacement": "telemetry",
+    "expectedInvalid": true
+  }
+]

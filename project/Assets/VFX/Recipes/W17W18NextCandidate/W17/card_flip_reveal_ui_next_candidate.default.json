@@ -1,0 +1,13 @@
+{
+  "schema": "w17-ui-next-candidate/v1",
+  "id": "card_flip_reveal_ui_next_candidate",
+  "workPackage": "W17",
+  "candidateStatus": "NEXT_CANDIDATE_VISUAL_PENDING",
+  "userVisualVerdict": null,
+  "preserveRejectedCandidate": true,
+  "effect": "card_flip_reveal",
+  "lifecycle": "event",
+  "protocols": ["anchor_rect", "follow_mode", "rarity_1_5"],
+  "visualCarriers": ["real_x_axis_flip", "midpoint_flash", "rarity_radial_burst"],
+  "budget": { "uiElements": 7, "materials": 1, "particleSystems": 0 }
+}

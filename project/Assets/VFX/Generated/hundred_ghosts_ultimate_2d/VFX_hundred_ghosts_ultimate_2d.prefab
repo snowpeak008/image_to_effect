@@ -1,0 +1,119 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &3960908114368498831
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3898933882348448636}
+  - component: {fileID: 7900553439219879857}
+  m_Layer: 0
+  m_Name: VFX_hundred_ghosts_ultimate_2d
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3898933882348448636
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3960908114368498831}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &7900553439219879857
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3960908114368498831}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 07d8735a81864834c8f1bda23acf4be2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  compositionId: hundred_ghosts_ultimate_2d
+  duration: 4.8
+  sourcePrefabs:
+  - {fileID: 3296170980886143002, guid: 2bb274b911006be44b747aa81dfbcd95, type: 3}
+  - {fileID: 3296170980886143002, guid: 2bb274b911006be44b747aa81dfbcd95, type: 3}
+  - {fileID: 3296170980886143002, guid: 2bb274b911006be44b747aa81dfbcd95, type: 3}
+  - {fileID: 8696871714125722298, guid: 5e6502ab8b088e843bd36a4994874dd8, type: 3}
+  - {fileID: 3925724645428753451, guid: e99b81dded4da0b4e9d8345bcfaabcb4, type: 3}
+  timeline:
+  - Time: 0
+    SourceIndex: 0
+    RefId: ink_dragon_trail_2d
+    Action: play
+    Position: {x: -1, y: 0.2, z: 0}
+    Rotation: {x: 0, y: 0, z: 0}
+    Scale: 1
+    HasPalette: 1
+    Primary: {r: 0.13333334, g: 0.12941177, b: 0.14509805, a: 1}
+    Secondary: {r: 0.45490196, g: 0.43529412, b: 0.47058824, a: 1}
+    Accent: {r: 0.7254902, g: 0.27450982, b: 0.22745098, a: 1}
+  - Time: 0.45
+    SourceIndex: 1
+    RefId: ink_dragon_trail_2d
+    Action: play
+    Position: {x: 0, y: -0.3, z: 0}
+    Rotation: {x: 0, y: 0, z: 12}
+    Scale: 1
+    HasPalette: 1
+    Primary: {r: 0.13333334, g: 0.12941177, b: 0.14509805, a: 1}
+    Secondary: {r: 0.45490196, g: 0.43529412, b: 0.47058824, a: 1}
+    Accent: {r: 0.7254902, g: 0.27450982, b: 0.22745098, a: 1}
+  - Time: 0.9
+    SourceIndex: 2
+    RefId: ink_dragon_trail_2d
+    Action: play
+    Position: {x: 1, y: 0.25, z: 0}
+    Rotation: {x: 0, y: 0, z: -12}
+    Scale: 1
+    HasPalette: 1
+    Primary: {r: 0.13333334, g: 0.12941177, b: 0.14509805, a: 1}
+    Secondary: {r: 0.45490196, g: 0.43529412, b: 0.47058824, a: 1}
+    Accent: {r: 0.7254902, g: 0.27450982, b: 0.22745098, a: 1}
+  - Time: 1.4
+    SourceIndex: 3
+    RefId: phantom_wail_area_2d
+    Action: play
+    Position: {x: 0, y: 0, z: 0}
+    Rotation: {x: 0, y: 0, z: 0}
+    Scale: 1.6
+    HasPalette: 1
+    Primary: {r: 0.13333334, g: 0.12941177, b: 0.14509805, a: 1}
+    Secondary: {r: 0.45490196, g: 0.43529412, b: 0.47058824, a: 1}
+    Accent: {r: 0.7254902, g: 0.27450982, b: 0.22745098, a: 1}
+  - Time: 3
+    SourceIndex: 4
+    RefId: shadow_grasp_area_2d
+    Action: play
+    Position: {x: 0, y: 0, z: 0}
+    Rotation: {x: 0, y: 0, z: 0}
+    Scale: 1.35
+    HasPalette: 1
+    Primary: {r: 0.13333334, g: 0.12941177, b: 0.14509805, a: 1}
+    Secondary: {r: 0.45490196, g: 0.43529412, b: 0.47058824, a: 1}
+    Accent: {r: 0.7254902, g: 0.27450982, b: 0.22745098, a: 1}
+  cameraHints:
+  - Time: 1.4
+    Type: slowmo
+    Strength: 0.3
+  - Time: 3
+    Type: shake
+    Strength: 0.45
+  gates: []
+  descriptor: {fileID: 4900000, guid: c231419bc711c754ea67d0a8685a86fb, type: 3}

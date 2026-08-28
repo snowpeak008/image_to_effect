@@ -1,0 +1,30 @@
+{
+  "succeeded": false,
+  "detail": null,
+  "entries": [
+    {
+      "code": "E103",
+      "severity": "error",
+      "path": "/stages/launch/modules/energy_body/kind",
+      "message": "Value is not in the supported enumeration.",
+      "actualValue": "body",
+      "allowedRange": null
+    },
+    {
+      "code": "E103",
+      "severity": "error",
+      "path": "/stages/travel/modules/motion_trail/kind",
+      "message": "Value is not in the supported enumeration.",
+      "actualValue": "trail",
+      "allowedRange": null
+    },
+    {
+      "code": "E103",
+      "severity": "error",
+      "path": "/stages/impact/modules/impact_burst/kind",
+      "message": "Value is not in the supported enumeration.",
+      "actualValue": "burst",
+      "allowedRange": null
+    }
+  ]
+}

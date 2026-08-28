@@ -1,0 +1,12 @@
+{
+  "manifestVersion": 1,
+  "templateId": "PFT_3D_LaunchFlash",
+  "templateVersion": "1.0.0",
+  "kind": "impact_flash",
+  "dimension": "3d",
+  "assetGuid": "cb75b9516f6e41744872cdc6b21fd462",
+  "assetPath": "Assets/VFX/Templates/3D/Prefabs/PFT_3D_LaunchFlash.prefab",
+  "tags": ["fire", "stylized", "3d", "bounds:template-local", "camera:perspective-reviewed"],
+  "parameters": { "lifetime": { "type": "float", "min": .06, "max": .22, "default": .12, "binding": "3d.launch.lifetime" }, "size": { "type": "float", "min": .45, "max": 1.8, "default": 1.0, "binding": "3d.launch.size" } },
+  "cost": { "estimatedPeakParticles": 1, "materials": 1, "trails": 0 }
+}

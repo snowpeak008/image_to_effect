@@ -1,0 +1,13 @@
+{
+  "schema": "w17-ui-next-candidate/v1",
+  "id": "daily_check_stamp_ui_next_candidate",
+  "workPackage": "W17",
+  "candidateStatus": "NEXT_CANDIDATE_VISUAL_PENDING",
+  "userVisualVerdict": null,
+  "preserveRejectedCandidate": true,
+  "effect": "daily_check_stamp",
+  "lifecycle": "event",
+  "protocols": ["anchor_rect", "follow_mode"],
+  "visualCarriers": ["falling_squash_stamp", "ink_ring", "stroke_reveal_check"],
+  "budget": { "uiElements": 3, "materials": 1, "particleSystems": 0 }
+}

@@ -1,0 +1,87 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://image-to-smart.local/schemas/s0a-metrics/v2",
+  "title": "S0a terminal metrics report",
+  "description": "Canonical scorer output. ReportHash is SHA-256 of canonical UTF-8 JSON with reportHash omitted; the scorer validates arithmetic and labelManifestHash identity.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["holdoutCohort", "labelManifestHash", "perRequirementMetrics", "topRouteMetrics", "stability", "terminalStatus", "reportHash"],
+  "properties": {
+    "holdoutCohort": {"enum": ["reduced-36-12-12-6", "full-60-20-20-10"]},
+    "labelManifestHash": {"$ref": "#/$defs/hash"},
+    "perRequirementMetrics": {"$ref": "#/$defs/perRequirementMetrics"},
+    "topRouteMetrics": {"$ref": "#/$defs/topRouteMetrics"},
+    "stability": {"$ref": "#/$defs/stability"},
+    "terminalStatus": {"enum": ["S0A_GATE_QUALIFIED", "S0A_ADVISORY_ONLY"]},
+    "reportHash": {"$ref": "#/$defs/hash"}
+  },
+  "allOf": [
+    {
+      "if": {"properties": {"terminalStatus": {"const": "S0A_GATE_QUALIFIED"}}, "required": ["terminalStatus"]},
+      "then": {
+        "properties": {
+          "holdoutCohort": {"const": "full-60-20-20-10"},
+          "perRequirementMetrics": {
+            "properties": {
+              "falsePassCount": {"const": 0},
+              "falseFailRate": {"maximum": 0.1},
+              "nonBoundaryUncertainRate": {"maximum": 0.15},
+              "qualificationPreconditions": {
+                "properties": {
+                  "exactFullHoldout": {"const": true},
+                  "labelCount": {"const": 110},
+                  "cohortCounts": {"properties": {"fail": {"const": 60}, "pass": {"const": 20}, "uncertain": {"const": 20}, "invalid": {"const": 10}}},
+                  "uncountedSamples": {"maxItems": 0}
+                }
+              }
+            }
+          },
+          "topRouteMetrics": {"properties": {"evidenceInvalidRecall": {"const": 1}}},
+          "stability": {"properties": {"perRequirementAgreement": {"minimum": 0.9}, "topRouteAgreement": {"minimum": 0.9}}}
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "hash": {"type": "string", "pattern": "^sha256:[a-f0-9]{64}$"},
+    "count": {"type": "integer", "minimum": 0},
+    "rate": {"type": "number", "minimum": 0, "maximum": 1},
+    "route": {"enum": ["VISUAL_PASS", "VISUAL_FAIL", "EVIDENCE_INVALID", "CONTRACT_AMBIGUOUS", "VISUAL_UNCERTAIN"]},
+    "metricMatrix": {"type": "object", "additionalProperties": {"type": "integer", "minimum": 0}},
+    "perRequirementMetrics": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["falsePassCount", "knownVisualFailCount", "falseFailRate", "nonBoundaryUncertainRate", "confusionMatricesByRequirementType", "qualificationPreconditions"],
+      "properties": {
+        "falsePassCount": {"$ref": "#/$defs/count"},
+        "knownVisualFailCount": {"$ref": "#/$defs/count"},
+        "falseFailRate": {"$ref": "#/$defs/rate"},
+        "nonBoundaryUncertainRate": {"$ref": "#/$defs/rate"},
+        "confusionMatricesByRequirementType": {"type": "object", "additionalProperties": {"type": "object", "additionalProperties": {"$ref": "#/$defs/metricMatrix"}}},
+        "qualificationPreconditions": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["exactFullHoldout", "labelCount", "cohortCounts", "uncountedSamples"],
+          "properties": {
+            "exactFullHoldout": {"type": "boolean"},
+            "labelCount": {"$ref": "#/$defs/count"},
+            "cohortCounts": {"type": "object", "additionalProperties": false, "required": ["fail", "pass", "uncertain", "invalid"], "properties": {"fail": {"$ref": "#/$defs/count"}, "pass": {"$ref": "#/$defs/count"}, "uncertain": {"$ref": "#/$defs/count"}, "invalid": {"$ref": "#/$defs/count"}}},
+            "uncountedSamples": {"type": "array", "uniqueItems": true, "items": {"type": "string", "minLength": 1}}
+          }
+        }
+      }
+    },
+    "topRouteMetrics": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["evidenceInvalidRecall", "evidenceInvalidDetected", "evidenceInvalidExpected", "confusionMatrix"],
+      "properties": {
+        "evidenceInvalidRecall": {"$ref": "#/$defs/rate"},
+        "evidenceInvalidDetected": {"$ref": "#/$defs/count"},
+        "evidenceInvalidExpected": {"$ref": "#/$defs/count"},
+        "confusionMatrix": {"type": "object", "additionalProperties": false, "required": ["VISUAL_PASS", "VISUAL_FAIL", "EVIDENCE_INVALID", "CONTRACT_AMBIGUOUS", "VISUAL_UNCERTAIN"], "properties": {"VISUAL_PASS": {"$ref": "#/$defs/metricMatrix"}, "VISUAL_FAIL": {"$ref": "#/$defs/metricMatrix"}, "EVIDENCE_INVALID": {"$ref": "#/$defs/metricMatrix"}, "CONTRACT_AMBIGUOUS": {"$ref": "#/$defs/metricMatrix"}, "VISUAL_UNCERTAIN": {"$ref": "#/$defs/metricMatrix"}}}
+      }
+    },
+    "stability": {"type": "object", "additionalProperties": false, "required": ["isolatedSessionCount", "perRequirementAgreement", "topRouteAgreement"], "properties": {"isolatedSessionCount": {"const": 3}, "perRequirementAgreement": {"$ref": "#/$defs/rate"}, "topRouteAgreement": {"$ref": "#/$defs/rate"}}}
+  }
+}

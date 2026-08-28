@@ -1,0 +1,33 @@
+{
+  "schema": "style-special-next-candidate/v1",
+  "id": "phantom_wail_area_2d_next_candidate",
+  "sourceId": "phantom_wail_area_2d",
+  "label": "GHOST · NEW WAIL",
+  "group": "w16",
+  "archetype": "area",
+  "dimension": "2d",
+  "style": "ghost",
+  "profile": "GhostPulse",
+  "semantic": "five-drifting-silhouettes+cold-mist+controlled-visibility-breath",
+  "duration": 1.48,
+  "releaseNormalized": 0.16,
+  "sustainEndNormalized": 0.86,
+  "sustained": true,
+  "seed": 16111,
+  "intensity": 0.94,
+  "palette": {
+    "primary": "#62C9BC",
+    "secondary": "#B9F1E9",
+    "accent": "#EFFFFB"
+  },
+  "meshes": [
+    "Quad",
+    "Quad",
+    "Quad",
+    "Ring",
+    "Burst"
+  ],
+  "pairFamily": "ghost",
+  "pairRole": "new",
+  "sourceBaseId": "phantom_wail_area_2d"
+}

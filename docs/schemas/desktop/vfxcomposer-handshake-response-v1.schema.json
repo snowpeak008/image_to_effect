@@ -1,0 +1,132 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.vfxcomposer.dev/desktop/vfxcomposer-handshake-response-v1.schema.json",
+  "title": "VFX Composer handshake response v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "protocolVersion",
+    "messageKind",
+    "requestId",
+    "serverInstanceId",
+    "accepted",
+    "negotiatedCapabilities",
+    "diagnostic"
+  ],
+  "properties": {
+    "protocolVersion": {
+      "const": "vfxcomposer.protocol/1.0"
+    },
+    "messageKind": {
+      "const": "handshake.response"
+    },
+    "requestId": {
+      "$ref": "#/$defs/correlationToken"
+    },
+    "serverInstanceId": {
+      "$ref": "#/$defs/correlationToken"
+    },
+    "accepted": {
+      "type": "boolean"
+    },
+    "negotiatedCapabilities": {
+      "$ref": "#/$defs/negotiatedCapabilities"
+    },
+    "diagnostic": {
+      "oneOf": [
+        {
+          "type": "null"
+        },
+        {
+          "$ref": "vfxcomposer-diagnostic-v1.schema.json"
+        }
+      ]
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "accepted": {
+            "const": true
+          }
+        },
+        "required": [
+          "accepted"
+        ]
+      },
+      "then": {
+        "properties": {
+          "diagnostic": {
+            "type": "null"
+          }
+        }
+      },
+      "else": {
+        "properties": {
+          "negotiatedCapabilities": {
+            "maxItems": 0
+          },
+          "diagnostic": {
+            "$ref": "vfxcomposer-diagnostic-v1.schema.json"
+          }
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "correlationToken": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 128,
+      "pattern": "^[A-Za-z0-9._:-]+$"
+    },
+    "negotiatedCapabilities": {
+      "oneOf": [
+        {
+          "const": []
+        },
+        {
+          "const": [
+            "diagnostics.stable.v1"
+          ]
+        },
+        {
+          "const": [
+            "protocol.handshake.v1"
+          ]
+        },
+        {
+          "const": [
+            "status.snapshot.v1"
+          ]
+        },
+        {
+          "const": [
+            "diagnostics.stable.v1",
+            "protocol.handshake.v1"
+          ]
+        },
+        {
+          "const": [
+            "diagnostics.stable.v1",
+            "status.snapshot.v1"
+          ]
+        },
+        {
+          "const": [
+            "protocol.handshake.v1",
+            "status.snapshot.v1"
+          ]
+        },
+        {
+          "const": [
+            "diagnostics.stable.v1",
+            "protocol.handshake.v1",
+            "status.snapshot.v1"
+          ]
+        }
+      ]
+    }
+  }
+}

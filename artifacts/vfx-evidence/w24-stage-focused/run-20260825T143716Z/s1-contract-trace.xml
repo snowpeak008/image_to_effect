@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<test-run id="2" testcasecount="15" result="Passed" total="15" passed="15" failed="0" inconclusive="0" skipped="0" asserts="0" engine-version="3.5.0.0" clr-version="4.0.30319.42000" start-time="2026-08-25 12:21:46Z" end-time="2026-08-25 12:21:47Z" duration="0.4362237">
+  <test-suite type="TestSuite" id="1541" name="project" fullname="project" runstate="Runnable" testcasecount="442" result="Passed" start-time="2026-08-25 12:21:46Z" end-time="2026-08-25 12:21:47Z" duration="0.436224" total="15" passed="15" failed="0" inconclusive="0" skipped="0" asserts="0">
+    <properties />
+    <test-suite type="Assembly" id="2075" name="VFXComposer.Tests.EditMode.dll" fullname="D:/WorkWork/Assist/image_to_smart/.codex_tmp/w24-fresh-20260825-0628/project/Library/ScriptAssemblies/VFXComposer.Tests.EditMode.dll" runstate="Runnable" testcasecount="440" result="Passed" start-time="2026-08-25 12:21:46Z" end-time="2026-08-25 12:21:47Z" duration="0.402905" total="15" passed="15" failed="0" inconclusive="0" skipped="0" asserts="0">
+      <properties>
+        <property name="_PID" value="43536" />
+        <property name="_APPDOMAIN" value="Unity Child Domain" />
+        <property name="platform" value="EditMode" />
+      </properties>
+      <test-suite type="TestSuite" id="2076" name="VFXComposer" fullname="VFXComposer" runstate="Runnable" testcasecount="440" result="Passed" start-time="2026-08-25 12:21:46Z" end-time="2026-08-25 12:21:47Z" duration="0.384792" total="15" passed="15" failed="0" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <test-suite type="TestSuite" id="2077" name="Tests" fullname="VFXComposer.Tests" runstate="Runnable" testcasecount="440" result="Passed" start-time="2026-08-25 12:21:46Z" end-time="2026-08-25 12:21:47Z" duration="0.380318" total="15" passed="15" failed="0" inconclusive="0" skipped="0" asserts="0">
+          <properties />
+          <test-suite type="TestSuite" id="2078" name="EditMode" fullname="VFXComposer.Tests.EditMode" runstate="Runnable" testcasecount="440" result="Passed" start-time="2026-08-25 12:21:46Z" end-time="2026-08-25 12:21:47Z" duration="0.368088" total="15" passed="15" failed="0" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <test-suite type="TestSuite" id="2079" name="W24S1" fullname="VFXComposer.Tests.EditMode.W24S1" runstate="Runnable" testcasecount="15" result="Passed" start-time="2026-08-25 12:21:46Z" end-time="2026-08-25 12:21:47Z" duration="0.360069" total="15" passed="15" failed="0" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <test-suite type="TestFixture" id="2037" name="W24S1ContractAndTraceTests" fullname="VFXComposer.Tests.EditMode.W24S1.W24S1ContractAndTraceTests" classname="VFXComposer.Tests.EditMode.W24S1.W24S1ContractAndTraceTests" runstate="Runnable" testcasecount="15" result="Passed" start-time="2026-08-25 12:21:46Z" end-time="2026-08-25 12:21:47Z" duration="0.356651" total="15" passed="15" failed="0" inconclusive="0" skipped="0" asserts="0">
+                <properties />
+                <test-case id="2038" name="AllFourFormalContracts_UseTheSameStrictLowerCamelAuthorityAndMatchCanonicalHash" fullname="VFXComposer.Tests.EditMode.W24S1.W24S1ContractAndTraceTests.AllFourFormalContracts_UseTheSameStrictLowerCamelAuthorityAndMatchCanonicalHash" methodname="AllFourFormalContracts_UseTheSameStrictLowerCamelAuthorityAndMatchCanonicalHash" classname="VFXComposer.Tests.EditMode.W24S1.W24S1ContractAndTraceTests" runstate="Runnable" seed="1655556511" result="Passed" start-time="2026-08-25 12:21:46Z" end-time="2026-08-25 12:21:47Z" duration="0.171842" asserts="0">
+                  <properties />
+                </test-case>
+                <test-case id="2039" name="FormalSustainedFlame_LowerCamelJsonNestedShapeAndPythonCompatibleHash_AllPass" fullname="VFXComposer.Tests.EditMode.W24S1.W24S1ContractAndTraceTests.FormalSustainedFlame_LowerCamelJsonNestedShapeAndPythonCompatibleHash_AllPass" methodname="FormalSustainedFlame_LowerCamelJsonNestedShapeAndPythonCompatibleHash_AllPass" classname="VFXComposer.Tests.EditMode.W24S1.W24S1ContractAndTraceTests" runstate="Runnable" seed="1620194992" result="Passed" start-time="2026-08-25 12:21:47Z" end-time="2026-08-25 12:21:47Z" duration="0.016466" asserts="0">
+                  <properties />
+                </test-case>
+                <test-case id="2045" name="FormalTraceJsonEntry_IsStrictLowerCamel_AndPendingRegistrationCannotPretendToBeBuilt" fullname="VFXComposer.Tests.EditMode.W24S1.W24S1ContractAndTraceTests.FormalTraceJsonEntry_IsStrictLowerCamel_AndPendingRegistrationCannotPretendToBeBuilt" methodname="FormalTraceJsonEntry_IsStrictLowerCamel_AndPendingRegistrationCannotPretendToBeBuilt" classname="VFXComposer.Tests.EditMode.W24S1.W24S1ContractAndTraceTests" runstate="Runnable" seed="608977336" result="Passed" start-time="2026-08-25 12:21:47Z" end-time="2026-08-25 12:21:47Z" duration="0.064670" asserts="0">
+                  <properties />
+                </test-case>
+                <test-suite type="ParameterizedMethod" id="2049" name="FrozenKnownCheats_AuthorityMustFailAndIndependentEvidenceMustAlarm" fullname="VFXComposer.Tests.EditMode.W24S1.W24S1ContractAndTraceTests.FrozenKnownCheats_AuthorityMustFailAndIndependentEvidenceMustAlarm" classname="VFXComposer.Tests.EditMode.W24S1.W24S1ContractAndTraceTests" runstate="Runnable" testcasecount="3" result="Passed" start-time="2026-08-25 12:21:47Z" end-time="2026-08-25 12:21:47Z" duration="0.018625" total="3" passed="3" failed="0" inconclusive="0" skipped="0" asserts="0">
+                  <properties />
+                  <test-case id="2046" name="FrozenKnownCheats_AuthorityMustFailAndIndependentEvidenceMustAlarm(&quot;Independent fragments rotate separately&quot;,&quot;whole_group_rotation&quot;,&quot;whole-image-rotation-fake-fragments&quot;)" fullname="VFXComposer.Tests.EditMode.W24S1.W24S1ContractAndTraceTests.FrozenKnownCheats_AuthorityMustFailAndIndependentEvidenceMustAlarm(&quot;Independent fragments rotate separately&quot;,&quot;whole_group_rotation&quot;,&quot;whole-image-rotation-fake-fragments&quot;)" methodname="FrozenKnownCheats_AuthorityMustFailAndIndependentEvidenceMustAlarm" classname="VFXComposer.Tests.EditMode.W24S1.W24S1ContractAndTraceTests" runstate="Runnable" seed="321485944" result="Passed" start-time="2026-08-25 12:21:47Z" end-time="2026-08-25 12:21:47Z" duration="0.006523" asserts="0">
+                    <properties />
+                  </test-case>
+                  <test-case id="2047" name="FrozenKnownCheats_AuthorityMustFailAndIndependentEvidenceMustAlarm(&quot;A projectile trail follows movement&quot;,&quot;static_trail&quot;,&quot;static-fake-trail&quot;)" fullname="VFXComposer.Tests.EditMode.W24S1.W24S1ContractAndTraceTests.FrozenKnownCheats_AuthorityMustFailAndIndependentEvidenceMustAlarm(&quot;A projectile trail follows movement&quot;,&quot;static_trail&quot;,&quot;static-fake-trail&quot;)" methodname="FrozenKnownCheats_AuthorityMustFailAndIndependentEvidenceMustAlarm" classname="VFXComposer.Tests.EditMode.W24S1.W24S1ContractAndTraceTests" runstate="Runnable" seed="376832394" result="Passed" start-time="2026-08-25 12:21:47Z" end-time="2026-08-25 12:21:47Z" duration="0.005310" asserts="0">
+                    <properties />
+                  </test-case>
+                  <test-case id="2048" name="FrozenKnownCheats_AuthorityMustFailAndIndependentEvidenceMustAlarm(&quot;A real Light illuminates a receiver&quot;,&quot;additive_fake_light&quot;,&quot;additive-fake-light&quot;)" fullname="VFXComposer.Tests.EditMode.W24S1.W24S1ContractAndTraceTests.FrozenKnownCheats_AuthorityMustFailAndIndependentEvidenceMustAlarm(&quot;A real Light illuminates a receiver&quot;,&quot;additive_fake_light&quot;,&quot;additive-fake-light&quot;)" methodname="FrozenKnownCheats_AuthorityMustFailAndIndependentEvidenceMustAlarm" classname="VFXComposer.Tests.EditMode.W24S1.W24S1ContractAndTraceTests" runstate="Runnable" seed="460613437" result="Passed" start-time="2026-08-25 12:21:47Z" end-time="2026-08-25 12:21:47Z" duration="0.005074" asserts="0">
+                    <properties />
+                  </test-case>
+                </test-suite>
+                <test-case id="2043" name="PreC0Identity_RejectsFakeZeroCaptureToolHash" fullname="VFXComposer.Tests.EditMode.W24S1.W24S1ContractAndTraceTests.PreC0Identity_RejectsFakeZeroCaptureToolHash" methodname="PreC0Identity_RejectsFakeZeroCaptureToolHash" classname="VFXComposer.Tests.EditMode.W24S1.W24S1ContractAndTraceTests" runstate="Runnable" seed="1925026925" result="Passed" start-time="2026-08-25 12:21:47Z" end-time="2026-08-25 12:21:47Z" duration="0.017633" asserts="0">
+                  <properties />
+                </test-case>
+                <test-case id="2044" name="RealJsonContract_DrivesFormalBidirectionalTraceValidation" fullname="VFXComposer.Tests.EditMode.W24S1.W24S1ContractAndTraceTests.RealJsonContract_DrivesFormalBidirectionalTraceValidation" methodname="RealJsonContract_DrivesFormalBidirectionalTraceValidation" classname="VFXComposer.Tests.EditMode.W24S1.W24S1ContractAndTraceTests" runstate="Runnable" seed="771144792" result="Passed" start-time="2026-08-25 12:21:47Z" end-time="2026-08-25 12:21:47Z" duration="0.016180" asserts="0">
+                  <properties />
+                </test-case>
+                <test-case id="2050" name="RepositoryUserSignatureCannotGrantL4BeforeHostOwnedAuthorityExists" fullname="VFXComposer.Tests.EditMode.W24S1.W24S1ContractAndTraceTests.RepositoryUserSignatureCannotGrantL4BeforeHostOwnedAuthorityExists" methodname="RepositoryUserSignatureCannotGrantL4BeforeHostOwnedAuthorityExists" classname="VFXComposer.Tests.EditMode.W24S1.W24S1ContractAndTraceTests" runstate="Runnable" seed="1501939057" result="Passed" start-time="2026-08-25 12:21:47Z" end-time="2026-08-25 12:21:47Z" duration="0.004993" asserts="0">
+                  <properties />
+                </test-case>
+                <test-case id="2042" name="StrictJsonEntry_RejectsLayerBudgetCostStringInsteadOfObject" fullname="VFXComposer.Tests.EditMode.W24S1.W24S1ContractAndTraceTests.StrictJsonEntry_RejectsLayerBudgetCostStringInsteadOfObject" methodname="StrictJsonEntry_RejectsLayerBudgetCostStringInsteadOfObject" classname="VFXComposer.Tests.EditMode.W24S1.W24S1ContractAndTraceTests" runstate="Runnable" seed="271384460" result="Passed" start-time="2026-08-25 12:21:47Z" end-time="2026-08-25 12:21:47Z" duration="0.006254" asserts="0">
+                  <properties />
+                </test-case>
+                <test-case id="2041" name="StrictJsonEntry_RejectsMissingNestedResolution" fullname="VFXComposer.Tests.EditMode.W24S1.W24S1ContractAndTraceTests.StrictJsonEntry_RejectsMissingNestedResolution" methodname="StrictJsonEntry_RejectsMissingNestedResolution" classname="VFXComposer.Tests.EditMode.W24S1.W24S1ContractAndTraceTests" runstate="Runnable" seed="755941562" result="Passed" start-time="2026-08-25 12:21:47Z" end-time="2026-08-25 12:21:47Z" duration="0.006582" asserts="0">
+                  <properties />
+                </test-case>
+                <test-case id="2040" name="StrictJsonEntry_RejectsUnknownField" fullname="VFXComposer.Tests.EditMode.W24S1.W24S1ContractAndTraceTests.StrictJsonEntry_RejectsUnknownField" methodname="StrictJsonEntry_RejectsUnknownField" classname="VFXComposer.Tests.EditMode.W24S1.W24S1ContractAndTraceTests" runstate="Runnable" seed="157778237" result="Passed" start-time="2026-08-25 12:21:47Z" end-time="2026-08-25 12:21:47Z" duration="0.002200" asserts="0">
+                  <properties />
+                </test-case>
+                <test-case id="2052" name="TypedMatrix_DiagnosticAuthorityRejectsGenericSummaryAndDuplicateMetricCheck" fullname="VFXComposer.Tests.EditMode.W24S1.W24S1ContractAndTraceTests.TypedMatrix_DiagnosticAuthorityRejectsGenericSummaryAndDuplicateMetricCheck" methodname="TypedMatrix_DiagnosticAuthorityRejectsGenericSummaryAndDuplicateMetricCheck" classname="VFXComposer.Tests.EditMode.W24S1.W24S1ContractAndTraceTests" runstate="Runnable" seed="615171589" result="Passed" start-time="2026-08-25 12:21:47Z" end-time="2026-08-25 12:21:47Z" duration="0.006561" asserts="0">
+                  <properties />
+                </test-case>
+                <test-case id="2053" name="TypedMatrix_FragmentDiagnosticCrossEvidenceCannotUseGenericSummary" fullname="VFXComposer.Tests.EditMode.W24S1.W24S1ContractAndTraceTests.TypedMatrix_FragmentDiagnosticCrossEvidenceCannotUseGenericSummary" methodname="TypedMatrix_FragmentDiagnosticCrossEvidenceCannotUseGenericSummary" classname="VFXComposer.Tests.EditMode.W24S1.W24S1ContractAndTraceTests" runstate="Runnable" seed="1560531617" result="Passed" start-time="2026-08-25 12:21:47Z" end-time="2026-08-25 12:21:47Z" duration="0.007353" asserts="0">
+                  <properties />
+                </test-case>
+                <test-case id="2051" name="TypedMetricTraceEvidence_RequiresReportIdentityAndCanonicalAnalysisInput" fullname="VFXComposer.Tests.EditMode.W24S1.W24S1ContractAndTraceTests.TypedMetricTraceEvidence_RequiresReportIdentityAndCanonicalAnalysisInput" methodname="TypedMetricTraceEvidence_RequiresReportIdentityAndCanonicalAnalysisInput" classname="VFXComposer.Tests.EditMode.W24S1.W24S1ContractAndTraceTests" runstate="Runnable" seed="2040601809" result="Passed" start-time="2026-08-25 12:21:47Z" end-time="2026-08-25 12:21:47Z" duration="0.006449" asserts="0">
+                  <properties />
+                </test-case>
+              </test-suite>
+            </test-suite>
+          </test-suite>
+        </test-suite>
+      </test-suite>
+    </test-suite>
+  </test-suite>
+</test-run>

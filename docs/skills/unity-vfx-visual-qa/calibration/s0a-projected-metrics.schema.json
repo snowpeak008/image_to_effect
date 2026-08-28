@@ -1,0 +1,52 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://image-to-smart.local/schemas/s0a-metrics/v3",
+  "title": "Projected S0a calibration metrics",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "scorerVersion", "scorerSourceHash", "projectionReceiptHash", "reviewCorpusHash", "holdoutCohort", "labelManifestHash", "perRequirementMetrics", "topRouteMetrics", "stability", "terminalStatus", "reportHash"],
+  "properties": {
+    "schemaVersion": {"const": "s0a-metrics/v3"},
+    "scorerVersion": {"const": "w24-s0a-projected-scorer/1.1.0"},
+    "scorerSourceHash": {"$ref": "#/$defs/hash"},
+    "projectionReceiptHash": {"$ref": "#/$defs/hash"},
+    "reviewCorpusHash": {"$ref": "#/$defs/hash"},
+    "holdoutCohort": {"enum": ["reduced-36-12-12-6", "full-60-20-20-10"]},
+    "labelManifestHash": {"$ref": "#/$defs/hash"},
+    "perRequirementMetrics": {"$ref": "https://image-to-smart.local/schemas/s0a-metrics/v2#/$defs/perRequirementMetrics"},
+    "topRouteMetrics": {"$ref": "https://image-to-smart.local/schemas/s0a-metrics/v2#/$defs/topRouteMetrics"},
+    "stability": {"$ref": "https://image-to-smart.local/schemas/s0a-metrics/v2#/$defs/stability"},
+    "terminalStatus": {"enum": ["S0A_GATE_QUALIFIED", "S0A_ADVISORY_ONLY"]},
+    "reportHash": {"$ref": "#/$defs/hash"}
+  },
+  "allOf": [
+    {
+      "if": {"properties": {"terminalStatus": {"const": "S0A_GATE_QUALIFIED"}}, "required": ["terminalStatus"]},
+      "then": {
+        "properties": {
+          "holdoutCohort": {"const": "full-60-20-20-10"},
+          "perRequirementMetrics": {
+            "properties": {
+              "falsePassCount": {"const": 0},
+              "falseFailRate": {"maximum": 0.1},
+              "nonBoundaryUncertainRate": {"maximum": 0.15},
+              "qualificationPreconditions": {
+                "properties": {
+                  "exactFullHoldout": {"const": true},
+                  "labelCount": {"const": 110},
+                  "cohortCounts": {"properties": {"fail": {"const": 60}, "pass": {"const": 20}, "uncertain": {"const": 20}, "invalid": {"const": 10}}},
+                  "uncountedSamples": {"maxItems": 0}
+                }
+              }
+            }
+          },
+          "topRouteMetrics": {"properties": {"evidenceInvalidRecall": {"const": 1}}},
+          "stability": {"properties": {"perRequirementAgreement": {"minimum": 0.9}, "topRouteAgreement": {"minimum": 0.9}}}
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "hash": {"type": "string", "pattern": "^sha256:[a-f0-9]{64}$"}
+  }
+}

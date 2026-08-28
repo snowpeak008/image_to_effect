@@ -1,0 +1,16 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "w24-s6/local-document-inspection-request-v1",
+  "title": "W24 S6 in-memory document inspection request",
+  "$comment": "Runtime rejects request source text above x-maxJsonCharacters before lexical parsing. This equals the 4 MiB base64 maximum plus a 4096-character exact-envelope allowance.",
+  "x-maxJsonCharacters": 5596504,
+  "type": "object", "additionalProperties": false,
+  "required": ["schemaVersion", "operationKind", "targetPath", "expectedInputHash", "documentBytes"],
+  "properties": {
+    "schemaVersion": {"const": "w24-s6/local-document-inspection-request-v1"},
+    "operationKind": {"enum": ["ParseRecipeSyntax", "ValidateContractDocument", "InspectManifestHeader"]},
+    "targetPath": {"type": "string", "maxLength": 260, "pattern": "^[^\\\\:|\\u0000-\\u001f\\u007f]+$"},
+    "expectedInputHash": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
+    "documentBytes": {"type": "string", "contentEncoding": "base64", "maxLength": 5592408}
+  }
+}

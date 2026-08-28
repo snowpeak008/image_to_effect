@@ -1,0 +1,16 @@
+{
+  "schemaVersion": "s0a-operator-mutation-command/v1",
+  "sampleId": "s0a-114fa96f5ccde54ae6a8",
+  "effectId": "sustained_flame_3d",
+  "fixedSeed": 2549686465,
+  "mutationCommands": [
+    {
+      "operation": "set",
+      "targetKey": "Flame.loopResetDiscontinuity",
+      "value": "0.14_normalized_delta"
+    }
+  ],
+  "fixtureApplicationStatus": "NOT_APPLIED_BY_UNITY_FIXTURE_ADAPTER",
+  "operatorInstruction": "A later Unity fixture adapter must execute this command and capture evidence.",
+  "commandHash": "sha256:1c845ef3e947a70f81b11047936e7fb656b48e22e8293d0a9d65d89e4430fc0c"
+}

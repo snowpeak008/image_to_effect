@@ -1,0 +1,12 @@
+{
+  "scene": "Assets/VFX/Preview/VFXPREVIEW_InteractionGallery_3x3.unity",
+  "capture": "one serialized perspective Camera; natural Update; preview driver sends release/retarget/hit events",
+  "fps": 60,
+  "frames": [
+    { "file": "interaction_018.png", "time": 0.3, "aliveEntries": 9, "cellForegroundPixels": [809,1399,1549,1146,1841,3039,1126,2697,685], "whiteClipRatio": 0.029786 },
+    { "file": "interaction_090.png", "time": 1.5, "aliveEntries": 9, "cellForegroundPixels": [822,972,1823,1071,2490,3161,3040,4079,1041], "whiteClipRatio": 0.026012 },
+    { "file": "interaction_180.png", "time": 3, "aliveEntries": 9, "cellForegroundPixels": [767,654,1814,1162,2352,2992,1827,4731,3027], "whiteClipRatio": 0.025381 },
+    { "file": "interaction_240.png", "time": 4, "aliveEntries": 9, "cellForegroundPixels": [635,839,1928,453,1425,1685,138,3925,3100], "whiteClipRatio": 0.014738 },
+    { "file": "interaction_330.png", "time": 5.5, "aliveEntries": 9, "cellForegroundPixels": [809,1399,1549,1146,1841,3039,1126,2697,685], "whiteClipRatio": 0.029786 }
+  ]
+}

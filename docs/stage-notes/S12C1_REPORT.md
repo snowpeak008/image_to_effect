@@ -1,0 +1,9 @@
+# S12C1 report — UI v2 routing, Slash Patch, and AI preregistration
+
+> Status: **Development complete; Main-Agent independent acceptance passed.** Independent verification recorded compile exit 0 and `s12-main-c1-final2.xml` EditMode 6/6 passed. No AI agent was dispatched and no Player/full-suite run was made.
+
+S12C1 routes UI compiler and Patch operations by `recipeVersion`, previews the selected same-ID v2 bytes rather than silently rebuilding canonical, and blocks other v2 IDs from overwriting the sole managed Slash output. `S12SlashPatchService` is isolated from v1, accepts only bare `replace` arrays for stable Slash parameter paths, validates Manifest type/range, and builds through the v2 compiler.
+
+Targeted EditMode is **6/6 passed** and compile exit is 0. It includes grammar/bad-input no-throw, v1/v2 rejection, selected variant preview, three real Apply paths, snapshot failure, and the four rollback combinations (recipe-history fault or compiler commit fault × history present/absent). Every rollback case compares Recipe/history bytes and `.meta`/GUID state, Generated root `.meta`, Prefab GUID and recursive filename+SHA state, restores canonical revision 1, and leaves no pending/Generated temp/OS backup residue.
+
+AI preregistration is export/freeze/verify only. Retired v1/v2 frozen contracts remain explicitly marked invalid and were never dispatched. The active versioned `docs/ai-workflow/s12-slash-v3/frozen/` has parser-shaped bare-value `recipeSkeleton`, a separate Manifest-derived `catalog`, structured greater-than-default acceptance for width/spark count/afterimage alpha, byte/hash manifest verification, `runtimeEvidence: 0`, and four self-contained payloads below 3500 bytes. Main-Agent independently confirmed v3 frozen hashes, no AI runtime artifacts, canonical/Generated revision 1, stable GUIDs, only the three authorized Generated directories, no pending/backup residue, and no Unity process.

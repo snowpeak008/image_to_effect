@@ -1,0 +1,7 @@
+[
+  {
+    "op": "set_content_param",
+    "path": "/content/parameters/per_level_palette",
+    "value": "white_gold_red_variant"
+  }
+]

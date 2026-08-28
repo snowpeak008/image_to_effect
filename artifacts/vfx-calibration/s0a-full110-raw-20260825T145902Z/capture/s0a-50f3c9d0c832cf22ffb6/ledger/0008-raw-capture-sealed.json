@@ -1,0 +1,1 @@
+{"schema":"w24-s0a-fixture-ledger/v2","sequence":8,"kind":"raw-capture-sealed","details":{"captureDirectory":"capture","sourceHashesUnchanged":true},"recordedUtc":"2026-08-25T15:12:40.9401685Z","previousEntryHash":"sha256:a5e73aa53e89cea4c745482de2d180c4b545f2ce5338655d45c1785352d57a2b","entryHash":"sha256:a0c5d01ef221e656f164a051140d816426f076f5f62b2d9a81a08a082362654e"}

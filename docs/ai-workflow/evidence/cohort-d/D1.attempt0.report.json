@@ -1,0 +1,54 @@
+{
+  "succeeded": false,
+  "detail": null,
+  "entries": [
+    {
+      "code": "E101",
+      "severity": "error",
+      "path": "/id",
+      "message": "Required field is missing.",
+      "actualValue": null,
+      "allowedRange": null
+    },
+    {
+      "code": "E101",
+      "severity": "error",
+      "path": "/randomSeed",
+      "message": "Required field is missing.",
+      "actualValue": null,
+      "allowedRange": null
+    },
+    {
+      "code": "E100",
+      "severity": "error",
+      "path": "/metadata/name",
+      "message": "Unknown field is not allowed.",
+      "actualValue": "d1_quick_comet",
+      "allowedRange": null
+    },
+    {
+      "code": "E100",
+      "severity": "error",
+      "path": "/metadata/description",
+      "message": "Unknown field is not allowed.",
+      "actualValue": "Quick, compact stylized fire comet with a small core, slim short trail, sparse embers, and restrained impact.",
+      "allowedRange": null
+    },
+    {
+      "code": "E101",
+      "severity": "error",
+      "path": "/metadata/createdBy",
+      "message": "Required field is missing.",
+      "actualValue": null,
+      "allowedRange": null
+    },
+    {
+      "code": "E101",
+      "severity": "error",
+      "path": "/metadata/templateCatalogVersion",
+      "message": "Required field is missing.",
+      "actualValue": null,
+      "allowedRange": null
+    }
+  ]
+}

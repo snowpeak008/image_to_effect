@@ -1,0 +1,13 @@
+{
+  "schema": "w17-ui-next-candidate/v1",
+  "id": "button_press_fx_ui_next_candidate",
+  "workPackage": "W17",
+  "candidateStatus": "NEXT_CANDIDATE_VISUAL_PENDING",
+  "userVisualVerdict": null,
+  "preserveRejectedCandidate": true,
+  "effect": "button_press",
+  "lifecycle": "event",
+  "protocols": ["anchor_rect", "follow_mode", "button_rect_size"],
+  "visualCarriers": ["masked_inset_ripple", "rounded_perimeter_sweep", "two_star_sprites"],
+  "budget": { "uiElements": 5, "materials": 1, "particleSystems": 0 }
+}

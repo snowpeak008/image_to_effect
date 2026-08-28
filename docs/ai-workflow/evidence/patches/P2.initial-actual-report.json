@@ -1,0 +1,30 @@
+{
+  "succeeded": true,
+  "detail": "revision 1->2",
+  "entries": [
+    {
+      "code": "I400",
+      "severity": "info",
+      "path": "/budget",
+      "message": "Static budget preflight completed for profile mobile_medium.",
+      "actualValue": null,
+      "allowedRange": null
+    },
+    {
+      "code": "I400",
+      "severity": "info",
+      "path": "/budget",
+      "message": "Static budget preflight completed for profile mobile_medium.",
+      "actualValue": null,
+      "allowedRange": null
+    },
+    {
+      "code": "I400",
+      "severity": "info",
+      "path": "/budget",
+      "message": "Static budget preflight completed for profile mobile_medium.",
+      "actualValue": null,
+      "allowedRange": null
+    }
+  ]
+}

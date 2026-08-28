@@ -1,0 +1,71 @@
+{
+  "manifestVersion": 1,
+  "rulesVersion": "1.0-draft",
+  "enforcement": "strict",
+  "effectId": "phase_dash_3d",
+  "archetype": "trail",
+  "recipeVersion": 1,
+  "recipeRevision": 1,
+  "recipeHash": "7c5e7df9e19b2f5ef6add509657bea96b003ae6c107a648b4d846de7ae14f4f0",
+  "buildHash": "4ad0a80340b5db205fe754cfb8f60a255e3592000edbeb7965545c7b6281390e",
+  "compilerVersion": "interaction-gallery-3",
+  "unityVersion": "2022.3.62f3c1",
+  "sourceRecipePath": "Assets/VFX/Recipes/Trail/phase_dash_3d.default.json",
+  "runtimeEntry": {
+    "kind": "prefab",
+    "path": "Assets/VFX/Generated/phase_dash_3d/VFX_phase_dash_3d.prefab",
+    "guid": "b7f2dbf65f13a2741a55ee7bec2813a9"
+  },
+  "ownedOutputs": [
+    {
+      "path": "Assets/VFX/Generated/phase_dash_3d/VFX_phase_dash_3d.prefab",
+      "guid": "b7f2dbf65f13a2741a55ee7bec2813a9",
+      "assetType": "GameObject",
+      "sha256": "d4ee1bd043377faa26a21f685706aa33007b034f6aa8d65ee893b4dfb4da7b92"
+    }
+  ],
+  "dependencies": [
+    {
+      "path": "Assets/VFX/Shared/CoverageGalleryB/Materials/MAT_CoverageB_Additive.mat",
+      "guid": "688b79adff1f3474da55fb0deedff137",
+      "assetType": "Material",
+      "version": null,
+      "dependencyHash": "0b0b0e70d4676ffab060eedfd9b3ebea"
+    },
+    {
+      "path": "Assets/VFX/Shared/CoverageGalleryB/Materials/MAT_CoverageB_Alpha.mat",
+      "guid": "a84952a854859674991a6e3fe826514a",
+      "assetType": "Material",
+      "version": null,
+      "dependencyHash": "6f1e099067ca8e046370c9a5c87d8158"
+    },
+    {
+      "path": "Assets/VFX/Shared/Shaders/CoverageGalleryBUnlit.shader",
+      "guid": "36a2072c324a26a479dfb498994d4812",
+      "assetType": "Shader",
+      "version": null,
+      "dependencyHash": "64f6028fba878ab561a8418a3ea09753"
+    },
+    {
+      "path": "Packages/com.vfxcomposer.unity/Runtime/Components/InteractionGalleryVfxController.cs",
+      "guid": "9c06fdbb4482a7a40862522ad88717b6",
+      "assetType": "MonoScript",
+      "version": null,
+      "dependencyHash": "856d2bcba33bff8d21dd532335cfda8f"
+    }
+  ],
+  "cost": {
+    "particles": 0,
+    "particleSystems": 0,
+    "renderers": 5,
+    "materials": 2,
+    "trails": 1,
+    "duration": 4.1999998092651367,
+    "localTextureBytes": 0,
+    "dependencyResidentTextureBytes": 0,
+    "gameObjects": 5,
+    "maxDepth": 1
+  },
+  "audit": [],
+  "generatedAtUtc": "2026-08-24T01:24:54.1372479Z"
+}

@@ -1,0 +1,58 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "w24-s6/local-filesystem-inspection-result-v1",
+  "title": "W24 S6 non-authoritative local filesystem document inspection result",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "authority",
+    "machineGatePassed",
+    "scope",
+    "requestId",
+    "projectIdentityHash",
+    "planHash",
+    "classification",
+    "operations",
+    "diagnostics"
+  ],
+  "properties": {
+    "schemaVersion": {"const": "w24-s6/local-filesystem-inspection-result-v1"},
+    "authority": {"const": "none"},
+    "machineGatePassed": {"const": false},
+    "scope": {"const": "local-filesystem-document-inspection-only"},
+    "requestId": {"oneOf": [{"type": "string", "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$", "maxLength": 96}, {"type": "null"}]},
+    "projectIdentityHash": {"oneOf": [{"$ref": "#/$defs/sha256"}, {"type": "null"}]},
+    "planHash": {"oneOf": [{"$ref": "#/$defs/sha256"}, {"type": "null"}]},
+    "classification": {"enum": ["inspection-complete", "rejected"]},
+    "operations": {"type": "array", "maxItems": 16, "items": {"$ref": "#/$defs/operationResult"}},
+    "diagnostics": {"type": "array", "items": {"$ref": "#/$defs/diagnostic"}}
+  },
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
+    "diagnostic": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["code", "field", "message"],
+      "properties": {
+        "code": {"type": "string", "minLength": 1, "maxLength": 96, "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]*$"},
+        "field": {"type": "string"},
+        "message": {"type": "string", "minLength": 1}
+      }
+    },
+    "operationResult": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["operationId", "operationKind", "targetPath", "inputSha256", "inputBytes", "classification", "diagnostics"],
+      "properties": {
+        "operationId": {"type": "string", "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$", "maxLength": 96},
+        "operationKind": {"enum": ["ParseRecipeSyntax", "ValidateContractDocument", "InspectManifestHeader"]},
+        "targetPath": {"type": "string", "maxLength": 260},
+        "inputSha256": {"oneOf": [{"$ref": "#/$defs/sha256"}, {"type": "null"}]},
+        "inputBytes": {"type": "integer", "minimum": 0, "maximum": 4194304},
+        "classification": {"enum": ["document-valid", "document-invalid", "rejected"]},
+        "diagnostics": {"type": "array", "items": {"$ref": "#/$defs/diagnostic"}}
+      }
+    }
+  }
+}

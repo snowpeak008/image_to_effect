@@ -1,0 +1,56 @@
+{
+  "recipeVersion": 1,
+  "revision": 1,
+  "id": "overheat_vent_idle_aura_3d",
+  "name": "Overheat Vent Idle Aura 3d",
+  "dimension": "3d",
+  "archetype": "aura",
+  "style": {
+    "token": "steampunk",
+    "palette": {
+      "primary": "#7A4924",
+      "secondary": "#D69B54",
+      "accent": "#F4EFE0"
+    },
+    "outline": 0.1,
+    "shading_steps": 4,
+    "noise_scale": 1.2,
+    "glow_strength": 1.05
+  },
+  "targetProfile": "mobile_medium",
+  "randomSeed": 272795236,
+  "stages": [
+    {
+      "id": "main",
+      "trigger": "manual",
+      "duration": 1.2,
+      "enabled": true,
+      "modules": [
+        {
+          "id": "body",
+          "kind": "energy_body",
+          "templateId": "PFT_3D_FireCore",
+          "parameters": {
+            "scale": 1.0
+          },
+          "enabled": true
+        }
+      ]
+    }
+  ],
+  "metadata": {
+    "createdBy": "w18-hero-exclusive",
+    "templateCatalogVersion": "1.0.0"
+  },
+  "behavior": {
+    "hit": {
+      "type": "single"
+    },
+    "emission": {
+      "type": "single"
+    },
+    "timing": {
+      "type": "sustained"
+    }
+  }
+}

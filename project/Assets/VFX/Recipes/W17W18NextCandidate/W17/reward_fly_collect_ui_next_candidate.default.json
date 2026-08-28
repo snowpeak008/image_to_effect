@@ -1,0 +1,13 @@
+{
+  "schema": "w17-ui-next-candidate/v1",
+  "id": "reward_fly_collect_ui_next_candidate",
+  "workPackage": "W17",
+  "candidateStatus": "NEXT_CANDIDATE_VISUAL_PENDING",
+  "userVisualVerdict": null,
+  "preserveRejectedCandidate": true,
+  "effect": "reward_fly_collect",
+  "lifecycle": "event",
+  "protocols": ["start_rect", "target_rect", "item_count_1_12", "arc_height", "stagger"],
+  "visualCarriers": ["fixed_pool_12", "quadratic_bezier_motion", "target_arrival_pulse"],
+  "budget": { "uiElements": 13, "materials": 1, "particleSystems": 0, "poolCapacity": 12 }
+}

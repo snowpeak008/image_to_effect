@@ -1,0 +1,7 @@
+[
+  {
+    "op": "set_content_param",
+    "path": "/content/parameters/bar_rect",
+    "value": "external_variant"
+  }
+]

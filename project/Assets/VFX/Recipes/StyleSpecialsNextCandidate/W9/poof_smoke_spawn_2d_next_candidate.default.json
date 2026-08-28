@@ -1,0 +1,33 @@
+{
+  "schema": "style-special-next-candidate/v1",
+  "id": "poof_smoke_spawn_2d_next_candidate",
+  "sourceId": "poof_smoke_spawn_2d",
+  "label": "POOF · ENTITY FRAME 3",
+  "group": "w9",
+  "archetype": "spawn",
+  "dimension": "2d",
+  "style": "cartoon",
+  "profile": "CelSequence",
+  "semantic": "6frame-center-poof+four-staggered-satellites",
+  "duration": 1.05,
+  "releaseNormalized": 0.34,
+  "sustainEndNormalized": 0.76,
+  "sustained": false,
+  "seed": 9105,
+  "intensity": 0.92,
+  "palette": {
+    "primary": "#D7D8E0",
+    "secondary": "#FFFFFF",
+    "accent": "#8C91A3"
+  },
+  "meshes": [
+    "Burst",
+    "Quad",
+    "Quad",
+    "Quad",
+    "Quad"
+  ],
+  "pairFamily": "",
+  "pairRole": "",
+  "sourceBaseId": ""
+}

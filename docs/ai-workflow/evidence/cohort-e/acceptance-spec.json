@@ -1,0 +1,12 @@
+{
+  "version": 2,
+  "defaults": {"coreScale":1.2,"launchLifetime":0.12,"trailTime":0.22,"trailWidth":0.42,"embersRate":18,"embersLifetime":0.55,"burstCount":24,"shockwaveEndSize":2.8},
+  "recipes": {
+    "E1":{"id":"e1_comet","profile":"pc_editor","comparisons":{"coreScale":"< default","launchLifetime":"< default","trailWidth":"< default","trailTime":"< default","embersRate":"< default","burstCount":"<= default","shockwaveEndSize":"<= default"}},
+    "E2":{"id":"e2_bolt","profile":"mobile_medium","comparisons":{"coreScale":"> default","trailWidth":"> default","trailTime":"> default","embersRate":"> default","embersLifetime":"> default","burstCount":"> default"}},
+    "E3":{"id":"e3_spark","profile":"pc_editor","forbidKinds":["motion_trail"],"comparisons":{"coreScale":"< default","burstCount":"<= default","shockwaveEndSize":"<= default"}},
+    "E4":{"id":"e4_ribbon","profile":"mobile_medium","forbidKinds":["secondary_particles"],"comparisons":{"coreScale":">= default","trailWidth":"< default","burstCount":"<= default","shockwaveEndSize":"<= default"}},
+    "E5":{"id":"e5_nova","profile":"pc_editor","comparisons":{"coreScale":">= default","trailWidth":"> default","embersRate":">= default","burstCount":"> default","shockwaveEndSize":"> default"}}
+  },
+  "patches":{"P1":{"revision":2,"path":"/stages/travel/modules/embers/parameters/rate","value":9},"P2":{"revision":2,"path":"/stages/travel/modules/embers","enabled":false},"P3":{"revision":2,"moduleId":"lighter_embers","templateId":"PFT_2D_Embers","kind":"secondary_particles","attachTo":"core"}}
+}

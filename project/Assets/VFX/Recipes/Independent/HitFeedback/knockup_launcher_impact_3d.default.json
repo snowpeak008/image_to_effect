@@ -1,0 +1,96 @@
+{
+  "recipeVersion": 1,
+  "revision": 1,
+  "id": "knockup_launcher_impact_3d",
+  "name": "Knockup Launcher Impact 3d",
+  "dimension": "3d",
+  "archetype": "impact",
+  "style": {
+    "token": "stylized",
+    "palette": {
+      "primary": "#C9E8FF",
+      "secondary": "#7EC8FF",
+      "accent": "#FFFFFF"
+    },
+    "outline": 0.12,
+    "shading_steps": 4,
+    "noise_scale": 1.2,
+    "glow_strength": 1.1
+  },
+  "behavior": {
+    "hit": {
+      "type": "single"
+    },
+    "emission": {
+      "type": "single"
+    },
+    "timing": {
+      "type": "instant"
+    }
+  },
+  "content": {
+    "family": "hit_feedback",
+    "parameters": {
+      "column_height": 3,
+      "ring_scale": 1.5,
+      "debris_count": 10
+    }
+  },
+  "targetProfile": "mobile_medium",
+  "randomSeed": 4154712544,
+  "stages": [
+    {
+      "id": "main",
+      "trigger": "on_hit",
+      "duration": 0.6,
+      "enabled": true,
+      "modules": [
+        {
+          "id": "body",
+          "kind": "energy_body",
+          "templateId": "PFT_3D_FireCore",
+          "parameters": {
+            "scale": 1.0
+          },
+          "enabled": true
+        },
+        {
+          "id": "flow",
+          "kind": "motion_trail",
+          "templateId": "PFT_3D_FireTrail",
+          "parameters": {
+            "time": 0.3,
+            "width": 0.25
+          },
+          "enabled": true,
+          "attachTo": "body"
+        },
+        {
+          "id": "secondary",
+          "kind": "secondary_particles",
+          "templateId": "PFT_3D_Embers",
+          "parameters": {
+            "rate": 10,
+            "lifetime": 0.55
+          },
+          "enabled": true,
+          "attachTo": "body"
+        },
+        {
+          "id": "accent",
+          "kind": "shockwave",
+          "templateId": "PFT_3D_Shockwave",
+          "parameters": {
+            "lifetime": 0.3,
+            "endSize": 2.1
+          },
+          "enabled": true
+        }
+      ]
+    }
+  ],
+  "metadata": {
+    "createdBy": "w11-w17-independent-content",
+    "templateCatalogVersion": "1.0.0"
+  }
+}

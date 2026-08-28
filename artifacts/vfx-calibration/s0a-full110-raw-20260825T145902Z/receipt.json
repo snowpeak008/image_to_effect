@@ -1,0 +1,84 @@
+{
+  "schema": "w24-s0a-full110-raw-capture-receipt/v1",
+  "status": "FORMAL_RAW_CAPTURE_SEALED_NOT_PROJECTED",
+  "effectId": "sustained_flame_3d",
+  "holdoutCohort": "full-60-20-20-10",
+  "captureTool": {
+    "version": "w24-s0a-formal-calibration-capture/1.1.3",
+    "sha256": "sha256:7719219522abb7bf7c3e59b2da726cd4586776c7986f17e96743de52a8438245",
+    "sourceCount": 8
+  },
+  "fixture": {
+    "mode": "FRESH_INDEPENDENT_FULL",
+    "commandSetHash": "sha256:369a751b2d8df1223d51b2bf74434ff2a3b9769c5b4f0d937723c73ddaa40dfa",
+    "candidateCount": 110,
+    "counts": {
+      "fail": 60,
+      "pass": 20,
+      "uncertain": 20,
+      "invalid": 10
+    },
+    "reducedSampleOverlap": 0,
+    "humanLabels": "TEMPLATE_NOT_REVIEWED"
+  },
+  "unityRun": {
+    "processStartedAtUtc": "2026-08-25T14:59:02.8381481Z",
+    "testStartedAtUtc": "2026-08-25T15:00:36Z",
+    "testEndedAtUtc": "2026-08-25T15:36:13Z",
+    "durationSeconds": 2137.5858883,
+    "exitCode": 0,
+    "total": 1,
+    "passed": 1,
+    "failed": 0,
+    "skipped": 0,
+    "inconclusive": 0,
+    "xmlSha256": "sha256:97be5b188b1d88bc42aa753e2568321035b4c35cd1e61e2457e9a55f44808ad3",
+    "logSha256": "sha256:0ce6ecc5d0150f73e40f42e3d91b0dfb20446b57620c58c59020541ef024025b",
+    "runnerSha256": "sha256:b9511134ed4cd227d306e77a33294acdfdad5def76b1849d01baf13f96c5bde8"
+  },
+  "capture": {
+    "candidateDirectories": 110,
+    "completedCandidates": 110,
+    "files": 7783,
+    "bytes": 154166302,
+    "readOnlyFiles": 7783,
+    "reparseEntries": 0,
+    "sampleIdSetHash": "sha256:e80b97541baca98e86fcf14525704489fc620811b17a1b259ab9cf059cedb8f2",
+    "completionSetHash": "sha256:3192b22b2783ed24f5a3715b146c6d0847877b53822357cf231b8ee6a2ae7f59",
+    "treeHash": "sha256:f3ad0f5fc6a81db3a3aaf52f009b8cf0dbbadb538256ea294daa6a0a205f800e"
+  },
+  "archivedInputs": {
+    "fixtureFiles": 226,
+    "fixtureTreeHash": "sha256:b8e6fb5f89ab4079770639d19b6adf717cc9d13fb10747a3899a5ec774816155",
+    "authorityFiles": 17,
+    "authorityTreeHash": "sha256:9763f321024afc88c7f681be5cec251afc12c012802b9823bcd9fc4062553135",
+    "verifierFiles": 3,
+    "verifierTreeHash": "sha256:57fa21e41be5de468a8f5cc3fe33de8c5db34e1a54f20934f61935b89f5515a2"
+  },
+  "verification": {
+    "pythonVersion": "3.12.4",
+    "verifiedCandidates": 110,
+    "candidateSetExact": true,
+    "captureTreeMatchesSource": true,
+    "fixtureTreeMatchesSource": true,
+    "commonCaptureProfileValidated": true,
+    "commonSourceIdentityValidated": true
+  },
+  "rejectedPreflight": {
+    "status": "PRESERVED_ENVIRONMENTAL_FAILURES_BEFORE_TEST_DISCOVERY",
+    "files": 2,
+    "treeHash": "sha256:8cb4d729a9d256075fdeb52abbd43350e4d9107eefe6ae67c981ed7cc6de2207",
+    "reason": "C-drive UPM cache ENOSPC; zero candidate directories were created in either attempt."
+  },
+  "authorityBoundary": {
+    "projectionStatus": "NOT_RUN_MODEL_VERSION_ID_UNSPECIFIED",
+    "visualQaPassed": false,
+    "s0aGateQualified": false,
+    "l3Qualified": false,
+    "l4Approved": false,
+    "userSigned": false,
+    "qaSessionCount": 0,
+    "metricsStatus": "NOT_CREATED"
+  },
+  "receiptHash": "sha256:abfc2ac5b8ccca75e3143916da536b974eff24f85c39b349c522363ce564ca53"
+}

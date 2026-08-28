@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<test-run id="2" testcasecount="1" result="Passed" total="1" passed="1" failed="0" inconclusive="0" skipped="0" asserts="0" engine-version="3.5.0.0" clr-version="4.0.30319.42000" start-time="2026-08-25 15:00:36Z" end-time="2026-08-25 15:36:13Z" duration="2137.5858883">
+  <test-suite type="TestSuite" id="1000" name="project" fullname="project" runstate="Runnable" testcasecount="124" result="Passed" start-time="2026-08-25 15:00:36Z" end-time="2026-08-25 15:36:13Z" duration="2137.585888" total="1" passed="1" failed="0" inconclusive="0" skipped="0" asserts="0">
+    <properties />
+    <test-suite type="Assembly" id="1172" name="VFXComposer.Tests.PlayMode.W24S0aFormalRuntime.dll" fullname="D:/WorkWork/Assist/image_to_smart/.codex_tmp/w24-s0a-full110-20260825-1448/project/Library/ScriptAssemblies/VFXComposer.Tests.PlayMode.W24S0aFormalRuntime.dll" runstate="Runnable" testcasecount="2" result="Passed" start-time="2026-08-25 15:00:36Z" end-time="2026-08-25 15:36:13Z" duration="2137.576132" total="1" passed="1" failed="0" inconclusive="0" skipped="0" asserts="0">
+      <properties>
+        <property name="_PID" value="10160" />
+        <property name="_APPDOMAIN" value="Unity Child Domain" />
+        <property name="platform" value="PlayMode" />
+      </properties>
+      <test-suite type="TestSuite" id="1173" name="VFXComposer" fullname="VFXComposer" runstate="Runnable" testcasecount="2" result="Passed" start-time="2026-08-25 15:00:36Z" end-time="2026-08-25 15:36:13Z" duration="2137.575767" total="1" passed="1" failed="0" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <test-suite type="TestSuite" id="1174" name="Tests" fullname="VFXComposer.Tests" runstate="Runnable" testcasecount="2" result="Passed" start-time="2026-08-25 15:00:36Z" end-time="2026-08-25 15:36:13Z" duration="2137.575531" total="1" passed="1" failed="0" inconclusive="0" skipped="0" asserts="0">
+          <properties />
+          <test-suite type="TestSuite" id="1175" name="PlayMode" fullname="VFXComposer.Tests.PlayMode" runstate="Runnable" testcasecount="2" result="Passed" start-time="2026-08-25 15:00:36Z" end-time="2026-08-25 15:36:13Z" duration="2137.574780" total="1" passed="1" failed="0" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <test-suite type="TestSuite" id="1176" name="W24S0aFormalRuntime" fullname="VFXComposer.Tests.PlayMode.W24S0aFormalRuntime" runstate="Runnable" testcasecount="2" result="Passed" start-time="2026-08-25 15:00:36Z" end-time="2026-08-25 15:36:13Z" duration="2137.574291" total="1" passed="1" failed="0" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <test-suite type="TestFixture" id="1169" name="W24S0aFormalPlayModeProxyTests" fullname="VFXComposer.Tests.PlayMode.W24S0aFormalRuntime.W24S0aFormalPlayModeProxyTests" classname="VFXComposer.Tests.PlayMode.W24S0aFormalRuntime.W24S0aFormalPlayModeProxyTests" runstate="Explicit" testcasecount="2" result="Passed" start-time="2026-08-25 15:00:36Z" end-time="2026-08-25 15:36:13Z" duration="2137.573215" total="1" passed="1" failed="0" inconclusive="0" skipped="0" asserts="0">
+                <properties>
+                  <property name="_SKIPREASON" value="Formal W24 S0a graphics capture. Requires generated sustained_flame_3d formal inputs and a graphics-backed Unity batch process; writes each calibration candidate once." />
+                </properties>
+                <test-case id="1171" name="Capture_Full110_OperatorOnlyMutants_WhenTheFutureCohortExists" fullname="VFXComposer.Tests.PlayMode.W24S0aFormalRuntime.W24S0aFormalPlayModeProxyTests.Capture_Full110_OperatorOnlyMutants_WhenTheFutureCohortExists" methodname="Capture_Full110_OperatorOnlyMutants_WhenTheFutureCohortExists" classname="VFXComposer.Tests.PlayMode.W24S0aFormalRuntime.W24S0aFormalPlayModeProxyTests" runstate="Runnable" seed="122554278" result="Passed" start-time="2026-08-25 15:00:36Z" end-time="2026-08-25 15:36:13Z" duration="2137.552254" asserts="0">
+                  <properties>
+                    <property name="_JOINTYPE" value="UnityCombinatorial" />
+                    <property name="Timeout" value="3600000" />
+                  </properties>
+                </test-case>
+              </test-suite>
+            </test-suite>
+          </test-suite>
+        </test-suite>
+      </test-suite>
+    </test-suite>
+  </test-suite>
+</test-run>

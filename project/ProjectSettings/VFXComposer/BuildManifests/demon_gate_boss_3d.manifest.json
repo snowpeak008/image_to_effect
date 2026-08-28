@@ -1,0 +1,281 @@
+{
+  "manifestVersion": 1,
+  "rulesVersion": "1.0-draft",
+  "enforcement": "strict",
+  "effectId": "demon_gate_boss_3d",
+  "archetype": "composite",
+  "recipeVersion": 1,
+  "recipeRevision": 1,
+  "recipeHash": "27f7ec78e8b3f9f8f85ec80597e3bb9e6873b97036726d38f8b0fdb30096cd67",
+  "buildHash": "64c55a3f97974376d40eb568a5655ab3c534bd9781bba478d179ce381d66c14e",
+  "compilerVersion": "composite-runtime-1",
+  "unityVersion": "2022.3.62f3c1",
+  "sourceRecipePath": "Assets/VFX/Recipes/Composites/Ultimate/demon_gate_boss_3d.default.json",
+  "runtimeEntry": {
+    "kind": "prefab",
+    "path": "Assets/VFX/Generated/demon_gate_boss_3d/VFX_demon_gate_boss_3d.prefab",
+    "guid": "0eb315d43ef12ba4daec542a79e06d78"
+  },
+  "ownedOutputs": [
+    {
+      "path": "Assets/VFX/Generated/demon_gate_boss_3d/Composition.json",
+      "guid": "4f73925fc26116c41a3c378275521ce0",
+      "assetType": "TextAsset",
+      "sha256": "9c63294b35d363b9acd748df635b24178e48208c0f286873d75f37c9850b8d4d"
+    },
+    {
+      "path": "Assets/VFX/Generated/demon_gate_boss_3d/VFX_demon_gate_boss_3d.prefab",
+      "guid": "0eb315d43ef12ba4daec542a79e06d78",
+      "assetType": "GameObject",
+      "sha256": "c167a930d5684cda1915cd2e87f456d5813ae138ad6a897573aafd4a04f5071f"
+    }
+  ],
+  "dependencies": [
+    {
+      "path": "Assets/VFX/Generated/blood_ritual_spawn_3d/VFX_blood_ritual_spawn_3d.prefab",
+      "guid": "4ada9c06626073c4d83a91bd3b63cf8c",
+      "assetType": "GameObject",
+      "version": null,
+      "dependencyHash": "151d259e6301e738e87d1b96daecc02d"
+    },
+    {
+      "path": "Assets/VFX/Generated/demon_eruption_impact_3d/VFX_demon_eruption_impact_3d.prefab",
+      "guid": "c14f3aeb42df0614cae69517608b19f2",
+      "assetType": "GameObject",
+      "version": null,
+      "dependencyHash": "2451b3a6226ad21bc56f025168a69c04"
+    },
+    {
+      "path": "Assets/VFX/Generated/phantom_wail_area_2d/VFX_phantom_wail_area_2d.prefab",
+      "guid": "5e6502ab8b088e843bd36a4994874dd8",
+      "assetType": "GameObject",
+      "version": null,
+      "dependencyHash": "eaa87615f65e4e83bfe9408224013cbd"
+    },
+    {
+      "path": "Assets/VFX/Generated/rift_spawn_3d/VFX_rift_spawn_3d.prefab",
+      "guid": "898fe37288553bf40aafd7e79a44200d",
+      "assetType": "GameObject",
+      "version": null,
+      "dependencyHash": "eeb0f73bdc68ab3643b680ea36912bd7"
+    },
+    {
+      "path": "Assets/VFX/Shared/CoverageGalleryB/Materials/MAT_CoverageB_Additive.mat",
+      "guid": "688b79adff1f3474da55fb0deedff137",
+      "assetType": "Material",
+      "version": null,
+      "dependencyHash": "0b0b0e70d4676ffab060eedfd9b3ebea"
+    },
+    {
+      "path": "Assets/VFX/Shared/CoverageGalleryB/Materials/MAT_CoverageB_Alpha.mat",
+      "guid": "a84952a854859674991a6e3fe826514a",
+      "assetType": "Material",
+      "version": null,
+      "dependencyHash": "6f1e099067ca8e046370c9a5c87d8158"
+    },
+    {
+      "path": "Assets/VFX/Shared/CoverageGalleryB/Meshes/M_CoverageB_Quad.asset",
+      "guid": "ea74b7ca76a79bc44b173c14298bbdba",
+      "assetType": "Mesh",
+      "version": null,
+      "dependencyHash": "65761f362d1fc645474a82095f5d7535"
+    },
+    {
+      "path": "Assets/VFX/Shared/CoverageGalleryB/Meshes/M_CoverageB_Ring.asset",
+      "guid": "7a536dcec1985cf4a9e09e6df4dbd583",
+      "assetType": "Mesh",
+      "version": null,
+      "dependencyHash": "2925f46e6811e075fedcad822cb3dfcf"
+    },
+    {
+      "path": "Assets/VFX/Shared/CoverageGalleryB/Prefabs/PF_CoverageB_Particles.prefab",
+      "guid": "70f199efb6fa95243bfdc29f0ac52b45",
+      "assetType": "GameObject",
+      "version": null,
+      "dependencyHash": "4ca484495d85edc18be403e3c11759f1"
+    },
+    {
+      "path": "Assets/VFX/Shared/Shaders/CoverageGalleryBUnlit.shader",
+      "guid": "36a2072c324a26a479dfb498994d4812",
+      "assetType": "Shader",
+      "version": null,
+      "dependencyHash": "64f6028fba878ab561a8418a3ea09753"
+    },
+    {
+      "path": "Assets/VFX/Shared/Shaders/VfxDissolveEdge.shader",
+      "guid": "5b0bcf875e86f60489700456c2154aee",
+      "assetType": "Shader",
+      "version": null,
+      "dependencyHash": "30bc399c9c079542d29fbf6700020364"
+    },
+    {
+      "path": "Assets/VFX/Shared/Shaders/VfxSoftNoise.shader",
+      "guid": "a6e4e3aa82ac7c84d9dd012aaae56c67",
+      "assetType": "Shader",
+      "version": null,
+      "dependencyHash": "daf4e4d9c28a30f0230301e6f07535a5"
+    },
+    {
+      "path": "Assets/VFX/Shared/Styles/Materials/MAT_Style_dark.mat",
+      "guid": "06882d319d21ef44f95b00f7814e3463",
+      "assetType": "Material",
+      "version": null,
+      "dependencyHash": "2c79c1062f8c6f82579a1c8f8d0ed21d"
+    },
+    {
+      "path": "Assets/VFX/Shared/Styles/Materials/MAT_Style_ghost.mat",
+      "guid": "537b7c3b77b57e841a12e48bf1cc1aaf",
+      "assetType": "Material",
+      "version": null,
+      "dependencyHash": "efe1cadbae6aa7b3e1bc9ab8aba7c9b1"
+    },
+    {
+      "path": "Assets/VFX/Shared/Styles/Meshes/M_Style_Burst.asset",
+      "guid": "0def46dac13f1d8449cd98d98de17a15",
+      "assetType": "Mesh",
+      "version": null,
+      "dependencyHash": "56e972a8f8588a864d379a7611c49c63"
+    },
+    {
+      "path": "Assets/VFX/Shared/Styles/Meshes/M_Style_Cone.asset",
+      "guid": "8a296d5e70420f647a6e1f646af993cd",
+      "assetType": "Mesh",
+      "version": null,
+      "dependencyHash": "69fd53314f71778bd2e32f584650207e"
+    },
+    {
+      "path": "Assets/VFX/Shared/Styles/Meshes/M_Style_Quad.asset",
+      "guid": "7f415b79b45b04d4ab5e3f4dd61605aa",
+      "assetType": "Mesh",
+      "version": null,
+      "dependencyHash": "01e83f0bfc8392031ac8f5694416ab10"
+    },
+    {
+      "path": "Assets/VFX/Shared/Styles/Meshes/M_Style_Ring.asset",
+      "guid": "df59364e370c085418d31c0f952bcf1a",
+      "assetType": "Mesh",
+      "version": null,
+      "dependencyHash": "021f9d0fab5159d1d05310de3284c997"
+    },
+    {
+      "path": "Assets/VFX/Shared/Styles/Meshes/M_Style_Shard.asset",
+      "guid": "506c8c0bcf8b14645948b3dbb02a1b3f",
+      "assetType": "Mesh",
+      "version": null,
+      "dependencyHash": "ff113f023e398b26696f0c501ae28324"
+    },
+    {
+      "path": "Packages/com.vfxcomposer.unity/Runtime/Components/CompositeVfxController.cs",
+      "guid": "07d8735a81864834c8f1bda23acf4be2",
+      "assetType": "MonoScript",
+      "version": null,
+      "dependencyHash": "570863f0966daccfed5bf3e887baa10e"
+    },
+    {
+      "path": "Packages/com.vfxcomposer.unity/Runtime/Components/CoverageGalleryVfxController.cs",
+      "guid": "18601207a015a6140b357c3de1ce8608",
+      "assetType": "MonoScript",
+      "version": null,
+      "dependencyHash": "b7413138fabc3a05f2522721ad65632e"
+    },
+    {
+      "path": "Packages/com.vfxcomposer.unity/Runtime/Components/StyledVfxController.cs",
+      "guid": "ca6f81a249967414c96082671e07dcaa",
+      "assetType": "MonoScript",
+      "version": null,
+      "dependencyHash": "486e1b8ba27b5e00b709bc5fd2b5624a"
+    }
+  ],
+  "cost": {
+    "particles": 0,
+    "particleSystems": 0,
+    "renderers": 0,
+    "materials": 0,
+    "trails": 0,
+    "duration": 8.0,
+    "localTextureBytes": 0,
+    "dependencyResidentTextureBytes": 0,
+    "gameObjects": 1,
+    "maxDepth": 0
+  },
+  "audit": [],
+  "generatedAtUtc": "2026-08-24T13:35:42.2420372Z",
+  "timeline": [
+    {
+      "t": 0.0,
+      "ref_id": "blood_ritual_spawn_3d",
+      "action": "play",
+      "overrides": {
+        "scale": 1.3,
+        "palette": "ultimate"
+      }
+    },
+    {
+      "t": 1.2,
+      "ref_id": "rift_spawn_3d",
+      "action": "play",
+      "overrides": {
+        "scale": 1.5,
+        "palette": "ultimate"
+      }
+    },
+    {
+      "t": 4.2,
+      "ref_id": "demon_eruption_impact_3d",
+      "action": "play",
+      "overrides": {
+        "scale": 1.6,
+        "palette": "ultimate"
+      }
+    },
+    {
+      "t": 6.2,
+      "ref_id": "phantom_wail_area_2d",
+      "action": "play",
+      "overrides": {
+        "scale": 1.4,
+        "palette": "ultimate"
+      }
+    }
+  ],
+  "cameraHints": [
+    {
+      "t": 1.2,
+      "type": "zoom",
+      "strength": 0.5
+    },
+    {
+      "t": 4.2,
+      "type": "shake",
+      "strength": 1.0
+    },
+    {
+      "t": 6.2,
+      "type": "slowmo",
+      "strength": 0.3
+    }
+  ],
+  "gates": [
+    {
+      "t": 1.2,
+      "wait_for": "gate_formed"
+    },
+    {
+      "t": 4.0,
+      "wait_for": "hand_release"
+    }
+  ],
+  "themeId": null,
+  "compositePeakBudget": {
+    "particles": 64,
+    "particleSystems": 2,
+    "materials": 3,
+    "renderers": 9,
+    "limits": {
+      "particles": 200,
+      "particleSystems": 10,
+      "materials": 10,
+      "renderers": 14
+    }
+  }
+}

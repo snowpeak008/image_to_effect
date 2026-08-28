@@ -1,0 +1,53 @@
+{
+  "contractSha256": "CE37DEFBB98C954C47C57721218CC69DC5175BF04BE8E4E693D2E1A3CFBD7507",
+  "initialPayloads": {
+    "H1": {
+      "payloadFile": "H1.initial.prompt.md",
+      "payloadSha256": "2ED139E7C2B0647C78E7C4D672943B932FEC6B911387BE51496004C89038485C",
+      "agentName": "s9_h_h1",
+      "transport": "spawn_agent"
+    },
+    "H2": {
+      "payloadFile": "H2.initial.prompt.md",
+      "payloadSha256": "072E9A75BCD2F3CAB7D49CB2A9A237143B0ACFB8154DC5D2741079DF535535A2",
+      "agentName": "s9_h_h2",
+      "transport": "spawn_agent"
+    },
+    "H3": {
+      "payloadFile": "H3.initial.prompt.md",
+      "payloadSha256": "33329EDA92CA10A03B1247E22928D711CCEF274439EDDEE0DBC430AED757A7B2",
+      "agentName": "s9_h_h3",
+      "transport": "spawn_agent"
+    },
+    "H4": {
+      "payloadFile": "H4.initial.prompt.md",
+      "payloadSha256": "6CDE7E578CF4E5672F672AC81D6158C94A3E70094A2E4B9FD80410B36B8D842F",
+      "agentName": "s9_h_h4",
+      "transport": "spawn_agent"
+    },
+    "H5": {
+      "payloadFile": "H5.initial.prompt.md",
+      "payloadSha256": "9B38A2FDFB63EBC43F9A78A581AB1F3F44E9564934CBC3A7D20E8E052D160CBF",
+      "agentName": "s9_h_h5",
+      "transport": "spawn_agent"
+    },
+    "P1": {
+      "payloadFile": "P1.initial.prompt.md",
+      "payloadSha256": "6FF2741F994F62864ADA6F0D8D6D955396AA4BFCF82250DDBFF5D4C9057785CB",
+      "agentName": "s9_h_p1",
+      "transport": "spawn_agent"
+    },
+    "P2": {
+      "payloadFile": "P2.initial.prompt.md",
+      "payloadSha256": "0ECA0A7776043A46A779B7A7E037D9E327E5351F05264525038AF8958FF564DA",
+      "agentName": "s9_h_p2",
+      "transport": "spawn_agent"
+    },
+    "P3": {
+      "payloadFile": "P3.initial.prompt.md",
+      "payloadSha256": "47C122070243BE33B0CE72710D27ED69FECA96A6ECAA759AE94531E5E24C4598",
+      "agentName": "s9_h_p3",
+      "transport": "spawn_agent"
+    }
+  }
+}

@@ -1,0 +1,97 @@
+{
+  "contractVersion": 1,
+  "family": "frost",
+  "directionalConvention": "Runtime shard tip points +X in every cell; Stretch billboard aligns +X to radial velocity.",
+  "sourceFiles": [
+    {
+      "path": "ArtSource/VFX/Frost/RawGenerated/FrostBrokenRing_raw_v1.png",
+      "sha256": "52956ef94665bfd6c066240727121596f1dca11f134a0d2d5419943fb76cac54"
+    },
+    {
+      "path": "ArtSource/VFX/Frost/RawGenerated/FrostMistRing_raw_v1.png",
+      "sha256": "65ae708dacc8fb89ca56f9f5ef38949e6800c5d3da624a61b6de5c1a6e5c1015"
+    },
+    {
+      "path": "ArtSource/VFX/Frost/RawGenerated/FrostShardVariants_raw_v1.png",
+      "sha256": "53a0973399e7dfb44d6facf8f49ddeffdfb7557d233e4ce40eceb2bd51ee2f32"
+    }
+  ],
+  "atlases": [
+    {
+      "path": "project/Assets/VFX/Shared/Frost/Textures/T_Frost_ImpactAtlas_A_v1.png",
+      "size": [
+        512,
+        512
+      ],
+      "sha256": "99b9e59121b5791a5d81a1f6f100db8ca7efb96414035681f424973a3460b13f",
+      "cells": {
+        "core_flash": {
+          "rect": [
+            0.0,
+            0.5,
+            0.5,
+            0.5
+          ],
+          "pivot": [
+            0.5,
+            0.5
+          ]
+        },
+        "snow_mote": {
+          "rect": [
+            0.5,
+            0.5,
+            0.5,
+            0.5
+          ],
+          "pivot": [
+            0.5,
+            0.5
+          ]
+        },
+        "broken_ring": {
+          "rect": [
+            0.0,
+            0.0,
+            0.5,
+            0.5
+          ],
+          "pivot": [
+            0.5,
+            0.5
+          ]
+        },
+        "mist_ring": {
+          "rect": [
+            0.5,
+            0.0,
+            0.5,
+            0.5
+          ],
+          "pivot": [
+            0.5,
+            0.5
+          ]
+        }
+      }
+    },
+    {
+      "path": "project/Assets/VFX/Shared/Frost/Textures/T_Frost_ShardAtlas_A_v1.png",
+      "size": [
+        256,
+        256
+      ],
+      "sha256": "3e0cc6111d94d87a1cad37c3218b90b6bb2b64daafaf5c6ce1cc92a27136cf7d",
+      "grid": [
+        2,
+        2
+      ],
+      "cells": [
+        "shard_01",
+        "shard_02",
+        "shard_03",
+        "shard_04"
+      ]
+    }
+  ]
+}

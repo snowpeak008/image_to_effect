@@ -1,0 +1,12 @@
+{
+  "manifestVersion": 1,
+  "templateId": "PFT_2D_Embers",
+  "templateVersion": "1.0.0",
+  "kind": "secondary_particles",
+  "dimension": "2d",
+  "assetGuid": "e7b6e99096bd0f64a912419158b3d0e2",
+  "assetPath": "Assets/VFX/Templates/2D/Prefabs/PFT_2D_Embers.prefab",
+  "tags": ["fire", "stylized", "2d"],
+  "parameters": { "rate": { "type": "float", "min": 4, "max": 36, "default": 18, "binding": "embers.rate" }, "lifetime": { "type": "float", "min": .25, "max": 1.1, "default": .55, "binding": "embers.lifetime" } },
+  "cost": { "estimatedPeakParticles": 40, "materials": 1, "trails": 0 }
+}

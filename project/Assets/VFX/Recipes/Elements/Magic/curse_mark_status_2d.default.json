@@ -1,0 +1,96 @@
+{
+  "recipeVersion": 1,
+  "revision": 1,
+  "id": "curse_mark_status_2d",
+  "name": "Curse Mark Status 2d",
+  "dimension": "2d",
+  "archetype": "aura",
+  "style": {
+    "token": "dark",
+    "palette": {
+      "primary": "#5A2E8C",
+      "secondary": "#1A0F2E",
+      "accent": "#C24DFF"
+    },
+    "outline": 0.12,
+    "shading_steps": 4,
+    "noise_scale": 1.1,
+    "glow_strength": 0.8
+  },
+  "behavior": {
+    "hit": {
+      "type": "single"
+    },
+    "emission": {
+      "type": "single"
+    },
+    "timing": {
+      "type": "sustained"
+    }
+  },
+  "content": {
+    "family": "shadow",
+    "parameters": {
+      "mark_glyph": 2,
+      "pulse_rate": 1.5,
+      "smoke_amount": 0.4
+    }
+  },
+  "targetProfile": "mobile_medium",
+  "randomSeed": 270607489,
+  "stages": [
+    {
+      "id": "main",
+      "trigger": "manual",
+      "duration": 1.0,
+      "enabled": true,
+      "modules": [
+        {
+          "id": "body",
+          "kind": "energy_body",
+          "templateId": "PFT_2D_FireCore",
+          "parameters": {
+            "scale": 1.0
+          },
+          "enabled": true
+        },
+        {
+          "id": "flow",
+          "kind": "motion_trail",
+          "templateId": "PFT_2D_FireTrail",
+          "parameters": {
+            "time": 0.28,
+            "width": 0.25
+          },
+          "attachTo": "body",
+          "enabled": true
+        },
+        {
+          "id": "secondary",
+          "kind": "secondary_particles",
+          "templateId": "PFT_2D_Embers",
+          "parameters": {
+            "rate": 12,
+            "lifetime": 0.55
+          },
+          "attachTo": "body",
+          "enabled": true
+        },
+        {
+          "id": "accent",
+          "kind": "shockwave",
+          "templateId": "PFT_2D_Shockwave",
+          "parameters": {
+            "lifetime": 0.3,
+            "endSize": 2.4
+          },
+          "enabled": true
+        }
+      ]
+    }
+  ],
+  "metadata": {
+    "createdBy": "w3-w8-element-family",
+    "templateCatalogVersion": "1.0.0"
+  }
+}

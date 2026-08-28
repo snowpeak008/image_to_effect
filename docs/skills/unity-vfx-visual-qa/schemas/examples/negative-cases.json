@@ -1,0 +1,14 @@
+[
+  {
+    "caseId": "visual-pass-cannot-contain-fail",
+    "fixture": "visual-review.invalid-pass-with-fail.json",
+    "expectedInvalid": true
+  },
+  {
+    "caseId": "unqualified-review-cannot-claim-ordinary-l3-gate",
+    "baseFixture": "visual-review.valid.json",
+    "jsonPointer": "/s0aTerminalStatus",
+    "replacement": null,
+    "expectedInvalidAfterAlsoSetting": {"/qaGateAuthority": "ordinary-l3-gate"}
+  }
+]

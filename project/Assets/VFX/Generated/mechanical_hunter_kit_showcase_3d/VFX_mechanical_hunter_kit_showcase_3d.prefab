@@ -1,0 +1,161 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &1393588688071985768
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3198459191273547185}
+  - component: {fileID: 2243115344187439043}
+  m_Layer: 0
+  m_Name: VFX_mechanical_hunter_kit_showcase_3d
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3198459191273547185
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1393588688071985768}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2243115344187439043
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1393588688071985768}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 07d8735a81864834c8f1bda23acf4be2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  compositionId: mechanical_hunter_kit_showcase_3d
+  duration: 6.6
+  sourcePrefabs:
+  - {fileID: 1678720729319752114, guid: 44572f2b806913c428c0dfc4c2ffa333, type: 3}
+  - {fileID: 4339523473688460148, guid: 5cf6da47e2fb2c24aacaf125ccf4722e, type: 3}
+  - {fileID: 6380280357303136815, guid: ec0478fa5e3f6ae4a8325220d6bad1b7, type: 3}
+  - {fileID: 6380280357303136815, guid: ec0478fa5e3f6ae4a8325220d6bad1b7, type: 3}
+  - {fileID: 6380280357303136815, guid: ec0478fa5e3f6ae4a8325220d6bad1b7, type: 3}
+  - {fileID: 8594018673309267745, guid: d5fcbe2cf96b0454485a830b76fc3ceb, type: 3}
+  - {fileID: 1221523754124383204, guid: 7804e9c60bff6ed408047b58380d0b9b, type: 3}
+  - {fileID: 3600273362355972649, guid: 4c4a2fe2d692a884ea937a3b29f999ca, type: 3}
+  - {fileID: 250657408377291432, guid: f97906afb2044804d9b8f308daef7bae, type: 3}
+  timeline:
+  - Time: 0
+    SourceIndex: 0
+    RefId: glitch_blink_transform_3d
+    Action: play
+    Position: {x: 0, y: 0, z: 0}
+    Rotation: {x: 0, y: 0, z: 0}
+    Scale: 1
+    HasPalette: 1
+    Primary: {r: 0.54901963, g: 0.39215687, b: 0.18039216, a: 1}
+    Secondary: {r: 0.8509804, g: 0.7254902, b: 0.43137255, a: 1}
+    Accent: {r: 0.49803922, g: 0.91764706, b: 1, a: 1}
+  - Time: 0.7
+    SourceIndex: 1
+    RefId: overheat_vent_idle_aura_3d
+    Action: play
+    Position: {x: 0, y: 0, z: 0}
+    Rotation: {x: 0, y: 0, z: 0}
+    Scale: 1
+    HasPalette: 1
+    Primary: {r: 0.54901963, g: 0.39215687, b: 0.18039216, a: 1}
+    Secondary: {r: 0.8509804, g: 0.7254902, b: 0.43137255, a: 1}
+    Accent: {r: 0.49803922, g: 0.91764706, b: 1, a: 1}
+  - Time: 1.2
+    SourceIndex: 2
+    RefId: muzzle_flash_impact_3d
+    Action: play
+    Position: {x: 0, y: 0, z: 0}
+    Rotation: {x: 0, y: 0, z: 0}
+    Scale: 1
+    HasPalette: 1
+    Primary: {r: 0.54901963, g: 0.39215687, b: 0.18039216, a: 1}
+    Secondary: {r: 0.8509804, g: 0.7254902, b: 0.43137255, a: 1}
+    Accent: {r: 0.49803922, g: 0.91764706, b: 1, a: 1}
+  - Time: 1.45
+    SourceIndex: 3
+    RefId: muzzle_flash_impact_3d
+    Action: play
+    Position: {x: 0, y: 0, z: 0}
+    Rotation: {x: 0, y: 0, z: 0}
+    Scale: 1
+    HasPalette: 1
+    Primary: {r: 0.54901963, g: 0.39215687, b: 0.18039216, a: 1}
+    Secondary: {r: 0.8509804, g: 0.7254902, b: 0.43137255, a: 1}
+    Accent: {r: 0.49803922, g: 0.91764706, b: 1, a: 1}
+  - Time: 1.7
+    SourceIndex: 4
+    RefId: muzzle_flash_impact_3d
+    Action: play
+    Position: {x: 0, y: 0, z: 0}
+    Rotation: {x: 0, y: 0, z: 0}
+    Scale: 1
+    HasPalette: 1
+    Primary: {r: 0.54901963, g: 0.39215687, b: 0.18039216, a: 1}
+    Secondary: {r: 0.8509804, g: 0.7254902, b: 0.43137255, a: 1}
+    Accent: {r: 0.49803922, g: 0.91764706, b: 1, a: 1}
+  - Time: 2.3
+    SourceIndex: 5
+    RefId: steam_vent_burst_impact_3d
+    Action: play
+    Position: {x: 0, y: 0, z: 0}
+    Rotation: {x: 0, y: 0, z: 0}
+    Scale: 1
+    HasPalette: 1
+    Primary: {r: 0.54901963, g: 0.39215687, b: 0.18039216, a: 1}
+    Secondary: {r: 0.8509804, g: 0.7254902, b: 0.43137255, a: 1}
+    Accent: {r: 0.49803922, g: 0.91764706, b: 1, a: 1}
+  - Time: 3
+    SourceIndex: 6
+    RefId: holo_scan_area_3d
+    Action: play
+    Position: {x: 0, y: 0, z: 0}
+    Rotation: {x: 0, y: 0, z: 0}
+    Scale: 1
+    HasPalette: 1
+    Primary: {r: 0.54901963, g: 0.39215687, b: 0.18039216, a: 1}
+    Secondary: {r: 0.8509804, g: 0.7254902, b: 0.43137255, a: 1}
+    Accent: {r: 0.49803922, g: 0.91764706, b: 1, a: 1}
+  - Time: 4
+    SourceIndex: 7
+    RefId: chain_grapple_beam_3d
+    Action: play
+    Position: {x: 0, y: 0, z: 0}
+    Rotation: {x: 0, y: 0, z: 0}
+    Scale: 1
+    HasPalette: 1
+    Primary: {r: 0.54901963, g: 0.39215687, b: 0.18039216, a: 1}
+    Secondary: {r: 0.8509804, g: 0.7254902, b: 0.43137255, a: 1}
+    Accent: {r: 0.49803922, g: 0.91764706, b: 1, a: 1}
+  - Time: 5.2
+    SourceIndex: 8
+    RefId: emp_nova_impact_2d
+    Action: play
+    Position: {x: 0, y: 0, z: 0}
+    Rotation: {x: 0, y: 0, z: 0}
+    Scale: 1
+    HasPalette: 1
+    Primary: {r: 0.54901963, g: 0.39215687, b: 0.18039216, a: 1}
+    Secondary: {r: 0.8509804, g: 0.7254902, b: 0.43137255, a: 1}
+    Accent: {r: 0.49803922, g: 0.91764706, b: 1, a: 1}
+  cameraHints: []
+  gates: []
+  descriptor: {fileID: 4900000, guid: 02a7708b735b77c488a610222bdd5f09, type: 3}

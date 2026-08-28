@@ -1,0 +1,85 @@
+{
+  "manifestVersion": 1,
+  "rulesVersion": "1.0-draft",
+  "enforcement": "strict",
+  "effectId": "energy_whip_trail_2d",
+  "archetype": "weapon_trail",
+  "recipeVersion": 1,
+  "recipeRevision": 1,
+  "recipeHash": "f975031d3a4cd5d3c090eced21e22625baa181d553769f67fc06013a75a6f442",
+  "buildHash": "4a7a853e41021f833e0f025bacc6c7d4fa4b639d0fe5a3dc134727d0b5ba0ca4",
+  "compilerVersion": "styled-content-4",
+  "unityVersion": "2022.3.62f3c1",
+  "sourceRecipePath": "Assets/VFX/Recipes/NewArchetypes/energy_whip_trail_2d.default.json",
+  "runtimeEntry": {
+    "kind": "prefab",
+    "path": "Assets/VFX/Generated/energy_whip_trail_2d/VFX_energy_whip_trail_2d.prefab",
+    "guid": "32b9bc776fe300044bc318e66c050d0a"
+  },
+  "ownedOutputs": [
+    {
+      "path": "Assets/VFX/Generated/energy_whip_trail_2d/VFX_energy_whip_trail_2d.prefab",
+      "guid": "32b9bc776fe300044bc318e66c050d0a",
+      "assetType": "GameObject",
+      "sha256": "0b47c1ba14d6f733cc65c239d0ee19b01fe6ea73957d7adbf34c2e4956d02312"
+    }
+  ],
+  "dependencies": [
+    {
+      "path": "Assets/VFX/Shared/Shaders/VfxLayeredRamp.shader",
+      "guid": "81928f0d6aa7a2e4c8cb73230126637f",
+      "assetType": "Shader",
+      "version": null,
+      "dependencyHash": "64048683c60561907c22fac9564aba1d"
+    },
+    {
+      "path": "Assets/VFX/Shared/Styles/Materials/MAT_Style_neon.mat",
+      "guid": "ca6294cd3ed51fb42ad1af796b22ec2b",
+      "assetType": "Material",
+      "version": null,
+      "dependencyHash": "4c6dca861b455dcc674a95f59c69d904"
+    },
+    {
+      "path": "Assets/VFX/Shared/Styles/Meshes/M_Style_Burst.asset",
+      "guid": "0def46dac13f1d8449cd98d98de17a15",
+      "assetType": "Mesh",
+      "version": null,
+      "dependencyHash": "56e972a8f8588a864d379a7611c49c63"
+    },
+    {
+      "path": "Assets/VFX/Shared/Styles/Meshes/M_Style_Ribbon.asset",
+      "guid": "dddd70cae322a2e40b1c5daa80492bd6",
+      "assetType": "Mesh",
+      "version": null,
+      "dependencyHash": "63b4bdca2af28668b73b3c2e60589468"
+    },
+    {
+      "path": "Assets/VFX/Shared/Styles/Meshes/M_Style_Shard.asset",
+      "guid": "506c8c0bcf8b14645948b3dbb02a1b3f",
+      "assetType": "Mesh",
+      "version": null,
+      "dependencyHash": "ff113f023e398b26696f0c501ae28324"
+    },
+    {
+      "path": "Packages/com.vfxcomposer.unity/Runtime/Components/StyledVfxController.cs",
+      "guid": "ca6f81a249967414c96082671e07dcaa",
+      "assetType": "MonoScript",
+      "version": null,
+      "dependencyHash": "486e1b8ba27b5e00b709bc5fd2b5624a"
+    }
+  ],
+  "cost": {
+    "particles": 16,
+    "particleSystems": 1,
+    "renderers": 6,
+    "materials": 1,
+    "trails": 1,
+    "duration": 2.4000000953674316,
+    "localTextureBytes": 0,
+    "dependencyResidentTextureBytes": 0,
+    "gameObjects": 6,
+    "maxDepth": 1
+  },
+  "audit": [],
+  "generatedAtUtc": "2026-08-24T13:19:56.4255277Z"
+}

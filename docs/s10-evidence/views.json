@@ -1,0 +1,13 @@
+{
+  "capture": "hidden-graphics-device batch Camera.Render; no -nographics",
+  "camera": "perspective",
+  "target": [0, 0.25, 0],
+  "views": [
+    { "file": "front.png", "position": [0, 3, -15], "fov": 48, "sha256": "127e8d83e96728523d746cceb021bed66034f670d8153bc6a036eca8dd32a107" },
+    { "file": "side.png", "position": [10.5, 3.5, -6], "fov": 48, "sha256": "13b30544f0d8c5ad7258444b5f1fcf22bcd751b580e2772b7256457718af5675" },
+    { "file": "oblique_top.png", "position": [8, 8, -11], "fov": 50, "sha256": "3a82cb31afbfec1f01bf305f2189506ba6a655dc31a190215bc14466517073a3" },
+    { "file": "close.png", "position": [0, 2, -7], "fov": 52, "sha256": "41d5f49aebe12e28a111ad5943c6022e8317923cb2701cca82b948667abb94e3" },
+    { "file": "game_distance.png", "position": [0, 5, -20], "fov": 36, "sha256": "591df9b9576d72fbc89ce8068add8bfc789858e90c64ddfcd140aa0f34cf5966" }
+  ],
+  "composition": "One retained 3D Gold Sample places Launch, Travel (sphere/flame/trail/separate billboard embers), and Impact (flash/burst/mesh-ring) apart in space for every perspective review."
+}

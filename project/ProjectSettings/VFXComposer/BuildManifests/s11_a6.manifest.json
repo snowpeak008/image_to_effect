@@ -1,0 +1,173 @@
+{
+  "manifestVersion": 1,
+  "rulesVersion": "1.0-draft",
+  "enforcement": "legacy_audit",
+  "effectId": "s11_a6",
+  "archetype": "projectile",
+  "recipeVersion": 1,
+  "recipeRevision": 2,
+  "recipeHash": "5177c5f53bf085ca48debd27e474be13bc9f6cf38e78de22367d89f2dff5cddc",
+  "buildHash": "dce4ebcdd983473e5436a98c3c883d244905b48084f8c181e21303e8df85a495",
+  "compilerVersion": "0.1.0",
+  "unityVersion": "2022.3.62f3c1",
+  "sourceRecipePath": null,
+  "runtimeEntry": {
+    "kind": "prefab",
+    "path": "Assets/VFX/Generated/s11_a6/VFX_S11_A6.prefab",
+    "guid": "f4025069371ce974d9288abe8f7f888e"
+  },
+  "ownedOutputs": [
+    {
+      "path": "Assets/VFX/Generated/s11_a6/VFX_S11_A6.prefab",
+      "guid": "f4025069371ce974d9288abe8f7f888e",
+      "assetType": "GameObject",
+      "sha256": "d2593ba74db2cdeb5215a82debc227be9392214cf21de7c4b293804e87731570"
+    },
+    {
+      "path": "Assets/VFX/Generated/s11_a6/burst_Material_0.mat",
+      "guid": "f4b6bcad20dbfd342b29b3ce645e28a0",
+      "assetType": "Material",
+      "sha256": "c3d24c19504b616f383cf61df086f9af00664bd1f8cfd3c7493b7600e3410f5b"
+    },
+    {
+      "path": "Assets/VFX/Generated/s11_a6/coreFlash_Material_0.mat",
+      "guid": "fd82f2cdccabc2d4cabeccef17e18063",
+      "assetType": "Material",
+      "sha256": "7d026651849cb31b424acecd9732ca7db17820f3832a78b3b614e29aa6d5ce8b"
+    },
+    {
+      "path": "Assets/VFX/Generated/s11_a6/core_Material_0.mat",
+      "guid": "b018b6c1ae18fd44bb6c5acc2105982e",
+      "assetType": "Material",
+      "sha256": "7243c787003d9e27f153861a8301f3106fe72009f6c51eab75025fc32475639f"
+    },
+    {
+      "path": "Assets/VFX/Generated/s11_a6/embers_Material_0.mat",
+      "guid": "bea9b918c6260184db10c370af99bc2c",
+      "assetType": "Material",
+      "sha256": "cc28ae9b7560229d4e0d66253bf14902ee28258053b0a5cd747ec6bf290d8dd8"
+    },
+    {
+      "path": "Assets/VFX/Generated/s11_a6/launchFlash_Material_0.mat",
+      "guid": "11c82ef7c466c284591ae8871bc7756e",
+      "assetType": "Material",
+      "sha256": "80dae19183c2be0aa16cf26c1ebad354acb01051549d9c4a78b82a6ef5d80420"
+    },
+    {
+      "path": "Assets/VFX/Generated/s11_a6/shockwave_Material_0.mat",
+      "guid": "2b098cc4a6ca7d143bc5732a80291326",
+      "assetType": "Material",
+      "sha256": "65424803d927e06c38687f18ec1a5e889b25c1dbcb207145540a5ee6c478fe63"
+    },
+    {
+      "path": "Assets/VFX/Generated/s11_a6/trail_Material_0.mat",
+      "guid": "c7e7642c63e5e584090f0fb67d4cd918",
+      "assetType": "Material",
+      "sha256": "7deac6e225483fb2fb23b5acfbf1ce5e25f721d841c242dec31dd906bd9a2b2d"
+    }
+  ],
+  "dependencies": [
+    {
+      "path": "Assets/VFX/Templates/2D/Textures/VFX2D_Ember.png",
+      "guid": "2473925f189aadf49bd3392eb912d164",
+      "assetType": "Texture2D",
+      "version": null,
+      "dependencyHash": "c28eef9b3c24613638561815067e5280"
+    },
+    {
+      "path": "Assets/VFX/Templates/2D/Textures/VFX2D_FireCore.png",
+      "guid": "db1681a7fbdc4a94f89153d768ed4ab0",
+      "assetType": "Texture2D",
+      "version": null,
+      "dependencyHash": "d1d83a1d4bb80328bfc1b8db9576b7d4"
+    },
+    {
+      "path": "Assets/VFX/Templates/2D/Textures/VFX2D_FireTrail.png",
+      "guid": "1a5cacac18736f940b624e020d7854d7",
+      "assetType": "Texture2D",
+      "version": null,
+      "dependencyHash": "fe88e46317792133ae1c2ccb52571ad6"
+    },
+    {
+      "path": "Assets/VFX/Templates/2D/Textures/VFX2D_ImpactStreak.png",
+      "guid": "d17050d159af2e541865ec8ca2c1dcaa",
+      "assetType": "Texture2D",
+      "version": null,
+      "dependencyHash": "511d8bec4f2a706008cdf5dcf58e5386"
+    },
+    {
+      "path": "Assets/VFX/Templates/2D/Textures/VFX2D_LaunchFlash.png",
+      "guid": "ee295a0c1599b7b458b940a1ac2fbbf1",
+      "assetType": "Texture2D",
+      "version": null,
+      "dependencyHash": "ec0bb98bf282dcabf092d445b2231b46"
+    },
+    {
+      "path": "Assets/VFX/Templates/2D/Textures/VFX2D_ShockwaveRing.png",
+      "guid": "bc036c3d227550f42beae2c8a8a34637",
+      "assetType": "Texture2D",
+      "version": null,
+      "dependencyHash": "288a47224e147722adc50c5881c40126"
+    },
+    {
+      "path": "Packages/com.unity.render-pipelines.universal/Editor/AssetVersion.cs",
+      "guid": "d0353a89b1f911e48b9e16bdc9f2e058",
+      "assetType": "MonoScript",
+      "version": null,
+      "dependencyHash": "32658fcbbe1a332050004e3b27abb4a3"
+    },
+    {
+      "path": "Packages/com.unity.render-pipelines.universal/Shaders/Particles/ParticlesUnlit.shader",
+      "guid": "0406db5a14f94604a8c57ccfbc9f3b46",
+      "assetType": "Shader",
+      "version": null,
+      "dependencyHash": "b7b185925fcbf7b0661368a240b860d4"
+    },
+    {
+      "path": "Packages/com.vfxcomposer.unity/Runtime/Components/GeneratedVfxController.cs",
+      "guid": "95375c27028a27440aba608c4070f13c",
+      "assetType": "MonoScript",
+      "version": null,
+      "dependencyHash": "84f23e5ab123318ec5a468206d637ab8"
+    }
+  ],
+  "cost": {
+    "particles": 99,
+    "particleSystems": 5,
+    "renderers": 7,
+    "materials": 7,
+    "trails": 1,
+    "duration": 1.62,
+    "localTextureBytes": 0,
+    "dependencyResidentTextureBytes": 3368944,
+    "gameObjects": 11,
+    "maxDepth": 3
+  },
+  "audit": [
+    {
+      "code": "R8014",
+      "severity": "warning",
+      "path": "/runtimeEntry/path",
+      "message": "Runtime Prefab name must be VFX_<effectId>."
+    },
+    {
+      "code": "R8003",
+      "severity": "warning",
+      "path": "/structure/gameObjects",
+      "message": "Runtime Entry exceeds the configured GameObject budget."
+    },
+    {
+      "code": "R8004",
+      "severity": "warning",
+      "path": "/structure/maxDepth",
+      "message": "Runtime Entry exceeds the configured hierarchy depth."
+    },
+    {
+      "code": "R8011",
+      "severity": "warning",
+      "path": "/ownedOutputs/materials",
+      "message": "Effect exceeds the recommended local Material count."
+    }
+  ],
+  "generatedAtUtc": "2026-08-24T14:10:39.6686762Z"
+}

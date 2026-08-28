@@ -1,0 +1,59 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://image-to-smart.local/schemas/s0a-projection-receipt/v3",
+  "title": "S0a write-once projection receipt",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "projectionToolVersion", "projectionToolSourceSchema", "projectionToolSources", "projectionToolRuntimeDependencies", "projectionToolSourceHash", "status", "holdoutCohort", "operatorLedgerHash", "commandSetHash", "captureRootIdentityHash", "captureProfilePolicyHash", "reviewContractHash", "reviewContextHash", "blindManifestHash", "operatorEvidenceBundleHash", "humanWorksheetHash", "artifactCountExcludingReceipt", "artifactTreeHashExcludingReceipt", "assertions", "receiptHash"],
+  "properties": {
+    "schemaVersion": {"const": "s0a-projection-receipt/v3"},
+    "projectionToolVersion": {"const": "w24-s0a-blind-projection/1.2.0"},
+    "projectionToolSourceSchema": {"const": "s0a-projection-tool-sources/v2"},
+    "projectionToolSources": {
+      "type": "array",
+      "minItems": 11,
+      "maxItems": 11,
+      "uniqueItems": true,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["path", "sha256"],
+        "properties": {
+          "path": {"enum": ["tools/vfx/project_s0a_capture.py", "tools/vfx/s0a_calibration.py", "tools/vfx/s0a_projection.py", "docs/skills/unity-vfx-visual-qa/calibration/s0a-blind-review-contract.schema.json", "docs/skills/unity-vfx-visual-qa/calibration/s0a-capture-profile-policy.schema.json", "docs/skills/unity-vfx-visual-qa/calibration/s0a-human-adjudication-worksheet.schema.json", "docs/skills/unity-vfx-visual-qa/calibration/s0a-projected-blind-evidence.schema.json", "docs/skills/unity-vfx-visual-qa/calibration/s0a-projected-blind-manifest.schema.json", "docs/skills/unity-vfx-visual-qa/calibration/s0a-projected-operator-evidence-bundle.schema.json", "docs/skills/unity-vfx-visual-qa/calibration/s0a-projected-review-freeze-context.schema.json", "docs/skills/unity-vfx-visual-qa/calibration/s0a-projection-receipt.schema.json"]},
+          "sha256": {"$ref": "#/$defs/hash"}
+        }
+      }
+    },
+    "projectionToolRuntimeDependencies": {
+      "const": [{"name": "Pillow", "version": "12.2.0"}]
+    },
+    "projectionToolSourceHash": {"$ref": "#/$defs/hash"},
+    "status": {"const": "PROJECTED_NOT_REVIEWED"},
+    "holdoutCohort": {"enum": ["reduced-36-12-12-6", "full-60-20-20-10"]},
+    "operatorLedgerHash": {"$ref": "#/$defs/hash"},
+    "commandSetHash": {"$ref": "#/$defs/hash"},
+    "captureRootIdentityHash": {"$ref": "#/$defs/hash"},
+    "captureProfilePolicyHash": {"$ref": "#/$defs/hash"},
+    "reviewContractHash": {"$ref": "#/$defs/hash"},
+    "reviewContextHash": {"$ref": "#/$defs/hash"},
+    "blindManifestHash": {"$ref": "#/$defs/hash"},
+    "operatorEvidenceBundleHash": {"$ref": "#/$defs/hash"},
+    "humanWorksheetHash": {"$ref": "#/$defs/hash"},
+    "artifactCountExcludingReceipt": {"type": "integer", "minimum": 1},
+    "artifactTreeHashExcludingReceipt": {"$ref": "#/$defs/hash"},
+    "assertions": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["labelsCreated", "labelsFrozen", "qaReportsCreated", "metricsEmitted", "terminalStatusClaimed"],
+      "properties": {
+        "labelsCreated": {"const": false},
+        "labelsFrozen": {"const": false},
+        "qaReportsCreated": {"const": false},
+        "metricsEmitted": {"const": false},
+        "terminalStatusClaimed": {"const": false}
+      }
+    },
+    "receiptHash": {"$ref": "#/$defs/hash"}
+  },
+  "$defs": {"hash": {"type": "string", "pattern": "^sha256:[a-f0-9]{64}$"}}
+}

@@ -1,0 +1,14 @@
+{
+  "succeeded": true,
+  "detail": "Assets/VFX/Generated/e2_bolt/VFX_E2_Bolt.prefab",
+  "entries": [
+    {
+      "code": "I400",
+      "severity": "info",
+      "path": "/budget",
+      "message": "Static budget preflight completed for profile mobile_medium.",
+      "actualValue": null,
+      "allowedRange": null
+    }
+  ]
+}

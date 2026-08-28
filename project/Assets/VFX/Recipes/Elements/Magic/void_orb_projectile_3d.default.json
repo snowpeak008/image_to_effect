@@ -1,0 +1,146 @@
+{
+  "recipeVersion": 1,
+  "revision": 1,
+  "id": "void_orb_projectile_3d",
+  "name": "Void Orb Projectile 3d",
+  "dimension": "3d",
+  "archetype": "projectile",
+  "style": {
+    "token": "dark",
+    "palette": {
+      "primary": "#1A0F2E",
+      "secondary": "#5A2E8C",
+      "accent": "#C24DFF"
+    },
+    "outline": 0.12,
+    "shading_steps": 4,
+    "noise_scale": 1.1,
+    "glow_strength": 0.8
+  },
+  "behavior": {
+    "motion": {
+      "type": "linear",
+      "speed": 3.2
+    },
+    "hit": {
+      "type": "single"
+    },
+    "emission": {
+      "type": "single"
+    },
+    "timing": {
+      "type": "instant"
+    }
+  },
+  "content": {
+    "family": "shadow",
+    "parameters": {
+      "orb_radius": 0.7,
+      "suction_particle_rate": 30,
+      "implode_scale": 1.25
+    }
+  },
+  "targetProfile": "mobile_medium",
+  "randomSeed": 1273908457,
+  "stages": [
+    {
+      "id": "launch",
+      "trigger": "on_launch",
+      "duration": 0.08,
+      "enabled": true,
+      "modules": [
+        {
+          "id": "launchFlash",
+          "kind": "impact_flash",
+          "templateId": "PFT_3D_LaunchFlash",
+          "parameters": {
+            "lifetime": 0.1,
+            "size": 0.7
+          },
+          "enabled": true
+        }
+      ]
+    },
+    {
+      "id": "travel",
+      "trigger": "after_previous",
+      "duration": 0.9,
+      "enabled": true,
+      "modules": [
+        {
+          "id": "core",
+          "kind": "energy_body",
+          "templateId": "PFT_3D_FireCore",
+          "parameters": {
+            "scale": 1.0
+          },
+          "enabled": true
+        },
+        {
+          "id": "trail",
+          "kind": "motion_trail",
+          "templateId": "PFT_3D_FireTrail",
+          "parameters": {
+            "time": 0.3,
+            "width": 0.28
+          },
+          "attachTo": "core",
+          "enabled": true
+        },
+        {
+          "id": "secondary",
+          "kind": "secondary_particles",
+          "templateId": "PFT_3D_Embers",
+          "parameters": {
+            "rate": 10,
+            "lifetime": 0.5
+          },
+          "attachTo": "core",
+          "enabled": true
+        }
+      ]
+    },
+    {
+      "id": "impact",
+      "trigger": "on_hit",
+      "duration": 0.27,
+      "enabled": true,
+      "modules": [
+        {
+          "id": "impactFlash",
+          "kind": "impact_flash",
+          "templateId": "PFT_3D_LaunchFlash",
+          "parameters": {
+            "lifetime": 0.1,
+            "size": 0.8
+          },
+          "enabled": true
+        },
+        {
+          "id": "impactBurst",
+          "kind": "impact_burst",
+          "templateId": "PFT_3D_FireImpact",
+          "parameters": {
+            "count": 16,
+            "speed": 3.0
+          },
+          "enabled": true
+        },
+        {
+          "id": "shockwave",
+          "kind": "shockwave",
+          "templateId": "PFT_3D_Shockwave",
+          "parameters": {
+            "lifetime": 0.24,
+            "endSize": 2.2
+          },
+          "enabled": true
+        }
+      ]
+    }
+  ],
+  "metadata": {
+    "createdBy": "w3-w8-element-family",
+    "templateCatalogVersion": "1.0.0"
+  }
+}

@@ -1,0 +1,161 @@
+{
+  "schema": "w24-stage-focused-unity-receipt/v1",
+  "createdAtUtc": "2026-08-25T14:40:44.8069976Z",
+  "authority": "MACHINE_ONLY",
+  "repositoryRoot": "D:/WorkWork/Assist/image_to_smart",
+  "shadowProject": "D:/WorkWork/Assist/image_to_smart/.codex_tmp/w24-fresh-20260825-0628/project",
+  "unity": {
+    "version": "2022.3.62f3c1",
+    "executable": "E:/workwork/steamgamework/unit/2022.3.62f3c1/Editor/Unity.exe",
+    "platform": "EditMode",
+    "batchMode": true,
+    "graphics": false
+  },
+  "runner": {
+    "file": "run-single-unity-test.ps1",
+    "sha256": "37b7993a167d85e0c2a3ab526186bbf8f9ca9c011f81eca082ff36e2d98d7db1",
+    "exitRule": "The Unity process must exit naturally with code 0 and the XML must contain at least one test, zero failed tests, and zero inconclusive tests."
+  },
+  "gates": [
+    {
+      "id": "S1_CONTRACT_TRACE",
+      "filter": "VFXComposer.Tests.EditMode.W24S1.W24S1ContractAndTraceTests",
+      "exitCode": 0,
+      "total": 15,
+      "passed": 15,
+      "failed": 0,
+      "skipped": 0,
+      "inconclusive": 0,
+      "xml": "s1-contract-trace.xml",
+      "xmlSha256": "a334ab7872f9810fb40881fec5a60e19d42aae212a7c671cf2b20a3f687df2f2",
+      "log": "s1-contract-trace.log",
+      "logSha256": "f6b5655040245b33e954d65584613f45f160b47f2b94857eed0b2b53f7503cb9"
+    },
+    {
+      "id": "S4_MIGRATION_AUDIT",
+      "filter": "VFXComposer.Tests.EditMode.W24S4MigrationAuditTests",
+      "exitCode": 0,
+      "total": 12,
+      "passed": 12,
+      "failed": 0,
+      "skipped": 0,
+      "inconclusive": 0,
+      "xml": "s4-migration-audit.xml",
+      "xmlSha256": "e91518ed8130022970b0053d66cb13c0f226e58103edfe79e28c5123ee317e7a",
+      "log": "s4-migration-audit.log",
+      "logSha256": "3502807ca8ad60b8c8e5323e633fdd35ae36092d9e92e0e861c3a21ceba78f19"
+    },
+    {
+      "id": "S5_PRODUCTION_GATE",
+      "filter": "VFXComposer.Tests.EditMode.W24S5ProductionGateTests",
+      "exitCode": 0,
+      "total": 26,
+      "passed": 26,
+      "failed": 0,
+      "skipped": 0,
+      "inconclusive": 0,
+      "xml": "s5-production-gate.xml",
+      "xmlSha256": "2909eb34a584f8355ed1218f90a2c48b8efd7e6bfa3d0d4dba82d8a5a19ec95a",
+      "log": "s5-production-gate.log",
+      "logSha256": "1be8ea2550457f196786701da8b699c5c4df8752423b6f17be7b77eae27b45f5"
+    },
+    {
+      "id": "FIRST_FORMAL_TRANSACTION",
+      "filter": "VFXComposer.Tests.EditMode.W24FirstFormalBuildTransactionTests",
+      "exitCode": 0,
+      "total": 5,
+      "passed": 5,
+      "failed": 0,
+      "skipped": 0,
+      "inconclusive": 0,
+      "xml": "first-formal-transaction.xml",
+      "xmlSha256": "70455d408cb65e3bff1041d76c6a34b75e0a11ff9438212e14a9c81741623c03",
+      "log": "first-formal-transaction.log",
+      "logSha256": "1c22fe4680837f00b13038eee7075b09a1cf7b2150670ea21e5ebdc45f769c9b"
+    },
+    {
+      "id": "TYPED_BINARY_CANONICAL",
+      "filter": "VFXComposer.Tests.EditMode.W24TypedBinaryCanonicalEncodingTests",
+      "exitCode": 0,
+      "total": 4,
+      "passed": 4,
+      "failed": 0,
+      "skipped": 0,
+      "inconclusive": 0,
+      "xml": "typed-binary-canonical.xml",
+      "xmlSha256": "8ab778a12376409cf18965d86554301e6ead01c07c95ae6f71fe154c830018ba",
+      "log": "typed-binary-canonical.log",
+      "logSha256": "00e1025e29ef58812248341d4f40697f6c0a0470c3f95398b227ae77f2b76d75"
+    },
+    {
+      "id": "TYPED_RAW_DIAGNOSTICS",
+      "filter": "VFXComposer.Tests.EditMode.W24TypedRawDiagnosticCaptureTests",
+      "exitCode": 0,
+      "total": 5,
+      "passed": 5,
+      "failed": 0,
+      "skipped": 0,
+      "inconclusive": 0,
+      "xml": "typed-raw-diagnostics.xml",
+      "xmlSha256": "e9062d583327a1bcc5af16243628a245bd0e889ab893241a522a9b984fdb25e7",
+      "log": "typed-raw-diagnostics.log",
+      "logSha256": "6d55fad0f2e3574960d486d1ba3330e34fb1efbfff6a6077e61b25c8a32837bf"
+    },
+    {
+      "id": "FORMAL_BATCH_ENTRYPOINTS",
+      "filter": "VFXComposer.Tests.EditMode.W24FormalBatchAuthoringEntrypointsTests",
+      "exitCode": 0,
+      "total": 8,
+      "passed": 7,
+      "failed": 0,
+      "skipped": 1,
+      "inconclusive": 0,
+      "ignoredReason": "The interactive-Editor-only fail-closed guard is intentionally ignored in batch mode.",
+      "xml": "formal-batch-entrypoints.xml",
+      "xmlSha256": "80a640b9e923133f95b5b7dcb27418c7bf5af2d681e750d4c4e1e31e5fbc3fe0",
+      "log": "formal-batch-entrypoints.log",
+      "logSha256": "52feb5b149f30598b9b622499e2333de7bac4c9a7de29f36dff20409ead5d63b"
+    },
+    {
+      "id": "S6_STUDIO_MODELS",
+      "filter": "VFXComposer.Tests.EditMode.W24S6StudioModelsTests",
+      "exitCode": 0,
+      "total": 5,
+      "passed": 5,
+      "failed": 0,
+      "skipped": 0,
+      "inconclusive": 0,
+      "xml": "s6-studio-models.xml",
+      "xmlSha256": "73b6b93febc613139701b0090efcfd5003fbca9ea36a5c13c5c7688c10419558",
+      "log": "s6-studio-models.log",
+      "logSha256": "21c6c004cf8af6732b1c2741a3971175d8db81611a27cdab4d73531daa9c6055"
+    },
+    {
+      "id": "S6_MCP_ENVELOPE",
+      "filter": "VFXComposer.Tests.EditMode.W24S6McpOperationEnvelopeTests",
+      "exitCode": 0,
+      "total": 8,
+      "passed": 8,
+      "failed": 0,
+      "skipped": 0,
+      "inconclusive": 0,
+      "xml": "s6-mcp-envelope.xml",
+      "xmlSha256": "b894b468a90a048c4200c66bd85fe5456c16a50aaa6fca6f270bca56dacd9739",
+      "log": "s6-mcp-envelope.log",
+      "logSha256": "6c412563462b8baf1c32dceb4d6e5294d50aeaaa470bcc24970f1bf8351ea716"
+    }
+  ],
+  "supersededNegativeObservations": [
+    "The first S4 run wrote a 12/12 XML but the Unity host stalled during native shutdown and was terminated by exact PID; the final S4 gate above is a fresh natural exit-0 rerun.",
+    "The first S6 Studio Models run wrote a 5/5 XML but stalled at the same native shutdown boundary; the final S6 Studio Models gate above is a fresh natural exit-0 rerun.",
+    "Three transaction attempts failed before test discovery because the C drive filled and the Unity ULF was truncated or stale. Disk data was moved recoverably and the ULF was reactivated through the official Unity Hub client before the final 5/5 run. These were environment failures, not test failures."
+  ],
+  "authorityBoundary": {
+    "machineGatesPassed": true,
+    "visualQaPassed": false,
+    "l3Granted": false,
+    "l4Granted": false,
+    "userVisualVerdict": null,
+    "notes": "These focused gates prove only the named contracts, migration audit framework, production gate, transaction, typed evidence primitives, batch admission, Studio models, and MCP admission envelope. They do not prove visual quality, an external MCP adapter, network execution, production writes, rollback of external actions, commercial readiness, or user acceptance."
+  }
+}

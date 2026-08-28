@@ -1,0 +1,59 @@
+{
+  "recipeVersion": 1,
+  "revision": 1,
+  "id": "chain_grapple_beam_3d",
+  "name": "Chain Grapple Beam 3d",
+  "dimension": "3d",
+  "archetype": "beam",
+  "style": {
+    "token": "steampunk",
+    "palette": {
+      "primary": "#8C632B",
+      "secondary": "#D9B96E",
+      "accent": "#C9F5FF"
+    },
+    "outline": 0.1,
+    "shading_steps": 4,
+    "noise_scale": 1.2,
+    "glow_strength": 1.05
+  },
+  "targetProfile": "mobile_medium",
+  "randomSeed": 4290453478,
+  "stages": [
+    {
+      "id": "main",
+      "trigger": "manual",
+      "duration": 1.2,
+      "enabled": true,
+      "modules": [
+        {
+          "id": "body",
+          "kind": "energy_body",
+          "templateId": "PFT_3D_FireCore",
+          "parameters": {
+            "scale": 1.0
+          },
+          "enabled": true
+        }
+      ]
+    }
+  ],
+  "metadata": {
+    "createdBy": "w18-hero-exclusive",
+    "templateCatalogVersion": "1.0.0"
+  },
+  "behavior": {
+    "hit": {
+      "type": "arc_link",
+      "hop_count": 1,
+      "sag": 0.22,
+      "jitter": 0.025
+    },
+    "emission": {
+      "type": "single"
+    },
+    "timing": {
+      "type": "sustained"
+    }
+  }
+}

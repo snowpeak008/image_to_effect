@@ -1,0 +1,32 @@
+{
+  "schema": "style-special-next-candidate/v1",
+  "id": "crystal_shield_3d_crystal_next_candidate",
+  "sourceId": "crystal_shield_3d_crystal",
+  "label": "CRYSTAL · SHIELD VARIANT",
+  "group": "w16",
+  "archetype": "shield",
+  "dimension": "3d",
+  "style": "crystal",
+  "profile": "HoloBarrier",
+  "semantic": "shield-content+faceted-core+dispersion-rims+impact-ripple",
+  "duration": 1.5,
+  "releaseNormalized": 0.3,
+  "sustainEndNormalized": 0.82,
+  "sustained": true,
+  "seed": 16104,
+  "intensity": 1.1,
+  "palette": {
+    "primary": "#52D9FF",
+    "secondary": "#E8FFFF",
+    "accent": "#FF8CF4"
+  },
+  "meshes": [
+    "Quad",
+    "FacetC",
+    "Ring",
+    "Ring"
+  ],
+  "pairFamily": "crystal",
+  "pairRole": "variant",
+  "sourceBaseId": "crystal_shield_3d"
+}

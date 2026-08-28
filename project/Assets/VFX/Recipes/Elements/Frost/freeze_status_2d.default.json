@@ -1,0 +1,96 @@
+{
+  "recipeVersion": 1,
+  "revision": 1,
+  "id": "freeze_status_2d",
+  "name": "Freeze Status 2d",
+  "dimension": "2d",
+  "archetype": "aura",
+  "style": {
+    "token": "stylized",
+    "palette": {
+      "primary": "#7FD8FF",
+      "secondary": "#FFFFFF",
+      "accent": "#2E6BD6"
+    },
+    "outline": 0.12,
+    "shading_steps": 4,
+    "noise_scale": 1.1,
+    "glow_strength": 1.25
+  },
+  "behavior": {
+    "hit": {
+      "type": "single"
+    },
+    "emission": {
+      "type": "single"
+    },
+    "timing": {
+      "type": "sustained"
+    }
+  },
+  "content": {
+    "family": "frost",
+    "parameters": {
+      "shell_opacity": 0.62,
+      "duration": 2,
+      "shatter_piece_count": 8
+    }
+  },
+  "targetProfile": "mobile_medium",
+  "randomSeed": 3146908548,
+  "stages": [
+    {
+      "id": "main",
+      "trigger": "manual",
+      "duration": 1.0,
+      "enabled": true,
+      "modules": [
+        {
+          "id": "body",
+          "kind": "energy_body",
+          "templateId": "PFT_2D_FireCore",
+          "parameters": {
+            "scale": 1.0
+          },
+          "enabled": true
+        },
+        {
+          "id": "flow",
+          "kind": "motion_trail",
+          "templateId": "PFT_2D_FireTrail",
+          "parameters": {
+            "time": 0.28,
+            "width": 0.25
+          },
+          "attachTo": "body",
+          "enabled": true
+        },
+        {
+          "id": "secondary",
+          "kind": "secondary_particles",
+          "templateId": "PFT_2D_Embers",
+          "parameters": {
+            "rate": 12,
+            "lifetime": 0.55
+          },
+          "attachTo": "body",
+          "enabled": true
+        },
+        {
+          "id": "accent",
+          "kind": "shockwave",
+          "templateId": "PFT_2D_Shockwave",
+          "parameters": {
+            "lifetime": 0.3,
+            "endSize": 2.4
+          },
+          "enabled": true
+        }
+      ]
+    }
+  ],
+  "metadata": {
+    "createdBy": "w3-w8-element-family",
+    "templateCatalogVersion": "1.0.0"
+  }
+}

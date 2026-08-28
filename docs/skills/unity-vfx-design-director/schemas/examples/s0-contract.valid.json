@@ -1,0 +1,82 @@
+{
+  "contractVersion": "s0/v1",
+  "effectId": "sustained_flame_3d",
+  "contractRevision": 1,
+  "contractHash": "sha256:90e60c2945d36beb6dfbd419d11f467a481b094153958eb34659b220ca63037b",
+  "lifecycle": {
+    "kind": "sustained",
+    "start": {"entryConditions": ["start event"], "deadlineSeconds": 0.5, "completionConditions": ["core visible"]},
+    "steady": {"entryConditions": ["start complete"], "deadlineSeconds": 3.0, "completionConditions": ["three windows captured"]},
+    "stop": {"entryConditions": ["stop event"], "deadlineSeconds": 1.0, "completionConditions": ["cleanup complete"]},
+    "interrupt": {"entryConditions": ["interrupt event"], "deadlineSeconds": 1.0, "completionConditions": ["interrupt cleanup complete"]}
+  },
+  "references": [
+    {
+      "source": "reference/flame-board.png",
+      "hash": "sha256:1111111111111111111111111111111111111111111111111111111111111111",
+      "license": "project-reference",
+      "assetUse": "reference-only",
+      "roles": [{"dimension": "motion", "weight": 1}],
+      "notRequired": ["pixel-identical silhouette"]
+    }
+  ],
+  "spatialContract": {
+    "coordinateSpace": "world",
+    "origin": [0, 0, 0],
+    "orientationEulerDegrees": [0, 0, 0],
+    "visualAnchor": {"kind": "world-origin", "reference": "S0FlameRoot"},
+    "designDimensions": {"width": 2, "height": 3, "depth": 1, "unit": "meter"},
+    "gameplayDistanceDimensions": {"width": 1, "height": 1.5, "depth": 0.5, "unit": "meter"}
+  },
+  "captureProfile": {
+    "captureProfileId": "s0_flame_1080p",
+    "unityVersion": "2022.3",
+    "urpVersion": "14.0.12",
+    "graphicsApi": "Direct3D11",
+    "graphicsDeviceDriver": "fixture-driver",
+    "cameraSerializedReference": "Assets/Scenes/S0.unity:MainCamera",
+    "cameraPose": {"position": [0, 1, -6], "orientationEulerDegrees": [0, 0, 0]},
+    "cameraFovDegrees": 60,
+    "sceneSerializedReference": "Assets/Scenes/S0.unity",
+    "sceneHash": "sha256:5555555555555555555555555555555555555555555555555555555555555555",
+    "prefabManifestSerializedReference": "Assets/Prefabs/S0Flame.prefab",
+    "prefabManifestHash": "sha256:6666666666666666666666666666666666666666666666666666666666666666",
+    "rendererAssetSerializedReference": "Assets/Settings/Renderer.asset",
+    "volumeSerializedReference": "Assets/Settings/S0Volume.asset",
+    "resolution": {"width": 1920, "height": 1080},
+    "fps": 30,
+    "background": "S0 neutral ground",
+    "colorSpace": "Linear",
+    "hdr": true,
+    "msaaSamples": 4,
+    "renderTextureFormat": "ARGBHalf",
+    "bloom": {"enabled": true, "settingsReference": "S0Volume.bloom"},
+    "toneMapping": "ACES",
+    "captureToolVersion": "capture/v1",
+    "captureToolHash": "sha256:7777777777777777777777777777777777777777777777777777777777777777",
+    "canonicalSeed": 100,
+    "robustnessSeeds": [101, 102]
+  },
+  "semanticStateMachine": {
+    "deterministicForSameSeed": true,
+    "states": [
+      {"stateId": "start", "role": "start", "durationSeconds": 0.5, "entryConditions": ["start event"], "exitConditions": ["core visible"], "triggeredEvents": ["ignite"], "preservedSemantics": ["root anchor"]},
+      {"stateId": "steady", "role": "steady", "durationSeconds": 3, "entryConditions": ["start complete"], "exitConditions": ["stop or interrupt"], "triggeredEvents": [], "preservedSemantics": ["root anchor", "core energy"]},
+      {"stateId": "stop", "role": "stop", "durationSeconds": 1, "entryConditions": ["stop event"], "exitConditions": ["particles clear"], "triggeredEvents": ["stop"], "preservedSemantics": ["root anchor"]},
+      {"stateId": "interrupt", "role": "interrupt", "durationSeconds": 1, "entryConditions": ["interrupt event"], "exitConditions": ["particles clear"], "triggeredEvents": ["interrupt"], "preservedSemantics": ["root anchor"]}
+    ],
+    "transitions": [{"from": "start", "to": "steady", "continuityMode": "continuous", "preservedSemantics": ["root anchor", "core energy"], "triggeredEvents": []}],
+    "completionExits": ["stop complete"],
+    "interruptExits": ["interrupt complete"]
+  },
+  "layers": [
+    {"layerId": "core", "responsibility": "visible burning core", "carrier": "particle-system", "geometry": "billboard particles", "materialModel": "unlit additive", "colorRole": "primary", "blendMode": "additive", "motionModel": "seeded turbulence", "timing": "start through stop", "attachment": "S0FlameRoot", "continuityFrom": [], "continuityTo": ["smoke"], "budgetCost": {"particles": 32}, "required": true}
+  ],
+  "allowedSubstitutions": [],
+  "forbiddenSubstitutions": [{"substitutionId": "no_static_flame", "from": "sustained burn", "to": "rotating full image", "rationale": "does not satisfy time-varying sustained carrier"}],
+  "cleanup": {"cleanupDeadline": 1, "allowedResidualLayers": [], "lightStopDeadline": 0.5},
+  "budget": {"particlePeak": 128, "particleSteady": 64, "rendererCount": 4, "materialCount": 3, "lightCount": 1, "textureResidency": {"localExclusiveMb": 4, "totalDependencyMb": 8}},
+  "requirements": [
+    {"designRequirementId": "flame.subject.readability", "type": "visual-semantic", "evidenceAuthority": "visualQa", "statement": "Core remains visible within the centre ROI during steady state.", "visualVerdict": {"subject": "core", "expectedCondition": "core is not occluded by smoke in the centre ROI", "evidenceLocation": {"state": "steady", "frameInterval": [90, 150], "roi": "centre 40 percent"}}}
+  ]
+}

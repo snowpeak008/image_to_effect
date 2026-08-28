@@ -1,0 +1,14 @@
+{
+  "recipeVersion": 1,
+  "revision": 1,
+  "id": "w15nc_scorch_decal_3d",
+  "name": "Scorch Decal Next Candidate",
+  "dimension": "3d",
+  "archetype": "decal",
+  "style": { "token": "dark", "palette": { "primary": "#8A240D", "secondary": "#FF6A17", "accent": "#FFD38A" }, "glow_strength": 0.78 },
+  "archetypeParameters": { "size": 1.15, "lifetime": 3.2, "stack_limit": 4 },
+  "targetProfile": "mobile_medium",
+  "randomSeed": 3085180936,
+  "stages": [{ "id": "active", "trigger": "manual", "duration": 3.2, "enabled": true, "modules": [{ "id": "core", "kind": "energy_body", "templateId": "PFT_3D_FireCore", "parameters": { "scale": 1.0 }, "enabled": true }, { "id": "secondary", "kind": "secondary_particles", "templateId": "PFT_3D_Embers", "parameters": { "rate": 8.0, "lifetime": 0.45 }, "attachTo": "core", "enabled": true }] }],
+  "metadata": { "createdBy": "w15-next-candidate-authoring", "templateCatalogVersion": "formal-1" }
+}

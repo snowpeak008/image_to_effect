@@ -1,0 +1,6 @@
+{
+  "scene": "Assets/VFX/Preview/VFXPREVIEW_DamageWarningUI_Fullscreen.unity",
+  "capture": "full-screen Canvas; serialized Camera; natural Update and runtime hit event",
+  "fps": 60,
+  "frames": [18,72]
+}

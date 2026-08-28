@@ -1,0 +1,78 @@
+{
+  "manifestVersion": 1,
+  "rulesVersion": "1.0-draft",
+  "enforcement": "strict",
+  "effectId": "cap_demo_charge_occlude_holo_3d",
+  "archetype": "beam",
+  "recipeVersion": 1,
+  "recipeRevision": 1,
+  "recipeHash": "0aa043b1ebbe5760df610fe2966b27e2d78add4663812e0c66bc8f17fe76c262",
+  "buildHash": "abd2a54aa17a8ebf0627c0d0a2e539cc9b0fa399ac8c1fddff6397c9d8f47b79",
+  "compilerVersion": "styled-content-4",
+  "unityVersion": "2022.3.62f3c1",
+  "sourceRecipePath": "Assets/VFX/Recipes/Capability/Demos/cap_demo_charge_occlude_holo_3d.default.json",
+  "runtimeEntry": {
+    "kind": "prefab",
+    "path": "Assets/VFX/Generated/cap_demo_charge_occlude_holo_3d/VFX_cap_demo_charge_occlude_holo_3d.prefab",
+    "guid": "593ea90de5b0be54189cc10a52974d81"
+  },
+  "ownedOutputs": [
+    {
+      "path": "Assets/VFX/Generated/cap_demo_charge_occlude_holo_3d/VFX_cap_demo_charge_occlude_holo_3d.prefab",
+      "guid": "593ea90de5b0be54189cc10a52974d81",
+      "assetType": "GameObject",
+      "sha256": "9297fe019130ed091158539db89ea732811bd119ba7c164df86388177e8d2421"
+    }
+  ],
+  "dependencies": [
+    {
+      "path": "Assets/VFX/Shared/Shaders/VfxHoloFresnel.shader",
+      "guid": "deae41ea852bbc24fbaeed759e6f0519",
+      "assetType": "Shader",
+      "version": null,
+      "dependencyHash": "736c58899b4da5696e81551b737ae1a4"
+    },
+    {
+      "path": "Assets/VFX/Shared/Styles/Materials/MAT_Style_holo.mat",
+      "guid": "7db5cf272022f764dafdea6ec2318707",
+      "assetType": "Material",
+      "version": null,
+      "dependencyHash": "60ab0bd7361013108f8a34875a414491"
+    },
+    {
+      "path": "Assets/VFX/Shared/Styles/Meshes/M_Style_Burst.asset",
+      "guid": "0def46dac13f1d8449cd98d98de17a15",
+      "assetType": "Mesh",
+      "version": null,
+      "dependencyHash": "56e972a8f8588a864d379a7611c49c63"
+    },
+    {
+      "path": "Assets/VFX/Shared/Styles/Meshes/M_Style_Quad.asset",
+      "guid": "7f415b79b45b04d4ab5e3f4dd61605aa",
+      "assetType": "Mesh",
+      "version": null,
+      "dependencyHash": "01e83f0bfc8392031ac8f5694416ab10"
+    },
+    {
+      "path": "Packages/com.vfxcomposer.unity/Runtime/Components/StyledVfxController.cs",
+      "guid": "ca6f81a249967414c96082671e07dcaa",
+      "assetType": "MonoScript",
+      "version": null,
+      "dependencyHash": "486e1b8ba27b5e00b709bc5fd2b5624a"
+    }
+  ],
+  "cost": {
+    "particles": 0,
+    "particleSystems": 0,
+    "renderers": 3,
+    "materials": 1,
+    "trails": 0,
+    "duration": 1.2000000476837158,
+    "localTextureBytes": 0,
+    "dependencyResidentTextureBytes": 0,
+    "gameObjects": 4,
+    "maxDepth": 1
+  },
+  "audit": [],
+  "generatedAtUtc": "2026-08-24T14:07:10.4658067Z"
+}

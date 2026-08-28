@@ -1,0 +1,203 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.vfxcomposer.dev/desktop/commands/vfxcomposer-validate-patch-command-v1.schema.json",
+  "title": "commands/vfxcomposer-validate-patch-command-v1.schema.json",
+  "type": "object",
+  "properties": {
+    "protocolVersion": {
+      "const": "vfxcomposer.protocol/1.0"
+    },
+    "messageKind": {
+      "const": "command.validate-patch"
+    },
+    "envelope": {
+      "type": "object",
+      "properties": {
+        "protocolVersion": {
+          "const": "vfxcomposer.protocol/1.0"
+        },
+        "requestId": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9._:-]{1,128}$",
+          "maxLength": 128
+        },
+        "commandId": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9._:-]{1,128}$",
+          "maxLength": 128
+        },
+        "idempotencyKey": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9._:-]{1,128}$",
+          "maxLength": 128
+        },
+        "leaseId": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9._:-]{1,128}$",
+          "maxLength": 128
+        },
+        "projectIdentity": {
+          "type": "object",
+          "properties": {
+            "typeTag": {
+              "const": "vfxcomposer.project-identity/1"
+            },
+            "digest": {
+              "type": "string",
+              "pattern": "^sha256:[0-9a-f]{64}$"
+            }
+          },
+          "required": [
+            "typeTag",
+            "digest"
+          ],
+          "additionalProperties": false
+        },
+        "leaseGeneration": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 9223372036854775807
+        },
+        "commandKind": {
+          "const": "command.validate-patch"
+        },
+        "commandCapability": {
+          "const": "command.validate-patch.v1"
+        },
+        "confirmationPolicy": {
+          "type": "object",
+          "properties": {
+            "policyId": {
+              "const": "confirmation.policy.reference.v1"
+            },
+            "policyIdentity": {
+              "type": "object",
+              "properties": {
+                "typeTag": {
+                  "const": "vfxcomposer.confirmation-policy/1"
+                },
+                "digest": {
+                  "type": "string",
+                  "pattern": "^sha256:[0-9a-f]{64}$"
+                }
+              },
+              "required": [
+                "typeTag",
+                "digest"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "policyId",
+            "policyIdentity"
+          ],
+          "additionalProperties": false
+        },
+        "selfHash": {
+          "type": "object",
+          "properties": {
+            "typeTag": {
+              "const": "vfxcomposer.command-envelope/1"
+            },
+            "digest": {
+              "type": "string",
+              "pattern": "^sha256:[0-9a-f]{64}$"
+            }
+          },
+          "required": [
+            "typeTag",
+            "digest"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "protocolVersion",
+        "requestId",
+        "commandId",
+        "idempotencyKey",
+        "leaseId",
+        "projectIdentity",
+        "leaseGeneration",
+        "commandKind",
+        "commandCapability",
+        "confirmationPolicy",
+        "selfHash"
+      ],
+      "additionalProperties": false
+    },
+    "patchId": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9._:-]{1,128}$",
+      "maxLength": 128
+    },
+    "patchContentHash": {
+      "type": "object",
+      "properties": {
+        "typeTag": {
+          "const": "vfxcomposer.patch-content/1"
+        },
+        "digest": {
+          "type": "string",
+          "pattern": "^sha256:[0-9a-f]{64}$"
+        }
+      },
+      "required": [
+        "typeTag",
+        "digest"
+      ],
+      "additionalProperties": false
+    },
+    "targetCandidateId": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9._:-]{1,128}$",
+      "maxLength": 128
+    },
+    "targetCandidateIdentity": {
+      "type": "object",
+      "properties": {
+        "typeTag": {
+          "const": "vfxcomposer.candidate-identity/1"
+        },
+        "digest": {
+          "type": "string",
+          "pattern": "^sha256:[0-9a-f]{64}$"
+        }
+      },
+      "required": [
+        "typeTag",
+        "digest"
+      ],
+      "additionalProperties": false
+    },
+    "selfHash": {
+      "type": "object",
+      "properties": {
+        "typeTag": {
+          "const": "vfxcomposer.command.validate-patch/1"
+        },
+        "digest": {
+          "type": "string",
+          "pattern": "^sha256:[0-9a-f]{64}$"
+        }
+      },
+      "required": [
+        "typeTag",
+        "digest"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "required": [
+    "protocolVersion",
+    "messageKind",
+    "envelope",
+    "patchId",
+    "patchContentHash",
+    "targetCandidateId",
+    "targetCandidateIdentity",
+    "selfHash"
+  ],
+  "additionalProperties": false
+}

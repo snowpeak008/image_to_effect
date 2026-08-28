@@ -1,0 +1,208 @@
+{
+  "recipeVersion": 1,
+  "revision": 1,
+  "id": "e5_nova",
+  "dimension": "2d",
+  "archetype": "projectile",
+  "targetProfile": "pc_editor",
+  "randomSeed": 581204,
+  "metadata": {
+    "createdBy": "s9_ai_workflow_developer",
+    "templateCatalogVersion": "1.0.0"
+  },
+  "stages": [
+    {
+      "id": "launch",
+      "trigger": "on_launch",
+      "enabled": true,
+      "modules": [
+        {
+          "id": "launch_flare",
+          "kind": "particle",
+          "semantic": "launch_flash",
+          "template": "PFT_2D_FireImpact",
+          "enabled": true,
+          "parameters": {
+            "count": 12,
+            "duration": 0.16,
+            "loop": false,
+            "position": { "x": 0, "y": 0 },
+            "rotation": 0,
+            "scale": 0.72,
+            "startColor": "#FFF7B8",
+            "endColor": "#FF5A19",
+            "startSize": 0.42,
+            "endSize": 0.04,
+            "speed": { "min": 1.2, "max": 3.1 },
+            "direction": { "x": 1, "y": 0 },
+            "spread": 180,
+            "lifetime": { "min": 0.12, "max": 0.24 },
+            "gravity": { "x": 0, "y": 0 },
+            "drag": 3.2,
+            "blendMode": "additive",
+            "sortingLayer": "effects",
+            "sortingOrder": 4
+          }
+        }
+      ]
+    },
+    {
+      "id": "travel",
+      "trigger": "after_previous",
+      "enabled": true,
+      "modules": [
+        {
+          "id": "energy_body",
+          "kind": "particle",
+          "semantic": "energy_body",
+          "template": "PFT_2D_FireCore",
+          "enabled": true,
+          "parameters": {
+            "count": 1,
+            "duration": 1.35,
+            "loop": true,
+            "position": { "x": 0, "y": 0 },
+            "rotation": 0,
+            "scale": 1.34,
+            "startColor": "#FFF2A0",
+            "endColor": "#FF3518",
+            "startSize": 0.86,
+            "endSize": 0.5,
+            "speed": { "min": 0, "max": 0 },
+            "direction": { "x": 1, "y": 0 },
+            "spread": 0,
+            "lifetime": { "min": 0.16, "max": 0.22 },
+            "gravity": { "x": 0, "y": 0 },
+            "drag": 0,
+            "blendMode": "additive",
+            "sortingLayer": "effects",
+            "sortingOrder": 5
+          }
+        },
+        {
+          "id": "motion_trail",
+          "kind": "particle",
+          "semantic": "motion_trail",
+          "template": "PFT_2D_FireTrail",
+          "enabled": true,
+          "attachment": { "targetModuleId": "energy_body", "mode": "follow", "inheritPosition": true, "inheritRotation": true, "inheritScale": false },
+          "parameters": {
+            "rate": 36,
+            "time": 0.62,
+            "width": 0.56,
+            "duration": 1.35,
+            "loop": true,
+            "position": { "x": -0.18, "y": 0 },
+            "rotation": 180,
+            "scale": 1,
+            "startColor": "#FFD056",
+            "endColor": "#F02B13",
+            "startSize": 0.56,
+            "endSize": 0.08,
+            "speed": { "min": 0.25, "max": 0.75 },
+            "direction": { "x": -1, "y": 0 },
+            "spread": 18,
+            "lifetime": { "min": 0.32, "max": 0.58 },
+            "gravity": { "x": 0, "y": -0.08 },
+            "drag": 1.4,
+            "blendMode": "additive",
+            "sortingLayer": "effects",
+            "sortingOrder": 3
+          }
+        },
+        {
+          "id": "embers",
+          "kind": "particle",
+          "semantic": "embers",
+          "template": "PFT_2D_Embers",
+          "enabled": true,
+          "attachment": { "targetModuleId": "energy_body", "mode": "follow", "inheritPosition": true, "inheritRotation": true, "inheritScale": true },
+          "parameters": {
+            "rate": 24,
+            "duration": 1.35,
+            "loop": true,
+            "position": { "x": -0.08, "y": 0 },
+            "rotation": 180,
+            "scale": 1,
+            "startColor": "#FFE37C",
+            "endColor": "#F13A19",
+            "startSize": 0.14,
+            "endSize": 0.025,
+            "speed": { "min": 0.55, "max": 1.75 },
+            "direction": { "x": -1, "y": 0 },
+            "spread": 48,
+            "lifetime": { "min": 0.28, "max": 0.64 },
+            "gravity": { "x": 0, "y": -0.42 },
+            "drag": 1.1,
+            "blendMode": "additive",
+            "sortingLayer": "effects",
+            "sortingOrder": 4
+          }
+        }
+      ]
+    },
+    {
+      "id": "impact",
+      "trigger": "on_hit",
+      "enabled": true,
+      "modules": [
+        {
+          "id": "impact_burst",
+          "kind": "particle",
+          "semantic": "impact_burst",
+          "template": "PFT_2D_FireImpact",
+          "enabled": true,
+          "parameters": {
+            "count": 32,
+            "duration": 0.34,
+            "loop": false,
+            "position": { "x": 0, "y": 0 },
+            "rotation": 0,
+            "scale": 1.18,
+            "startColor": "#FFF4B4",
+            "endColor": "#E92712",
+            "startSize": 0.36,
+            "endSize": 0.03,
+            "speed": { "min": 1.8, "max": 5.2 },
+            "direction": { "x": 1, "y": 0 },
+            "spread": 360,
+            "lifetime": { "min": 0.22, "max": 0.52 },
+            "gravity": { "x": 0, "y": -0.28 },
+            "drag": 1.8,
+            "blendMode": "additive",
+            "sortingLayer": "effects",
+            "sortingOrder": 7
+          }
+        },
+        {
+          "id": "shockwave",
+          "kind": "particle",
+          "semantic": "shockwave",
+          "template": "PFT_2D_Shockwave",
+          "enabled": true,
+          "parameters": {
+            "count": 1,
+            "duration": 0.42,
+            "loop": false,
+            "position": { "x": 0, "y": 0 },
+            "rotation": 0,
+            "scale": 1,
+            "startColor": "#FFF09B",
+            "endColor": "#FF5B25",
+            "startSize": 0.24,
+            "endSize": 3.35,
+            "speed": { "min": 0, "max": 0 },
+            "direction": { "x": 1, "y": 0 },
+            "spread": 0,
+            "lifetime": { "min": 0.38, "max": 0.42 },
+            "gravity": { "x": 0, "y": 0 },
+            "drag": 0,
+            "blendMode": "additive",
+            "sortingLayer": "effects",
+            "sortingOrder": 6
+          }
+        }
+      ]
+    }
+  ]
+}

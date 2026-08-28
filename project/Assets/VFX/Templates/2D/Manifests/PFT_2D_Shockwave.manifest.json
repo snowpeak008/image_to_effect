@@ -1,0 +1,12 @@
+{
+  "manifestVersion": 1,
+  "templateId": "PFT_2D_Shockwave",
+  "templateVersion": "1.0.0",
+  "kind": "shockwave",
+  "dimension": "2d",
+  "assetGuid": "5ee656dff7e6be6498cf1bc14c283ee4",
+  "assetPath": "Assets/VFX/Templates/2D/Prefabs/PFT_2D_Shockwave.prefab",
+  "tags": ["fire", "stylized", "2d"],
+  "parameters": { "lifetime": { "type": "float", "min": .12, "max": .5, "default": .28, "binding": "shockwave.lifetime" }, "endSize": { "type": "float", "min": 1.2, "max": 4, "default": 2.8, "binding": "shockwave.endSize" } },
+  "cost": { "estimatedPeakParticles": 1, "materials": 1, "trails": 0 }
+}

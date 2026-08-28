@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<test-run id="2" testcasecount="26" result="Passed" total="26" passed="26" failed="0" inconclusive="0" skipped="0" asserts="0" engine-version="3.5.0.0" clr-version="4.0.30319.42000" start-time="2026-08-25 14:21:00Z" end-time="2026-08-25 14:21:01Z" duration="1.0298439">
+  <test-suite type="TestSuite" id="1541" name="project" fullname="project" runstate="Runnable" testcasecount="442" result="Passed" start-time="2026-08-25 14:21:00Z" end-time="2026-08-25 14:21:01Z" duration="1.029844" total="26" passed="26" failed="0" inconclusive="0" skipped="0" asserts="0">
+    <properties />
+    <test-suite type="Assembly" id="2075" name="VFXComposer.Tests.EditMode.dll" fullname="D:/WorkWork/Assist/image_to_smart/.codex_tmp/w24-fresh-20260825-0628/project/Library/ScriptAssemblies/VFXComposer.Tests.EditMode.dll" runstate="Runnable" testcasecount="440" result="Passed" start-time="2026-08-25 14:21:00Z" end-time="2026-08-25 14:21:01Z" duration="0.997900" total="26" passed="26" failed="0" inconclusive="0" skipped="0" asserts="0">
+      <properties>
+        <property name="_PID" value="34868" />
+        <property name="_APPDOMAIN" value="Unity Child Domain" />
+        <property name="platform" value="EditMode" />
+      </properties>
+      <test-suite type="TestSuite" id="2076" name="VFXComposer" fullname="VFXComposer" runstate="Runnable" testcasecount="440" result="Passed" start-time="2026-08-25 14:21:01Z" end-time="2026-08-25 14:21:01Z" duration="0.982864" total="26" passed="26" failed="0" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <test-suite type="TestSuite" id="2077" name="Tests" fullname="VFXComposer.Tests" runstate="Runnable" testcasecount="440" result="Passed" start-time="2026-08-25 14:21:01Z" end-time="2026-08-25 14:21:01Z" duration="0.967408" total="26" passed="26" failed="0" inconclusive="0" skipped="0" asserts="0">
+          <properties />
+          <test-suite type="TestSuite" id="2078" name="EditMode" fullname="VFXComposer.Tests.EditMode" runstate="Runnable" testcasecount="440" result="Passed" start-time="2026-08-25 14:21:01Z" end-time="2026-08-25 14:21:01Z" duration="0.951548" total="26" passed="26" failed="0" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <test-suite type="TestFixture" id="1934" name="W24S5ProductionGateTests" fullname="VFXComposer.Tests.EditMode.W24S5ProductionGateTests" classname="VFXComposer.Tests.EditMode.W24S5ProductionGateTests" runstate="Runnable" testcasecount="26" result="Passed" start-time="2026-08-25 14:21:01Z" end-time="2026-08-25 14:21:01Z" duration="0.925704" total="26" passed="26" failed="0" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <test-case id="1948" name="CallerCreatedPlanCannotSubstituteAnApprovedProductionPlan" fullname="VFXComposer.Tests.EditMode.W24S5ProductionGateTests.CallerCreatedPlanCannotSubstituteAnApprovedProductionPlan" methodname="CallerCreatedPlanCannotSubstituteAnApprovedProductionPlan" classname="VFXComposer.Tests.EditMode.W24S5ProductionGateTests" runstate="Runnable" seed="1781910679" result="Passed" start-time="2026-08-25 14:21:01Z" end-time="2026-08-25 14:21:01Z" duration="0.148219" asserts="0">
+                <properties />
+              </test-case>
+              <test-case id="1942" name="CandidateEvidenceSealDoesNotConsumeCandidateC1" fullname="VFXComposer.Tests.EditMode.W24S5ProductionGateTests.CandidateEvidenceSealDoesNotConsumeCandidateC1" methodname="CandidateEvidenceSealDoesNotConsumeCandidateC1" classname="VFXComposer.Tests.EditMode.W24S5ProductionGateTests" runstate="Runnable" seed="235038378" result="Passed" start-time="2026-08-25 14:21:01Z" end-time="2026-08-25 14:21:01Z" duration="0.014187" asserts="0">
+                <properties />
+              </test-case>
+              <test-case id="1950" name="ExactBootstrapBinding_AcceptsExplicitJsonNullEvidence_AndRejectsAnyEvidenceOrOmission" fullname="VFXComposer.Tests.EditMode.W24S5ProductionGateTests.ExactBootstrapBinding_AcceptsExplicitJsonNullEvidence_AndRejectsAnyEvidenceOrOmission" methodname="ExactBootstrapBinding_AcceptsExplicitJsonNullEvidence_AndRejectsAnyEvidenceOrOmission" classname="VFXComposer.Tests.EditMode.W24S5ProductionGateTests" runstate="Runnable" seed="147765136" result="Passed" start-time="2026-08-25 14:21:01Z" end-time="2026-08-25 14:21:01Z" duration="0.011997" asserts="0">
+                <properties />
+              </test-case>
+              <test-case id="1956" name="FirstFormalBuild_AcceptsOnlyTheStrictPendingPreregistration" fullname="VFXComposer.Tests.EditMode.W24S5ProductionGateTests.FirstFormalBuild_AcceptsOnlyTheStrictPendingPreregistration" methodname="FirstFormalBuild_AcceptsOnlyTheStrictPendingPreregistration" classname="VFXComposer.Tests.EditMode.W24S5ProductionGateTests" runstate="Runnable" seed="1836532615" result="Passed" start-time="2026-08-25 14:21:01Z" end-time="2026-08-25 14:21:01Z" duration="0.040162" asserts="0">
+                <properties />
+              </test-case>
+              <test-case id="1960" name="FirstFormalBuild_ApprovalCannotBeForgedOrUsedAfterPinnedTraceChanges" fullname="VFXComposer.Tests.EditMode.W24S5ProductionGateTests.FirstFormalBuild_ApprovalCannotBeForgedOrUsedAfterPinnedTraceChanges" methodname="FirstFormalBuild_ApprovalCannotBeForgedOrUsedAfterPinnedTraceChanges" classname="VFXComposer.Tests.EditMode.W24S5ProductionGateTests" runstate="Runnable" seed="15028006" result="Passed" start-time="2026-08-25 14:21:01Z" end-time="2026-08-25 14:21:01Z" duration="0.044211" asserts="0">
+                <properties />
+              </test-case>
+              <test-case id="1959" name="FirstFormalBuild_RejectsContractTraceAndManifestPathSubstitution" fullname="VFXComposer.Tests.EditMode.W24S5ProductionGateTests.FirstFormalBuild_RejectsContractTraceAndManifestPathSubstitution" methodname="FirstFormalBuild_RejectsContractTraceAndManifestPathSubstitution" classname="VFXComposer.Tests.EditMode.W24S5ProductionGateTests" runstate="Runnable" seed="605551325" result="Passed" start-time="2026-08-25 14:21:01Z" end-time="2026-08-25 14:21:01Z" duration="0.031673" asserts="0">
+                <properties />
+              </test-case>
+              <test-case id="1958" name="FirstFormalBuild_RejectsMissingReverseLayerMappingAndCallerOwnedRootSubstitution" fullname="VFXComposer.Tests.EditMode.W24S5ProductionGateTests.FirstFormalBuild_RejectsMissingReverseLayerMappingAndCallerOwnedRootSubstitution" methodname="FirstFormalBuild_RejectsMissingReverseLayerMappingAndCallerOwnedRootSubstitution" classname="VFXComposer.Tests.EditMode.W24S5ProductionGateTests" runstate="Runnable" seed="1373104737" result="Passed" start-time="2026-08-25 14:21:01Z" end-time="2026-08-25 14:21:01Z" duration="0.045163" asserts="0">
+                <properties />
+              </test-case>
+              <test-case id="1957" name="FirstFormalBuild_RejectsPublicationL3AndNonPendingTraceIdentity" fullname="VFXComposer.Tests.EditMode.W24S5ProductionGateTests.FirstFormalBuild_RejectsPublicationL3AndNonPendingTraceIdentity" methodname="FirstFormalBuild_RejectsPublicationL3AndNonPendingTraceIdentity" classname="VFXComposer.Tests.EditMode.W24S5ProductionGateTests" runstate="Runnable" seed="711209178" result="Passed" start-time="2026-08-25 14:21:01Z" end-time="2026-08-25 14:21:01Z" duration="0.051072" asserts="0">
+                <properties />
+              </test-case>
+              <test-case id="1949" name="FormalManifestModelCarriesAllNonVisualBindings" fullname="VFXComposer.Tests.EditMode.W24S5ProductionGateTests.FormalManifestModelCarriesAllNonVisualBindings" methodname="FormalManifestModelCarriesAllNonVisualBindings" classname="VFXComposer.Tests.EditMode.W24S5ProductionGateTests" runstate="Runnable" seed="1404071642" result="Passed" start-time="2026-08-25 14:21:01Z" end-time="2026-08-25 14:21:01Z" duration="0.029569" asserts="0">
+                <properties />
+              </test-case>
+              <test-case id="1954" name="FormalManifestRollbackRestoresThePriorManifestBytes" fullname="VFXComposer.Tests.EditMode.W24S5ProductionGateTests.FormalManifestRollbackRestoresThePriorManifestBytes" methodname="FormalManifestRollbackRestoresThePriorManifestBytes" classname="VFXComposer.Tests.EditMode.W24S5ProductionGateTests" runstate="Runnable" seed="2043343510" result="Passed" start-time="2026-08-25 14:21:01Z" end-time="2026-08-25 14:21:01Z" duration="0.025207" asserts="0">
+                <properties />
+              </test-case>
+              <test-case id="1945" name="LegacyCompatibilityRequiresEveryOwnedFileHashAndMetaGuid" fullname="VFXComposer.Tests.EditMode.W24S5ProductionGateTests.LegacyCompatibilityRequiresEveryOwnedFileHashAndMetaGuid" methodname="LegacyCompatibilityRequiresEveryOwnedFileHashAndMetaGuid" classname="VFXComposer.Tests.EditMode.W24S5ProductionGateTests" runstate="Runnable" seed="1257962449" result="Passed" start-time="2026-08-25 14:21:01Z" end-time="2026-08-25 14:21:01Z" duration="0.045895" asserts="0">
+                <properties />
+              </test-case>
+              <test-case id="1943" name="MetricsToolBundle_RejectsArbitrarySelfHashedScript" fullname="VFXComposer.Tests.EditMode.W24S5ProductionGateTests.MetricsToolBundle_RejectsArbitrarySelfHashedScript" methodname="MetricsToolBundle_RejectsArbitrarySelfHashedScript" classname="VFXComposer.Tests.EditMode.W24S5ProductionGateTests" runstate="Runnable" seed="1229329523" result="Passed" start-time="2026-08-25 14:21:01Z" end-time="2026-08-25 14:21:01Z" duration="0.029962" asserts="0">
+                <properties />
+              </test-case>
+              <test-case id="1935" name="MissingPersistedContract_BlocksFormalDevelopmentBuild" fullname="VFXComposer.Tests.EditMode.W24S5ProductionGateTests.MissingPersistedContract_BlocksFormalDevelopmentBuild" methodname="MissingPersistedContract_BlocksFormalDevelopmentBuild" classname="VFXComposer.Tests.EditMode.W24S5ProductionGateTests" runstate="Runnable" seed="724780148" result="Passed" start-time="2026-08-25 14:21:01Z" end-time="2026-08-25 14:21:01Z" duration="0.017888" asserts="0">
+                <properties />
+              </test-case>
+              <test-case id="1947" name="OrdinaryFormalGateRejectsAnyNonFinalTraceStatus" fullname="VFXComposer.Tests.EditMode.W24S5ProductionGateTests.OrdinaryFormalGateRejectsAnyNonFinalTraceStatus" methodname="OrdinaryFormalGateRejectsAnyNonFinalTraceStatus" classname="VFXComposer.Tests.EditMode.W24S5ProductionGateTests" runstate="Runnable" seed="1071405790" result="Passed" start-time="2026-08-25 14:21:01Z" end-time="2026-08-25 14:21:01Z" duration="0.108887" asserts="0">
+                <properties />
+              </test-case>
+              <test-case id="1937" name="PersistedDocsResolveFromRepositoryRootAndRejectTraversal" fullname="VFXComposer.Tests.EditMode.W24S5ProductionGateTests.PersistedDocsResolveFromRepositoryRootAndRejectTraversal" methodname="PersistedDocsResolveFromRepositoryRootAndRejectTraversal" classname="VFXComposer.Tests.EditMode.W24S5ProductionGateTests" runstate="Runnable" seed="1703944091" result="Passed" start-time="2026-08-25 14:21:01Z" end-time="2026-08-25 14:21:01Z" duration="0.026161" asserts="0">
+                <properties />
+              </test-case>
+              <test-case id="1953" name="ProtectedEffectDiscoveryFailsClosedWhenAContractCannotBeRead" fullname="VFXComposer.Tests.EditMode.W24S5ProductionGateTests.ProtectedEffectDiscoveryFailsClosedWhenAContractCannotBeRead" methodname="ProtectedEffectDiscoveryFailsClosedWhenAContractCannotBeRead" classname="VFXComposer.Tests.EditMode.W24S5ProductionGateTests" runstate="Runnable" seed="446711609" result="Passed" start-time="2026-08-25 14:21:01Z" end-time="2026-08-25 14:21:01Z" duration="0.021813" asserts="0">
+                <properties />
+              </test-case>
+              <test-case id="1952" name="PublicManifestSurfaceCannotRestoreOrOverwriteAW24ProtectedEffect" fullname="VFXComposer.Tests.EditMode.W24S5ProductionGateTests.PublicManifestSurfaceCannotRestoreOrOverwriteAW24ProtectedEffect" methodname="PublicManifestSurfaceCannotRestoreOrOverwriteAW24ProtectedEffect" classname="VFXComposer.Tests.EditMode.W24S5ProductionGateTests" runstate="Runnable" seed="384653565" result="Passed" start-time="2026-08-25 14:21:01Z" end-time="2026-08-25 14:21:01Z" duration="0.011359" asserts="0">
+                <properties />
+              </test-case>
+              <test-case id="1951" name="PublicManifestWriter_HasNoFormalBindingParameter" fullname="VFXComposer.Tests.EditMode.W24S5ProductionGateTests.PublicManifestWriter_HasNoFormalBindingParameter" methodname="PublicManifestWriter_HasNoFormalBindingParameter" classname="VFXComposer.Tests.EditMode.W24S5ProductionGateTests" runstate="Runnable" seed="1650073715" result="Passed" start-time="2026-08-25 14:21:01Z" end-time="2026-08-25 14:21:01Z" duration="0.010486" asserts="0">
+                <properties />
+              </test-case>
+              <test-case id="1940" name="PublicRequestCannotForgeL3OrSubstituteAdvisoryStringsForQaAuthority" fullname="VFXComposer.Tests.EditMode.W24S5ProductionGateTests.PublicRequestCannotForgeL3OrSubstituteAdvisoryStringsForQaAuthority" methodname="PublicRequestCannotForgeL3OrSubstituteAdvisoryStringsForQaAuthority" classname="VFXComposer.Tests.EditMode.W24S5ProductionGateTests" runstate="Runnable" seed="46173325" result="Passed" start-time="2026-08-25 14:21:01Z" end-time="2026-08-25 14:21:01Z" duration="0.021271" asserts="0">
+                <properties />
+              </test-case>
+              <test-case id="1939" name="PublicRequestCannotForgeL4" fullname="VFXComposer.Tests.EditMode.W24S5ProductionGateTests.PublicRequestCannotForgeL4" methodname="PublicRequestCannotForgeL4" classname="VFXComposer.Tests.EditMode.W24S5ProductionGateTests" runstate="Runnable" seed="83747524" result="Passed" start-time="2026-08-25 14:21:01Z" end-time="2026-08-25 14:21:01Z" duration="0.021418" asserts="0">
+                <properties />
+              </test-case>
+              <test-case id="1941" name="PublicRequestsFailClosedForL3AndL4UntilOpaqueIssuersExist" fullname="VFXComposer.Tests.EditMode.W24S5ProductionGateTests.PublicRequestsFailClosedForL3AndL4UntilOpaqueIssuersExist" methodname="PublicRequestsFailClosedForL3AndL4UntilOpaqueIssuersExist" classname="VFXComposer.Tests.EditMode.W24S5ProductionGateTests" runstate="Runnable" seed="970266722" result="Passed" start-time="2026-08-25 14:21:01Z" end-time="2026-08-25 14:21:01Z" duration="0.042584" asserts="0">
+                <properties />
+              </test-case>
+              <test-case id="1936" name="RawOrMismatchedTraceBytes_CannotReplacePersistedAuthority" fullname="VFXComposer.Tests.EditMode.W24S5ProductionGateTests.RawOrMismatchedTraceBytes_CannotReplacePersistedAuthority" methodname="RawOrMismatchedTraceBytes_CannotReplacePersistedAuthority" classname="VFXComposer.Tests.EditMode.W24S5ProductionGateTests" runstate="Runnable" seed="117955348" result="Passed" start-time="2026-08-25 14:21:01Z" end-time="2026-08-25 14:21:01Z" duration="0.022232" asserts="0">
+                <properties />
+              </test-case>
+              <test-case id="1955" name="RollbackRecordsNonIoFailureWithoutReplacingTheOriginalTransactionError" fullname="VFXComposer.Tests.EditMode.W24S5ProductionGateTests.RollbackRecordsNonIoFailureWithoutReplacingTheOriginalTransactionError" methodname="RollbackRecordsNonIoFailureWithoutReplacingTheOriginalTransactionError" classname="VFXComposer.Tests.EditMode.W24S5ProductionGateTests" runstate="Runnable" seed="572409209" result="Passed" start-time="2026-08-25 14:21:01Z" end-time="2026-08-25 14:21:01Z" duration="0.012432" asserts="0">
+                <properties />
+              </test-case>
+              <test-case id="1944" name="SelfDeclaredLegacyDoesNotBypassFormalGate" fullname="VFXComposer.Tests.EditMode.W24S5ProductionGateTests.SelfDeclaredLegacyDoesNotBypassFormalGate" methodname="SelfDeclaredLegacyDoesNotBypassFormalGate" classname="VFXComposer.Tests.EditMode.W24S5ProductionGateTests" runstate="Runnable" seed="1997848464" result="Passed" start-time="2026-08-25 14:21:01Z" end-time="2026-08-25 14:21:01Z" duration="0.020905" asserts="0">
+                <properties />
+              </test-case>
+              <test-case id="1946" name="TraceMustBindExactGatedBuildAndRuntimeEntry" fullname="VFXComposer.Tests.EditMode.W24S5ProductionGateTests.TraceMustBindExactGatedBuildAndRuntimeEntry" methodname="TraceMustBindExactGatedBuildAndRuntimeEntry" classname="VFXComposer.Tests.EditMode.W24S5ProductionGateTests" runstate="Runnable" seed="1866562100" result="Passed" start-time="2026-08-25 14:21:01Z" end-time="2026-08-25 14:21:01Z" duration="0.029407" asserts="0">
+                <properties />
+              </test-case>
+              <test-case id="1938" name="VisualPending_StillRequiresTheImmutableC0EvidenceChain" fullname="VFXComposer.Tests.EditMode.W24S5ProductionGateTests.VisualPending_StillRequiresTheImmutableC0EvidenceChain" methodname="VisualPending_StillRequiresTheImmutableC0EvidenceChain" classname="VFXComposer.Tests.EditMode.W24S5ProductionGateTests" runstate="Runnable" seed="1100223851" result="Passed" start-time="2026-08-25 14:21:01Z" end-time="2026-08-25 14:21:01Z" duration="0.029652" asserts="0">
+                <properties />
+              </test-case>
+            </test-suite>
+          </test-suite>
+        </test-suite>
+      </test-suite>
+    </test-suite>
+  </test-suite>
+</test-run>

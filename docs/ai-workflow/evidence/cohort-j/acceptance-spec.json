@@ -1,0 +1,30 @@
+{
+  "version": 1,
+  "patches": {
+    "J1": {
+      "expectedRevision": 1,
+      "operation": "replace",
+      "path": "/stages/launch/modules/launchFlash/parameters/size",
+      "value": 1.4
+    },
+    "J2": {
+      "expectedRevision": 1,
+      "operation": "disable",
+      "path": "/stages/impact/modules/shockwave",
+      "enabled": false
+    },
+    "J3": {
+      "expectedRevision": 1,
+      "operation": "add",
+      "path": "/stages/travel/modules/linger_embers",
+      "module": {
+        "id": "linger_embers",
+        "kind": "secondary_particles",
+        "templateId": "PFT_2D_Embers",
+        "parameters": { "rate": 8, "lifetime": 0.9 },
+        "attachTo": "core",
+        "enabled": true
+      }
+    }
+  }
+}

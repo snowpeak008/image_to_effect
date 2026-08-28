@@ -1,0 +1,34 @@
+{
+  "reviewVersion": "s0a-visual-qa/1.0",
+  "candidateId": "C0",
+  "contractHash": "sha256:ba44573fabb3416f0e5b9cb4734607d115d97c0594817debc816e18d187323d1",
+  "buildHash": "sha256:00d9202f1e5b681617b18863753fff4b8b4a5a539af81f081ed791c892c96e0e",
+  "captureProfileHash": "sha256:1d9ee0b874721a3eb1e45e1d347744f316bbd0f6b407184afcb37bb9abae18db",
+  "evidenceHashes": [
+    "sha256:c412a79cb574d9387de523c685bd35e71e4e96e90f029bf9115e05a75e423cc0"
+  ],
+  "imageInputRead": true,
+  "evidenceStatus": "valid",
+  "contractStatus": "unambiguous",
+  "s0aTerminalStatus": null,
+  "qaGateAuthority": "advisory-only",
+  "topLevelRoute": "VISUAL_FAIL",
+  "perRequirement": [
+    {
+      "designRequirementId": "s0a.visual.req.ffd3b51e898f5725d6c7",
+      "state": "fail",
+      "countable": true,
+      "reasonCode": "OBSERVED",
+      "stateRef": "steady",
+      "frameNumbers": [
+        60,
+        120,
+        180
+      ],
+      "imageRegion": "sustained flame and illuminated ground progressing from center to the right image edge in all three seed rows",
+      "observation": "Across canonical, robustness-1, and robustness-2, the sustained flame and its ground illumination translate sharply rightward from frames 60 through 180 and reach or are clipped by the right image edge, so the fixed evidence does not show a coherent sustained-flame lifecycle."
+    }
+  ],
+  "conflicts": [],
+  "sealedReportHash": "sha256:258e4787d8f686e79a609f2d2228ae84ae9965dc52d5b02c7e1a8946cd3f28b9"
+}

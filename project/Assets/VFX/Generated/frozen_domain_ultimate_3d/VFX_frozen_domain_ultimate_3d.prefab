@@ -1,0 +1,110 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &6269102801254563500
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3418389722938218259}
+  - component: {fileID: 2801121022083138707}
+  m_Layer: 0
+  m_Name: VFX_frozen_domain_ultimate_3d
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3418389722938218259
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6269102801254563500}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2801121022083138707
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6269102801254563500}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 07d8735a81864834c8f1bda23acf4be2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  compositionId: frozen_domain_ultimate_3d
+  duration: 6
+  sourcePrefabs:
+  - {fileID: 4604391042401296737, guid: af94060cc32f7ef41bdcb604ce105ab6, type: 3}
+  - {fileID: 6802044666072153230, guid: 957eff07dcda1364f8183d69b8d43a29, type: 3}
+  - {fileID: 1186636246282418038, guid: bbffff37b1ee55f4ca94a2616dbd35b3, type: 3}
+  - {fileID: 8729338845733914301, guid: b762e0a6c4f3b1843b7d96f74ffacb34, type: 3}
+  timeline:
+  - Time: 0
+    SourceIndex: 0
+    RefId: focus_charge_3d
+    Action: play
+    Position: {x: 0, y: 0, z: 0}
+    Rotation: {x: 0, y: 0, z: 0}
+    Scale: 1
+    HasPalette: 1
+    Primary: {r: 0.16862746, g: 0.56078434, b: 0.8352941, a: 1}
+    Secondary: {r: 0.5529412, g: 0.9098039, b: 1, a: 1}
+    Accent: {r: 0.9490196, g: 1, b: 1, a: 1}
+  - Time: 0.6
+    SourceIndex: 1
+    RefId: blizzard_area_3d
+    Action: play
+    Position: {x: 0, y: 0, z: 0}
+    Rotation: {x: 0, y: 0, z: 0}
+    Scale: 1.35
+    HasPalette: 1
+    Primary: {r: 0.16862746, g: 0.56078434, b: 0.8352941, a: 1}
+    Secondary: {r: 0.5529412, g: 0.9098039, b: 1, a: 1}
+    Accent: {r: 0.9490196, g: 1, b: 1, a: 1}
+  - Time: 2.2
+    SourceIndex: 2
+    RefId: flash_freeze_transform_3d
+    Action: play
+    Position: {x: 0, y: 0, z: 0}
+    Rotation: {x: 0, y: 0, z: 0}
+    Scale: 1.2
+    HasPalette: 1
+    Primary: {r: 0.16862746, g: 0.56078434, b: 0.8352941, a: 1}
+    Secondary: {r: 0.5529412, g: 0.9098039, b: 1, a: 1}
+    Accent: {r: 0.9490196, g: 1, b: 1, a: 1}
+  - Time: 4.8
+    SourceIndex: 3
+    RefId: ice_spike_spawn_3d
+    Action: play
+    Position: {x: 0, y: 0, z: 0}
+    Rotation: {x: 0, y: 0, z: 0}
+    Scale: 1.45
+    HasPalette: 1
+    Primary: {r: 0.16862746, g: 0.56078434, b: 0.8352941, a: 1}
+    Secondary: {r: 0.5529412, g: 0.9098039, b: 1, a: 1}
+    Accent: {r: 0.9490196, g: 1, b: 1, a: 1}
+  cameraHints:
+  - Time: 0.5
+    Type: zoom
+    Strength: 0.4
+  - Time: 2.2
+    Type: slowmo
+    Strength: 0.65
+  - Time: 4.8
+    Type: shake
+    Strength: 0.75
+  gates: []
+  descriptor: {fileID: 4900000, guid: 5735767ce4aa26641949ae3f355c2faf, type: 3}

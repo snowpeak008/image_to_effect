@@ -1,0 +1,34 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://image-to-smart.local/schemas/s0a-projected-review-freeze-context/v1",
+  "title": "Projected S0a blind review freeze context",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "holdoutCohort", "freezeStatus", "holdoutIsolationMode", "operatorLedgerHash", "reducedMetricsHash", "qaPromptHash", "imageInputStrategyHash", "threeStateRulesHash", "aggregationRulesHash", "visualReviewSchemaHash", "modelVersionHash", "reviewContractHash", "buildHash", "captureProfilePolicyHash", "frameTableHash", "sceneHash", "prefabManifestHash", "captureToolHash", "contextHash"],
+  "properties": {
+    "schemaVersion": {"const": "s0a-projected-review-freeze-context/v1"},
+    "holdoutCohort": {"enum": ["reduced-36-12-12-6", "full-60-20-20-10"]},
+    "freezeStatus": {"const": "FROZEN_FOR_BLIND_REVIEW"},
+    "holdoutIsolationMode": {"enum": ["INITIAL_REDUCED", "EXPANDED_AFTER_REDUCED_ZERO_FALSE_PASS", "FRESH_INDEPENDENT_FULL"]},
+    "operatorLedgerHash": {"$ref": "#/$defs/hash"},
+    "reducedMetricsHash": {"$ref": "#/$defs/nullableHash"},
+    "qaPromptHash": {"$ref": "#/$defs/hash"},
+    "imageInputStrategyHash": {"$ref": "#/$defs/hash"},
+    "threeStateRulesHash": {"$ref": "#/$defs/hash"},
+    "aggregationRulesHash": {"$ref": "#/$defs/hash"},
+    "visualReviewSchemaHash": {"$ref": "#/$defs/hash"},
+    "modelVersionHash": {"$ref": "#/$defs/hash"},
+    "reviewContractHash": {"$ref": "#/$defs/hash"},
+    "buildHash": {"$ref": "#/$defs/hash"},
+    "captureProfilePolicyHash": {"$ref": "#/$defs/hash"},
+    "frameTableHash": {"$ref": "#/$defs/hash"},
+    "sceneHash": {"$ref": "#/$defs/hash"},
+    "prefabManifestHash": {"$ref": "#/$defs/hash"},
+    "captureToolHash": {"$ref": "#/$defs/hash"},
+    "contextHash": {"$ref": "#/$defs/hash"}
+  },
+  "$defs": {
+    "hash": {"type": "string", "pattern": "^sha256:[a-f0-9]{64}$"},
+    "nullableHash": {"type": ["string", "null"], "pattern": "^sha256:[a-f0-9]{64}$"}
+  }
+}

@@ -1,0 +1,39 @@
+{
+  "reviewVersion": "s0a-visual-qa/1.0",
+  "candidateId": "C0",
+  "contractHash": "sha256:ba44573fabb3416f0e5b9cb4734607d115d97c0594817debc816e18d187323d1",
+  "buildHash": "sha256:00d9202f1e5b681617b18863753fff4b8b4a5a539af81f081ed791c892c96e0e",
+  "captureProfileHash": "sha256:1d9ee0b874721a3eb1e45e1d347744f316bbd0f6b407184afcb37bb9abae18db",
+  "evidenceHashes": [
+    "sha256:00fb1dd0544d27a5302aa50ac26993aaa33caf83e3c97aab09126d686865c353"
+  ],
+  "imageInputRead": true,
+  "evidenceStatus": "invalid",
+  "contractStatus": "unambiguous",
+  "s0aTerminalStatus": null,
+  "qaGateAuthority": "advisory-only",
+  "topLevelRoute": "EVIDENCE_INVALID",
+  "perRequirement": [
+    {
+      "designRequirementId": "s0a.visual.req.fb0da4d76074c7ee80cd",
+      "state": "uncertain",
+      "countable": false,
+      "reasonCode": "EVIDENCE_INVALID",
+      "stateRef": "steady-state frame 180 within the fixed lifecycle evidence set",
+      "frameNumbers": [
+        1,
+        21,
+        60,
+        120,
+        180,
+        240,
+        300,
+        360
+      ],
+      "imageRegion": "Right edge of the Beauty frame at frame 180 across seed rows 0-2.",
+      "observation": "At required steady frame 180, the sustained-flame subject reaches and is visibly clipped by the right image boundary across the seed rows; the key region is cropped, so the complete lifecycle cannot be judged reliably."
+    }
+  ],
+  "conflicts": [],
+  "sealedReportHash": "sha256:9f359143464545c2cc7e102d5d5c462db9fc5dfc6b73ca8cc641ea0a3bf3febe"
+}

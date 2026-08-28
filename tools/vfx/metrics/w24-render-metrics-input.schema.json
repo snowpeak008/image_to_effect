@@ -1,0 +1,41 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://image-to-smart.local/schemas/w24-render-metrics-input/v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema", "effectId", "candidateId", "contractRevision", "contractSha256", "captureProfileSha256", "recorderCaptureProfileSha256", "captureToolBundlePath", "captureToolBundleSha256", "expectedToolSha256", "metricsEnvironment", "requiredEvidenceMatrix", "requiredEvidenceMatrixSha256", "evidence", "checks"],
+  "properties": {
+    "schema": {"const": "w24-render-metrics-input/v1"},
+    "effectId": {"type": "string", "pattern": "^[a-z][a-z0-9_]*$"},
+    "candidateId": {"const": "C0"},
+    "contractRevision": {"type": "integer", "minimum": 1},
+    "contractSha256": {"$ref": "#/$defs/hash"},
+    "captureProfileSha256": {"$ref": "#/$defs/hash"},
+    "recorderCaptureProfileSha256": {"$ref": "#/$defs/hash"},
+    "captureToolBundlePath": {"type": "string", "pattern": "^docs/vfx-contracts/capture-tools/[a-z0-9_.-]+\\.bundle\\.json$"},
+    "captureToolBundleSha256": {"$ref": "#/$defs/hash"},
+    "expectedToolSha256": {"$ref": "#/$defs/hash"},
+    "metricsEnvironment": {"$ref": "#/$defs/environment"},
+    "requiredEvidenceMatrix": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/matrixRow"}},
+    "requiredEvidenceMatrixSha256": {"$ref": "#/$defs/hash"},
+    "evidence": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/evidence"}},
+    "checks": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/check"}}
+  },
+  "$defs": {
+    "hash": {"type": "string", "pattern": "^sha256:[a-f0-9]{64}$"},
+    "token": {"type": "string", "pattern": "^[a-z0-9_.-]+$"},
+    "environment": {"type": "object", "additionalProperties": false, "required": ["pythonExecutablePath", "pythonExecutableSha256", "pythonVersion", "numpyVersion", "pillowVersion", "environmentSha256"], "properties": {"pythonExecutablePath": {"type": "string", "minLength": 3, "pattern": "^(?:[A-Za-z]:/|/).+"}, "pythonExecutableSha256": {"$ref": "#/$defs/hash"}, "pythonVersion": {"type": "string", "minLength": 1}, "numpyVersion": {"type": "string", "minLength": 1}, "pillowVersion": {"type": "string", "minLength": 1}, "environmentSha256": {"$ref": "#/$defs/hash"}}},
+    "matrixRow": {"type": "object", "additionalProperties": false, "required": ["evidenceId", "passId", "seed", "viewId", "logicalFrameIndex"], "properties": {"evidenceId": {"$ref": "#/$defs/token"}, "passId": {"$ref": "#/$defs/token"}, "seed": {"type": "integer", "minimum": 0}, "viewId": {"$ref": "#/$defs/token"}, "logicalFrameIndex": {"type": "integer", "minimum": 0}}},
+    "evidence": {"type": "object", "additionalProperties": false, "required": ["id", "path", "sha256", "kind", "passId", "encoding", "seed", "logicalFrameIndex", "playerLoopSerial", "playerLoopFrame", "playerLoopTime", "viewId", "derivedFrom"], "properties": {"id": {"$ref": "#/$defs/token"}, "path": {"type": "string", "pattern": "^diagnostics/(?!.*(?:^|/)\\.{1,2}(?:/|$)).+"}, "sha256": {"$ref": "#/$defs/hash"}, "kind": {"const": "diagnostic"}, "passId": {"$ref": "#/$defs/token"}, "encoding": {"$ref": "#/$defs/token"}, "seed": {"type": "integer", "minimum": 0}, "logicalFrameIndex": {"type": "integer", "minimum": 0}, "playerLoopSerial": {"type": "integer", "minimum": 1}, "playerLoopFrame": {"type": "integer", "minimum": 0}, "playerLoopTime": {"type": "number"}, "viewId": {"$ref": "#/$defs/token"}, "derivedFrom": {"type": "string", "minLength": 1, "not": {"pattern": "(?:\\\\|\\.\\.)"}}}},
+    "check": {"oneOf": [
+      {"type": "object", "additionalProperties": false, "required": ["id", "kind", "frames", "windows"], "properties": {"id": {"$ref": "#/$defs/token"}, "kind": {"const": "mask_steady"}, "frames": {"type": "array", "minItems": 1, "items": {"type": "string"}}, "windows": {"type": "array", "minItems": 3, "maxItems": 3}, "limits": {"type": "object"}}},
+      {"type": "object", "additionalProperties": false, "required": ["id", "kind", "frames"], "properties": {"id": {"$ref": "#/$defs/token"}, "kind": {"const": "autocorrelation"}, "frames": {"type": "array", "minItems": 3, "items": {"type": "string"}}, "expectedPeriodFrames": {"type": ["integer", "null"]}, "minCorrelation": {"type": "number"}, "toleranceFrames": {"type": "integer"}}},
+      {"type": "object", "additionalProperties": false, "required": ["id", "kind", "baselineLayers", "afterLayers", "maxNormalizedMae", "maxResidualComponentArea"], "properties": {"id": {"$ref": "#/$defs/token"}, "kind": {"const": "cleanup"}, "baselineLayers": {"type": "object"}, "afterLayers": {"type": "object"}, "allowedResidualLayers": {"type": "array"}, "maxNormalizedMae": {"type": "number"}, "maxResidualComponentArea": {"type": "integer"}}},
+      {"type": "object", "additionalProperties": false, "required": ["id", "kind", "trail", "historyProjectedPx", "radiusPx", "maxMeanNearestDistancePx", "minCorridorCoverage"], "properties": {"id": {"$ref": "#/$defs/token"}, "kind": {"const": "trail"}, "trail": {"type": "string"}, "previous": {"type": "string"}, "headNewSpace": {"type": "string"}, "historyProjectedPx": {"type": "array", "minItems": 1}, "radiusPx": {"type": "number"}, "maxMeanNearestDistancePx": {"type": "number"}, "minCorridorCoverage": {"type": "number"}}},
+      {"type": "object", "additionalProperties": false, "required": ["id", "kind", "beforeLayers", "afterLayers", "continuityMode"], "properties": {"id": {"$ref": "#/$defs/token"}, "kind": {"const": "transition"}, "beforeLayers": {"type": "object"}, "afterLayers": {"type": "object"}, "continuityMode": {"enum": ["continuous", "impulse", "replace", "clear"]}, "anchorsBefore": {"type": "object"}, "anchorsAfter": {"type": "object"}, "limits": {"type": "object"}}},
+      {"type": "object", "additionalProperties": false, "required": ["id", "kind", "on", "off", "receiverIds", "effectMask", "receiverId", "minLinearLuminanceDelta"], "properties": {"id": {"$ref": "#/$defs/token"}, "kind": {"enum": ["receiver_luminance", "receiver_luminance_ldr"]}, "on": {"type": "string"}, "off": {"type": "string"}, "receiverIds": {"type": "string"}, "effectMask": {"type": "string"}, "receiverId": {"type": "integer"}, "minLinearLuminanceDelta": {"type": "number"}}},
+      {"type": "object", "additionalProperties": false, "required": ["id", "kind", "frames", "fragmentIds", "maxTrajectoryCorrelation", "minPairwiseDistanceVariationRatio", "rejectSingleRigidBody"], "properties": {"id": {"$ref": "#/$defs/token"}, "kind": {"const": "fragment_tracks"}, "frames": {"type": "array", "minItems": 2, "items": {"type": "string"}}, "fragmentIds": {"type": "array", "minItems": 2}, "maxTrajectoryCorrelation": {"type": "number", "minimum": 0, "maximum": 1}, "minPairwiseDistanceVariationRatio": {"type": "number", "minimum": 0}, "rejectSingleRigidBody": {"const": true}}},
+      {"type": "object", "additionalProperties": false, "required": ["id", "kind", "views", "objectId", "carrier"], "properties": {"id": {"$ref": "#/$defs/token"}, "kind": {"const": "multiview_3d"}, "views": {"type": "array", "minItems": 2}, "objectId": {"type": "integer"}, "carrier": {"type": "string"}, "minDepthSpan": {"type": "number"}, "minParallaxPx": {"type": "number"}, "requireParallax": {"type": "boolean"}}}
+    ]}
+  }
+}

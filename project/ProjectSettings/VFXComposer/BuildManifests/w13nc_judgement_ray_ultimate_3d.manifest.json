@@ -1,0 +1,163 @@
+{
+  "manifestVersion": 1,
+  "rulesVersion": "1.0-draft",
+  "enforcement": "strict",
+  "effectId": "w13nc_judgement_ray_ultimate_3d",
+  "archetype": "composite",
+  "recipeVersion": 1,
+  "recipeRevision": 1,
+  "recipeHash": "dc76fd6b5c0f36aa484e0de4ec2c6b9f281935647fcbfb656bce9422e15e56ce",
+  "buildHash": "30ce503b8f09a89c51d004d5c8f03cd7ac5a5417b0d9f698785e720a5ce17ed5",
+  "compilerVersion": "w11-w13-next-candidate-1",
+  "unityVersion": "2022.3.62f3c1",
+  "sourceRecipePath": "Assets/VFX/Recipes/W11W13NextCandidate/W13/w13nc_judgement_ray_ultimate_3d.default.json",
+  "runtimeEntry": {
+    "kind": "prefab",
+    "path": "Assets/VFX/Generated/W11W13NextCandidate/w13nc_judgement_ray_ultimate_3d/VFX_w13nc_judgement_ray_ultimate_3d.prefab",
+    "guid": "a1ddd69186c0d5a4db77e4dc6ecc28a0"
+  },
+  "ownedOutputs": [
+    {
+      "path": "Assets/VFX/Generated/W11W13NextCandidate/w13nc_judgement_ray_ultimate_3d/VFX_w13nc_judgement_ray_ultimate_3d.prefab",
+      "guid": "a1ddd69186c0d5a4db77e4dc6ecc28a0",
+      "assetType": "GameObject",
+      "sha256": "78255ff5886a65e3e1f5bf50af194e6c6a44fb5b137fccc34235dfd04c3db88f"
+    }
+  ],
+  "dependencies": [
+    {
+      "path": "Assets/VFX/Generated/arcane_rune_spawn_2d/VFX_arcane_rune_spawn_2d.prefab",
+      "guid": "c3aec333b2b2a2d4a8b63dbbdf2c57e6",
+      "assetType": "GameObject",
+      "version": null,
+      "dependencyHash": "ea08994edfe779f711b69bb246ea65b6"
+    },
+    {
+      "path": "Assets/VFX/Generated/divine_smite_impact_3d/VFX_divine_smite_impact_3d.prefab",
+      "guid": "3ebfb62c5ebc7fe448a83c75dd8c0e4a",
+      "assetType": "GameObject",
+      "version": null,
+      "dependencyHash": "5ca8abe6aca6dc1ad067f0c07ef0b5a1"
+    },
+    {
+      "path": "Assets/VFX/Generated/focus_charge_3d/VFX_focus_charge_3d.prefab",
+      "guid": "af94060cc32f7ef41bdcb604ce105ab6",
+      "assetType": "GameObject",
+      "version": null,
+      "dependencyHash": "17843b6257154fd13af415822265d1ae"
+    },
+    {
+      "path": "Assets/VFX/Shared/CoverageGalleryB/Materials/MAT_CoverageB_Additive.mat",
+      "guid": "688b79adff1f3474da55fb0deedff137",
+      "assetType": "Material",
+      "version": null,
+      "dependencyHash": "0b0b0e70d4676ffab060eedfd9b3ebea"
+    },
+    {
+      "path": "Assets/VFX/Shared/CoverageGalleryB/Meshes/M_CoverageB_Ring.asset",
+      "guid": "7a536dcec1985cf4a9e09e6df4dbd583",
+      "assetType": "Mesh",
+      "version": null,
+      "dependencyHash": "2925f46e6811e075fedcad822cb3dfcf"
+    },
+    {
+      "path": "Assets/VFX/Shared/Shaders/CoverageGalleryBUnlit.shader",
+      "guid": "36a2072c324a26a479dfb498994d4812",
+      "assetType": "Shader",
+      "version": null,
+      "dependencyHash": "677bb5f640200583cb27bcc1f973f0c6"
+    },
+    {
+      "path": "Assets/VFX/Shared/Shaders/VfxLayeredRamp.shader",
+      "guid": "81928f0d6aa7a2e4c8cb73230126637f",
+      "assetType": "Shader",
+      "version": null,
+      "dependencyHash": "75ed6365bf9e5f1a57f8bfd5b6acc801"
+    },
+    {
+      "path": "Assets/VFX/Shared/Styles/Materials/MAT_Style_stylized.mat",
+      "guid": "0034e6cb149f4034ca9562644ff7ae8d",
+      "assetType": "Material",
+      "version": null,
+      "dependencyHash": "7f3751282b1f62d6cb78f412797ce124"
+    },
+    {
+      "path": "Assets/VFX/Shared/Styles/Meshes/M_Style_Burst.asset",
+      "guid": "0def46dac13f1d8449cd98d98de17a15",
+      "assetType": "Mesh",
+      "version": null,
+      "dependencyHash": "56e972a8f8588a864d379a7611c49c63"
+    },
+    {
+      "path": "Assets/VFX/Shared/Styles/Meshes/M_Style_Cone.asset",
+      "guid": "8a296d5e70420f647a6e1f646af993cd",
+      "assetType": "Mesh",
+      "version": null,
+      "dependencyHash": "69fd53314f71778bd2e32f584650207e"
+    },
+    {
+      "path": "Assets/VFX/Shared/Styles/Meshes/M_Style_Ring.asset",
+      "guid": "df59364e370c085418d31c0f952bcf1a",
+      "assetType": "Mesh",
+      "version": null,
+      "dependencyHash": "021f9d0fab5159d1d05310de3284c997"
+    },
+    {
+      "path": "Assets/VFX/Shared/Styles/Meshes/M_Style_Shard.asset",
+      "guid": "506c8c0bcf8b14645948b3dbb02a1b3f",
+      "assetType": "Mesh",
+      "version": null,
+      "dependencyHash": "ff113f023e398b26696f0c501ae28324"
+    },
+    {
+      "path": "Assets/VFX/Shared/W11W13NextCandidate/Materials/MAT_W13_NextCandidate.mat",
+      "guid": "aa31d03054c71ae47a5616b72c59be73",
+      "assetType": "Material",
+      "version": null,
+      "dependencyHash": "c4ba6f1ce68ecf434e52e2dcfddc885e"
+    },
+    {
+      "path": "Assets/VFX/Shared/W11W13NextCandidate/Shaders/W11W13NextCandidateLayeredUnlit.shader",
+      "guid": "70776f9a8b468361c206ba11734f7ef1",
+      "assetType": "Shader",
+      "version": null,
+      "dependencyHash": "125aa7b08bc434ff6314866f483110fc"
+    },
+    {
+      "path": "Packages/com.vfxcomposer.unity/Runtime/Components/InteractionGalleryVfxController.cs",
+      "guid": "9c06fdbb4482a7a40862522ad88717b6",
+      "assetType": "MonoScript",
+      "version": null,
+      "dependencyHash": "856d2bcba33bff8d21dd532335cfda8f"
+    },
+    {
+      "path": "Packages/com.vfxcomposer.unity/Runtime/Components/StyledVfxController.cs",
+      "guid": "ca6f81a249967414c96082671e07dcaa",
+      "assetType": "MonoScript",
+      "version": null,
+      "dependencyHash": "486e1b8ba27b5e00b709bc5fd2b5624a"
+    },
+    {
+      "path": "Packages/com.vfxcomposer.unity/Runtime/W11W13NextCandidate/W11W13NextCandidateController.cs",
+      "guid": "4405247fb6bbc356ed57a8e09f292951",
+      "assetType": "MonoScript",
+      "version": null,
+      "dependencyHash": "923477f1bea941f1cd5a3c2e72435101"
+    }
+  ],
+  "cost": {
+    "particles": 24,
+    "particleSystems": 1,
+    "renderers": 7,
+    "materials": 1,
+    "trails": 0,
+    "duration": 4.1999998092651367,
+    "localTextureBytes": 0,
+    "dependencyResidentTextureBytes": 0,
+    "gameObjects": 12,
+    "maxDepth": 2
+  },
+  "audit": [],
+  "formalProduction": null,
+  "generatedAtUtc": "2026-08-25T12:08:37.9375285Z"
+}

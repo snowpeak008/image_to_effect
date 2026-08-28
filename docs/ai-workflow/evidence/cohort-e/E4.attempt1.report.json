@@ -1,0 +1,14 @@
+{
+  "succeeded": true,
+  "detail": "Assets/VFX/Generated/e4_ribbon/VFX_E4_Ribbon.prefab",
+  "entries": [
+    {
+      "code": "I400",
+      "severity": "info",
+      "path": "/budget",
+      "message": "Static budget preflight completed for profile mobile_medium.",
+      "actualValue": null,
+      "allowedRange": null
+    }
+  ]
+}

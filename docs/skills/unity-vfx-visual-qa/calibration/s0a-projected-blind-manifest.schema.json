@@ -1,0 +1,42 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://image-to-smart.local/schemas/s0a-projected-blind-manifest/v1",
+  "title": "Projected S0a blind submission manifest",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "holdoutCohort", "freezeStatus", "reviewContractHash", "captureProfilePolicyHash", "reviewContextHash", "samples", "manifestHash"],
+  "properties": {
+    "schemaVersion": {"const": "s0a-projected-blind-manifest/v1"},
+    "holdoutCohort": {"enum": ["reduced-36-12-12-6", "full-60-20-20-10"]},
+    "freezeStatus": {"const": "FROZEN_FOR_BLIND_REVIEW"},
+    "reviewContractHash": {"$ref": "#/$defs/hash"},
+    "captureProfilePolicyHash": {"$ref": "#/$defs/hash"},
+    "reviewContextHash": {"$ref": "#/$defs/hash"},
+    "samples": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/sample"}},
+    "manifestHash": {"$ref": "#/$defs/hash"}
+  },
+  "allOf": [
+    {
+      "if": {"properties": {"holdoutCohort": {"const": "reduced-36-12-12-6"}}, "required": ["holdoutCohort"]},
+      "then": {"properties": {"samples": {"minItems": 66, "maxItems": 66}}},
+      "else": {"properties": {"samples": {"minItems": 110, "maxItems": 110}}}
+    }
+  ],
+  "$defs": {
+    "hash": {"type": "string", "pattern": "^sha256:[a-f0-9]{64}$"},
+    "sampleId": {"type": "string", "pattern": "^s0a-[a-f0-9]{20}$"},
+    "requirementId": {"type": "string", "pattern": "^s0a\\.visual\\.req\\.[a-f0-9]{20}$"},
+    "sample": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["sampleId", "designRequirementIds", "captureProfileInstanceHash", "evidenceManifest", "evidenceHash"],
+      "properties": {
+        "sampleId": {"$ref": "#/$defs/sampleId"},
+        "designRequirementIds": {"type": "array", "minItems": 1, "maxItems": 1, "uniqueItems": true, "items": {"$ref": "#/$defs/requirementId"}},
+        "captureProfileInstanceHash": {"$ref": "#/$defs/hash"},
+        "evidenceManifest": {"type": "string", "pattern": "^evidence/s0a-[a-f0-9]{20}\\.evidence\\.json$"},
+        "evidenceHash": {"$ref": "#/$defs/hash"}
+      }
+    }
+  }
+}

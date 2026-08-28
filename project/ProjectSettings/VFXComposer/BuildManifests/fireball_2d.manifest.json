@@ -1,0 +1,173 @@
+{
+  "manifestVersion": 1,
+  "rulesVersion": "1.0-draft",
+  "enforcement": "legacy_audit",
+  "effectId": "fireball_2d",
+  "archetype": "projectile",
+  "recipeVersion": 1,
+  "recipeRevision": 1,
+  "recipeHash": "4f284e172edbd9db8de2ef6dedc03cbbb743a39aedd0377f1f8f06100df8f45a",
+  "buildHash": "c507ee71d49c941e40127ae6fc7f60c04a90198028492ad3e3792188d716b642",
+  "compilerVersion": "0.1.0",
+  "unityVersion": "2022.3.62f3c1",
+  "sourceRecipePath": "Assets/VFX/Recipes/fireball-2d.default.json",
+  "runtimeEntry": {
+    "kind": "prefab",
+    "path": "Assets/VFX/Generated/fireball_2d/VFX_Fireball_2D.prefab",
+    "guid": "edfdb8327c7bd234c94f0f4338c35816"
+  },
+  "ownedOutputs": [
+    {
+      "path": "Assets/VFX/Generated/fireball_2d/VFX_Fireball_2D.prefab",
+      "guid": "edfdb8327c7bd234c94f0f4338c35816",
+      "assetType": "GameObject",
+      "sha256": "2eea00d00901b79a924ecffaaa4d2380f9f104076c10736bf0f932f551ce51fc"
+    },
+    {
+      "path": "Assets/VFX/Generated/fireball_2d/burst_Material_0.mat",
+      "guid": "ef50eb7457ba0ce4bbd27d2a7e0dfd15",
+      "assetType": "Material",
+      "sha256": "bcef081b3949cc6641c1fae91899f62954ec0069e987e17d9616f0cb445a3e89"
+    },
+    {
+      "path": "Assets/VFX/Generated/fireball_2d/coreFlash_Material_0.mat",
+      "guid": "bab9fb9e3b0eb05449d2ef719fe1c381",
+      "assetType": "Material",
+      "sha256": "19fb87cadab4e660fa605356d09e393aa16139b5a86ef03aa12a047c39ff44a1"
+    },
+    {
+      "path": "Assets/VFX/Generated/fireball_2d/core_Material_0.mat",
+      "guid": "fa1787ed0476ffe41b0d3d648fbf7db6",
+      "assetType": "Material",
+      "sha256": "3a681db3e52a2661dbeff1ef35b7e1d8219a48be9c30eddea4b37a14aa52e474"
+    },
+    {
+      "path": "Assets/VFX/Generated/fireball_2d/embers_Material_0.mat",
+      "guid": "261cd5b37b66319448a259339a8b3be5",
+      "assetType": "Material",
+      "sha256": "866559d2e5d127d371f1f95688bf9a7bd8ae7183df8910fda41f8e84b038950b"
+    },
+    {
+      "path": "Assets/VFX/Generated/fireball_2d/launchFlash_Material_0.mat",
+      "guid": "e17f16efd4d4ce247b5e2260b793aa73",
+      "assetType": "Material",
+      "sha256": "71ca3e420a7f246f64149e4dba578dd2e25654f343c2599fdc94b93c41f10b65"
+    },
+    {
+      "path": "Assets/VFX/Generated/fireball_2d/shockwave_Material_0.mat",
+      "guid": "aad5297e1dae05a428494d1de4834810",
+      "assetType": "Material",
+      "sha256": "7b3f7d675fde52449c93af318f87ac13543c01033fadd79c0919e6a52a65bde4"
+    },
+    {
+      "path": "Assets/VFX/Generated/fireball_2d/trail_Material_0.mat",
+      "guid": "370435c139d31bb4eb2262c7a52fcc1f",
+      "assetType": "Material",
+      "sha256": "dab36fcb082d1515bb38c89b4ebd8aca939f6f9eb2a3d6876e7fdce1f41d10a7"
+    }
+  ],
+  "dependencies": [
+    {
+      "path": "Assets/VFX/Templates/2D/Textures/VFX2D_Ember.png",
+      "guid": "2473925f189aadf49bd3392eb912d164",
+      "assetType": "Texture2D",
+      "version": null,
+      "dependencyHash": "c28eef9b3c24613638561815067e5280"
+    },
+    {
+      "path": "Assets/VFX/Templates/2D/Textures/VFX2D_FireCore.png",
+      "guid": "db1681a7fbdc4a94f89153d768ed4ab0",
+      "assetType": "Texture2D",
+      "version": null,
+      "dependencyHash": "d1d83a1d4bb80328bfc1b8db9576b7d4"
+    },
+    {
+      "path": "Assets/VFX/Templates/2D/Textures/VFX2D_FireTrail.png",
+      "guid": "1a5cacac18736f940b624e020d7854d7",
+      "assetType": "Texture2D",
+      "version": null,
+      "dependencyHash": "fe88e46317792133ae1c2ccb52571ad6"
+    },
+    {
+      "path": "Assets/VFX/Templates/2D/Textures/VFX2D_ImpactStreak.png",
+      "guid": "d17050d159af2e541865ec8ca2c1dcaa",
+      "assetType": "Texture2D",
+      "version": null,
+      "dependencyHash": "511d8bec4f2a706008cdf5dcf58e5386"
+    },
+    {
+      "path": "Assets/VFX/Templates/2D/Textures/VFX2D_LaunchFlash.png",
+      "guid": "ee295a0c1599b7b458b940a1ac2fbbf1",
+      "assetType": "Texture2D",
+      "version": null,
+      "dependencyHash": "ec0bb98bf282dcabf092d445b2231b46"
+    },
+    {
+      "path": "Assets/VFX/Templates/2D/Textures/VFX2D_ShockwaveRing.png",
+      "guid": "bc036c3d227550f42beae2c8a8a34637",
+      "assetType": "Texture2D",
+      "version": null,
+      "dependencyHash": "288a47224e147722adc50c5881c40126"
+    },
+    {
+      "path": "Packages/com.unity.render-pipelines.universal/Editor/AssetVersion.cs",
+      "guid": "d0353a89b1f911e48b9e16bdc9f2e058",
+      "assetType": "MonoScript",
+      "version": null,
+      "dependencyHash": "32658fcbbe1a332050004e3b27abb4a3"
+    },
+    {
+      "path": "Packages/com.unity.render-pipelines.universal/Shaders/Particles/ParticlesUnlit.shader",
+      "guid": "0406db5a14f94604a8c57ccfbc9f3b46",
+      "assetType": "Shader",
+      "version": null,
+      "dependencyHash": "b7b185925fcbf7b0661368a240b860d4"
+    },
+    {
+      "path": "Packages/com.vfxcomposer.unity/Runtime/Components/GeneratedVfxController.cs",
+      "guid": "95375c27028a27440aba608c4070f13c",
+      "assetType": "MonoScript",
+      "version": null,
+      "dependencyHash": "84f23e5ab123318ec5a468206d637ab8"
+    }
+  ],
+  "cost": {
+    "particles": 99,
+    "particleSystems": 5,
+    "renderers": 7,
+    "materials": 7,
+    "trails": 1,
+    "duration": 1.62,
+    "localTextureBytes": 0,
+    "dependencyResidentTextureBytes": 3368944,
+    "gameObjects": 11,
+    "maxDepth": 3
+  },
+  "audit": [
+    {
+      "code": "R8014",
+      "severity": "warning",
+      "path": "/runtimeEntry/path",
+      "message": "Runtime Prefab name must be VFX_<effectId>."
+    },
+    {
+      "code": "R8003",
+      "severity": "warning",
+      "path": "/structure/gameObjects",
+      "message": "Runtime Entry exceeds the configured GameObject budget."
+    },
+    {
+      "code": "R8004",
+      "severity": "warning",
+      "path": "/structure/maxDepth",
+      "message": "Runtime Entry exceeds the configured hierarchy depth."
+    },
+    {
+      "code": "R8011",
+      "severity": "warning",
+      "path": "/ownedOutputs/materials",
+      "message": "Effect exceeds the recommended local Material count."
+    }
+  ],
+  "generatedAtUtc": "2026-08-23T08:18:36.6692350Z"
+}

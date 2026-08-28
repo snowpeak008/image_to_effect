@@ -1,0 +1,92 @@
+{
+  "manifestVersion": 1,
+  "rulesVersion": "1.0-draft",
+  "enforcement": "strict",
+  "effectId": "hex_guard_shield_2d",
+  "archetype": "shield",
+  "recipeVersion": 1,
+  "recipeRevision": 2,
+  "recipeHash": "a68847ed0caac2844e19ef5a98705f08234db4ee3fbee8b2513e601035641196",
+  "buildHash": "fc202b34be3d2862248f0f00685c2c7075425d97e6bb3f691f7ae3ebffdb10f4",
+  "compilerVersion": "gallery2d-8",
+  "unityVersion": "2022.3.62f3c1",
+  "sourceRecipePath": "Assets/VFX/Recipes/Shield/hex_guard_shield_2d.default.json",
+  "runtimeEntry": {
+    "kind": "prefab",
+    "path": "Assets/VFX/Generated/hex_guard_shield_2d/VFX_hex_guard_shield_2d.prefab",
+    "guid": "fbfa2f9a9d8cf70428ea64896213fc09"
+  },
+  "ownedOutputs": [
+    {
+      "path": "Assets/VFX/Generated/hex_guard_shield_2d/VFX_hex_guard_shield_2d.prefab",
+      "guid": "fbfa2f9a9d8cf70428ea64896213fc09",
+      "assetType": "GameObject",
+      "sha256": "2d6946ff0fc6f56e42d473f92020396dea0940af99bd1941433905c346890d8b"
+    }
+  ],
+  "dependencies": [
+    {
+      "path": "Assets/VFX/Shared/Shaders/ValidationGallery2DUnlit.shader",
+      "guid": "2fab832073c9e6240be39731092c35b4",
+      "assetType": "Shader",
+      "version": null,
+      "dependencyHash": "db0025af3563c5afe6ace1bea454033b"
+    },
+    {
+      "path": "Assets/VFX/Shared/ValidationGallery/Materials/MAT_ValidationGallery_Additive.mat",
+      "guid": "27f23796fb8e62347b7d55f4c8b94197",
+      "assetType": "Material",
+      "version": null,
+      "dependencyHash": "29a4c6db0ae59d8f042b7cbe1bef5925"
+    },
+    {
+      "path": "Assets/VFX/Shared/ValidationGallery/Materials/MAT_ValidationGallery_Alpha.mat",
+      "guid": "dc85986daba9b5d458a30b99b9c2ab97",
+      "assetType": "Material",
+      "version": null,
+      "dependencyHash": "f3de783fa193a6f21690e1c59c4a54cf"
+    },
+    {
+      "path": "Assets/VFX/Shared/ValidationGallery/Meshes/M_ValidationGallery_Quad.asset",
+      "guid": "b3a2b1899cacdca4d9b5a6517fe16bc8",
+      "assetType": "Mesh",
+      "version": null,
+      "dependencyHash": "869597b2ffb201a932c6211cb2943190"
+    },
+    {
+      "path": "Assets/VFX/Shared/ValidationGallery/Prefabs/PF_ValidationGallery_SecondaryParticles.prefab",
+      "guid": "780e3fe8fcf1e024ab8d37ad14000223",
+      "assetType": "GameObject",
+      "version": null,
+      "dependencyHash": "1fdb1787fbac85ea775e9278fd0edaa1"
+    },
+    {
+      "path": "Assets/VFX/Shared/ValidationGallery/Textures/T_ValidationGallery_MaskAtlas_128.png",
+      "guid": "c22f97e3677993b4d95adb5fe44b2639",
+      "assetType": "Texture2D",
+      "version": null,
+      "dependencyHash": "89846448b58840606e2d08e6722514d0"
+    },
+    {
+      "path": "Packages/com.vfxcomposer.unity/Runtime/Components/ValidationArchetypeVfxController.cs",
+      "guid": "caf378d94f9b2cb4087bada83fcb3371",
+      "assetType": "MonoScript",
+      "version": null,
+      "dependencyHash": "a845f9e351732f50a1d53641f25361e9"
+    }
+  ],
+  "cost": {
+    "particles": 24,
+    "particleSystems": 1,
+    "renderers": 6,
+    "materials": 2,
+    "trails": 0,
+    "duration": 2.0,
+    "localTextureBytes": 0,
+    "dependencyResidentTextureBytes": 17064,
+    "gameObjects": 7,
+    "maxDepth": 1
+  },
+  "audit": [],
+  "generatedAtUtc": "2026-08-23T13:54:54.3790569Z"
+}

@@ -1,0 +1,32 @@
+{
+  "schema": "style-special-next-candidate/v1",
+  "id": "anime_charge_aura_2d_next_candidate",
+  "sourceId": "anime_charge_aura_2d",
+  "label": "ANIME CHARGE · LOOP",
+  "group": "w9",
+  "archetype": "aura",
+  "dimension": "2d",
+  "style": "cartoon",
+  "profile": "CelSequence",
+  "semantic": "8frame-flame-contour+rise-motes+ground-wind-ring",
+  "duration": 1.3,
+  "releaseNormalized": 0.14,
+  "sustainEndNormalized": 0.84,
+  "sustained": true,
+  "seed": 9106,
+  "intensity": 1.14,
+  "palette": {
+    "primary": "#3DA7FF",
+    "secondary": "#BDEBFF",
+    "accent": "#FFFFFF"
+  },
+  "meshes": [
+    "Cone",
+    "Ring",
+    "Burst",
+    "Shard"
+  ],
+  "pairFamily": "",
+  "pairRole": "",
+  "sourceBaseId": ""
+}

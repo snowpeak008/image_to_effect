@@ -1,0 +1,43 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://image-to-smart.local/schemas/s0a-isolated-review-corpus/v3",
+  "title": "Projected S0a isolated review corpus",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "projectionReceiptHash", "blindManifestHash", "evidenceBundleHash", "reviewContextHash", "reviewContractHash", "captureProfilePolicyHash", "modelVersionHash", "sessionProtocols", "sessions", "corpusHash"],
+  "properties": {
+    "schemaVersion": {"const": "s0a-isolated-review-corpus/v3"},
+    "projectionReceiptHash": {"$ref": "#/$defs/hash"},
+    "blindManifestHash": {"$ref": "#/$defs/hash"},
+    "evidenceBundleHash": {"$ref": "#/$defs/hash"},
+    "reviewContextHash": {"$ref": "#/$defs/hash"},
+    "reviewContractHash": {"$ref": "#/$defs/hash"},
+    "captureProfilePolicyHash": {"$ref": "#/$defs/hash"},
+    "modelVersionHash": {"$ref": "#/$defs/hash"},
+    "sessionProtocols": {
+      "type": "array",
+      "minItems": 3,
+      "maxItems": 3,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["sessionId", "schemaVersion", "sessionHash"],
+        "properties": {
+          "sessionId": {"type": "string", "minLength": 1},
+          "schemaVersion": {"enum": ["s0a-isolated-review-session-directory/v1", "s0a-visual-qa-session/1.0", "s0a-visual-qa-session/2.0"]},
+          "sessionHash": {"$ref": "#/$defs/hash"}
+        }
+      }
+    },
+    "sessions": {
+      "type": "array",
+      "minItems": 3,
+      "maxItems": 3,
+      "items": {"$ref": "https://image-to-smart.local/schemas/s0a-isolated-review-session/v3"}
+    },
+    "corpusHash": {"$ref": "#/$defs/hash"}
+  },
+  "$defs": {
+    "hash": {"type": "string", "pattern": "^sha256:[a-f0-9]{64}$"}
+  }
+}

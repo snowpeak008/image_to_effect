@@ -1,0 +1,22 @@
+{
+  "succeeded": false,
+  "detail": null,
+  "entries": [
+    {
+      "code": "E306",
+      "severity": "error",
+      "path": "/stages/travel/modules/broad_trail/attachTo",
+      "message": "attachTo must reference a module ID in the same stage.",
+      "actualValue": "orb_core",
+      "allowedRange": null
+    },
+    {
+      "code": "E306",
+      "severity": "error",
+      "path": "/stages/travel/modules/persistent_embers/attachTo",
+      "message": "attachTo must reference a module ID in the same stage.",
+      "actualValue": "orb_core",
+      "allowedRange": null
+    }
+  ]
+}

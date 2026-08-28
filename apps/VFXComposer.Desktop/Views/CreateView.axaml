@@ -1,0 +1,21 @@
+<UserControl
+    x:Class="VFXComposer.Desktop.Views.CreateView"
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:vm="using:VFXComposer.Desktop.ViewModels"
+    x:DataType="vm:CreateViewModel">
+  <StackPanel Spacing="18">
+    <StackPanel Spacing="5">
+      <TextBlock FontSize="28" FontWeight="SemiBold" Text="{Binding Title}" />
+      <TextBlock Classes="muted" Text="{Binding Description}" TextWrapping="Wrap" />
+    </StackPanel>
+    <Border Classes="card">
+      <StackPanel Spacing="10">
+        <TextBlock FontWeight="SemiBold" Text="Recipe draft" />
+        <TextBox Watermark="Recipe name" Text="{Binding RecipeName}" />
+        <TextBox AcceptsReturn="True" Height="140" TextWrapping="Wrap" Watermark="Draft notes" Text="{Binding DraftNotes}" />
+        <TextBlock Classes="muted" Text="{Binding EmptyStateMessage}" TextWrapping="Wrap" />
+      </StackPanel>
+    </Border>
+  </StackPanel>
+</UserControl>

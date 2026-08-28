@@ -1,0 +1,169 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &1615097435333309303
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8358475098206979666}
+  - component: {fileID: 5582066385129852191}
+  m_Layer: 0
+  m_Name: VFX_meteor_shower_ultimate_3d
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8358475098206979666
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1615097435333309303}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &5582066385129852191
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1615097435333309303}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 07d8735a81864834c8f1bda23acf4be2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  compositionId: meteor_shower_ultimate_3d
+  duration: 5
+  sourcePrefabs:
+  - {fileID: 5656544031732231505, guid: 07b53908adc51d741a6b540cf5f637ad, type: 3}
+  - {fileID: 6120830381778147488, guid: de5d30552a4d5c242861536ab5e4aa4d, type: 3}
+  - {fileID: 6120830381778147488, guid: de5d30552a4d5c242861536ab5e4aa4d, type: 3}
+  - {fileID: 6120830381778147488, guid: de5d30552a4d5c242861536ab5e4aa4d, type: 3}
+  - {fileID: 6120830381778147488, guid: de5d30552a4d5c242861536ab5e4aa4d, type: 3}
+  - {fileID: 6120830381778147488, guid: de5d30552a4d5c242861536ab5e4aa4d, type: 3}
+  - {fileID: 6120830381778147488, guid: de5d30552a4d5c242861536ab5e4aa4d, type: 3}
+  - {fileID: 9138410619889568490, guid: 5fd40fcb15c3dea4ba616bacebf7b829, type: 3}
+  timeline:
+  - Time: 0
+    SourceIndex: 0
+    RefId: warning_telegraph_3d
+    Action: play
+    Position: {x: 0, y: 0, z: 0}
+    Rotation: {x: 0, y: 0, z: 0}
+    Scale: 1
+    HasPalette: 1
+    Primary: {r: 0.84705883, g: 0.28627452, b: 0.11764706, a: 1}
+    Secondary: {r: 1, g: 0.61960787, b: 0.19215687, a: 1}
+    Accent: {r: 0.9490196, g: 0.8156863, b: 0.63529414, a: 1}
+  - Time: 0.9
+    SourceIndex: 0
+    RefId: warning_telegraph_3d
+    Action: stop
+    Position: {x: 0, y: 0, z: 0}
+    Rotation: {x: 0, y: 0, z: 0}
+    Scale: 1
+    HasPalette: 1
+    Primary: {r: 0.84705883, g: 0.28627452, b: 0.11764706, a: 1}
+    Secondary: {r: 1, g: 0.61960787, b: 0.19215687, a: 1}
+    Accent: {r: 0.9490196, g: 0.8156863, b: 0.63529414, a: 1}
+  - Time: 1
+    SourceIndex: 1
+    RefId: meteor_impact_3d
+    Action: play
+    Position: {x: -1.5, y: 0.7, z: 0}
+    Rotation: {x: 0, y: 0, z: 0}
+    Scale: 1
+    HasPalette: 1
+    Primary: {r: 0.84705883, g: 0.28627452, b: 0.11764706, a: 1}
+    Secondary: {r: 1, g: 0.61960787, b: 0.19215687, a: 1}
+    Accent: {r: 0.9490196, g: 0.8156863, b: 0.63529414, a: 1}
+  - Time: 1.5
+    SourceIndex: 2
+    RefId: meteor_impact_3d
+    Action: play
+    Position: {x: 0.9, y: 0.3, z: 0}
+    Rotation: {x: 0, y: 0, z: 0}
+    Scale: 0.9
+    HasPalette: 1
+    Primary: {r: 0.84705883, g: 0.28627452, b: 0.11764706, a: 1}
+    Secondary: {r: 1, g: 0.61960787, b: 0.19215687, a: 1}
+    Accent: {r: 0.9490196, g: 0.8156863, b: 0.63529414, a: 1}
+  - Time: 2
+    SourceIndex: 3
+    RefId: meteor_impact_3d
+    Action: play
+    Position: {x: -0.4, y: -0.3, z: 0}
+    Rotation: {x: 0, y: 0, z: 0}
+    Scale: 1.2
+    HasPalette: 1
+    Primary: {r: 0.84705883, g: 0.28627452, b: 0.11764706, a: 1}
+    Secondary: {r: 1, g: 0.61960787, b: 0.19215687, a: 1}
+    Accent: {r: 0.9490196, g: 0.8156863, b: 0.63529414, a: 1}
+  - Time: 2.5
+    SourceIndex: 4
+    RefId: meteor_impact_3d
+    Action: play
+    Position: {x: 1.5, y: -0.5, z: 0}
+    Rotation: {x: 0, y: 0, z: 0}
+    Scale: 0.85
+    HasPalette: 1
+    Primary: {r: 0.84705883, g: 0.28627452, b: 0.11764706, a: 1}
+    Secondary: {r: 1, g: 0.61960787, b: 0.19215687, a: 1}
+    Accent: {r: 0.9490196, g: 0.8156863, b: 0.63529414, a: 1}
+  - Time: 3
+    SourceIndex: 5
+    RefId: meteor_impact_3d
+    Action: play
+    Position: {x: 0.2, y: 0.6, z: 0}
+    Rotation: {x: 0, y: 0, z: 0}
+    Scale: 1.15
+    HasPalette: 1
+    Primary: {r: 0.84705883, g: 0.28627452, b: 0.11764706, a: 1}
+    Secondary: {r: 1, g: 0.61960787, b: 0.19215687, a: 1}
+    Accent: {r: 0.9490196, g: 0.8156863, b: 0.63529414, a: 1}
+  - Time: 3.5
+    SourceIndex: 6
+    RefId: meteor_impact_3d
+    Action: play
+    Position: {x: -1, y: -0.8, z: 0}
+    Rotation: {x: 0, y: 0, z: 0}
+    Scale: 1
+    HasPalette: 1
+    Primary: {r: 0.84705883, g: 0.28627452, b: 0.11764706, a: 1}
+    Secondary: {r: 1, g: 0.61960787, b: 0.19215687, a: 1}
+    Accent: {r: 0.9490196, g: 0.8156863, b: 0.63529414, a: 1}
+  - Time: 4.6
+    SourceIndex: 7
+    RefId: smoke_plume_area_3d
+    Action: play
+    Position: {x: 0, y: 0, z: 0}
+    Rotation: {x: 0, y: 0, z: 0}
+    Scale: 1.35
+    HasPalette: 1
+    Primary: {r: 0.84705883, g: 0.28627452, b: 0.11764706, a: 1}
+    Secondary: {r: 1, g: 0.61960787, b: 0.19215687, a: 1}
+    Accent: {r: 0.9490196, g: 0.8156863, b: 0.63529414, a: 1}
+  cameraHints:
+  - Time: 0.9
+    Type: zoom
+    Strength: 0.3
+  - Time: 2
+    Type: shake
+    Strength: 0.7
+  - Time: 3.5
+    Type: shake
+    Strength: 0.9
+  gates: []
+  descriptor: {fileID: 4900000, guid: 7f8fbe42430c2be4483652c797003563, type: 3}

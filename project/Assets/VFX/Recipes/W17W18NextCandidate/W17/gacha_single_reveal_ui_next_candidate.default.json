@@ -1,0 +1,13 @@
+{
+  "schema": "w17-ui-next-candidate/v1",
+  "id": "gacha_single_reveal_ui_next_candidate",
+  "workPackage": "W17",
+  "candidateStatus": "NEXT_CANDIDATE_VISUAL_PENDING",
+  "userVisualVerdict": null,
+  "preserveRejectedCandidate": true,
+  "effect": "gacha_single_reveal",
+  "lifecycle": "event",
+  "protocols": ["rarity_1_5", "skip_to_reveal", "fullscreen_grace_max_0_8s"],
+  "visualCarriers": ["falling_bouncing_orb", "six_cracks", "rarity_topology", "bounded_fullscreen_grace"],
+  "budget": { "uiElements": 21, "materials": 1, "particleSystems": 0, "limit": 48 }
+}

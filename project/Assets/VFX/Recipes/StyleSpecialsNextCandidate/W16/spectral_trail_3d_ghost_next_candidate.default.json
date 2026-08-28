@@ -1,0 +1,32 @@
+{
+  "schema": "style-special-next-candidate/v1",
+  "id": "spectral_trail_3d_ghost_next_candidate",
+  "sourceId": "spectral_trail_3d_ghost",
+  "label": "GHOST · TRAIL VARIANT",
+  "group": "w16",
+  "archetype": "trail",
+  "dimension": "3d",
+  "style": "ghost",
+  "profile": "GhostPulse",
+  "semantic": "trail-content+three-offset-afterimages+breathing-cold-edge",
+  "duration": 1.36,
+  "releaseNormalized": 0.1,
+  "sustainEndNormalized": 0.82,
+  "sustained": false,
+  "seed": 16112,
+  "intensity": 0.96,
+  "palette": {
+    "primary": "#54BDAF",
+    "secondary": "#B4EEE6",
+    "accent": "#F1FFFC"
+  },
+  "meshes": [
+    "Ribbon",
+    "Quad",
+    "Quad",
+    "Shard"
+  ],
+  "pairFamily": "ghost",
+  "pairRole": "variant",
+  "sourceBaseId": "spectral_trail_3d"
+}

@@ -1,0 +1,18 @@
+{
+  "question": "I2",
+  "attempt": 0,
+  "agentName": "s9_i_i2",
+  "model": "gpt-5.6-terra",
+  "reasoningEffort": "high",
+  "forkTurns": "none",
+  "threadId": "/root/s9_h_recovery_developer/s9_i_i2",
+  "transport": "spawn_agent",
+  "envelopeFile": "I2.initial.envelope.txt",
+  "envelopeSha256": "9FC5B20AB6792A828DA2971734D0118A332C454FE1D47725510AAD68A16FA121",
+  "payloadFile": "I2.initial.payload.md",
+  "payloadSha256": "FE5C52AC6CC366FAEAE5A52566627899C815EC6127BEFB2E784862D348876C42",
+  "tempPayloadPath": "C:\\Users\\admin\\AppData\\Local\\Temp\\vfxcomposer-s9-cohort-i\\I2\\I2.initial.payload.md",
+  "tempPayloadSha256": "FE5C52AC6CC366FAEAE5A52566627899C815EC6127BEFB2E784862D348876C42",
+  "continuity": "initial isolated thread",
+  "disclosure": "No wire payload or child tool trace readback; primary Agent witnessed the short envelope."
+}

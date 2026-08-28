@@ -1,0 +1,2523 @@
+{
+  "auditMode": "READ_ONLY_DERIVED_GEOMETRY_PROXY",
+  "authority": {
+    "canvasPx": [
+      960,
+      540
+    ],
+    "declaredBackgroundRgb8": [
+      19,
+      21,
+      24
+    ],
+    "frameCount": 28,
+    "metadataFile": "metadata.json",
+    "metadataSha256": "7187f00123cbacb39166f59bb8ffa3a1369bc6049731b8f28a23dff144ec94ca",
+    "runName": "run-20260823T041806959Z",
+    "verifiedFrameSha256": [
+      {
+        "file": "frame_0000.png",
+        "sha256": "a7794f6fd456b1151b0a638adb40c9cb609f9152e5b961109c44d81ed9c8d09d"
+      },
+      {
+        "file": "frame_0001.png",
+        "sha256": "a7794f6fd456b1151b0a638adb40c9cb609f9152e5b961109c44d81ed9c8d09d"
+      },
+      {
+        "file": "frame_0002.png",
+        "sha256": "a7794f6fd456b1151b0a638adb40c9cb609f9152e5b961109c44d81ed9c8d09d"
+      },
+      {
+        "file": "frame_0003.png",
+        "sha256": "92d139f6ac79a3ca655ea9c526860678a01688f482d8f6a014d267b308c6c69b"
+      },
+      {
+        "file": "frame_0004.png",
+        "sha256": "7ad6bcada16763dcec3c97d24cf238e202d24336596d87986942fd694cc81954"
+      },
+      {
+        "file": "frame_0005.png",
+        "sha256": "4d397c355330afafc7a0902d80af9c93f338b1e39700598eee2d8084529291bc"
+      },
+      {
+        "file": "frame_0006.png",
+        "sha256": "8493c0c571beb8ce141679e864a157e9f45ba1ee89d9a5a4400c3a178c0919e5"
+      },
+      {
+        "file": "frame_0007.png",
+        "sha256": "8251628401f0eecbbf58b67f0cf8492e3f9627ca57075addf0c3dc774362b1ae"
+      },
+      {
+        "file": "frame_0008.png",
+        "sha256": "30c11c695bf38cb9e31cb10f1781dac154295f6e2d5e19b4164a5743defe9377"
+      },
+      {
+        "file": "frame_0009.png",
+        "sha256": "5bc3a250d4eed568a09d34f2c29a1249a719fddc06eec607ab925453d2cd7e02"
+      },
+      {
+        "file": "frame_0010.png",
+        "sha256": "f58471010270923d5e37f2bb0f0abeeaee99b099a6c4617ff71b851c6ee33e6d"
+      },
+      {
+        "file": "frame_0011.png",
+        "sha256": "81ebbf0f3ae468d56e0b0b8e733ec134ed1d917f4c357319bcf097f44cb154c7"
+      },
+      {
+        "file": "frame_0012.png",
+        "sha256": "0be91195a0869051671b698ee90ca91772cddeaec5d5c8681c41787b4d61bb45"
+      },
+      {
+        "file": "frame_0013.png",
+        "sha256": "949369e63422ae057a834a22fcbaeb0f4df4c2a9a629a972e65affee29e84cc9"
+      },
+      {
+        "file": "frame_0014.png",
+        "sha256": "62b1f392c7fd0c52b86015161bcac8236853de91a3853421976db15a50659fea"
+      },
+      {
+        "file": "frame_0015.png",
+        "sha256": "e59975edd8490b5db2d247bbd4b61b775fcc5c85a34128cd9442ce47bee0fd69"
+      },
+      {
+        "file": "frame_0016.png",
+        "sha256": "29455d93c65b572e201fbb834fb9223ec45af28ba617999efdb5bf5440a26b20"
+      },
+      {
+        "file": "frame_0017.png",
+        "sha256": "7ea6aff523866f6598ef2613556c4b9a87ce9af783f76983ebdcb65cae9da620"
+      },
+      {
+        "file": "frame_0018.png",
+        "sha256": "9b1c455fac6fc1e842220b325bc7cc9f6792269acb2d6adfb535d4444eff68d5"
+      },
+      {
+        "file": "frame_0019.png",
+        "sha256": "d3499e90b22af3f320e593d4ffeb431dcb342d4bea8b73325b3dfbbee234d623"
+      },
+      {
+        "file": "frame_0020.png",
+        "sha256": "0a4572af3e25cd3206f8925096b0d9841ac31903216ddb032dbeb8fd17c89dfb"
+      },
+      {
+        "file": "frame_0021.png",
+        "sha256": "f7fe9ba52fe357fce21567c0418823b93cb8d5e4423d9f345e428a111b9d849b"
+      },
+      {
+        "file": "frame_0022.png",
+        "sha256": "a8c490befdfb63a4bce6f110b368a1387ad8787259e82cb4d5f996ec26799b2d"
+      },
+      {
+        "file": "frame_0023.png",
+        "sha256": "996b9600689261e7725ff80633905d9645e310e8f169f35f86ccfc426eaffbf8"
+      },
+      {
+        "file": "frame_0024.png",
+        "sha256": "f8180492136d0a501c62be6dd08a400b1aba60c194814cd4122c974ec5ba20ab"
+      },
+      {
+        "file": "frame_0025.png",
+        "sha256": "81bdc14266f2eadb7d1b569361826b7e0dd412f952672fdb8f5e07de54dbf445"
+      },
+      {
+        "file": "frame_0026.png",
+        "sha256": "74b65d38b25d9c957862d6924e194e833d4cec276811d1261604c0f125df2a1f"
+      },
+      {
+        "file": "frame_0027.png",
+        "sha256": "2c532a5c4bdb5eb97c7851a432bb543a82395b8c342b577fd19f708f7572365d"
+      }
+    ]
+  },
+  "commercialUseVerdict": "NOT_AUTHORIZED_BY_THIS_AUDIT",
+  "frames": [
+    {
+      "allDetectedWarmCandidatesDoNotTouchCanvasBorder": true,
+      "bladeProxyPixels": 38,
+      "canvasPx": [
+        960,
+        540
+      ],
+      "detachedWarmCandidateComponentCount": 2,
+      "detachedWarmCandidateComponents": [
+        {
+          "areaPixels": 3,
+          "borderClearancePx": 219,
+          "boundsPxInclusive": [
+            476,
+            319,
+            477,
+            320
+          ],
+          "nearestBladeProxyPixelDistancePx": 5.0,
+          "nearestMainEffectProxyPixelDistancePx": 2.236068,
+          "peakRgb": [
+            255,
+            174,
+            34
+          ],
+          "sourceAttribution": "UNAVAILABLE_FROM_BEAUTY_RGB",
+          "touchesCanvasBorder": false
+        },
+        {
+          "areaPixels": 2,
+          "borderClearancePx": 208,
+          "boundsPxInclusive": [
+            474,
+            330,
+            475,
+            331
+          ],
+          "nearestBladeProxyPixelDistancePx": 5.656854,
+          "nearestMainEffectProxyPixelDistancePx": 2.236068,
+          "peakRgb": [
+            255,
+            245,
+            71
+          ],
+          "sourceAttribution": "UNAVAILABLE_FROM_BEAUTY_RGB",
+          "touchesCanvasBorder": false
+        }
+      ],
+      "file": "frame_0000.png",
+      "foregroundPixels": 415,
+      "index": 0,
+      "mainEffectProxyBoundsPxInclusive": [
+        473,
+        294,
+        521,
+        338
+      ],
+      "mainEffectProxyPixels": 410,
+      "minimumDetachedWarmCandidateBorderClearancePx": 208,
+      "minimumDetachedWarmCandidateToBladeProxyDistancePx": 5.0,
+      "recorderContext": {
+        "dissipationLiveCount": 0,
+        "sourceAttribution": "UNAVAILABLE_FROM_BEAUTY_RGB",
+        "sparkLiveCount": 0,
+        "unattributedRecorderLiveCount": 0
+      },
+      "sha256": "a7794f6fd456b1151b0a638adb40c9cb609f9152e5b961109c44d81ed9c8d09d",
+      "timeSeconds": 0.0
+    },
+    {
+      "allDetectedWarmCandidatesDoNotTouchCanvasBorder": true,
+      "bladeProxyPixels": 38,
+      "canvasPx": [
+        960,
+        540
+      ],
+      "detachedWarmCandidateComponentCount": 2,
+      "detachedWarmCandidateComponents": [
+        {
+          "areaPixels": 3,
+          "borderClearancePx": 219,
+          "boundsPxInclusive": [
+            476,
+            319,
+            477,
+            320
+          ],
+          "nearestBladeProxyPixelDistancePx": 5.0,
+          "nearestMainEffectProxyPixelDistancePx": 2.236068,
+          "peakRgb": [
+            255,
+            174,
+            34
+          ],
+          "sourceAttribution": "UNAVAILABLE_FROM_BEAUTY_RGB",
+          "touchesCanvasBorder": false
+        },
+        {
+          "areaPixels": 2,
+          "borderClearancePx": 208,
+          "boundsPxInclusive": [
+            474,
+            330,
+            475,
+            331
+          ],
+          "nearestBladeProxyPixelDistancePx": 5.656854,
+          "nearestMainEffectProxyPixelDistancePx": 2.236068,
+          "peakRgb": [
+            255,
+            245,
+            71
+          ],
+          "sourceAttribution": "UNAVAILABLE_FROM_BEAUTY_RGB",
+          "touchesCanvasBorder": false
+        }
+      ],
+      "file": "frame_0001.png",
+      "foregroundPixels": 415,
+      "index": 1,
+      "mainEffectProxyBoundsPxInclusive": [
+        473,
+        294,
+        521,
+        338
+      ],
+      "mainEffectProxyPixels": 410,
+      "minimumDetachedWarmCandidateBorderClearancePx": 208,
+      "minimumDetachedWarmCandidateToBladeProxyDistancePx": 5.0,
+      "recorderContext": {
+        "dissipationLiveCount": 0,
+        "sourceAttribution": "UNAVAILABLE_FROM_BEAUTY_RGB",
+        "sparkLiveCount": 0,
+        "unattributedRecorderLiveCount": 0
+      },
+      "sha256": "a7794f6fd456b1151b0a638adb40c9cb609f9152e5b961109c44d81ed9c8d09d",
+      "timeSeconds": 0.016667
+    },
+    {
+      "allDetectedWarmCandidatesDoNotTouchCanvasBorder": true,
+      "bladeProxyPixels": 38,
+      "canvasPx": [
+        960,
+        540
+      ],
+      "detachedWarmCandidateComponentCount": 2,
+      "detachedWarmCandidateComponents": [
+        {
+          "areaPixels": 3,
+          "borderClearancePx": 219,
+          "boundsPxInclusive": [
+            476,
+            319,
+            477,
+            320
+          ],
+          "nearestBladeProxyPixelDistancePx": 5.0,
+          "nearestMainEffectProxyPixelDistancePx": 2.236068,
+          "peakRgb": [
+            255,
+            174,
+            34
+          ],
+          "sourceAttribution": "UNAVAILABLE_FROM_BEAUTY_RGB",
+          "touchesCanvasBorder": false
+        },
+        {
+          "areaPixels": 2,
+          "borderClearancePx": 208,
+          "boundsPxInclusive": [
+            474,
+            330,
+            475,
+            331
+          ],
+          "nearestBladeProxyPixelDistancePx": 5.656854,
+          "nearestMainEffectProxyPixelDistancePx": 2.236068,
+          "peakRgb": [
+            255,
+            245,
+            71
+          ],
+          "sourceAttribution": "UNAVAILABLE_FROM_BEAUTY_RGB",
+          "touchesCanvasBorder": false
+        }
+      ],
+      "file": "frame_0002.png",
+      "foregroundPixels": 415,
+      "index": 2,
+      "mainEffectProxyBoundsPxInclusive": [
+        473,
+        294,
+        521,
+        338
+      ],
+      "mainEffectProxyPixels": 410,
+      "minimumDetachedWarmCandidateBorderClearancePx": 208,
+      "minimumDetachedWarmCandidateToBladeProxyDistancePx": 5.0,
+      "recorderContext": {
+        "dissipationLiveCount": 0,
+        "sourceAttribution": "UNAVAILABLE_FROM_BEAUTY_RGB",
+        "sparkLiveCount": 0,
+        "unattributedRecorderLiveCount": 0
+      },
+      "sha256": "a7794f6fd456b1151b0a638adb40c9cb609f9152e5b961109c44d81ed9c8d09d",
+      "timeSeconds": 0.033333
+    },
+    {
+      "allDetectedWarmCandidatesDoNotTouchCanvasBorder": true,
+      "bladeProxyPixels": 142,
+      "canvasPx": [
+        960,
+        540
+      ],
+      "detachedWarmCandidateComponentCount": 0,
+      "detachedWarmCandidateComponents": [],
+      "file": "frame_0003.png",
+      "foregroundPixels": 4017,
+      "index": 3,
+      "mainEffectProxyBoundsPxInclusive": [
+        422,
+        233,
+        600,
+        341
+      ],
+      "mainEffectProxyPixels": 4017,
+      "minimumDetachedWarmCandidateBorderClearancePx": null,
+      "minimumDetachedWarmCandidateToBladeProxyDistancePx": null,
+      "recorderContext": {
+        "dissipationLiveCount": 0,
+        "sourceAttribution": "UNAVAILABLE_FROM_BEAUTY_RGB",
+        "sparkLiveCount": 0,
+        "unattributedRecorderLiveCount": 0
+      },
+      "sha256": "92d139f6ac79a3ca655ea9c526860678a01688f482d8f6a014d267b308c6c69b",
+      "timeSeconds": 0.05
+    },
+    {
+      "allDetectedWarmCandidatesDoNotTouchCanvasBorder": true,
+      "bladeProxyPixels": 1397,
+      "canvasPx": [
+        960,
+        540
+      ],
+      "detachedWarmCandidateComponentCount": 0,
+      "detachedWarmCandidateComponents": [],
+      "file": "frame_0004.png",
+      "foregroundPixels": 8887,
+      "index": 4,
+      "mainEffectProxyBoundsPxInclusive": [
+        422,
+        206,
+        638,
+        341
+      ],
+      "mainEffectProxyPixels": 8887,
+      "minimumDetachedWarmCandidateBorderClearancePx": null,
+      "minimumDetachedWarmCandidateToBladeProxyDistancePx": null,
+      "recorderContext": {
+        "dissipationLiveCount": 0,
+        "sourceAttribution": "UNAVAILABLE_FROM_BEAUTY_RGB",
+        "sparkLiveCount": 0,
+        "unattributedRecorderLiveCount": 0
+      },
+      "sha256": "7ad6bcada16763dcec3c97d24cf238e202d24336596d87986942fd694cc81954",
+      "timeSeconds": 0.066667
+    },
+    {
+      "allDetectedWarmCandidatesDoNotTouchCanvasBorder": true,
+      "bladeProxyPixels": 2147,
+      "canvasPx": [
+        960,
+        540
+      ],
+      "detachedWarmCandidateComponentCount": 0,
+      "detachedWarmCandidateComponents": [],
+      "file": "frame_0005.png",
+      "foregroundPixels": 12137,
+      "index": 5,
+      "mainEffectProxyBoundsPxInclusive": [
+        422,
+        206,
+        706,
+        341
+      ],
+      "mainEffectProxyPixels": 12137,
+      "minimumDetachedWarmCandidateBorderClearancePx": null,
+      "minimumDetachedWarmCandidateToBladeProxyDistancePx": null,
+      "recorderContext": {
+        "dissipationLiveCount": 0,
+        "sourceAttribution": "UNAVAILABLE_FROM_BEAUTY_RGB",
+        "sparkLiveCount": 0,
+        "unattributedRecorderLiveCount": 0
+      },
+      "sha256": "4d397c355330afafc7a0902d80af9c93f338b1e39700598eee2d8084529291bc",
+      "timeSeconds": 0.083333
+    },
+    {
+      "allDetectedWarmCandidatesDoNotTouchCanvasBorder": true,
+      "bladeProxyPixels": 2727,
+      "canvasPx": [
+        960,
+        540
+      ],
+      "detachedWarmCandidateComponentCount": 0,
+      "detachedWarmCandidateComponents": [],
+      "file": "frame_0006.png",
+      "foregroundPixels": 15269,
+      "index": 6,
+      "mainEffectProxyBoundsPxInclusive": [
+        422,
+        206,
+        759,
+        341
+      ],
+      "mainEffectProxyPixels": 15269,
+      "minimumDetachedWarmCandidateBorderClearancePx": null,
+      "minimumDetachedWarmCandidateToBladeProxyDistancePx": null,
+      "recorderContext": {
+        "dissipationLiveCount": 0,
+        "sourceAttribution": "UNAVAILABLE_FROM_BEAUTY_RGB",
+        "sparkLiveCount": 0,
+        "unattributedRecorderLiveCount": 0
+      },
+      "sha256": "8493c0c571beb8ce141679e864a157e9f45ba1ee89d9a5a4400c3a178c0919e5",
+      "timeSeconds": 0.1
+    },
+    {
+      "allDetectedWarmCandidatesDoNotTouchCanvasBorder": true,
+      "bladeProxyPixels": 3356,
+      "canvasPx": [
+        960,
+        540
+      ],
+      "detachedWarmCandidateComponentCount": 0,
+      "detachedWarmCandidateComponents": [],
+      "file": "frame_0007.png",
+      "foregroundPixels": 19003,
+      "index": 7,
+      "mainEffectProxyBoundsPxInclusive": [
+        422,
+        193,
+        819,
+        341
+      ],
+      "mainEffectProxyPixels": 18931,
+      "minimumDetachedWarmCandidateBorderClearancePx": null,
+      "minimumDetachedWarmCandidateToBladeProxyDistancePx": null,
+      "recorderContext": {
+        "dissipationLiveCount": 0,
+        "sourceAttribution": "UNAVAILABLE_FROM_BEAUTY_RGB",
+        "sparkLiveCount": 0,
+        "unattributedRecorderLiveCount": 0
+      },
+      "sha256": "8251628401f0eecbbf58b67f0cf8492e3f9627ca57075addf0c3dc774362b1ae",
+      "timeSeconds": 0.116667
+    },
+    {
+      "allDetectedWarmCandidatesDoNotTouchCanvasBorder": true,
+      "bladeProxyPixels": 0,
+      "canvasPx": [
+        960,
+        540
+      ],
+      "detachedWarmCandidateComponentCount": 0,
+      "detachedWarmCandidateComponents": [],
+      "file": "frame_0008.png",
+      "foregroundPixels": 40372,
+      "index": 8,
+      "mainEffectProxyBoundsPxInclusive": [
+        422,
+        34,
+        925,
+        341
+      ],
+      "mainEffectProxyPixels": 40371,
+      "minimumDetachedWarmCandidateBorderClearancePx": null,
+      "minimumDetachedWarmCandidateToBladeProxyDistancePx": null,
+      "recorderContext": {
+        "dissipationLiveCount": 0,
+        "sourceAttribution": "UNAVAILABLE_FROM_BEAUTY_RGB",
+        "sparkLiveCount": 0,
+        "unattributedRecorderLiveCount": 0
+      },
+      "sha256": "30c11c695bf38cb9e31cb10f1781dac154295f6e2d5e19b4164a5743defe9377",
+      "timeSeconds": 0.133333
+    },
+    {
+      "allDetectedWarmCandidatesDoNotTouchCanvasBorder": true,
+      "bladeProxyPixels": 78,
+      "canvasPx": [
+        960,
+        540
+      ],
+      "detachedWarmCandidateComponentCount": 4,
+      "detachedWarmCandidateComponents": [
+        {
+          "areaPixels": 17,
+          "borderClearancePx": 220,
+          "boundsPxInclusive": [
+            679,
+            313,
+            683,
+            319
+          ],
+          "nearestBladeProxyPixelDistancePx": 54.561891,
+          "nearestMainEffectProxyPixelDistancePx": 23.706539,
+          "peakRgb": [
+            250,
+            209,
+            64
+          ],
+          "sourceAttribution": "UNAVAILABLE_FROM_BEAUTY_RGB",
+          "touchesCanvasBorder": false
+        },
+        {
+          "areaPixels": 14,
+          "borderClearancePx": 174,
+          "boundsPxInclusive": [
+            556,
+            174,
+            561,
+            179
+          ],
+          "nearestBladeProxyPixelDistancePx": 124.739729,
+          "nearestMainEffectProxyPixelDistancePx": 61.522354,
+          "peakRgb": [
+            255,
+            255,
+            76
+          ],
+          "sourceAttribution": "UNAVAILABLE_FROM_BEAUTY_RGB",
+          "touchesCanvasBorder": false
+        },
+        {
+          "areaPixels": 9,
+          "borderClearancePx": 154,
+          "boundsPxInclusive": [
+            511,
+            154,
+            514,
+            159
+          ],
+          "nearestBladeProxyPixelDistancePx": 174.61386,
+          "nearestMainEffectProxyPixelDistancePx": 102.528045,
+          "peakRgb": [
+            249,
+            211,
+            74
+          ],
+          "sourceAttribution": "UNAVAILABLE_FROM_BEAUTY_RGB",
+          "touchesCanvasBorder": false
+        },
+        {
+          "areaPixels": 5,
+          "borderClearancePx": 223,
+          "boundsPxInclusive": [
+            670,
+            314,
+            671,
+            316
+          ],
+          "nearestBladeProxyPixelDistancePx": 51.195703,
+          "nearestMainEffectProxyPixelDistancePx": 14.422205,
+          "peakRgb": [
+            249,
+            200,
+            29
+          ],
+          "sourceAttribution": "UNAVAILABLE_FROM_BEAUTY_RGB",
+          "touchesCanvasBorder": false
+        }
+      ],
+      "file": "frame_0009.png",
+      "foregroundPixels": 45581,
+      "index": 9,
+      "mainEffectProxyBoundsPxInclusive": [
+        422,
+        21,
+        951,
+        341
+      ],
+      "mainEffectProxyPixels": 45536,
+      "minimumDetachedWarmCandidateBorderClearancePx": 154,
+      "minimumDetachedWarmCandidateToBladeProxyDistancePx": 51.195703,
+      "recorderContext": {
+        "dissipationLiveCount": 0,
+        "sourceAttribution": "UNAVAILABLE_FROM_BEAUTY_RGB",
+        "sparkLiveCount": 8,
+        "unattributedRecorderLiveCount": 8
+      },
+      "sha256": "5bc3a250d4eed568a09d34f2c29a1249a719fddc06eec607ab925453d2cd7e02",
+      "timeSeconds": 0.15
+    },
+    {
+      "allDetectedWarmCandidatesDoNotTouchCanvasBorder": true,
+      "bladeProxyPixels": 1663,
+      "canvasPx": [
+        960,
+        540
+      ],
+      "detachedWarmCandidateComponentCount": 4,
+      "detachedWarmCandidateComponents": [
+        {
+          "areaPixels": 15,
+          "borderClearancePx": 224,
+          "boundsPxInclusive": [
+            667,
+            309,
+            671,
+            315
+          ],
+          "nearestBladeProxyPixelDistancePx": 46.173586,
+          "nearestMainEffectProxyPixelDistancePx": 11.401754,
+          "peakRgb": [
+            225,
+            179,
+            53
+          ],
+          "sourceAttribution": "UNAVAILABLE_FROM_BEAUTY_RGB",
+          "touchesCanvasBorder": false
+        },
+        {
+          "areaPixels": 14,
+          "borderClearancePx": 222,
+          "boundsPxInclusive": [
+            678,
+            312,
+            681,
+            317
+          ],
+          "nearestBladeProxyPixelDistancePx": 52.773099,
+          "nearestMainEffectProxyPixelDistancePx": 21.931712,
+          "peakRgb": [
+            225,
+            180,
+            60
+          ],
+          "sourceAttribution": "UNAVAILABLE_FROM_BEAUTY_RGB",
+          "touchesCanvasBorder": false
+        },
+        {
+          "areaPixels": 9,
+          "borderClearancePx": 153,
+          "boundsPxInclusive": [
+            514,
+            153,
+            516,
+            157
+          ],
+          "nearestBladeProxyPixelDistancePx": 172.800463,
+          "nearestMainEffectProxyPixelDistancePx": 103.092192,
+          "peakRgb": [
+            225,
+            176,
+            26
+          ],
+          "sourceAttribution": "UNAVAILABLE_FROM_BEAUTY_RGB",
+          "touchesCanvasBorder": false
+        },
+        {
+          "areaPixels": 8,
+          "borderClearancePx": 172,
+          "boundsPxInclusive": [
+            559,
+            172,
+            561,
+            175
+          ],
+          "nearestBladeProxyPixelDistancePx": 127.349912,
+          "nearestMainEffectProxyPixelDistancePx": 64.031242,
+          "peakRgb": [
+            225,
+            179,
+            56
+          ],
+          "sourceAttribution": "UNAVAILABLE_FROM_BEAUTY_RGB",
+          "touchesCanvasBorder": false
+        }
+      ],
+      "file": "frame_0010.png",
+      "foregroundPixels": 51562,
+      "index": 10,
+      "mainEffectProxyBoundsPxInclusive": [
+        422,
+        20,
+        956,
+        341
+      ],
+      "mainEffectProxyPixels": 51516,
+      "minimumDetachedWarmCandidateBorderClearancePx": 153,
+      "minimumDetachedWarmCandidateToBladeProxyDistancePx": 46.173586,
+      "recorderContext": {
+        "dissipationLiveCount": 0,
+        "sourceAttribution": "UNAVAILABLE_FROM_BEAUTY_RGB",
+        "sparkLiveCount": 8,
+        "unattributedRecorderLiveCount": 8
+      },
+      "sha256": "f58471010270923d5e37f2bb0f0abeeaee99b099a6c4617ff71b851c6ee33e6d",
+      "timeSeconds": 0.166667
+    },
+    {
+      "allDetectedWarmCandidatesDoNotTouchCanvasBorder": true,
+      "bladeProxyPixels": 2322,
+      "canvasPx": [
+        960,
+        540
+      ],
+      "detachedWarmCandidateComponentCount": 5,
+      "detachedWarmCandidateComponents": [
+        {
+          "areaPixels": 18,
+          "borderClearancePx": 167,
+          "boundsPxInclusive": [
+            558,
+            167,
+            563,
+            173
+          ],
+          "nearestBladeProxyPixelDistancePx": 127.404866,
+          "nearestMainEffectProxyPixelDistancePx": 66.603303,
+          "peakRgb": [
+            255,
+            219,
+            56
+          ],
+          "sourceAttribution": "UNAVAILABLE_FROM_BEAUTY_RGB",
+          "touchesCanvasBorder": false
+        },
+        {
+          "areaPixels": 12,
+          "borderClearancePx": 210,
+          "boundsPxInclusive": [
+            610,
+            210,
+            614,
+            213
+          ],
+          "nearestBladeProxyPixelDistancePx": 61.522354,
+          "nearestMainEffectProxyPixelDistancePx": 3.605551,
+          "peakRgb": [
+            203,
+            154,
+            47
+          ],
+          "sourceAttribution": "UNAVAILABLE_FROM_BEAUTY_RGB",
+          "touchesCanvasBorder": false
+        },
+        {
+          "areaPixels": 12,
+          "borderClearancePx": 224,
+          "boundsPxInclusive": [
+            677,
+            311,
+            680,
+            315
+          ],
+          "nearestBladeProxyPixelDistancePx": 51.884487,
+          "nearestMainEffectProxyPixelDistancePx": 20.248457,
+          "peakRgb": [
+            203,
+            155,
+            49
+          ],
+          "sourceAttribution": "UNAVAILABLE_FROM_BEAUTY_RGB",
+          "touchesCanvasBorder": false
+        },
+        {
+          "areaPixels": 9,
+          "borderClearancePx": 228,
+          "boundsPxInclusive": [
+            666,
+            306,
+            669,
+            311
+          ],
+          "nearestBladeProxyPixelDistancePx": 43.65776,
+          "nearestMainEffectProxyPixelDistancePx": 8.944272,
+          "peakRgb": [
+            203,
+            152,
+            42
+          ],
+          "sourceAttribution": "UNAVAILABLE_FROM_BEAUTY_RGB",
+          "touchesCanvasBorder": false
+        },
+        {
+          "areaPixels": 5,
+          "borderClearancePx": 153,
+          "boundsPxInclusive": [
+            517,
+            153,
+            519,
+            155
+          ],
+          "nearestBladeProxyPixelDistancePx": 171.011696,
+          "nearestMainEffectProxyPixelDistancePx": 104.120123,
+          "peakRgb": [
+            203,
+            137,
+            24
+          ],
+          "sourceAttribution": "UNAVAILABLE_FROM_BEAUTY_RGB",
+          "touchesCanvasBorder": false
+        }
+      ],
+      "file": "frame_0011.png",
+      "foregroundPixels": 55597,
+      "index": 11,
+      "mainEffectProxyBoundsPxInclusive": [
+        422,
+        0,
+        956,
+        341
+      ],
+      "mainEffectProxyPixels": 55540,
+      "minimumDetachedWarmCandidateBorderClearancePx": 153,
+      "minimumDetachedWarmCandidateToBladeProxyDistancePx": 43.65776,
+      "recorderContext": {
+        "dissipationLiveCount": 0,
+        "sourceAttribution": "UNAVAILABLE_FROM_BEAUTY_RGB",
+        "sparkLiveCount": 8,
+        "unattributedRecorderLiveCount": 8
+      },
+      "sha256": "81ebbf0f3ae468d56e0b0b8e733ec134ed1d917f4c357319bcf097f44cb154c7",
+      "timeSeconds": 0.183333
+    },
+    {
+      "allDetectedWarmCandidatesDoNotTouchCanvasBorder": true,
+      "bladeProxyPixels": 0,
+      "canvasPx": [
+        960,
+        540
+      ],
+      "detachedWarmCandidateComponentCount": 5,
+      "detachedWarmCandidateComponents": [
+        {
+          "areaPixels": 12,
+          "borderClearancePx": 165,
+          "boundsPxInclusive": [
+            558,
+            165,
+            562,
+            169
+          ],
+          "nearestBladeProxyPixelDistancePx": null,
+          "nearestMainEffectProxyPixelDistancePx": 68.88396,
+          "peakRgb": [
+            179,
+            130,
+            43
+          ],
+          "sourceAttribution": "UNAVAILABLE_FROM_BEAUTY_RGB",
+          "touchesCanvasBorder": false
+        },
+        {
+          "areaPixels": 10,
+          "borderClearancePx": 208,
+          "boundsPxInclusive": [
+            610,
+            208,
+            612,
+            212
+          ],
+          "nearestBladeProxyPixelDistancePx": null,
+          "nearestMainEffectProxyPixelDistancePx": 11.661904,
+          "peakRgb": [
+            179,
+            128,
+            48
+          ],
+          "sourceAttribution": "UNAVAILABLE_FROM_BEAUTY_RGB",
+          "touchesCanvasBorder": false
+        },
+        {
+          "areaPixels": 9,
+          "borderClearancePx": 231,
+          "boundsPxInclusive": [
+            664,
+            303,
+            667,
+            308
+          ],
+          "nearestBladeProxyPixelDistancePx": null,
+          "nearestMainEffectProxyPixelDistancePx": 12.369317,
+          "peakRgb": [
+            179,
+            128,
+            42
+          ],
+          "sourceAttribution": "UNAVAILABLE_FROM_BEAUTY_RGB",
+          "touchesCanvasBorder": false
+        },
+        {
+          "areaPixels": 5,
+          "borderClearancePx": 227,
+          "boundsPxInclusive": [
+            676,
+            310,
+            678,
+            312
+          ],
+          "nearestBladeProxyPixelDistancePx": null,
+          "nearestMainEffectProxyPixelDistancePx": 21.0,
+          "peakRgb": [
+            179,
+            126,
+            27
+          ],
+          "sourceAttribution": "UNAVAILABLE_FROM_BEAUTY_RGB",
+          "touchesCanvasBorder": false
+        },
+        {
+          "areaPixels": 4,
+          "borderClearancePx": 152,
+          "boundsPxInclusive": [
+            520,
+            152,
+            521,
+            153
+          ],
+          "nearestBladeProxyPixelDistancePx": null,
+          "nearestMainEffectProxyPixelDistancePx": 107.712581,
+          "peakRgb": [
+            179,
+            128,
+            31
+          ],
+          "sourceAttribution": "UNAVAILABLE_FROM_BEAUTY_RGB",
+          "touchesCanvasBorder": false
+        }
+      ],
+      "file": "frame_0012.png",
+      "foregroundPixels": 37402,
+      "index": 12,
+      "mainEffectProxyBoundsPxInclusive": [
+        429,
+        21,
+        891,
+        339
+      ],
+      "mainEffectProxyPixels": 37359,
+      "minimumDetachedWarmCandidateBorderClearancePx": 152,
+      "minimumDetachedWarmCandidateToBladeProxyDistancePx": null,
+      "recorderContext": {
+        "dissipationLiveCount": 2,
+        "sourceAttribution": "UNAVAILABLE_FROM_BEAUTY_RGB",
+        "sparkLiveCount": 8,
+        "unattributedRecorderLiveCount": 10
+      },
+      "sha256": "0be91195a0869051671b698ee90ca91772cddeaec5d5c8681c41787b4d61bb45",
+      "timeSeconds": 0.2
+    },
+    {
+      "allDetectedWarmCandidatesDoNotTouchCanvasBorder": true,
+      "bladeProxyPixels": 0,
+      "canvasPx": [
+        960,
+        540
+      ],
+      "detachedWarmCandidateComponentCount": 6,
+      "detachedWarmCandidateComponents": [
+        {
+          "areaPixels": 8,
+          "borderClearancePx": 207,
+          "boundsPxInclusive": [
+            608,
+            207,
+            611,
+            209
+          ],
+          "nearestBladeProxyPixelDistancePx": null,
+          "nearestMainEffectProxyPixelDistancePx": 13.601471,
+          "peakRgb": [
+            155,
+            106,
+            42
+          ],
+          "sourceAttribution": "UNAVAILABLE_FROM_BEAUTY_RGB",
+          "touchesCanvasBorder": false
+        },
+        {
+          "areaPixels": 6,
+          "borderClearancePx": 235,
+          "boundsPxInclusive": [
+            663,
+            301,
+            664,
+            304
+          ],
+          "nearestBladeProxyPixelDistancePx": null,
+          "nearestMainEffectProxyPixelDistancePx": 9.848858,
+          "peakRgb": [
+            155,
+            107,
+            43
+          ],
+          "sourceAttribution": "UNAVAILABLE_FROM_BEAUTY_RGB",
+          "touchesCanvasBorder": false
+        },
+        {
+          "areaPixels": 5,
+          "borderClearancePx": 150,
+          "boundsPxInclusive": [
+            522,
+            150,
+            524,
+            152
+          ],
+          "nearestBladeProxyPixelDistancePx": null,
+          "nearestMainEffectProxyPixelDistancePx": 106.831643,
+          "peakRgb": [
+            155,
+            105,
+            41
+          ],
+          "sourceAttribution": "UNAVAILABLE_FROM_BEAUTY_RGB",
+          "touchesCanvasBorder": false
+        },
+        {
+          "areaPixels": 5,
+          "borderClearancePx": 162,
+          "boundsPxInclusive": [
+            559,
+            162,
+            560,
+            165
+          ],
+          "nearestBladeProxyPixelDistancePx": null,
+          "nearestMainEffectProxyPixelDistancePx": 72.622311,
+          "peakRgb": [
+            155,
+            105,
+            36
+          ],
+          "sourceAttribution": "UNAVAILABLE_FROM_BEAUTY_RGB",
+          "touchesCanvasBorder": false
+        },
+        {
+          "areaPixels": 4,
+          "borderClearancePx": 229,
+          "boundsPxInclusive": [
+            675,
+            309,
+            677,
+            310
+          ],
+          "nearestBladeProxyPixelDistancePx": null,
+          "nearestMainEffectProxyPixelDistancePx": 20.024984,
+          "peakRgb": [
+            155,
+            107,
+            36
+          ],
+          "sourceAttribution": "UNAVAILABLE_FROM_BEAUTY_RGB",
+          "touchesCanvasBorder": false
+        },
+        {
+          "areaPixels": 3,
+          "borderClearancePx": 162,
+          "boundsPxInclusive": [
+            562,
+            162,
+            562,
+            164
+          ],
+          "nearestBladeProxyPixelDistancePx": null,
+          "nearestMainEffectProxyPixelDistancePx": 71.610055,
+          "peakRgb": [
+            155,
+            106,
+            29
+          ],
+          "sourceAttribution": "UNAVAILABLE_FROM_BEAUTY_RGB",
+          "touchesCanvasBorder": false
+        }
+      ],
+      "file": "frame_0013.png",
+      "foregroundPixels": 37420,
+      "index": 13,
+      "mainEffectProxyBoundsPxInclusive": [
+        429,
+        21,
+        891,
+        339
+      ],
+      "mainEffectProxyPixels": 37388,
+      "minimumDetachedWarmCandidateBorderClearancePx": 150,
+      "minimumDetachedWarmCandidateToBladeProxyDistancePx": null,
+      "recorderContext": {
+        "dissipationLiveCount": 2,
+        "sourceAttribution": "UNAVAILABLE_FROM_BEAUTY_RGB",
+        "sparkLiveCount": 8,
+        "unattributedRecorderLiveCount": 10
+      },
+      "sha256": "949369e63422ae057a834a22fcbaeb0f4df4c2a9a629a972e65affee29e84cc9",
+      "timeSeconds": 0.216667
+    },
+    {
+      "allDetectedWarmCandidatesDoNotTouchCanvasBorder": true,
+      "bladeProxyPixels": 0,
+      "canvasPx": [
+        960,
+        540
+      ],
+      "detachedWarmCandidateComponentCount": 6,
+      "detachedWarmCandidateComponents": [
+        {
+          "areaPixels": 3,
+          "borderClearancePx": 160,
+          "boundsPxInclusive": [
+            559,
+            160,
+            560,
+            161
+          ],
+          "nearestBladeProxyPixelDistancePx": null,
+          "nearestMainEffectProxyPixelDistancePx": 45.398238,
+          "peakRgb": [
+            133,
+            87,
+            35
+          ],
+          "sourceAttribution": "UNAVAILABLE_FROM_BEAUTY_RGB",
+          "touchesCanvasBorder": false
+        },
+        {
+          "areaPixels": 3,
+          "borderClearancePx": 239,
+          "boundsPxInclusive": [
+            661,
+            299,
+            662,
+            300
+          ],
+          "nearestBladeProxyPixelDistancePx": null,
+          "nearestMainEffectProxyPixelDistancePx": 7.615773,
+          "peakRgb": [
+            132,
+            59,
+            24
+          ],
+          "sourceAttribution": "UNAVAILABLE_FROM_BEAUTY_RGB",
+          "touchesCanvasBorder": false
+        },
+        {
+          "areaPixels": 3,
+          "borderClearancePx": 230,
+          "boundsPxInclusive": [
+            674,
+            308,
+            675,
+            309
+          ],
+          "nearestBladeProxyPixelDistancePx": null,
+          "nearestMainEffectProxyPixelDistancePx": 18.681542,
+          "peakRgb": [
+            133,
+            87,
+            28
+          ],
+          "sourceAttribution": "UNAVAILABLE_FROM_BEAUTY_RGB",
+          "touchesCanvasBorder": false
+        },
+        {
+          "areaPixels": 2,
+          "borderClearancePx": 149,
+          "boundsPxInclusive": [
+            526,
+            149,
+            526,
+            150
+          ],
+          "nearestBladeProxyPixelDistancePx": null,
+          "nearestMainEffectProxyPixelDistancePx": 55.0,
+          "peakRgb": [
+            133,
+            71,
+            24
+          ],
+          "sourceAttribution": "UNAVAILABLE_FROM_BEAUTY_RGB",
+          "touchesCanvasBorder": false
+        },
+        {
+          "areaPixels": 2,
+          "borderClearancePx": 160,
+          "boundsPxInclusive": [
+            562,
+            160,
+            563,
+            160
+          ],
+          "nearestBladeProxyPixelDistancePx": null,
+          "nearestMainEffectProxyPixelDistancePx": 46.872167,
+          "peakRgb": [
+            133,
+            86,
+            28
+          ],
+          "sourceAttribution": "UNAVAILABLE_FROM_BEAUTY_RGB",
+          "touchesCanvasBorder": false
+        },
+        {
+          "areaPixels": 1,
+          "borderClearancePx": 206,
+          "boundsPxInclusive": [
+            609,
+            206,
+            609,
+            206
+          ],
+          "nearestBladeProxyPixelDistancePx": null,
+          "nearestMainEffectProxyPixelDistancePx": 12.369317,
+          "peakRgb": [
+            124,
+            28,
+            24
+          ],
+          "sourceAttribution": "UNAVAILABLE_FROM_BEAUTY_RGB",
+          "touchesCanvasBorder": false
+        }
+      ],
+      "file": "frame_0014.png",
+      "foregroundPixels": 38963,
+      "index": 14,
+      "mainEffectProxyBoundsPxInclusive": [
+        429,
+        21,
+        891,
+        339
+      ],
+      "mainEffectProxyPixels": 38945,
+      "minimumDetachedWarmCandidateBorderClearancePx": 149,
+      "minimumDetachedWarmCandidateToBladeProxyDistancePx": null,
+      "recorderContext": {
+        "dissipationLiveCount": 2,
+        "sourceAttribution": "UNAVAILABLE_FROM_BEAUTY_RGB",
+        "sparkLiveCount": 8,
+        "unattributedRecorderLiveCount": 10
+      },
+      "sha256": "62b1f392c7fd0c52b86015161bcac8236853de91a3853421976db15a50659fea",
+      "timeSeconds": 0.233333
+    },
+    {
+      "allDetectedWarmCandidatesDoNotTouchCanvasBorder": true,
+      "bladeProxyPixels": 1,
+      "canvasPx": [
+        960,
+        540
+      ],
+      "detachedWarmCandidateComponentCount": 5,
+      "detachedWarmCandidateComponents": [
+        {
+          "areaPixels": 2,
+          "borderClearancePx": 156,
+          "boundsPxInclusive": [
+            563,
+            156,
+            563,
+            157
+          ],
+          "nearestBladeProxyPixelDistancePx": 136.780847,
+          "nearestMainEffectProxyPixelDistancePx": 50.0,
+          "peakRgb": [
+            109,
+            66,
+            29
+          ],
+          "sourceAttribution": "UNAVAILABLE_FROM_BEAUTY_RGB",
+          "touchesCanvasBorder": false
+        },
+        {
+          "areaPixels": 2,
+          "borderClearancePx": 157,
+          "boundsPxInclusive": [
+            559,
+            157,
+            559,
+            158
+          ],
+          "nearestBladeProxyPixelDistancePx": 138.708327,
+          "nearestMainEffectProxyPixelDistancePx": 48.373546,
+          "peakRgb": [
+            109,
+            46,
+            24
+          ],
+          "sourceAttribution": "UNAVAILABLE_FROM_BEAUTY_RGB",
+          "touchesCanvasBorder": false
+        },
+        {
+          "areaPixels": 2,
+          "borderClearancePx": 242,
+          "boundsPxInclusive": [
+            660,
+            296,
+            660,
+            297
+          ],
+          "nearestBladeProxyPixelDistancePx": 36.674242,
+          "nearestMainEffectProxyPixelDistancePx": 4.123106,
+          "peakRgb": [
+            109,
+            68,
+            29
+          ],
+          "sourceAttribution": "UNAVAILABLE_FROM_BEAUTY_RGB",
+          "touchesCanvasBorder": false
+        },
+        {
+          "areaPixels": 2,
+          "borderClearancePx": 232,
+          "boundsPxInclusive": [
+            673,
+            306,
+            673,
+            307
+          ],
+          "nearestBladeProxyPixelDistancePx": 50.159745,
+          "nearestMainEffectProxyPixelDistancePx": 16.492423,
+          "peakRgb": [
+            108,
+            50,
+            24
+          ],
+          "sourceAttribution": "UNAVAILABLE_FROM_BEAUTY_RGB",
+          "touchesCanvasBorder": false
+        },
+        {
+          "areaPixels": 1,
+          "borderClearancePx": 148,
+          "boundsPxInclusive": [
+            528,
+            148,
+            528,
+            148
+          ],
+          "nearestBladeProxyPixelDistancePx": 167.83623,
+          "nearestMainEffectProxyPixelDistancePx": 57.0,
+          "peakRgb": [
+            109,
+            69,
+            33
+          ],
+          "sourceAttribution": "UNAVAILABLE_FROM_BEAUTY_RGB",
+          "touchesCanvasBorder": false
+        }
+      ],
+      "file": "frame_0015.png",
+      "foregroundPixels": 38957,
+      "index": 15,
+      "mainEffectProxyBoundsPxInclusive": [
+        429,
+        21,
+        891,
+        339
+      ],
+      "mainEffectProxyPixels": 38946,
+      "minimumDetachedWarmCandidateBorderClearancePx": 148,
+      "minimumDetachedWarmCandidateToBladeProxyDistancePx": 36.674242,
+      "recorderContext": {
+        "dissipationLiveCount": 2,
+        "sourceAttribution": "UNAVAILABLE_FROM_BEAUTY_RGB",
+        "sparkLiveCount": 9,
+        "unattributedRecorderLiveCount": 11
+      },
+      "sha256": "e59975edd8490b5db2d247bbd4b61b775fcc5c85a34128cd9442ce47bee0fd69",
+      "timeSeconds": 0.25
+    },
+    {
+      "allDetectedWarmCandidatesDoNotTouchCanvasBorder": true,
+      "bladeProxyPixels": 0,
+      "canvasPx": [
+        960,
+        540
+      ],
+      "detachedWarmCandidateComponentCount": 3,
+      "detachedWarmCandidateComponents": [
+        {
+          "areaPixels": 2,
+          "borderClearancePx": 203,
+          "boundsPxInclusive": [
+            606,
+            203,
+            607,
+            203
+          ],
+          "nearestBladeProxyPixelDistancePx": null,
+          "nearestMainEffectProxyPixelDistancePx": 13.928388,
+          "peakRgb": [
+            86,
+            35,
+            24
+          ],
+          "sourceAttribution": "UNAVAILABLE_FROM_BEAUTY_RGB",
+          "touchesCanvasBorder": false
+        },
+        {
+          "areaPixels": 1,
+          "borderClearancePx": 154,
+          "boundsPxInclusive": [
+            559,
+            154,
+            559,
+            154
+          ],
+          "nearestBladeProxyPixelDistancePx": null,
+          "nearestMainEffectProxyPixelDistancePx": 52.345009,
+          "peakRgb": [
+            84,
+            51,
+            24
+          ],
+          "sourceAttribution": "UNAVAILABLE_FROM_BEAUTY_RGB",
+          "touchesCanvasBorder": false
+        },
+        {
+          "areaPixels": 1,
+          "borderClearancePx": 234,
+          "boundsPxInclusive": [
+            672,
+            305,
+            672,
+            305
+          ],
+          "nearestBladeProxyPixelDistancePx": null,
+          "nearestMainEffectProxyPixelDistancePx": 15.297059,
+          "peakRgb": [
+            86,
+            53,
+            26
+          ],
+          "sourceAttribution": "UNAVAILABLE_FROM_BEAUTY_RGB",
+          "touchesCanvasBorder": false
+        }
+      ],
+      "file": "frame_0016.png",
+      "foregroundPixels": 38992,
+      "index": 16,
+      "mainEffectProxyBoundsPxInclusive": [
+        429,
+        21,
+        891,
+        339
+      ],
+      "mainEffectProxyPixels": 38985,
+      "minimumDetachedWarmCandidateBorderClearancePx": 154,
+      "minimumDetachedWarmCandidateToBladeProxyDistancePx": null,
+      "recorderContext": {
+        "dissipationLiveCount": 3,
+        "sourceAttribution": "UNAVAILABLE_FROM_BEAUTY_RGB",
+        "sparkLiveCount": 9,
+        "unattributedRecorderLiveCount": 12
+      },
+      "sha256": "29455d93c65b572e201fbb834fb9223ec45af28ba617999efdb5bf5440a26b20",
+      "timeSeconds": 0.266667
+    },
+    {
+      "allDetectedWarmCandidatesDoNotTouchCanvasBorder": true,
+      "bladeProxyPixels": 0,
+      "canvasPx": [
+        960,
+        540
+      ],
+      "detachedWarmCandidateComponentCount": 0,
+      "detachedWarmCandidateComponents": [],
+      "file": "frame_0017.png",
+      "foregroundPixels": 39017,
+      "index": 17,
+      "mainEffectProxyBoundsPxInclusive": [
+        429,
+        21,
+        891,
+        339
+      ],
+      "mainEffectProxyPixels": 39011,
+      "minimumDetachedWarmCandidateBorderClearancePx": null,
+      "minimumDetachedWarmCandidateToBladeProxyDistancePx": null,
+      "recorderContext": {
+        "dissipationLiveCount": 3,
+        "sourceAttribution": "UNAVAILABLE_FROM_BEAUTY_RGB",
+        "sparkLiveCount": 9,
+        "unattributedRecorderLiveCount": 12
+      },
+      "sha256": "7ea6aff523866f6598ef2613556c4b9a87ce9af783f76983ebdcb65cae9da620",
+      "timeSeconds": 0.283333
+    },
+    {
+      "allDetectedWarmCandidatesDoNotTouchCanvasBorder": true,
+      "bladeProxyPixels": 0,
+      "canvasPx": [
+        960,
+        540
+      ],
+      "detachedWarmCandidateComponentCount": 1,
+      "detachedWarmCandidateComponents": [
+        {
+          "areaPixels": 9,
+          "borderClearancePx": 256,
+          "boundsPxInclusive": [
+            649,
+            256,
+            651,
+            259
+          ],
+          "nearestBladeProxyPixelDistancePx": null,
+          "nearestMainEffectProxyPixelDistancePx": 9.848858,
+          "peakRgb": [
+            179,
+            128,
+            49
+          ],
+          "sourceAttribution": "UNAVAILABLE_FROM_BEAUTY_RGB",
+          "touchesCanvasBorder": false
+        }
+      ],
+      "file": "frame_0018.png",
+      "foregroundPixels": 6217,
+      "index": 18,
+      "mainEffectProxyBoundsPxInclusive": [
+        463,
+        205,
+        647,
+        331
+      ],
+      "mainEffectProxyPixels": 6148,
+      "minimumDetachedWarmCandidateBorderClearancePx": 256,
+      "minimumDetachedWarmCandidateToBladeProxyDistancePx": null,
+      "recorderContext": {
+        "dissipationLiveCount": 3,
+        "sourceAttribution": "UNAVAILABLE_FROM_BEAUTY_RGB",
+        "sparkLiveCount": 9,
+        "unattributedRecorderLiveCount": 12
+      },
+      "sha256": "9b1c455fac6fc1e842220b325bc7cc9f6792269acb2d6adfb535d4444eff68d5",
+      "timeSeconds": 0.3
+    },
+    {
+      "allDetectedWarmCandidatesDoNotTouchCanvasBorder": true,
+      "bladeProxyPixels": 0,
+      "canvasPx": [
+        960,
+        540
+      ],
+      "detachedWarmCandidateComponentCount": 1,
+      "detachedWarmCandidateComponents": [
+        {
+          "areaPixels": 7,
+          "borderClearancePx": 255,
+          "boundsPxInclusive": [
+            648,
+            255,
+            650,
+            258
+          ],
+          "nearestBladeProxyPixelDistancePx": null,
+          "nearestMainEffectProxyPixelDistancePx": 8.544004,
+          "peakRgb": [
+            155,
+            105,
+            43
+          ],
+          "sourceAttribution": "UNAVAILABLE_FROM_BEAUTY_RGB",
+          "touchesCanvasBorder": false
+        }
+      ],
+      "file": "frame_0019.png",
+      "foregroundPixels": 6202,
+      "index": 19,
+      "mainEffectProxyBoundsPxInclusive": [
+        463,
+        205,
+        647,
+        331
+      ],
+      "mainEffectProxyPixels": 6137,
+      "minimumDetachedWarmCandidateBorderClearancePx": 255,
+      "minimumDetachedWarmCandidateToBladeProxyDistancePx": null,
+      "recorderContext": {
+        "dissipationLiveCount": 3,
+        "sourceAttribution": "UNAVAILABLE_FROM_BEAUTY_RGB",
+        "sparkLiveCount": 1,
+        "unattributedRecorderLiveCount": 4
+      },
+      "sha256": "d3499e90b22af3f320e593d4ffeb431dcb342d4bea8b73325b3dfbbee234d623",
+      "timeSeconds": 0.316667
+    },
+    {
+      "allDetectedWarmCandidatesDoNotTouchCanvasBorder": true,
+      "bladeProxyPixels": 0,
+      "canvasPx": [
+        960,
+        540
+      ],
+      "detachedWarmCandidateComponentCount": 1,
+      "detachedWarmCandidateComponents": [
+        {
+          "areaPixels": 3,
+          "borderClearancePx": 255,
+          "boundsPxInclusive": [
+            648,
+            255,
+            649,
+            256
+          ],
+          "nearestBladeProxyPixelDistancePx": null,
+          "nearestMainEffectProxyPixelDistancePx": 7.615773,
+          "peakRgb": [
+            133,
+            87,
+            25
+          ],
+          "sourceAttribution": "UNAVAILABLE_FROM_BEAUTY_RGB",
+          "touchesCanvasBorder": false
+        }
+      ],
+      "file": "frame_0020.png",
+      "foregroundPixels": 6196,
+      "index": 20,
+      "mainEffectProxyBoundsPxInclusive": [
+        463,
+        205,
+        647,
+        331
+      ],
+      "mainEffectProxyPixels": 6135,
+      "minimumDetachedWarmCandidateBorderClearancePx": 255,
+      "minimumDetachedWarmCandidateToBladeProxyDistancePx": null,
+      "recorderContext": {
+        "dissipationLiveCount": 3,
+        "sourceAttribution": "UNAVAILABLE_FROM_BEAUTY_RGB",
+        "sparkLiveCount": 1,
+        "unattributedRecorderLiveCount": 4
+      },
+      "sha256": "0a4572af3e25cd3206f8925096b0d9841ac31903216ddb032dbeb8fd17c89dfb",
+      "timeSeconds": 0.333333
+    },
+    {
+      "allDetectedWarmCandidatesDoNotTouchCanvasBorder": true,
+      "bladeProxyPixels": 0,
+      "canvasPx": [
+        960,
+        540
+      ],
+      "detachedWarmCandidateComponentCount": 2,
+      "detachedWarmCandidateComponents": [
+        {
+          "areaPixels": 11,
+          "borderClearancePx": 224,
+          "boundsPxInclusive": [
+            680,
+            311,
+            683,
+            315
+          ],
+          "nearestBladeProxyPixelDistancePx": null,
+          "nearestMainEffectProxyPixelDistancePx": 57.280014,
+          "peakRgb": [
+            249,
+            208,
+            47
+          ],
+          "sourceAttribution": "UNAVAILABLE_FROM_BEAUTY_RGB",
+          "touchesCanvasBorder": false
+        },
+        {
+          "areaPixels": 1,
+          "borderClearancePx": 255,
+          "boundsPxInclusive": [
+            647,
+            255,
+            647,
+            255
+          ],
+          "nearestBladeProxyPixelDistancePx": null,
+          "nearestMainEffectProxyPixelDistancePx": 6.708204,
+          "peakRgb": [
+            109,
+            68,
+            25
+          ],
+          "sourceAttribution": "UNAVAILABLE_FROM_BEAUTY_RGB",
+          "touchesCanvasBorder": false
+        }
+      ],
+      "file": "frame_0021.png",
+      "foregroundPixels": 6207,
+      "index": 21,
+      "mainEffectProxyBoundsPxInclusive": [
+        463,
+        205,
+        647,
+        331
+      ],
+      "mainEffectProxyPixels": 6137,
+      "minimumDetachedWarmCandidateBorderClearancePx": 224,
+      "minimumDetachedWarmCandidateToBladeProxyDistancePx": null,
+      "recorderContext": {
+        "dissipationLiveCount": 4,
+        "sourceAttribution": "UNAVAILABLE_FROM_BEAUTY_RGB",
+        "sparkLiveCount": 2,
+        "unattributedRecorderLiveCount": 6
+      },
+      "sha256": "f7fe9ba52fe357fce21567c0418823b93cb8d5e4423d9f345e428a111b9d849b",
+      "timeSeconds": 0.35
+    },
+    {
+      "allDetectedWarmCandidatesDoNotTouchCanvasBorder": true,
+      "bladeProxyPixels": 0,
+      "canvasPx": [
+        960,
+        540
+      ],
+      "detachedWarmCandidateComponentCount": 0,
+      "detachedWarmCandidateComponents": [],
+      "file": "frame_0022.png",
+      "foregroundPixels": 6194,
+      "index": 22,
+      "mainEffectProxyBoundsPxInclusive": [
+        463,
+        205,
+        647,
+        331
+      ],
+      "mainEffectProxyPixels": 6137,
+      "minimumDetachedWarmCandidateBorderClearancePx": null,
+      "minimumDetachedWarmCandidateToBladeProxyDistancePx": null,
+      "recorderContext": {
+        "dissipationLiveCount": 4,
+        "sourceAttribution": "UNAVAILABLE_FROM_BEAUTY_RGB",
+        "sparkLiveCount": 0,
+        "unattributedRecorderLiveCount": 4
+      },
+      "sha256": "a8c490befdfb63a4bce6f110b368a1387ad8787259e82cb4d5f996ec26799b2d",
+      "timeSeconds": 0.366667
+    },
+    {
+      "allDetectedWarmCandidatesDoNotTouchCanvasBorder": true,
+      "bladeProxyPixels": 0,
+      "canvasPx": [
+        960,
+        540
+      ],
+      "detachedWarmCandidateComponentCount": 0,
+      "detachedWarmCandidateComponents": [],
+      "file": "frame_0023.png",
+      "foregroundPixels": 6199,
+      "index": 23,
+      "mainEffectProxyBoundsPxInclusive": [
+        463,
+        205,
+        647,
+        331
+      ],
+      "mainEffectProxyPixels": 6142,
+      "minimumDetachedWarmCandidateBorderClearancePx": null,
+      "minimumDetachedWarmCandidateToBladeProxyDistancePx": null,
+      "recorderContext": {
+        "dissipationLiveCount": 4,
+        "sourceAttribution": "UNAVAILABLE_FROM_BEAUTY_RGB",
+        "sparkLiveCount": 0,
+        "unattributedRecorderLiveCount": 4
+      },
+      "sha256": "996b9600689261e7725ff80633905d9645e310e8f169f35f86ccfc426eaffbf8",
+      "timeSeconds": 0.383333
+    },
+    {
+      "allDetectedWarmCandidatesDoNotTouchCanvasBorder": true,
+      "bladeProxyPixels": 0,
+      "canvasPx": [
+        960,
+        540
+      ],
+      "detachedWarmCandidateComponentCount": 0,
+      "detachedWarmCandidateComponents": [],
+      "file": "frame_0024.png",
+      "foregroundPixels": 6203,
+      "index": 24,
+      "mainEffectProxyBoundsPxInclusive": [
+        463,
+        205,
+        647,
+        331
+      ],
+      "mainEffectProxyPixels": 6144,
+      "minimumDetachedWarmCandidateBorderClearancePx": null,
+      "minimumDetachedWarmCandidateToBladeProxyDistancePx": null,
+      "recorderContext": {
+        "dissipationLiveCount": 4,
+        "sourceAttribution": "UNAVAILABLE_FROM_BEAUTY_RGB",
+        "sparkLiveCount": 0,
+        "unattributedRecorderLiveCount": 4
+      },
+      "sha256": "f8180492136d0a501c62be6dd08a400b1aba60c194814cd4122c974ec5ba20ab",
+      "timeSeconds": 0.4
+    },
+    {
+      "allDetectedWarmCandidatesDoNotTouchCanvasBorder": true,
+      "bladeProxyPixels": 0,
+      "canvasPx": [
+        960,
+        540
+      ],
+      "detachedWarmCandidateComponentCount": 0,
+      "detachedWarmCandidateComponents": [],
+      "file": "frame_0025.png",
+      "foregroundPixels": 6204,
+      "index": 25,
+      "mainEffectProxyBoundsPxInclusive": [
+        463,
+        205,
+        647,
+        331
+      ],
+      "mainEffectProxyPixels": 6146,
+      "minimumDetachedWarmCandidateBorderClearancePx": null,
+      "minimumDetachedWarmCandidateToBladeProxyDistancePx": null,
+      "recorderContext": {
+        "dissipationLiveCount": 2,
+        "sourceAttribution": "UNAVAILABLE_FROM_BEAUTY_RGB",
+        "sparkLiveCount": 0,
+        "unattributedRecorderLiveCount": 2
+      },
+      "sha256": "81bdc14266f2eadb7d1b569361826b7e0dd412f952672fdb8f5e07de54dbf445",
+      "timeSeconds": 0.416667
+    },
+    {
+      "allDetectedWarmCandidatesDoNotTouchCanvasBorder": true,
+      "bladeProxyPixels": 0,
+      "canvasPx": [
+        960,
+        540
+      ],
+      "detachedWarmCandidateComponentCount": 0,
+      "detachedWarmCandidateComponents": [],
+      "file": "frame_0026.png",
+      "foregroundPixels": 6207,
+      "index": 26,
+      "mainEffectProxyBoundsPxInclusive": [
+        463,
+        205,
+        647,
+        331
+      ],
+      "mainEffectProxyPixels": 6149,
+      "minimumDetachedWarmCandidateBorderClearancePx": null,
+      "minimumDetachedWarmCandidateToBladeProxyDistancePx": null,
+      "recorderContext": {
+        "dissipationLiveCount": 2,
+        "sourceAttribution": "UNAVAILABLE_FROM_BEAUTY_RGB",
+        "sparkLiveCount": 0,
+        "unattributedRecorderLiveCount": 2
+      },
+      "sha256": "74b65d38b25d9c957862d6924e194e833d4cec276811d1261604c0f125df2a1f",
+      "timeSeconds": 0.433334
+    },
+    {
+      "allDetectedWarmCandidatesDoNotTouchCanvasBorder": true,
+      "bladeProxyPixels": 0,
+      "canvasPx": [
+        960,
+        540
+      ],
+      "detachedWarmCandidateComponentCount": 0,
+      "detachedWarmCandidateComponents": [],
+      "file": "frame_0027.png",
+      "foregroundPixels": 0,
+      "index": 27,
+      "mainEffectProxyBoundsPxInclusive": null,
+      "mainEffectProxyPixels": 0,
+      "minimumDetachedWarmCandidateBorderClearancePx": null,
+      "minimumDetachedWarmCandidateToBladeProxyDistancePx": null,
+      "recorderContext": {
+        "dissipationLiveCount": 0,
+        "sourceAttribution": "UNAVAILABLE_FROM_BEAUTY_RGB",
+        "sparkLiveCount": 0,
+        "unattributedRecorderLiveCount": 0
+      },
+      "sha256": "2c532a5c4bdb5eb97c7851a432bb543a82395b8c342b577fd19f708f7572365d",
+      "timeSeconds": 0.45
+    }
+  ],
+  "keyFrames": [
+    {
+      "allDetectedWarmCandidatesDoNotTouchCanvasBorder": true,
+      "bladeProxyPixels": 38,
+      "canvasPx": [
+        960,
+        540
+      ],
+      "detachedWarmCandidateComponentCount": 2,
+      "detachedWarmCandidateComponents": [
+        {
+          "areaPixels": 3,
+          "borderClearancePx": 219,
+          "boundsPxInclusive": [
+            476,
+            319,
+            477,
+            320
+          ],
+          "nearestBladeProxyPixelDistancePx": 5.0,
+          "nearestMainEffectProxyPixelDistancePx": 2.236068,
+          "peakRgb": [
+            255,
+            174,
+            34
+          ],
+          "sourceAttribution": "UNAVAILABLE_FROM_BEAUTY_RGB",
+          "touchesCanvasBorder": false
+        },
+        {
+          "areaPixels": 2,
+          "borderClearancePx": 208,
+          "boundsPxInclusive": [
+            474,
+            330,
+            475,
+            331
+          ],
+          "nearestBladeProxyPixelDistancePx": 5.656854,
+          "nearestMainEffectProxyPixelDistancePx": 2.236068,
+          "peakRgb": [
+            255,
+            245,
+            71
+          ],
+          "sourceAttribution": "UNAVAILABLE_FROM_BEAUTY_RGB",
+          "touchesCanvasBorder": false
+        }
+      ],
+      "file": "frame_0001.png",
+      "foregroundPixels": 415,
+      "index": 1,
+      "mainEffectProxyBoundsPxInclusive": [
+        473,
+        294,
+        521,
+        338
+      ],
+      "mainEffectProxyPixels": 410,
+      "minimumDetachedWarmCandidateBorderClearancePx": 208,
+      "minimumDetachedWarmCandidateToBladeProxyDistancePx": 5.0,
+      "recorderContext": {
+        "dissipationLiveCount": 0,
+        "sourceAttribution": "UNAVAILABLE_FROM_BEAUTY_RGB",
+        "sparkLiveCount": 0,
+        "unattributedRecorderLiveCount": 0
+      },
+      "sha256": "a7794f6fd456b1151b0a638adb40c9cb609f9152e5b961109c44d81ed9c8d09d",
+      "timeSeconds": 0.016667
+    },
+    {
+      "allDetectedWarmCandidatesDoNotTouchCanvasBorder": true,
+      "bladeProxyPixels": 38,
+      "canvasPx": [
+        960,
+        540
+      ],
+      "detachedWarmCandidateComponentCount": 2,
+      "detachedWarmCandidateComponents": [
+        {
+          "areaPixels": 3,
+          "borderClearancePx": 219,
+          "boundsPxInclusive": [
+            476,
+            319,
+            477,
+            320
+          ],
+          "nearestBladeProxyPixelDistancePx": 5.0,
+          "nearestMainEffectProxyPixelDistancePx": 2.236068,
+          "peakRgb": [
+            255,
+            174,
+            34
+          ],
+          "sourceAttribution": "UNAVAILABLE_FROM_BEAUTY_RGB",
+          "touchesCanvasBorder": false
+        },
+        {
+          "areaPixels": 2,
+          "borderClearancePx": 208,
+          "boundsPxInclusive": [
+            474,
+            330,
+            475,
+            331
+          ],
+          "nearestBladeProxyPixelDistancePx": 5.656854,
+          "nearestMainEffectProxyPixelDistancePx": 2.236068,
+          "peakRgb": [
+            255,
+            245,
+            71
+          ],
+          "sourceAttribution": "UNAVAILABLE_FROM_BEAUTY_RGB",
+          "touchesCanvasBorder": false
+        }
+      ],
+      "file": "frame_0002.png",
+      "foregroundPixels": 415,
+      "index": 2,
+      "mainEffectProxyBoundsPxInclusive": [
+        473,
+        294,
+        521,
+        338
+      ],
+      "mainEffectProxyPixels": 410,
+      "minimumDetachedWarmCandidateBorderClearancePx": 208,
+      "minimumDetachedWarmCandidateToBladeProxyDistancePx": 5.0,
+      "recorderContext": {
+        "dissipationLiveCount": 0,
+        "sourceAttribution": "UNAVAILABLE_FROM_BEAUTY_RGB",
+        "sparkLiveCount": 0,
+        "unattributedRecorderLiveCount": 0
+      },
+      "sha256": "a7794f6fd456b1151b0a638adb40c9cb609f9152e5b961109c44d81ed9c8d09d",
+      "timeSeconds": 0.033333
+    },
+    {
+      "allDetectedWarmCandidatesDoNotTouchCanvasBorder": true,
+      "bladeProxyPixels": 2727,
+      "canvasPx": [
+        960,
+        540
+      ],
+      "detachedWarmCandidateComponentCount": 0,
+      "detachedWarmCandidateComponents": [],
+      "file": "frame_0006.png",
+      "foregroundPixels": 15269,
+      "index": 6,
+      "mainEffectProxyBoundsPxInclusive": [
+        422,
+        206,
+        759,
+        341
+      ],
+      "mainEffectProxyPixels": 15269,
+      "minimumDetachedWarmCandidateBorderClearancePx": null,
+      "minimumDetachedWarmCandidateToBladeProxyDistancePx": null,
+      "recorderContext": {
+        "dissipationLiveCount": 0,
+        "sourceAttribution": "UNAVAILABLE_FROM_BEAUTY_RGB",
+        "sparkLiveCount": 0,
+        "unattributedRecorderLiveCount": 0
+      },
+      "sha256": "8493c0c571beb8ce141679e864a157e9f45ba1ee89d9a5a4400c3a178c0919e5",
+      "timeSeconds": 0.1
+    },
+    {
+      "allDetectedWarmCandidatesDoNotTouchCanvasBorder": true,
+      "bladeProxyPixels": 1663,
+      "canvasPx": [
+        960,
+        540
+      ],
+      "detachedWarmCandidateComponentCount": 4,
+      "detachedWarmCandidateComponents": [
+        {
+          "areaPixels": 15,
+          "borderClearancePx": 224,
+          "boundsPxInclusive": [
+            667,
+            309,
+            671,
+            315
+          ],
+          "nearestBladeProxyPixelDistancePx": 46.173586,
+          "nearestMainEffectProxyPixelDistancePx": 11.401754,
+          "peakRgb": [
+            225,
+            179,
+            53
+          ],
+          "sourceAttribution": "UNAVAILABLE_FROM_BEAUTY_RGB",
+          "touchesCanvasBorder": false
+        },
+        {
+          "areaPixels": 14,
+          "borderClearancePx": 222,
+          "boundsPxInclusive": [
+            678,
+            312,
+            681,
+            317
+          ],
+          "nearestBladeProxyPixelDistancePx": 52.773099,
+          "nearestMainEffectProxyPixelDistancePx": 21.931712,
+          "peakRgb": [
+            225,
+            180,
+            60
+          ],
+          "sourceAttribution": "UNAVAILABLE_FROM_BEAUTY_RGB",
+          "touchesCanvasBorder": false
+        },
+        {
+          "areaPixels": 9,
+          "borderClearancePx": 153,
+          "boundsPxInclusive": [
+            514,
+            153,
+            516,
+            157
+          ],
+          "nearestBladeProxyPixelDistancePx": 172.800463,
+          "nearestMainEffectProxyPixelDistancePx": 103.092192,
+          "peakRgb": [
+            225,
+            176,
+            26
+          ],
+          "sourceAttribution": "UNAVAILABLE_FROM_BEAUTY_RGB",
+          "touchesCanvasBorder": false
+        },
+        {
+          "areaPixels": 8,
+          "borderClearancePx": 172,
+          "boundsPxInclusive": [
+            559,
+            172,
+            561,
+            175
+          ],
+          "nearestBladeProxyPixelDistancePx": 127.349912,
+          "nearestMainEffectProxyPixelDistancePx": 64.031242,
+          "peakRgb": [
+            225,
+            179,
+            56
+          ],
+          "sourceAttribution": "UNAVAILABLE_FROM_BEAUTY_RGB",
+          "touchesCanvasBorder": false
+        }
+      ],
+      "file": "frame_0010.png",
+      "foregroundPixels": 51562,
+      "index": 10,
+      "mainEffectProxyBoundsPxInclusive": [
+        422,
+        20,
+        956,
+        341
+      ],
+      "mainEffectProxyPixels": 51516,
+      "minimumDetachedWarmCandidateBorderClearancePx": 153,
+      "minimumDetachedWarmCandidateToBladeProxyDistancePx": 46.173586,
+      "recorderContext": {
+        "dissipationLiveCount": 0,
+        "sourceAttribution": "UNAVAILABLE_FROM_BEAUTY_RGB",
+        "sparkLiveCount": 8,
+        "unattributedRecorderLiveCount": 8
+      },
+      "sha256": "f58471010270923d5e37f2bb0f0abeeaee99b099a6c4617ff71b851c6ee33e6d",
+      "timeSeconds": 0.166667
+    },
+    {
+      "allDetectedWarmCandidatesDoNotTouchCanvasBorder": true,
+      "bladeProxyPixels": 0,
+      "canvasPx": [
+        960,
+        540
+      ],
+      "detachedWarmCandidateComponentCount": 6,
+      "detachedWarmCandidateComponents": [
+        {
+          "areaPixels": 3,
+          "borderClearancePx": 160,
+          "boundsPxInclusive": [
+            559,
+            160,
+            560,
+            161
+          ],
+          "nearestBladeProxyPixelDistancePx": null,
+          "nearestMainEffectProxyPixelDistancePx": 45.398238,
+          "peakRgb": [
+            133,
+            87,
+            35
+          ],
+          "sourceAttribution": "UNAVAILABLE_FROM_BEAUTY_RGB",
+          "touchesCanvasBorder": false
+        },
+        {
+          "areaPixels": 3,
+          "borderClearancePx": 239,
+          "boundsPxInclusive": [
+            661,
+            299,
+            662,
+            300
+          ],
+          "nearestBladeProxyPixelDistancePx": null,
+          "nearestMainEffectProxyPixelDistancePx": 7.615773,
+          "peakRgb": [
+            132,
+            59,
+            24
+          ],
+          "sourceAttribution": "UNAVAILABLE_FROM_BEAUTY_RGB",
+          "touchesCanvasBorder": false
+        },
+        {
+          "areaPixels": 3,
+          "borderClearancePx": 230,
+          "boundsPxInclusive": [
+            674,
+            308,
+            675,
+            309
+          ],
+          "nearestBladeProxyPixelDistancePx": null,
+          "nearestMainEffectProxyPixelDistancePx": 18.681542,
+          "peakRgb": [
+            133,
+            87,
+            28
+          ],
+          "sourceAttribution": "UNAVAILABLE_FROM_BEAUTY_RGB",
+          "touchesCanvasBorder": false
+        },
+        {
+          "areaPixels": 2,
+          "borderClearancePx": 149,
+          "boundsPxInclusive": [
+            526,
+            149,
+            526,
+            150
+          ],
+          "nearestBladeProxyPixelDistancePx": null,
+          "nearestMainEffectProxyPixelDistancePx": 55.0,
+          "peakRgb": [
+            133,
+            71,
+            24
+          ],
+          "sourceAttribution": "UNAVAILABLE_FROM_BEAUTY_RGB",
+          "touchesCanvasBorder": false
+        },
+        {
+          "areaPixels": 2,
+          "borderClearancePx": 160,
+          "boundsPxInclusive": [
+            562,
+            160,
+            563,
+            160
+          ],
+          "nearestBladeProxyPixelDistancePx": null,
+          "nearestMainEffectProxyPixelDistancePx": 46.872167,
+          "peakRgb": [
+            133,
+            86,
+            28
+          ],
+          "sourceAttribution": "UNAVAILABLE_FROM_BEAUTY_RGB",
+          "touchesCanvasBorder": false
+        },
+        {
+          "areaPixels": 1,
+          "borderClearancePx": 206,
+          "boundsPxInclusive": [
+            609,
+            206,
+            609,
+            206
+          ],
+          "nearestBladeProxyPixelDistancePx": null,
+          "nearestMainEffectProxyPixelDistancePx": 12.369317,
+          "peakRgb": [
+            124,
+            28,
+            24
+          ],
+          "sourceAttribution": "UNAVAILABLE_FROM_BEAUTY_RGB",
+          "touchesCanvasBorder": false
+        }
+      ],
+      "file": "frame_0014.png",
+      "foregroundPixels": 38963,
+      "index": 14,
+      "mainEffectProxyBoundsPxInclusive": [
+        429,
+        21,
+        891,
+        339
+      ],
+      "mainEffectProxyPixels": 38945,
+      "minimumDetachedWarmCandidateBorderClearancePx": 149,
+      "minimumDetachedWarmCandidateToBladeProxyDistancePx": null,
+      "recorderContext": {
+        "dissipationLiveCount": 2,
+        "sourceAttribution": "UNAVAILABLE_FROM_BEAUTY_RGB",
+        "sparkLiveCount": 8,
+        "unattributedRecorderLiveCount": 10
+      },
+      "sha256": "62b1f392c7fd0c52b86015161bcac8236853de91a3853421976db15a50659fea",
+      "timeSeconds": 0.233333
+    },
+    {
+      "allDetectedWarmCandidatesDoNotTouchCanvasBorder": true,
+      "bladeProxyPixels": 0,
+      "canvasPx": [
+        960,
+        540
+      ],
+      "detachedWarmCandidateComponentCount": 1,
+      "detachedWarmCandidateComponents": [
+        {
+          "areaPixels": 3,
+          "borderClearancePx": 255,
+          "boundsPxInclusive": [
+            648,
+            255,
+            649,
+            256
+          ],
+          "nearestBladeProxyPixelDistancePx": null,
+          "nearestMainEffectProxyPixelDistancePx": 7.615773,
+          "peakRgb": [
+            133,
+            87,
+            25
+          ],
+          "sourceAttribution": "UNAVAILABLE_FROM_BEAUTY_RGB",
+          "touchesCanvasBorder": false
+        }
+      ],
+      "file": "frame_0020.png",
+      "foregroundPixels": 6196,
+      "index": 20,
+      "mainEffectProxyBoundsPxInclusive": [
+        463,
+        205,
+        647,
+        331
+      ],
+      "mainEffectProxyPixels": 6135,
+      "minimumDetachedWarmCandidateBorderClearancePx": 255,
+      "minimumDetachedWarmCandidateToBladeProxyDistancePx": null,
+      "recorderContext": {
+        "dissipationLiveCount": 3,
+        "sourceAttribution": "UNAVAILABLE_FROM_BEAUTY_RGB",
+        "sparkLiveCount": 1,
+        "unattributedRecorderLiveCount": 4
+      },
+      "sha256": "0a4572af3e25cd3206f8925096b0d9841ac31903216ddb032dbeb8fd17c89dfb",
+      "timeSeconds": 0.333333
+    },
+    {
+      "allDetectedWarmCandidatesDoNotTouchCanvasBorder": true,
+      "bladeProxyPixels": 0,
+      "canvasPx": [
+        960,
+        540
+      ],
+      "detachedWarmCandidateComponentCount": 0,
+      "detachedWarmCandidateComponents": [],
+      "file": "frame_0025.png",
+      "foregroundPixels": 6204,
+      "index": 25,
+      "mainEffectProxyBoundsPxInclusive": [
+        463,
+        205,
+        647,
+        331
+      ],
+      "mainEffectProxyPixels": 6146,
+      "minimumDetachedWarmCandidateBorderClearancePx": null,
+      "minimumDetachedWarmCandidateToBladeProxyDistancePx": null,
+      "recorderContext": {
+        "dissipationLiveCount": 2,
+        "sourceAttribution": "UNAVAILABLE_FROM_BEAUTY_RGB",
+        "sparkLiveCount": 0,
+        "unattributedRecorderLiveCount": 2
+      },
+      "sha256": "81bdc14266f2eadb7d1b569361826b7e0dd412f952672fdb8f5e07de54dbf445",
+      "timeSeconds": 0.416667
+    },
+    {
+      "allDetectedWarmCandidatesDoNotTouchCanvasBorder": true,
+      "bladeProxyPixels": 0,
+      "canvasPx": [
+        960,
+        540
+      ],
+      "detachedWarmCandidateComponentCount": 0,
+      "detachedWarmCandidateComponents": [],
+      "file": "frame_0027.png",
+      "foregroundPixels": 0,
+      "index": 27,
+      "mainEffectProxyBoundsPxInclusive": null,
+      "mainEffectProxyPixels": 0,
+      "minimumDetachedWarmCandidateBorderClearancePx": null,
+      "minimumDetachedWarmCandidateToBladeProxyDistancePx": null,
+      "recorderContext": {
+        "dissipationLiveCount": 0,
+        "sourceAttribution": "UNAVAILABLE_FROM_BEAUTY_RGB",
+        "sparkLiveCount": 0,
+        "unattributedRecorderLiveCount": 0
+      },
+      "sha256": "2c532a5c4bdb5eb97c7851a432bb543a82395b8c342b577fd19f708f7572365d",
+      "timeSeconds": 0.45
+    }
+  ],
+  "limitations": {
+    "allRecorderLiveInstancesAreUnattributed": true,
+    "candidateNote": "a detached warm component may be a spark, dissipation, mesh fragment, anti-aliased island, or another source; no correspondence is inferred",
+    "canvasNote": "border clearance applies only to pixels already detected inside the PNG and cannot detect an off-canvas projection",
+    "reason": "beauty RGB has no instance ID, renderer ID, depth, or unoccluded projection pass",
+    "recorderCountsAreContextOnly": true,
+    "unattributedAlternatives": [
+      "off_canvas",
+      "merged_with_main_effect",
+      "occluded",
+      "below_threshold",
+      "dissipation_or_other_fragment",
+      "foreign_source_component"
+    ]
+  },
+  "machineStatuses": {
+    "candidateSourceAttribution": "UNAVAILABLE_FROM_BEAUTY_RGB",
+    "trueSparkBladeOverlap": "PENDING_INSTANCE_ID_OR_DEPTH_DIAGNOSTIC",
+    "trueSparkOcclusion": "PENDING_INSTANCE_ID_OR_DEPTH_DIAGNOSTIC",
+    "trueSparkProjectionCanvasContainment": "PENDING_INSTANCE_ID_OR_DEPTH_DIAGNOSTIC",
+    "trueSparkVisibility": "PENDING_INSTANCE_ID_OR_DEPTH_DIAGNOSTIC"
+  },
+  "measurementTool": {
+    "dependencies": {
+      "Pillow": "required",
+      "numpy": "required",
+      "python": ">=3.10"
+    },
+    "path": "tools/vfx/s15_wysiwyg_projection_audit_v2.py",
+    "sha256": "625dcf77316850da2d17f8c0da0dc2c29fe7f949b5a94f4cbe53d8769792440d"
+  },
+  "proxyDefinition": {
+    "connectivity": 8,
+    "detachedWarmCandidate": {
+      "maxAreaPixels": 128,
+      "maxWidthOrHeightPixels": 32,
+      "minimumPeakRedDeltaFromBackground": 64,
+      "notMainEffectComponent": true,
+      "sourceAttribution": "UNAVAILABLE_FROM_BEAUTY_RGB"
+    },
+    "foreground": "RGB code differs in any channel from declared opaque camera background",
+    "mainBladeProxy": {
+      "insideMainEffectComponent": true,
+      "minimumBlueToRedRatio": 0.25,
+      "minimumGreenToRedRatio": 0.8,
+      "minimumRedCode": 150
+    },
+    "mainEffect": "largest foreground connected component",
+    "thresholdCalibrationStatus": "PENDING_HUMAN_OR_DIAGNOSTIC_CALIBRATION"
+  },
+  "schema": "s15-wysiwyg-projection-audit/v2",
+  "summary": {
+    "allDetectedWarmCandidatesDoNotTouchCanvasBorder": true,
+    "detachedWarmCandidateComponentObservationsAcrossFrames": 49,
+    "evidenceIntegrity": "VERIFIED_28_OF_28",
+    "keyFrameIndexes": [
+      1,
+      2,
+      6,
+      10,
+      14,
+      20,
+      25,
+      27
+    ],
+    "minimumDetachedWarmCandidateBorderClearancePx": 148,
+    "trueSparkBladeOverlap": "PENDING_INSTANCE_ID_OR_DEPTH_DIAGNOSTIC",
+    "trueSparkOcclusion": "PENDING_INSTANCE_ID_OR_DEPTH_DIAGNOSTIC",
+    "trueSparkProjectionCanvasContainment": "PENDING_INSTANCE_ID_OR_DEPTH_DIAGNOSTIC",
+    "trueSparkVisibility": "PENDING_INSTANCE_ID_OR_DEPTH_DIAGNOSTIC"
+  },
+  "supersedes": {
+    "preservedJsonSha256": "a73619e373d7c76984a4328c023be8fa66c45d05ba15e4dddc42aff349306d41",
+    "preservedReportSha256": "876aecaf99088b8456d5c49f2b23941a0c56bd9d18e82ad0bb4f80d42297cb48",
+    "reason": "beauty RGB cannot attribute detached warm components to spark instances or establish a spark visibility ratio",
+    "schema": "s15-wysiwyg-projection-audit/v1",
+    "status": "SUPERSEDED_AFTER_INDEPENDENT_AUDIT_NO_GO"
+  },
+  "userSignedBoundary": "CONDITIONAL_PASS_CONTENT_OK_BUT_NOT_COMMERCIAL_USABLE",
+  "visualVerdict": "NOT_EVALUATED"
+}

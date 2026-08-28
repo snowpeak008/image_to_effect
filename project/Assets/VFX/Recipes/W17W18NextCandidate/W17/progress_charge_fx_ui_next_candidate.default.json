@@ -1,0 +1,13 @@
+{
+  "schema": "w17-ui-next-candidate/v1",
+  "id": "progress_charge_fx_ui_next_candidate",
+  "workPackage": "W17",
+  "candidateStatus": "NEXT_CANDIDATE_VISUAL_PENDING",
+  "userVisualVerdict": null,
+  "preserveRejectedCandidate": true,
+  "effect": "progress_charge",
+  "lifecycle": "sustained",
+  "protocols": ["anchor_rect", "follow_mode", "fill_ratio_0_1"],
+  "visualCarriers": ["real_fill_width", "speed_scaled_glint", "full_endpoint_pulse"],
+  "budget": { "uiElements": 4, "materials": 1, "particleSystems": 0 }
+}

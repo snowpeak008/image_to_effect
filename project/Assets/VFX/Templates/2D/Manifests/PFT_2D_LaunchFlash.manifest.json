@@ -1,0 +1,12 @@
+{
+  "manifestVersion": 1,
+  "templateId": "PFT_2D_LaunchFlash",
+  "templateVersion": "1.0.0",
+  "kind": "impact_flash",
+  "dimension": "2d",
+  "assetGuid": "67b8b2ebf20d4aa499fed82ee704d4be",
+  "assetPath": "Assets/VFX/Templates/2D/Prefabs/PFT_2D_LaunchFlash.prefab",
+  "tags": ["fire", "stylized", "2d"],
+  "parameters": { "lifetime": { "type": "float", "min": .06, "max": .22, "default": .12, "binding": "launch.lifetime" }, "size": { "type": "float", "min": .45, "max": 1.8, "default": 1, "binding": "launch.size" } },
+  "cost": { "estimatedPeakParticles": 1, "materials": 1, "trails": 0 }
+}

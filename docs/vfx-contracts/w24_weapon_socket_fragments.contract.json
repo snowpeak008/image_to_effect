@@ -1,0 +1,116 @@
+{
+  "contractVersion": "w24-s1/1.0", "effectId": "w24_weapon_socket_fragments", "contractRevision": 25, "contractHash": "sha256:88c752a126d0c0922861af647158b884dfb9095b173e573d3279239ca0f3dc4d",
+  "lifecycle": {
+    "kind": "event_driven",
+    "start": {"entryConditions": ["Bind requested and socket resolves"], "deadlineSeconds": 0.1, "completionConditions": ["visual root parented to socket"]},
+    "steady": {"entryConditions": ["weapon socket remains valid"], "deadlineSeconds": 0, "completionConditions": ["detach or fragment event"]},
+    "stop": {"entryConditions": ["normal detach"], "deadlineSeconds": 0.8, "completionConditions": ["fragments expire and reset"]},
+    "interrupt": {"entryConditions": ["model or socket missing"], "deadlineSeconds": 0.1, "completionConditions": ["explicit binding fault telemetry"]}
+  },
+  "references": [{
+    "source": "project-internal W24 S3 model-binding brief", "hash": "sha256:bd6919d3664a7c6d3ec2162a056c715d01478b7130ed3553f327a5f5be249d80", "license": "project-internal", "assetUse": "reference-only",
+    "roles": [{"dimension": "attachment", "weight": 0.65}, {"dimension": "motion", "weight": 0.35}], "notRequired": ["a copied character mesh", "one rotating full-image shard"]
+  }],
+  "spatialContract": {
+    "coordinateSpace": "local", "origin": [0, 0, 0], "orientationEulerDegrees": [0, 0, 0], "visualAnchor": {"kind": "socket", "reference": "PreviewTestModel_MeshRenderer/weapon_socket"},
+    "designDimensions": {"width": 0.6, "height": 0.6, "depth": 0.6, "unit": "metre"}, "gameplayDistanceDimensions": {"width": 0.5, "height": 0.5, "depth": 0.5, "unit": "metre"}
+  },
+  "captureProfile": {
+    "captureProfileId": "w24-s3-binding-dx11-v1", "unityVersion": "2022.3.62f3c1", "urpVersion": "14.0.12", "graphicsApi": "Direct3D11", "graphicsDeviceDriver": "NVIDIA GeForce RTX 1050 Ti / Direct3D 11.0 [level 11.1]",
+    "cameraSerializedReference": "Assets/VFX/Preview/W24S3/VFXPREVIEW_ModelSocketFragments.unity#MainCamera", "cameraPose": {"position": [0, 1.4, -5.4], "orientationEulerDegrees": [4.2, 0, 0]}, "cameraFovDegrees": 60,
+    "sceneSerializedReference": "Assets/VFX/Preview/W24S3/VFXPREVIEW_ModelSocketFragments.unity", "sceneHash": "pending:formal-build",
+    "prefabManifestSerializedReference": "ProjectSettings/VFXComposer/BuildManifests/w24_weapon_socket_fragments.manifest.json#buildHash", "prefabManifestHash": "pending:formal-build",
+    "rendererAssetSerializedReference": "Assets/Settings/VFXPreviewUniversalRenderer.asset", "volumeSerializedReference": "ProjectSettings/GraphicsSettings.asset (no per-scene Volume; bloom/tone mapping disabled)", "resolution": {"width": 960, "height": 540}, "fps": 60,
+    "background": "dark neutral", "colorSpace": "Linear", "hdr": false, "msaaSamples": 1, "renderTextureFormat": "ARGB32", "bloom": {"enabled": false, "settingsReference": "none"}, "toneMapping": "None",
+    "captureToolVersion": "w24-s3-capture/3.5", "captureToolHash": "sha256:f605aacf4d27128347a2a8434a29cebc95aa789af73df55cc26c6fd7a0e42726", "canonicalSeed": 24201, "robustnessSeeds": [24211, 24221]
+  },
+  "semanticStateMachine": {
+    "deterministicForSameSeed": true,
+    "states": [
+      {"stateId": "bind", "role": "start", "durationSeconds": 0.1, "entryConditions": ["bind requested"], "exitConditions": ["socket resolved or fault"], "triggeredEvents": ["bind"], "preservedSemantics": ["requested socket"]},
+      {"stateId": "attached", "role": "steady", "durationSeconds": 0, "entryConditions": ["socket resolved"], "exitConditions": ["detach or fragment"], "triggeredEvents": ["attached"], "preservedSemantics": ["socket anchor"]},
+      {"stateId": "fragment", "role": "stop", "durationSeconds": 0.8, "entryConditions": ["fragment event"], "exitConditions": ["all fragment state reset"], "triggeredEvents": ["fragment"], "preservedSemantics": ["last socket pose", "per-fragment seeds"]},
+      {"stateId": "binding_fault", "role": "interrupt", "durationSeconds": 0.1, "entryConditions": ["model or socket missing"], "exitConditions": ["fault emitted and visuals cleared"], "triggeredEvents": ["binding_fault"], "preservedSemantics": []}
+    ],
+    "transitions": [
+      {"from": "bind", "to": "attached", "continuityMode": "continuous", "preservedSemantics": ["socket anchor"], "triggeredEvents": ["attached"]},
+      {"from": "attached", "to": "fragment", "continuityMode": "impulse", "preservedSemantics": ["last socket pose", "per-fragment seeds"], "triggeredEvents": ["fragment"]},
+      {"from": "bind", "to": "binding_fault", "continuityMode": "clear", "preservedSemantics": [], "triggeredEvents": ["binding_fault"]}
+    ],
+    "completionExits": ["independent fragments expire and reset"], "interruptExits": ["binding fault is reported and visual state cleared"]
+  },
+  "layers": [
+    {"layerId": "socket_attachment", "responsibility": "track a real model socket", "carrier": "Transform socket plus W24ModelBindingAdapter", "geometry": "model-local attachment", "materialModel": "none", "colorRole": "anchor", "blendMode": "none", "motionModel": "inherits socket pose", "timing": "attached", "attachment": "weapon_socket", "continuityFrom": [], "continuityTo": ["independent_fragments"], "budgetCost": {"transforms": 2}, "required": true},
+    {"layerId": "independent_fragments", "responsibility": "break into independently simulated local pieces", "carrier": "W24FragmentMotionSystem", "geometry": "three separate cube MeshRenderers", "materialModel": "URP Lit shared material", "colorRole": "weapon-energy accents", "blendMode": "alpha", "motionModel": "unique seed velocity and angular velocity per Transform", "timing": "fragment exit", "attachment": "SocketVisualRoot before detachment", "continuityFrom": ["socket_attachment"], "continuityTo": [], "budgetCost": {"transforms": 3, "renderers": 3}, "required": true}
+  ],
+  "allowedSubstitutions": [{"substitutionId": "allow_equivalent_mesh_fragments", "from": "cube MeshRenderers", "to": "three or more distinct mesh fragments", "rationale": "fragment geometry may change while transform independence remains machine-verifiable"}],
+  "forbiddenSubstitutions": [
+    {"substitutionId": "forbid_model_side_primitive", "from": "real socket binding", "to": "an independent primitive near the model", "rationale": "proximity does not prove attachment"},
+    {"substitutionId": "forbid_whole_group_rotation", "from": "independently integrated fragments", "to": "one parent or whole image rotation", "rationale": "shared rotation erases fragment semantics"}
+  ],
+  "cleanup": {"cleanupDeadline": 0.8, "allowedResidualLayers": [], "lightStopDeadline": 0},
+  "budget": {"particlePeak": 28, "particleSteady": 12, "rendererCount": 6, "materialCount": 1, "lightCount": 0, "textureResidency": {"localExclusiveMb": 0, "totalDependencyMb": 0}},
+  "requirements": [
+    {"designRequirementId": "REQ-C-SOCKET", "type": "structural", "evidenceAuthority": "telemetry", "statement": "W24ModelBindingAdapter resolves the named real Transform socket and parents SocketVisualRoot to it."},
+    {"designRequirementId": "REQ-C-MODEL-MOTION", "type": "behavioral", "evidenceAuthority": "telemetry", "statement": "When the model socket pose changes the attached visual retains its local alignment."},
+    {"designRequirementId": "REQ-C-MISSING", "type": "structural", "evidenceAuthority": "telemetry", "statement": "Missing model socket renderer mesh or bone produces an explicit W24BindingFault rather than a silent fallback."},
+    {"designRequirementId": "REQ-C-FRAGMENT-INDEPENDENCE", "type": "behavioral", "evidenceAuthority": "telemetry", "statement": "Each fragment has its own Transform state seed velocity and angular velocity; no parent-group rotation substitutes for them."},
+    {"designRequirementId": "REQ-C-MULTIVIEW", "type": "visual-measurable", "evidenceAuthority": "diagnostic", "statement": "Object-ID and depth captures show socket attachment with non-zero depth and parallax.", "visualVerdict": {"subject": "socket attachment", "expectedCondition": "attachment stays on the weapon socket in front and oblique views", "evidenceLocation": {"state": "attached and fragment", "frameInterval": [0, 90], "roi": "model hand and weapon region"}}},
+    {"designRequirementId": "REQ-C-VISUAL", "type": "visual-semantic", "evidenceAuthority": "visualQa", "statement": "Fragment exit reads as several pieces rather than one image rotating as a whole.", "visualVerdict": {"subject": "model and fragments", "expectedCondition": "credible model attachment and independent breakup", "evidenceLocation": {"state": "attached and fragment", "frameInterval": [0, 90], "layerMask": "independent_fragments"}}},
+    {"designRequirementId": "REQ-C-USER", "type": "user-signoff", "evidenceAuthority": "user", "statement": "Dynamic visual acceptance remains pending user signature."}
+  ],
+  "extensions": {
+    "typedDiagnostics": {
+      "metricsTool": {"path": "tools/vfx/metrics/render_metrics.py", "sha256": "sha256:8e32e6d3df25e002c402f3ec9af98bbfbc10da57b3d545f9bd86fcf4a078b8b6"},
+      "metricsEnvironment": {"pythonExecutablePath": "C:/Program Files/Python312/python.exe", "pythonExecutableSha256": "sha256:fd5c46d73d29ba21b04c844bbaf9096066136526911230645a2a040d23fb612b", "pythonVersion": "Python 3.12.4", "numpyVersion": "2.4.5", "pillowVersion": "12.2.0", "environmentSha256": "sha256:c4fe189aa8e53cf7add49138dd96830056e545cdac44c82a69251e5112df5c49"},
+      "requiredEvidenceMatrix": [
+        {"evidenceId": "c-fragment-24201-f54", "passId": "fragment-id", "seed": 24201, "viewId": "binding_front_main", "logicalFrameIndex": 54},
+        {"evidenceId": "c-fragment-24201-f63", "passId": "fragment-id", "seed": 24201, "viewId": "binding_front_main", "logicalFrameIndex": 63},
+        {"evidenceId": "c-fragment-24201-f72", "passId": "fragment-id", "seed": 24201, "viewId": "binding_front_main", "logicalFrameIndex": 72},
+        {"evidenceId": "c-object-id-24201-front-f72", "passId": "object-id", "seed": 24201, "viewId": "binding_front_main", "logicalFrameIndex": 72},
+        {"evidenceId": "c-depth-24201-front-f72", "passId": "depth-linear", "seed": 24201, "viewId": "binding_front_main", "logicalFrameIndex": 72},
+        {"evidenceId": "c-object-id-24201-oblique-f72", "passId": "object-id", "seed": 24201, "viewId": "binding_oblique", "logicalFrameIndex": 72},
+        {"evidenceId": "c-depth-24201-oblique-f72", "passId": "depth-linear", "seed": 24201, "viewId": "binding_oblique", "logicalFrameIndex": 72},
+        {"evidenceId": "c-fragment-24211-f54", "passId": "fragment-id", "seed": 24211, "viewId": "binding_front_main", "logicalFrameIndex": 54},
+        {"evidenceId": "c-fragment-24211-f63", "passId": "fragment-id", "seed": 24211, "viewId": "binding_front_main", "logicalFrameIndex": 63},
+        {"evidenceId": "c-fragment-24211-f72", "passId": "fragment-id", "seed": 24211, "viewId": "binding_front_main", "logicalFrameIndex": 72},
+        {"evidenceId": "c-object-id-24211-front-f72", "passId": "object-id", "seed": 24211, "viewId": "binding_front_main", "logicalFrameIndex": 72},
+        {"evidenceId": "c-depth-24211-front-f72", "passId": "depth-linear", "seed": 24211, "viewId": "binding_front_main", "logicalFrameIndex": 72},
+        {"evidenceId": "c-object-id-24211-oblique-f72", "passId": "object-id", "seed": 24211, "viewId": "binding_oblique", "logicalFrameIndex": 72},
+        {"evidenceId": "c-depth-24211-oblique-f72", "passId": "depth-linear", "seed": 24211, "viewId": "binding_oblique", "logicalFrameIndex": 72},
+        {"evidenceId": "c-fragment-24221-f54", "passId": "fragment-id", "seed": 24221, "viewId": "binding_front_main", "logicalFrameIndex": 54},
+        {"evidenceId": "c-fragment-24221-f63", "passId": "fragment-id", "seed": 24221, "viewId": "binding_front_main", "logicalFrameIndex": 63},
+        {"evidenceId": "c-fragment-24221-f72", "passId": "fragment-id", "seed": 24221, "viewId": "binding_front_main", "logicalFrameIndex": 72},
+        {"evidenceId": "c-object-id-24221-front-f72", "passId": "object-id", "seed": 24221, "viewId": "binding_front_main", "logicalFrameIndex": 72},
+        {"evidenceId": "c-depth-24221-front-f72", "passId": "depth-linear", "seed": 24221, "viewId": "binding_front_main", "logicalFrameIndex": 72},
+        {"evidenceId": "c-object-id-24221-oblique-f72", "passId": "object-id", "seed": 24221, "viewId": "binding_oblique", "logicalFrameIndex": 72},
+        {"evidenceId": "c-depth-24221-oblique-f72", "passId": "depth-linear", "seed": 24221, "viewId": "binding_oblique", "logicalFrameIndex": 72}
+      ],
+      "objectIdDepth": {
+        "requirementId": "REQ-C-MULTIVIEW",
+        "artifacts": [{"kind": "object-id", "graphicsFormat": "R32_UInt", "npyDtype": "<u4", "beautyFallbackAllowed": false}, {"kind": "linear-depth", "graphicsFormat": "R32_SFloat", "npyDtype": "<f4", "finiteOnly": true, "beautyFallbackAllowed": false}],
+        "frozenViews": [
+          {"viewId": "binding_front_main", "position": [0, 1.4, -5.4], "orientationEulerDegrees": [4.2, 0, 0], "fovDegrees": 60, "matrixPolicy": "explicit matrices from the serialized MainCamera"},
+          {"viewId": "binding_oblique", "position": [3.2, 1.8, -4.2], "lookAt": [0, 1, 0], "fovDegrees": 60, "matrixPolicy": "explicit worldToCamera from frozen pose plus the serialized MainCamera projection"}
+        ],
+        "requiredObjectIds": [{"id": 10, "role": "bound_model"}, {"id": 101, "role": "weapon_socket_marker"}, {"id": 201, "role": "independent_fragment_0"}, {"id": 202, "role": "independent_fragment_1"}, {"id": 203, "role": "independent_fragment_2"}],
+        "parallaxRequiredObjectIds": [101, 201, 202, 203],
+        "formalDiagnosticLayer": {"index": 30, "beautyCameraExcluded": true, "registeredRenderersRemainEnabledAndActiveAtCapture": true},
+        "thresholds": {"minimumPixelsPerRequiredId": 1, "minimumLinearDepth": 0.0001, "finiteDepthRequired": true, "minimumCentroidParallaxPixelsAcrossViews": 1.0},
+        "metricPlan": {"tool": "tools/vfx/metrics/render_metrics.py", "bridge": "W24MetricsEvidenceDag", "kind": "multiview_3d", "checkIdPattern": "binding-multiview-{seed}-{objectId}", "logicalFrame": 72, "inputFields": ["views.objectIds", "views.depth", "objectId", "minDepthSpan", "minParallaxPx", "requireParallax"], "perRequiredId": true, "allSeedsRequired": true},
+        "seedConsumptionPlan": {"orderedSeeds": [24201, 24211, 24221], "oneRestartPerSeed": true, "objectIdMappingInvariantAcrossSeeds": true, "fragmentSeedsDerivedIndependentlyFromEntrySeed": true},
+        "missingBindingProbePlan": {"schema": "w24-binding-probes/v1", "requiredProbes": ["missing_socket", "missing_renderer", "missing_mesh", "missing_bone"], "expectedFaults": {"missing_socket": "MissingTarget", "missing_renderer": "MissingRenderer", "missing_mesh": "MissingMesh", "missing_bone": "MissingBone"}, "exactFaultRequired": true, "anchorOrRendererFallbackAllowed": false}
+      },
+      "fragmentTracks": {
+        "requirementId": "REQ-C-FRAGMENT-INDEPENDENCE",
+        "artifact": {"kind": "fragment-id", "graphicsFormat": "R32_UInt", "npyDtype": "<u4", "beautyFallbackAllowed": false},
+        "frontViewId": "binding_front_main", "frames": [54, 63, 72], "fragmentIds": [201, 202, 203],
+        "thresholds": {"maxTrajectoryCorrelation": 0.98, "minPairwiseDistanceVariationRatio": 0.05, "rejectSingleRigidBody": true},
+        "metricPlan": {"tool": "tools/vfx/metrics/render_metrics.py", "bridge": "W24MetricsEvidenceDag", "kind": "fragment_tracks", "checkIdPattern": "fragment-tracks-{seed}", "inputFields": ["frames", "fragmentIds", "maxTrajectoryCorrelation", "minPairwiseDistanceVariationRatio", "rejectSingleRigidBody"], "allSeedsRequired": true}
+      }
+    },
+    "runtimeEntry": "Assets/VFX/Generated/w24_weapon_socket_fragments/VFX_w24_weapon_socket_fragments.prefab", "previewScene": "Assets/VFX/Preview/W24S3/VFXPREVIEW_ModelSocketFragments.unity",
+    "manifest": "ProjectSettings/VFXComposer/BuildManifests/w24_weapon_socket_fragments.manifest.json", "implementationTrace": "docs/vfx-traces/w24_weapon_socket_fragments.implementation-trace.json",
+    "captureToolBundle": "docs/vfx-contracts/capture-tools/w24-s3-capture-tool.bundle.json", "captureBindingStatus": "PENDING_FIRST_FORMAL_BUILD", "visualStatus": "VISUAL_PENDING"
+  }
+}

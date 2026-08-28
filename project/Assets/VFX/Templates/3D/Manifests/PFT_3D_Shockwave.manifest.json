@@ -1,0 +1,12 @@
+{
+  "manifestVersion": 1,
+  "templateId": "PFT_3D_Shockwave",
+  "templateVersion": "1.0.0",
+  "kind": "shockwave",
+  "dimension": "3d",
+  "assetGuid": "b5cb6b035f75a1743ad26d15a1111e45",
+  "assetPath": "Assets/VFX/Templates/3D/Prefabs/PFT_3D_Shockwave.prefab",
+  "tags": ["fire", "stylized", "3d", "bounds:template-local", "camera:perspective-reviewed"],
+  "parameters": { "lifetime": { "type": "float", "min": .12, "max": .5, "default": .28, "binding": "3d.shockwave.lifetime" }, "endSize": { "type": "float", "min": 1.2, "max": 4, "default": 2.8, "binding": "3d.shockwave.endSize" } },
+  "cost": { "estimatedPeakParticles": 1, "materials": 1, "trails": 0 }
+}

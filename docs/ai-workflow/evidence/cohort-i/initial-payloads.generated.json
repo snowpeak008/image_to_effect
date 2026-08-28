@@ -1,0 +1,70 @@
+{
+  "contractSha256": "CE37DEFBB98C954C47C57721218CC69DC5175BF04BE8E4E693D2E1A3CFBD7507",
+  "tempRoot": "C:\\Users\\admin\\AppData\\Local\\Temp\\vfxcomposer-s9-cohort-i",
+  "initialPayloads": {
+    "I1": {
+      "envelopeFile": "I1.initial.envelope.txt",
+      "envelopeSha256": "B2BD68C5FE178756BCD380A8DE831845A3B5E2F06A9DFF4384EC22AB68A661C4",
+      "payloadFile": "I1.initial.payload.md",
+      "payloadSha256": "6E3383B681E0407F43FD9CFA4C07C918AF74F57B964C54AFF78ED595EA859081",
+      "tempPayloadPath": "C:\\Users\\admin\\AppData\\Local\\Temp\\vfxcomposer-s9-cohort-i\\I1\\I1.initial.payload.md",
+      "tempPayloadSha256": "6E3383B681E0407F43FD9CFA4C07C918AF74F57B964C54AFF78ED595EA859081"
+    },
+    "I2": {
+      "envelopeFile": "I2.initial.envelope.txt",
+      "envelopeSha256": "9FC5B20AB6792A828DA2971734D0118A332C454FE1D47725510AAD68A16FA121",
+      "payloadFile": "I2.initial.payload.md",
+      "payloadSha256": "FE5C52AC6CC366FAEAE5A52566627899C815EC6127BEFB2E784862D348876C42",
+      "tempPayloadPath": "C:\\Users\\admin\\AppData\\Local\\Temp\\vfxcomposer-s9-cohort-i\\I2\\I2.initial.payload.md",
+      "tempPayloadSha256": "FE5C52AC6CC366FAEAE5A52566627899C815EC6127BEFB2E784862D348876C42"
+    },
+    "I3": {
+      "envelopeFile": "I3.initial.envelope.txt",
+      "envelopeSha256": "661AFFF491777395DFD1D6372145E7C170C01A98AD8B9256BA834B2256B94D3E",
+      "payloadFile": "I3.initial.payload.md",
+      "payloadSha256": "8F8528AD143AD2DE6947534BC887EA9E885986305836780B13D40672D53A6E75",
+      "tempPayloadPath": "C:\\Users\\admin\\AppData\\Local\\Temp\\vfxcomposer-s9-cohort-i\\I3\\I3.initial.payload.md",
+      "tempPayloadSha256": "8F8528AD143AD2DE6947534BC887EA9E885986305836780B13D40672D53A6E75"
+    },
+    "I4": {
+      "envelopeFile": "I4.initial.envelope.txt",
+      "envelopeSha256": "F85F9AABB58D0A5B3B2F8A9421004A6E5D4C8EFCD3A813297994315062BD3756",
+      "payloadFile": "I4.initial.payload.md",
+      "payloadSha256": "F1CB8BD959CCE8BA398F3DCF22CB411042B218167B3D972016F940378B2E2FA1",
+      "tempPayloadPath": "C:\\Users\\admin\\AppData\\Local\\Temp\\vfxcomposer-s9-cohort-i\\I4\\I4.initial.payload.md",
+      "tempPayloadSha256": "F1CB8BD959CCE8BA398F3DCF22CB411042B218167B3D972016F940378B2E2FA1"
+    },
+    "I5": {
+      "envelopeFile": "I5.initial.envelope.txt",
+      "envelopeSha256": "5C39AD99C48741A8F547DEE7E106C39D6BE3A1BA025B577BE6A4375DD101C39B",
+      "payloadFile": "I5.initial.payload.md",
+      "payloadSha256": "06F2B3B97EA2094F4B04760C2E69C963E0AA2C37C3C9DB2587D7C86539567B92",
+      "tempPayloadPath": "C:\\Users\\admin\\AppData\\Local\\Temp\\vfxcomposer-s9-cohort-i\\I5\\I5.initial.payload.md",
+      "tempPayloadSha256": "06F2B3B97EA2094F4B04760C2E69C963E0AA2C37C3C9DB2587D7C86539567B92"
+    },
+    "P1": {
+      "envelopeFile": "P1.initial.envelope.txt",
+      "envelopeSha256": "23651144C47E2D5612F29743E9EA30A2BE788E25AB2173CE89BD481810115ED7",
+      "payloadFile": "P1.initial.payload.md",
+      "payloadSha256": "5436773044178EFF635C3D7016E356C6EEA7CB844D1F3684D2B43D7CE473EBC1",
+      "tempPayloadPath": "C:\\Users\\admin\\AppData\\Local\\Temp\\vfxcomposer-s9-cohort-i\\P1\\P1.initial.payload.md",
+      "tempPayloadSha256": "5436773044178EFF635C3D7016E356C6EEA7CB844D1F3684D2B43D7CE473EBC1"
+    },
+    "P2": {
+      "envelopeFile": "P2.initial.envelope.txt",
+      "envelopeSha256": "9E31B57439B50F2D5989B1EE29AA93D237FA1A2813C1D645F795D205695F1491",
+      "payloadFile": "P2.initial.payload.md",
+      "payloadSha256": "59103BF8F5BE846473605CB5181F22AE83AADB3AA7E140F7022296C4F2CB357C",
+      "tempPayloadPath": "C:\\Users\\admin\\AppData\\Local\\Temp\\vfxcomposer-s9-cohort-i\\P2\\P2.initial.payload.md",
+      "tempPayloadSha256": "59103BF8F5BE846473605CB5181F22AE83AADB3AA7E140F7022296C4F2CB357C"
+    },
+    "P3": {
+      "envelopeFile": "P3.initial.envelope.txt",
+      "envelopeSha256": "29B7ECADB5CAFCBBE327CA1B01D27679A49B97A939FAC9B5A63697CF9CDBF017",
+      "payloadFile": "P3.initial.payload.md",
+      "payloadSha256": "D49CC406EB70EFDDD6D29604D131ADFF869C34E1A2B1BFA15E7413F5976CDEF5",
+      "tempPayloadPath": "C:\\Users\\admin\\AppData\\Local\\Temp\\vfxcomposer-s9-cohort-i\\P3\\P3.initial.payload.md",
+      "tempPayloadSha256": "D49CC406EB70EFDDD6D29604D131ADFF869C34E1A2B1BFA15E7413F5976CDEF5"
+    }
+  }
+}

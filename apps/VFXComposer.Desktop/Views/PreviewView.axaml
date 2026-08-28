@@ -1,0 +1,16 @@
+<UserControl
+    x:Class="VFXComposer.Desktop.Views.PreviewView"
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:vm="using:VFXComposer.Desktop.ViewModels"
+    x:DataType="vm:PreviewViewModel">
+  <StackPanel Spacing="18">
+    <StackPanel Spacing="5">
+      <TextBlock FontSize="28" FontWeight="SemiBold" Text="{Binding Title}" />
+      <TextBlock Classes="muted" Text="{Binding Description}" TextWrapping="Wrap" />
+    </StackPanel>
+    <Border Classes="card" MinHeight="240">
+      <TextBlock Classes="muted" HorizontalAlignment="Center" VerticalAlignment="Center" Text="{Binding EmptyStateMessage}" />
+    </Border>
+  </StackPanel>
+</UserControl>

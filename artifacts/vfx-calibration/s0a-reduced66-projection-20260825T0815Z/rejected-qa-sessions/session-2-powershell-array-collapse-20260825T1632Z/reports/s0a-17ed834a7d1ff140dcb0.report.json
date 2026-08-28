@@ -1,0 +1,39 @@
+{
+  "reviewVersion": "s0a-visual-qa/1.0",
+  "candidateId": "C0",
+  "contractHash": "sha256:ba44573fabb3416f0e5b9cb4734607d115d97c0594817debc816e18d187323d1",
+  "buildHash": "sha256:00d9202f1e5b681617b18863753fff4b8b4a5a539af81f081ed791c892c96e0e",
+  "captureProfileHash": "sha256:1d9ee0b874721a3eb1e45e1d347744f316bbd0f6b407184afcb37bb9abae18db",
+  "evidenceHashes": [
+    "sha256:6ec4bf25ef8fc4304b6ffd2b097ed7f5124cc95db45519265ec56aeb49e308af"
+  ],
+  "imageInputRead": true,
+  "evidenceStatus": "invalid",
+  "contractStatus": "unambiguous",
+  "s0aTerminalStatus": null,
+  "qaGateAuthority": "advisory-only",
+  "topLevelRoute": "EVIDENCE_INVALID",
+  "perRequirement": [
+    {
+      "designRequirementId": "s0a.visual.req.e600447942a25c0a9ad8",
+      "state": "uncertain",
+      "countable": false,
+      "reasonCode": "EVIDENCE_INVALID",
+      "stateRef": "capture metadata binding for the fixed lifecycle evidence set",
+      "frameNumbers": [
+        1,
+        21,
+        60,
+        120,
+        180,
+        240,
+        300,
+        360
+      ],
+      "imageRegion": "Full 3x8 Beauty evidence grid and its capture-metadata binding.",
+      "observation": "The fixed Beauty images were read, but captureMetadata.declaredHash does not equal captureMetadata.actualHash, so the evidence package is not valid for visual judgment."
+    }
+  ],
+  "conflicts": [],
+  "sealedReportHash": "sha256:99743740ab29d14c9ed945d1c3f41b3e37b304f4aebcdbf961539b743ef63cb1"
+}

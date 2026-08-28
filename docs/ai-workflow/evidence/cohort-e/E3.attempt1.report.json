@@ -1,0 +1,38 @@
+{
+  "succeeded": false,
+  "detail": null,
+  "entries": [
+    {
+      "code": "E306",
+      "severity": "error",
+      "path": "/stages/launch/modules/launch_flash/attachTo",
+      "message": "attachTo must not reference the module itself.",
+      "actualValue": "launch_flash",
+      "allowedRange": null
+    },
+    {
+      "code": "E306",
+      "severity": "error",
+      "path": "/stages/travel/modules/energy_body/attachTo",
+      "message": "attachTo must not reference the module itself.",
+      "actualValue": "energy_body",
+      "allowedRange": null
+    },
+    {
+      "code": "E306",
+      "severity": "error",
+      "path": "/stages/impact/modules/impact_burst/attachTo",
+      "message": "attachTo must not reference the module itself.",
+      "actualValue": "impact_burst",
+      "allowedRange": null
+    },
+    {
+      "code": "E306",
+      "severity": "error",
+      "path": "/stages/impact/modules/shockwave/attachTo",
+      "message": "attachTo must not form a cycle within a stage.",
+      "actualValue": "impact_burst",
+      "allowedRange": null
+    }
+  ]
+}

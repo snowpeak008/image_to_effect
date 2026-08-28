@@ -1,0 +1,10 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <OutputType>Exe</OutputType>
+    <AssemblyName>VFXComposer.Broker.ServiceHost</AssemblyName>
+    <RootNamespace>VFXComposer.Broker.ServiceHost</RootNamespace>
+    <Description>Dormant, fail-closed Windows SCM service host for VFX Composer.</Description>
+    <IsPackable>false</IsPackable>
+  </PropertyGroup>
+</Project>

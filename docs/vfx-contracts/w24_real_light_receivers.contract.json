@@ -1,0 +1,103 @@
+{
+  "contractVersion": "w24-s1/1.0", "effectId": "w24_real_light_receivers", "contractRevision": 24, "contractHash": "sha256:0a7b6c6715834f17c5b4864346c015cc3b96bbd32b5be734d3b2b6b38e959859",
+  "lifecycle": {
+    "kind": "event_driven",
+    "start": {"entryConditions": ["muzzle or fire light event"], "deadlineSeconds": 0.1, "completionConditions": ["actual Light enabled within budget"]},
+    "steady": {"entryConditions": ["sustained fire source active"], "deadlineSeconds": 0, "completionConditions": ["explicit stop"]},
+    "stop": {"entryConditions": ["stop event"], "deadlineSeconds": 0.2, "completionConditions": ["all Light components disabled"]},
+    "interrupt": {"entryConditions": ["reset or pool reuse"], "deadlineSeconds": 0.1, "completionConditions": ["lights reset and receiver test is clean"]}
+  },
+  "references": [{
+    "source": "project-internal W24 S3 real-light brief", "hash": "sha256:cb73e3772a5f3fa0212a5413867363c21ca6b1da3fefa1261b98c118cee4a3ad", "license": "project-internal", "assetUse": "reference-only",
+    "roles": [{"dimension": "lighting", "weight": 0.8}, {"dimension": "timing", "weight": 0.2}], "notRequired": ["additive glow as proof", "bloom-only brightness"]
+  }],
+  "spatialContract": {
+    "coordinateSpace": "world", "origin": [0, 0, 0], "orientationEulerDegrees": [0, 0, 0], "visualAnchor": {"kind": "transform", "reference": "Runtime Entry root"},
+    "designDimensions": {"width": 3, "height": 2, "depth": 3, "unit": "metre"}, "gameplayDistanceDimensions": {"width": 3, "height": 2, "depth": 3, "unit": "metre"}
+  },
+  "captureProfile": {
+    "captureProfileId": "w24-s3-light-dx11-v1", "unityVersion": "2022.3.62f3c1", "urpVersion": "14.0.12", "graphicsApi": "Direct3D11", "graphicsDeviceDriver": "NVIDIA GeForce RTX 1050 Ti / Direct3D 11.0 [level 11.1]",
+    "cameraSerializedReference": "Assets/VFX/Preview/W24S3/VFXPREVIEW_RealLightReceivers.unity#MainCamera", "cameraPose": {"position": [0, 1.5, -5.5], "orientationEulerDegrees": [8.1, 0, 0]}, "cameraFovDegrees": 60,
+    "sceneSerializedReference": "Assets/VFX/Preview/W24S3/VFXPREVIEW_RealLightReceivers.unity", "sceneHash": "pending:formal-build",
+    "prefabManifestSerializedReference": "ProjectSettings/VFXComposer/BuildManifests/w24_real_light_receivers.manifest.json#buildHash", "prefabManifestHash": "pending:formal-build",
+    "rendererAssetSerializedReference": "Assets/Settings/VFXPreviewUniversalRenderer.asset", "volumeSerializedReference": "ProjectSettings/GraphicsSettings.asset (no per-scene Volume; bloom/tone mapping disabled)", "resolution": {"width": 960, "height": 540}, "fps": 60,
+    "background": "dark neutral", "colorSpace": "Linear", "hdr": false, "msaaSamples": 1, "renderTextureFormat": "ARGB32", "bloom": {"enabled": false, "settingsReference": "none"}, "toneMapping": "None",
+    "captureToolVersion": "w24-s3-capture/3.5", "captureToolHash": "sha256:f605aacf4d27128347a2a8434a29cebc95aa789af73df55cc26c6fd7a0e42726", "canonicalSeed": 24301, "robustnessSeeds": [24311, 24321]
+  },
+  "semanticStateMachine": {
+    "deterministicForSameSeed": true,
+    "states": [
+      {"stateId": "muzzle", "role": "start", "durationSeconds": 0.1, "entryConditions": ["muzzle event"], "exitConditions": ["muzzle deadline"], "triggeredEvents": ["muzzle_light_on"], "preservedSemantics": ["bounded light budget"]},
+      {"stateId": "fire_lit", "role": "steady", "durationSeconds": 0, "entryConditions": ["sustained fire active"], "exitConditions": ["stop"], "triggeredEvents": ["sustained_light_on"], "preservedSemantics": ["bounded light budget"]},
+      {"stateId": "lights_off", "role": "stop", "durationSeconds": 0.2, "entryConditions": ["stop"], "exitConditions": ["all lights disabled"], "triggeredEvents": ["lights_off"], "preservedSemantics": []},
+      {"stateId": "pool_reset", "role": "interrupt", "durationSeconds": 0.1, "entryConditions": ["reset or pool reuse"], "exitConditions": ["lights and internal state reset"], "triggeredEvents": ["pool_reset"], "preservedSemantics": []}
+    ],
+    "transitions": [
+      {"from": "muzzle", "to": "fire_lit", "continuityMode": "replace", "preservedSemantics": ["bounded light budget"], "triggeredEvents": ["sustained_light_on"]},
+      {"from": "fire_lit", "to": "lights_off", "continuityMode": "clear", "preservedSemantics": [], "triggeredEvents": ["lights_off"]},
+      {"from": "muzzle", "to": "pool_reset", "continuityMode": "clear", "preservedSemantics": [], "triggeredEvents": ["pool_reset"]}
+    ],
+    "completionExits": ["all real Light components are disabled"], "interruptExits": ["pool reset leaves lights disabled and receiver baseline clean"]
+  },
+  "layers": [
+    {"layerId": "muzzle_light", "responsibility": "short warm event light", "carrier": "UnityEngine.Light", "geometry": "point-light volume", "materialModel": "URP Forward real-time lighting", "colorRole": "short orange impulse", "blendMode": "physical receiver illumination", "motionModel": "module-controlled intensity", "timing": "muzzle", "attachment": "Runtime Entry", "continuityFrom": [], "continuityTo": ["sustained_light"], "budgetCost": {"lights": 1}, "required": true},
+    {"layerId": "sustained_light", "responsibility": "continuous fire-source illumination", "carrier": "UnityEngine.Light", "geometry": "point-light volume", "materialModel": "URP Forward real-time lighting", "colorRole": "red-orange continuous contribution", "blendMode": "physical receiver illumination", "motionModel": "module-controlled intensity", "timing": "fire_lit", "attachment": "Runtime Entry", "continuityFrom": ["muzzle_light"], "continuityTo": [], "budgetCost": {"lights": 1}, "required": true},
+    {"layerId": "source_body", "responsibility": "provide a visible self-bright body at the physical light source without serving as receiver-light evidence", "carrier": "MeshRenderer under the W24S3RuntimeEntry active root", "geometry": "built-in sphere mesh at 0.24 metre local diameter", "materialModel": "URP Lit effect-owned independent emissive material with serialized non-black HDR emission and persistent _EMISSION; never shared with receiver_a_b", "colorRole": "orange-white self-bright source", "blendMode": "opaque plus emission", "motionModel": "static local source anchor", "timing": "muzzle and fire_lit while the Runtime Entry active root is playing", "attachment": "Runtime Entry/SustainedFlame/PhysicalLightCoreMesh", "continuityFrom": ["muzzle_light"], "continuityTo": [], "budgetCost": {"renderers": 1, "materials": 1}, "required": true},
+    {"layerId": "receiver_a_b", "responsibility": "separate diagnostic surfaces", "carrier": "MeshRenderer", "geometry": "two opaque cubes", "materialModel": "separate physically light-responsive URP Lit material with serialized black _EmissionColor; importer-managed keyword state is non-authoritative, and this asset is never shared with source_body", "colorRole": "neutral light receiver", "blendMode": "opaque", "motionModel": "static", "timing": "all A-B captures; neutrality is proven by black serialized emission plus receiver-only real-Light A-B diagnostics", "attachment": "Preview Scene only", "continuityFrom": [], "continuityTo": [], "budgetCost": {"previewOnlyRenderers": 2, "materials": 1}, "required": true}
+  ],
+  "allowedSubstitutions": [{"substitutionId": "allow_equivalent_receiver_geometry", "from": "opaque cube receivers", "to": "opaque neutral diagnostic meshes with stable object-ID masks", "rationale": "receiver shape may change without weakening independent illumination proof"}],
+  "forbiddenSubstitutions": [
+    {"substitutionId": "forbid_additive_fake_light", "from": "actual Light plus receiver A-B luminance", "to": "additive glow bloom or bright unlit material", "rationale": "the independent emissive source-body material may identify the source but can never substitute for positive light deltas on separate neutral receivers"},
+    {"substitutionId": "forbid_emissive_receiver_sharing", "from": "independent source-body and neutral receiver materials", "to": "one emissive material shared by source and receiver probes", "rationale": "shared emission would contaminate receiver luminance and invalidate physical-light A-B evidence"},
+    {"substitutionId": "forbid_no_receiver", "from": "two scene receivers", "to": "sampling the effect body itself", "rationale": "the effect mask cannot serve as its own lighting proof"}
+  ],
+  "cleanup": {"cleanupDeadline": 0.2, "allowedResidualLayers": [], "lightStopDeadline": 0.2},
+  "budget": {"particlePeak": 32, "particleSteady": 12, "rendererCount": 5, "materialCount": 2, "lightCount": 2, "textureResidency": {"localExclusiveMb": 0, "totalDependencyMb": 0}},
+  "requirements": [
+    {"designRequirementId": "REQ-D-REAL-LIGHTS", "type": "structural", "evidenceAuthority": "telemetry", "statement": "MuzzleFlashLight and SustainedFireLight are actual unshadowed UnityEngine.Light components within count range and intensity budget."},
+    {"designRequirementId": "REQ-D-RECEIVER-A", "type": "visual-measurable", "evidenceAuthority": "diagnostic", "statement": "Fixed-exposure linear LDR capture of Receiver A changes positively when only real lights are enabled.", "visualVerdict": {"subject": "Receiver_A_LinearProbe", "expectedCondition": "on minus off linear LDR luminance is positive outside the effect mask", "evidenceLocation": {"state": "muzzle and fire_lit", "frameInterval": [0, 30], "layerMask": "receiver_a_b"}}},
+    {"designRequirementId": "REQ-D-RECEIVER-B", "type": "visual-measurable", "evidenceAuthority": "diagnostic", "statement": "Fixed-exposure linear LDR capture of Receiver B changes positively when only real lights are enabled.", "visualVerdict": {"subject": "Receiver_B_LinearProbe", "expectedCondition": "on minus off linear LDR luminance is positive outside the effect mask", "evidenceLocation": {"state": "muzzle and fire_lit", "frameInterval": [0, 30], "layerMask": "receiver_a_b"}}},
+    {"designRequirementId": "REQ-D-CLEANUP", "type": "behavioral", "evidenceAuthority": "telemetry", "statement": "Stop and ResetForPool disable every Light within the deadline."},
+    {"designRequirementId": "REQ-D-VISUAL", "type": "visual-semantic", "evidenceAuthority": "visualQa", "statement": "Beauty filmstrip distinguishes the declared self-bright source_body, carried by its own persistently emissive material, from physical illumination on two separate neutral receiver surfaces.", "visualVerdict": {"subject": "source_body and receiver_a_b", "expectedCondition": "PhysicalLightCoreMesh remains visibly self-bright from its independent serialized emissive material while both neutral receivers respond only to the real lights without bloom-only or shared-material cheating", "evidenceLocation": {"state": "muzzle fire_lit and off A-B", "frameInterval": [0, 30], "roi": "source body plus separate receiver regions"}}},
+    {"designRequirementId": "REQ-D-USER", "type": "user-signoff", "evidenceAuthority": "user", "statement": "Dynamic visual acceptance remains pending user signature."}
+  ],
+  "extensions": {
+    "typedDiagnostics": {
+      "metricsTool": {"path": "tools/vfx/metrics/render_metrics.py", "sha256": "sha256:8e32e6d3df25e002c402f3ec9af98bbfbc10da57b3d545f9bd86fcf4a078b8b6"},
+      "metricsEnvironment": {"pythonExecutablePath": "C:/Program Files/Python312/python.exe", "pythonExecutableSha256": "sha256:fd5c46d73d29ba21b04c844bbaf9096066136526911230645a2a040d23fb612b", "pythonVersion": "Python 3.12.4", "numpyVersion": "2.4.5", "pillowVersion": "12.2.0", "environmentSha256": "sha256:c4fe189aa8e53cf7add49138dd96830056e545cdac44c82a69251e5112df5c49"},
+      "requiredEvidenceMatrix": [
+        {"evidenceId": "d-effect-mask-24301-f24", "passId": "effect-mask", "seed": 24301, "viewId": "light_main", "logicalFrameIndex": 24},
+        {"evidenceId": "d-receiver-id-24301-f24", "passId": "receiver-id", "seed": 24301, "viewId": "light_main", "logicalFrameIndex": 24},
+        {"evidenceId": "d-receiver-off-24301-f24", "passId": "receiver-linear-ldr", "seed": 24301, "viewId": "light_main", "logicalFrameIndex": 24},
+        {"evidenceId": "d-receiver-on-24301-f24", "passId": "receiver-linear-ldr", "seed": 24301, "viewId": "light_main", "logicalFrameIndex": 24},
+        {"evidenceId": "d-effect-mask-24311-f24", "passId": "effect-mask", "seed": 24311, "viewId": "light_main", "logicalFrameIndex": 24},
+        {"evidenceId": "d-receiver-id-24311-f24", "passId": "receiver-id", "seed": 24311, "viewId": "light_main", "logicalFrameIndex": 24},
+        {"evidenceId": "d-receiver-off-24311-f24", "passId": "receiver-linear-ldr", "seed": 24311, "viewId": "light_main", "logicalFrameIndex": 24},
+        {"evidenceId": "d-receiver-on-24311-f24", "passId": "receiver-linear-ldr", "seed": 24311, "viewId": "light_main", "logicalFrameIndex": 24},
+        {"evidenceId": "d-effect-mask-24321-f24", "passId": "effect-mask", "seed": 24321, "viewId": "light_main", "logicalFrameIndex": 24},
+        {"evidenceId": "d-receiver-id-24321-f24", "passId": "receiver-id", "seed": 24321, "viewId": "light_main", "logicalFrameIndex": 24},
+        {"evidenceId": "d-receiver-off-24321-f24", "passId": "receiver-linear-ldr", "seed": 24321, "viewId": "light_main", "logicalFrameIndex": 24},
+        {"evidenceId": "d-receiver-on-24321-f24", "passId": "receiver-linear-ldr", "seed": 24321, "viewId": "light_main", "logicalFrameIndex": 24}
+      ],
+      "receiverLuminanceLdr": {
+        "requirementIds": ["REQ-D-REAL-LIGHTS", "REQ-D-RECEIVER-A", "REQ-D-RECEIVER-B", "REQ-D-CLEANUP", "REQ-D-VISUAL"],
+        "perRequirementCheckMapping": [
+          {"requirementId": "REQ-D-REAL-LIGHTS", "receiverIds": [11, 12]},
+          {"requirementId": "REQ-D-RECEIVER-A", "receiverIds": [11]},
+          {"requirementId": "REQ-D-RECEIVER-B", "receiverIds": [12]},
+          {"requirementId": "REQ-D-CLEANUP", "receiverIds": [11, 12]},
+          {"requirementId": "REQ-D-VISUAL", "receiverIds": [11, 12]}
+        ],
+        "artifacts": [{"kind": "receiver-linear-ldr", "graphicsFormat": "ARGB32 linear readback", "npyDtype": "<f4", "channels": 3, "beautyFallbackAllowed": false}, {"kind": "receiver-id", "graphicsFormat": "R32_UInt", "npyDtype": "<u4", "beautyFallbackAllowed": false}, {"kind": "effect-mask", "graphicsFormat": "R8_UNorm", "npyDtype": "|u1", "allowedValues": [0, 255], "beautyFallbackAllowed": false}],
+        "frozenView": {"viewId": "light_main", "cameraSerializedReference": "Assets/VFX/Preview/W24S3/VFXPREVIEW_RealLightReceivers.unity#MainCamera", "position": [0, 1.5, -5.5], "orientationEulerDegrees": [8.1, 0, 0], "fovDegrees": 60},
+        "receiverIds": [{"id": 11, "role": "receiver_a"}, {"id": 12, "role": "receiver_b"}],
+        "effectMaskSubjects": "explicit enabled Runtime Entry Renderer set captured before those renderers are hidden", "abIsolation": "all Runtime Entry Renderer components hidden; only UnityEngine.Light.enabled changes between off/on", "thresholds": {"minimumLinearLuminanceDelta": 0.001},
+        "metricPlan": {"tool": "tools/vfx/metrics/render_metrics.py", "bridge": "W24MetricsEvidenceDag", "kind": "receiver_luminance_ldr", "checkIdPattern": "receiver-{receiver}-{seed}", "inputFields": ["on", "off", "receiverIds", "effectMask", "receiverId", "minLinearLuminanceDelta"]},
+        "seedConsumptionPlan": {"orderedSeeds": [24301, 24311, 24321], "oneRestartPerSeed": true, "logicalFrame": 24}
+      }
+    },
+    "runtimeEntry": "Assets/VFX/Generated/w24_real_light_receivers/VFX_w24_real_light_receivers.prefab", "previewScene": "Assets/VFX/Preview/W24S3/VFXPREVIEW_RealLightReceivers.unity",
+    "manifest": "ProjectSettings/VFXComposer/BuildManifests/w24_real_light_receivers.manifest.json", "implementationTrace": "docs/vfx-traces/w24_real_light_receivers.implementation-trace.json",
+    "captureToolBundle": "docs/vfx-contracts/capture-tools/w24-s3-capture-tool.bundle.json", "captureBindingStatus": "PENDING_FIRST_FORMAL_BUILD", "visualStatus": "VISUAL_PENDING"
+  }
+}

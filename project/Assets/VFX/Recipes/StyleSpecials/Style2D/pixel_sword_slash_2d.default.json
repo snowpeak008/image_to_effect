@@ -1,0 +1,98 @@
+{
+  "recipeVersion": 1,
+  "revision": 1,
+  "id": "pixel_sword_slash_2d",
+  "name": "Pixel Sword Slash 2d",
+  "dimension": "2d",
+  "archetype": "slash",
+  "style": {
+    "token": "pixel",
+    "snap_fps": 12,
+    "palette_lut": "cold_frost",
+    "virtual_res": 96,
+    "palette": {
+      "primary": "#58B8FF",
+      "secondary": "#D8F4FF",
+      "accent": "#FFFFFF"
+    },
+    "outline": 0.12,
+    "shading_steps": 4,
+    "noise_scale": 1.2,
+    "glow_strength": 1.1
+  },
+  "behavior": {
+    "hit": {
+      "type": "single"
+    },
+    "emission": {
+      "type": "single"
+    },
+    "timing": {
+      "type": "instant"
+    }
+  },
+  "targetProfile": "mobile_medium",
+  "randomSeed": 1305120422,
+  "stages": [
+    {
+      "id": "main",
+      "trigger": "manual",
+      "duration": 0.32,
+      "enabled": true,
+      "modules": [
+        {
+          "id": "body",
+          "kind": "energy_body",
+          "templateId": "PFT_2D_FireCore",
+          "parameters": {
+            "scale": 1.0
+          },
+          "enabled": true
+        },
+        {
+          "id": "flow",
+          "kind": "motion_trail",
+          "templateId": "PFT_2D_FireTrail",
+          "parameters": {
+            "time": 0.3,
+            "width": 0.28
+          },
+          "enabled": true,
+          "attachTo": "body"
+        },
+        {
+          "id": "secondary",
+          "kind": "secondary_particles",
+          "templateId": "PFT_2D_Embers",
+          "parameters": {
+            "rate": 12,
+            "lifetime": 0.5
+          },
+          "enabled": true,
+          "attachTo": "body"
+        },
+        {
+          "id": "accent",
+          "kind": "shockwave",
+          "templateId": "PFT_2D_Shockwave",
+          "parameters": {
+            "lifetime": 0.3,
+            "endSize": 2.2
+          },
+          "enabled": true
+        }
+      ]
+    }
+  ],
+  "metadata": {
+    "createdBy": "w9-w10-w16-style-special",
+    "templateCatalogVersion": "1.0.0"
+  },
+  "content": {
+    "family": "style_special",
+    "parameters": {
+      "arc_frames": 3,
+      "star_count": 4
+    }
+  }
+}

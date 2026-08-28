@@ -1,0 +1,97 @@
+{
+  "recipeVersion": 1,
+  "revision": 1,
+  "id": "blood_ritual_spawn_3d",
+  "name": "Blood Ritual Spawn 3d",
+  "dimension": "3d",
+  "archetype": "spawn",
+  "style": {
+    "token": "dark",
+    "palette": {
+      "primary": "#521015",
+      "secondary": "#9A1E25",
+      "accent": "#FF5A42"
+    },
+    "outline": 0.12,
+    "shading_steps": 4,
+    "noise_scale": 1.2,
+    "glow_strength": 0.78
+  },
+  "behavior": {
+    "hit": {
+      "type": "single"
+    },
+    "emission": {
+      "type": "single"
+    },
+    "timing": {
+      "type": "instant"
+    }
+  },
+  "targetProfile": "mobile_medium",
+  "randomSeed": 3388619895,
+  "stages": [
+    {
+      "id": "main",
+      "trigger": "manual",
+      "duration": 1.2,
+      "enabled": true,
+      "modules": [
+        {
+          "id": "body",
+          "kind": "energy_body",
+          "templateId": "PFT_3D_FireCore",
+          "parameters": {
+            "scale": 1.0
+          },
+          "enabled": true
+        },
+        {
+          "id": "flow",
+          "kind": "motion_trail",
+          "templateId": "PFT_3D_FireTrail",
+          "parameters": {
+            "time": 0.3,
+            "width": 0.28
+          },
+          "enabled": true,
+          "attachTo": "body"
+        },
+        {
+          "id": "secondary",
+          "kind": "secondary_particles",
+          "templateId": "PFT_3D_Embers",
+          "parameters": {
+            "rate": 12,
+            "lifetime": 0.5
+          },
+          "enabled": true,
+          "attachTo": "body"
+        },
+        {
+          "id": "accent",
+          "kind": "shockwave",
+          "templateId": "PFT_3D_Shockwave",
+          "parameters": {
+            "lifetime": 0.3,
+            "endSize": 2.2
+          },
+          "enabled": true
+        }
+      ]
+    }
+  ],
+  "metadata": {
+    "createdBy": "w9-w10-w16-style-special",
+    "templateCatalogVersion": "1.0.0"
+  },
+  "content": {
+    "family": "style_special",
+    "parameters": {
+      "circle_radius": 2.2,
+      "rune_set": "blood_a",
+      "candle_count": 5,
+      "smoke_height": 3.4
+    }
+  }
+}

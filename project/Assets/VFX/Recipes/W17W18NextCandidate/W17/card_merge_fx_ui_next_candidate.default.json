@@ -1,0 +1,13 @@
+{
+  "schema": "w17-ui-next-candidate/v1",
+  "id": "card_merge_fx_ui_next_candidate",
+  "workPackage": "W17",
+  "candidateStatus": "NEXT_CANDIDATE_VISUAL_PENDING",
+  "userVisualVerdict": null,
+  "preserveRejectedCandidate": true,
+  "effect": "card_merge",
+  "lifecycle": "event",
+  "protocols": ["source_rects_2_3", "result_rect", "result_rarity"],
+  "visualCarriers": ["source_card_motion", "collision", "result_column", "result_card"],
+  "budget": { "uiElements": 5, "materials": 1, "particleSystems": 0 }
+}

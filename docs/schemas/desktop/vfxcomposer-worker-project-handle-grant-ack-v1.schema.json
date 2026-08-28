@@ -1,0 +1,56 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.vfxcomposer.dev/desktop/vfxcomposer-worker-project-handle-grant-ack-v1.schema.json",
+  "title": "VFX Composer Worker project handle grant acknowledgement v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "protocolVersion",
+    "messageKind",
+    "requestId",
+    "leaseId",
+    "brokerGeneration",
+    "leaseGeneration",
+    "workerSessionId",
+    "workerProcessEpoch",
+    "grantSelfHash",
+    "disposition",
+    "selfHash"
+  ],
+  "properties": {
+    "protocolVersion": { "const": "vfxcomposer.protocol/1.0" },
+    "messageKind": { "const": "worker.project.handle.grant.ack" },
+    "requestId": { "$ref": "#/$defs/token" },
+    "leaseId": { "$ref": "#/$defs/token" },
+    "brokerGeneration": { "$ref": "#/$defs/positiveGeneration" },
+    "leaseGeneration": { "$ref": "#/$defs/positiveGeneration" },
+    "workerSessionId": { "$ref": "#/$defs/token" },
+    "workerProcessEpoch": { "$ref": "#/$defs/token" },
+    "grantSelfHash": { "$ref": "#/$defs/grantSelfHash" },
+    "disposition": { "const": "GRANT_ACCEPTED" },
+    "selfHash": { "$ref": "#/$defs/selfHash" }
+  },
+  "$defs": {
+    "token": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[A-Za-z0-9._:-]+$" },
+    "positiveGeneration": { "type": "integer", "minimum": 1, "maximum": 9223372036854775807 },
+    "digest": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" },
+    "grantSelfHash": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["typeTag", "digest"],
+      "properties": {
+        "typeTag": { "const": "vfxcomposer.worker-project-handle-grant/1" },
+        "digest": { "$ref": "#/$defs/digest" }
+      }
+    },
+    "selfHash": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["typeTag", "digest"],
+      "properties": {
+        "typeTag": { "const": "vfxcomposer.worker-project-handle-grant-ack/1" },
+        "digest": { "$ref": "#/$defs/digest" }
+      }
+    }
+  }
+}

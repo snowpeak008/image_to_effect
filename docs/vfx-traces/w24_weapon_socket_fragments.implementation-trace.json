@@ -1,0 +1,20 @@
+{
+  "traceVersion": "w24-s1/1.0",
+  "traceStatus": "PENDING_FIRST_FORMAL_BUILD_BINDING",
+  "effectId": "w24_weapon_socket_fragments",
+  "contractRevision": 25,
+  "contractHash": "sha256:88c752a126d0c0922861af647158b884dfb9095b173e573d3279239ca0f3dc4d",
+  "buildHash": "pending:formal-build",
+  "captureProfileHash": "pending:formal-build",
+  "runtimeEntryAssetPath": "Assets/VFX/Generated/w24_weapon_socket_fragments/VFX_w24_weapon_socket_fragments.prefab",
+  "runtimeEntryGuid": "pending:formal-build",
+  "requirementTraces": [
+    {"designRequirementId": "REQ-C-SOCKET", "evidenceAuthority": "telemetry", "objects": [{"assetPath": "Assets/VFX/Generated/w24_weapon_socket_fragments/VFX_w24_weapon_socket_fragments.prefab", "hierarchyPath": "/VFX_w24_weapon_socket_fragments", "componentType": "W24ModelBindingAdapter", "componentInstanceId": "socket_binding_adapter"}], "stateIds": ["bind", "attached"], "layerIds": ["socket_attachment"]},
+    {"designRequirementId": "REQ-C-MODEL-MOTION", "evidenceAuthority": "telemetry", "objects": [{"assetPath": "Assets/VFX/Generated/w24_weapon_socket_fragments/VFX_w24_weapon_socket_fragments.prefab", "hierarchyPath": "/VFX_w24_weapon_socket_fragments/SocketVisualRoot", "componentType": "Transform", "componentInstanceId": "socket_visual_root"}], "stateIds": ["attached"], "layerIds": ["socket_attachment"]},
+    {"designRequirementId": "REQ-C-MISSING", "evidenceAuthority": "telemetry", "objects": [{"assetPath": "Assets/VFX/Generated/w24_weapon_socket_fragments/VFX_w24_weapon_socket_fragments.prefab", "hierarchyPath": "/VFX_w24_weapon_socket_fragments", "componentType": "W24ModelBindingAdapter", "componentInstanceId": "socket_binding_adapter"}], "stateIds": ["binding_fault"], "layerIds": ["socket_attachment"]},
+    {"designRequirementId": "REQ-C-FRAGMENT-INDEPENDENCE", "evidenceAuthority": "telemetry", "objects": [{"assetPath": "Assets/VFX/Generated/w24_weapon_socket_fragments/VFX_w24_weapon_socket_fragments.prefab", "hierarchyPath": "/VFX_w24_weapon_socket_fragments/SocketVisualRoot", "componentType": "W24FragmentMotionSystem", "componentInstanceId": "fragment_motion_system"}, {"assetPath": "Assets/VFX/Generated/w24_weapon_socket_fragments/VFX_w24_weapon_socket_fragments.prefab", "hierarchyPath": "/VFX_w24_weapon_socket_fragments/SocketVisualRoot/IndependentFragment_0", "componentType": "Transform", "componentInstanceId": "fragment_0"}, {"assetPath": "Assets/VFX/Generated/w24_weapon_socket_fragments/VFX_w24_weapon_socket_fragments.prefab", "hierarchyPath": "/VFX_w24_weapon_socket_fragments/SocketVisualRoot/IndependentFragment_1", "componentType": "Transform", "componentInstanceId": "fragment_1"}, {"assetPath": "Assets/VFX/Generated/w24_weapon_socket_fragments/VFX_w24_weapon_socket_fragments.prefab", "hierarchyPath": "/VFX_w24_weapon_socket_fragments/SocketVisualRoot/IndependentFragment_2", "componentType": "Transform", "componentInstanceId": "fragment_2"}], "stateIds": ["fragment"], "layerIds": ["independent_fragments"]},
+    {"designRequirementId": "REQ-C-MULTIVIEW", "evidenceAuthority": "diagnostic", "objects": [], "stateIds": ["attached", "fragment"], "layerIds": ["socket_attachment", "independent_fragments"]},
+    {"designRequirementId": "REQ-C-VISUAL", "evidenceAuthority": "visualQa", "objects": [{"assetPath": "Assets/VFX/Generated/w24_weapon_socket_fragments/VFX_w24_weapon_socket_fragments.prefab", "hierarchyPath": "/VFX_w24_weapon_socket_fragments/SocketVisualRoot/IndependentFragment_0", "componentType": "Transform", "componentInstanceId": "fragment_0"}, {"assetPath": "Assets/VFX/Generated/w24_weapon_socket_fragments/VFX_w24_weapon_socket_fragments.prefab", "hierarchyPath": "/VFX_w24_weapon_socket_fragments/SocketVisualRoot/IndependentFragment_1", "componentType": "Transform", "componentInstanceId": "fragment_1"}], "stateIds": ["attached", "fragment"], "layerIds": ["independent_fragments"]},
+    {"designRequirementId": "REQ-C-USER", "evidenceAuthority": "user", "objects": [], "stateIds": [], "layerIds": []}
+  ]
+}

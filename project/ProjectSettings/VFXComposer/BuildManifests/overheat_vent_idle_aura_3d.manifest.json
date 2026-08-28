@@ -1,0 +1,85 @@
+{
+  "manifestVersion": 1,
+  "rulesVersion": "1.0-draft",
+  "enforcement": "strict",
+  "effectId": "overheat_vent_idle_aura_3d",
+  "archetype": "aura",
+  "recipeVersion": 1,
+  "recipeRevision": 1,
+  "recipeHash": "c0856f1e8cadcd5fdf1b5ece4118d7c55eb4f4a0813c6257b8131c9f4623b6d1",
+  "buildHash": "760e20aa909fcf65d605c6cbdcc0428120de24da5ba782e6950a3e9c0000fb93",
+  "compilerVersion": "styled-content-4",
+  "unityVersion": "2022.3.62f3c1",
+  "sourceRecipePath": "Assets/VFX/Recipes/Composites/HeroComponents/overheat_vent_idle_aura_3d.default.json",
+  "runtimeEntry": {
+    "kind": "prefab",
+    "path": "Assets/VFX/Generated/overheat_vent_idle_aura_3d/VFX_overheat_vent_idle_aura_3d.prefab",
+    "guid": "5cf6da47e2fb2c24aacaf125ccf4722e"
+  },
+  "ownedOutputs": [
+    {
+      "path": "Assets/VFX/Generated/overheat_vent_idle_aura_3d/VFX_overheat_vent_idle_aura_3d.prefab",
+      "guid": "5cf6da47e2fb2c24aacaf125ccf4722e",
+      "assetType": "GameObject",
+      "sha256": "ed1c84c9d71482f1a90ac18d968988e58516a972d76dfe97fd766ce502a08b30"
+    }
+  ],
+  "dependencies": [
+    {
+      "path": "Assets/VFX/Shared/Shaders/VfxLayeredRamp.shader",
+      "guid": "81928f0d6aa7a2e4c8cb73230126637f",
+      "assetType": "Shader",
+      "version": null,
+      "dependencyHash": "64048683c60561907c22fac9564aba1d"
+    },
+    {
+      "path": "Assets/VFX/Shared/Styles/Materials/MAT_Style_steampunk.mat",
+      "guid": "495290e581cc56b4789b8bdb4d4521ea",
+      "assetType": "Material",
+      "version": null,
+      "dependencyHash": "74e19b970f93025b43ace825827392d8"
+    },
+    {
+      "path": "Assets/VFX/Shared/Styles/Meshes/M_Style_Burst.asset",
+      "guid": "0def46dac13f1d8449cd98d98de17a15",
+      "assetType": "Mesh",
+      "version": null,
+      "dependencyHash": "56e972a8f8588a864d379a7611c49c63"
+    },
+    {
+      "path": "Assets/VFX/Shared/Styles/Meshes/M_Style_Quad.asset",
+      "guid": "7f415b79b45b04d4ab5e3f4dd61605aa",
+      "assetType": "Mesh",
+      "version": null,
+      "dependencyHash": "01e83f0bfc8392031ac8f5694416ab10"
+    },
+    {
+      "path": "Assets/VFX/Shared/Styles/Meshes/M_Style_Ring.asset",
+      "guid": "df59364e370c085418d31c0f952bcf1a",
+      "assetType": "Mesh",
+      "version": null,
+      "dependencyHash": "021f9d0fab5159d1d05310de3284c997"
+    },
+    {
+      "path": "Packages/com.vfxcomposer.unity/Runtime/Components/StyledVfxController.cs",
+      "guid": "ca6f81a249967414c96082671e07dcaa",
+      "assetType": "MonoScript",
+      "version": null,
+      "dependencyHash": "486e1b8ba27b5e00b709bc5fd2b5624a"
+    }
+  ],
+  "cost": {
+    "particles": 0,
+    "particleSystems": 0,
+    "renderers": 3,
+    "materials": 1,
+    "trails": 0,
+    "duration": 1.2000000476837158,
+    "localTextureBytes": 0,
+    "dependencyResidentTextureBytes": 0,
+    "gameObjects": 4,
+    "maxDepth": 1
+  },
+  "audit": [],
+  "generatedAtUtc": "2026-08-24T13:34:58.2442223Z"
+}

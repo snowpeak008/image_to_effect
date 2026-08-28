@@ -1,0 +1,7 @@
+[
+  {
+    "op": "set_content_param",
+    "path": "/content/parameters/hit_burst_scale",
+    "value": 2.6
+  }
+]

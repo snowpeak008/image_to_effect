@@ -1,0 +1,19 @@
+{
+  "traceVersion": "w24-s1/1.0",
+  "traceStatus": "PENDING_FIRST_FORMAL_BUILD_BINDING",
+  "effectId": "w24_moving_projectile_trail",
+  "contractRevision": 26,
+  "contractHash": "sha256:93fce950b2bbea9de590bdbc9594f43bce5894ebf4ccbacafbe370af8d279b58",
+  "buildHash": "pending:formal-build",
+  "captureProfileHash": "pending:formal-build",
+  "runtimeEntryAssetPath": "Assets/VFX/Generated/w24_moving_projectile_trail/VFX_w24_moving_projectile_trail.prefab",
+  "runtimeEntryGuid": "pending:formal-build",
+  "requirementTraces": [
+    {"designRequirementId": "REQ-B-MOTION", "evidenceAuthority": "telemetry", "objects": [{"assetPath": "Assets/VFX/Generated/w24_moving_projectile_trail/VFX_w24_moving_projectile_trail.prefab", "hierarchyPath": "/VFX_w24_moving_projectile_trail", "componentType": "W24MovingEmitterTrailProtocol", "componentInstanceId": "moving_emitter_protocol"}], "stateIds": ["travel"], "layerIds": ["moving_emitter", "world_trail"], "semanticTokens": ["emitter_position_history", "trail_vertices_from_motion"]},
+    {"designRequirementId": "REQ-B-WORLD-TRAIL", "evidenceAuthority": "telemetry", "objects": [{"assetPath": "Assets/VFX/Generated/w24_moving_projectile_trail/VFX_w24_moving_projectile_trail.prefab", "hierarchyPath": "/VFX_w24_moving_projectile_trail/Travel/WorldSpaceTrail", "componentType": "TrailRenderer", "componentInstanceId": "world_space_trail"}], "stateIds": ["travel"], "layerIds": ["world_trail"], "semanticTokens": ["emitter_position_history", "trail_vertices_from_motion"]},
+    {"designRequirementId": "REQ-B-TRAIL-CORRIDOR", "evidenceAuthority": "diagnostic", "objects": [], "stateIds": ["travel"], "layerIds": ["world_trail"], "semanticTokens": ["emitter_position_history", "trail_vertices_from_motion"]},
+    {"designRequirementId": "REQ-B-POOL-CLEAR", "evidenceAuthority": "telemetry", "objects": [{"assetPath": "Assets/VFX/Generated/w24_moving_projectile_trail/VFX_w24_moving_projectile_trail.prefab", "hierarchyPath": "/VFX_w24_moving_projectile_trail", "componentType": "W24MovingEmitterTrailProtocol", "componentInstanceId": "moving_emitter_protocol"}], "stateIds": ["cancel"], "layerIds": ["world_trail"], "semanticTokens": ["emitter_position_history", "trail_vertices_from_motion"]},
+    {"designRequirementId": "REQ-B-VISUAL-CAUSALITY", "evidenceAuthority": "visualQa", "objects": [], "stateIds": ["launch", "travel", "impact"], "layerIds": ["moving_emitter", "world_trail", "impact_residue"], "semanticTokens": ["emitter_position_history", "trail_vertices_from_motion"]},
+    {"designRequirementId": "REQ-B-USER", "evidenceAuthority": "user", "objects": [], "stateIds": [], "layerIds": []}
+  ]
+}

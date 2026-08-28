@@ -1,0 +1,32 @@
+{
+  "schema": "style-special-next-candidate/v1",
+  "id": "healing_bloom_aura_2d_candy_next_candidate",
+  "sourceId": "healing_bloom_aura_2d_candy",
+  "label": "CANDY · HEAL VARIANT",
+  "group": "w16",
+  "archetype": "aura",
+  "dimension": "2d",
+  "style": "candy",
+  "profile": "CandyBounce",
+  "semantic": "heal-bloom-content+pastel-jelly-ring+heart-star-rise-loop",
+  "duration": 1.32,
+  "releaseNormalized": 0.12,
+  "sustainEndNormalized": 0.84,
+  "sustained": true,
+  "seed": 16106,
+  "intensity": 1.04,
+  "palette": {
+    "primary": "#77E49A",
+    "secondary": "#FF9BCB",
+    "accent": "#FFF3A1"
+  },
+  "meshes": [
+    "Ring",
+    "Burst",
+    "Quad",
+    "Quad"
+  ],
+  "pairFamily": "candy",
+  "pairRole": "variant",
+  "sourceBaseId": "healing_bloom_aura_2d"
+}

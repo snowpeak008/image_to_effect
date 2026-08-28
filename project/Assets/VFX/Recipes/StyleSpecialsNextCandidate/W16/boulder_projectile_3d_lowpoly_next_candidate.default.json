@@ -1,0 +1,32 @@
+{
+  "schema": "style-special-next-candidate/v1",
+  "id": "boulder_projectile_3d_lowpoly_next_candidate",
+  "sourceId": "boulder_projectile_3d_lowpoly",
+  "label": "LOWPOLY · BOULDER VARIANT",
+  "group": "w16",
+  "archetype": "projectile",
+  "dimension": "3d",
+  "style": "lowpoly",
+  "profile": "FacetBurst",
+  "semantic": "boulder-content+flat-facets+parabolic-turn+hard-edge-debris",
+  "duration": 1.3,
+  "releaseNormalized": 0.12,
+  "sustainEndNormalized": 0.76,
+  "sustained": false,
+  "seed": 16102,
+  "intensity": 1.02,
+  "palette": {
+    "primary": "#8B6A48",
+    "secondary": "#C9A777",
+    "accent": "#F1D5A5"
+  },
+  "meshes": [
+    "FacetB",
+    "FacetA",
+    "Shard",
+    "Ring"
+  ],
+  "pairFamily": "lowpoly",
+  "pairRole": "variant",
+  "sourceBaseId": "boulder_projectile_3d"
+}

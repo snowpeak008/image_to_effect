@@ -1,0 +1,173 @@
+{
+  "manifestVersion": 1,
+  "rulesVersion": "1.0-draft",
+  "enforcement": "legacy_audit",
+  "effectId": "i3_brazier_bead",
+  "archetype": "projectile",
+  "recipeVersion": 1,
+  "recipeRevision": 1,
+  "recipeHash": "a946baa18cd9fe1f9cac540ce669f422a64202e2e7206ddd067be10888c194c8",
+  "buildHash": "674f6a33124d882317d42ae1c61be22a359c3d2646f2e32d6713389ab7c2403a",
+  "compilerVersion": "0.1.0",
+  "unityVersion": "2022.3.62f3c1",
+  "sourceRecipePath": null,
+  "runtimeEntry": {
+    "kind": "prefab",
+    "path": "Assets/VFX/Generated/i3_brazier_bead/VFX_I3_Brazier_Bead.prefab",
+    "guid": "fdedc7e79202b494faaa12210aa8845c"
+  },
+  "ownedOutputs": [
+    {
+      "path": "Assets/VFX/Generated/i3_brazier_bead/VFX_I3_Brazier_Bead.prefab",
+      "guid": "fdedc7e79202b494faaa12210aa8845c",
+      "assetType": "GameObject",
+      "sha256": "f959d45f9c50fe7be662bfc5ac837a6bb40549601b343ef8bb0ced22505e665c"
+    },
+    {
+      "path": "Assets/VFX/Generated/i3_brazier_bead/burst_Material_0.mat",
+      "guid": "c608e8817f11f8b4a8f82c1ea46e8a79",
+      "assetType": "Material",
+      "sha256": "f0f93c24a5b67a85ff1c31c942113817ac9be56fa93cd820978621d34c1b0357"
+    },
+    {
+      "path": "Assets/VFX/Generated/i3_brazier_bead/coreFlash_Material_0.mat",
+      "guid": "9948228d2f561ce458671802b0526280",
+      "assetType": "Material",
+      "sha256": "5d8c0022eb4668ab7b7c3e09ab41d946794c192cb412e8f01a558e193fdca409"
+    },
+    {
+      "path": "Assets/VFX/Generated/i3_brazier_bead/core_Material_0.mat",
+      "guid": "331e5ddaf86bcd748aa333d47a5182f6",
+      "assetType": "Material",
+      "sha256": "f37ea51c069c4aaa632499a9cadbcbd23d12fa700d261d714f3a95d6790ac3ea"
+    },
+    {
+      "path": "Assets/VFX/Generated/i3_brazier_bead/embers_Material_0.mat",
+      "guid": "37440dde3303b524bb80c93315b51a14",
+      "assetType": "Material",
+      "sha256": "fd36093c636880229ec5ff58d35f811b778a4d8e6692b24a7b715bcb560e2bb9"
+    },
+    {
+      "path": "Assets/VFX/Generated/i3_brazier_bead/launchFlash_Material_0.mat",
+      "guid": "3e6faa584b3aadf4b8bd2bf354db070d",
+      "assetType": "Material",
+      "sha256": "9e1a000569792e6e68e7a3f391b032437764bacdf6efcd22af21cf4b417649cf"
+    },
+    {
+      "path": "Assets/VFX/Generated/i3_brazier_bead/shockwave_Material_0.mat",
+      "guid": "8e11510411a0d264ab2a2c8282565977",
+      "assetType": "Material",
+      "sha256": "2da27cda39148fbfceba05a3f00b59782367518d49fd2582d0c342f99490c260"
+    },
+    {
+      "path": "Assets/VFX/Generated/i3_brazier_bead/trail_Material_0.mat",
+      "guid": "4f58831751447544da081a054e9c70a6",
+      "assetType": "Material",
+      "sha256": "708b0b7c05b9da8be6e358f0f05daa9edc4865b50fa6f515f439a5dc3f823f5b"
+    }
+  ],
+  "dependencies": [
+    {
+      "path": "Assets/VFX/Templates/2D/Textures/VFX2D_Ember.png",
+      "guid": "2473925f189aadf49bd3392eb912d164",
+      "assetType": "Texture2D",
+      "version": null,
+      "dependencyHash": "c28eef9b3c24613638561815067e5280"
+    },
+    {
+      "path": "Assets/VFX/Templates/2D/Textures/VFX2D_FireCore.png",
+      "guid": "db1681a7fbdc4a94f89153d768ed4ab0",
+      "assetType": "Texture2D",
+      "version": null,
+      "dependencyHash": "d1d83a1d4bb80328bfc1b8db9576b7d4"
+    },
+    {
+      "path": "Assets/VFX/Templates/2D/Textures/VFX2D_FireTrail.png",
+      "guid": "1a5cacac18736f940b624e020d7854d7",
+      "assetType": "Texture2D",
+      "version": null,
+      "dependencyHash": "fe88e46317792133ae1c2ccb52571ad6"
+    },
+    {
+      "path": "Assets/VFX/Templates/2D/Textures/VFX2D_ImpactStreak.png",
+      "guid": "d17050d159af2e541865ec8ca2c1dcaa",
+      "assetType": "Texture2D",
+      "version": null,
+      "dependencyHash": "511d8bec4f2a706008cdf5dcf58e5386"
+    },
+    {
+      "path": "Assets/VFX/Templates/2D/Textures/VFX2D_LaunchFlash.png",
+      "guid": "ee295a0c1599b7b458b940a1ac2fbbf1",
+      "assetType": "Texture2D",
+      "version": null,
+      "dependencyHash": "ec0bb98bf282dcabf092d445b2231b46"
+    },
+    {
+      "path": "Assets/VFX/Templates/2D/Textures/VFX2D_ShockwaveRing.png",
+      "guid": "bc036c3d227550f42beae2c8a8a34637",
+      "assetType": "Texture2D",
+      "version": null,
+      "dependencyHash": "288a47224e147722adc50c5881c40126"
+    },
+    {
+      "path": "Packages/com.unity.render-pipelines.universal/Editor/AssetVersion.cs",
+      "guid": "d0353a89b1f911e48b9e16bdc9f2e058",
+      "assetType": "MonoScript",
+      "version": null,
+      "dependencyHash": "32658fcbbe1a332050004e3b27abb4a3"
+    },
+    {
+      "path": "Packages/com.unity.render-pipelines.universal/Shaders/Particles/ParticlesUnlit.shader",
+      "guid": "0406db5a14f94604a8c57ccfbc9f3b46",
+      "assetType": "Shader",
+      "version": null,
+      "dependencyHash": "b7b185925fcbf7b0661368a240b860d4"
+    },
+    {
+      "path": "Packages/com.vfxcomposer.unity/Runtime/Components/GeneratedVfxController.cs",
+      "guid": "95375c27028a27440aba608c4070f13c",
+      "assetType": "MonoScript",
+      "version": null,
+      "dependencyHash": "84f23e5ab123318ec5a468206d637ab8"
+    }
+  ],
+  "cost": {
+    "particles": 99,
+    "particleSystems": 5,
+    "renderers": 7,
+    "materials": 7,
+    "trails": 1,
+    "duration": 1.62,
+    "localTextureBytes": 0,
+    "dependencyResidentTextureBytes": 3368944,
+    "gameObjects": 11,
+    "maxDepth": 3
+  },
+  "audit": [
+    {
+      "code": "R8014",
+      "severity": "warning",
+      "path": "/runtimeEntry/path",
+      "message": "Runtime Prefab name must be VFX_<effectId>."
+    },
+    {
+      "code": "R8003",
+      "severity": "warning",
+      "path": "/structure/gameObjects",
+      "message": "Runtime Entry exceeds the configured GameObject budget."
+    },
+    {
+      "code": "R8004",
+      "severity": "warning",
+      "path": "/structure/maxDepth",
+      "message": "Runtime Entry exceeds the configured hierarchy depth."
+    },
+    {
+      "code": "R8011",
+      "severity": "warning",
+      "path": "/ownedOutputs/materials",
+      "message": "Effect exceeds the recommended local Material count."
+    }
+  ],
+  "generatedAtUtc": "2026-08-24T11:24:48.3531718Z"
+}

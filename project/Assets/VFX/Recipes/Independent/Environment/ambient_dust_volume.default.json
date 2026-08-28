@@ -1,0 +1,98 @@
+{
+  "recipeVersion": 1,
+  "revision": 1,
+  "id": "ambient_dust_volume",
+  "name": "Ambient Dust Volume",
+  "dimension": "3d",
+  "archetype": "environment",
+  "style": {
+    "token": "semireal",
+    "palette": {
+      "primary": "#D8C9AD",
+      "secondary": "#FFF2D1",
+      "accent": "#FFFFFF"
+    },
+    "outline": 0.12,
+    "shading_steps": 4,
+    "noise_scale": 1.2,
+    "glow_strength": 1.1
+  },
+  "behavior": {
+    "hit": {
+      "type": "single"
+    },
+    "emission": {
+      "type": "single"
+    },
+    "timing": {
+      "type": "sustained"
+    }
+  },
+  "content": {
+    "family": "environment",
+    "parameters": {
+      "intensity": 0.45,
+      "wind_strength": 0.4,
+      "area_size": 12,
+      "camera_follow": true,
+      "light_band_gain": 1.5
+    }
+  },
+  "targetProfile": "mobile_medium",
+  "randomSeed": 119071503,
+  "stages": [
+    {
+      "id": "main",
+      "trigger": "manual",
+      "duration": 2.0,
+      "enabled": true,
+      "modules": [
+        {
+          "id": "body",
+          "kind": "energy_body",
+          "templateId": "PFT_3D_FireCore",
+          "parameters": {
+            "scale": 1.0
+          },
+          "enabled": true
+        },
+        {
+          "id": "flow",
+          "kind": "motion_trail",
+          "templateId": "PFT_3D_FireTrail",
+          "parameters": {
+            "time": 0.3,
+            "width": 0.25
+          },
+          "enabled": true,
+          "attachTo": "body"
+        },
+        {
+          "id": "secondary",
+          "kind": "secondary_particles",
+          "templateId": "PFT_3D_Embers",
+          "parameters": {
+            "rate": 10,
+            "lifetime": 0.55
+          },
+          "enabled": true,
+          "attachTo": "body"
+        },
+        {
+          "id": "accent",
+          "kind": "shockwave",
+          "templateId": "PFT_3D_Shockwave",
+          "parameters": {
+            "lifetime": 0.3,
+            "endSize": 2.1
+          },
+          "enabled": true
+        }
+      ]
+    }
+  ],
+  "metadata": {
+    "createdBy": "w11-w17-independent-content",
+    "templateCatalogVersion": "1.0.0"
+  }
+}

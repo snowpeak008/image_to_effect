@@ -1,0 +1,60 @@
+{
+  "capture": "hidden-graphics-device batch Camera.Render; no -nographics; Bloom disabled (camera HDR false)",
+  "targetReference": "docs/slash/reference/slash-visual-target-v1.png (reference only; no texture or flipbook imported)",
+  "views": [
+    { "file": "front.png", "background": "dark", "position": [0, 2.4, -7.6], "target": [0, 0.38, 0], "fov": 60, "sha256": "F57ADFD7404EEF85FA07BAAD31E07AD3275071B727F380F7BD1582DD29D40D1F" },
+    { "file": "side.png", "background": "neutral", "position": [8.2, 2.8, -0.6], "target": [0, 0.38, 0], "fov": 60, "sha256": "172D750F8F4D01F5222ABF5D448AE604A86A7CBDBA1FFE8CC0376CAB18CB3EAA" },
+    { "file": "oblique_top.png", "background": "bright", "position": [4.8, 6.6, -7.2], "target": [0, 0.38, 0], "fov": 60, "sha256": "4EE2AFC5782D71110BF732554A4CCFF2155164FAA054A001BB6F0C34A5F5A043" },
+    { "file": "close.png", "background": "dark", "position": [-0.4, 1.55, -4.35], "target": [0, 0.38, 0], "fov": 60, "sha256": "CF0C41F1629E4A5CE18945ABFA7FF7C85AB4D7DB9B8A4EC916E9CC5C66F2CBA5" },
+    { "file": "game_distance.png", "background": "neutral", "position": [0, 3.2, -12], "target": [0, 0.38, 0], "fov": 60, "sha256": "A9657E0BDAE67D1AE187F957703FB2FA7DA05D65990DC4534BF3FAFD609D3D3F" }
+  ],
+  "timelineFrames": [
+    { "phase": "anticipation", "time": 0.02, "file": "time_anticipation.png", "sha256": "7AD17D23C5AEEC3B763E57C4E0E0D05FC7441423E112524C1BD31B49AA005B36" },
+    { "phase": "primary", "time": 0.16, "file": "time_primary.png", "sha256": "8582EB9792620B1D4BAD3663F2253A6B973A14C04DD40989FBD3A11F3FE1D185" },
+    { "phase": "afterimage", "time": 0.24, "file": "time_afterimage.png", "sha256": "ED19BC5A0CF39FCDEBF1F78EA1343EE093B3F88BB62DCAD41D7E0253BDE82EE4" },
+    { "phase": "dissipation", "time": 0.38, "file": "time_dissipation.png", "sha256": "7BEF6BD2FD5CBDB1477E5A890D7D5107F13834BCE5E72B94E6B922D9C4993F95" }
+  ],
+  "meshes": [
+    { "path": "Assets/VFX/Spike/S12/Meshes/MESH_S12_AfterimageA.asset", "vertices": 100, "triangles": 192, "bounds": { "center": [-0.025075, 0.396703, 0.197767], "size": [2.060344, 1.781494, 0.166288] } },
+    { "path": "Assets/VFX/Spike/S12/Meshes/MESH_S12_AfterimageB.asset", "vertices": 100, "triangles": 192, "bounds": { "center": [-0.099394, 0.504544, 0.288168], "size": [1.534808, 1.368181, 0.125439] } },
+    { "path": "Assets/VFX/Spike/S12/Meshes/MESH_S12_Anticipation.asset", "vertices": 100, "triangles": 192, "bounds": { "center": [-0.907034, -0.469448, 0.02364], "size": [0.722683, 0.852799, 0.169279] } },
+    { "path": "Assets/VFX/Spike/S12/Meshes/MESH_S12_DiamondSpark.asset", "vertices": 8, "triangles": 4, "bounds": { "center": [0, 0, 0.008], "size": [0.09, 0.14, 0.016] } },
+    { "path": "Assets/VFX/Spike/S12/Meshes/MESH_S12_InnerBlade.asset", "vertices": 100, "triangles": 192, "bounds": { "center": [0.040681, 0.211939, 0.115651], "size": [2.464723, 2.107406, 0.210698] } },
+    { "path": "Assets/VFX/Spike/S12/Meshes/MESH_S12_PrimaryArc.asset", "vertices": 100, "triangles": 192, "bounds": { "center": [0.005755, 0.223073, 0.09], "size": [2.603486, 2.232442, 0.222] } }
+  ],
+  "materials": [
+    { "path": "Assets/VFX/Spike/S12/Materials/S12_Afterimage.mat", "shader": "Universal Render Pipeline/Particles/Unlit", "renderQueue": 3070, "queueOffset": 70, "alpha": 0.68 },
+    { "path": "Assets/VFX/Spike/S12/Materials/S12_Anticipation.mat", "shader": "Universal Render Pipeline/Particles/Unlit", "renderQueue": 3120, "queueOffset": 120, "alpha": 0.7 },
+    { "path": "Assets/VFX/Spike/S12/Materials/S12_ArcBody.mat", "shader": "Universal Render Pipeline/Particles/Unlit", "renderQueue": 3100, "queueOffset": 100, "alpha": 0.84 },
+    { "path": "Assets/VFX/Spike/S12/Materials/S12_Dissipation.mat", "shader": "Universal Render Pipeline/Particles/Unlit", "renderQueue": 3050, "queueOffset": 50, "alpha": 0.38 },
+    { "path": "Assets/VFX/Spike/S12/Materials/S12_InnerBlade.mat", "shader": "Universal Render Pipeline/Particles/Unlit", "renderQueue": 3130, "queueOffset": 130, "alpha": 0.98 },
+    { "path": "Assets/VFX/Spike/S12/Materials/S12_ScaleReference.mat", "shader": "Universal Render Pipeline/Particles/Unlit", "renderQueue": 3020, "queueOffset": 20, "alpha": 0.78 },
+    { "path": "Assets/VFX/Spike/S12/Materials/S12_Sparks.mat", "shader": "Universal Render Pipeline/Particles/Unlit", "renderQueue": 3150, "queueOffset": 150, "alpha": 0.94 }
+  ],
+  "rendererBounds": [
+    { "name": "S12_SlashSpikeRoot/ScaleReference_1_8m/BaseTick", "bounds": { "center": [-1.82, 0.02, 0.22], "size": [0.32, 0.025, 0.025] }, "boundsSpace": "world", "material": "S12_ScaleReference", "renderQueue": 3020, "queueOffset": 20 },
+    { "name": "S12_SlashSpikeRoot/ScaleReference_1_8m/Height_1_8m", "bounds": { "center": [-1.82, 0.92, 0.22], "size": [0.035, 1.8, 0.035] }, "boundsSpace": "world", "material": "S12_ScaleReference", "renderQueue": 3020, "queueOffset": 20 },
+    { "name": "S12_SlashSpikeRoot/ScaleReference_1_8m/ReferenceHead", "bounds": { "center": [-1.82, 1.65, 0.2232], "size": [0.036, 0.056, 0.0064] }, "boundsSpace": "world", "material": "S12_ScaleReference", "renderQueue": 3020, "queueOffset": 20 },
+    { "name": "S12_SlashSpikeRoot/ScaleReference_1_8m/TopTick", "bounds": { "center": [-1.82, 1.82, 0.22], "size": [0.32, 0.025, 0.025] }, "boundsSpace": "world", "material": "S12_ScaleReference", "renderQueue": 3020, "queueOffset": 20 },
+    { "name": "S12_SlashSpikeRoot/afterimage/RedAfterimageA", "bounds": { "center": [-0.025075, 0.396703, 0.197767], "size": [2.060344, 1.781494, 0.166288] }, "boundsSpace": "world", "material": "S12_Afterimage", "renderQueue": 3070, "queueOffset": 70 },
+    { "name": "S12_SlashSpikeRoot/afterimage/RedAfterimageB", "bounds": { "center": [-0.099394, 0.504544, 0.288168], "size": [1.534808, 1.368181, 0.125439] }, "boundsSpace": "world", "material": "S12_Afterimage", "renderQueue": 3070, "queueOffset": 70 },
+    { "name": "S12_SlashSpikeRoot/anticipation/AnticipationGlint", "bounds": { "center": [-0.907034, -0.469448, 0.02364], "size": [0.722683, 0.852799, 0.169279] }, "boundsSpace": "world", "material": "S12_Anticipation", "renderQueue": 3120, "queueOffset": 120 },
+    { "name": "S12_SlashSpikeRoot/dissipation/DissipationMotes", "bounds": { "center": [0.365, 0.375, 0.035], "size": [1.44, 0.56, 0.2] }, "boundsSpace": "local", "phaseSampleTime": 0.24, "material": "S12_Dissipation", "renderQueue": 3050, "queueOffset": 50 },
+    { "name": "S12_SlashSpikeRoot/dissipation/Spark_0", "bounds": { "center": [-0.28, 0.14, 0.06496], "size": [0.100833, 0.100833, 0.00992] }, "boundsSpace": "world", "material": "S12_Dissipation", "renderQueue": 3050, "queueOffset": 50 },
+    { "name": "S12_SlashSpikeRoot/dissipation/Spark_1", "bounds": { "center": [0.18, 0.42, 0.08496], "size": [0.100833, 0.100833, 0.00992] }, "boundsSpace": "world", "material": "S12_Dissipation", "renderQueue": 3050, "queueOffset": 50 },
+    { "name": "S12_SlashSpikeRoot/dissipation/Spark_2", "bounds": { "center": [0.62, 0.23, 0.04496], "size": [0.100833, 0.100833, 0.00992] }, "boundsSpace": "world", "material": "S12_Dissipation", "renderQueue": 3050, "queueOffset": 50 },
+    { "name": "S12_SlashSpikeRoot/dissipation/Spark_3", "bounds": { "center": [0.92, 0.55, 0.07496], "size": [0.100833, 0.100833, 0.00992] }, "boundsSpace": "world", "material": "S12_Dissipation", "renderQueue": 3050, "queueOffset": 50 },
+    { "name": "S12_SlashSpikeRoot/dissipation/Spark_4", "bounds": { "center": [1.15, 0.26, -0.01504], "size": [0.100833, 0.100833, 0.00992] }, "boundsSpace": "world", "material": "S12_Dissipation", "renderQueue": 3050, "queueOffset": 50 },
+    { "name": "S12_SlashSpikeRoot/primary_arc/PrimaryArcBody", "bounds": { "center": [0.005755, 0.223073, 0.09], "size": [2.603486, 2.232442, 0.222] }, "boundsSpace": "world", "material": "S12_ArcBody", "renderQueue": 3100, "queueOffset": 100 },
+    { "name": "S12_SlashSpikeRoot/primary_arc/YellowWhiteInnerBlade", "bounds": { "center": [0.040681, 0.211939, 0.115651], "size": [2.464723, 2.107406, 0.210698] }, "boundsSpace": "world", "material": "S12_InnerBlade", "renderQueue": 3130, "queueOffset": 130 },
+    { "name": "S12_SlashSpikeRoot/sparks/SeparatedDiamondSparks", "bounds": { "center": [0.34375, 0.47125, 0.05625], "size": [1.6825, 1.3725, 0.3225] }, "boundsSpace": "local", "phaseSampleTime": 0.16, "material": "S12_Sparks", "renderQueue": 3150, "queueOffset": 150 },
+    { "name": "S12_SlashSpikeRoot/sparks/Spark_0", "bounds": { "center": [-0.22, -0.24, 0.048], "size": [0.162635, 0.162635, 0.016] }, "boundsSpace": "world", "material": "S12_Sparks", "renderQueue": 3150, "queueOffset": 150 },
+    { "name": "S12_SlashSpikeRoot/sparks/Spark_1", "bounds": { "center": [0.08, 0.24, 0.088], "size": [0.162635, 0.162635, 0.016] }, "boundsSpace": "world", "material": "S12_Sparks", "renderQueue": 3150, "queueOffset": 150 },
+    { "name": "S12_SlashSpikeRoot/sparks/Spark_2", "bounds": { "center": [0.38, 0.56, 0.128], "size": [0.162635, 0.162635, 0.016] }, "boundsSpace": "world", "material": "S12_Sparks", "renderQueue": 3150, "queueOffset": 150 },
+    { "name": "S12_SlashSpikeRoot/sparks/Spark_3", "bounds": { "center": [0.7, 0.2, -0.012], "size": [0.162635, 0.162635, 0.016] }, "boundsSpace": "world", "material": "S12_Sparks", "renderQueue": 3150, "queueOffset": 150 },
+    { "name": "S12_SlashSpikeRoot/sparks/Spark_4", "bounds": { "center": [0.98, 0.72, 0.108], "size": [0.162635, 0.162635, 0.016] }, "boundsSpace": "world", "material": "S12_Sparks", "renderQueue": 3150, "queueOffset": 150 },
+    { "name": "S12_SlashSpikeRoot/sparks/Spark_5", "bounds": { "center": [-0.47, 0.48, 0.048], "size": [0.162635, 0.162635, 0.016] }, "boundsSpace": "world", "material": "S12_Sparks", "renderQueue": 3150, "queueOffset": 150 },
+    { "name": "S12_SlashSpikeRoot/sparks/Spark_6", "bounds": { "center": [1.16, -0.02, 0.048], "size": [0.162635, 0.162635, 0.016] }, "boundsSpace": "world", "material": "S12_Sparks", "renderQueue": 3150, "queueOffset": 150 },
+    { "name": "S12_SlashSpikeRoot/sparks/Spark_7", "bounds": { "center": [0.3, 1.05, -0.032], "size": [0.162635, 0.162635, 0.016] }, "boundsSpace": "world", "material": "S12_Sparks", "renderQueue": 3150, "queueOffset": 150 }
+  ]
+}
