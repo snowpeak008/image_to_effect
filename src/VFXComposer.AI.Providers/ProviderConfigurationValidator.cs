@@ -17,9 +17,15 @@ public static class ProviderConfigurationValidator
 
         var profiles = new Dictionary<string, ProviderProfile>(StringComparer.Ordinal);
         var allCapabilities = new HashSet<string>(StringComparer.Ordinal);
+        var secretOwners = new Dictionary<string, string>(StringComparer.Ordinal);
         foreach (var profile in settings.Profiles)
         {
             if (!Enum.IsDefined(profile.Origin) || !profiles.TryAdd(profile.Id, profile))
+            {
+                throw new AiGatewayException(AiErrorCode.ConfigurationInvalid);
+            }
+
+            if (!secretOwners.TryAdd(profile.Auth.SecretRef.Id, profile.Id))
             {
                 throw new AiGatewayException(AiErrorCode.ConfigurationInvalid);
             }
@@ -63,8 +69,12 @@ public static class ProviderConfigurationValidator
         ArgumentNullException.ThrowIfNull(endpoint);
         ArgumentNullException.ThrowIfNull(auth);
         var uri = endpoint.Uri;
-        if (!uri.IsAbsoluteUri || string.IsNullOrEmpty(uri.Host) ||
-            !string.IsNullOrEmpty(uri.UserInfo) || !string.IsNullOrEmpty(uri.Fragment))
+        if (!uri.IsAbsoluteUri ||
+            uri.AbsoluteUri.Length > EndpointDefinition.MaximumUriLength ||
+            string.IsNullOrEmpty(uri.Host) ||
+            !string.IsNullOrEmpty(uri.UserInfo) ||
+            !string.IsNullOrEmpty(uri.Query) ||
+            !string.IsNullOrEmpty(uri.Fragment))
         {
             throw new AiGatewayException(AiErrorCode.EndpointRejected);
         }

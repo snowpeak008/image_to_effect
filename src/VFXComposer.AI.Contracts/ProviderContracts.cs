@@ -81,10 +81,14 @@ public sealed class ProtocolBinding
 
 public sealed class EndpointDefinition
 {
+    public const int MaximumUriLength = 2048;
+
     public EndpointDefinition(Uri uri, bool allowLoopbackHttp)
     {
         ArgumentNullException.ThrowIfNull(uri);
-        if (!uri.IsAbsoluteUri)
+        if (!uri.IsAbsoluteUri ||
+            uri.AbsoluteUri.Length > MaximumUriLength ||
+            !string.IsNullOrEmpty(uri.Query))
         {
             throw new ArgumentException("Endpoint URI must be absolute.", nameof(uri));
         }

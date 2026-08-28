@@ -5,19 +5,21 @@ using VFXComposer.AI.Contracts;
 
 namespace VFXComposer.AI.Providers;
 
-/// <summary>Checks a SecretRef without exposing its plaintext.</summary>
+/// <summary>Checks a profile-owned SecretRef without exposing its plaintext.</summary>
 public interface ISecretReferenceVerifier
 {
-    bool IsReadable(SecretRef secretRef);
+    bool IsReadable(string profileId, SecretRef secretRef);
 }
 
 /// <summary>
-/// Per-user DPAPI storage for credential material. Configuration JSON can contain only the matching SecretRef.
+/// Per-user DPAPI storage for credential material. A secret is scoped to exactly one profile ID and one SecretRef;
+/// configuration JSON can contain only that profile-owned reference.
 /// </summary>
 public sealed class ProviderSecretStore : ISecretReferenceVerifier
 {
     private const int MaximumSecretBytes = 16 * 1024;
-    private static readonly byte[] Magic = "VFXAIDP1"u8.ToArray();
+    private static readonly byte[] Magic = "VFXAIDP2"u8.ToArray();
+    private static readonly byte[] LegacyMagic = "VFXAIDP1"u8.ToArray();
     private static readonly UTF8Encoding Utf8 = new(encoderShouldEmitUTF8Identifier: false, throwOnInvalidBytes: true);
     private readonly string _rootDirectory;
 
@@ -28,8 +30,9 @@ public sealed class ProviderSecretStore : ISecretReferenceVerifier
     }
 
     /// <summary>Saves caller-owned plaintext without ever returning it or placing it in configuration JSON.</summary>
-    public void SaveSecret(SecretRef secretRef, ReadOnlySpan<char> plaintext)
+    public void SaveSecret(string profileId, SecretRef secretRef, ReadOnlySpan<char> plaintext)
     {
+        profileId = ValidateProfileId(profileId);
         ArgumentNullException.ThrowIfNull(secretRef);
         if (!OperatingSystem.IsWindows() || plaintext.Length == 0 || plaintext.Length > MaximumSecretBytes || plaintext.IndexOf('\0') >= 0)
         {
@@ -49,11 +52,12 @@ public sealed class ProviderSecretStore : ISecretReferenceVerifier
 
             plainBytes = new byte[byteCount];
             Utf8.GetBytes(plaintext, plainBytes);
-            protectedBytes = DpapiCurrentUser.Protect(plainBytes, EntropyFor(secretRef));
-            fileBytes = new byte[checked(Magic.Length + protectedBytes.Length)];
-            Magic.CopyTo(fileBytes, 0);
-            protectedBytes.CopyTo(fileBytes, Magic.Length);
-            AtomicFileWriter.WriteReplace(SecretPathFor(secretRef), BackupPathFor(secretRef), fileBytes);
+            protectedBytes = DpapiCurrentUser.Protect(plainBytes, EntropyFor(profileId, secretRef));
+            fileBytes = CreateEnvelope(profileId, secretRef, protectedBytes);
+            AtomicFileWriter.WriteReplace(
+                SecretPathFor(profileId, secretRef),
+                BackupPathFor(profileId, secretRef),
+                fileBytes);
         }
         catch (AiGatewayException)
         {
@@ -80,12 +84,13 @@ public sealed class ProviderSecretStore : ISecretReferenceVerifier
     }
 
     /// <summary>Returns only readability; the temporary plaintext buffer is immediately zeroed.</summary>
-    public bool IsReadable(SecretRef secretRef)
+    public bool IsReadable(string profileId, SecretRef secretRef)
     {
+        profileId = ValidateProfileId(profileId);
         ArgumentNullException.ThrowIfNull(secretRef);
         try
         {
-            using var lease = OpenSecret(secretRef);
+            using var lease = OpenSecret(profileId, secretRef);
             return lease.Length > 0;
         }
         catch (AiGatewayException)
@@ -96,20 +101,21 @@ public sealed class ProviderSecretStore : ISecretReferenceVerifier
 
     public override string ToString() => "ProviderSecretStore(<redacted>)";
 
-    internal ProviderSecretLease OpenSecret(SecretRef secretRef)
+    internal ProviderSecretLease OpenSecret(string profileId, SecretRef secretRef)
     {
+        profileId = ValidateProfileId(profileId);
         ArgumentNullException.ThrowIfNull(secretRef);
         if (!OperatingSystem.IsWindows())
         {
             throw new AiGatewayException(AiErrorCode.SecretUnavailable);
         }
 
-        if (TryOpen(SecretPathFor(secretRef), secretRef, out var primary))
+        if (TryOpen(SecretPathFor(profileId, secretRef), profileId, secretRef, out var primary))
         {
             return primary!;
         }
 
-        if (TryOpen(BackupPathFor(secretRef), secretRef, out var backup))
+        if (TryOpen(BackupPathFor(profileId, secretRef), profileId, secretRef, out var backup))
         {
             return backup!;
         }
@@ -117,9 +123,11 @@ public sealed class ProviderSecretStore : ISecretReferenceVerifier
         throw new AiGatewayException(AiErrorCode.SecretUnavailable);
     }
 
-    internal string SecretPathFor(SecretRef secretRef)
+    internal string SecretPathFor(string profileId, SecretRef secretRef)
     {
-        var idBytes = Utf8.GetBytes(secretRef.Id);
+        profileId = ValidateProfileId(profileId);
+        ArgumentNullException.ThrowIfNull(secretRef);
+        var idBytes = Utf8.GetBytes("VFXComposer.AI.ProviderSecretStore/path/v2/" + profileId + "/" + secretRef.Id);
         try
         {
             var digest = SHA256.HashData(idBytes);
@@ -138,9 +146,9 @@ public sealed class ProviderSecretStore : ISecretReferenceVerifier
         }
     }
 
-    private string BackupPathFor(SecretRef secretRef) => SecretPathFor(secretRef) + ".bak";
+    private string BackupPathFor(string profileId, SecretRef secretRef) => SecretPathFor(profileId, secretRef) + ".bak";
 
-    private static bool TryOpen(string path, SecretRef secretRef, out ProviderSecretLease? result)
+    private static bool TryOpen(string path, string profileId, SecretRef secretRef, out ProviderSecretLease? result)
     {
         result = null;
         if (!File.Exists(path))
@@ -153,13 +161,12 @@ public sealed class ProviderSecretStore : ISecretReferenceVerifier
         try
         {
             fileBytes = AtomicFileWriter.ReadBounded(path, MaximumSecretBytes * 16);
-            if (fileBytes.Length <= Magic.Length || !fileBytes.AsSpan(0, Magic.Length).SequenceEqual(Magic))
+            if (IsLegacyEnvelope(fileBytes) || !TryReadEnvelope(fileBytes, profileId, secretRef, out protectedBytes))
             {
                 return false;
             }
 
-            protectedBytes = fileBytes.AsSpan(Magic.Length).ToArray();
-            var plaintext = DpapiCurrentUser.Unprotect(protectedBytes, EntropyFor(secretRef));
+            var plaintext = DpapiCurrentUser.Unprotect(protectedBytes!, EntropyFor(profileId, secretRef));
             if (plaintext.Length is < 1 or > MaximumSecretBytes)
             {
                 Zero(plaintext);
@@ -192,8 +199,83 @@ public sealed class ProviderSecretStore : ISecretReferenceVerifier
         }
     }
 
-    private static byte[] EntropyFor(SecretRef secretRef) =>
-        Utf8.GetBytes("VFXComposer.AI.ProviderSecretStore/v1/" + secretRef.Id);
+    private static byte[] CreateEnvelope(string profileId, SecretRef secretRef, ReadOnlySpan<byte> protectedBytes)
+    {
+        var profileBytes = Utf8.GetBytes(profileId);
+        var secretRefBytes = Utf8.GetBytes(secretRef.Id);
+        try
+        {
+            if (profileBytes.Length > byte.MaxValue || secretRefBytes.Length > byte.MaxValue || protectedBytes.Length == 0)
+            {
+                throw new AiGatewayException(AiErrorCode.SecretUnavailable);
+            }
+
+            var headerLength = checked(Magic.Length + 2 + profileBytes.Length + secretRefBytes.Length);
+            var fileBytes = new byte[checked(headerLength + protectedBytes.Length)];
+            Magic.CopyTo(fileBytes, 0);
+            fileBytes[Magic.Length] = checked((byte)profileBytes.Length);
+            fileBytes[Magic.Length + 1] = checked((byte)secretRefBytes.Length);
+            profileBytes.CopyTo(fileBytes, Magic.Length + 2);
+            secretRefBytes.CopyTo(fileBytes, Magic.Length + 2 + profileBytes.Length);
+            protectedBytes.CopyTo(fileBytes.AsSpan(headerLength));
+            return fileBytes;
+        }
+        finally
+        {
+            Zero(profileBytes);
+            Zero(secretRefBytes);
+        }
+    }
+
+    private static bool TryReadEnvelope(
+        ReadOnlySpan<byte> fileBytes,
+        string profileId,
+        SecretRef secretRef,
+        out byte[]? protectedBytes)
+    {
+        protectedBytes = null;
+        if (fileBytes.Length <= Magic.Length + 2 || !fileBytes[..Magic.Length].SequenceEqual(Magic))
+        {
+            return false;
+        }
+
+        var profileLength = fileBytes[Magic.Length];
+        var secretRefLength = fileBytes[Magic.Length + 1];
+        var headerLength = checked(Magic.Length + 2 + profileLength + secretRefLength);
+        if (profileLength == 0 || secretRefLength == 0 || headerLength >= fileBytes.Length)
+        {
+            return false;
+        }
+
+        var expectedProfileBytes = Utf8.GetBytes(profileId);
+        var expectedSecretRefBytes = Utf8.GetBytes(secretRef.Id);
+        try
+        {
+            if (expectedProfileBytes.Length != profileLength ||
+                expectedSecretRefBytes.Length != secretRefLength ||
+                !fileBytes.Slice(Magic.Length + 2, profileLength).SequenceEqual(expectedProfileBytes) ||
+                !fileBytes.Slice(Magic.Length + 2 + profileLength, secretRefLength).SequenceEqual(expectedSecretRefBytes))
+            {
+                return false;
+            }
+
+            protectedBytes = fileBytes[headerLength..].ToArray();
+            return true;
+        }
+        finally
+        {
+            Zero(expectedProfileBytes);
+            Zero(expectedSecretRefBytes);
+        }
+    }
+
+    private static bool IsLegacyEnvelope(ReadOnlySpan<byte> fileBytes) =>
+        fileBytes.Length >= LegacyMagic.Length && fileBytes[..LegacyMagic.Length].SequenceEqual(LegacyMagic);
+
+    private static string ValidateProfileId(string profileId) => new SecretRef(profileId).Id;
+
+    private static byte[] EntropyFor(string profileId, SecretRef secretRef) =>
+        Utf8.GetBytes("VFXComposer.AI.ProviderSecretStore/v2/" + profileId + "/" + secretRef.Id);
 
     private static void Zero(byte[]? buffer)
     {
@@ -247,7 +329,7 @@ internal static class DpapiCurrentUser
         {
             if (!CryptProtectData(
                     ref input,
-                    "VFXComposer AI Provider Secret v1",
+                    "VFXComposer AI Provider Secret v2",
                     ref optionalEntropy,
                     IntPtr.Zero,
                     IntPtr.Zero,
@@ -347,7 +429,7 @@ internal static class DpapiCurrentUser
     [StructLayout(LayoutKind.Sequential)]
     private struct DataBlob
     {
-        public int Length;
+        public uint Length;
         public IntPtr Data;
 
         public static DataBlob From(ReadOnlySpan<byte> bytes)
@@ -362,7 +444,7 @@ internal static class DpapiCurrentUser
             try
             {
                 Marshal.Copy(managed, 0, data, managed.Length);
-                return new DataBlob { Length = managed.Length, Data = data };
+                return new DataBlob { Length = checked((uint)managed.Length), Data = data };
             }
             finally
             {
@@ -372,15 +454,16 @@ internal static class DpapiCurrentUser
 
         public byte[] CopyToManaged()
         {
-            if (Length < 0 || (Length > 0 && Data == IntPtr.Zero))
+            if (Length > int.MaxValue || (Length > 0 && Data == IntPtr.Zero))
             {
                 throw new CryptographicException("Protected data was invalid.");
             }
 
-            var managed = new byte[Length];
-            if (Length > 0)
+            var length = checked((int)Length);
+            var managed = new byte[length];
+            if (length > 0)
             {
-                Marshal.Copy(Data, managed, 0, Length);
+                Marshal.Copy(Data, managed, 0, length);
             }
 
             return managed;
@@ -420,11 +503,11 @@ internal static class DpapiCurrentUser
             Length = 0;
         }
 
-        private static void ZeroMemory(IntPtr pointer, int length)
+        private static void ZeroMemory(IntPtr pointer, uint length)
         {
-            for (var index = 0; index < length; index++)
+            for (var index = 0U; index < length; index++)
             {
-                Marshal.WriteByte(pointer, index, 0);
+                Marshal.WriteByte(pointer, checked((int)index), 0);
             }
         }
     }

@@ -1,48 +1,81 @@
+using System.Collections.Concurrent;
 using System.Security.Cryptography;
 using VFXComposer.AI.Contracts;
 
 namespace VFXComposer.AI.Providers;
 
 /// <summary>
-/// Current-user non-secret configuration store. Reads never synthesize an empty configuration.
+/// Current-user non-secret configuration store. Reads never synthesize an empty configuration. Every read-modify-write
+/// operation takes both a process-local gate and an exclusive cross-process lock before it observes a revision.
 /// </summary>
 public sealed class ProviderConfigurationStore
 {
+    private const int LockRetryMilliseconds = 20;
+    private static readonly TimeSpan LockTimeout = TimeSpan.FromSeconds(10);
+    private static readonly ConcurrentDictionary<string, object> ProcessGates = new(StringComparer.OrdinalIgnoreCase);
+
     private readonly string _configurationPath;
     private readonly string _backupPath;
+    private readonly string _lockPath;
+    private readonly object _processGate;
 
     public ProviderConfigurationStore(string configurationPath)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(configurationPath);
         _configurationPath = Path.GetFullPath(configurationPath);
         _backupPath = _configurationPath + ".bak";
+        _lockPath = _configurationPath + ".lock";
+        _processGate = ProcessGates.GetOrAdd(_configurationPath, static _ => new object());
     }
 
     public void Save(AiProviderSettings settings)
     {
         ArgumentNullException.ThrowIfNull(settings);
-        ProviderConfigurationValidator.Validate(settings);
-        EnsureRevisionAdvances(settings.Revision);
-        var bytes = ProviderConfigurationCodec.Serialize(settings);
-        try
+        ExecuteUnderLock(() =>
         {
-            AtomicFileWriter.WriteReplace(_configurationPath, _backupPath, bytes);
-        }
-        catch (IOException)
-        {
-            throw new AiGatewayException(AiErrorCode.ConfigurationUnavailable);
-        }
-        catch (UnauthorizedAccessException)
-        {
-            throw new AiGatewayException(AiErrorCode.ConfigurationUnavailable);
-        }
-        finally
-        {
-            CryptographicOperations.ZeroMemory(bytes);
-        }
+            var current = TryLoadExistingCore();
+            ProviderConfigurationValidator.Validate(settings);
+            if (current is not null && settings.Revision <= current.Configuration.Settings.Revision)
+            {
+                throw new AiGatewayException(AiErrorCode.ConfigurationInvalid);
+            }
+
+            if (current?.RecoveredFromBackup == true)
+            {
+                RestoreRecoveredPrimary(current.Configuration.Settings);
+            }
+
+            var bytes = ProviderConfigurationCodec.Serialize(settings);
+            try
+            {
+                AtomicFileWriter.WriteReplace(_configurationPath, _backupPath, bytes);
+            }
+            finally
+            {
+                CryptographicOperations.ZeroMemory(bytes);
+            }
+
+            return 0;
+        });
     }
 
-    public ProviderConfigurationStoreReadResult Load()
+    public ProviderConfigurationStoreReadResult Load() => ExecuteUnderLock(LoadCore);
+
+    public bool Exists() => File.Exists(_configurationPath) || File.Exists(_backupPath);
+
+    public override string ToString() => "ProviderConfigurationStore(<redacted>)";
+
+    private ProviderConfigurationStoreReadResult? TryLoadExistingCore()
+    {
+        if (!File.Exists(_configurationPath) && !File.Exists(_backupPath))
+        {
+            return null;
+        }
+
+        return LoadCore();
+    }
+
+    private ProviderConfigurationStoreReadResult LoadCore()
     {
         if (TryRead(_configurationPath, out var primary))
         {
@@ -57,21 +90,69 @@ public sealed class ProviderConfigurationStore
         throw new AiGatewayException(AiErrorCode.ConfigurationUnavailable);
     }
 
-    public bool Exists() => File.Exists(_configurationPath) || File.Exists(_backupPath);
-
-    public override string ToString() => "ProviderConfigurationStore(<redacted>)";
-
-    private void EnsureRevisionAdvances(long nextRevision)
+    private void RestoreRecoveredPrimary(AiProviderSettings recoveredSettings)
     {
-        if (!Exists())
+        var knownGoodBytes = ProviderConfigurationCodec.Serialize(recoveredSettings);
+        try
         {
-            return;
+            AtomicFileWriter.RestorePrimaryPreservingBackup(_configurationPath, knownGoodBytes);
+        }
+        finally
+        {
+            CryptographicOperations.ZeroMemory(knownGoodBytes);
+        }
+    }
+
+    private T ExecuteUnderLock<T>(Func<T> operation)
+    {
+        lock (_processGate)
+        {
+            try
+            {
+                using var fileLock = AcquireCrossProcessLock();
+                return operation();
+            }
+            catch (AiGatewayException)
+            {
+                throw;
+            }
+            catch (IOException)
+            {
+                throw new AiGatewayException(AiErrorCode.ConfigurationUnavailable);
+            }
+            catch (UnauthorizedAccessException)
+            {
+                throw new AiGatewayException(AiErrorCode.ConfigurationUnavailable);
+            }
+        }
+    }
+
+    private FileStream AcquireCrossProcessLock()
+    {
+        var parent = Path.GetDirectoryName(_lockPath);
+        if (string.IsNullOrEmpty(parent))
+        {
+            throw new IOException("Provider storage path is invalid.");
         }
 
-        var current = Load();
-        if (nextRevision <= current.Configuration.Settings.Revision)
+        Directory.CreateDirectory(parent);
+        var deadline = DateTime.UtcNow + LockTimeout;
+        while (true)
         {
-            throw new AiGatewayException(AiErrorCode.ConfigurationInvalid);
+            try
+            {
+                return new FileStream(
+                    _lockPath,
+                    FileMode.OpenOrCreate,
+                    FileAccess.ReadWrite,
+                    FileShare.None,
+                    bufferSize: 1,
+                    FileOptions.WriteThrough);
+            }
+            catch (IOException) when (DateTime.UtcNow < deadline)
+            {
+                Thread.Sleep(LockRetryMilliseconds);
+            }
         }
     }
 

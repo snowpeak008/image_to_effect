@@ -70,7 +70,7 @@
           "additionalProperties": false,
           "required": ["uri", "allowLoopbackHttp"],
           "properties": {
-            "uri": { "type": "string", "minLength": 9, "maxLength": 2048, "pattern": "^https?://" },
+            "uri": { "type": "string", "minLength": 9, "maxLength": 2048, "pattern": "^https?://[^?#]+$" },
             "allowLoopbackHttp": { "type": "boolean" }
           }
         },

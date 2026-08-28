@@ -8,7 +8,7 @@ namespace VFXComposer.AI.Tests;
 public sealed class ProviderSecretStoreTests
 {
     [TestMethod]
-    public void CurrentUserDpapiSecret_IsCiphertextAndUnreadablePayloadFailsClosed()
+    public void CurrentUserDpapiSecret_IsCiphertextProfileBoundAndOldEnvelopeFailsClosed()
     {
         if (!OperatingSystem.IsWindows())
         {
@@ -18,11 +18,20 @@ public sealed class ProviderSecretStoreTests
         using var directory = new A1TestDirectory();
         var store = new ProviderSecretStore(directory.Path);
         var secretRef = new SecretRef("secret-dpapi");
+        const string ownerProfileId = "profile-primary";
+        const string otherProfileId = "profile-secondary";
         const string testToken = "synthetic-a1-token-only";
-        store.SaveSecret(secretRef, testToken.AsSpan());
-        Assert.IsTrue(store.IsReadable(secretRef));
+        store.SaveSecret(ownerProfileId, secretRef, testToken.AsSpan());
+        Assert.IsTrue(store.IsReadable(ownerProfileId, secretRef));
+        Assert.IsFalse(store.IsReadable(otherProfileId, secretRef));
 
-        var encrypted = File.ReadAllBytes(store.SecretPathFor(secretRef));
+        var ownerPath = store.SecretPathFor(ownerProfileId, secretRef);
+        var otherPath = store.SecretPathFor(otherProfileId, secretRef);
+        File.Copy(ownerPath, otherPath);
+        Assert.IsFalse(store.IsReadable(otherProfileId, secretRef));
+        A1TestSupport.Throws(AiErrorCode.SecretUnavailable, () => store.OpenSecret(otherProfileId, secretRef));
+
+        var encrypted = File.ReadAllBytes(ownerPath);
         try
         {
             var asText = System.Text.Encoding.UTF8.GetString(encrypted);
@@ -34,8 +43,8 @@ public sealed class ProviderSecretStoreTests
             System.Security.Cryptography.CryptographicOperations.ZeroMemory(encrypted);
         }
 
-        File.WriteAllBytes(store.SecretPathFor(secretRef), "not-a-valid-secret"u8.ToArray());
-        Assert.IsFalse(store.IsReadable(secretRef));
-        A1TestSupport.Throws(AiErrorCode.SecretUnavailable, () => store.OpenSecret(secretRef));
+        File.WriteAllBytes(ownerPath, "VFXAIDP1legacy-envelope-must-not-migrate"u8.ToArray());
+        Assert.IsFalse(store.IsReadable(ownerProfileId, secretRef));
+        A1TestSupport.Throws(AiErrorCode.SecretUnavailable, () => store.OpenSecret(ownerProfileId, secretRef));
     }
 }

@@ -60,30 +60,95 @@ public sealed class ProviderSafetySurfaceTests
     }
 
     [TestMethod]
-    public void TomImportIsNonSensitiveAndRelayRequiresConfirmation()
+    public void TomImportUsesTheRealFixedShapeSkipsSensitiveFieldsAndKeepsRelayAutoAsAConfirmationOnlySuggestion()
     {
         var importer = new TomProviderDraftImporter();
-        var relay = Encoding.UTF8.GetBytes("{\"displayName\":\"Relay draft\",\"originSuggestion\":\"Relay\",\"endpoint\":\"https://relay.example.invalid/v1/\",\"modelId\":\"chat-model-1\",\"timeoutSeconds\":30}");
+        var fixtures = new[]
+        {
+            (Type: "openai", Origin: ProviderOrigin.Official, BaseUrl: "https://official.example.invalid/v1/", Model: "chat-model-1"),
+            (Type: "relay-api", Origin: ProviderOrigin.Relay, BaseUrl: "https://relay.example.invalid/v1/", Model: "chat-model-2"),
+            (Type: "openai-compatible", Origin: ProviderOrigin.Friend, BaseUrl: "https://friend.example.invalid/v1/", Model: "chat-model-3"),
+            (Type: "openai-codex-login", Origin: ProviderOrigin.Subscription, BaseUrl: string.Empty, Model: "codex"),
+            (Type: "custom", Origin: ProviderOrigin.Custom, BaseUrl: "https://custom.example.invalid/v1/", Model: "chat-model-5"),
+        };
+
+        foreach (var fixture in fixtures)
+        {
+            var source = TomFixture(fixture.Type, fixture.BaseUrl, fixture.Model, relayProtocol: "auto");
+            try
+            {
+                if (fixture.Origin == ProviderOrigin.Relay)
+                {
+                    A1TestSupport.Throws(
+                        AiErrorCode.ImportConfirmationRequired,
+                        () => importer.Import(source, relayProtocolConfirmed: false));
+                    continue;
+                }
+
+                var draft = importer.Import(source, relayProtocolConfirmed: false);
+                Assert.AreEqual(fixture.Origin, draft.OriginSuggestion, fixture.Type);
+                Assert.AreEqual(fixture.Model, draft.ModelId, fixture.Type);
+                Assert.AreEqual(fixture.Origin == ProviderOrigin.Subscription, draft.RequiresEndpointConfiguration, fixture.Type);
+                Assert.IsFalse(draft.RequiresRelayProtocolConfirmation, fixture.Type);
+                Assert.AreEqual(
+                    null,
+                    draft.RelayProtocolSuggestion,
+                    fixture.Type);
+                Assert.IsFalse(draft.ToString().Contains("synthetic-never-import", StringComparison.Ordinal));
+                Assert.IsFalse(draft.ToString().Contains("synthetic-command-path", StringComparison.Ordinal));
+            }
+            finally
+            {
+                System.Security.Cryptography.CryptographicOperations.ZeroMemory(source);
+            }
+        }
+
+        var relay = TomFixture("relay-api", "https://relay.example.invalid/v1/", "chat-model-relay", relayProtocol: "auto");
         try
         {
-            A1TestSupport.Throws(AiErrorCode.ImportConfirmationRequired, () => importer.Import(relay, relayConfirmed: false));
-            var draft = importer.Import(relay, relayConfirmed: true);
-            Assert.AreEqual(ProviderOrigin.Relay, draft.OriginSuggestion);
-            Assert.IsFalse(draft.ToString().Contains("relay.example", StringComparison.Ordinal));
+            var confirmedRelay = importer.Import(relay, relayProtocolConfirmed: true);
+            Assert.IsFalse(confirmedRelay.RequiresRelayProtocolConfirmation);
+            Assert.AreEqual("auto", confirmedRelay.RelayProtocolSuggestion);
         }
         finally
         {
             System.Security.Cryptography.CryptographicOperations.ZeroMemory(relay);
         }
 
-        var protectedKey = Encoding.UTF8.GetBytes("{\"ApiKeyProtected\":\"synthetic-never-import\"}");
-        try
+        var draftPropertyNames = typeof(TomProviderDraft).GetProperties(BindingFlags.Public | BindingFlags.Instance)
+            .Select(static property => property.Name)
+            .ToArray();
+        Assert.IsFalse(draftPropertyNames.Any(static name =>
+            name.Contains("ApiKey", StringComparison.OrdinalIgnoreCase) ||
+            name.Contains("Command", StringComparison.OrdinalIgnoreCase) ||
+            name.Contains("Verification", StringComparison.OrdinalIgnoreCase)));
+    }
+
+    private static byte[] TomFixture(string type, string baseUrl, string model, string relayProtocol)
+    {
+        var json = $$"""
         {
-            A1TestSupport.Throws(AiErrorCode.ImportRejected, () => importer.Import(protectedKey, relayConfirmed: true));
+          "Id":"fixture-{{type}}",
+          "Type":"{{type}}",
+          "DisplayName":"{{type}} fixture",
+          "Enabled":true,
+          "BaseUrl":"{{baseUrl}}",
+          "ApiKeyProtected":"synthetic-never-import",
+          "DefaultModel":"{{model}}",
+          "CommandPath":"synthetic-command-path",
+          "RelayWebsiteName":"synthetic-relay-site",
+          "RelayProtocol":"{{relayProtocol}}",
+          "RelayDetectionSummary":"synthetic-detection",
+          "RelayDetectionConfidence":99,
+          "TimeoutSeconds":30,
+          "UseJsonSchema":true,
+          "SaveRawResponse":true,
+          "VerificationAvailable":true,
+          "VerificationSignature":"synthetic-verification-signature",
+          "VerificationMessage":"synthetic-verification-message",
+          "LastVerifiedAtUtc":"2026-08-28T00:00:00Z"
         }
-        finally
-        {
-            System.Security.Cryptography.CryptographicOperations.ZeroMemory(protectedKey);
-        }
+        """;
+        return Encoding.UTF8.GetBytes(json);
     }
 }

@@ -68,7 +68,7 @@ internal static class A1TestSupport
 
     internal sealed class TestSecretVerifier(bool readable) : ISecretReferenceVerifier
     {
-        public bool IsReadable(SecretRef secretRef) => readable;
+        public bool IsReadable(string profileId, SecretRef secretRef) => readable;
     }
 }
 

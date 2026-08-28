@@ -59,7 +59,7 @@ public sealed class ProviderConfigurationResolver
         }
 
         ProviderConfigurationValidator.ValidateEndpoint(profile.Endpoint, profile.Auth);
-        if (!_secrets.IsReadable(profile.Auth.SecretRef))
+        if (!_secrets.IsReadable(profile.Id, profile.Auth.SecretRef))
         {
             throw new AiGatewayException(AiErrorCode.SecretUnavailable);
         }

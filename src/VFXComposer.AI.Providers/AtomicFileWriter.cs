@@ -8,29 +8,8 @@ internal static class AtomicFileWriter
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(destinationPath);
         ArgumentException.ThrowIfNullOrWhiteSpace(backupPath);
-        var parent = Path.GetDirectoryName(destinationPath);
-        if (string.IsNullOrEmpty(parent))
+        WriteAtomically(destinationPath, bytes, temporaryPath =>
         {
-            throw new InvalidOperationException("Provider storage path is invalid.");
-        }
-
-        Directory.CreateDirectory(parent);
-        var temporaryPath = destinationPath + "." + Guid.NewGuid().ToString("N") + ".tmp";
-        var completed = false;
-        try
-        {
-            using (var stream = new FileStream(
-                temporaryPath,
-                FileMode.CreateNew,
-                FileAccess.Write,
-                FileShare.None,
-                bufferSize: 4096,
-                FileOptions.WriteThrough))
-            {
-                stream.Write(bytes);
-                stream.Flush(flushToDisk: true);
-            }
-
             if (File.Exists(destinationPath))
             {
                 File.Replace(temporaryPath, destinationPath, backupPath, ignoreMetadataErrors: true);
@@ -39,23 +18,27 @@ internal static class AtomicFileWriter
             {
                 File.Move(temporaryPath, destinationPath);
             }
+        });
+    }
 
-            completed = true;
-        }
-        finally
+    /// <summary>
+    /// Repairs a known-good primary without touching its existing backup. This is used before a normal replace when
+    /// recovery read the backup because replacing a corrupt primary would otherwise overwrite the only valid backup.
+    /// </summary>
+    public static void RestorePrimaryPreservingBackup(string destinationPath, ReadOnlySpan<byte> bytes)
+    {
+        ArgumentException.ThrowIfNullOrWhiteSpace(destinationPath);
+        WriteAtomically(destinationPath, bytes, temporaryPath =>
         {
-            if (!completed && File.Exists(temporaryPath))
+            if (File.Exists(destinationPath))
             {
-                try
-                {
-                    File.Delete(temporaryPath);
-                }
-                catch (IOException)
-                {
-                    // The original remains authoritative; a later cleanup may remove the temp file.
-                }
+                File.Replace(temporaryPath, destinationPath, destinationBackupFileName: null, ignoreMetadataErrors: true);
             }
-        }
+            else
+            {
+                File.Move(temporaryPath, destinationPath);
+            }
+        });
     }
 
     public static byte[] ReadBounded(string path, int maximumBytes)
@@ -93,5 +76,49 @@ internal static class AtomicFileWriter
         }
 
         return bytes;
+    }
+
+    private static void WriteAtomically(string destinationPath, ReadOnlySpan<byte> bytes, Action<string> commit)
+    {
+        var parent = Path.GetDirectoryName(destinationPath);
+        if (string.IsNullOrEmpty(parent))
+        {
+            throw new InvalidOperationException("Provider storage path is invalid.");
+        }
+
+        Directory.CreateDirectory(parent);
+        var temporaryPath = destinationPath + "." + Guid.NewGuid().ToString("N") + ".tmp";
+        var completed = false;
+        try
+        {
+            using (var stream = new FileStream(
+                temporaryPath,
+                FileMode.CreateNew,
+                FileAccess.Write,
+                FileShare.None,
+                bufferSize: 4096,
+                FileOptions.WriteThrough))
+            {
+                stream.Write(bytes);
+                stream.Flush(flushToDisk: true);
+            }
+
+            commit(temporaryPath);
+            completed = true;
+        }
+        finally
+        {
+            if (!completed && File.Exists(temporaryPath))
+            {
+                try
+                {
+                    File.Delete(temporaryPath);
+                }
+                catch (IOException)
+                {
+                    // The original remains authoritative; a later cleanup may remove the temp file.
+                }
+            }
+        }
     }
 }

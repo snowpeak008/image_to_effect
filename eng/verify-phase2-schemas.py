@@ -523,6 +523,15 @@ def main() -> None:
     if not ai_validator.is_valid(ai_positive):
         raise AssertionError("AI provider schema rejected its positive fixture")
 
+    endpoint_prefix = "https://provider.example.invalid/"
+    endpoint_at_limit = endpoint_prefix + ("a" * (2048 - len(endpoint_prefix)))
+    if len(endpoint_at_limit) != 2048:
+        raise AssertionError("AI provider endpoint boundary fixture is invalid")
+    ai_endpoint_boundary_positive = copy.deepcopy(ai_positive)
+    ai_endpoint_boundary_positive["profiles"][0]["endpoint"]["uri"] = endpoint_at_limit
+    if not ai_validator.is_valid(ai_endpoint_boundary_positive):
+        raise AssertionError("AI provider schema rejected its 2048-character endpoint")
+
     ai_negative_count = 0
     for invalid in (
         {key: value for key, value in ai_positive.items() if key != "revision"},
@@ -546,6 +555,36 @@ def main() -> None:
                 }
             ],
         },
+        {
+            **ai_positive,
+            "profiles": [
+                {
+                    **ai_positive["profiles"][0],
+                    "protocol": {"id": "1openai-compatible-v1"},
+                }
+            ],
+        },
+        {
+            **ai_positive,
+            "profiles": [
+                {
+                    **ai_positive["profiles"][0],
+                    "endpoint": {
+                        "uri": "https://provider.example.invalid/v1/?api_key=must-not-be-an-endpoint-field",
+                        "allowLoopbackHttp": False,
+                    },
+                }
+            ],
+        },
+        {
+            **ai_positive,
+            "profiles": [
+                {
+                    **ai_positive["profiles"][0],
+                    "endpoint": {"uri": endpoint_at_limit + "a", "allowLoopbackHttp": False},
+                }
+            ],
+        },
     ):
         if ai_validator.is_valid(invalid):
             raise AssertionError("AI provider schema accepted a negative fixture")
@@ -561,7 +600,7 @@ def main() -> None:
         "negativeCount": negative_count,
         "aiProviderSchemaValidation": {
             "status": "PASS",
-            "positiveCount": 1,
+            "positiveCount": 2,
             "negativeCount": ai_negative_count,
         },
     }, separators=(",", ":")))

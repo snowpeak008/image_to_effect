@@ -8,10 +8,18 @@ namespace VFXComposer.AI.Tests;
 public sealed class ProviderResolutionTests
 {
     [TestMethod]
-    public void EndpointPolicy_RejectsCredentialsNonHttpAndNonLoopbackHttp()
+    public void EndpointPolicy_RejectsCredentialsQueriesOversizeNonHttpAndNonLoopbackHttp()
     {
         var credentials = A1TestSupport.Settings(endpoint: new Uri("https://user:password@provider.example.invalid/v1/"));
         A1TestSupport.Throws(AiErrorCode.EndpointRejected, () => ProviderConfigurationValidator.Validate(credentials));
+
+        Assert.ThrowsExactly<ArgumentException>(() => new EndpointDefinition(
+            new Uri("https://provider.example.invalid/v1/?api_key=query-credentials-are-not-a-service-root"),
+            allowLoopbackHttp: false));
+
+        const string endpointPrefix = "https://provider.example.invalid/";
+        var oversizedEndpoint = endpointPrefix + new string('a', EndpointDefinition.MaximumUriLength - endpointPrefix.Length + 1);
+        Assert.ThrowsExactly<ArgumentException>(() => new EndpointDefinition(new Uri(oversizedEndpoint), allowLoopbackHttp: false));
 
         var nonHttp = A1TestSupport.Settings(endpoint: new Uri("ftp://provider.example.invalid/"));
         A1TestSupport.Throws(AiErrorCode.EndpointRejected, () => ProviderConfigurationValidator.Validate(nonHttp));

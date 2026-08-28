@@ -50,7 +50,9 @@ internal static class AiContractGuard
     public static string ProtocolId(string value, string parameterName)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(value, parameterName);
-        if (value.Length > 64 || !value.EndsWith("-v1", StringComparison.Ordinal))
+        if (value.Length is < 4 or > 64 ||
+            value[0] is < 'a' or > 'z' ||
+            !value.EndsWith("-v1", StringComparison.Ordinal))
         {
             throw new ArgumentException("Protocol identifier is invalid.", parameterName);
         }

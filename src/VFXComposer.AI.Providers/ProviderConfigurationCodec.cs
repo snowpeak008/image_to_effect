@@ -129,12 +129,22 @@ public static class ProviderConfigurationCodec
         }
 
         var endpointText = RequireString(endpointElement, "uri");
+        if (endpointText.Length > EndpointDefinition.MaximumUriLength)
+        {
+            throw new AiGatewayException(AiErrorCode.EndpointRejected);
+        }
+
         Uri endpointUri;
         try
         {
             endpointUri = new Uri(endpointText, UriKind.Absolute);
         }
         catch (UriFormatException)
+        {
+            throw new AiGatewayException(AiErrorCode.EndpointRejected);
+        }
+
+        if (endpointUri.AbsoluteUri.Length > EndpointDefinition.MaximumUriLength || !string.IsNullOrEmpty(endpointUri.Query))
         {
             throw new AiGatewayException(AiErrorCode.EndpointRejected);
         }
