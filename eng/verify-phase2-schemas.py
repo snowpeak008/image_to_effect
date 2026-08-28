@@ -28,6 +28,7 @@ PHASE2_NAMES = (
     "vfxcomposer-worker-project-locator-v1.schema.json",
     "vfxcomposer-worker-project-locator-ack-v1.schema.json",
 )
+AI_PROVIDER_CONFIG_NAME = "vfxcomposer-ai-provider-config-v1.schema.json"
 
 
 def typed(type_tag: str) -> dict:
@@ -54,7 +55,7 @@ def load() -> tuple[dict[str, dict], Registry]:
         Draft202012Validator.check_schema(schema)
         schemas[path.name] = schema
         resources.append((schema["$id"], Resource.from_contents(schema)))
-    if len(schemas) != 22 or set(PHASE2_NAMES) - schemas.keys():
+    if len(schemas) != 23 or set(PHASE2_NAMES) - schemas.keys() or AI_PROVIDER_CONFIG_NAME not in schemas:
         raise AssertionError("The current desktop schema set is not exact.")
     return schemas, Registry().with_resources(resources)
 
@@ -481,6 +482,75 @@ def main() -> None:
     else:
         raise AssertionError("locator accepted a duplicate decoded property name")
 
+    ai_validator = Draft202012Validator(schemas[AI_PROVIDER_CONFIG_NAME], registry=registry)
+    ai_positive = {
+        "formatVersion": 1,
+        "revision": 1,
+        "profiles": [
+            {
+                "id": "profile-primary",
+                "displayName": "Primary provider",
+                "origin": "Official",
+                "enabled": True,
+                "protocol": {"id": "openai-compatible-v1"},
+                "endpoint": {
+                    "uri": "https://provider.example.invalid/v1/",
+                    "allowLoopbackHttp": False,
+                },
+                "auth": {
+                    "secretRef": "secret-primary",
+                    "secretScope": "Production",
+                },
+                "timeoutSeconds": 30,
+                "capabilities": [
+                    {
+                        "id": "chat-main",
+                        "channel": "ChatLlm",
+                        "modelId": "chat-model-1",
+                    }
+                ],
+            }
+        ],
+        "channelBindings": [
+            {
+                "channel": "ChatLlm",
+                "profileId": "profile-primary",
+                "capabilityId": "chat-main",
+                "modelId": "chat-model-1",
+            }
+        ],
+    }
+    if not ai_validator.is_valid(ai_positive):
+        raise AssertionError("AI provider schema rejected its positive fixture")
+
+    ai_negative_count = 0
+    for invalid in (
+        {key: value for key, value in ai_positive.items() if key != "revision"},
+        {**ai_positive, "apiKeyProtected": "must-not-be-a-schema-field"},
+        {**ai_positive, "formatVersion": 2},
+        {
+            **ai_positive,
+            "profiles": [
+                {
+                    **ai_positive["profiles"][0],
+                    "auth": {"secretRef": "secret-primary", "apiKey": "not-allowed"},
+                }
+            ],
+        },
+        {
+            **ai_positive,
+            "profiles": [
+                {
+                    **ai_positive["profiles"][0],
+                    "endpoint": {"uri": "file:///untrusted", "allowLoopbackHttp": False},
+                }
+            ],
+        },
+    ):
+        if ai_validator.is_valid(invalid):
+            raise AssertionError("AI provider schema accepted a negative fixture")
+        ai_negative_count += 1
+
     print(json.dumps({
         "schema": "w24-phase2-schema-verification/1",
         "status": "PASS",
@@ -489,6 +559,11 @@ def main() -> None:
         "phase2SchemaCount": len(PHASE2_NAMES),
         "positiveCount": positive_count,
         "negativeCount": negative_count,
+        "aiProviderSchemaValidation": {
+            "status": "PASS",
+            "positiveCount": 1,
+            "negativeCount": ai_negative_count,
+        },
     }, separators=(",", ":")))
 
 

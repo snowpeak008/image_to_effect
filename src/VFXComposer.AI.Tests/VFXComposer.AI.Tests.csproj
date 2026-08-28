@@ -1,0 +1,25 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <AssemblyName>VFXComposer.AI.Tests</AssemblyName>
+    <RootNamespace>VFXComposer.AI.Tests</RootNamespace>
+    <IsPackable>false</IsPackable>
+    <IsTestProject>true</IsTestProject>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" />
+    <PackageReference Include="MSTest.TestAdapter" />
+    <PackageReference Include="MSTest.TestFramework" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\VFXComposer.AI.Contracts\VFXComposer.AI.Contracts.csproj" />
+    <ProjectReference Include="..\VFXComposer.AI.Providers\VFXComposer.AI.Providers.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\..\docs\schemas\desktop\vfxcomposer-ai-provider-config-v1.schema.json"
+          Link="Schemas\vfxcomposer-ai-provider-config-v1.schema.json"
+          CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+</Project>
