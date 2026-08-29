@@ -1,6 +1,6 @@
 # W24 program control
 
-> **CURRENT CONTROL PLANE — U6 FINAL GO / A1 FINAL ACCEPTED / A2+A3 ACTIVE (2026-08-29).** ADR-005's USER_MODE route is closed at `100/100`; ADR-006 controls the separate post-U6 AI-provider route with user-owned opaque endpoints. A1 is closed at final acceptance and the two isolated channel packages are the only active implementation nodes. Old Service/SCM/privileged nodes are historical only and are neither active, schedulable, auditable, nor blockers.
+> **CURRENT CONTROL PLANE — U6 FINAL GO / A0–A3 CLOSED / A4 SOLE ACTIVE (2026-08-29).** ADR-005's USER_MODE route is closed at `100/100`; ADR-006 controls the separate post-U6 AI-provider route with user-owned opaque endpoints. A2 and A3 are final GO, and A4 Desktop wiring is the only active implementation node. Old Service/SCM/privileged nodes are historical only and are neither active, schedulable, auditable, nor blockers.
 >
 > Normative tokens: `USER_MODE_LOCAL_CREATIVE_TOOL_V1` and `AI_PROVIDER_TWO_CHANNEL_ROUTING_V1`.
 
@@ -18,9 +18,9 @@
 | USER_MODE main architecture | `CLOSED — 100/100` | ADR-005 route is complete; this is not an AI-provider or external-service activation. |
 | Post-U6 AI A0 | `CLOSED — DOCS ONLY`; endpoint contract rebased in the current seven-document decision update. | Existing U6 unified-gate evidence only, no project-gate rerun. |
 | A1 `AI_PROVIDER_FOUNDATION` | `CLOSED — FINAL ACCEPTED — GO`. | Merged source commit `698e770a35062cc4135872147a401dce40adcb51`; `OpaqueEndpoint` is exact opaque storage, and A1 contains no real Chat/Image HTTP. |
-| A2 `WP-AI-CHAT-CHANNEL` | `ACTIVE`. | Owns only the three `.../Chat/**` roots; request-time Chat transport only, with no shared-file edit. |
-| A3 `WP-AI-IMAGE-CHANNEL` | `ACTIVE`. | Owns only the three `.../Image/**` roots; request-time Image transport only, with no shared-file edit. |
-| A4 Desktop wiring | `NOT STARTED` | May begin only after A2 and A3 closeout. |
+| A2 `WP-AI-CHAT-CHANNEL` | `CLOSED — FINAL GO — P0/P1/P2=0/0/0`. | `55ee0993f71375ee0245cbee54815e7988fe04fd` plus redirect closure `2678cb62be9ac9ff5a05c9a5b605a75c60effb5c`; Chat `23/23 × 3`. |
+| A3 `WP-AI-IMAGE-CHANNEL` | `CLOSED — FINAL GO — P0/P1/P2=0/0/0`. | `c7c4adcfcc80c732bfaf87b0dfea11294b4af741` plus redirect closure `12b58ac69efe3175cf49a6ee129b3784b5b3da5c`; Image `20/20`. |
+| A4 Desktop wiring | `ACTIVE — SOLE WRITER` | Exact preflight Desktop/AI integration scope; shared Release solution closeout is `0 warnings / 0 errors`. |
 | A5 mock E2E | `NOT STARTED` | May begin only after A4 closeout. |
 | A6 AI final audit | `NOT STARTED` | May begin only after A5 closeout. |
 | Runtime | `USER_MODE FINAL GO; AI NO-GO` | Default Broker launch with no arguments remains stderr `W24FS001`, exit `23`; no AI provider runtime is released. |
@@ -41,7 +41,7 @@ The completed USER_MODE DAG is:
 | U5 | `CLOSED / SCOPED GO — LOCAL_ORDINARY_USER_E2E`; standalone ordinary-user Worker and real local E2E are accepted at source `365e7612b1be276aa74f4ab36f40482a0858e1ae`, integration `b9de2eb47e4e9d9ea29e0490b9dfc745a4dc307d`. | Accepted U4 integration. |
 | U6 | `CLOSED — FINAL GO — P0/P1/P2=0/0/0`; accepted independent frozen-byte/evidence audit. | Frozen U0-U5 integration and accepted final receipt. |
 
-The exact formal post-U6 AI DAG is `A0 -> A1 -> (A2 || A3) -> A4 -> A5 -> A6`. A0 and A1 are closed; A2 and A3 are the only active packages and may proceed in parallel under zero-overlap ownership. A4-A6 are `NOT STARTED`. The AI program remains separate from the closed USER_MODE `100/100` accounting.
+The exact formal post-U6 AI DAG is `A0 -> A1 -> (A2 || A3) -> A4 -> A5 -> A6`. A0-A3 are closed; A2/A3 are final GO with `P0/P1/P2=0/0/0`, and A4 is the sole active package. A5 and A6 are `NOT STARTED`. The AI program remains separate from the closed USER_MODE `100/100` accounting.
 
 ### U3 closed evidence
 
@@ -127,11 +127,13 @@ The AI A0 documentation freeze is closed, with no U6 gate replay. ADR-006 freeze
 
 The accepted A1 record is AI tests `23/23 × 3`, schema opaque-endpoint vectors `9`, and independent gate receipt `D:\wt\i2s-a1\.codex_tmp\a1-phase2-gate-092b7d6b3aeb4246928688323771e8b8`: self-excluded receipt manifest `167/167`, Release solution `0 warnings / 0 errors`, frozen-root replay `0` mismatches, and point-in-time runtime/pipe/owned-temp-root residue `0`. This is the `A1 CLOSED GO` evidence; no later channel package may reopen A1 ownership.
 
-`A2 — WP-AI-CHAT-CHANNEL` is `ACTIVE` and owns only `src/VFXComposer.AI.Contracts/Chat/**`, `src/VFXComposer.AI.Providers/Chat/**`, and `src/VFXComposer.AI.Tests/Chat/**`. It interprets the selected `OpaqueEndpoint` only when making a request and sends the stored full URL exactly as supplied, with no normalization, modification, path append, or concatenation. It may implement explicit OpenAI Chat/Responses, Anthropic Messages, Gemini GenerateContent, and OpenAI-compatible protocols; auth is per request only and must never use `DefaultHeaders`. It has zero fallback and must return typed, redacted failures for cancellation, timeout, HTTP `429`, malformed input/response, parser, network, or upstream failure. Automated transport tests use mock handlers only.
+`A2 — WP-AI-CHAT-CHANNEL` is `CLOSED — FINAL GO — P0/P1/P2=0/0/0` at source `55ee0993f71375ee0245cbee54815e7988fe04fd` and redirect correction `2678cb62be9ac9ff5a05c9a5b605a75c60effb5c`; `A3 — WP-AI-IMAGE-CHANNEL` is equivalently closed at `c7c4adcfcc80c732bfaf87b0dfea11294b4af741` and `12b58ac69efe3175cf49a6ee129b3784b5b3da5c`. Their accepted tests are Chat `23/23 × 3`, Image `20/20`, and the solution build is `0 warnings / 0 errors`. The prior channel roots remain immutable output except A4's expressly authorized Chat overlays. Their request-time endpoint/no-path-append/per-request-auth/no-fallback/redacted-failure and image redirect/MIME/byte/dimension/hash/no-auth-forwarding rules remain binding.
 
-`A3 — WP-AI-IMAGE-CHANNEL` is concurrently `ACTIVE` and owns only `src/VFXComposer.AI.Contracts/Image/**`, `src/VFXComposer.AI.Providers/Image/**`, and `src/VFXComposer.AI.Tests/Image/**`. It may implement only OpenAI Images-compatible request-time transport using the stored full endpoint exactly. It must normalize `b64` and URL responses; URL retrieval never forwards authorization and must enforce redirect, MIME, byte, dimension, and hash limits before producing a private temporary artifact. It must not write Unity/project state, auto-retry, or add paid CI.
+`A4 — AI_DESKTOP_WIRING` is the sole active writer. Its new leaves are only `Contracts/Desktop/**`, `Providers/Desktop/**`, `AI.Tests/Desktop/**`, `apps/VFXComposer.Desktop/Services/PrivateImagePreviewDecoder.cs`, and `apps/VFXComposer.Desktop.Tests/AiDesktopIntegrationTests.cs`. Its only existing AI overlays are `ProviderConfigurationResolver.cs`, `ProviderSecretStore.cs`, `ChatRouteResolver.cs`, `ChatChannelGateway.cs`, `AI.Tests/Chat/**`, and `ProviderSafetySurfaceTests.cs`. Its Desktop/Test/automation surface is only the Desktop csproj/lock, `App.axaml.cs`, MainWindow/Create/Settings/Preview view models, Create/Settings/Preview views, `NoProjectAccessSurfaceTests.cs`, Desktop.Tests csproj/lock, and `eng/run-phase2-gate.ps1` plus `eng/phase2-baseline-roots.json`. The Registry supplies the repository-relative allow-list; every other path is STOP.
 
-A2 and A3 have zero overlapping files and may not edit any common file, `.csproj`, lock file, solution, runner, or baseline. Existing SDK globs must already compile and test each owned subtree; if a glob is insufficient, STOP rather than widen ownership. Each package requires its targeted tests and a Release solution build, but neither may independently update the runner, baseline, or independent gate; A4 is the first integration package permitted to do that. A4-A6 remain `NOT STARTED`.
+The A4 UI control plane has zero automatic network activity: configuration save, application startup, and Create/Settings/Preview navigation neither probe/resolve endpoints nor create HTTP traffic, health checks, credential refreshes, downloads, or paid image calls. `Unknown` health cannot block a deliberately submitted prompt; that real request alone is the first request and records its route's health result. Image has no automatic health or paid request. Secrets are re-entry-only and redacted; revoke removes the selected secret reference and leaves the route fail-closed until deliberate re-entry. Ordinary UI and all diagnostics/export redact endpoint sensitive content, secret/auth material, prompt, raw request/response, and image bytes. There is no routing, credential, protocol, model, adapter, endpoint, or channel fallback.
+
+The sole Desktop stream exception is `PrivateImagePreviewDecoder`: provider-issued `Stream` to in-memory Avalonia `Bitmap`, immediately closed on every path. It must not use `File`, `Directory`, `Path`, `FileStream`, `Environment`, `System.Net`, project access, or Unity. A4 must STOP for any Client/Broker/Worker/Unity/project/solution path, `OpenAiCompatibleImageGateway`, or `MainWindow.axaml` edit; nonzero automatic network observation; secret read-back or raw-data leak; forbidden decoder surface; a missing focused UI/safety/redaction test; or an attempt to run mock-handler cross-channel E2E. A5, not A4, owns that E2E evidence; A5/A6 remain not started.
 
 ---
 

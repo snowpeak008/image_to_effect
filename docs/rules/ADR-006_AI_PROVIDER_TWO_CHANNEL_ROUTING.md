@@ -1,6 +1,6 @@
 # ADR-006: AI provider two-channel routing and user-defined endpoints
 
-Status: `ACCEPTED — A0 ARCHITECTURE FREEZE; A1 CLOSED; A2+A3 ACTIVE / COMBINED NO-GO PENDING A3 P1#2 REMEDIATION` on `2026-08-29`.
+Status: `ACCEPTED — A0–A3 CLOSED; A4 DESKTOP WIRING SOLE ACTIVE` on `2026-08-29`.
 
 Normative architecture token: `AI_PROVIDER_TWO_CHANNEL_ROUTING_V1`.
 
@@ -14,9 +14,11 @@ The post-U6 AI DAG remains exactly:
 
 `A0 -> A1 -> (A2 || A3) -> A4 -> A5 -> A6`.
 
-`A0` and `A1 — AI_PROVIDER_FOUNDATION` are closed; A1 is finally accepted at merged source commit `698e770a35062cc4135872147a401dce40adcb51`. `A2` and `A3` are the only concurrent `ACTIVE` packages, but their combined quality-control state is `NO-GO`. `A4` through `A6` remain `NOT STARTED`.
+`A0` and `A1 — AI_PROVIDER_FOUNDATION` are closed; A1 is finally accepted at merged source commit `698e770a35062cc4135872147a401dce40adcb51`. `A2 — WP-AI-CHAT-CHANNEL` and `A3 — WP-AI-IMAGE-CHANNEL` are each `CLOSED — FINAL GO — P0/P1/P2=0/0/0`. A2 is the accepted sequence `55ee0993f71375ee0245cbee54815e7988fe04fd` followed by the redirect-boundary fix `2678cb62be9ac9ff5a05c9a5b605a75c60effb5c`; A3 is `c7c4adcfcc80c732bfaf87b0dfea11294b4af741` followed by `12b58ac69efe3175cf49a6ee129b3784b5b3da5c`. Their closeout records Chat `23/23 × 3`, Image `20/20`, and a Release solution build with `0 warnings / 0 errors`.
 
-Combined QC `P1#1` is superseded by this explicit user requirement clarification: the premise that standard .NET/HTTP request-time `RequestUri` normalization violates opaque configuration exactness is not a source finding and requires no source remediation. Combined QC `P1#2` is separate and remains open: Image's arbitrary public `HttpMessageHandler` injection requires one A3 remediation. Until that remediation and its review close, both A2 and A3 remain `ACTIVE / NO-GO`; this ADR grants no release or integration GO.
+Combined QC `P1#1` remains superseded by the explicit requirement clarification: standard .NET/HTTP request-time `RequestUri` normalization is not a configuration-storage finding. Combined QC `P1#2` is closed by the A3 redirect transport boundary. Neither closeout is a live-provider, paid-image, Desktop integration, project-write, Broker, Worker, or Unity claim.
+
+`A4 — AI_DESKTOP_WIRING` is now the sole `ACTIVE` package. `A5 — AI_MOCK_E2E` and `A6 — AI_INDEPENDENT_FINAL_AUDIT` remain `NOT STARTED`; A5 alone owns mock-handler, cross-channel end-to-end evidence.
 
 ## 2. Decision: two explicit channels, no fallback
 
@@ -60,6 +62,8 @@ If .NET/HTTP cannot interpret the value as a request URI, the adapter returns a 
 
 Neither success nor failure may persist a normalized `RequestUri`, rewrite, normalize, disable, delete, or otherwise mutate saved configuration. It must not select a different profile, model, endpoint, adapter, protocol, channel, or fallback route. Request-time usability is therefore distinct from local configuration persistence.
 
+Configuration save, application startup, and navigation between Create, Settings, and Preview are zero-network operations. They must not parse/probe an endpoint, resolve DNS, construct an HTTP client, perform a health check, refresh a credential, download an image, or make a paid request. Health begins as `Unknown`; that state does not prevent a user from submitting an explicit prompt. The resulting real prompt request is the first request and records the resulting health observation for its already selected route. There is no automatic Chat or Image health probe. In particular, Image must never turn health display, selection, startup, save, or navigation into an automatic or paid request; an image generation request requires its own explicit user action.
+
 ## 5. Storage, observability, import, and export
 
 AI configuration remains current-user application data, not Unity project configuration. The aggregate stays versioned and atomically written with bounded UTF-8 serialization and a preserved `.bak`; corrupt or unsupported aggregate data fails closed rather than silently replacing user settings. This integrity handling does not become endpoint syntax validation.
@@ -71,6 +75,10 @@ An explicit provider-profile editing surface may display the user's raw endpoint
 The fixed Tom design input remains [`snowpeak008/Tom_doc@dd0f9ffc32d426735f7fb8960640e9b7ae9337bf`](https://github.com/snowpeak008/Tom_doc/tree/dd0f9ffc32d426735f7fb8960640e9b7ae9337bf). Tom import is user-confirmed draft import only. A source endpoint may be carried as the same opaque user value and must be redacted in preview outside an explicit edit action. `ApiKeyProtected` is never copied, parsed, decrypted, re-encrypted, returned, logged, or persisted. Command paths, sidecar/CLI hints, cookies, and automatic protocol detection are rejected. Import cannot activate a channel binding without explicit user selection of protocol, capability/model, credential, and channel.
 
 Future image output remains a private, untrusted artifact. It must not automatically write to Unity, `Assets`, recipes, patches, or any project path. A later explicit Desktop export remains a separately bounded action.
+
+The Settings UI treats a secret as entry-only. It may expose a blank/password entry control and a redacted presence state, but it must never read a plaintext secret back into the UI, logs, receipts, diagnostics, or export. A new or changed binding that needs a `SecretRef` requires deliberate secret re-entry; it cannot recover a prior plaintext value, infer another profile's secret, or fall back to another credential. Explicit revoke must clear the selected binding's secret reference through the secret store, clear the UI's transient entry state, and leave that route fail-closed until the user deliberately re-enters a replacement. Endpoint text is still shown only inside the deliberate profile-edit interaction and remains redacted everywhere else.
+
+The only Desktop stream exception is `PrivateImagePreviewDecoder`. It may consume only a provider-issued `Stream`, decode it directly into an in-memory Avalonia `Bitmap`, and close the stream immediately after decoding, including failure paths. It is not a file/cache/export/network abstraction: it must not use `File`, `Directory`, `Path`, `FileStream`, `Environment`, `System.Net`, any project path, or Unity API.
 
 ## 6. Module boundary and active-channel contract
 
@@ -93,12 +101,37 @@ A1 retains its published owned roots:
 7. `eng/run-phase2-gate.ps1`
 8. `eng/phase2-baseline-roots.json`
 
-The A1 ownership is historical closed ownership; this clarification edits only the seven named AI control documents and does not reopen it. A2 owns only `src/VFXComposer.AI.Contracts/Chat/**`, `src/VFXComposer.AI.Providers/Chat/**`, and `src/VFXComposer.AI.Tests/Chat/**`; A3 owns the corresponding `Image/**` roots. Their root sets are disjoint, and neither may use the clarification as authority to edit a shared file, project file, runner, baseline, or A1-owned path.
+The A1 ownership is historical closed ownership. A2 closed with only `src/VFXComposer.AI.Contracts/Chat/**`, `src/VFXComposer.AI.Providers/Chat/**`, and `src/VFXComposer.AI.Tests/Chat/**`; A3 closed with the corresponding `Image/**` roots. A4 may consume those outputs but may not reopen their closed leaf ownership except for the expressly listed Chat integration overlays below.
 
-The active-channel proof obligations include: exact configuration/codec/store/edit round trips for arbitrary bounded endpoint text; no configuration-time network invocation; request-time .NET/HTTP `RequestUri` interpretation that leaves the saved value untouched; stable redacted failures when it cannot be interpreted or when network/upstream handling fails; no vendor-path concatenation, normalized-value persistence, or fallback; and protection of endpoint-embedded sensitive material in logs, exceptions, receipts, ordinary UI, and default export.
+### A4 exact owned scope and stop line
+
+A4 may add only these new roots/leaves:
+
+1. `src/VFXComposer.AI.Contracts/Desktop/**`
+2. `src/VFXComposer.AI.Providers/Desktop/**`
+3. `src/VFXComposer.AI.Tests/Desktop/**`
+4. `apps/VFXComposer.Desktop/Services/PrivateImagePreviewDecoder.cs`
+5. `apps/VFXComposer.Desktop.Tests/AiDesktopIntegrationTests.cs`
+
+A4 may modify only these existing integration surfaces:
+
+1. `src/VFXComposer.AI.Providers/ProviderConfigurationResolver.cs`
+2. `src/VFXComposer.AI.Providers/ProviderSecretStore.cs`
+3. `src/VFXComposer.AI.Providers/Chat/ChatRouteResolver.cs`
+4. `src/VFXComposer.AI.Providers/Chat/ChatChannelGateway.cs`
+5. `src/VFXComposer.AI.Tests/Chat/**`
+6. `src/VFXComposer.AI.Tests/ProviderSafetySurfaceTests.cs`
+7. `apps/VFXComposer.Desktop/VFXComposer.Desktop.csproj` and `apps/VFXComposer.Desktop/packages.lock.json`
+8. `apps/VFXComposer.Desktop/App.axaml.cs`; the MainWindow, Create, Settings, and Preview view models; and the Create, Settings, and Preview views/code-behind
+9. `apps/VFXComposer.Desktop.Tests/AiDesktopIntegrationTests.cs`, `apps/VFXComposer.Desktop.Tests/NoProjectAccessSurfaceTests.cs`, `apps/VFXComposer.Desktop.Tests/VFXComposer.Desktop.Tests.csproj`, and `apps/VFXComposer.Desktop.Tests/packages.lock.json`
+10. `eng/run-phase2-gate.ps1` and `eng/phase2-baseline-roots.json`
+
+This is an all-and-only preflight allow-list. A4 must STOP rather than widen it for `src/VFXComposer.Client/**`, any Broker, Worker, Unity, project, or solution path; `src/VFXComposer.AI.Providers/Image/OpenAiCompatibleImageGateway.cs`; or `apps/VFXComposer.Desktop/Views/MainWindow.axaml`. A4 cannot add an automatic health/probe/prompt/image request, raw-secret recovery, a direct Desktop transport, a fallback route, project access, Unity write, or mock-handler cross-channel E2E. The latter is owned by A5.
+
+The active A4 proof obligations include: exact configuration/codec/store/edit round trips for arbitrary bounded endpoint text; zero network on save/start/page navigation; `Unknown` health allowing an explicit user prompt and being recorded only from that request result; no automatic Image health or paid request; secret re-entry and revoke fail-closed behavior; no vendor-path concatenation, normalized-value persistence, or fallback; redaction of endpoint/secret/prompt/raw payloads; the in-memory, promptly closed preview stream; and static/runtime proof of zero Desktop project/Unity/file/network API surface except for the named decoder's `Stream` input. A4 may use focused fake/spy tests for its UI/contract boundary, but must STOP before mock-handler cross-channel E2E; A5 owns that evidence.
 
 ## 7. Consequences and stop line
 
-`A2` and `A3` remain `ACTIVE / NO-GO`; A3 has exactly one still-required remediation for QC P1#2, Image arbitrary public handler injection. A4 (Desktop wiring), A5 (mock E2E), and A6 (independent audit) remain `NOT STARTED`. No later node may use endpoint acceptance to infer permission for a different route, weaken endpoint redaction, add vendor-path construction, persist a normalized endpoint, or introduce fallback.
+`A2` and `A3` are final closed GO packages. A4 is the only active writer; A5 (mock E2E) and A6 (independent audit) remain not started. No later node may use endpoint acceptance to infer permission for a different route, weaken endpoint/secret/prompt/image redaction, add vendor-path construction, persist a normalized endpoint, introduce fallback, conduct background network activity, write project/Unity state, or treat A2/A3 component evidence as cross-channel E2E evidence.
 
-After this documentation commit passes `git diff --check` and the worktree is clean, this clarification is `FINAL STOPPED`. It does not close the combined QC gate or authorize source work beyond the separately tracked P1#2 remediation.
+A4 must STOP on any allow-list expansion, nonzero save/start/navigation network observation, implicit health/paid image request, secret read-back, failed revoke containment, raw-data leak, decoder file/network/project/Unity API use, test that crosses into A5 mock-handler E2E ownership, validation failure, or a dirty/unexplained worktree. It may publish only after its exact scope, gate/baseline update, required focused tests, locked Release solution build, redaction and forbidden-surface scans, and clean-worktree review are recorded; this ADR grants neither A5 nor A6 an early start.

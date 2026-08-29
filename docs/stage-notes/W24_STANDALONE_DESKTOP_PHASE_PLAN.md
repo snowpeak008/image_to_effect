@@ -6,9 +6,9 @@
 
 ## Current user-mode closeout and post-U6 AI plan
 
-The independent U6 receipt `u6-independent-final-audit-20260828T232640380Z` is accepted as `FINAL GO — P0/P1/P2=0/0/0`: `summary.json` is passed, frozen-root replay has `0` mismatches, point-in-time process/pipe/temp-root residue is empty, and the recorded source manifest is `16607` entries at SHA-256 `592bfeaab629e8cb9b100cf82fd3ce95c5be23972742501be34e57f1908a2284`. The ADR-005 USER_MODE main architecture is therefore `CLOSED — 100/100`. This does not turn AI configuration or provider traffic on.
+The independent U6 receipt `u6-independent-final-audit-20260828T232640380Z` remains accepted as `FINAL GO — P0/P1/P2=0/0/0`: `summary.json` is passed, frozen-root replay has `0` mismatches, point-in-time process/pipe/temp-root residue is empty, and the recorded source manifest is `16607` entries at SHA-256 `592bfeaab629e8cb9b100cf82fd3ce95c5be23972742501be34e57f1908a2284`. The ADR-005 USER_MODE main architecture is `CLOSED — 100/100`; that does not establish an AI-provider, paid-image, project-write, Broker, Worker, or Unity claim.
 
-The default Broker contract remains frozen: no-argument launch writes only `W24FS001` to stderr and exits `23`. Broker, Worker, and Unity receive no AI secret or provider-network role; Desktop may use only `IAiGateway` and constrained settings-management contracts, never a direct AI transport.
+The default Broker contract remains frozen: no-argument launch writes only `W24FS001` to stderr and exits `23`. Broker, Worker, and Unity receive no AI secret or provider-network role. Desktop may use only `IAiGateway` and constrained settings-management contracts, never a direct provider transport or project path.
 
 ### Closed user-mode DAG
 
@@ -25,34 +25,41 @@ The completed USER_MODE DAG remains historical evidence with these exact edges:
 
 The exact formal AI delivery DAG is `A0 -> A1 -> (A2 || A3) -> A4 -> A5 -> A6`.
 
-| Node | State | Planned boundary |
+| Node | State | Current boundary |
 |---|---|---|
-| A0 `AI_PROVIDER_TWO_CHANNEL_ROUTING` | `CLOSED — DOCS ONLY`; its endpoint contract is rebased by this seven-document decision update. | Existing U6 evidence only, no project-gate rerun and no implementation bytes. |
-| A1 `AI_PROVIDER_FOUNDATION` | `ACTIVE` — the sole active package. | Rework the prior endpoint admission model to `OpaqueEndpoint`, then revalidate contracts/configuration/store/import/resolver/Gateway; no real Chat or Image HTTP. |
-| A2 Chat adapter lane | `NOT STARTED`. | Explicit Chat-only adapter behavior after A1. |
-| A3 Image adapter lane | `NOT STARTED`. | Explicit Image-only adapter, downloader/cache behavior after A1. |
-| A4 Desktop wiring | `NOT STARTED`. | Desktop uses the Gateway only; no direct provider transport or project write. |
-| A5 mock E2E | `NOT STARTED`. | Controlled mock-only end-to-end evidence. |
-| A6 independent AI audit | `NOT STARTED`. | Read-only audit of frozen A0–A5 bytes. |
+| A0 `AI_PROVIDER_TWO_CHANNEL_ROUTING` | `CLOSED — DOCS ONLY`. | Endpoint routing/opacity decision only. |
+| A1 `AI_PROVIDER_FOUNDATION` | `CLOSED — FINAL ACCEPTED — GO`. | `OpaqueEndpoint`, configuration, redaction, DPAPI/`SecretRef`, and Gateway foundation; no initial real HTTP. |
+| A2 `WP-AI-CHAT-CHANNEL` | `CLOSED — FINAL GO — P0/P1/P2=0/0/0`. | Accepted source `55ee0993f71375ee0245cbee54815e7988fe04fd` plus Chat redirect closure `2678cb62be9ac9ff5a05c9a5b605a75c60effb5c`; Chat `23/23 × 3`. |
+| A3 `WP-AI-IMAGE-CHANNEL` | `CLOSED — FINAL GO — P0/P1/P2=0/0/0`. | Accepted source `c7c4adcfcc80c732bfaf87b0dfea11294b4af741` plus Image redirect closure `12b58ac69efe3175cf49a6ee129b3784b5b3da5c`; Image `20/20`. |
+| A4 `AI_DESKTOP_WIRING` | `ACTIVE` — the sole active package. | Bounded Desktop settings/create/preview integration, contracts, tests, runner, and baseline only. |
+| A5 `AI_MOCK_E2E` | `NOT STARTED`. | The only owner of mock-handler cross-channel E2E. |
+| A6 `AI_INDEPENDENT_FINAL_AUDIT` | `NOT STARTED`. | Read-only audit of frozen A0–A5 bytes. |
+
+The A2/A3 closeout also records a Release solution build with `0 warnings / 0 errors`. It closes the former redirect-handling P1 and does not prove live provider availability, paid image generation, UI integration, or cross-channel E2E. A4 is consequently the only implementation writer.
 
 ADR-006 freezes two mandatory channels: all LLM/conversation work uses only the one explicit `ChatLlm` binding, and all image generation uses only the one explicit `ImageGeneration` binding. Each binding resolves exactly one profile/capability/model; a profile may serve both only through separately chosen capabilities. Origin (`Official`, `Relay`, `Friend`, `Subscription`, `Custom`) is metadata, not protocol or routing. Unknown, missing, cross-channel, or failed state has no implicit or fallback route. The endpoint is `OpaqueEndpoint`: a user-supplied string saved and resolved unchanged, including official, relay, friend, subscription, and custom values. Local configuration acceptance is never network authorization.
 
-### A1 exact ownership and stop line
+### A4 exact ownership, UI contract, and stop line
 
-The A1 owned roots are exactly:
+A4 may create only `src/VFXComposer.AI.Contracts/Desktop/**`, `src/VFXComposer.AI.Providers/Desktop/**`, `src/VFXComposer.AI.Tests/Desktop/**`, `apps/VFXComposer.Desktop/Services/PrivateImagePreviewDecoder.cs`, and `apps/VFXComposer.Desktop.Tests/AiDesktopIntegrationTests.cs`. It may modify only:
 
-1. `src/VFXComposer.AI.Contracts/**`
-2. `src/VFXComposer.AI.Providers/**`
-3. `src/VFXComposer.AI.Tests/**`
-4. `docs/schemas/desktop/vfxcomposer-ai-provider-config-v1.schema.json`
-5. `VFXComposer.sln`
-6. `eng/verify-phase2-schemas.py`
-7. `eng/run-phase2-gate.ps1`
-8. `eng/phase2-baseline-roots.json`
+1. `src/VFXComposer.AI.Providers/ProviderConfigurationResolver.cs` and `src/VFXComposer.AI.Providers/ProviderSecretStore.cs`;
+2. `src/VFXComposer.AI.Providers/Chat/ChatRouteResolver.cs` and `src/VFXComposer.AI.Providers/Chat/ChatChannelGateway.cs`;
+3. `src/VFXComposer.AI.Tests/Chat/**` and `src/VFXComposer.AI.Tests/ProviderSafetySurfaceTests.cs`;
+4. `apps/VFXComposer.Desktop/VFXComposer.Desktop.csproj`, `apps/VFXComposer.Desktop/packages.lock.json`, and `apps/VFXComposer.Desktop/App.axaml.cs`;
+5. the existing MainWindow, Create, Settings, and Preview view models, and the Create, Settings, and Preview views/code-behind;
+6. `apps/VFXComposer.Desktop.Tests/NoProjectAccessSurfaceTests.cs`, `apps/VFXComposer.Desktop.Tests/VFXComposer.Desktop.Tests.csproj`, and `apps/VFXComposer.Desktop.Tests/packages.lock.json`; and
+7. `eng/run-phase2-gate.ps1` and `eng/phase2-baseline-roots.json`.
 
-A1 must STOP for any other path, including a central package-management file or an external `.csproj` dependency. Its earlier `NO-GO — P0/P1/P2=0/0/1` is superseded by the user requirement, not upgraded to GO. It must replace endpoint admission with `OpaqueEndpoint`: schema/storage enforce only structure, type, version, duplicate/unknown-field handling, and bounded storage size; no URI, scheme, host, port, user-info, query, fragment, or upstream-validity decision may block save or resolution. A1 may deliver core contracts/profile/channel bindings/schema, strict versioned atomic JSON with `.bak`, DPAPI CurrentUser SecretRef store, configuration fingerprint, health/adapter-registry skeleton, safe Tom draft import, resolver, and `IAiGateway`; it must not implement real provider HTTP. Its minimum revalidation matrix is arbitrary bounded endpoint save/resolve unchanged; structural/size failures only; zero network invocation during config acceptance; request-time adapter failure/no write-back/no fallback; DPAPI/plaintext and backup recovery; channel mismatch; Tom-secret exclusion; boundary; and redaction.
+This list is exhaustive. A4 must STOP rather than alter `src/VFXComposer.Client/**`, any Broker/Worker/Unity/project path, `VFXComposer.sln`, `src/VFXComposer.AI.Providers/Image/OpenAiCompatibleImageGateway.cs`, or `apps/VFXComposer.Desktop/Views/MainWindow.axaml`. It does not authorize a common source edit merely because A2/A3 are closed.
 
-`SecretRef` with DPAPI CurrentUser remains the recommended formal key store, but endpoint text containing credentials is not rejected and is always treated as sensitive. A2/A3, not A1, will attempt protocol-specific request construction from the original `OpaqueEndpoint` at call time. Construction/network/upstream failure returns a stable redacted error, never changes configuration and never falls back. Logs, exceptions, receipts, ordinary UI, and default export show only a redacted endpoint summary; the explicit edit surface may show the user value, and configuration export requires explicit inclusion plus a credential-exposure warning. Cookie scraping, scripts/CLI, custom-header templates, dynamic DLLs, TLS bypasses, raw diagnostic data, and automatic Unity writes remain prohibited.
+Settings must show redacted profile/endpoint summaries outside a deliberate edit interaction. It may save an opaque endpoint exactly as entered, but saving configuration, opening the application, and navigating between Create, Settings, and Preview must perform zero network activity: no DNS, endpoint parsing/probing, HTTP-client creation, health request, credential refresh, image download, or paid call. The initial health value is `Unknown`, and it cannot block an explicit user prompt. That actual prompt is the only first request and its success/failure records health for its already explicit route. Image has no automatic health probe and no automatic paid request; a generation call requires a separate deliberate user action.
+
+Secret handling is entry-only. A secret entry is blank/redacted after use and no plaintext secret, `SecretRef` payload, authorization value, prompt, raw request/response, endpoint user-info/query, or image bytes may reach ordinary UI, logs, exceptions, receipts, telemetry, cache keys, or default export. Where a binding needs a secret, a changed/new binding requires explicit re-entry; it cannot recover the previous plaintext or borrow a different profile's secret. Explicit revoke removes the selected `SecretRef` through the secret store, clears transient UI state, and leaves the route fail-closed until deliberate re-entry. No failure may choose another profile, credential, protocol, adapter, model, endpoint, or channel.
+
+Create may submit only the user-selected explicit `ChatLlm` request through `IAiGateway`; it neither preflights nor falls back. Preview may display only a provider-issued image stream. `PrivateImagePreviewDecoder` is the sole Desktop stream exception: it takes that `Stream`, produces an in-memory Avalonia `Bitmap`, and closes the stream immediately on both success and failure. It may not use `File`, `Directory`, `Path`, `FileStream`, `Environment`, `System.Net`, any project path, or Unity API. Image output remains private/untrusted and is never automatically exported or written to Unity/`Assets`/recipes/patches.
+
+A4 must prove exact opaque configuration round trips; zero network on save/start/page navigation; `Unknown`-to-explicit-prompt health handling; zero automatic Image health/paid calls; secret re-entry/revoke; no fallback or normalized-value persistence; redaction; prompt/response failure handling; prompt stream closure; and zero Desktop project/Unity/file/network surface except the decoder's inbound stream. It may use focused fakes/spies for these component assertions, but must STOP before a mock-handler cross-channel E2E test: that evidence belongs to A5. Publication also requires the exact runner/baseline update, targeted Desktop/AI tests, locked Release solution build, forbidden-surface/redaction scans, `git diff --check`, and a clean worktree.
 
 ---
 
