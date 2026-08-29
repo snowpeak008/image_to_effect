@@ -125,6 +125,9 @@ public static class CliRunner
         BatchSubmissionResult submission;
         try
         {
+            // Skipping entries whose content already succeeded is the default (REQ-002 §12,
+            // REQ-002-16); --resume is the explicit spelling of that default and --force is the
+            // only switch that turns it off. The parser enforces that the two never combine.
             submission = new BatchSubmissionService(queue.Client).Submit(manifest, command.Run.Force);
         }
         catch (JobQueueException exception)
