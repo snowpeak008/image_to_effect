@@ -18,16 +18,24 @@ public sealed class ChatChannelGateway : IChatChannelGateway, IDisposable
     private readonly HttpClient _httpClient;
     private int _disposed;
 
-    /// <summary>Creates the production client.  Tests use the internal handler constructor and never call a network.</summary>
-    public ChatChannelGateway(
+    /// <summary>
+    /// Creates the production gateway with a gateway-owned HTTP handler that never follows redirect locations.
+    /// </summary>
+    public static ChatChannelGateway Create(
         ProviderConfigurationStore configurationStore,
         ProviderHealthRegistry healthRegistry,
         ProviderSecretStore secretStore)
-        : this(configurationStore, healthRegistry, secretStore, CreateProductionClient())
     {
+        ArgumentNullException.ThrowIfNull(configurationStore);
+        ArgumentNullException.ThrowIfNull(healthRegistry);
+        ArgumentNullException.ThrowIfNull(secretStore);
+        return new ChatChannelGateway(configurationStore, healthRegistry, secretStore, CreateProductionClient());
     }
 
-    /// <summary>Test-only transport seam.  It is internal and exposed only to the scoped AI test assembly.</summary>
+    /// <summary>
+    /// Test-only transport seam. It is internal and exposed only to the scoped AI test assembly; production callers
+    /// must use <see cref="Create"/>, which owns the non-redirecting HTTP handler.
+    /// </summary>
     internal ChatChannelGateway(
         ProviderConfigurationStore configurationStore,
         ProviderHealthRegistry healthRegistry,
@@ -221,7 +229,13 @@ public sealed class ChatChannelGateway : IChatChannelGateway, IDisposable
 
     public override string ToString() => "ChatChannelGateway(<redacted>)";
 
-    private static HttpClient CreateProductionClient() => new()
+    private static HttpClient CreateProductionClient() => new(
+        new HttpClientHandler
+        {
+            AllowAutoRedirect = false,
+            UseCookies = false,
+        },
+        disposeHandler: true)
     {
         Timeout = Timeout.InfiniteTimeSpan,
     };
@@ -256,15 +270,25 @@ public sealed class ChatChannelGateway : IChatChannelGateway, IDisposable
         }
     }
 
-    private static ChatChannelException MapStatus(HttpStatusCode statusCode) => statusCode switch
+    private static ChatChannelException MapStatus(HttpStatusCode statusCode)
     {
-        HttpStatusCode.Unauthorized or HttpStatusCode.Forbidden =>
-            new ChatChannelException(ChatChannelErrorCode.AuthenticationFailed),
-        (HttpStatusCode)429 => new ChatChannelException(ChatChannelErrorCode.RateLimited, retryable: true),
-        >= HttpStatusCode.InternalServerError =>
-            new ChatChannelException(ChatChannelErrorCode.UpstreamUnavailable, retryable: true),
-        _ => new ChatChannelException(ChatChannelErrorCode.UpstreamRejected),
-    };
+        // Redirect targets are intentionally neither parsed nor sent. Apart from preventing route selection from a
+        // provider response, this keeps request-local authorization confined to the configured endpoint.
+        if ((int)statusCode is >= 300 and <= 399)
+        {
+            return new ChatChannelException(ChatChannelErrorCode.UpstreamRejected);
+        }
+
+        return statusCode switch
+        {
+            HttpStatusCode.Unauthorized or HttpStatusCode.Forbidden =>
+                new ChatChannelException(ChatChannelErrorCode.AuthenticationFailed),
+            (HttpStatusCode)429 => new ChatChannelException(ChatChannelErrorCode.RateLimited, retryable: true),
+            >= HttpStatusCode.InternalServerError =>
+                new ChatChannelException(ChatChannelErrorCode.UpstreamUnavailable, retryable: true),
+            _ => new ChatChannelException(ChatChannelErrorCode.UpstreamRejected),
+        };
+    }
 
     private static async ValueTask<byte[]> ReadBoundedResponseAsync(HttpContent content, CancellationToken cancellationToken)
     {

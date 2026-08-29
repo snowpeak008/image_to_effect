@@ -211,6 +211,54 @@ public sealed class ChatChannelGatewayTests
     }
 
     [TestMethod]
+    [DataRow(300)]
+    [DataRow(302)]
+    [DataRow(399)]
+    public async Task RedirectStatusesAreRejectedWithoutFollowingLocationOrForwardingAuthorization(int statusCode)
+    {
+        const string endpoint = "https://synthetic.invalid/a2/redirect?synthetic-query=token";
+        const string redirectedEndpoint = "https://redirected.invalid/a2/target?redirect-token=synthetic-location-token";
+        const string secret = "synthetic-redirect-secret";
+        const string prompt = "synthetic-redirect-prompt";
+        const string rawResponse = "synthetic redirect response must not escape";
+        using var fixture = new ChatTestFixture(endpoint: endpoint, secret: secret);
+        var handler = new RecordingHandler((request, _) =>
+        {
+            Assert.AreEqual(endpoint, request.RequestUri?.OriginalString);
+            Assert.AreEqual("Bearer " + secret, request.Headers.Authorization?.ToString());
+            var response = ChatTestResponses.Json((HttpStatusCode)statusCode, rawResponse);
+            response.Headers.Location = new Uri(redirectedEndpoint);
+            return Task.FromResult(response);
+        });
+        using var gateway = fixture.CreateGateway(handler);
+
+        var exception = await ThrowsAsync(
+            ChatChannelErrorCode.UpstreamRejected,
+            () => gateway.CompleteAsync(new ChatChannelRequest(
+                "correlation-redirect",
+                [new ChatChannelMessage(ChatRole.User, prompt)])).AsTask()).ConfigureAwait(false);
+
+        Assert.IsFalse(exception.Retryable);
+        Assert.AreEqual(1, handler.RequestCount, "A redirect must not trigger a second request.");
+        var captures = handler.Requests;
+        Assert.AreEqual(1, captures.Count);
+        Assert.AreEqual(endpoint, captures[0].Endpoint);
+        Assert.AreNotEqual(redirectedEndpoint, captures[0].Endpoint);
+        Assert.AreEqual("Bearer " + secret, captures[0].Header("Authorization"));
+        Assert.IsFalse(captures.Skip(1).Any(static capture => capture.Headers.ContainsKey("Authorization")));
+        AssertNotLeaked(
+            exception.Message,
+            exception.ToString(),
+            endpoint,
+            redirectedEndpoint,
+            secret,
+            prompt,
+            rawResponse,
+            "synthetic-query",
+            "synthetic-location-token");
+    }
+
+    [TestMethod]
     public async Task MalformedProviderJsonAndMissingRequiredFieldsAreRejectedWhileUnknownFieldsAreAllowed()
     {
         using var fixture = new ChatTestFixture();
