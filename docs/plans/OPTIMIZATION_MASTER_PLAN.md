@@ -140,6 +140,11 @@ flowchart LR
 - 交付物：`docs/plans/BASELINE_REPORT.md`。
 - 验收标准：数字可复现（附命令）；失败项如实记录并分类（阻塞/非阻塞）。
 
+**O4 Unity 既有测试失败 triage**（依赖 O3；F2 的前置）
+- 目标：对 O3 发现的 Unity EditMode 8 个确定性既有失败逐个定位根因并处置：属"陈旧 pin/fixture/注册表与现状不同步"的直接修复；属真实缺陷或需产品决策的，出报告待主 agent 裁决。八项症状：契约 sha256 pin 不符 ×2、错误码清单不同步、preview 场景缺 driver 组件 ×2、W24FS107≠W24FS109、句柄暴露检查、状态注册断言。
+- allow-list：`project/Packages/com.vfxcomposer.unity/**` 中与八项失败直接相关的测试/fixture/契约 pin/注册表文件；`docs/plans/UNITY_TEST_TRIAGE.md`（新建报告）。
+- 验收标准：EditMode 全绿，或"修复 N 项 + 明确豁免清单（每项有根因与裁决请求）"；.NET 侧零改动。
+
 ### Phase 3 新功能
 
 **F1 Recipe 结构化生成通道**（依赖 P0-1、R1）
@@ -155,7 +160,7 @@ flowchart LR
 
 **F3 Jobs 串行队列**（依赖 P0-1、R3）
 - 目标：实现单并发持久化任务队列 + Desktop Jobs 页（列表/进度/取消），复用 Protocol Job DTO。
-- 开工首个设计决策（来自 R3 调研）：队列执行器宿主形态（内嵌 Desktop vs 独立宿主进程），直接影响 CLI `--detach` 与无 Desktop 场景的 MCP 提交；开工前由主 agent 定版。
+- 宿主形态已定版（主 agent，2026-08-29）：执行层做成**库**（新程序集 `src/VFXComposer.Jobs`，仅依赖 Protocol）+ 跨进程 durable 单写者锁（复用 `ProviderConfigurationRevisionLock` 模式）；Desktop/CLI/MCP 各入口在进程内宿主执行器，锁保证全局并发=1；不引入常驻服务与新网络面。CLI `--detach` 语义由 F4 在此模型上实现（提交进程退出后队列状态在 store 中，接续执行由下一个宿主进程恢复）。
 - 验收标准：入队/执行/取消/崩溃恢复测试全绿；并发提交时严格串行执行。
 
 **F4 CLI 批量入口**（依赖 F1、F3、R2）
@@ -183,9 +188,11 @@ flowchart LR
 | R4 | DONE | 开发子 agent | 独立审计 PASS；6 条建议已落实（v1.1），ADR-007 转 ACCEPTED 合入。Phase 1 需求补全全部关闭 |
 | O1 | DONE | 开发子 agent | 主 agent 验收 PASS（.gitignore 补齐、空目录清理、退役清单交付；worktree/分支退役延后到 O2/O3 合并后执行，`codex/m1`、`codex/m2` 两个未并入分支暂保留） |
 | O2 | DONE | 开发子 agent | 主 agent 验收 PASS（脚本三条路径实测；`-SkipLockedRestore` 为 O3 修复前过渡开关，O3 合并后停用） |
-| O3 | DELIVERED | 开发子 agent | 已交付待验收（暂停中，交付在分支 `task/O3-baseline`）：锁修复+锁定 restore 通过、450/450 复核一致；新发现 Unity 包 8 个既有测试失败，F2 前需 triage（拟新增任务 O4） |
-| F1 | PAUSED | 开发子 agent | 用户要求全局暂停而中断；WIP 提交 `558cfcb1` 在分支 `task/F1-recipe-generation`，进度与恢复指引见 DEV_MEMORY §1 |
-| F2–F6 | BLOCKED | — | — |
+| O3 | DONE | 开发子 agent | 验收 PASS 并合并（`1aba917f`）：锁修复无版本变化、锁定 restore 18/18、450/450 独立复核一致；轻闸 `-SkipLockedRestore` 不再需要 |
+| O4 | DISPATCHED | 开发子 agent | Unity 8 个既有测试失败 triage（独立 worktree，F2 前置） |
+| F1 | RESUMED | 开发子 agent | 从 WIP `558cfcb1` 断点恢复开发中 |
+| F3 | DISPATCHED | 开发子 agent | 宿主形态已定版（库+跨进程单写者锁），独立 worktree 开发中 |
+| F2/F4–F6 | BLOCKED | — | F2 等 F1+O4；F4 等 F1+F3；F5 等 F4；F6 等 F2/F3/F4 |
 
 已知非阻塞遗留（P0-1 交付报告）：①`services/VFXComposer.Broker.HandleProbe` 与 `services/VFXComposer.Broker.Tests` 的 `packages.lock.json` 自 baseline 起与引用图不同步（归入 O3）；②`.gitignore` 未覆盖 `tests/**` 构建产物（归入 O1）。
 
