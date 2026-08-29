@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <AssemblyName>vfxc</AssemblyName>
+    <RootNamespace>VFXComposer.Cli</RootNamespace>
+    <IsPackable>false</IsPackable>
+    <Description>Local batch entry surface: reads a batch manifest, enqueues one job per entry and reports the batch outcome.</Description>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\VFXComposer.AI.Contracts\VFXComposer.AI.Contracts.csproj" />
+    <ProjectReference Include="..\..\src\VFXComposer.AI.Providers\VFXComposer.AI.Providers.csproj" />
+    <ProjectReference Include="..\..\src\VFXComposer.Batch.Core\VFXComposer.Batch.Core.csproj" />
+    <ProjectReference Include="..\..\src\VFXComposer.Jobs\VFXComposer.Jobs.csproj" />
+    <ProjectReference Include="..\..\src\VFXComposer.Protocol\VFXComposer.Protocol.csproj" />
+  </ItemGroup>
+</Project>

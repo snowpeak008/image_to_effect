@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <AssemblyName>VFXComposer.Batch.Core</AssemblyName>
+    <RootNamespace>VFXComposer.Batch.Core</RootNamespace>
+    <Description>Batch manifest parsing, submission, tracking and reporting shared by every batch entry surface.</Description>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\VFXComposer.AI.Contracts\VFXComposer.AI.Contracts.csproj" />
+    <ProjectReference Include="..\VFXComposer.Jobs\VFXComposer.Jobs.csproj" />
+    <ProjectReference Include="..\VFXComposer.Protocol\VFXComposer.Protocol.csproj" />
+  </ItemGroup>
+</Project>
