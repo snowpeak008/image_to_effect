@@ -51,6 +51,7 @@ public sealed class SettingsViewModel : WorkspacePageViewModel
         BeginSelectedProfileEditCommand = new RelayCommand(BeginSelectedProfileEdit, CanEditSelectedProfile);
         SaveProfileCommand = new RelayCommand(SaveProfile, () => IsEditingProfile);
         DeleteProfileCommand = new RelayCommand(DeleteSelectedProfile, CanEditSelectedProfile);
+        RevokeSecretCommand = new RelayCommand(RevokeSelectedSecret, CanEditSelectedProfile);
         SaveChatBindingCommand = new RelayCommand(SaveChatBinding);
         ClearChatBindingCommand = new RelayCommand(ClearChatBinding);
         SaveImageBindingCommand = new RelayCommand(SaveImageBinding);
@@ -221,12 +222,13 @@ public sealed class SettingsViewModel : WorkspacePageViewModel
     }
 
     public string SecurityNotice =>
-        "Secrets are entry-only. Endpoint text is shown only while editing this profile; normal summaries are redacted.";
+        "Secrets are entry-only. Revoke detaches the selected secret and leaves its route fail-closed until deliberate replacement. Endpoint text is shown only while editing this profile; normal summaries are redacted.";
 
     public IRelayCommand BeginNewProfileCommand { get; }
     public IRelayCommand BeginSelectedProfileEditCommand { get; }
     public IRelayCommand SaveProfileCommand { get; }
     public IRelayCommand DeleteProfileCommand { get; }
+    public IRelayCommand RevokeSecretCommand { get; }
     public IRelayCommand SaveChatBindingCommand { get; }
     public IRelayCommand ClearChatBindingCommand { get; }
     public IRelayCommand SaveImageBindingCommand { get; }
@@ -388,6 +390,35 @@ public sealed class SettingsViewModel : WorkspacePageViewModel
         }
     }
 
+    private void RevokeSelectedSecret()
+    {
+        if (!CanEditSelectedProfile())
+        {
+            return;
+        }
+
+        // Entry-only text must never survive a revoke attempt, including an unavailable configuration store.
+        SecretEntry = string.Empty;
+        try
+        {
+            var snapshot = _runtime.Settings.RevokeSecret(SelectedProfileId!);
+            ApplySnapshot(snapshot);
+            SecretPresence = snapshot.Profiles.SingleOrDefault(profile =>
+                string.Equals(profile.Id, SelectedProfileId, StringComparison.Ordinal))?.HasSecret == true
+                    ? "Secret configured"
+                    : "No secret configured";
+            ProfileStatus = "Secret detached. This profile is fail-closed until a new secret is saved.";
+        }
+        catch (AiGatewayException exception)
+        {
+            ProfileStatus = "Secret not revoked: " + exception.Code + ".";
+        }
+        catch
+        {
+            ProfileStatus = "Secret not revoked.";
+        }
+    }
+
     private void SaveChatBinding() => SaveBinding(
         AiChannel.ChatLlm,
         ChatBindingProfileId,
@@ -540,5 +571,6 @@ public sealed class SettingsViewModel : WorkspacePageViewModel
     {
         BeginSelectedProfileEditCommand.NotifyCanExecuteChanged();
         DeleteProfileCommand.NotifyCanExecuteChanged();
+        RevokeSecretCommand.NotifyCanExecuteChanged();
     }
 }

@@ -1,5 +1,4 @@
 using System.Security.Cryptography;
-using System.Text;
 using VFXComposer.AI.Contracts;
 using VFXComposer.AI.Contracts.Desktop;
 
@@ -15,17 +14,31 @@ internal sealed class ProviderDesktopSettings : IAiDesktopSettings
     private readonly ProviderSecretStore _secrets;
     private readonly ProviderHealthRegistry _health;
     private readonly Action _configurationChanged;
+    private readonly Action? _beforeConfigurationSave;
 
     public ProviderDesktopSettings(
         ProviderConfigurationStore store,
         ProviderSecretStore secrets,
         ProviderHealthRegistry health,
         Action configurationChanged)
+        : this(store, secrets, health, configurationChanged, beforeConfigurationSave: null)
+    {
+    }
+
+    // This seam makes the durable revision-conflict path observable in the focused provider tests. Production uses
+    // the four-argument constructor above and never supplies a callback.
+    internal ProviderDesktopSettings(
+        ProviderConfigurationStore store,
+        ProviderSecretStore secrets,
+        ProviderHealthRegistry health,
+        Action configurationChanged,
+        Action? beforeConfigurationSave)
     {
         _store = store ?? throw new ArgumentNullException(nameof(store));
         _secrets = secrets ?? throw new ArgumentNullException(nameof(secrets));
         _health = health ?? throw new ArgumentNullException(nameof(health));
         _configurationChanged = configurationChanged ?? throw new ArgumentNullException(nameof(configurationChanged));
+        _beforeConfigurationSave = beforeConfigurationSave;
     }
 
     public AiDesktopSettingsSnapshot Load()
@@ -70,7 +83,11 @@ internal sealed class ProviderDesktopSettings : IAiDesktopSettings
             var existing = TryLoad();
             var existingProfile = existing?.Configuration.Settings.Profiles.SingleOrDefault(candidate =>
                 string.Equals(candidate.Id, profile.Id, StringComparison.Ordinal));
-            var secretRef = existingProfile?.Auth.SecretRef ?? CreateSecretRef(profile.Id);
+            var isSecretReplacement = !string.IsNullOrEmpty(secretEntry);
+            var oldSecretRef = existingProfile?.Auth.SecretRef;
+            var secretRef = isSecretReplacement || oldSecretRef is null
+                ? CreateSecretRef(oldSecretRef)
+                : oldSecretRef;
             var replacement = CreateProfile(profile, secretRef);
             var previousProfiles = existing?.Configuration.Settings.Profiles ?? Array.Empty<ProviderProfile>();
             var profiles = previousProfiles
@@ -79,17 +96,91 @@ internal sealed class ProviderDesktopSettings : IAiDesktopSettings
                 .ToArray();
             var bindings = existing?.Configuration.Settings.ChannelBindings ?? Array.Empty<ChannelBinding>();
             var settings = new AiProviderSettings(NextRevision(existing), profiles, bindings);
-            _store.Save(settings);
-            _configurationChanged();
 
-            // Empty means preserve: neither reads nor recreates any prior plaintext. Any nonempty value deliberately
-            // replaces the profile-owned DPAPI envelope after the updated reference has been persisted.
-            if (!string.IsNullOrEmpty(secretEntry))
+            // Empty means preserve: neither reads nor recreates prior plaintext, and it retains the current reference.
+            // A nonempty entry is staged under a brand-new profile-bound DPAPI reference before configuration can ever
+            // point at it. Thus a DPAPI failure cannot mutate configuration or overwrite the old usable secret.
+            if (isSecretReplacement)
             {
-                _secrets.SaveSecret(replacement.Id, secretRef, secretEntry.AsSpan());
+                try
+                {
+                    _secrets.SaveSecret(replacement.Id, secretRef, secretEntry!.AsSpan());
+                }
+                catch
+                {
+                    TryRevokeOrphan(replacement.Id, secretRef);
+                    throw;
+                }
             }
 
-            return Snapshot(_store.Load().Configuration);
+            try
+            {
+                _beforeConfigurationSave?.Invoke();
+                _store.Save(settings);
+            }
+            catch
+            {
+                // The staged envelope is unreachable because Save did not commit its reference. Leave the previously
+                // loaded configuration and secret untouched, then best-effort remove only this fresh orphan.
+                if (isSecretReplacement)
+                {
+                    TryRevokeOrphan(replacement.Id, secretRef);
+                }
+
+                throw;
+            }
+
+            NotifyCommittedConfigurationChanged();
+
+            // Configuration is now the durable commit point. Cleanup cannot make a committed save appear failed in
+            // Settings; the old envelope is already unreachable from the new configuration even if its deletion is
+            // temporarily unavailable.
+            if (isSecretReplacement && oldSecretRef is not null)
+            {
+                TryRevokeOrphan(existingProfile!.Id, oldSecretRef);
+            }
+
+            return Snapshot(CommittedConfiguration(settings));
+        }
+        catch (AiGatewayException)
+        {
+            throw;
+        }
+        catch (ArgumentException)
+        {
+            throw new AiGatewayException(AiErrorCode.ConfigurationInvalid);
+        }
+        catch (OverflowException)
+        {
+            throw new AiGatewayException(AiErrorCode.ConfigurationInvalid);
+        }
+    }
+
+    public AiDesktopSettingsSnapshot RevokeSecret(string profileId)
+    {
+        ArgumentException.ThrowIfNullOrWhiteSpace(profileId);
+        try
+        {
+            var configuration = RequireConfiguration();
+            var profile = configuration.Settings.Profiles.SingleOrDefault(candidate =>
+                string.Equals(candidate.Id, profileId, StringComparison.Ordinal));
+            if (profile is null)
+            {
+                throw new AiGatewayException(AiErrorCode.ConfigurationInvalid);
+            }
+
+            // Persist an unreadable fresh reference before deleting the selected one. If a deletion fails, the saved
+            // profile is nevertheless fail-closed because no route still names the prior credential envelope.
+            var replacement = ReplaceSecretRef(profile, CreateSecretRef(profile.Auth.SecretRef));
+            var settings = new AiProviderSettings(
+                NextRevision(configuration),
+                configuration.Settings.Profiles.Select(candidate =>
+                    string.Equals(candidate.Id, profile.Id, StringComparison.Ordinal) ? replacement : candidate),
+                configuration.Settings.ChannelBindings);
+            _store.Save(settings);
+            NotifyCommittedConfigurationChanged();
+            TryRevokeOrphan(profile.Id, profile.Auth.SecretRef);
+            return Snapshot(CommittedConfiguration(settings));
         }
         catch (AiGatewayException)
         {
@@ -292,25 +383,67 @@ internal sealed class ProviderDesktopSettings : IAiDesktopSettings
             capability.Channel,
             capability.ModelId)));
 
-    private static SecretRef CreateSecretRef(string profileId)
+    private static ProviderProfile ReplaceSecretRef(ProviderProfile profile, SecretRef secretRef) => new(
+        profile.Id,
+        profile.DisplayName,
+        profile.Origin,
+        profile.Enabled,
+        profile.Protocol,
+        profile.Endpoint,
+        new AuthDescriptor(secretRef, profile.Auth.SecretScope),
+        profile.TimeoutSeconds,
+        profile.Capabilities);
+
+    private static SecretRef CreateSecretRef(SecretRef? distinctFrom = null)
     {
-        ArgumentNullException.ThrowIfNull(profileId);
-        var source = Encoding.UTF8.GetBytes(profileId);
-        try
+        SecretRef result;
+        do
         {
-            var digest = SHA256.HashData(source);
+            var random = RandomNumberGenerator.GetBytes(24);
             try
             {
-                return new SecretRef("sec-" + Convert.ToHexString(digest).ToLowerInvariant()[..60]);
+                result = new SecretRef("sec-" + Convert.ToHexString(random).ToLowerInvariant());
             }
             finally
             {
-                CryptographicOperations.ZeroMemory(digest);
+                CryptographicOperations.ZeroMemory(random);
             }
         }
-        finally
+        while (result.Equals(distinctFrom));
+
+        return result;
+    }
+
+    private static ProviderConfigurationReadResult CommittedConfiguration(AiProviderSettings settings) => new(
+        settings,
+        ProviderConfigurationFingerprint.Compute(settings),
+        requiresMigration: false);
+
+    private void TryRevokeOrphan(string profileId, SecretRef secretRef)
+    {
+        try
         {
-            CryptographicOperations.ZeroMemory(source);
+            _secrets.RevokeSecret(profileId, secretRef);
+        }
+        catch (AiGatewayException)
+        {
+            // This cleanup is intentionally post-commit. The current configuration no longer references this envelope
+            // (or never did after a failed staged save), so a transient storage error cannot reopen the selected route
+            // or cause the UI to report an already-committed save as unsuccessful.
+        }
+    }
+
+    private void NotifyCommittedConfigurationChanged()
+    {
+        try
+        {
+            _configurationChanged();
+        }
+        catch (Exception)
+        {
+            // The configuration write is already durable. This callback only retires in-memory adapters, which also
+            // re-resolve their persisted route on every explicit action; allowing it to change the caller-visible
+            // outcome would make Settings report an unsaved profile even though its new reference is authoritative.
         }
     }
 

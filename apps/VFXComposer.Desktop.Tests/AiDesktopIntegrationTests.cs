@@ -138,6 +138,28 @@ public sealed class AiDesktopIntegrationTests
     }
 
     [TestMethod]
+    public void SettingsExplicitSecretRevokeClearsEntryAndLeavesTheSelectedProfileFailClosed()
+    {
+        var runtime = new FakeDesktopRuntime();
+        runtime.Settings.SetExistingProfile();
+        var viewModel = new SettingsViewModel(runtime)
+        {
+            SelectedProfileId = "profile-one",
+            SecretEntry = "transient-secret-entry",
+        };
+
+        viewModel.RevokeSecretCommand.Execute(null);
+
+        Assert.AreEqual("profile-one", runtime.Settings.LastRevokedProfileId);
+        Assert.AreEqual(string.Empty, viewModel.SecretEntry);
+        Assert.AreEqual("No secret configured", viewModel.SecretPresence);
+        Assert.IsFalse(viewModel.Profiles.Single().HasSecret);
+        Assert.IsTrue(viewModel.ProfileStatus.Contains("fail-closed", StringComparison.Ordinal));
+        Assert.AreEqual(0, runtime.ChatCalls);
+        Assert.AreEqual(0, runtime.ImageCalls);
+    }
+
+    [TestMethod]
     public async Task MainWindowDisposesTheAiRuntimeAndPreviewResources()
     {
         var runtime = new FakeDesktopRuntime();
@@ -307,6 +329,7 @@ public sealed class AiDesktopIntegrationTests
         private AiDesktopProfileEdit? _edit;
 
         public string? LastSecretEntry { get; private set; }
+        public string? LastRevokedProfileId { get; private set; }
 
         public AiDesktopSettingsSnapshot Load() => _snapshot;
 
@@ -325,6 +348,19 @@ public sealed class AiDesktopIntegrationTests
         {
             _edit = null;
             _snapshot = EmptySnapshot();
+            return _snapshot;
+        }
+
+        public AiDesktopSettingsSnapshot RevokeSecret(string profileId)
+        {
+            if (_edit is null || !string.Equals(_edit.Profile.Id, profileId, StringComparison.Ordinal))
+            {
+                throw new AiGatewayException(AiErrorCode.ConfigurationUnavailable);
+            }
+
+            LastRevokedProfileId = profileId;
+            _edit = new AiDesktopProfileEdit(_edit.Profile, hasSecret: false);
+            _snapshot = SnapshotFor(_edit.Profile, hasSecret: false);
             return _snapshot;
         }
 

@@ -276,6 +276,12 @@ public interface IAiDesktopSettings
     /// <summary>Deletes the profile and revokes its profile-owned secret reference before returning.</summary>
     AiDesktopSettingsSnapshot DeleteProfile(string profileId);
 
+    /// <summary>
+    /// Detaches and revokes the selected profile's current secret reference. The profile remains configured, but its
+    /// route is fail-closed until a nonempty secret is deliberately entered and saved again.
+    /// </summary>
+    AiDesktopSettingsSnapshot RevokeSecret(string profileId);
+
     AiDesktopSettingsSnapshot SaveChannelBinding(AiDesktopChannelBindingDraft binding);
 
     AiDesktopSettingsSnapshot ClearChannelBinding(AiChannel channel);
@@ -333,6 +339,9 @@ public static class AiDesktopRuntime
             throw new AiGatewayException(AiErrorCode.ConfigurationUnavailable);
 
         public AiDesktopSettingsSnapshot DeleteProfile(string profileId) =>
+            throw new AiGatewayException(AiErrorCode.ConfigurationUnavailable);
+
+        public AiDesktopSettingsSnapshot RevokeSecret(string profileId) =>
             throw new AiGatewayException(AiErrorCode.ConfigurationUnavailable);
 
         public AiDesktopSettingsSnapshot SaveChannelBinding(AiDesktopChannelBindingDraft binding) =>

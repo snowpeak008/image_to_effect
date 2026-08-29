@@ -53,6 +53,7 @@ public sealed class ChatChannelGatewayTests
         var observed = fixture.Health.Get("profile-primary", "chat-main", AiChannel.ChatLlm);
         Assert.IsNotNull(observed);
         Assert.AreEqual(ProviderHealthState.Unhealthy, observed.State);
+        Assert.AreEqual(AiErrorCode.AdapterUnavailable, observed.ReasonCode);
     }
 
     [TestMethod]
@@ -164,6 +165,7 @@ public sealed class ChatChannelGatewayTests
         var after = fixture.Store.Load().Configuration.Settings;
         Assert.AreEqual(before.Revision, after.Revision);
         Assert.AreEqual(endpoint, after.Profiles.Single().Endpoint.Value);
+        AssertObservedFailure(fixture, endpoint, secret, prompt);
         AssertNotLeaked(exception.ToString(), endpoint, secret, prompt, "synthetic-endpoint-token");
     }
 
@@ -188,6 +190,24 @@ public sealed class ChatChannelGatewayTests
 
         Assert.AreEqual(1, handler.RequestCount);
         Assert.IsFalse(exception.Retryable);
+        AssertObservedFailure(fixture);
+    }
+
+    [TestMethod]
+    public async Task PreCancelledExplicitPromptStillRecordsTheResolvedRouteAsUnhealthyWithoutSending()
+    {
+        using var fixture = new ChatTestFixture();
+        var handler = new RecordingHandler((_, _) => throw new AssertFailedException("A pre-cancelled prompt must not send."));
+        using var gateway = fixture.CreateGateway(handler);
+        using var cancellation = new CancellationTokenSource();
+        cancellation.Cancel();
+
+        await ThrowsAsync(
+            ChatChannelErrorCode.Cancelled,
+            () => gateway.CompleteAsync(Request("correlation-pre-cancelled"), cancellation.Token).AsTask()).ConfigureAwait(false);
+
+        Assert.AreEqual(0, handler.RequestCount);
+        AssertObservedFailure(fixture);
     }
 
     [TestMethod]
@@ -252,6 +272,7 @@ public sealed class ChatChannelGatewayTests
                 [new ChatChannelMessage(ChatRole.User, prompt)])).AsTask()).ConfigureAwait(false);
 
         Assert.AreEqual(retryable, exception.Retryable);
+        AssertObservedFailure(fixture, endpoint, secret, prompt, rawResponse);
         AssertNotLeaked(exception.Message, exception.ToString(), endpoint, secret, prompt, rawResponse, "synthetic-user-info", "synthetic-query");
     }
 
@@ -486,6 +507,15 @@ public sealed class ChatChannelGatewayTests
 
         Assert.Fail("Expected a ChatChannelException.");
         throw new InvalidOperationException("Unreachable.");
+    }
+
+    private static void AssertObservedFailure(ChatTestFixture fixture, params string[] sensitiveValues)
+    {
+        var observed = fixture.Health.Get("profile-primary", "chat-main", AiChannel.ChatLlm);
+        Assert.IsNotNull(observed);
+        Assert.AreEqual(ProviderHealthState.Unhealthy, observed.State);
+        Assert.AreEqual(AiErrorCode.AdapterUnavailable, observed.ReasonCode);
+        AssertNotLeaked(observed.ToString(), sensitiveValues);
     }
 
     private static void AssertNotLeaked(string value, params string[] sensitiveValues)

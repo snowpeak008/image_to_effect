@@ -71,10 +71,11 @@
           <TextBlock Grid.Column="2" VerticalAlignment="Center" Text="Image model" />
           <TextBox Grid.Column="3" Text="{Binding ImageModelId}" />
         </Grid>
-        <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="8">
+        <Grid ColumnDefinitions="Auto,*,Auto,Auto" ColumnSpacing="8">
           <TextBlock VerticalAlignment="Center" Text="Secret" />
           <TextBox Grid.Column="1" PasswordChar="●" Text="{Binding SecretEntry}" Watermark="Leave blank to preserve the existing secret" />
           <TextBlock Grid.Column="2" Classes="muted" VerticalAlignment="Center" Text="{Binding SecretPresence}" />
+          <Button Grid.Column="3" Command="{Binding RevokeSecretCommand}" Content="Revoke secret" />
         </Grid>
         <TextBlock Foreground="#F1D39A" Text="{Binding SecurityNotice}" TextWrapping="Wrap" />
         <Button HorizontalAlignment="Left" Command="{Binding SaveProfileCommand}" Content="Save profile" />
