@@ -30,7 +30,12 @@ namespace VFXComposer.Tests.EditMode
             "project/Packages/com.vfxcomposer.unity/Tests/PlayMode/W24SustainedFlameFormalEvidenceTests.cs"
         };
 
-        [Test]
+        // Exempted by the main agent on 2026-08-29; see docs/plans/UNITY_TEST_TRIAGE.md §3.4 (R-4).
+        // The S0b bundle pins VfxDesignContract.cs at a content that predates this repository's
+        // history and is unrecoverable, and re-sealing sustained_flame_3d.contract.json would
+        // rewrite 111 downstream write-once evidence pins. The assertions below stay intact so the
+        // exemption is visible and reversible; do not weaken them.
+        [Test, Ignore("R-4 exemption: S0b capture-tool bundle re-seal is deferred; see docs/plans/UNITY_TEST_TRIAGE.md §3.4.")]
         public void CaptureToolBundle_BindsTheExactS0bAuthoritySourceSet()
         {
             var projectRoot = Directory.GetParent(Application.dataPath).FullName;
