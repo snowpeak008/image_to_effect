@@ -19,7 +19,15 @@ public sealed class ProviderConfigurationResolver
         _secrets = secrets ?? throw new ArgumentNullException(nameof(secrets));
     }
 
-    public ResolvedProviderRoute Resolve(AiChannel channel, ProviderConfigurationReadResult configuration)
+    /// <summary>
+    /// Resolves a channel without interpreting its endpoint. Ordinary callers remain fail-closed on unobserved
+    /// health; an explicit user prompt may opt into the one bounded <paramref name="allowUnknownHealth"/> admission
+    /// path. This method never probes, refreshes, or otherwise changes health itself.
+    /// </summary>
+    public ResolvedProviderRoute Resolve(
+        AiChannel channel,
+        ProviderConfigurationReadResult configuration,
+        bool allowUnknownHealth = false)
     {
         ArgumentNullException.ThrowIfNull(configuration);
         var settings = configuration.Settings;
@@ -66,7 +74,12 @@ public sealed class ProviderConfigurationResolver
         var health = _health.Get(profile.Id, capability.Id, channel);
         if (health is null)
         {
-            throw new AiGatewayException(AiErrorCode.HealthUnverified);
+            if (!allowUnknownHealth)
+            {
+                throw new AiGatewayException(AiErrorCode.HealthUnverified);
+            }
+
+            return new ResolvedProviderRoute(channel, profile, capability, binding, configuration.Fingerprint);
         }
 
         if (!health.ConfigurationFingerprint.Equals(configuration.Fingerprint))
@@ -77,6 +90,11 @@ public sealed class ProviderConfigurationResolver
         if (health.State == ProviderHealthState.Stale)
         {
             throw new AiGatewayException(AiErrorCode.HealthStale);
+        }
+
+        if (health.State == ProviderHealthState.Unknown && allowUnknownHealth)
+        {
+            return new ResolvedProviderRoute(channel, profile, capability, binding, configuration.Fingerprint);
         }
 
         if (health.State != ProviderHealthState.Verified)

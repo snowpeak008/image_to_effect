@@ -1,7 +1,7 @@
 {
   "formatVersion": 1,
   "algorithm": "SHA-256 of UTF-8(no BOM) lines: lowercase file hash, two spaces, repository-relative forward-slash path, LF; paths sorted before row construction with StringComparer.Ordinal; bin/obj segments excluded",
-  "capturedUtc": "2026-08-29T01:39:03.8009550Z",
+  "capturedUtc": "2026-08-29T04:23:15.3909470Z",
   "roots": [
     {
       "path": "src/VFXComposer.Protocol",
@@ -18,20 +18,20 @@
     {
       "path": "src/VFXComposer.AI.Contracts",
       "kind": "directory",
-      "count": 7,
-      "sha256": "4f473d0a2abb188995de5a4ddb38e0053ad7e045d6d71606541847f336f20747"
+      "count": 10,
+      "sha256": "f41ec1f43ae473f8591a70ebfe6fecf7728db9e8743ee544904b4ea91aad8aaa"
     },
     {
       "path": "src/VFXComposer.AI.Providers",
       "kind": "directory",
-      "count": 16,
-      "sha256": "3e2f4ee3d00b2aadb03710f3df0eeb2b1c90bc79a539192d0257d8f36261a011"
+      "count": 26,
+      "sha256": "decfb2450192540634a81e14baea6af269bfac06d7f52c858deeaba1de718c27"
     },
     {
       "path": "src/VFXComposer.AI.Tests",
       "kind": "directory",
-      "count": 13,
-      "sha256": "dbdf4fa74fa80d9943342094d4a01e447be7c42ad94393fafd8ab71d7806312c"
+      "count": 21,
+      "sha256": "0b0ea77ce0fdd243eaccda420ef8c61b7a9754b203f6aa203f3d4b684eaee697"
     },
     {
       "path": "src/VFXComposer.Client",
@@ -54,14 +54,14 @@
     {
       "path": "apps/VFXComposer.Desktop",
       "kind": "directory",
-      "count": 44,
-      "sha256": "27c54d98b571f3ad10e497cdaf44abe378fdf0f17000abab05e05c886e91a799"
+      "count": 45,
+      "sha256": "7466886339babe206e042415bcdbaf964e6f9deea256912272523c979ed603d4"
     },
     {
       "path": "apps/VFXComposer.Desktop.Tests",
       "kind": "directory",
-      "count": 9,
-      "sha256": "6178afa08016b3f356e28931d0b8904a5cdf3e919f9a9285078307cf85efbbd2"
+      "count": 10,
+      "sha256": "e287cc5af664ca7560f7de97085ac0119777c9deb4952131a87ac2f5be790003"
     },
     {
       "path": "services/VFXComposer.Broker",

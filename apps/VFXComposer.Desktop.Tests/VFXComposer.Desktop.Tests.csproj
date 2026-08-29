@@ -11,5 +11,6 @@
   <ItemGroup>
     <ProjectReference Include="..\VFXComposer.Desktop\VFXComposer.Desktop.csproj" />
     <ProjectReference Include="..\..\src\VFXComposer.Client\VFXComposer.Client.csproj" />
+    <ProjectReference Include="..\..\src\VFXComposer.AI.Contracts\VFXComposer.AI.Contracts.csproj" />
   </ItemGroup>
 </Project>

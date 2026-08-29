@@ -11,6 +11,51 @@ namespace VFXComposer.AI.Tests.Chat;
 public sealed class ChatChannelGatewayTests
 {
     [TestMethod]
+    public async Task ExplicitPromptAdmitsUnknownHealthAndRecordsVerifiedFromItsOwnSuccessfulResult()
+    {
+        using var fixture = new ChatTestFixture();
+        fixture.Health.Clear();
+        var handler = new RecordingHandler((_, _) => Task.FromResult(ChatTestResponses.Success(
+            ChatProtocolIds.OpenAiChatCompletionsV1)));
+        using var gateway = fixture.CreateGateway(handler);
+
+        var result = await gateway.CompleteAsync(Request());
+
+        Assert.AreEqual("synthetic-result", result.Text);
+        Assert.AreEqual(1, handler.RequestCount);
+        var configuration = fixture.Store.Load().Configuration;
+        var observed = fixture.Health.Get("profile-primary", "chat-main", AiChannel.ChatLlm);
+        Assert.IsNotNull(observed);
+        Assert.AreEqual(ProviderHealthState.Verified, observed.State);
+        Assert.AreEqual(configuration.Fingerprint, observed.ConfigurationFingerprint);
+    }
+
+    [TestMethod]
+    public async Task ExplicitPromptRecordsUnhealthyFromItsOwnUpstreamFailureWithoutFallback()
+    {
+        using var fixture = new ChatTestFixture();
+        fixture.Health.Clear();
+        var handler = new RecordingHandler((_, _) => Task.FromResult(
+            ChatTestResponses.Json(HttpStatusCode.ServiceUnavailable, "{}")));
+        using var gateway = fixture.CreateGateway(handler);
+
+        try
+        {
+            await gateway.CompleteAsync(Request());
+            Assert.Fail("The selected upstream failure must remain fail-closed.");
+        }
+        catch (ChatChannelException exception)
+        {
+            Assert.AreEqual(ChatChannelErrorCode.UpstreamUnavailable, exception.Code);
+        }
+
+        Assert.AreEqual(1, handler.RequestCount);
+        var observed = fixture.Health.Get("profile-primary", "chat-main", AiChannel.ChatLlm);
+        Assert.IsNotNull(observed);
+        Assert.AreEqual(ProviderHealthState.Unhealthy, observed.State);
+    }
+
+    [TestMethod]
     [DataRow(ChatProtocolIds.OpenAiChatCompletionsV1, "https://synthetic.invalid/a2/openai-chat?opaque=one#fragment")]
     [DataRow(ChatProtocolIds.OpenAiResponsesV1, "https://synthetic.invalid/a2/openai-responses?opaque=two#fragment")]
     [DataRow(ChatProtocolIds.AnthropicMessagesV1, "https://synthetic.invalid/a2/anthropic-messages?opaque=three#fragment")]

@@ -3,6 +3,7 @@ using System.Reflection;
 using System.Reflection.Emit;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using VFXComposer.Client;
+using VFXComposer.Desktop.Services;
 using VFXComposer.Desktop.ViewModels;
 
 namespace VFXComposer.Desktop.Tests;
@@ -22,6 +23,9 @@ public sealed class NoProjectAccessSurfaceTests
         typeof(VfxComposerClient).Assembly,
         typeof(MainWindowViewModel).Assembly,
     ];
+
+    private const string PrivateImagePreviewDecoderType =
+        "VFXComposer.Desktop.Services.PrivateImagePreviewDecoder";
 
     // U4 permits this exact Client-only process/control-pipe implementation.
     // The Desktop assembly and every other Client type remain fully inspected.
@@ -125,6 +129,19 @@ public sealed class NoProjectAccessSurfaceTests
             UserModeClientInfrastructureAllowlist);
         Assert.IsTrue(UserModeClientInfrastructureAllowlist.All(name =>
             name.StartsWith("VFXComposer.Client.", StringComparison.Ordinal)));
+    }
+
+    [TestMethod]
+    public void PrivatePreviewStreamAllowanceIsExactAndClosed()
+    {
+        var decoder = typeof(PrivateImagePreviewDecoder);
+        Assert.AreEqual(PrivateImagePreviewDecoderType, decoder.FullName);
+        CollectionAssert.AreEqual(
+            new[] { "DecodeAsync" },
+            decoder.GetMethods(BindingFlags.Public | BindingFlags.Static | BindingFlags.DeclaredOnly)
+                .Select(method => method.Name)
+                .Order(StringComparer.Ordinal)
+                .ToArray());
     }
 
     private static IEnumerable<string> ScanAssembly(Assembly assembly)
@@ -551,6 +568,14 @@ public sealed class NoProjectAccessSurfaceTests
     private static IEnumerable<string> CheckTypeReference(Type? type, string context)
     {
         if (type is null)
+        {
+            yield break;
+        }
+
+        // The decoder is the only Desktop component allowed to receive the provider-issued in-memory stream. It still
+        // receives no filesystem, environment, network, project, or Unity type exemption.
+        if (type == typeof(System.IO.Stream) &&
+            context.StartsWith(PrivateImagePreviewDecoderType, StringComparison.Ordinal))
         {
             yield break;
         }

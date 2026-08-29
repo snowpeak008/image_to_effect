@@ -2,6 +2,7 @@
     x:Class="VFXComposer.Desktop.Views.SettingsView"
     xmlns="https://github.com/avaloniaui"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:contracts="using:VFXComposer.AI.Contracts.Desktop"
     xmlns:vm="using:VFXComposer.Desktop.ViewModels"
     x:DataType="vm:SettingsViewModel">
   <StackPanel Spacing="18">
@@ -9,10 +10,103 @@
       <TextBlock FontSize="28" FontWeight="SemiBold" Text="{Binding Title}" />
       <TextBlock Classes="muted" Text="{Binding Description}" TextWrapping="Wrap" />
     </StackPanel>
+
     <Border Classes="card">
       <StackPanel Spacing="8">
-        <TextBlock Classes="muted" Text="{Binding EmptyStateMessage}" />
+        <TextBlock FontWeight="SemiBold" Text="Provider profiles" />
+        <TextBlock Classes="muted" Text="Profiles expose redacted endpoint summaries here. Select an identifier and choose Edit to deliberately reveal its exact endpoint text." TextWrapping="Wrap" />
+        <ItemsControl ItemsSource="{Binding Profiles}">
+          <ItemsControl.ItemTemplate>
+            <DataTemplate x:DataType="contracts:AiDesktopProfileSummary">
+              <Border Margin="0,3" Padding="10" BorderBrush="#343A45" BorderThickness="1" CornerRadius="5">
+                <StackPanel Spacing="2">
+                  <TextBlock FontWeight="SemiBold" Text="{Binding DisplayName}" />
+                  <TextBlock Classes="muted" Text="{Binding Id}" />
+                  <TextBlock Classes="muted" Text="{Binding Origin}" />
+                  <TextBlock Classes="muted" Text="{Binding ProtocolId}" />
+                  <TextBlock Classes="muted" Text="{Binding EndpointSummary}" TextWrapping="Wrap" />
+                  <TextBlock Classes="muted" Text="{Binding HasSecret}" />
+                </StackPanel>
+              </Border>
+            </DataTemplate>
+          </ItemsControl.ItemTemplate>
+        </ItemsControl>
+        <Grid ColumnDefinitions="*,Auto,Auto,Auto" ColumnSpacing="8">
+          <TextBox Watermark="Profile identifier" Text="{Binding SelectedProfileId}" />
+          <Button Grid.Column="1" Command="{Binding BeginNewProfileCommand}" Content="New" />
+          <Button Grid.Column="2" Command="{Binding BeginSelectedProfileEditCommand}" Content="Edit" />
+          <Button Grid.Column="3" Command="{Binding DeleteProfileCommand}" Content="Delete + revoke" />
+        </Grid>
+        <TextBlock Classes="muted" Text="{Binding ProfileStatus}" TextWrapping="Wrap" />
+      </StackPanel>
+    </Border>
+
+    <Border Classes="card" IsVisible="{Binding IsEditingProfile}">
+      <StackPanel Spacing="9">
+        <TextBlock FontWeight="SemiBold" Text="Profile editor" />
+        <Grid ColumnDefinitions="Auto,*" ColumnSpacing="10" RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto">
+          <TextBlock VerticalAlignment="Center" Text="Identifier" />
+          <TextBox Grid.Column="1" Text="{Binding ProfileId}" />
+          <TextBlock Grid.Row="1" VerticalAlignment="Center" Text="Name" />
+          <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding ProfileDisplayName}" />
+          <TextBlock Grid.Row="2" VerticalAlignment="Center" Text="Origin" />
+          <ComboBox Grid.Row="2" Grid.Column="1" ItemsSource="{Binding Origins}" SelectedItem="{Binding ProfileOrigin}" />
+          <TextBlock Grid.Row="3" VerticalAlignment="Center" Text="Protocol" />
+          <TextBox Grid.Row="3" Grid.Column="1" Text="{Binding ProfileProtocolId}" />
+          <TextBlock Grid.Row="4" VerticalAlignment="Center" Text="Timeout" />
+          <TextBox Grid.Row="4" Grid.Column="1" Text="{Binding ProfileTimeoutSeconds}" />
+          <CheckBox Grid.Row="5" Grid.ColumnSpan="2" Content="Enabled" IsChecked="{Binding ProfileEnabled}" />
+        </Grid>
+        <TextBlock Classes="muted" Text="Exact endpoint text is editable only in this focused editor; it is never copied into the summary above." TextWrapping="Wrap" />
+        <TextBox AcceptsReturn="True" Height="80" TextWrapping="Wrap" Watermark="Exact endpoint text (may include user-info, query, or fragment)" Text="{Binding ProfileOpaqueEndpoint}" />
+        <Grid ColumnDefinitions="Auto,*,Auto,*" ColumnSpacing="8">
+          <TextBlock VerticalAlignment="Center" Text="Chat capability" />
+          <TextBox Grid.Column="1" Text="{Binding ChatCapabilityId}" />
+          <TextBlock Grid.Column="2" VerticalAlignment="Center" Text="Chat model" />
+          <TextBox Grid.Column="3" Text="{Binding ChatModelId}" />
+        </Grid>
+        <Grid ColumnDefinitions="Auto,*,Auto,*" ColumnSpacing="8">
+          <TextBlock VerticalAlignment="Center" Text="Image capability" />
+          <TextBox Grid.Column="1" Text="{Binding ImageCapabilityId}" />
+          <TextBlock Grid.Column="2" VerticalAlignment="Center" Text="Image model" />
+          <TextBox Grid.Column="3" Text="{Binding ImageModelId}" />
+        </Grid>
+        <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="8">
+          <TextBlock VerticalAlignment="Center" Text="Secret" />
+          <TextBox Grid.Column="1" PasswordChar="●" Text="{Binding SecretEntry}" Watermark="Leave blank to preserve the existing secret" />
+          <TextBlock Grid.Column="2" Classes="muted" VerticalAlignment="Center" Text="{Binding SecretPresence}" />
+        </Grid>
         <TextBlock Foreground="#F1D39A" Text="{Binding SecurityNotice}" TextWrapping="Wrap" />
+        <Button HorizontalAlignment="Left" Command="{Binding SaveProfileCommand}" Content="Save profile" />
+      </StackPanel>
+    </Border>
+
+    <Border Classes="card">
+      <StackPanel Spacing="10">
+        <TextBlock FontWeight="SemiBold" Text="Explicit channel bindings" />
+        <TextBlock Classes="muted" Text="Chat and Image each require their own profile, capability, and model. Saving one never changes or falls back to the other." TextWrapping="Wrap" />
+        <TextBlock FontWeight="SemiBold" Text="ChatLlm" />
+        <Grid ColumnDefinitions="*,*,*" ColumnSpacing="8">
+          <TextBox Watermark="Profile ID" Text="{Binding ChatBindingProfileId}" />
+          <TextBox Grid.Column="1" Watermark="Capability ID" Text="{Binding ChatBindingCapabilityId}" />
+          <TextBox Grid.Column="2" Watermark="Model ID" Text="{Binding ChatBindingModelId}" />
+        </Grid>
+        <StackPanel Orientation="Horizontal" Spacing="8">
+          <Button Command="{Binding SaveChatBindingCommand}" Content="Save chat binding" />
+          <Button Command="{Binding ClearChatBindingCommand}" Content="Clear chat binding" />
+          <TextBlock Classes="muted" VerticalAlignment="Center" Text="{Binding ChatBindingStatus}" />
+        </StackPanel>
+        <TextBlock FontWeight="SemiBold" Text="ImageGeneration" />
+        <Grid ColumnDefinitions="*,*,*" ColumnSpacing="8">
+          <TextBox Watermark="Profile ID" Text="{Binding ImageBindingProfileId}" />
+          <TextBox Grid.Column="1" Watermark="Capability ID" Text="{Binding ImageBindingCapabilityId}" />
+          <TextBox Grid.Column="2" Watermark="Model ID" Text="{Binding ImageBindingModelId}" />
+        </Grid>
+        <StackPanel Orientation="Horizontal" Spacing="8">
+          <Button Command="{Binding SaveImageBindingCommand}" Content="Save image binding" />
+          <Button Command="{Binding ClearImageBindingCommand}" Content="Clear image binding" />
+          <TextBlock Classes="muted" VerticalAlignment="Center" Text="{Binding ImageBindingStatus}" />
+        </StackPanel>
       </StackPanel>
     </Border>
   </StackPanel>

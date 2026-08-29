@@ -1,6 +1,7 @@
 using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
+using VFXComposer.AI.Providers.Desktop;
 using VFXComposer.Desktop.Services;
 using VFXComposer.Desktop.ViewModels;
 using VFXComposer.Desktop.Views;
@@ -21,6 +22,9 @@ public sealed partial class App : Application
             try
             {
                 var session = new VFXComposer.Client.UserModeDesktopSession();
+                // Local composition only: the runtime derives current-user storage but creates no provider adapter,
+                // health probe, DNS request, or HTTP client until an explicit Create/Preview action.
+                var aiRuntime = AiDesktopRuntimeFactory.CreateCurrentUser();
                 var window = new MainWindow();
                 var selectionDialog = new AvaloniaProjectSelectionDialog(() => desktop.MainWindow);
                 var viewModel = MainWindowViewModel.CreateUserMode(
@@ -28,7 +32,8 @@ public sealed partial class App : Application
                     selectionDialog,
                     new AvaloniaUiDispatcher(),
                     diagnostics,
-                    errorBoundary);
+                    errorBoundary,
+                    aiRuntime);
                 window.DataContext = viewModel;
                 desktop.MainWindow = window;
                 desktop.Exit += async (_, _) => await viewModel.DisposeAsync();

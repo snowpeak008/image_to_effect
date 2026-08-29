@@ -33,10 +33,20 @@ public sealed class ProviderSafetySurfaceTests
         A1TestSupport.Throws(
             AiErrorCode.ConfigurationUnavailable,
             () => gateway.ChatAsync(new ChatRequest("correlation-1", [new ChatMessage(ChatRole.User, "synthetic prompt")])).GetAwaiter().GetResult());
+    }
 
-        var referencedNames = typeof(ConfigurationAiGateway).Assembly.GetReferencedAssemblies()
-            .Select(static reference => reference.Name ?? string.Empty);
-        Assert.IsFalse(referencedNames.Any(static name => name.Contains("System.Net.Http", StringComparison.OrdinalIgnoreCase)));
+    [TestMethod]
+    public void SystemNetHttpSurfaceIsConfinedToChatAndImageProviderNamespaces()
+    {
+        var offenders = typeof(ConfigurationAiGateway).Assembly
+            .GetTypes()
+            .Where(type => !IsTransportNamespace(type.Namespace))
+            .Where(TypeReferencesSystemNetHttp)
+            .Select(type => type.FullName ?? type.Name)
+            .Order(StringComparer.Ordinal)
+            .ToArray();
+
+        CollectionAssert.AreEqual(Array.Empty<string>(), offenders);
     }
 
     [TestMethod]
@@ -177,5 +187,53 @@ public sealed class ProviderSafetySurfaceTests
         }
         """;
         return Encoding.UTF8.GetBytes(json);
+    }
+
+    private static bool IsTransportNamespace(string? namespaceName) =>
+        string.Equals(namespaceName, "VFXComposer.AI.Providers.Chat", StringComparison.Ordinal) ||
+        string.Equals(namespaceName, "VFXComposer.AI.Providers.Image", StringComparison.Ordinal);
+
+    private static bool TypeReferencesSystemNetHttp(Type type)
+    {
+        const BindingFlags Members =
+            BindingFlags.Instance |
+            BindingFlags.Static |
+            BindingFlags.Public |
+            BindingFlags.NonPublic |
+            BindingFlags.DeclaredOnly;
+
+        if (IsSystemNetHttp(type.BaseType) || type.GetInterfaces().Any(IsSystemNetHttp))
+        {
+            return true;
+        }
+
+        if (type.GetFields(Members).Any(field => IsSystemNetHttp(field.FieldType)) ||
+            type.GetProperties(Members).Any(property => IsSystemNetHttp(property.PropertyType)))
+        {
+            return true;
+        }
+
+        return type.GetMethods(Members).Any(method =>
+            IsSystemNetHttp(method.ReturnType) || method.GetParameters().Any(parameter => IsSystemNetHttp(parameter.ParameterType)));
+    }
+
+    private static bool IsSystemNetHttp(Type? type)
+    {
+        if (type is null)
+        {
+            return false;
+        }
+
+        if (type.IsByRef || type.IsPointer || type.IsArray)
+        {
+            return IsSystemNetHttp(type.GetElementType());
+        }
+
+        if ((type.FullName ?? type.Name).StartsWith("System.Net.Http.", StringComparison.Ordinal))
+        {
+            return true;
+        }
+
+        return type.IsGenericType && type.GetGenericArguments().Any(IsSystemNetHttp);
     }
 }

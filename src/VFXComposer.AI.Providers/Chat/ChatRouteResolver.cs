@@ -20,7 +20,11 @@ internal sealed class ChatRouteResolver
         _a1Resolver = new ProviderConfigurationResolver(AllowlistedProviderRegistry.Default, _health, _secrets);
     }
 
-    public ChatResolvedRoute Resolve(ProviderConfigurationReadResult configuration)
+    /// <summary>
+    /// Resolves only the persisted ChatLlm binding. The unknown-health allowance is used solely by a caller that is
+    /// already executing an explicit user prompt; this resolver never creates a health request or a fallback route.
+    /// </summary>
+    public ChatResolvedRoute Resolve(ProviderConfigurationReadResult configuration, bool allowUnknownHealth = false)
     {
         ArgumentNullException.ThrowIfNull(configuration);
 
@@ -65,8 +69,13 @@ internal sealed class ChatRouteResolver
             // below because A1's closed descriptive registry cannot be widened from this isolated work package.
             if (protocol == ChatWireProtocol.OpenAiCompatible)
             {
-                var a1Route = _a1Resolver.Resolve(AiChannel.ChatLlm, configuration);
-                return new ChatResolvedRoute(protocol, a1Route.Profile, a1Route.Capability, a1Route.Binding);
+                var a1Route = _a1Resolver.Resolve(AiChannel.ChatLlm, configuration, allowUnknownHealth);
+                return new ChatResolvedRoute(
+                    protocol,
+                    a1Route.Profile,
+                    a1Route.Capability,
+                    a1Route.Binding,
+                    a1Route.ConfigurationFingerprint);
             }
 
             if (!_secrets.IsReadable(profile.Id, profile.Auth.SecretRef))
@@ -77,7 +86,17 @@ internal sealed class ChatRouteResolver
             var health = _health.Get(profile.Id, capability.Id, AiChannel.ChatLlm);
             if (health is null)
             {
-                throw new ChatChannelException(ChatChannelErrorCode.HealthUnverified);
+                if (!allowUnknownHealth)
+                {
+                    throw new ChatChannelException(ChatChannelErrorCode.HealthUnverified);
+                }
+
+                return new ChatResolvedRoute(
+                    protocol,
+                    profile,
+                    capability,
+                    binding,
+                    configuration.Fingerprint);
             }
 
             if (!health.ConfigurationFingerprint.Equals(configuration.Fingerprint) || health.State == ProviderHealthState.Stale)
@@ -85,12 +104,22 @@ internal sealed class ChatRouteResolver
                 throw new ChatChannelException(ChatChannelErrorCode.HealthStale);
             }
 
+            if (health.State == ProviderHealthState.Unknown && allowUnknownHealth)
+            {
+                return new ChatResolvedRoute(
+                    protocol,
+                    profile,
+                    capability,
+                    binding,
+                    configuration.Fingerprint);
+            }
+
             if (health.State != ProviderHealthState.Verified)
             {
                 throw new ChatChannelException(ChatChannelErrorCode.HealthUnverified);
             }
 
-            return new ChatResolvedRoute(protocol, profile, capability, binding);
+            return new ChatResolvedRoute(protocol, profile, capability, binding, configuration.Fingerprint);
         }
         catch (ChatChannelException)
         {
@@ -109,18 +138,21 @@ internal sealed class ChatResolvedRoute
         ChatWireProtocol protocol,
         ProviderProfile profile,
         CapabilityDefinition capability,
-        ChannelBinding binding)
+        ChannelBinding binding,
+        ConfigurationFingerprint configurationFingerprint)
     {
         Protocol = protocol;
         Profile = profile ?? throw new ArgumentNullException(nameof(profile));
         Capability = capability ?? throw new ArgumentNullException(nameof(capability));
         Binding = binding ?? throw new ArgumentNullException(nameof(binding));
+        ConfigurationFingerprint = configurationFingerprint ?? throw new ArgumentNullException(nameof(configurationFingerprint));
     }
 
     public ChatWireProtocol Protocol { get; }
     public ProviderProfile Profile { get; }
     public CapabilityDefinition Capability { get; }
     public ChannelBinding Binding { get; }
+    public ConfigurationFingerprint ConfigurationFingerprint { get; }
 }
 
 internal enum ChatWireProtocol

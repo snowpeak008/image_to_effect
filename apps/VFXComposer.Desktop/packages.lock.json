@@ -185,6 +185,15 @@
           "System.IO.Pipelines": "8.0.0"
         }
       },
+      "vfxcomposer.ai.contracts": {
+        "type": "Project"
+      },
+      "vfxcomposer.ai.providers": {
+        "type": "Project",
+        "dependencies": {
+          "VFXComposer.AI.Contracts": "[1.0.0, )"
+        }
+      },
       "vfxcomposer.client": {
         "type": "Project",
         "dependencies": {
