@@ -41,6 +41,7 @@
 
 ## 4. 派发子 agent 的模板要点（沿用本次会话有效实践）
 
+- **模型选择（用户定版，2026-08-29）**：后续子 agent 一律用 Claude Sonnet 5 Thinking，仅限 Claude 系，不用 Opus/Fable 高档位；轻量文档修订由主 agent 直接做，不派子 agent。
 - 任务书必含：先读主计划任务卡 + CODING_STANDARDS；精确 allow-list；worktree 指令（代码任务）+ **复制批准 feed**（`.codex_tmp/w24-phase1-approved-feed` 未跟踪，新 worktree 没有它 restore 必失败）；PowerShell 5.1 语法警告；禁止 push/合并/越界；交付报告格式（改动清单/命令与数字/已知限制）。
 - 文档任务在主工作区只新增文件、禁 git 写操作，由主 agent 验收后提交。
 - 交付后：主 agent 初审（小任务）或派只读独立审计（PRD/ADR/代码），建议级问题 resume 原作者一轮微调，微调后由主 agent 提交推送并更新状态板。

@@ -29,6 +29,7 @@
 3. **提交纪律**：开发子 agent 不得直接提交到 master；合并由主 agent 在验收 PASS 后执行。
 4. **验收基线**：Release 构建 0 warning/0 error（仓库已开 `TreatWarningsAsErrors`）、锁定 restore、相关测试全绿、符合 `docs/plans/CODING_STANDARDS.md`。
 5. 本计划与旧治理文档（receipt/独立审计/gate 全套）冲突时，以本计划为准：保留 `eng/run-phase2-gate.ps1` 作为里程碑级质量闸，日常任务验收用第 4 条基线，不再要求 receipt 官僚层。
+6. **子 agent 模型策略**（用户定版，2026-08-29）：后续派发的子 agent 一律使用 **Claude Sonnet 5 Thinking**；仅限 Claude 系模型，禁止其他厂商模型；不使用 Opus/Fable 等更高档位（控制消耗）。轻量文档修订不再单独派发子 agent，由主 agent 直接完成。已在途任务（F3、O4、F1 审计）维持原模型不变。
 
 ## 3. 阶段 DAG 与并行泳道
 
@@ -190,7 +191,7 @@ flowchart LR
 | O2 | DONE | 开发子 agent | 主 agent 验收 PASS（脚本三条路径实测；`-SkipLockedRestore` 为 O3 修复前过渡开关，O3 合并后停用） |
 | O3 | DONE | 开发子 agent | 验收 PASS 并合并（`1aba917f`）：锁修复无版本变化、锁定 restore 18/18、450/450 独立复核一致；轻闸 `-SkipLockedRestore` 不再需要 |
 | O4 | DISPATCHED | 开发子 agent | Unity 8 个既有测试失败 triage（独立 worktree，F2 前置） |
-| F1 | RESUMED | 开发子 agent | 从 WIP `558cfcb1` 断点恢复开发中 |
+| F1 | DELIVERED | 开发子 agent | 审计中（分支 `task/F1-recipe-generation` @ `6cd61636`：构建 0/0，AI.Tests 103 绿，Desktop.Tests 29 绿） |
 | F3 | DISPATCHED | 开发子 agent | 宿主形态已定版（库+跨进程单写者锁），独立 worktree 开发中 |
 | F2/F4–F6 | BLOCKED | — | F2 等 F1+O4；F4 等 F1+F3；F5 等 F4；F6 等 F2/F3/F4 |
 
