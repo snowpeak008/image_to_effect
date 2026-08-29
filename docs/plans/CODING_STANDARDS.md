@@ -20,7 +20,7 @@
 ## 3. 安全与边界（继承 ADR-002/003/005/006，硬性）
 
 1. 日志/异常/测试输出禁止出现：raw endpoint、Authorization/token、SecretRef 内容、prompt 原文、图片字节、未脱敏项目路径。统一走 redaction。
-2. Desktop 不直接读写 Unity 项目文件；项目写入只允许经批准的构建路径，写入面为 ADR-007（ACCEPTED）定版的封闭双成员清单：`Assets/VFX/Generated/**` + `ProjectSettings/VFXComposer/BuildManifests/<effectId>.manifest.json`；`Assets/VFX/Shared/**` 与单点之外的 `ProjectSettings/**` 构建期只读，越界即 fail-closed。
+2. Desktop 不直接读写 Unity 项目文件；项目写入只允许经批准的构建路径，写入面为 ADR-007（ACCEPTED，v1.2）定版的封闭三成员清单：`Assets/VFX/Generated/**` + `ProjectSettings/VFXComposer/BuildManifests/<effectId>.manifest.json` + `Assets/VFX/Recipes/<Sanitize(effectId)>.json`（构建溯源单文件，仅构建入口在哈希复验后原子写入）；`Assets/VFX/Shared/**` 与单点之外的 `ProjectSettings/**` 构建期只读，越界即 fail-closed。
 3. 保存配置、启动、页面导航必须零网络；网络请求只能由用户/任务的显式动作触发。
 4. AI 通道无 fallback：一个通道一个显式绑定，失败即 fail-closed，不得静默换 route。
 5. secret 一律经 DPAPI/SecretRef 存取，UI 只允许 entry-only。

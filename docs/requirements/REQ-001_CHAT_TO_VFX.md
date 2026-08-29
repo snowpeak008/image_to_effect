@@ -13,7 +13,7 @@
 仓库现状具备两块相互独立、尚未连通的能力：
 
 1. **AI ChatLlm 通道**（A0–A6 已关闭）：Desktop 内显式绑定、零 fallback、零自动网络的文本对话通道（`ChatChannelGateway`），当前 Create 页只做纯文本聊天，不产出任何结构化产物。
-2. **Unity 侧特效编译能力**（S1–S11 历史阶段产物）：以 Recipe JSON 为输入的校验器（`RecipeValidator`）与编译器（`VfxCompiler` 及各模板族编译器），能把合法 Recipe 幂等地编译为 Prefab，资产写入限定在 `Assets/VFX/Generated`，并在 `ProjectSettings/VFXComposer/BuildManifests/` 下写审计 manifest（两者即 ADR-007 定版的封闭双成员写入面）。历史执行计划（`docs/EXECUTION_PLAN.md` S9）已验证过"文字需求 → AI 写 Recipe → Validate → 修复 → Build"的人工流程可行。
+2. **Unity 侧特效编译能力**（S1–S11 历史阶段产物）：以 Recipe JSON 为输入的校验器（`RecipeValidator`）与编译器（`VfxCompiler` 及各模板族编译器），能把合法 Recipe 幂等地编译为 Prefab，资产写入限定在 `Assets/VFX/Generated`，并在 `ProjectSettings/VFXComposer/BuildManifests/` 下写审计 manifest（连同 ADR-007 v1.2 增补的 `Assets/VFX/Recipes/<effectId>.json` 构建溯源单文件，即定版的封闭三成员写入面）。历史执行计划（`docs/EXECUTION_PLAN.md` S9）已验证过"文字需求 → AI 写 Recipe → Validate → 修复 → Build"的人工流程可行。
 
 本需求把这条人工流程产品化：用户在 Desktop 输入一句特效描述，系统经 AI 生成 Recipe 草稿、分层校验、用户确认后，由受限执行路径构建出单个 Prefab。
 
@@ -33,13 +33,13 @@
 
 1. 用户在 Desktop 输入一段自然语言特效描述，点击一次"生成"，得到一份通过 L1 校验的 Recipe v1 草稿。
 2. AI 输出不合契约时，系统在有界次数内携带精确错误报告自动重试，用户无需理解 JSON。
-3. 草稿经用户显式确认后才提交构建；构建经 Unity 侧权威校验与受限写入路径产出 Prefab，写入面限定为 ADR-007 定版的封闭双成员清单（`Assets/VFX/Generated/**` 与 `ProjectSettings/VFXComposer/BuildManifests/` 审计元数据单点，细则见 REQ-001-18）。
+3. 草稿经用户显式确认后才提交构建；构建经 Unity 侧权威校验与受限写入路径产出 Prefab，写入面限定为 ADR-007 定版的封闭三成员清单（`Assets/VFX/Generated/**`、`ProjectSettings/VFXComposer/BuildManifests/` 审计元数据单点、`Assets/VFX/Recipes/<effectId>.json` 构建溯源单文件，细则见 REQ-001-18）。
 4. 全流程 fail-closed：任何一步失败都以稳定错误码呈现并停止，不静默降级、不换 provider、不绕过校验。
 5. 全流程可审计但不泄密：日志只含稳定错误码与脱敏摘要，不含 prompt 原文、endpoint、secret。
 
 ## 4. 非目标
 
-1. **不做封闭写入面之外的任何自动写入**：构建任务的写入面为 ADR-007（`docs/rules/ADR-007_CONTROLLED_PROJECT_MUTATION.md`，已定版）裁决的封闭双成员清单——①资产产物唯一根 `Assets/VFX/Generated/**`；②审计元数据单点 `ProjectSettings/VFXComposer/BuildManifests/<effectId>.manifest.json`（`VfxCompiler` 既有代码事实：构建必写 manifest）。AI 产物不写模板目录、不写任意用户路径；除上述单点外 `ProjectSettings/**` 保持只读；模板族共享资产（`Assets/VFX/Shared/**`）不在写入面内，构建任务对其只读。越界即 fail-closed。
+1. **不做封闭写入面之外的任何自动写入**：构建任务的写入面为 ADR-007（`docs/rules/ADR-007_CONTROLLED_PROJECT_MUTATION.md`，已定版，v1.2）裁决的封闭三成员清单——①资产产物唯一根 `Assets/VFX/Generated/**`；②审计元数据单点 `ProjectSettings/VFXComposer/BuildManifests/<effectId>.manifest.json`（`VfxCompiler` 既有代码事实：构建必写 manifest）；③构建溯源单文件 `Assets/VFX/Recipes/<Sanitize(effectId)>.json`（仅构建入口在用户确认与哈希复验之后原子写入，满足 strict E8014 溯源）。AI 产物不写模板目录、不写任意用户路径；除上述单点外 `ProjectSettings/**` 保持只读（含 `VfxProjectRules.json` 的 `legacyEffectIds`）；模板族共享资产（`Assets/VFX/Shared/**`）不在写入面内，构建任务对其只读。越界即 fail-closed。
 2. **不做 AI 自动选 provider**：ChatLlm 通道保持唯一显式绑定、零 fallback（ADR-006）；通道未绑定即失败，不自动推断、不换 route、不换模型。
 3. **单特效、单对话轮次**：一次生成任务对应一段用户描述、产出至多一个特效；不支持跨任务对话记忆、不支持"在上一个特效基础上改一改"（Patch/多轮迭代属后续需求）；生成任务内部的校验重试不是新的对话轮次。
 4. **不做批量生成**（REQ-002 范围）、**不做任务队列语义**（REQ-003 范围）：本需求只要求"同一时刻至多一个构建任务在执行"这一约束成立。
@@ -125,7 +125,7 @@ flowchart TD
 ### 6.6 构建执行（F2 实现，需求边界在此定义）
 
 - **REQ-001-17** 构建任务必须经受限执行路径执行 Unity 侧完整流水：`RecipeValidator` 校验 → `VfxCompiler` DryRun → Build；Desktop 进程自身不得对 Unity 项目做任何文件 I/O（继承 ADR-005 边界）。
-- **REQ-001-18** 所有构建写入必须落在 ADR-007 定版的封闭双成员写入面之内：①`VfxCompiler.GeneratedRoot`（`Assets/VFX/Generated/**`，资产产物唯一根）；②`ProjectSettings/VFXComposer/BuildManifests/<effectId>.manifest.json`（审计元数据单点，构建必写）。越界目标必须被拒绝（`E600` 行为）且有负向测试。模板目录、`Assets/VFX/Shared/**`、以及上述单点之外的 `ProjectSettings/**` 对构建任务只读；越界即 fail-closed。
+- **REQ-001-18** 所有构建写入必须落在 ADR-007（v1.2）定版的封闭三成员写入面之内：①`VfxCompiler.GeneratedRoot`（`Assets/VFX/Generated/**`，资产产物唯一根）；②`ProjectSettings/VFXComposer/BuildManifests/<effectId>.manifest.json`（审计元数据单点，构建必写）；③`Assets/VFX/Recipes/<Sanitize(effectId)>.json`（构建溯源单文件，仅构建入口在哈希复验后原子写入，未确认草稿永不落盘）。越界目标必须被拒绝（`E600` 行为）且有负向测试。模板目录、`Assets/VFX/Shared/**`、以及上述单点之外的 `ProjectSettings/**` 对构建任务只读；越界即 fail-closed。
 - **REQ-001-19** 构建必须满足原子性与幂等：失败不破坏上一次成功产物；同一草稿重复构建第二次 DryRun 结果为 Unchanged（继承既有编译器语义，作为端到端断言复述）。
 - **REQ-001-20** 同一时刻至多一个构建任务持有 Unity 实例（单实例锁）；锁不可得时构建任务必须显式失败或排队等待（排队语义由 REQ-003 定义），禁止并发抢锁。
 - **REQ-001-21** 构建完成必须向用户回显：成功时 Prefab 资产路径 + `BuildManifest.json` 摘要（recipe 哈希、build 哈希、编译器版本）；失败时定位到 stage/module/参数路径的错误列表。
@@ -172,14 +172,14 @@ F1 = 生成 + 解析 + 校验（产物止于"通过校验、待确认的 recipe 
 | G-6 | 模板参数表送达通道：Worker 只读白名单目前仅 `LIBRARY_INDEX` 与 BuildManifests，`Assets/VFX/Templates` 下的 manifest 无法经现有只读链路到达 Desktop；候选：`S12SlashAiExporter` 模式的静态导出快照（v1 目录版）或扩展只读白名单（需走边界变更评审） | F1（快照方案）或 F2/ADR-007（白名单方案） | REQ-001-04 |
 | G-7 | 受限构建执行器：batchmode 入口方法（或 Worker 命令实现）、recipe 字节的受控投递、`W24S5ProductionGate` 请求构造或 legacy Build 路径的取舍 | F2 | REQ-001-17/18/19/21 |
 | G-8 | 构建任务的锁调度与结果回传（与 F3 Jobs 队列共界，本需求只要求"至多一个 + 失败显式"） | F2（最小实现）/F3（队列化） | REQ-001-20/21 |
-| G-9 | 写入安全设计：路径 containment 细则、`Assets/VFX/Shared/**` 共享资产的处理、原子写入/回滚、fail-closed 行为——已由 ADR-007 定版闭合（双成员封闭写入面），F2 按其实现 | R4（ADR-007，已交付） | REQ-001-18 |
+| G-9 | 写入安全设计：路径 containment 细则、`Assets/VFX/Shared/**` 共享资产的处理、原子写入/回滚、fail-closed 行为——已由 ADR-007 定版闭合（v1.2 三成员封闭写入面），F2 按其实现 | R4（ADR-007，已交付） | REQ-001-18 |
 
 ## 9. 风险与开放问题
 
 ### 9.1 调研发现的风险
 
 - **R-1 写入根表述不一致（已解决，2026-08-29）**：主计划与 CODING_STANDARDS 曾写"`Assets/Generated`"，与代码实际的 `VfxCompiler.GeneratedRoot = "Assets/VFX/Generated"` 不一致；两份文档均已更正为 `Assets/VFX/Generated`，本文与代码、治理文档三方一致。`Assets/VFX/Shared/**` 的写入政策已由 ADR-007 裁决为只读（见 R-2）。
-- **R-2 共享资产写入超出 Generated**：`Impact2DSharedLibrary`/`Area2DSharedLibrary` 的 `Ensure()` 会在 `Assets/VFX/Shared/<Family>` 下补建材质/网格并配置纹理导入。若构建任务触发这些路径，封闭写入面即被突破。ADR-007 已裁决（定版）：`Assets/VFX/Shared/**` 不在双成员写入面内，构建任务对其只读（依赖缺失即失败），`Ensure()` 类共享资产补建不得由构建任务触发；剩余风险是 F2 实现必须实际拦截该路径。
+- **R-2 共享资产写入超出 Generated**：`Impact2DSharedLibrary`/`Area2DSharedLibrary` 的 `Ensure()` 会在 `Assets/VFX/Shared/<Family>` 下补建材质/网格并配置纹理导入。若构建任务触发这些路径，封闭写入面即被突破。ADR-007 已裁决（定版）：`Assets/VFX/Shared/**` 不在写入面内，构建任务对其只读（依赖缺失即失败），`Ensure()` 类共享资产补建不得由构建任务触发；剩余风险是 F2 实现必须实际拦截该路径。
 - **R-3 语义权威在 Unity 侧**：schema 对 `parameters`/`archetypeParameters`/`content.parameters` 是开放的（`additionalProperties: true`），权威校验在 C# registries 与 live `TemplateCatalog`。L1 通过 ≠ 可构建；确认前必须拿到 L2 结论，这使"确认前跑一次 Unity 只读校验"成为流程硬依赖，Unity batchmode 冷启动（分钟级）直接决定交互体验。是否引入常驻 Unity 会话属 F2/F3 设计题。
 - **R-4 结构化输出的协议差异**：`ChatProtocolIds` 支持 4 种协议，各家对 JSON Schema 约束输出的支持程度不一；REQ-001-06 的"退化为纯文本"路径必须是一等公民而非兜底摆设，否则部分绑定下功能不可用。
 - **R-5 编译能力碎片化**：schema 的 archetype 枚举有 20 个值，但实际可编译的模板族有限（v1 `VfxCompiler` + Impact2D/Area2D 域 + 隔离的 v2 Slash）。若 prompt 把全部枚举暴露给 AI，会生成大量"合法但不可构建"的 Recipe。F1 的 prompt 必须以运行时 Catalog 实际登记的模板集为准收窄选项（依赖 G-6 的数据通道）。
@@ -231,7 +231,7 @@ F1 = 生成 + 解析 + 校验（产物止于"通过校验、待确认的 recipe 
 **AC-7 越界写入被拒**
 - Given：构造一个经受限执行路径提交、输出路径解析到 Generated 根之外的构建请求（负向测试注入）
 - When：执行构建
-- Then：构建被 `E600` 行为拒绝并标记 Blocked；封闭写入面（Generated 根与 BuildManifests 单点）之外无任何新文件；上次成功产物不变
+- Then：构建被 `E600` 行为拒绝并标记 Blocked；封闭写入面（Generated 根、BuildManifests 单点与 Recipes 溯源单文件）之外无任何新文件；上次成功产物不变
 
 **AC-8 网络失败不自动重试**
 - Given：mock provider 超时
@@ -250,3 +250,4 @@ F1 = 生成 + 解析 + 校验（产物止于"通过校验、待确认的 recipe 
 | v0.1 | 2026-08-29 | 初版（任务卡 R1 交付） |
 | v0.2 | 2026-08-29 | 审计建议微调：映射路径改为 P0-1 合并后的 master 路径（S-1）；R-1/R-8 标记已解决（S-2）；REQ-001-06 等价判定量化（S-3） |
 | v0.3 | 2026-08-29 | 对齐已定版的 ADR-007 双成员封闭写入面：修正 §4 非目标 1 与 REQ-001-18（`ProjectSettings/VFXComposer/BuildManifests/` 审计元数据单点可写、其余 `ProjectSettings/**` 只读），同步 §3 目标、§5.1 流程图、AC-7、R-1/R-2、G-9 的同义表述 |
+| v0.4 | 2026-08-29 | 对齐 ADR-007 v1.2 三成员封闭写入面（F2 停手报告裁决）：写入面增补 `Assets/VFX/Recipes/<Sanitize(effectId)>.json` 构建溯源单文件，同步 §2/§3/§4/REQ-001-18/AC-7/G-9/R-2 表述 |
