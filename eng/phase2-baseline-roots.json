@@ -19,19 +19,19 @@
       "path": "src/VFXComposer.AI.Contracts",
       "kind": "directory",
       "count": 10,
-      "sha256": "f41ec1f43ae473f8591a70ebfe6fecf7728db9e8743ee544904b4ea91aad8aaa"
+      "sha256": "6cb576cf9eb3a400148bf76cce6668b31d31454e0a9bcbbe3423144eebafe49a"
     },
     {
       "path": "src/VFXComposer.AI.Providers",
       "kind": "directory",
       "count": 26,
-      "sha256": "decfb2450192540634a81e14baea6af269bfac06d7f52c858deeaba1de718c27"
+      "sha256": "6b49cca09dbe79e1ad14fcc55037023a30a9c48f1f07d5b36547a7b763fae54c"
     },
     {
       "path": "src/VFXComposer.AI.Tests",
       "kind": "directory",
       "count": 21,
-      "sha256": "0b0ea77ce0fdd243eaccda420ef8c61b7a9754b203f6aa203f3d4b684eaee697"
+      "sha256": "fd88502836a1164f76851db8fbf115dc2e8b7369eaaa26fba0a527edd1298146"
     },
     {
       "path": "src/VFXComposer.Client",
@@ -55,13 +55,13 @@
       "path": "apps/VFXComposer.Desktop",
       "kind": "directory",
       "count": 45,
-      "sha256": "7466886339babe206e042415bcdbaf964e6f9deea256912272523c979ed603d4"
+      "sha256": "723587347a57a8d66501b6d4212422481a8d35bf98dc6cd3097f04068da5de4e"
     },
     {
       "path": "apps/VFXComposer.Desktop.Tests",
       "kind": "directory",
       "count": 10,
-      "sha256": "e287cc5af664ca7560f7de97085ac0119777c9deb4952131a87ac2f5be790003"
+      "sha256": "a3257da79800922deeb7c28a2c4fb6d366b6e2c50fd2c5802697bdad8e37ba94"
     },
     {
       "path": "services/VFXComposer.Broker",
