@@ -1,7 +1,7 @@
 # 开发记忆与恢复指南
 
 > 暂停时间：2026-08-29 18:20 前后。恢复开发时按 §3 步骤执行即可无缝续接。
-> **更新（2026-08-29 19:45）**：已恢复开发。O3、F1、F3 均已审计合入 master（F1 `fd7b508f`、F3 `2b71eb9`，worktree/分支已退役）。REQ-003-12 裁决为条件豁免（F2 维持 batchmode 即有效）。当前在途：O4（Unity 测试 triage）、F3b（Jobs 队列加固，F4 前置，任务卡见主计划）。下一步：O4 归零后拍板 F2 生产闸（§2 决策 2）并派发 F2；F3b 合入后派发 F4。另见主计划"运维事件"：worktree 退役操作仅由主 agent 在确认无在途任务时执行。
+> **更新（2026-08-29 20:00）**：O3、F1、F3、F3b 均已合入 master（最新 `e36d5a8d`，全量 538/538）。REQ-003-12 裁决为条件豁免（F2 维持 batchmode 即有效）。当前在途：O4（Unity 测试 triage）、F4（CLI 批量入口）。下一步：O4 归零后拍板 F2 生产闸（§2 决策 2）并派发 F2；F4 交付后审计合并，再定版 F5 MCP 底座（§2 决策 3，倾向手写 stdio JSON-RPC）。另见主计划"运维事件"：worktree 退役操作仅由主 agent 在确认无在途任务时执行。
 > 文件夹导航：`OPTIMIZATION_MASTER_PLAN.md`（总计划+任务卡+状态板）｜`CODING_STANDARDS.md`（验收标准）｜`PROJECT_UNDERSTANDING.md`（项目理解）｜`SESSION_LOG_2026-08-29.md`（本次对话记录）｜`WORKTREE_RETIREMENT.md`（worktree 退役清单）｜`BASELINE_REPORT.md`（O3 交付后出现）。
 
 ## 1. 暂停时刻的精确状态
