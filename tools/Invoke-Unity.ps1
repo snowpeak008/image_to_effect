@@ -1,9 +1,13 @@
 param(
-    [Parameter(Mandatory = $true)] [ValidateSet('Compile', 'EditMode', 'PlayMode', 'ValidateResults')] [string] $Mode,
+    [Parameter(Mandatory = $true)] [ValidateSet('Compile', 'EditMode', 'PlayMode', 'ValidateResults', 'RecipeBuild')] [string] $Mode,
     [int] $TimeoutSeconds = 900,
     [string] $ResultsPath,
     [switch] $UseGraphics,
-    [string] $TestFilter
+    [string] $TestFilter,
+    # RecipeBuild only: the restricted build request and result files. Both must live outside the
+    # Unity project, because build inputs and logs are never part of the project write surface.
+    [string] $BuildRequestPath,
+    [string] $BuildResultPath
 )
 
 $ErrorActionPreference = 'Stop'
@@ -135,6 +139,37 @@ if (-not $UseGraphics) {
 }
 if ($Mode -eq 'Compile') {
     $arguments += '-quit'
+} elseif ($Mode -eq 'RecipeBuild') {
+    if ([string]::IsNullOrWhiteSpace($BuildRequestPath) -or [string]::IsNullOrWhiteSpace($BuildResultPath)) {
+        [Console]::Error.WriteLine('RecipeBuild requires -BuildRequestPath and -BuildResultPath.')
+        exit 64
+    }
+
+    $requestFull = [System.IO.Path]::GetFullPath($BuildRequestPath)
+    $resultFull = [System.IO.Path]::GetFullPath($BuildResultPath)
+    if (-not (Test-Path -LiteralPath $requestFull -PathType Leaf)) {
+        [Console]::Error.WriteLine("RecipeBuild request file does not exist: $requestFull")
+        exit 64
+    }
+
+    $projectBoundary = [System.IO.Path]::GetFullPath($projectPath).TrimEnd('\', '/') + [System.IO.Path]::DirectorySeparatorChar
+    foreach ($candidate in @($requestFull, $resultFull)) {
+        if ($candidate.StartsWith($projectBoundary, [System.StringComparison]::OrdinalIgnoreCase)) {
+            [Console]::Error.WriteLine("RecipeBuild request and result files must live outside the Unity project: $candidate")
+            exit 64
+        }
+    }
+
+    if (Test-Path -LiteralPath $resultFull) {
+        Remove-Item -LiteralPath $resultFull -Force
+    }
+
+    New-Item -ItemType Directory -Force -Path ([System.IO.Path]::GetDirectoryName($resultFull)) | Out-Null
+    # The entry point reads these two paths and calls EditorApplication.Exit itself, so -quit must
+    # not be supplied: it would race the structured result write.
+    $env:VFX_RECIPE_BUILD_REQUEST = $requestFull
+    $env:VFX_RECIPE_BUILD_RESULT = $resultFull
+    $arguments += @('-executeMethod', 'VFXComposer.Editor.Build.VfxRecipeBuildEntrypoint.BuildConfirmedRecipe')
 } else {
     $resultsPath = if ([string]::IsNullOrWhiteSpace($ResultsPath)) { Join-Path $evidencePath ("{0}.xml" -f $Mode) } else { $ResultsPath }
     # The Unity Test Framework owns shutdown after -runTests. Supplying -quit
@@ -176,6 +211,15 @@ try {
 $process.Refresh()
 $exitCode = $process.ExitCode
 Write-Host "Unity $Mode check finished with exit code $exitCode (PID $($process.Id))."
+if ($Mode -eq 'RecipeBuild') {
+    if (-not (Test-Path -LiteralPath $resultFull)) {
+        [Console]::Error.WriteLine("RecipeBuild produced no structured result. Unity exit code=$exitCode. See $logPath")
+        exit 2
+    }
+
+    Write-Host "RecipeBuild result: $resultFull"
+    exit $exitCode
+}
 if ($Mode -ne 'Compile') {
     $resultGateExitCode = Test-NUnitResults -Path $resultsPath
     if ($resultGateExitCode -ne 0) {
