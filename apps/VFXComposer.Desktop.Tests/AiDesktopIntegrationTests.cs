@@ -4,6 +4,7 @@ using System.IO.Compression;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using VFXComposer.AI.Contracts;
 using VFXComposer.AI.Contracts.Desktop;
+using VFXComposer.AI.Contracts.Recipes;
 using VFXComposer.Desktop.Services;
 using VFXComposer.Desktop.ViewModels;
 using VFXComposer.Desktop;
@@ -40,6 +41,7 @@ public sealed class AiDesktopIntegrationTests
         Assert.AreEqual(0, runtime.ChatCalls);
         Assert.AreEqual(0, runtime.ImageCalls);
         Assert.AreEqual(0, runtime.OpenArtifactCalls);
+        Assert.AreEqual(0, runtime.RecipeGenerateCalls);
         Assert.AreEqual(string.Empty, shell.SettingsPage.SecretEntry);
         Assert.AreEqual("synthetic-secret", runtime.Settings.LastSecretEntry);
     }
@@ -192,7 +194,7 @@ public sealed class AiDesktopIntegrationTests
         Assert.IsTrue(runtime.LastOpenedStream.WasDisposed);
     }
 
-    private sealed class FakeDesktopRuntime : IAiDesktopRuntime, IAiGateway
+    private sealed class FakeDesktopRuntime : IAiDesktopRuntime, IAiGateway, IRecipeGenerationChannel, IRecipeDraftStore
     {
         private static readonly byte[] ValidPng = CreateValidPng();
 
@@ -204,10 +206,14 @@ public sealed class AiDesktopIntegrationTests
         public IAiGateway Gateway => this;
         public FakeDesktopSettings Settings { get; }
         IAiDesktopSettings IAiDesktopRuntime.Settings => Settings;
+        public IRecipeGenerationChannel RecipeGeneration => this;
+        public IRecipeDraftStore RecipeDrafts => this;
         public int ChatCalls { get; private set; }
         public int ImageCalls { get; private set; }
         public int OpenArtifactCalls { get; private set; }
         public int DisposeCalls { get; private set; }
+        public int RecipeGenerateCalls { get; private set; }
+        public int RecipeDraftSaveCalls { get; private set; }
         public bool ThrowChatFailure { get; init; }
         public bool ThrowImageFailure { get; init; }
         public ChatRequest? LastChatRequest { get; private set; }
@@ -247,6 +253,26 @@ public sealed class AiDesktopIntegrationTests
             DisposeCalls++;
             return ValueTask.CompletedTask;
         }
+
+        public ValueTask<RecipeGenerationResult> GenerateAsync(
+            RecipeGenerationRequest request,
+            CancellationToken cancellationToken = default)
+        {
+            RecipeGenerateCalls++;
+            return ValueTask.FromException<RecipeGenerationResult>(
+                new AiGatewayException(AiErrorCode.ConfigurationUnavailable));
+        }
+
+        public RecipeDraftRecord Save(RecipeDraftRecord record)
+        {
+            RecipeDraftSaveCalls++;
+            throw new RecipeDraftStoreException(RecipeDraftStoreErrorCode.StorageFailed);
+        }
+
+        public RecipeDraftRecord Confirm(string draftId, string canonicalSha256) =>
+            throw new RecipeDraftStoreException(RecipeDraftStoreErrorCode.StorageFailed);
+
+        public RecipeDraftRecord? TryGet(string draftId) => null;
 
         private static byte[] CreateValidPng()
         {
