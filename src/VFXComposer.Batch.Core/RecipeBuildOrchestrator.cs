@@ -293,13 +293,13 @@ public sealed class RecipeBuildOrchestrator
             return new RecipeBuildDecision(false, result.FailureCode ?? RecipeBuildFailureCodes.ProcessFailed, result);
         }
 
-        // A success is only accepted when the entry point built the exact recipe this job submitted.
+        // A success is only accepted when the entry point built the exact recipe this job submitted
+        // and reported exactly the three closed write-surface members for that effect. This is the
+        // execution-layer half of the double defence: a reported target outside the surface is
+        // treated as a failed build even if Unity claimed success.
         if (!string.Equals(result.RecipeHash, content.CanonicalSha256, StringComparison.Ordinal) ||
-            string.IsNullOrEmpty(result.EffectId) ||
-            string.IsNullOrEmpty(result.PrefabPath) ||
-            string.IsNullOrEmpty(result.OwnershipManifestPath) ||
-            string.IsNullOrEmpty(result.ProvenanceRecipePath) ||
-            string.IsNullOrEmpty(result.BuildHash))
+            string.IsNullOrEmpty(result.BuildHash) ||
+            !RecipeBuildWriteSurface.DescribesExactly(result.EffectId, result.PrefabPath, result.OwnershipManifestPath, result.ProvenanceRecipePath))
         {
             return new RecipeBuildDecision(false, RecipeBuildFailureCodes.ResultIdentityMismatch, result);
         }
