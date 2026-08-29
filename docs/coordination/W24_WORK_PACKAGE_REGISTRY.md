@@ -1,6 +1,6 @@
 # W24 work-package registry
 
-> **CURRENT REGISTRY — U6 FINAL GO / A0–A4 CLOSED / A5 SOLE ACTIVE (2026-08-29).** ADR-005's USER_MODE route is closed at `100/100`; ADR-006 governs the separate post-U6 AI chain with user-owned opaque endpoints. A2, A3, and A4 are final GO; A5 local mock E2E is the sole active, zero-overlap package. Every pre-U0 package entry retained later in this file is historical provenance, not an active contract, dependency, blocker, or audit queue.
+> **CURRENT REGISTRY — U6 FINAL GO / A0–A5 CLOSED / A6 SOLE ACTIVE (2026-08-29).** ADR-005's USER_MODE route is closed at `100/100`; ADR-006 governs the separate post-U6 AI chain with user-owned opaque endpoints. A5 local loopback E2E is closed; A6 is the sole active, zero-overlap, read-only audit package. AI functionality final GO remains pending A6. Every pre-U0 package entry retained later in this file is historical provenance, not an active contract, dependency, blocker, or audit queue.
 >
 > Normative tokens: `USER_MODE_LOCAL_CREATIVE_TOOL_V1` and `AI_PROVIDER_TWO_CHANNEL_ROUTING_V1`.
 
@@ -23,10 +23,10 @@ Exact DAG: `U0 -> U1`; `U0 -> U2`; `U1 + U2 -> U3`; `U3 -> U4 -> U5 -> U6`.
 | A2 `WP-AI-CHAT-CHANNEL` | `CLOSED — FINAL GO — P0/P1/P2=0/0/0`. | `55ee0993f71375ee0245cbee54815e7988fe04fd`, then redirect closure `2678cb62be9ac9ff5a05c9a5b605a75c60effb5c`; Chat `23/23 × 3`. |
 | A3 `WP-AI-IMAGE-CHANNEL` | `CLOSED — FINAL GO — P0/P1/P2=0/0/0`. | `c7c4adcfcc80c732bfaf87b0dfea11294b4af741`, then redirect closure `12b58ac69efe3175cf49a6ee129b3784b5b3da5c`; Image `20/20`. |
 | A4 `AI_DESKTOP_WIRING` | `CLOSED — FINAL GO — P0/P1/P2=0/0/0`. | `fc986d11`, `ffc9f609`, `cc5ff806`; receipt `186/186`; AI `77/77`, Desktop `22/22`, `423/423` total; root/residue `0`. |
-| A5 `AI_MOCK_E2E` | `ACTIVE — SOLE WRITER`. | Exact five-path local-loopback E2E contract below. |
-| A6 `AI_INDEPENDENT_FINAL_AUDIT` | `NOT STARTED`. | Waits for closed A5. |
+| A5 `AI_MOCK_E2E` | `CLOSED — FINAL ACCEPTED / GO — P0/P1/P2=0/0/0`. | `9152c7e6` + `14abb1d3`, merge `c6f9920f`; real-loopback `11/11`, receipt `a5-final-acceptance-14abb1d3-bootstrap`. |
+| A6 `WP-AI-PROVIDER-FINAL-AUDIT` | `ACTIVE — SOLE READ-ONLY AUDITOR`. | Whole-A0–A5 audit only; no product development or repair; final AI functionality GO pending. |
 
-U1 through U6 are closed/integrated, scoped GO, or final GO. A0-A4 are closed; A5 is the only active writer, and A6 is `NOT STARTED`. There are no other current implementation nodes.
+U1 through U6 are closed/integrated, scoped GO, or final GO. A0-A5 are closed; A6 is the only active package and is read-only. There are no other current implementation nodes, and no final AI functionality GO is asserted before A6 completes.
 
 ### U3 exact closed ownership and evidence
 
@@ -102,7 +102,7 @@ The accepted scope is the ADR-005 local ordinary-user route only: Protocol-only 
 
 The closed U6 result makes the ADR-005 USER_MODE main architecture `100/100`. It preserves the default Broker no-argument behavior `W24FS001`/exit `23`; it does not authorize an AI provider, credential, network request, image cache, Desktop wiring, or Unity/project mutation.
 
-The formal AI DAG is `A0 -> A1 -> (A2 || A3) -> A4 -> A5 -> A6`. A0-A4 are closed; A2, A3, and A4 are final GO at `P0/P1/P2=0/0/0`, A5 is the sole `ACTIVE` package, and A6 is `NOT STARTED`. ADR-006's mandatory dual-channel policy requires `ChatLlm` for all LLM/conversation work and `ImageGeneration` for all image generation, with one explicit profile/capability/model per channel, Origin metadata distinct from protocol, and zero fallback. Endpoint is a user-owned `OpaqueEndpoint` string, so local configuration save/resolve is deliberately separate from request-time adapter usability and never authorizes a network request.
+The formal AI DAG is `A0 -> A1 -> (A2 || A3) -> A4 -> A5 -> A6`. A0-A5 are closed; A2, A3, and A4 are final GO, and A5 is `CLOSED — FINAL ACCEPTED / GO`, all at `P0/P1/P2=0/0/0`. A6 `WP-AI-PROVIDER-FINAL-AUDIT` is the sole `ACTIVE` read-only package. ADR-006's mandatory dual-channel policy requires `ChatLlm` for all LLM/conversation work and `ImageGeneration` for all image generation, with one explicit profile/capability/model per channel, Origin metadata distinct from protocol, and zero fallback. Endpoint is a user-owned `OpaqueEndpoint` string, so local configuration save/resolve is deliberately separate from request-time adapter usability and never authorizes a network request; AI functionality final GO remains pending A6.
 
 `A1 — AI_PROVIDER_FOUNDATION` closed with exactly these owned paths:
 
@@ -119,11 +119,11 @@ The formal AI DAG is `A0 -> A1 -> (A2 || A3) -> A4 -> A5 -> A6`. A0-A4 are close
 
 `A2 — WP-AI-CHAT-CHANNEL` is `CLOSED — FINAL GO — P0/P1/P2=0/0/0`: accepted source `55ee0993f71375ee0245cbee54815e7988fe04fd`, redirect boundary closure `2678cb62be9ac9ff5a05c9a5b605a75c60effb5c`, and Chat `23/23 × 3`. `A3 — WP-AI-IMAGE-CHANNEL` is equivalently closed: accepted source `c7c4adcfcc80c732bfaf87b0dfea11294b4af741`, redirect boundary closure `12b58ac69efe3175cf49a6ee129b3784b5b3da5c`, and Image `20/20`. Their shared Release solution result is `0 warnings / 0 errors`. A2's stored-full-endpoint/per-request-auth/no-normalization/no-path-append/no-fallback/redacted-failure rule and A3's stored-full-endpoint/no-auth-forwarded redirect/MIME/byte/dimension/hash/private-artifact rule remain closed outputs, not permission for Desktop to open a direct transport.
 
-### A4 `AI_DESKTOP_WIRING` final closeout and A5 `AI_MOCK_E2E` active contract
+### A4/A5 final closeouts and A6 active audit contract
 
 A4 is `CLOSED — FINAL GO — P0/P1/P2=0/0/0`. Its accepted commits are `fc986d11`, `ffc9f609`, and `cc5ff806`. The final receipt records `186/186`; AI `77/77`, Desktop `22/22`, and `423/423` total tests; frozen-root replay `0`; and owned runtime/pipe/private-artifact residue `0`. The closeout remains limited to its former exact Desktop/AI scope and its opaque-config, zero-auto-network, secret/revoke, redaction, decoder-stream, no-fallback, and no-project-write controls. It is not A5 mock-handler cross-channel E2E proof.
 
-A5 is the sole package with write authority. Its implementation scope is exactly:
+A5 is closed. Its implementation scope was exactly:
 
 1. `tests/VFXComposer.AiLocalE2E.Tests/**`
 2. `src/VFXComposer.AI.Providers/Desktop/ProviderDesktopRuntime.cs`
@@ -131,11 +131,13 @@ A5 is the sole package with write authority. Its implementation scope is exactly
 4. `eng/run-phase2-gate.ps1`
 5. `eng/phase2-baseline-roots.json`
 
-`ProviderDesktopRuntime.cs` is A5's only production seam. The existing constructor must remain; the only permitted production addition is optional `privateImageTempRoot`, transparently passed to `ImageGateway`. Production passes `null` and therefore retains its current behavior. Any sixth implementation path is STOP.
+`ProviderDesktopRuntime.cs` was A5's only production seam. The existing constructor remains; the only production addition is optional `privateImageTempRoot`, transparently passed to `ImageGateway`. Production passes `null` and therefore retains its current behavior. Any sixth implementation path remains STOP.
 
-A5 must run a real loopback `TcpListener` against the production runtime and production `HttpClient` handlers. It must not use handler injection, an external endpoint, or a paid-provider call. The tests must take Settings CRUD/DPAPI/explicit bindings through Create Chat and then Preview Image, covering both base64 and URL image responses through the existing decoder. They must prove restart persistence, channel isolation, opaque endpoint fidelity, redacted failures, revoke/fail-closed behavior, private-artifact cleanup, and no project writes.
+A5 ran a real loopback `TcpListener` against the production runtime and production `HttpClient` handlers. It used no handler injection, external endpoint, or paid-provider call. The accepted tests take Settings CRUD/DPAPI/explicit bindings through Create Chat and then Preview Image, covering both base64 and URL image responses through the existing decoder, restart persistence, channel isolation, opaque endpoint fidelity, redacted failures, revoke/fail-closed behavior, private-artifact cleanup, and no project writes.
 
-The gate/baseline update must add exact root replay, locked Release build, A5 test, product-assembly binding, and `vfxcomposer-a5` residue verification. A nonzero root/build/test/binding/`vfxcomposer-a5` residue result, scope drift, production-`null` drift, injected handler, external/paid traffic, fallback, sensitive-data leak, failed cleanup, or project write is STOP. A6 stays `NOT STARTED` until an independent final audit can consume frozen A0–A5 evidence.
+The final A5 receipt `a5-final-acceptance-14abb1d3-bootstrap` records source `9152c7e6`, remediation `14abb1d3`, merge `c6f9920f`, `11/11`, `P0/P1/P2=0/0/0`, `209` SHA-256 receipt hashes, exact root replay `0`, locked Release build, product-assembly binding, unchanged tracked locks, and `vfxcomposer-a5` residue `0`. A nonzero root/build/test/binding/`vfxcomposer-a5` residue result, scope drift, production-`null` drift, injected handler, external/paid traffic, fallback, sensitive-data leak, failed cleanup, or project write remains STOP.
+
+A6 `WP-AI-PROVIDER-FINAL-AUDIT` is the sole active package. It is a strict whole-A0–A5 read-only audit and has no product development, repair, implementation, or product-gate rerun authority. It must verify two-channel routing/no fallback, opaque configuration/request-time parsing separation, secret and sensitive-data redaction, no Broker/Worker/Unity provider-network role, real-loopback/no-paid-external-call evidence, frozen gates and tracked locks, and cleanup/residue. Findings STOP the audit and are reported without repair; AI functionality final GO is not asserted until A6 completes.
 
 ## Current trust and reuse rules
 

@@ -1,6 +1,6 @@
 # ADR-006: AI provider two-channel routing and user-defined endpoints
 
-Status: `ACCEPTED — A0–A4 CLOSED; A5 AI_MOCK_E2E SOLE ACTIVE` on `2026-08-29`.
+Status: `ACCEPTED — A0–A5 CLOSED; A6 WP-AI-PROVIDER-FINAL-AUDIT SOLE ACTIVE; AI FINAL GO PENDING A6` on `2026-08-29`.
 
 Normative architecture token: `AI_PROVIDER_TWO_CHANNEL_ROUTING_V1`.
 
@@ -18,7 +18,7 @@ The post-U6 AI DAG remains exactly:
 
 Combined QC `P1#1` remains superseded by the explicit requirement clarification: standard .NET/HTTP request-time `RequestUri` normalization is not a configuration-storage finding. Combined QC `P1#2` is closed by the A3 redirect transport boundary. Neither closeout is a live-provider, paid-image, Desktop integration, project-write, Broker, Worker, or Unity claim.
 
-`A4 — AI_DESKTOP_WIRING` is `CLOSED — FINAL GO — P0/P1/P2=0/0/0`. Its accepted source sequence is `fc986d11`, `ffc9f609`, and `cc5ff806`; the final receipt is `186/186`, with AI `77/77`, Desktop `22/22`, and `423/423` total tests, frozen-root replay `0`, and owned-runtime/artifact residue `0`. `A5 — AI_MOCK_E2E` is now the sole `ACTIVE` package. `A6 — AI_INDEPENDENT_FINAL_AUDIT` remains `NOT STARTED`.
+`A4 — AI_DESKTOP_WIRING` is `CLOSED — FINAL GO — P0/P1/P2=0/0/0`. Its accepted source sequence is `fc986d11`, `ffc9f609`, and `cc5ff806`; the final receipt is `186/186`, with AI `77/77`, Desktop `22/22`, and `423/423` total tests, frozen-root replay `0`, and owned-runtime/artifact residue `0`. `A5 — AI_MOCK_E2E` is `CLOSED — FINAL ACCEPTED / GO — P0/P1/P2=0/0/0`: source `9152c7e6`, remediation `14abb1d3`, and integration merge `c6f9920f`. Its accepted local-only receipt `a5-final-acceptance-14abb1d3-bootstrap` records `11/11`, `209` SHA-256 receipt hashes, frozen-root replay `0`, unchanged tracked locks, and point-in-time runtime/pipe/owned-A5 residue `0`. It used a real loopback `TcpListener` with the production runtime and production `HttpClient` handlers, never handler injection, external traffic, or paid calls. `A6 — WP-AI-PROVIDER-FINAL-AUDIT` is now the sole `ACTIVE` package; AI functionality has no final-GO claim before A6 completes.
 
 ## 2. Decision: two explicit channels, no fallback
 
@@ -130,9 +130,9 @@ This was A4's all-and-only preflight allow-list. A4 stopped rather than widen it
 
 The A4 final record is `CLOSED — FINAL GO — P0/P1/P2=0/0/0`. The accepted implementation commits are `fc986d11` (Desktop provider wiring), `ffc9f609` (health/secret QC remediation), and `cc5ff806` (final baseline binding). The receipt records `186/186`, AI `77/77`, Desktop `22/22`, `423/423` total tests, frozen-root replay `0`, and owned runtime/pipe/private-artifact residue `0`. This closes the opaque configuration, zero-auto-network, secret/revoke, redaction, decoder-stream, and zero Desktop project-write controls, but is not mock-handler cross-channel E2E evidence.
 
-### A5 exact active scope and stop line
+### A5 final closeout and A6 read-only audit stop line
 
-A5 is the sole package with implementation write authority. Its implementation scope is all-and-only:
+A5 is closed. Its all-and-only implementation scope was:
 
 1. `tests/VFXComposer.AiLocalE2E.Tests/**`
 2. `src/VFXComposer.AI.Providers/Desktop/ProviderDesktopRuntime.cs`
@@ -140,14 +140,16 @@ A5 is the sole package with implementation write authority. Its implementation s
 4. `eng/run-phase2-gate.ps1`
 5. `eng/phase2-baseline-roots.json`
 
-`ProviderDesktopRuntime.cs` is the only production seam. A5 must retain the existing constructor and may add only an optional `privateImageTempRoot` that is transparently passed to `ImageGateway`; the production `null` behavior remains unchanged. No other production path, provider handler, Desktop UI/decoder, Client, Broker, Worker, Unity, project, or documentation/runtime path is owned by A5.
+`ProviderDesktopRuntime.cs` was the only production seam. A5 retained the existing constructor and added only the optional `privateImageTempRoot` passed transparently to `ImageGateway`; production `null` behavior remained unchanged. No other production path, provider handler, Desktop UI/decoder, Client, Broker, Worker, Unity, project, or documentation/runtime path was owned by A5.
 
-A5 must use a real loopback `TcpListener` and the production runtime plus production `HttpClient` handlers. Handler injection, external-network access, and paid-provider calls are forbidden. Its local end-to-end evidence starts with Settings CRUD, DPAPI storage, and explicit isolated bindings, then exercises Create Chat and Preview Image for both base64 and URL image results through the existing decoder. It must cover restart persistence, channel isolation, opaque endpoint handling, redacted failures, explicit revoke/fail-closed behavior, private-artifact cleanup, and zero project writes.
+A5 used a real loopback `TcpListener` and the production runtime plus production `HttpClient` handlers. Handler injection, external-network access, and paid-provider calls were absent. Its accepted local end-to-end evidence starts with Settings CRUD, DPAPI storage, and explicit isolated bindings, then exercises Create Chat and Preview Image for both base64 and URL image results through the existing decoder. It covers restart persistence, channel isolation, opaque endpoint handling, redacted failures, explicit revoke/fail-closed behavior, private-artifact cleanup, and zero project writes.
 
-The A5 gate must add exact root replay, locked Release build, A5 test, product-assembly binding, and `vfxcomposer-a5` owned-residue checks. It must prove no root drift, build/test/binding failure, stale `vfxcomposer-a5` private artifact, handler injection, external/paid call, cross-channel fallback, secret/prompt/raw-payload/image-byte leak, or project write. Any sixth implementation path, a changed production `null` behavior, or failed cleanup is STOP. A6 remains `NOT STARTED` until A5 closes.
+The accepted A5 gate records exact root replay `0`, locked Release build, A5 `11/11`, product-assembly binding, unchanged tracked locks, and `vfxcomposer-a5` residue `0`. The receipt `a5-final-acceptance-14abb1d3-bootstrap` has `209` SHA-256 hashes and records no root drift, build/test/binding failure, stale private artifact, handler injection, external/paid call, cross-channel fallback, secret/prompt/raw-payload/image-byte leak, or project write. Any sixth implementation path, changed production `null` behavior, or failed cleanup remains a STOP finding.
+
+`A6 — WP-AI-PROVIDER-FINAL-AUDIT` is the sole `ACTIVE` package and is a strict, whole-A0–A5 read-only audit. It has no product-development, repair, implementation, or gate-rerun authority. It must verify the two explicit channel routes and no fallback; opaque configuration retained separately from request-time parsing; secret and sensitive-data redaction; no Broker, Worker, or Unity provider-network role; the real-loopback/no-handler-injection/no-paid-external-call evidence; all frozen gate and tracked-lock evidence; and cleanup/residue containment. A finding is STOP and must be reported without repair or reopening a closed package. Only a completed A6 acceptance may decide whether to assert an AI functionality final GO.
 
 ## 7. Consequences and stop line
 
-`A2` and `A3` are final closed GO packages, and A4 is `CLOSED — FINAL GO — P0/P1/P2=0/0/0`. A5 is the only active writer; A6 remains not started. No later node may use endpoint acceptance to infer permission for a different route, weaken endpoint/secret/prompt/image redaction, add vendor-path construction, persist a normalized endpoint, introduce fallback, conduct background network activity, write project/Unity state, or treat A2/A3/A4 component evidence as cross-channel E2E evidence.
+`A2` and `A3` are final closed GO packages, A4 is `CLOSED — FINAL GO — P0/P1/P2=0/0/0`, and A5 is `CLOSED — FINAL ACCEPTED / GO — P0/P1/P2=0/0/0`. A6 is the only active, read-only auditor; the overall AI functionality final GO remains pending its result. No later node may use endpoint acceptance to infer permission for a different route, weaken endpoint/secret/prompt/image redaction, add vendor-path construction, persist a normalized endpoint, introduce fallback, conduct background network activity, write project/Unity state, or treat A2/A3/A4 component evidence as cross-channel E2E evidence.
 
-A5 must STOP on any scope expansion; handler injection; non-loopback, external, or paid traffic; changed production `null` behavior; project write; fallback; raw-data leak; failed restart/revoke/cleanup containment; root/build/test/binding/`vfxcomposer-a5` residue gate failure; or dirty/unexplained worktree. It may publish only after its exact scope and all local loopback E2E evidence are recorded; this ADR grants A6 no early start.
+A5 is stopped after its accepted closeout. A6 must STOP on any evidence mismatch, fallback, raw-data leak, Broker/Worker/Unity provider-network role, non-loopback or paid/external traffic claim, gate/lock/cleanup-residue failure, or dirty/unexplained audit state. A6 may not repair, develop product code, rerun a product gate, or reopen A0–A5; this ADR permits no AI functionality final-GO assertion before A6 completes.
