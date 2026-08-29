@@ -3,6 +3,8 @@
 > **CURRENT REGISTRY — U6 FINAL GO / A0–A6 CLOSED — FINAL ACCEPTED/GO (2026-08-29).** ADR-005's USER_MODE route is closed at `100/100`; ADR-006's separate AI two-channel scope is accepted at `100/100`, with `P0/P1/P2=0/0/0`. No AI work package is active; a later AI requirement requires a new milestone. Every pre-U0 package entry retained later in this file is historical provenance, not an active contract, dependency, blocker, or audit queue.
 >
 > Normative tokens: `USER_MODE_LOCAL_CREATIVE_TOOL_V1` and `AI_PROVIDER_TWO_CHANNEL_ROUTING_V1`.
+>
+> Forward development: sequencing for all new work is owned solely by `docs/plans/OPTIMIZATION_MASTER_PLAN.md` (the post-closeout P0/R/O/F milestone series). Day-to-day task acceptance follows `docs/plans/CODING_STANDARDS.md`; per-task receipts are no longer required, and `eng/run-phase2-gate.ps1` is retained as a milestone-level quality gate only.
 
 ## Current seven-node registry and integration status
 
@@ -155,6 +157,8 @@ U0 closeout freezes `45/100`, reported as **42%-48% complete**, under weights `U
 
 ## Historical pre-U0 package registry (superseded for product delivery)
 
+> Historical — superseded by U6/A6 closeout. Every package entry and contract below is retained provenance frozen at `2026-08-28`. Any `ACTIVE`, `PLANNED`, `BLOCKED`, or "sole active package" statement below describes the retired pre-U0 privileged route only; no pre-U0 package is active, schedulable, or blocking.
+
 Status date: `2026-08-28`
 
 ## 1. Registry
@@ -184,7 +188,7 @@ Status date: `2026-08-28`
 | `WP-DESKTOP-READ` | `PLANNED / NOT PUBLISHED — PRODUCTION READ ROUTE REQUIRED` | Client/Desktop and their tests only | Frozen Protocol plus admitted production read route | Read-only connection/status scoped GO; zero direct project access. |
 | Unity Worker command implementation | `BLOCKED` | Unity Worker only | `WP-PROTOCOL-P3-RECOVERY` frozen and audited; separate runtime package still required | Separate future package; no Unity UI changes and no authority promotion. |
 
-The sole active package is P1 `WP-P2-ACTUAL-NAMED-PIPE-ACL-SESSION` with scope `DORMANT_PER_SERVING_PRODUCTION_NAMED_PIPE_ACL_PROVISIONING_AND_EXACT_READBACK_ONLY`; no other implementation package is active or next published. D1R is final `STOPPED` scoped GO; C1/C2 are closed GO; old D1 remains frozen `STOPPED / NO-GO`; the DAG-rebase GO/P2=1 remains historical. I1 is an external privileged-root preflight blocker and is not published or started; C3 and W1 are not active or published. Quota is 100% and is not a scheduling condition.
+*Historical — superseded by U6/A6 closeout; the following paragraph is the frozen 2026-08-28 registry footer, not a current state.* The sole active package is P1 `WP-P2-ACTUAL-NAMED-PIPE-ACL-SESSION` with scope `DORMANT_PER_SERVING_PRODUCTION_NAMED_PIPE_ACL_PROVISIONING_AND_EXACT_READBACK_ONLY`; no other implementation package is active or next published. D1R is final `STOPPED` scoped GO; C1/C2 are closed GO; old D1 remains frozen `STOPPED / NO-GO`; the DAG-rebase GO/P2=1 remains historical. I1 is an external privileged-root preflight blocker and is not published or started; C3 and W1 are not active or published. Quota is 100% and is not a scheduling condition.
 
 ## 2. `WP-PROTOCOL-P3` contract
 
@@ -608,7 +612,7 @@ Final closeout: `CLOSED / SCOPED GO — PURE_PROTOCOL_WORKER_PROJECT_LOCATOR_CON
 - The inherited bare `dotnet restore VFXComposer.sln --locked-mode` NU1004 limitation remains nonblocking: pre-existing HandleProbe/Broker.Tests project-reference lock inconsistencies were not changed, and the passing builds were locked/no-restore. No lock file changed.
 - C1 and C2 remain closed GO; old D1 remains retained `STOPPED / NO-GO`; the DAG rebase remains historical scoped GO/P2=1. At D1R closeout, the active package was `NONE / NEXT NOT PUBLISHED`; I1 was NO-GO and not published or started, W1 was not active or published, and production, Phase 2 and authority remained NO-GO.
 
-## 17. P1 `WP-P2-ACTUAL-NAMED-PIPE-ACL-SESSION` active contract
+## 17. P1 `WP-P2-ACTUAL-NAMED-PIPE-ACL-SESSION` active contract (historical — superseded by U6/A6 closeout)
 
 Unique objective:
 

@@ -10,7 +10,7 @@
 
 - `master` 仅有 phase2 baseline 提交；U0–U6（普通用户 Broker/Worker 只读链路）与 A0–A6（AI 双通道）的全部实现在 `codex/usermode-integration` 分支及 `D:\wt\` 下的 worktree 中，未合并回 master。
 - 产品目标功能三大缺口：①对话生成单个特效的端到端链路（AI 输出 → Recipe → 校验 → 构建 Prefab）；②MCP/CLI 批量生成入口；③受机器配置限制的串行 Jobs 队列。
-- 特效编译核心（`VfxCompiler`、`Impact2DCompiler`、`Area2DCompiler`、`S12SlashCompiler` 等）已在 Unity 包 `project/Packages/com.vfxcomposer.unity` 内实现并有测试，写入范围限定 `Assets/Generated`。
+- 特效编译核心（`VfxCompiler`、`Impact2DCompiler`、`Area2DCompiler`、`S12SlashCompiler` 等）已在 Unity 包 `project/Packages/com.vfxcomposer.unity` 内实现并有测试，产物写入根为 `Assets/VFX/Generated`（另有共享资产目录 `Assets/VFX/Shared`，写入政策由 ADR-007 裁决）。
 
 总目标按顺序分三段：**需求内容补全 → 代码优化 → 新功能开发**。
 
@@ -118,7 +118,7 @@ flowchart LR
 - 验收标准：与 Protocol 现有 Job DTO（`JobProgress`、`CancelJobCommand` 等）兼容；崩溃恢复语义明确。
 
 **R4 ADR-007 项目写入安全设计**（依赖 R1）
-- 目标：为"AI 产物写入 Unity 项目"建立新 ADR：路径 containment（限 `Assets/Generated`）、原子写入/回滚、覆盖策略、威胁模型增量、fail-closed 行为。
+- 目标：为"AI 产物写入 Unity 项目"建立新 ADR：路径 containment（限 `Assets/VFX/Generated`，`Assets/VFX/Shared` 政策一并裁决）、原子写入/回滚、覆盖策略、威胁模型增量、fail-closed 行为。
 - 交付物：`docs/rules/ADR-007_CONTROLLED_PROJECT_MUTATION.md`。
 - allow-list：仅新增该文件。
 - 验收标准：不推翻 ADR-005/006 既有边界；每个写入路径有明确的拒绝条件。
@@ -153,6 +153,7 @@ flowchart LR
 
 **F3 Jobs 串行队列**（依赖 P0-1、R3）
 - 目标：实现单并发持久化任务队列 + Desktop Jobs 页（列表/进度/取消），复用 Protocol Job DTO。
+- 开工首个设计决策（来自 R3 调研）：队列执行器宿主形态（内嵌 Desktop vs 独立宿主进程），直接影响 CLI `--detach` 与无 Desktop 场景的 MCP 提交；开工前由主 agent 定版。
 - 验收标准：入队/执行/取消/崩溃恢复测试全绿；并发提交时严格串行执行。
 
 **F4 CLI 批量入口**（依赖 F1、F3、R2）
@@ -160,7 +161,8 @@ flowchart LR
 - 验收标准：样例清单批量跑通；单条失败不中断整批（按 R2 语义）。
 
 **F5 MCP 入口**（依赖 F4）
-- 目标：MCP server 暴露"生成特效/查询任务"工具，复用 F4 执行层。
+- 目标：MCP server 暴露"生成特效/查询任务"工具，复用 F4 执行层；仅 stdio transport，不引入新网络面。
+- 开工前置决策（来自 R2 调研）：官方 MCP C# SDK 不在本地批准 feed 内，需先做 feed 准入决策，或选择手写 stdio JSON-RPC；由主 agent 定版。
 - 验收标准：MCP 客户端可发起生成并查询任务状态。
 
 **F6 端到端验收**（依赖 F2、F3、F4）
@@ -172,13 +174,13 @@ flowchart LR
 | 任务 | 状态 | 派发对象 | 验收 |
 |---|---|---|---|
 | P0-1 | DONE | 开发子 agent | 初审 PASS（merge `3375a8fe`，构建 0/0，测试 450/450）；O3 复跑作独立复核 |
-| P0-2 | DISPATCHED | 开发子 agent | 待验收 |
-| R1 | DELIVERED | 开发子 agent | 审计中（REQ-001 已交付，23 条需求/9 条验收场景） |
-| R2 | DISPATCHED | 开发子 agent | 待验收 |
-| R3 | DISPATCHED | 开发子 agent | 待验收 |
+| P0-2 | DONE | 开发子 agent | 主 agent 验收 PASS（5 文件纯追加标注，历史数字零改动）；范围外遗留（stage-notes/ADR-004/ai-workflow README 指针）追加为 P0-2b |
+| R1 | DONE | 开发子 agent | 独立审计 PASS（映射 19 项属实、无阻塞问题）；3 条非阻塞建议已派发微调 |
+| R2 | DELIVERED | 开发子 agent | 审计中（REQ-002 已交付，20 条需求/6 条验收场景） |
+| R3 | DELIVERED | 开发子 agent | 审计中（REQ-003 已交付，18 条需求/6 条验收场景） |
 | R4 | DISPATCHED | 开发子 agent | 待验收 |
 | O1 | DONE | 开发子 agent | 主 agent 验收 PASS（.gitignore 补齐、空目录清理、退役清单交付；worktree/分支退役延后到 O2/O3 合并后执行，`codex/m1`、`codex/m2` 两个未并入分支暂保留） |
-| O2 | DISPATCHED | 开发子 agent | 待验收（独立 worktree） |
+| O2 | DONE | 开发子 agent | 主 agent 验收 PASS（脚本三条路径实测；`-SkipLockedRestore` 为 O3 修复前过渡开关，O3 合并后停用） |
 | O3 | DISPATCHED | 开发子 agent | 待验收（独立 worktree，兼作 P0-1 独立复核；含 baseline 锁文件漂移修复） |
 | F1–F6 | BLOCKED | — | — |
 

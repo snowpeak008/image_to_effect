@@ -3,6 +3,8 @@
 > **当前最终状态（2026-08-29）**：普通用户本地创作路线 <code>USER_MODE_LOCAL_CREATIVE_TOOL_V1</code> 已在 U6 以 <code>FINAL GO</code> 关闭，完成度 <code>100/100</code>；AI 双通道路由 <code>AI_PROVIDER_TWO_CHANNEL_ROUTING_V1</code> 已在 A6 以 <code>FINAL ACCEPTED/GO</code> 关闭，完成度 <code>100/100</code>。两条路线的最终独立验收均为 <code>P0/P1/P2=0/0/0</code>。没有活动中的 U/A 工作包。
 >
 > 本文是全项目的单文件阅读入口：它解释当前产品边界、实现架构、开发决策、闭环证据和下一里程碑的启动条件。它不是把旧计划拼接成目录；历史材料只保留为可追溯的决策背景，不能覆盖本文件所指向的最终验收状态。
+>
+> **当前开发入口**：U6/A6 关闭后的后续开发已作为新的里程碑系列启动，唯一顺序依据是 <code>docs/plans/OPTIMIZATION_MASTER_PLAN.md</code>（P0/R/O/F 系列任务卡）；日常任务验收按 <code>docs/plans/CODING_STANDARDS.md</code> 执行，不再要求逐任务 receipt，<code>eng/run-phase2-gate.ps1</code> 保留为里程碑级质量闸。该计划不改写本文所述 U0–U6/A0–A6 的已关闭状态。
 
 ## 1. 文档目的、范围与权威优先级
 

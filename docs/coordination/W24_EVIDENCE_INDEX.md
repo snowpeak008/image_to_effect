@@ -3,6 +3,8 @@
 > **CURRENT EVIDENCE ROUTING — U6 FINAL GO / A0–A6 CLOSED — FINAL ACCEPTED/GO (2026-08-29).** ADR-005 closes the USER_MODE route at `100/100`; ADR-006's separate AI two-channel scope is accepted at `100/100`, with `P0/P1/P2=0/0/0`. No AI work package is active; a later AI requirement requires a new milestone. The pre-U0 entries retained below preserve exact history but cannot be selected as proof of the ordinary-user runtime or treated as current dependencies/blockers.
 >
 > Normative tokens: `USER_MODE_LOCAL_CREATIVE_TOOL_V1` and `AI_PROVIDER_TWO_CHANNEL_ROUTING_V1`.
+>
+> Forward development: sequencing for all new work is owned solely by `docs/plans/OPTIMIZATION_MASTER_PLAN.md` (the post-closeout P0/R/O/F milestone series). Day-to-day task acceptance follows `docs/plans/CODING_STANDARDS.md`; per-task receipts are no longer required, and `eng/run-phase2-gate.ps1` is retained as a milestone-level quality gate only.
 
 ## Current final USER_MODE and post-U6 AI evidence boundary
 
@@ -138,6 +140,8 @@ U0 freezes a formal completion planning point of `45/100`, reported as **42%-48%
 ---
 
 ## Historical pre-U0 evidence index (superseded for product delivery)
+
+> Historical — superseded by U6/A6 closeout. Every boundary below is retained provenance frozen at `2026-08-28`. Any `ACTIVE` publication state, `NO-GO`, or "not published" statement below describes the retired pre-U0 privileged route only; no pre-U0 package is active, schedulable, or blocking, and none of these receipts may be selected as proof of the current ordinary-user or AI runtime.
 
 Status date: `2026-08-28`
 
@@ -383,7 +387,7 @@ The external pre-status handoff SHA is an independent-audit input, not a self-ha
 - The bare `dotnet restore VFXComposer.sln --locked-mode` NU1004 limitation is inherited, nonblocking, and unmodified: pre-existing HandleProbe/Broker.Tests project-reference lock inconsistencies remain outside D1R authority; locked/no-restore builds passed and no lock changed.
 - C1 and C2 remain closed GO; old D1 remains retained `STOPPED / NO-GO`; the DAG rebase remains historical scoped GO/P2=1. At D1R closeout, the active package was `NONE / NEXT NOT PUBLISHED`; W1 was not active or published. The final status-updated handoff records no current self-hash.
 
-## 18. P1 `WP-P2-ACTUAL-NAMED-PIPE-ACL-SESSION` active publication boundary
+## 18. P1 `WP-P2-ACTUAL-NAMED-PIPE-ACL-SESSION` active publication boundary (historical — superseded by U6/A6 closeout)
 
 - State: `ACTIVE — DORMANT_PER_SERVING_PRODUCTION_NAMED_PIPE_ACL_PROVISIONING_AND_EXACT_READBACK_ONLY`. This is a controller publication boundary only; it records no P1 source result, test pass, production listener, serving receipt, `Running` state or authority.
 - The sole fresh Terra Max writer owns exactly four new leaves: `services/VFXComposer.Broker/Ipc/WindowsProductionNamedPipeHost.cs`, `services/VFXComposer.Broker/Security/WindowsNamedPipeAclReadback.cs`, `services/VFXComposer.Broker.Tests/WindowsProductionNamedPipeHostTests.cs`, and `services/VFXComposer.Broker.Tests/WindowsNamedPipeAclReadbackTests.cs`. All four were pre-absent with case-insensitive collision count zero. The only metadata exceptions are `docs/coordination/handoffs/WP-P2-ACTUAL-NAMED-PIPE-ACL-SESSION.md`, `.codex_tmp/WP-P2-ACTUAL-NAMED-PIPE-ACL-SESSION/**`, and required `bin/obj`; metadata is not a fifth product leaf.
