@@ -173,10 +173,16 @@ flowchart LR
 - 目标：独立 CLI（新 console 工程），读取需求清单文件，逐条入队生成，输出进度与结果汇总。
 - 验收标准：样例清单批量跑通；单条失败不中断整批（按 R2 语义）。
 
+**F3c Jobs itemId 持久化**（依赖 F3；F6 前置。来源：F4 交付已知限制 1）
+- 目标：`JobRecord` 持久化 `itemId`（目前只参与幂等键派生不落库），使 `queue list`/`batch status`/Desktop Jobs 页可按 REQ-003 §9.1 展示 itemId。store schema 变更需显式处理版本（升版或兼容读取，方案自定并说明理由，保持未知版本 fail-closed 纪律）。
+- allow-list：`src/VFXComposer.Jobs/**`、`src/VFXComposer.Jobs.Tests/**`、Desktop Jobs 页文件（`JobsViewModel`/`JobListItemViewModel`/`JobsView.axaml*`）、`apps/VFXComposer.Desktop.Tests/**`。CLI 侧展示归 F5，不在本卡。
+- 验收标准：构建 0/0；全量测试全绿；itemId 跨崩溃恢复/重新入队保持；版本处理有专项测试。
+
 **F5 MCP 入口**（依赖 F4）
-- 目标：MCP server 暴露"生成特效/查询任务"工具，复用 F4 执行层；仅 stdio transport，不引入新网络面。
-- 开工前置决策（来自 R2 调研）：官方 MCP C# SDK 不在本地批准 feed 内，需先做 feed 准入决策，或选择手写 stdio JSON-RPC；由主 agent 定版。
-- 验收标准：MCP 客户端可发起生成并查询任务状态。
+- 目标：MCP server 暴露"生成特效/查询任务"工具，复用 F4 执行层（`VFXComposer.Batch.Core`）；仅 stdio transport，不引入新网络面。
+- 底座已定版（主 agent，2026-08-29）：**手写 stdio JSON-RPC**（不引入官方 MCP C# SDK——不在批准 feed，且 REQ-002 §7 工具面是闭集手写量可控）；零新 NuGet。
+- 随卡收纳 F4 审计建议：①增补 `batch cancel <batchId>`（执行层方法 + CLI 命令 + MCP 工具 `vfx_cancel_batch`，见 REQ-002 §6.2 勘误）；②`BatchVerdict.Pending` 在退出码映射中显式处理（不落默认 0）；③CLI notice 输出附带 `JobQueueException` 稳定码。
+- 验收标准：MCP 客户端可发起生成并查询任务状态（stdio 往返测试，mock 通道）；工具面与 REQ-002 §7 一致（含新增 `vfx_cancel_batch`）；redaction 与零网络测试同 CLI 标准。
 
 **F6 端到端验收**（依赖 F2、F3、F4）
 - 目标：对话生成单个特效 + CLI 批量生成多个特效两条主流程的 E2E 测试与人工验收脚本。
@@ -199,14 +205,18 @@ flowchart LR
 | F1 | DONE | 开发子 agent | 独立审计 PASS（复跑：锁定 restore 18/18、构建 0/0、全量 483/483 全绿、24 文件全部在 allow-list）；合并 `fd7b508f` 并推送；worktree 与分支已退役。3 条非阻塞建议见下 |
 | F3 | DONE | 开发子 agent | 独立审计 PASS（合并态复跑 532/532 全绿、构建 0/0、46 文件全在 allow-list、共享文件纯加法）；合并 `2b71eb9` 已推送；worktree/分支已退役。**REQ-003-12 裁决：条件豁免成立**——Worker 取消映射分支仅在 F2 弃 batchmode 改走 Worker 路线时才需交付，batchmode 分支（精确 PID 终止+临时目录清理）已交付有测试；若未来 Worker 化需重开条目 |
 | F3b | DONE | 开发子 agent | 主 agent 初审 PASS（小任务免独立审计）：7 文件全在 allow-list，合并态 538/538 全绿、构建 0/0，交付含反向变异验证；新增 VFXJ0016；零 executor 宿主定版为纯观察者（不取锁不恢复不领取）。合并 `e36d5a8d` 已推送，worktree/分支已退役 |
-| F4 | DELIVERED | 开发子 agent | 审计中（36 文件纯新增，已本地集成合并 `9d4e23ed`，未推送：构建 0/0，合并态 625/625 全绿，Cli.Tests 87 项） |
-| F2/F5/F6 | BLOCKED | — | F2 等 O4（F1 已完成）；F5 等 F4 + MCP 底座定版；F6 等 F2/F3/F4 |
+| F4 | DONE | 开发子 agent | 独立审计 PASS（合并态 625/625 全绿、36 文件纯新增、退出码 8 码逐码测试、路径逃逸 9 形态负向、6 条已知限制核实属实）；合并 `9d4e23ed` 已推送；worktree/分支已退役 |
+| F3c | DISPATCHED | 开发子 agent | Jobs itemId 持久化（F4 限制 1，F6 前置） |
+| F5 | DISPATCHED | 开发子 agent | MCP stdio 入口（底座定版：手写 JSON-RPC），随卡收纳 F4 审计建议 ①②③ |
+| F2/F6 | BLOCKED | — | F2 等 O4（F1 已完成）；F6 等 F2/F5/F3c |
 
 已知非阻塞遗留（P0-1 交付报告）：①`services/VFXComposer.Broker.HandleProbe` 与 `services/VFXComposer.Broker.Tests` 的 `packages.lock.json` 自 baseline 起与引用图不同步（归入 O3）；②`.gitignore` 未覆盖 `tests/**` 构建产物（归入 O1）。
 
 F1 审计非阻塞建议（后续任务顺带处理）：①补一条直接互比 PlainText/StructuredOutput 两形态哈希的测试（可并入 F2）；②`CreateViewModel` 的 `SendChatAsync`/`GenerateRecipeAsync` 末尾裸 `catch` 无稳定错误码——master 既有风格，统一治理另立小任务；③Desktop 侧未来可自动优选 `StructuredOutput` 形态（增强，非需求）。
 
 F3 审计非阻塞建议处置：建议 1/2/4/6/7 收进 F3b 任务卡；建议 3（执行器锁跨进程真杀测试，可仿 `RevisionLockHost` 先例）留给 F6 端到端验收裁量；建议 5（Jobs 页批次分组折叠交互）登记为 v1 已知限制，不排期；建议 8（lock 文件末行换行）为 NuGet 生成物，忽略。
+
+F4 审计非阻塞建议处置：①批次级取消（REQ-002 内部不一致，已记勘误）→ F5 任务卡；②Pending 退出码显式映射 → F5；③notice 附带 VFXJ 稳定码 → F5；④ValidationFailed/ChannelFailed 区分码（需 Jobs 新码）→ F6 裁量；⑤生产组合根零网络真实用例 → F6；⑥`Cli.csproj` 引用 `AI.Providers` 记为**有意偏离**（组合根需绑定 `AiDesktopRuntimeFactory` 门面，`Batch.Core` 保持干净；若 F5 遇到同样问题再考虑抽独立装配体）；⑦argv 回显有界，无动作；⑧F6 allow-list 应纳入 `batches/` 样例清单与 schema。F4 已知限制 1（JobRecord 无 itemId）→ 新任务卡 F3c。
 
 运维事件（2026-08-29 约 19:00）：`D:\wt\` 下全部在途 worktree（i2s-f1/i2s-f3/i2s-o4）被外部清空一次（F3 交付报告推测为 worktree 退役清理波及在途目录）。F3 agent 用 `git worktree repair` + 重建源码恢复并改为逐单元提交；F1 提交未受损（已合入 master），其 worktree 已退役。**教训：worktree 退役只能由主 agent 在确认无在途任务共用 `D:\wt\` 时执行；并行 worktree 验收前先 `git status` 核实磁盘完整性；开发子 agent 应逐逻辑单元提交。**
 
