@@ -185,9 +185,18 @@ flowchart LR
 - 随卡收纳 F4 审计建议：①增补 `batch cancel <batchId>`（执行层方法 + CLI 命令 + MCP 工具 `vfx_cancel_batch`，见 REQ-002 §6.2 勘误）；②`BatchVerdict.Pending` 在退出码映射中显式处理（不落默认 0）；③CLI notice 输出附带 `JobQueueException` 稳定码。
 - 验收标准：MCP 客户端可发起生成并查询任务状态（stdio 往返测试，mock 通道）；工具面与 REQ-002 §7 一致（含新增 `vfx_cancel_batch`）；redaction 与零网络测试同 CLI 标准。
 
-**F6 端到端验收**（依赖 F2、F3、F4）
-- 目标：对话生成单个特效 + CLI 批量生成多个特效两条主流程的 E2E 测试与人工验收脚本。
-- 验收标准：两条主流程在干净环境一次跑通并有记录。
+**F6 端到端验收**（依赖 F2、F3、F4、F5；任务卡已细化定稿 2026-08-29，待 F2 合入后派发）
+- 目标：对话生成单个特效 + CLI 批量生成多个特效两条主流程的 E2E 测试与人工验收脚本；同时清算 F1/F3/F4/F5 审计遗留的全部必做项。
+- 必做清算项（来源见各审计处置段）：
+  - ① `BatchQueueReportBuilder.EntryLabel` 改 `job.ItemId ?? job.JobId` 并修正失实注释（F5 建议①，决定 MCP `vfx_get_batch_report` 满足 REQ-003 §9.1）。
+  - ② CLI/MCP 双面等价性测试改构造性：反射遍历 `JobRecord` 属性 + 显式排除清单（`JobId`/`RequestId`/`IdempotencyKey`/时间戳/`SourceEntry`），当前 `ItemId` 已漏在断言外（F5 建议②）。
+  - ③ IL 扫描面（`NoProjectAccessSurfaceTests.ProductAssemblies`）纳入 `vfxc`/`vfxc-mcp` 两个入口装配体（F4 建议⑤ + F5 建议⑤合并）。
+  - ④ MCP 侧 `vfx_validate_manifest` 零网络证据补齐（F5 建议⑥）；生产组合根零网络真实用例（F4 建议⑤余项）。
+  - ⑤ `batches/` 样例清单 + schema 入库（F4 建议⑧），作为 E2E 批量流程的固定输入。
+- 裁量项（时间允许则做，否则逐条记录不做理由）：F5 建议③（`single-` 保留前缀或注释降级）、④（派生清单 onFailure 断言）、⑦（MCP Ctrl+C 假象）、⑧（initialize 必需成员）、⑨（常量重复）；F4 建议④（ValidationFailed/ChannelFailed 区分码）；F3 建议 3（执行器锁跨进程真杀测试）；F1 建议②（Desktop 裸 catch 稳定码治理）。
+- E2E 范围：流程一（Desktop 对话 → recipe 草稿 → 确认 → 构建 → Prefab 三件套核验）可用 mock 通道 + 真实 Unity batchmode；流程二（CLI 清单批量 → 队列串行 → 报告/退出码核验）+ MCP 冒烟（提交/状态/取消往返）。人工验收脚本写入 `eng/`。
+- allow-list：`tests/**`（新 E2E 工程）、`batches/**`（样例清单与 schema）、`eng/**`（验收脚本）、清算项①-④涉及的 `src/VFXComposer.Batch.Core/**`、`apps/VFXComposer.Cli*/**`、`apps/VFXComposer.Mcp*/**`、`src/VFXComposer.*.Tests/**`；禁止改动 Jobs 核心语义与 Unity 包生产代码。
+- 验收标准：两条主流程在干净环境一次跑通并有记录；必做清算项①-⑤全部落地有测试；Release 全量测试不回退；EditMode 基线不回退；dependencyHash 还原纪律照旧。
 
 ## 5. 任务状态板
 
