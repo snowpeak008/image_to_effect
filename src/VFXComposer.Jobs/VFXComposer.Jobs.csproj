@@ -1,0 +1,11 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <AssemblyName>VFXComposer.Jobs</AssemblyName>
+    <RootNamespace>VFXComposer.Jobs</RootNamespace>
+    <Description>Persistent single-concurrency job queue, durable store and executor host for VFX Composer.</Description>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\VFXComposer.Protocol\VFXComposer.Protocol.csproj" />
+  </ItemGroup>
+</Project>
