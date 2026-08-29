@@ -655,19 +655,6 @@ public static class BatchManifestParser
                         Descriptor(recipePath)));
                 }
             }
-
-            if (entry.Item.Prompt is string prompt)
-            {
-                var composedBytes = BatchGenerationPayload.ComposedDescriptionByteCount(prompt, entry.Item.Constraints);
-                if (composedBytes > BatchGenerationPayload.MaximumComposedDescriptionBytes)
-                {
-                    issues.Add(new BatchValidationIssue(
-                        BatchDiagnosticCodes.ComposedDescriptionTooLong,
-                        entry.Path + ".prompt",
-                        Number(composedBytes) + " bytes",
-                        "<= " + Number(BatchGenerationPayload.MaximumComposedDescriptionBytes) + " bytes"));
-                }
-            }
         }
     }
 

@@ -26,7 +26,6 @@ public static class BatchDiagnosticCodes
 
     public const string RecipeFileMissing = "B201";
     public const string RecipeFileNotJsonObject = "B202";
-    public const string ComposedDescriptionTooLong = "B203";
 
     public const string RecipeBuildNotSupported = "B301";
     public const string PromptGenerationUnavailable = "B302";
@@ -99,10 +98,6 @@ public static class BatchDiagnosticCatalog
                 BatchDiagnosticCodes.RecipeFileNotJsonObject,
                 DiagnosticSeverities.Error,
                 "The referenced recipe file is not a strict JSON object."),
-            new BatchDiagnosticDefinition(
-                BatchDiagnosticCodes.ComposedDescriptionTooLong,
-                DiagnosticSeverities.Error,
-                "The prompt and its constraints exceed the generation channel description bound."),
             new BatchDiagnosticDefinition(
                 BatchDiagnosticCodes.RecipeBuildNotSupported,
                 DiagnosticSeverities.Error,

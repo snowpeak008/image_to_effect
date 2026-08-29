@@ -116,11 +116,11 @@ public static class BatchGenerationPayload
         return builder.ToString();
     }
 
-    /// <summary>UTF-8 byte length of the composed description, used by the manifest semantic check.</summary>
-    public static int ComposedDescriptionByteCount(string prompt, BatchConstraints constraints) =>
-        Encoding.UTF8.GetByteCount(ComposeDescription(prompt, constraints));
-
-    /// <summary>Upper bound the composed description must respect (<see cref="RecipeChannelLimits"/>).</summary>
+    /// <summary>
+    /// Upper bound the composed description must respect. The manifest prompt bound plus the
+    /// bounded constraint rendering is deliberately kept below this value, so composition can
+    /// never produce a description the channel would refuse; a covering test pins the relation.
+    /// </summary>
     public static int MaximumComposedDescriptionBytes => RecipeChannelLimits.MaximumDescriptionUtf8Bytes;
 
     private static void AppendConstraint(List<string> lines, string key, string? value)
