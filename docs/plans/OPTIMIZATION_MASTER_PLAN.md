@@ -183,7 +183,7 @@ flowchart LR
 | R4 | DONE | 开发子 agent | 独立审计 PASS；6 条建议已落实（v1.1），ADR-007 转 ACCEPTED 合入。Phase 1 需求补全全部关闭 |
 | O1 | DONE | 开发子 agent | 主 agent 验收 PASS（.gitignore 补齐、空目录清理、退役清单交付；worktree/分支退役延后到 O2/O3 合并后执行，`codex/m1`、`codex/m2` 两个未并入分支暂保留） |
 | O2 | DONE | 开发子 agent | 主 agent 验收 PASS（脚本三条路径实测；`-SkipLockedRestore` 为 O3 修复前过渡开关，O3 合并后停用） |
-| O3 | DISPATCHED | 开发子 agent | 待验收（独立 worktree，兼作 P0-1 独立复核；含 baseline 锁文件漂移修复） |
+| O3 | DELIVERED | 开发子 agent | 已交付待验收（暂停中，交付在分支 `task/O3-baseline`）：锁修复+锁定 restore 通过、450/450 复核一致；新发现 Unity 包 8 个既有测试失败，F2 前需 triage（拟新增任务 O4） |
 | F1 | DISPATCHED | 开发子 agent | 独立 worktree 开发中 |
 | F2–F6 | BLOCKED | — | — |
 
