@@ -13,17 +13,14 @@
 
 | 任务 | 内容 | 完成后处置 |
 |---|---|---|
-| ADR-007 v1.1 微调 | 按审计 6 条建议修订 + 状态转 ACCEPTED | 与 rules README（P0-2c）一起提交 |
-| REQ-001 v0.3 | ProjectSettings 表述对齐 ADR-007 双成员写入面 | 同上一批提交 |
+| ~~ADR-007 v1.1 微调~~ | 已完成并转 ACCEPTED，已合入 | 完成 |
+| ~~REQ-001 v0.3~~ | 已完成，已合入 | 完成 |
 | O3 基线（worktree `D:\wt\i2s-o3`，分支 `task/O3-baseline`） | 修 HandleProbe/Broker.Tests 锁文件漂移 + 全量构建/测试基线报告 | 验收后合并入 master，然后可停用轻闸的 `-SkipLockedRestore` |
 | F1 开发（worktree `D:\wt\i2s-f1`，分支 `task/F1-recipe-generation`） | Recipe 结构化生成通道（模板快照/生成服务/契约/Create 页/测试） | 交付后派独立审计（代码任务必须审计），PASS 后合并 |
 
-### 工作区待提交文件（等在途小任务返回后一起处理）
+### 工作区待提交文件
 
-- `docs/rules/README.md`（P0-2c，已验收，因引用 ADR-007 押后）
-- `docs/rules/ADR-007_CONTROLLED_PROJECT_MUTATION.md`（v1.1 微调中）
-- `docs/requirements/REQ-001_CHAT_TO_VFX.md`（v0.3 微调中）
-- 本交接文件夹的新文件
+无——小任务批（ADR-007 v1.1 / REQ-001 v0.3 / rules README / CODING_STANDARDS §3.2 更新）已全部合入推送；剩余在途仅 O3 与 F1 两个 worktree 任务，交付物在各自分支上，等用户回来后验收合并。
 
 ## 2. 待主 agent / 用户拍板的决策（按优先级）
 
