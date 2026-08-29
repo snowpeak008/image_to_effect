@@ -92,7 +92,7 @@
     },
     {
       "path": "project/Packages/com.vfxcomposer.unity/Runtime/W24/W24RealLightingModule.cs",
-      "sha256": "sha256:25dfda6c5cd549d0e81a53555ed3cb4648de886e1c6ee68fb3b2e18056b097d8"
+      "sha256": "sha256:9208c260367f10c179bd30d7c41819ab08ac3c6dfe0955837a42ebd9969fb7ed"
     },
     {
       "path": "project/Packages/com.vfxcomposer.unity/Runtime/W24/W24SemanticTelemetry.cs",
@@ -104,7 +104,7 @@
     },
     {
       "path": "project/Packages/com.vfxcomposer.unity/Editor/W24/S1/VfxDesignContract.cs",
-      "sha256": "sha256:536d17b08e4b1263afe374bbbf96fed14f73d05f9a026c0dcc44cb299d6ca445"
+      "sha256": "sha256:c430ad1a66946bbd75a6c98eb1032718039745020fea778e176a02ff5c750486"
     },
     {
       "path": "project/Packages/com.vfxcomposer.unity/Editor/W24/S1/VfxImplementationTrace.cs",

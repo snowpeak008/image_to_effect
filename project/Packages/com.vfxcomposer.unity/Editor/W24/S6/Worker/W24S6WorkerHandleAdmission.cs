@@ -296,16 +296,20 @@ namespace VFXComposer.Editor.W24.S6.Worker
 
         internal bool TryReadRepositoryRelative(string relativePath, out byte[] bytes)
         {
-            return TryReadRelative(repositoryHandle, relativePath, out bytes);
+            return TryReadRelative(LeaseRoot.Repository, relativePath, out bytes);
         }
 
         internal bool TryReadProjectRelative(string relativePath, out byte[] bytes)
         {
-            return TryReadRelative(projectRootHandle, relativePath, out bytes);
+            return TryReadRelative(LeaseRoot.ProjectRoot, relativePath, out bytes);
         }
 
+        // The opaque lease surface may never name a native handle type, not even on a private
+        // member: callers select a pinned root by identity and the handle stays inside the lock.
+        private enum LeaseRoot { Repository, ProjectRoot }
+
         private bool TryReadRelative(
-            SafeFileHandle rootHandle,
+            LeaseRoot root,
             string relativePath,
             out byte[] bytes)
         {
@@ -317,7 +321,7 @@ namespace VFXComposer.Editor.W24.S6.Worker
                 {
                     if (!ReplayIdentitiesUnderLock()) return false;
                     var read = W24S6WindowsReadOnlyFile.ReadExactFromPinnedDirectoryHandle(
-                        rootHandle,
+                        root == LeaseRoot.Repository ? repositoryHandle : projectRootHandle,
                         relativePath,
                         MaximumReadBytes);
                     if (Volatile.Read(ref usable) != 1 || !session.IsUsable ||

@@ -148,6 +148,40 @@ namespace VFXComposer.Tests.EditMode
             Assert.That(first.Entries.All(entry => entry.HasRuntimeEntry && entry.RuntimeEntryPathIsValid && entry.RuntimeEntryExists && entry.RuntimeEntryGuidIsVerifiable && entry.RuntimeEntryHashIsVerifiable), Is.True);
             Assert.That(first.Entries.All(entry => W24StatusRegistry.IsCanonicalSha256(entry.RuntimeEntryHash) && W24StatusRegistry.IsCanonicalSha256(entry.BuildHash)), Is.True);
             Assert.That(first.Entries.All(entry => !entry.HasW24VisualQa && entry.Basis.Contains("no W24 visual-QA evidence")), Is.True);
+            Assert.That(first.Entries.Select(entry => entry.EffectId).Intersect(
+                    W24StatusRegistry.EffectContainerDirectories.Concat(W24StatusRegistry.SeparatelyManifestedDirectories), StringComparer.Ordinal),
+                Is.Empty, "A declared grouping directory is never itself an effect registration.");
+            CollectionAssert.IsSubsetOf(new[] { "w11nc_ambient_dust_volume", "w13nc_blade_tempest_ultimate_3d" }, first.Entries.Select(entry => entry.EffectId).ToArray());
+        }
+
+        [Test]
+        public void StatusRegistry_DeclaredContainersAreNotEffectsAndEverythingElseStillFailsClosed()
+        {
+            var root = Path.Combine(Path.GetTempPath(), "w24-status-container-" + Guid.NewGuid().ToString("N"));
+            var generated = Path.Combine(root, "Generated");
+            var manifests = Path.Combine(root, "Manifests");
+            try
+            {
+                Assert.That(W24StatusRegistry.EffectContainerDirectories, Is.EqualTo(new[] { "W11W13NextCandidate", "W15NextCandidate" }));
+                Assert.That(W24StatusRegistry.SeparatelyManifestedDirectories, Is.EqualTo(new[] { "W17W18NextCandidate" }));
+                Directory.CreateDirectory(Path.Combine(generated, "W11W13NextCandidate", "w11nc_declared_child"));
+                Directory.CreateDirectory(Path.Combine(generated, "W17W18NextCandidate", "W17"));
+                Directory.CreateDirectory(Path.Combine(generated, "undeclared_group", "child_effect"));
+                Directory.CreateDirectory(manifests);
+
+                var entries = W24StatusRegistry.ScanDirectories(root, generated, manifests).Entries;
+
+                CollectionAssert.AreEqual(new[] { "undeclared_group", "w11nc_declared_child" },
+                    entries.Select(entry => entry.EffectId).OrderBy(value => value, StringComparer.Ordinal).ToArray(),
+                    "Containers register their children, the separately manifested set registers nothing, and undeclared directories stay in the scan.");
+                Assert.That(entries.All(entry => entry.Maturity == W24MaturityLevel.L0_InvalidOrMissing), Is.True,
+                    "A missing BuildManifest still fails closed inside a declared container and for every undeclared directory.");
+                Assert.That(entries.All(entry => entry.WorkingStatus == W24WorkingStatus.None), Is.True);
+            }
+            finally
+            {
+                if (Directory.Exists(root)) Directory.Delete(root, true);
+            }
         }
 
         [Test]

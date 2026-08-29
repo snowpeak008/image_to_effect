@@ -3,7 +3,7 @@
   "traceStatus": "PENDING_FIRST_FORMAL_BUILD_BINDING",
   "effectId": "w24_real_light_receivers",
   "contractRevision": 24,
-  "contractHash": "sha256:0a7b6c6715834f17c5b4864346c015cc3b96bbd32b5be734d3b2b6b38e959859",
+  "contractHash": "sha256:fb54bb65118140b996afe8d44923a99d1190ddc15b692b58e196a254b771fbd6",
   "buildHash": "pending:formal-build",
   "captureProfileHash": "pending:formal-build",
   "runtimeEntryAssetPath": "Assets/VFX/Generated/w24_real_light_receivers/VFX_w24_real_light_receivers.prefab",

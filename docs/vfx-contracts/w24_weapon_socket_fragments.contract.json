@@ -1,5 +1,5 @@
 {
-  "contractVersion": "w24-s1/1.0", "effectId": "w24_weapon_socket_fragments", "contractRevision": 25, "contractHash": "sha256:88c752a126d0c0922861af647158b884dfb9095b173e573d3279239ca0f3dc4d",
+  "contractVersion": "w24-s1/1.0", "effectId": "w24_weapon_socket_fragments", "contractRevision": 25, "contractHash": "sha256:e011654dad1a437413eca2dc9844964a9e08da61bff1437f8a63e3d7561a6228",
   "lifecycle": {
     "kind": "event_driven",
     "start": {"entryConditions": ["Bind requested and socket resolves"], "deadlineSeconds": 0.1, "completionConditions": ["visual root parented to socket"]},
@@ -22,7 +22,7 @@
     "prefabManifestSerializedReference": "ProjectSettings/VFXComposer/BuildManifests/w24_weapon_socket_fragments.manifest.json#buildHash", "prefabManifestHash": "pending:formal-build",
     "rendererAssetSerializedReference": "Assets/Settings/VFXPreviewUniversalRenderer.asset", "volumeSerializedReference": "ProjectSettings/GraphicsSettings.asset (no per-scene Volume; bloom/tone mapping disabled)", "resolution": {"width": 960, "height": 540}, "fps": 60,
     "background": "dark neutral", "colorSpace": "Linear", "hdr": false, "msaaSamples": 1, "renderTextureFormat": "ARGB32", "bloom": {"enabled": false, "settingsReference": "none"}, "toneMapping": "None",
-    "captureToolVersion": "w24-s3-capture/3.5", "captureToolHash": "sha256:f605aacf4d27128347a2a8434a29cebc95aa789af73df55cc26c6fd7a0e42726", "canonicalSeed": 24201, "robustnessSeeds": [24211, 24221]
+    "captureToolVersion": "w24-s3-capture/3.5", "captureToolHash": "sha256:c300573cc86ba8ba2e31bc9ef88c3e5d689f18a4f74531160c93c068e133c432", "canonicalSeed": 24201, "robustnessSeeds": [24211, 24221]
   },
   "semanticStateMachine": {
     "deterministicForSameSeed": true,
