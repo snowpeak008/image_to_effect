@@ -131,7 +131,12 @@ internal sealed class CliPresenter
         _writer.WriteLine("[" + itemId + "] PLANNED " + disposition + " key=" + entryIdempotencyKey);
     }
 
-    public void Notice(string code, string message)
+    /// <summary>
+    /// Writes one entry-surface notice. When the notice was caused by a typed queue failure its
+    /// stable jobs-domain code travels with it, so an operator can tell a corrupt store from a
+    /// permission fault from a full queue without reading the queue store itself.
+    /// </summary>
+    public void Notice(string code, string message, string? queueDiagnosticCode = null)
     {
         if (_json)
         {
@@ -140,11 +145,14 @@ internal sealed class CliPresenter
                 writer.WriteString("kind", "notice");
                 writer.WriteString("code", code);
                 writer.WriteString("message", message);
+                WriteOptionalString(writer, "queueDiagnostic", queueDiagnosticCode);
             });
             return;
         }
 
-        _writer.WriteLine(code + " " + message);
+        _writer.WriteLine(queueDiagnosticCode is null
+            ? code + " " + message
+            : code + " " + message + " (" + queueDiagnosticCode + ")");
     }
 
     public void BatchSummary(BatchReport report)
@@ -265,6 +273,45 @@ internal sealed class CliPresenter
 
         _writer.WriteLine(jobId + " " + result.State + " accepted=" +
             (result.Accepted ? "true" : "false"));
+    }
+
+    public void BatchCancellation(BatchCancellationResult result)
+    {
+        if (_json)
+        {
+            WriteJson(writer =>
+            {
+                writer.WriteString("kind", "batchCancellation");
+                writer.WriteString("batchId", result.BatchId);
+                writer.WriteNumber("requested", result.Requested);
+                writer.WriteNumber("accepted", result.Accepted);
+                writer.WriteNumber("noOp", result.NoOp);
+                writer.WriteStartArray("jobs");
+                foreach (var item in result.Items)
+                {
+                    writer.WriteStartObject();
+                    writer.WriteString("jobId", item.JobId);
+                    writer.WriteString("state", item.State);
+                    writer.WriteBoolean("accepted", item.Accepted);
+                    writer.WriteEndObject();
+                }
+
+                writer.WriteEndArray();
+            });
+            return;
+        }
+
+        foreach (var item in result.Items)
+        {
+            _writer.WriteLine(item.JobId + " " + item.State + " accepted=" +
+                (item.Accepted ? "true" : "false"));
+        }
+
+        _writer.WriteLine(
+            "batch " + result.BatchId +
+            ": requested=" + Number(result.Requested) +
+            " accepted=" + Number(result.Accepted) +
+            " noOp=" + Number(result.NoOp));
     }
 
     public void Line(string text) => _writer.WriteLine(text);

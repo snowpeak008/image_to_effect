@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <AssemblyName>vfxc-mcp</AssemblyName>
+    <RootNamespace>VFXComposer.Mcp</RootNamespace>
+    <IsPackable>false</IsPackable>
+    <Description>Local MCP server over stdio: exposes the batch entry surface as a closed tool set on the shared execution layer.</Description>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\VFXComposer.AI.Contracts\VFXComposer.AI.Contracts.csproj" />
+    <ProjectReference Include="..\..\src\VFXComposer.AI.Providers\VFXComposer.AI.Providers.csproj" />
+    <ProjectReference Include="..\..\src\VFXComposer.Batch.Core\VFXComposer.Batch.Core.csproj" />
+    <ProjectReference Include="..\..\src\VFXComposer.Jobs\VFXComposer.Jobs.csproj" />
+    <ProjectReference Include="..\..\src\VFXComposer.Protocol\VFXComposer.Protocol.csproj" />
+  </ItemGroup>
+</Project>

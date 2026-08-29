@@ -14,7 +14,7 @@ public sealed class BatchSubmissionAndTrackingTests
         var store = new JobStore(CliTestHarness.CreateDirectory());
         var manifest = Manifest("alpha", "beta", "gamma");
 
-        var submission = new BatchSubmissionService(store).Submit(manifest, force: false);
+        var submission = new BatchSubmissionService(store, JobSourceEntries.Cli).Submit(manifest, force: false);
 
         CollectionAssert.AreEqual(
             new[] { "alpha", "beta", "gamma" },
@@ -33,7 +33,7 @@ public sealed class BatchSubmissionAndTrackingTests
     {
         var store = new JobStore(CliTestHarness.CreateDirectory());
         var manifest = Manifest("alpha", "beta");
-        var service = new BatchSubmissionService(store);
+        var service = new BatchSubmissionService(store, JobSourceEntries.Cli);
         var first = service.Submit(manifest, force: false);
         await DrainAsync(store, expectedTerminalJobs: 2);
 
@@ -53,7 +53,7 @@ public sealed class BatchSubmissionAndTrackingTests
     [TestMethod]
     public void AnUnavailableStoreRejectsTheWholeSubmission()
     {
-        var service = new BatchSubmissionService(new UnavailableQueueClient());
+        var service = new BatchSubmissionService(new UnavailableQueueClient(), JobSourceEntries.Cli);
 
         var exception = Assert.ThrowsExactly<JobQueueException>(() => service.Submit(Manifest("alpha"), force: false));
 
@@ -64,7 +64,7 @@ public sealed class BatchSubmissionAndTrackingTests
     public async Task TrackingCompletesWhenEveryEntryIsTerminal()
     {
         var store = new JobStore(CliTestHarness.CreateDirectory());
-        var submission = new BatchSubmissionService(store).Submit(Manifest("alpha", "beta"), force: false);
+        var submission = new BatchSubmissionService(store, JobSourceEntries.Cli).Submit(Manifest("alpha", "beta"), force: false);
         await DrainAsync(store, expectedTerminalJobs: 2);
         var sink = new RecordingTrackingSink();
 
@@ -81,7 +81,7 @@ public sealed class BatchSubmissionAndTrackingTests
     public async Task TrackingStopsImmediatelyWhenTheCallerInterruptsIt()
     {
         var store = new JobStore(CliTestHarness.CreateDirectory());
-        var submission = new BatchSubmissionService(store).Submit(Manifest("alpha"), force: false);
+        var submission = new BatchSubmissionService(store, JobSourceEntries.Cli).Submit(Manifest("alpha"), force: false);
         using var interrupted = new CancellationTokenSource();
         await interrupted.CancelAsync();
 
@@ -99,7 +99,7 @@ public sealed class BatchSubmissionAndTrackingTests
     public async Task TrackingGivesUpWhenTheProjectLockWaitExceedsTheBound()
     {
         var store = new JobStore(CliTestHarness.CreateDirectory());
-        var submission = new BatchSubmissionService(store).Submit(Manifest("alpha"), force: false);
+        var submission = new BatchSubmissionService(store, JobSourceEntries.Cli).Submit(Manifest("alpha"), force: false);
         var sink = new RecordingTrackingSink();
         var options = CliTestHarness.FastTracking with { ProjectLockTimeout = TimeSpan.Zero };
 

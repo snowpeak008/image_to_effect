@@ -20,6 +20,7 @@ public static class CliNoticeCodes
     public const string DryRunPlanOnly = "VFXC0009";
     public const string ReportNotWritten = "VFXC0010";
     public const string ManifestRejected = "VFXC0011";
+    public const string BatchVerdictInconsistent = "VFXC0012";
 
     public static IReadOnlySet<string> All => CliNoticeCatalog.Codes;
 }
@@ -46,6 +47,8 @@ public static class CliNoticeCatalog
             [CliNoticeCodes.DryRunPlanOnly] = "Dry run: the plan was printed and nothing was enqueued.",
             [CliNoticeCodes.ReportNotWritten] = "The batch report could not be written to the requested destination.",
             [CliNoticeCodes.ManifestRejected] = "The manifest was rejected; no entry was enqueued.",
+            [CliNoticeCodes.BatchVerdictInconsistent] =
+                "Tracking reported the batch complete while entries were still open; the queue view is inconsistent.",
         }.ToFrozenDictionary(StringComparer.Ordinal);
 
     internal static FrozenSet<string> Codes { get; } = Messages.Keys.ToFrozenSet(StringComparer.Ordinal);

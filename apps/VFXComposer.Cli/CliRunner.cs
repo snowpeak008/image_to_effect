@@ -46,6 +46,8 @@ public static class CliRunner
                 await RunBatchAsync(command, environment, cancellationToken).ConfigureAwait(false),
             (CliCommandGroups.Batch, CliCommandActions.Status) =>
                 await BatchStatusAsync(command, environment).ConfigureAwait(false),
+            (CliCommandGroups.Batch, CliCommandActions.Cancel) =>
+                await BatchCancelAsync(command, environment).ConfigureAwait(false),
             (CliCommandGroups.Job, CliCommandActions.Status) =>
                 await JobStatusAsync(command, environment).ConfigureAwait(false),
             (CliCommandGroups.Job, CliCommandActions.Cancel) =>
@@ -128,11 +130,12 @@ public static class CliRunner
             // Skipping entries whose content already succeeded is the default (REQ-002 §12,
             // REQ-002-16); --resume is the explicit spelling of that default and --force is the
             // only switch that turns it off. The parser enforces that the two never combine.
-            submission = new BatchSubmissionService(queue.Client).Submit(manifest, command.Run.Force);
+            submission = new BatchSubmissionService(queue.Client, JobSourceEntries.Cli)
+                .Submit(manifest, command.Run.Force);
         }
         catch (JobQueueException exception)
         {
-            errorPresenter.Notice(CliNoticeCodes.QueueUnavailable, exception.Message);
+            errorPresenter.Notice(CliNoticeCodes.QueueUnavailable, exception.Message, exception.Code);
             return CliExitCodes.QueueUnavailable;
         }
 
@@ -199,14 +202,18 @@ public static class CliRunner
         }
         catch (JobQueueException exception)
         {
-            errorPresenter.Notice(CliNoticeCodes.QueueUnavailable, exception.Message);
+            errorPresenter.Notice(CliNoticeCodes.QueueUnavailable, exception.Message, exception.Code);
             return CliExitCodes.QueueUnavailable;
         }
 
         var queuePolicy = BatchFailurePolicies.ToQueuePolicy(manifest.FailurePolicy);
         foreach (var item in manifest.Items)
         {
-            var request = BatchSubmissionService.CreateRequest(manifest, queuePolicy, item);
+            var request = BatchSubmissionService.CreateRequest(
+                JobSourceEntries.Cli,
+                manifest,
+                queuePolicy,
+                item);
             presenter.ItemPlanned(
                 item.ItemId,
                 request.EntryIdempotencyKey,
@@ -229,7 +236,7 @@ public static class CliRunner
         }
         catch (JobQueueException exception)
         {
-            errorPresenter.Notice(CliNoticeCodes.QueueUnavailable, exception.Message);
+            errorPresenter.Notice(CliNoticeCodes.QueueUnavailable, exception.Message, exception.Code);
             return CliExitCodes.QueueUnavailable;
         }
 
@@ -251,6 +258,30 @@ public static class CliRunner
         return CliExitCodes.Success;
     }
 
+    private static async Task<int> BatchCancelAsync(CliCommand command, CliEnvironment environment)
+    {
+        var presenter = new CliPresenter(environment.Output, command.Json);
+        var errorPresenter = new CliPresenter(environment.Error, command.Json);
+        await using var queue = environment.OpenQueue();
+        try
+        {
+            var result = new BatchCancellationService(queue.Client).Cancel(command.Argument!);
+            if (!result.BatchFound)
+            {
+                errorPresenter.Notice(CliNoticeCodes.NotFound, CliNoticeCatalog.Require(CliNoticeCodes.NotFound));
+                return CliExitCodes.DataError;
+            }
+
+            presenter.BatchCancellation(result);
+            return CliExitCodes.Success;
+        }
+        catch (JobQueueException exception)
+        {
+            errorPresenter.Notice(CliNoticeCodes.QueueUnavailable, exception.Message, exception.Code);
+            return CliExitCodes.QueueUnavailable;
+        }
+    }
+
     private static async Task<int> JobStatusAsync(CliCommand command, CliEnvironment environment)
     {
         var presenter = new CliPresenter(environment.Output, command.Json);
@@ -263,7 +294,7 @@ public static class CliRunner
         }
         catch (JobQueueException exception)
         {
-            errorPresenter.Notice(CliNoticeCodes.QueueUnavailable, exception.Message);
+            errorPresenter.Notice(CliNoticeCodes.QueueUnavailable, exception.Message, exception.Code);
             return CliExitCodes.QueueUnavailable;
         }
 
@@ -293,12 +324,15 @@ public static class CliRunner
         catch (JobQueueException exception)
             when (string.Equals(exception.Code, JobQueueDiagnosticCodes.JobNotFound, StringComparison.Ordinal))
         {
-            errorPresenter.Notice(CliNoticeCodes.NotFound, CliNoticeCatalog.Require(CliNoticeCodes.NotFound));
+            errorPresenter.Notice(
+                CliNoticeCodes.NotFound,
+                CliNoticeCatalog.Require(CliNoticeCodes.NotFound),
+                exception.Code);
             return CliExitCodes.DataError;
         }
         catch (JobQueueException exception)
         {
-            errorPresenter.Notice(CliNoticeCodes.QueueUnavailable, exception.Message);
+            errorPresenter.Notice(CliNoticeCodes.QueueUnavailable, exception.Message, exception.Code);
             return CliExitCodes.QueueUnavailable;
         }
     }
@@ -315,7 +349,7 @@ public static class CliRunner
         }
         catch (JobQueueException exception)
         {
-            errorPresenter.Notice(CliNoticeCodes.QueueUnavailable, exception.Message);
+            errorPresenter.Notice(CliNoticeCodes.QueueUnavailable, exception.Message, exception.Code);
             return CliExitCodes.QueueUnavailable;
         }
 
@@ -350,12 +384,20 @@ public static class CliRunner
                     CliNoticeCatalog.Require(CliNoticeCodes.QueueUnavailable));
                 return CliExitCodes.QueueUnavailable;
             default:
-                return BatchReportBuilder.Evaluate(report, failurePolicy) switch
+                var verdict = BatchReportBuilder.Evaluate(report, failurePolicy);
+                var exitCode = CliExitCodes.ForVerdict(verdict);
+                if (verdict is not (BatchVerdict.AllSucceeded or BatchVerdict.CompletedWithFailures
+                    or BatchVerdict.Aborted))
                 {
-                    BatchVerdict.CompletedWithFailures => CliExitCodes.BatchCompletedWithFailures,
-                    BatchVerdict.Aborted => CliExitCodes.BatchAborted,
-                    _ => CliExitCodes.Success,
-                };
+                    // Tracking declared every entry terminal while the report still counts open
+                    // entries; the two cannot both be right. It is unreachable today and is
+                    // announced rather than silently folded into an ordinary failure code.
+                    errorPresenter.Notice(
+                        CliNoticeCodes.BatchVerdictInconsistent,
+                        CliNoticeCatalog.Require(CliNoticeCodes.BatchVerdictInconsistent));
+                }
+
+                return exitCode;
         }
     }
 
