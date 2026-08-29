@@ -118,11 +118,38 @@ public sealed class JobsPageTests
     }
 
     [TestMethod]
+    public void ItemIdIsShownForBatchEntriesAndOmittedForEveryOtherJob()
+    {
+        var queue = new FakeJobQueueClient();
+        queue.AddQueuedBatchEntry("job-batch00001", "batch-alpha", "fire_slash-01");
+        queue.AddQueued("job-solo000001");
+        var viewModel = new JobsViewModel(queue);
+        viewModel.Refresh();
+
+        var batchRow = viewModel.Jobs.Single(job => job.JobId == "job-batch00001");
+        Assert.IsTrue(batchRow.HasItemId);
+        Assert.AreEqual("fire_slash-01", batchRow.ItemId);
+        var soloRow = viewModel.Jobs.Single(job => job.JobId == "job-solo000001");
+        Assert.IsFalse(soloRow.HasItemId, "A job without an item id must not render a placeholder value.");
+        Assert.IsNull(soloRow.ItemId);
+
+        viewModel.SelectedJob = batchRow;
+        Assert.AreEqual("Batch item fire_slash-01", viewModel.SelectedItemDisplay);
+
+        viewModel.SelectedJob = soloRow;
+        Assert.AreEqual(string.Empty, viewModel.SelectedItemDisplay, "The detail line must be absent, not a dash.");
+
+        viewModel.SelectedJob = null;
+        Assert.AreEqual(string.Empty, viewModel.SelectedItemDisplay);
+    }
+
+    [TestMethod]
     public void NoRenderedTextEverContainsThePayloadOrAPath()
     {
         var queue = new FakeJobQueueClient();
         queue.AddRunning("job-running001", progressPermille: 100);
         queue.AddFailed("job-failed0001");
+        queue.AddQueuedBatchEntry("job-batch00001", "batch-alpha", "fire_slash-01");
         var viewModel = new JobsViewModel(queue);
         viewModel.Refresh();
         viewModel.SelectedJob = viewModel.Jobs.Last();
@@ -133,6 +160,7 @@ public sealed class JobsPageTests
             viewModel.StoreStatus,
             viewModel.SelectedDiagnostic,
             viewModel.SelectedArtifacts,
+            viewModel.SelectedItemDisplay,
         };
         rendered.AddRange(viewModel.SelectedJobTimeline);
         foreach (var row in viewModel.Jobs)
@@ -141,7 +169,7 @@ public sealed class JobsPageTests
             [
                 row.ShortJobId, row.SourceEntry, row.JobKind, row.BatchDisplay, row.State,
                 row.ProgressDisplay, row.EnqueuedDisplay, row.StartedDisplay, row.CompletedDisplay,
-                row.DiagnosticDisplay,
+                row.DiagnosticDisplay, row.ItemId ?? string.Empty,
             ]);
         }
 
@@ -188,6 +216,9 @@ public sealed class JobsPageTests
         public void AddFailed(string jobId) =>
             Add(jobId, JobStatusStates.Failed, 500, JobQueueDiagnosticCodes.ExecutionFailed);
 
+        public void AddQueuedBatchEntry(string jobId, string batchId, string itemId) =>
+            Add(jobId, JobStatusStates.Queued, 0, null, batchId, itemId);
+
         public JobQueueSnapshotView ReadSnapshot() =>
             ThrowOnRead
                 ? throw new JobQueueException(JobQueueDiagnosticCodes.StoreUnavailable)
@@ -211,7 +242,13 @@ public sealed class JobsPageTests
             return _jobs.Single(job => job.JobId == jobId);
         }
 
-        private void Add(string jobId, string state, int progressPermille, string? diagnosticCode)
+        private void Add(
+            string jobId,
+            string state,
+            int progressPermille,
+            string? diagnosticCode,
+            string? batchId = null,
+            string? itemId = null)
         {
             var enqueued = new DateTimeOffset(2026, 8, 29, 2, 0, 0, TimeSpan.Zero);
             var running = !string.Equals(state, JobStatusStates.Queued, StringComparison.Ordinal);
@@ -220,9 +257,9 @@ public sealed class JobsPageTests
                 jobId,
                 "req-" + jobId,
                 "idk-" + jobId,
-                JobEntryIdempotency.Derive(null, null, SensitivePayload),
-                batchId: null,
-                batchPolicy: null,
+                JobEntryIdempotency.Derive(batchId, itemId, SensitivePayload),
+                batchId,
+                batchId is null ? null : JobBatchPolicies.Continue,
                 JobSourceEntries.Desktop,
                 "test.job",
                 SensitivePayload,
@@ -237,7 +274,8 @@ public sealed class JobsPageTests
                 terminal ? diagnosticCode : null,
                 Array.Empty<string>(),
                 childProcessId: null,
-                childProcessStartUtc: null);
+                childProcessStartUtc: null,
+                itemId: itemId);
             _jobs.Add(record);
             var timeline = new List<JobStoreEvent>
             {

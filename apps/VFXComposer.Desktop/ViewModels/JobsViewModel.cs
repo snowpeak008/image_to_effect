@@ -18,6 +18,7 @@ public sealed class JobsViewModel : WorkspacePageViewModel
     private string _storeStatus = string.Empty;
     private string _selectedDiagnostic = string.Empty;
     private string _selectedArtifacts = string.Empty;
+    private string _selectedItemDisplay = string.Empty;
 
     public JobsViewModel()
         : this(null)
@@ -87,6 +88,13 @@ public sealed class JobsViewModel : WorkspacePageViewModel
     {
         get => _selectedArtifacts;
         private set => SetProperty(ref _selectedArtifacts, value);
+    }
+
+    /// <summary>Batch entry line of the selected job; empty when the job is not a batch entry.</summary>
+    public string SelectedItemDisplay
+    {
+        get => _selectedItemDisplay;
+        private set => SetProperty(ref _selectedItemDisplay, value);
     }
 
     public IRelayCommand RefreshCommand { get; }
@@ -217,6 +225,7 @@ public sealed class JobsViewModel : WorkspacePageViewModel
     private void RefreshSelectedDetail()
     {
         SelectedJobTimeline.Clear();
+        SelectedItemDisplay = SelectedJob?.ItemId is string itemId ? "Batch item " + itemId : string.Empty;
         if (_queue is null || SelectedJob is null)
         {
             SelectedDiagnostic = string.Empty;
