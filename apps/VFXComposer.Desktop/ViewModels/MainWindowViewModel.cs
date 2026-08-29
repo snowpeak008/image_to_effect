@@ -1,6 +1,7 @@
 using System.Collections.ObjectModel;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using VFXComposer.AI.Contracts.Desktop;
 using VFXComposer.Client;
 using VFXComposer.Desktop.Services;
 
@@ -14,6 +15,10 @@ public sealed class MainWindowViewModel : ObservableObject, IAsyncDisposable
     private IUiDispatcher? _dispatcher;
     private readonly IInMemoryDiagnosticSink _diagnostics;
     private readonly IUiErrorBoundary _errorBoundary;
+    private readonly IAiDesktopRuntime _aiRuntime;
+    private readonly CreateViewModel _createPage;
+    private readonly PreviewViewModel _previewPage;
+    private readonly SettingsViewModel _settingsPage;
     private NavigationItemViewModel _selectedNavigationItem;
     private string _connectionDisplay;
     private string _projectDisplay;
@@ -23,23 +28,28 @@ public sealed class MainWindowViewModel : ObservableObject, IAsyncDisposable
     public MainWindowViewModel(
         VfxComposerClient client,
         IInMemoryDiagnosticSink diagnostics,
-        IUiErrorBoundary errorBoundary)
+        IUiErrorBoundary errorBoundary,
+        IAiDesktopRuntime? aiRuntime = null)
     {
         _client = client ?? throw new ArgumentNullException(nameof(client));
         _diagnostics = diagnostics ?? throw new ArgumentNullException(nameof(diagnostics));
         _errorBoundary = errorBoundary ?? throw new ArgumentNullException(nameof(errorBoundary));
+        _aiRuntime = aiRuntime ?? AiDesktopRuntime.Unavailable;
+        _createPage = new CreateViewModel(_aiRuntime);
+        _previewPage = new PreviewViewModel(_aiRuntime);
+        _settingsPage = new SettingsViewModel(_aiRuntime);
 
         NavigationItems = new ReadOnlyObservableCollection<NavigationItemViewModel>(
             new ObservableCollection<NavigationItemViewModel>(
             [
                 new(new DashboardViewModel()),
                 new(new LibraryViewModel()),
-                new(new CreateViewModel()),
-                new(new PreviewViewModel()),
+                new(_createPage),
+                new(_previewPage),
                 new(new PatchViewModel()),
                 new(new ReviewViewModel()),
                 new(new JobsViewModel()),
-                new(new SettingsViewModel()),
+                new(_settingsPage),
             ]));
 
         _selectedNavigationItem = NavigationItems[0];
@@ -110,9 +120,16 @@ public sealed class MainWindowViewModel : ObservableObject, IAsyncDisposable
 
     public IReadOnlyList<UiDiagnostic> Diagnostics => _diagnostics.Snapshot;
 
+    public CreateViewModel CreatePage => _createPage;
+
+    public PreviewViewModel PreviewPage => _previewPage;
+
+    public SettingsViewModel SettingsPage => _settingsPage;
+
     public static MainWindowViewModel CreateDisconnected(
         IInMemoryDiagnosticSink? diagnostics = null,
-        IUiErrorBoundary? errorBoundary = null)
+        IUiErrorBoundary? errorBoundary = null,
+        IAiDesktopRuntime? aiRuntime = null)
     {
         diagnostics ??= new InMemoryDiagnosticSink();
         errorBoundary ??= new UiErrorBoundary(diagnostics);
@@ -120,7 +137,8 @@ public sealed class MainWindowViewModel : ObservableObject, IAsyncDisposable
         return new MainWindowViewModel(
             VfxComposerClient.CreateDisconnected(),
             diagnostics,
-            errorBoundary);
+            errorBoundary,
+            aiRuntime);
     }
 
     public static MainWindowViewModel CreateUserMode(
@@ -128,7 +146,8 @@ public sealed class MainWindowViewModel : ObservableObject, IAsyncDisposable
         IProjectSelectionDialog selectionDialog,
         IUiDispatcher dispatcher,
         IInMemoryDiagnosticSink? diagnostics = null,
-        IUiErrorBoundary? errorBoundary = null)
+        IUiErrorBoundary? errorBoundary = null,
+        IAiDesktopRuntime? aiRuntime = null)
     {
         ArgumentNullException.ThrowIfNull(session);
         ArgumentNullException.ThrowIfNull(selectionDialog);
@@ -136,7 +155,7 @@ public sealed class MainWindowViewModel : ObservableObject, IAsyncDisposable
         diagnostics ??= new InMemoryDiagnosticSink();
         errorBoundary ??= new UiErrorBoundary(diagnostics);
         var result = new MainWindowViewModel(
-            VfxComposerClient.CreateDisconnected(), diagnostics, errorBoundary)
+            VfxComposerClient.CreateDisconnected(), diagnostics, errorBoundary, aiRuntime)
         {
             _session = session,
             _selectionDialog = selectionDialog,
@@ -176,10 +195,18 @@ public sealed class MainWindowViewModel : ObservableObject, IAsyncDisposable
 
     public async ValueTask DisposeAsync()
     {
-        if (_session is not null)
+        try
         {
-            _session.StateChanged -= OnSessionStateChanged;
-            await _session.DisposeAsync();
+            if (_session is not null)
+            {
+                _session.StateChanged -= OnSessionStateChanged;
+                await _session.DisposeAsync();
+            }
+        }
+        finally
+        {
+            _previewPage.Dispose();
+            await _aiRuntime.DisposeAsync();
         }
     }
 

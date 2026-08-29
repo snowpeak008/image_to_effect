@@ -17,5 +17,15 @@
         <TextBlock Classes="muted" Text="{Binding EmptyStateMessage}" TextWrapping="Wrap" />
       </StackPanel>
     </Border>
+    <Border Classes="card">
+      <StackPanel Spacing="10">
+        <TextBlock FontWeight="SemiBold" Text="Chat" />
+        <TextBlock Classes="muted" Text="This sends one explicit ChatLlm prompt through the configured binding." TextWrapping="Wrap" />
+        <TextBox AcceptsReturn="True" Height="96" TextWrapping="Wrap" Watermark="Ask the selected chat provider" Text="{Binding ChatPrompt}" />
+        <Button HorizontalAlignment="Left" Command="{Binding SendChatCommand}" Content="Send chat prompt" />
+        <TextBlock Classes="muted" Text="{Binding ChatStatus}" TextWrapping="Wrap" />
+        <TextBox AcceptsReturn="True" Height="140" IsReadOnly="True" Text="{Binding ChatResponse}" TextWrapping="Wrap" Watermark="Typed chat response appears here" />
+      </StackPanel>
+    </Border>
   </StackPanel>
 </UserControl>

@@ -99,6 +99,29 @@ public sealed class ProviderSecretStore : ISecretReferenceVerifier
         }
     }
 
+    /// <summary>
+    /// Revokes the exact profile-owned secret reference. Both the primary and retained backup are removed so a
+    /// deleted profile cannot be revived by a stale protected envelope. No secret payload is opened or returned.
+    /// </summary>
+    public void RevokeSecret(string profileId, SecretRef secretRef)
+    {
+        profileId = ValidateProfileId(profileId);
+        ArgumentNullException.ThrowIfNull(secretRef);
+        try
+        {
+            DeleteIfPresent(SecretPathFor(profileId, secretRef));
+            DeleteIfPresent(BackupPathFor(profileId, secretRef));
+        }
+        catch (IOException)
+        {
+            throw new AiGatewayException(AiErrorCode.SecretUnavailable);
+        }
+        catch (UnauthorizedAccessException)
+        {
+            throw new AiGatewayException(AiErrorCode.SecretUnavailable);
+        }
+    }
+
     public override string ToString() => "ProviderSecretStore(<redacted>)";
 
     internal ProviderSecretLease OpenSecret(string profileId, SecretRef secretRef)
@@ -147,6 +170,14 @@ public sealed class ProviderSecretStore : ISecretReferenceVerifier
     }
 
     private string BackupPathFor(string profileId, SecretRef secretRef) => SecretPathFor(profileId, secretRef) + ".bak";
+
+    private static void DeleteIfPresent(string path)
+    {
+        if (File.Exists(path))
+        {
+            File.Delete(path);
+        }
+    }
 
     private static bool TryOpen(string path, string profileId, SecretRef secretRef, out ProviderSecretLease? result)
     {

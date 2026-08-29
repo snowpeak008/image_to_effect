@@ -14,6 +14,7 @@ public sealed class ChatChannelGateway : IChatChannelGateway, IDisposable
 {
     private readonly ProviderConfigurationStore _configurationStore;
     private readonly ProviderSecretStore _secretStore;
+    private readonly ProviderHealthRegistry _health;
     private readonly ChatRouteResolver _routeResolver;
     private readonly HttpClient _httpClient;
     private int _disposed;
@@ -60,7 +61,8 @@ public sealed class ChatChannelGateway : IChatChannelGateway, IDisposable
     {
         _configurationStore = configurationStore ?? throw new ArgumentNullException(nameof(configurationStore));
         _secretStore = secretStore ?? throw new ArgumentNullException(nameof(secretStore));
-        _routeResolver = new ChatRouteResolver(healthRegistry, _secretStore);
+        _health = healthRegistry ?? throw new ArgumentNullException(nameof(healthRegistry));
+        _routeResolver = new ChatRouteResolver(_health, _secretStore);
         _httpClient = httpClient ?? throw new ArgumentNullException(nameof(httpClient));
     }
 
@@ -70,17 +72,15 @@ public sealed class ChatChannelGateway : IChatChannelGateway, IDisposable
     {
         ThrowIfDisposed();
         ArgumentNullException.ThrowIfNull(request);
-        if (cancellationToken.IsCancellationRequested)
-        {
-            throw new ChatChannelException(ChatChannelErrorCode.Cancelled);
-        }
 
         ChatResolvedRoute route;
         try
         {
             // Resolve once, before any await.  This immutable snapshot pins the selected profile/capability/model/
             // protocol for the complete call even if another thread saves a newer configuration while it is in flight.
-            route = _routeResolver.Resolve(_configurationStore.Load().Configuration);
+            // Health Unknown is deliberately admissible only because this call is an explicit user prompt. There is
+            // no preflight or automatic health request; the result below becomes the first observation.
+            route = _routeResolver.Resolve(_configurationStore.Load().Configuration, allowUnknownHealth: true);
         }
         catch (ChatChannelException)
         {
@@ -91,10 +91,14 @@ public sealed class ChatChannelGateway : IChatChannelGateway, IDisposable
             throw ChatErrorMapper.FromA1(exception);
         }
 
-        var requestUri = CreateRequestUri(route.Profile.Endpoint);
         byte[]? payload = null;
         try
         {
+            // Cancellation is deliberately observed only after the explicit route has been resolved. This keeps the
+            // prompt result (including a pre-cancelled prompt) attached to the exact persisted route without parsing
+            // or retaining an endpoint anywhere outside this request-time operation.
+            cancellationToken.ThrowIfCancellationRequested();
+            var requestUri = CreateRequestUri(route.Profile.Endpoint);
             payload = ChatProtocolCodec.CreateRequestPayload(route, request);
             using var message = new HttpRequestMessage(HttpMethod.Post, requestUri)
             {
@@ -165,7 +169,9 @@ public sealed class ChatChannelGateway : IChatChannelGateway, IDisposable
                 try
                 {
                     responseBytes = await ReadBoundedResponseAsync(response.Content, linkedCancellation.Token).ConfigureAwait(false);
-                    return ChatProtocolCodec.ParseSuccessResponse(route.Protocol, request, responseBytes);
+                    var result = ChatProtocolCodec.ParseSuccessResponse(route.Protocol, request, responseBytes);
+                    RecordObservedHealth(route, ProviderHealthState.Verified, reasonCode: null);
+                    return result;
                 }
                 catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested)
                 {
@@ -191,6 +197,39 @@ public sealed class ChatChannelGateway : IChatChannelGateway, IDisposable
                     }
                 }
             }
+        }
+        catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested)
+        {
+            throw RecordObservedFailure(route, new ChatChannelException(ChatChannelErrorCode.Cancelled));
+        }
+        catch (OperationCanceledException)
+        {
+            throw RecordObservedFailure(route, new ChatChannelException(ChatChannelErrorCode.Cancelled));
+        }
+        catch (HttpRequestException)
+        {
+            throw RecordObservedFailure(route, new ChatChannelException(
+                ChatChannelErrorCode.TransportFailed,
+                retryable: true));
+        }
+        catch (IOException)
+        {
+            throw RecordObservedFailure(route, new ChatChannelException(
+                ChatChannelErrorCode.TransportFailed,
+                retryable: true));
+        }
+        catch (ArgumentException)
+        {
+            throw RecordObservedFailure(route, new ChatChannelException(ChatChannelErrorCode.RequestInvalid));
+        }
+        catch (InvalidOperationException)
+        {
+            throw RecordObservedFailure(route, new ChatChannelException(ChatChannelErrorCode.RequestInvalid));
+        }
+        catch (ChatChannelException exception)
+        {
+            RecordObservedFailure(route, exception);
+            throw;
         }
         finally
         {
@@ -339,5 +378,31 @@ public sealed class ChatChannelGateway : IChatChannelGateway, IDisposable
         {
             throw new ObjectDisposedException(nameof(ChatChannelGateway));
         }
+    }
+
+    private void RecordObservedHealth(
+        ChatResolvedRoute route,
+        ProviderHealthState state,
+        AiErrorCode? reasonCode)
+    {
+        _health.Record(new ProviderHealth(
+            route.Profile.Id,
+            route.Capability.Id,
+            AiChannel.ChatLlm,
+            route.ConfigurationFingerprint,
+            state,
+            DateTimeOffset.UtcNow,
+            reasonCode));
+    }
+
+    private ChatChannelException RecordObservedFailure(ChatResolvedRoute route, ChatChannelException exception)
+    {
+        ArgumentNullException.ThrowIfNull(route);
+        ArgumentNullException.ThrowIfNull(exception);
+
+        // ProviderHealth stores a closed, shared error vocabulary rather than transport-local details. In
+        // particular, it never retains an endpoint, HTTP status payload, credential, prompt, or exception text.
+        RecordObservedHealth(route, ProviderHealthState.Unhealthy, AiErrorCode.AdapterUnavailable);
+        return exception;
     }
 }

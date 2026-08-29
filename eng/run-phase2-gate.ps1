@@ -437,6 +437,7 @@ $commands = @(
     [ordered]@{ phase = "build"; id = "ai-providers-build"; file = "dotnet"; args = @("build", "src/VFXComposer.AI.Providers/VFXComposer.AI.Providers.csproj", "--configuration", "Release", "--no-restore", "-p:RestoreLockedMode=true"); expected = @(0) },
     [ordered]@{ phase = "build"; id = "ai-revision-lock-host-build"; file = "dotnet"; args = @("build", "src/VFXComposer.AI.Tests/RevisionLockHost/VFXComposer.AI.Tests.RevisionLockHost.csproj", "--configuration", "Release", "--no-restore", "-p:RestoreLockedMode=true"); expected = @(0) },
     [ordered]@{ phase = "build"; id = "ai-test-build"; file = "dotnet"; args = @("build", "src/VFXComposer.AI.Tests/VFXComposer.AI.Tests.csproj", "--configuration", "Release", "--no-restore", "-p:RestoreLockedMode=true"); expected = @(0) },
+    [ordered]@{ phase = "build"; id = "desktop-test-build"; file = "dotnet"; args = @("build", "apps/VFXComposer.Desktop.Tests/VFXComposer.Desktop.Tests.csproj", "--configuration", "Release", "--no-restore", "-p:RestoreLockedMode=true"); expected = @(0) },
     [ordered]@{ phase = "build"; id = "protocol-build"; file = "dotnet"; args = @("build", "src/VFXComposer.Protocol.Tests/VFXComposer.Protocol.Tests.csproj", "--configuration", "Release", "--no-restore", "-p:RestoreLockedMode=true"); expected = @(0) },
     [ordered]@{ phase = "build"; id = "client-build"; file = "dotnet"; args = @("build", "src/VFXComposer.Client.Tests/VFXComposer.Client.Tests.csproj", "--configuration", "Release", "--no-restore", "-p:RestoreLockedMode=true"); expected = @(0) },
     [ordered]@{ phase = "build"; id = "broker-build"; file = "dotnet"; args = @("build", "services/VFXComposer.Broker.Tests/VFXComposer.Broker.Tests.csproj", "--configuration", "Release", "--no-restore", "-p:RestoreLockedMode=true"); expected = @(0) },
@@ -445,6 +446,7 @@ $commands = @(
     [ordered]@{ phase = "build"; id = "solution-build"; file = "dotnet"; args = @("build", "VFXComposer.sln", "--configuration", "Release", "--no-restore", "-p:RestoreLockedMode=true"); expected = @(0) },
     [ordered]@{ phase = "run"; id = "protocol-test"; file = "dotnet"; args = @("test", "src/VFXComposer.Protocol.Tests/VFXComposer.Protocol.Tests.csproj", "--configuration", "Release", "--no-build", "--no-restore", "-p:RestoreLockedMode=true", "--logger", "trx;LogFileName=protocol.trx", "--results-directory", (Join-Path $testResults "protocol")); expected = @(0) },
     [ordered]@{ phase = "run"; id = "ai-test"; file = "dotnet"; args = @("test", "src/VFXComposer.AI.Tests/VFXComposer.AI.Tests.csproj", "--configuration", "Release", "--no-build", "--no-restore", "-p:RestoreLockedMode=true", "--logger", "trx;LogFileName=ai.trx", "--results-directory", (Join-Path $testResults "ai")); expected = @(0) },
+    [ordered]@{ phase = "run"; id = "desktop-test"; file = "dotnet"; args = @("test", "apps/VFXComposer.Desktop.Tests/VFXComposer.Desktop.Tests.csproj", "--configuration", "Release", "--no-build", "--no-restore", "-p:RestoreLockedMode=true", "--logger", "trx;LogFileName=desktop.trx", "--results-directory", (Join-Path $testResults "desktop")); expected = @(0) },
     [ordered]@{ phase = "run"; id = "client-test"; file = "dotnet"; args = @("test", "src/VFXComposer.Client.Tests/VFXComposer.Client.Tests.csproj", "--configuration", "Release", "--no-build", "--no-restore", "-p:RestoreLockedMode=true", "--logger", "trx;LogFileName=client.trx", "--results-directory", (Join-Path $testResults "client")); expected = @(0) },
     [ordered]@{ phase = "run"; id = "broker-test"; file = "dotnet"; args = @("test", "services/VFXComposer.Broker.Tests/VFXComposer.Broker.Tests.csproj", "--configuration", "Release", "--no-build", "--no-restore", "-p:RestoreLockedMode=true", "--logger", "trx;LogFileName=broker.trx", "--results-directory", (Join-Path $testResults "broker")); expected = @(0) },
     [ordered]@{ phase = "run"; id = "local-e2e-test"; file = "dotnet"; args = @("test", "tests/VFXComposer.LocalE2E.Tests/VFXComposer.LocalE2E.Tests.csproj", "--configuration", "Release", "--no-build", "--no-restore", "-p:RestoreLockedMode=true", "--logger", "trx;LogFileName=local-e2e.trx", "--results-directory", (Join-Path $testResults "local-e2e")); expected = @(0) },
@@ -487,6 +489,8 @@ $bindingBeforeTests = @(
     Get-AssemblyIdentity -RelativePath "src/VFXComposer.AI.Providers/bin/Release/net8.0/VFXComposer.AI.Providers.dll"
     Get-AssemblyIdentity -RelativePath "src/VFXComposer.AI.Tests/RevisionLockHost/bin/Release/net8.0/VFXComposer.AI.Tests.RevisionLockHost.dll"
     Get-AssemblyIdentity -RelativePath "src/VFXComposer.AI.Tests/bin/Release/net8.0/VFXComposer.AI.Tests.dll"
+    Get-AssemblyIdentity -RelativePath "apps/VFXComposer.Desktop/bin/Release/net8.0/VFXComposer.Desktop.dll"
+    Get-AssemblyIdentity -RelativePath "apps/VFXComposer.Desktop.Tests/bin/Release/net8.0/VFXComposer.Desktop.Tests.dll"
     Get-AssemblyIdentity -RelativePath "src/VFXComposer.Client.Tests/bin/Release/net8.0/VFXComposer.Client.Tests.dll"
     Get-AssemblyIdentity -RelativePath "src/VFXComposer.Client/bin/Release/net8.0/VFXComposer.Client.dll"
     Get-AssemblyIdentity -RelativePath "services/VFXComposer.Broker.Tests/bin/Release/net8.0/VFXComposer.Broker.Tests.dll"
@@ -518,6 +522,8 @@ $bindingAfterTests = @(
     Get-AssemblyIdentity -RelativePath "src/VFXComposer.AI.Providers/bin/Release/net8.0/VFXComposer.AI.Providers.dll"
     Get-AssemblyIdentity -RelativePath "src/VFXComposer.AI.Tests/RevisionLockHost/bin/Release/net8.0/VFXComposer.AI.Tests.RevisionLockHost.dll"
     Get-AssemblyIdentity -RelativePath "src/VFXComposer.AI.Tests/bin/Release/net8.0/VFXComposer.AI.Tests.dll"
+    Get-AssemblyIdentity -RelativePath "apps/VFXComposer.Desktop/bin/Release/net8.0/VFXComposer.Desktop.dll"
+    Get-AssemblyIdentity -RelativePath "apps/VFXComposer.Desktop.Tests/bin/Release/net8.0/VFXComposer.Desktop.Tests.dll"
     Get-AssemblyIdentity -RelativePath "src/VFXComposer.Client.Tests/bin/Release/net8.0/VFXComposer.Client.Tests.dll"
     Get-AssemblyIdentity -RelativePath "src/VFXComposer.Client/bin/Release/net8.0/VFXComposer.Client.dll"
     Get-AssemblyIdentity -RelativePath "services/VFXComposer.Broker.Tests/bin/Release/net8.0/VFXComposer.Broker.Tests.dll"
