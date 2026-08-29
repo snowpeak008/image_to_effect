@@ -1,8 +1,10 @@
 # Unity EditMode 既有失败 triage 报告（O4）
 
-> 状态：DELIVERED　|　日期：2026-08-29　|　执行者：O4 开发子 agent（分支 `task/O4b-unity-test-triage`）
+> 状态：DELIVERED（返工轮完成，EditMode 0 失败）　|　日期：2026-08-29　|　执行者：O4 开发子 agent（分支 `task/O4b-unity-test-triage`）
 >
 > 对象：`docs/plans/BASELINE_REPORT.md` 第 3.4 节记录的 Unity EditMode 8 个确定性既有失败。目标是逐项定位根因并二分处置：陈旧同步类直接修复，真实缺陷或需产品决策类出裁决请求。
+>
+> **两轮交付**：首轮（§1–§5）定位九个失败面、修复 2 项、提出 5 条裁决请求；返工轮（§6）落实主 agent 对全部裁决的批准，EditMode 归零。首轮各节保留原文作为根因证据，处置结论以 §6 为准。
 
 ## 1. 环境与复现
 
@@ -31,19 +33,19 @@ total=657 passed=596 failed=8 skipped=53
 
 ## 2. 处置矩阵
 
-| # | 失败用例 | 症状 | 根因分类 | 处置 |
-|---|---|---|---|---|
-| 1 | `S11ReleaseAcceptanceTests.ErrorCodeAudit_…` | 源码错误码集与文档清单不等价 | 陈旧清单（文档漏登记 14 码） | **已修**：补登 `E1930`–`E1943`（提交 `149f30ef`） |
-| 2 | `W17W18NextCandidatePreviewTests.W17Preview_…` | preview 场景内 driver 组件为空序列（偶发） | **真实缺陷**（Runtime 源码：一文件两个 MonoBehaviour，driver 无脚本资产） | 不修，裁决请求 R-1（附补丁方案；根因已实测确证） |
-| 3 | `W17W18NextCandidatePreviewTests.W18Preview_…` | 同上 | 同 #2 | 同 #2，随 R-1 一并去除偶发 |
-| 4 | `W24S3BaselineContractTests.CaptureToolBundle_…` | `W24RealLightingModule.cs` sha256 与 pin 不符 | **需产品决策**（封存证据链有意 fail-closed） | 不修，裁决请求 R-2 |
-| 5 | `W24S6LocalReadOnlyFilesystemAdapterTests.DirectoryTarget_…` | 目录目标返回 `W24FS107`，期望 `W24FS109` | 陈旧断言（期望码在当前实现下不可达） | **已修**：改断言并加强为"真实 open 尝试 + 非常规谓词"双重校验（提交 `b0903a96`） |
-| 6 | `W24S6WorkerHandleAdmissionTests.SessionRevocation…NoNativeHandle` | 不透明面暴露 `SafeFileHandle` 签名 | **真实缺陷**（Editor 源码实例方法签名违反契约） | 不修，裁决请求 R-3（附补丁方案） |
-| 7 | `W24SustainedFlameProductionTests.CaptureToolBundle_…` | `VfxDesignContract.cs` sha256 与 pin 不符 | **需产品决策**（同 #4，且下游 111 文件受牵连） | 不修，裁决请求 R-4 |
-| 8 | `W24WorkflowTests.StatusRegistry_…` | 生成物清单中存在非 L2 条目 | **需产品决策**（注册表扫描契约 vs 已入库的分组目录布局） | 不修，裁决请求 R-5 |
-| 9 | `W24S6WorkerBrokerSessionTests.TestOnlyBrokerHost…` | `HandleProbe.exe` 不存在 | 环境前置条件 | 不修：运行前先 `dotnet build -c Release`（§3.7） |
+| # | 失败用例 | 症状 | 根因分类 | 首轮处置 | 最终状态 |
+|---|---|---|---|---|---|
+| 1 | `S11ReleaseAcceptanceTests.ErrorCodeAudit_…` | 源码错误码集与文档清单不等价 | 陈旧清单（文档漏登记 14 码） | **已修**：补登 `E1930`–`E1943`（`149f30ef`） | 通过；越界已追认 |
+| 2 | `W17W18NextCandidatePreviewTests.W17Preview_…` | preview 场景内 driver 组件为空序列（偶发） | **真实缺陷**（Runtime 源码：一文件两个 MonoBehaviour，driver 无脚本资产） | 裁决请求 R-1（附补丁方案；根因已实测确证） | **已修**（`7e5dcfd4`），重建/重开两条路径均决定性通过 |
+| 3 | `W17W18NextCandidatePreviewTests.W18Preview_…` | 同上 | 同 #2 | 同 #2 | 同 #2 |
+| 4 | `W24S3BaselineContractTests.CaptureToolBundle_…` | `W24RealLightingModule.cs`/`VfxDesignContract.cs` sha256 与 pin 不符 | **需产品决策**（封存证据链有意 fail-closed） | 裁决请求 R-2 | **已重封**（`3d5ce862`，7 文件） |
+| 5 | `W24S6LocalReadOnlyFilesystemAdapterTests.DirectoryTarget_…` | 目录目标返回 `W24FS107`，期望 `W24FS109` | 陈旧断言（期望码在当前实现下不可达） | **已修**：改断言并加强为"真实 open 尝试 + 非常规谓词"双重校验（`b0903a96`） | 通过 |
+| 6 | `W24S6WorkerHandleAdmissionTests.SessionRevocation…NoNativeHandle` | 不透明面暴露 `SafeFileHandle` 签名 | **真实缺陷**（Editor 源码实例方法签名违反契约） | 裁决请求 R-3（附补丁方案） | **已修**（`5519688f`），零行为改动 |
+| 7 | `W24SustainedFlameProductionTests.CaptureToolBundle_…` | `VfxDesignContract.cs` sha256 与 pin 不符 | **需产品决策**（同 #4，且下游 111 文件受牵连） | 裁决请求 R-4 | **显式豁免**（`d76e29d4`，`[Ignore]` 计入跳过） |
+| 8 | `W24WorkflowTests.StatusRegistry_…` | 生成物清单中存在非 L2 条目 | **需产品决策**（注册表扫描契约 vs 已入库的分组目录布局） | 裁决请求 R-5 | **已定版**（`e4cd5158`，容器闭集 + 新负向测试） |
+| 9 | `W24S6WorkerBrokerSessionTests.TestOnlyBrokerHost…` | `HandleProbe.exe` 不存在 | 环境前置条件 | 说明前置条件（§3.7） | 通过（worktree 内已构建 Release HandleProbe） |
 
-已修 2 项（确定性归零并复跑验证），裁决请求 5 项（覆盖 6 个失败面，其中 1 项当前偶发通过），环境说明 1 项。
+首轮：已修 2 项、裁决请求 5 项、环境说明 1 项。返工轮：全部落地，**EditMode 0 失败**（详见 §6）。
 
 ## 3. 逐项 triage
 
@@ -205,7 +207,7 @@ powershell -NoProfile -ExecutionPolicy Bypass -File tools\Invoke-Unity.ps1 -Mode
 
 结论：**确定性修复 2 项（596→599 通过、8→5 失败）+ 豁免清单 5 项 + 偶发项 1 项（根因已确证）**。EditMode 未全绿，剩余项全部有根因与建议方案，按任务卡"修复 N 项 + 明确豁免清单"交付。
 
-## 5. 裁决请求清单（给主 agent）
+## 5. 裁决请求清单（首轮提出，全部已批准并落地——落地明细见 §6）
 
 | 编号 | 对象 | 请求 | 越界面 | 建议 |
 |---|---|---|---|---|
@@ -216,12 +218,106 @@ powershell -NoProfile -ExecutionPolicy Bypass -File tools\Invoke-Unity.ps1 -Mode
 | R-5 | `Editor/W24/Workflow/W24StatusRegistry.cs` | 定版"分组容器目录"扫描规则后实施 | 生产代码 + 契约语义 | 定版后另派任务 |
 | 附 | `docs/release/ERROR_CODES.md`（已改，提交 `149f30ef`） | 追认该文件的 allow-list 扩展 | 文档路径前缀越界 | 追认或单独回退 |
 
-## 6. 改动清单
+## 6. 返工轮：主 agent 裁决落地（2026-08-29）
+
+主 agent 对首轮 5 条裁决请求 + 1 条越界追认全部按建议方向批准。落地明细如下。
+
+### 6.1 越界追认
+
+`docs/release/ERROR_CODES.md` 的 14 码补登（`149f30ef`）**保留原样**，allow-list 越界已追认，无新动作。
+
+### 6.2 R-1：preview driver 独立脚本资产（已修）
+
+- `Runtime/W17W18NextCandidate/W17W18NextCandidatePreviewDriver.cs`（新增）：`W17W18NextCandidatePreviewDriver` 类逐字搬移，零逻辑改动；随之生成 `.cs.meta`（新 GUID）一并入库。
+- `Runtime/W17W18NextCandidate/W17W18NextCandidatePreview.cs`：删除该类，并移除随之不再使用的 `using System.Linq;`；`W17W18PreviewFamily` 与 `W17W18NextCandidateCell` 留在原文件，**GUID 不变**，既有引用不受影响。
+- 场景侧：两个 preview 场景是测试生成物（不入库），删除旧场景与增量标记后由 authoring 重建。重建后校验：两个场景的**内联 MonoScript 存根数 = 0、无 guid 的 `m_Script` 引用数 = 0**，driver 已按正常 `guid:11500000` 引用。
+- 决定性验证：①全量轮（先删场景 → authoring 重建 → 打开）两项通过；②随后单独重跑该 fixture（不删场景，直接从磁盘重开——即首轮偶发失败的那条路径）两项再次通过。偶发性消除。
+
+### 6.3 R-2：S3 侧最小重封（已执行）
+
+重封理由与影响面见提交 `3d5ce862` 的信息。实际改动 **7 个文件**（比首轮估算的 4 个多 3 个，原因是契约自哈希链）：
+
+| 文件 | 改动 |
+|---|---|
+| `docs/vfx-contracts/capture-tools/w24-s3-capture-tool.bundle.json` | 2 条 source pin 按真实文件字节刷新：`W24RealLightingModule.cs` `25dfda6c…`→`9208c260…`、`VfxDesignContract.cs` `536d17b0…`→`c430ad1a…` |
+| `docs/vfx-contracts/w24_moving_projectile_trail.contract.json` | `captureProfile.captureToolHash` `f605aacf…`→`c300573c…`；`contractHash` `93fce950…`→`22035428…` |
+| `docs/vfx-contracts/w24_weapon_socket_fragments.contract.json` | 同上；`contractHash` `88c752a1…`→`e011654d…` |
+| `docs/vfx-contracts/w24_real_light_receivers.contract.json` | 同上；`contractHash` `0a7b6c67…`→`fb54bb65…` |
+| `docs/vfx-traces/w24_moving_projectile_trail.implementation-trace.json` | `contractHash` 同步（`W24T003` 要求 trace 绑定精确契约哈希） |
+| `docs/vfx-traces/w24_weapon_socket_fragments.implementation-trace.json` | 同上 |
+| `docs/vfx-traces/w24_real_light_receivers.implementation-trace.json` | 同上 |
+
+链条：刷新 source pin → bundle 规范化哈希 `f605aacf…`→`c300573c…`（用生产 `RecipeCanonicalizer` 与独立离线实现双算，结果一致）→ 3 个契约的 `captureToolHash` → 3 个契约的自哈希（`contractHash`，由生产 `VfxDesignContractJson.ComputeContractHash` 计算，验证器 `W24C004` 强制）→ 3 个 trace 的 `contractHash`。所有哈希值均由 Unity 内生产代码计算，未手算；文件为定点文本替换，无重排版。
+
+未牵连：这 3 个契约的**文件哈希**未被任何 receipt/evidence/manifest pin（已全仓核对），因此没有 write-once 证据被改写。
+
+遗留（**不在本次 allow-list 扩展内，留主 agent 决定**）：3 篇文档仍以叙述形式记录重封前的旧哈希 `f605aacf…`——`docs/stage-notes/W24_S3_REPORT.md`、`docs/stage-notes/W24_MEASURED_FAILURE_SEALING_PREP.md`、`docs/vfx-reviews/W24_S3_GRAPHICS_CAPTURE_PRODUCER_REPORT.md` 与 `docs/vfx-reviews/W24_S3_TYPED_DIAGNOSTIC_ENTITY_PREP.md`（后两篇同时记录旧契约自哈希）。它们是阶段历史记录、无测试断言；若要求"文档不留旧值"，需再开一个纯文档提交。
+
+### 6.4 R-4：S0b 侧豁免落地（显式跳过）
+
+`W24SustainedFlameProductionTests.CaptureToolBundle_BindsTheExactS0bAuthoritySourceSet` 加 `[Ignore("R-4 exemption: …see docs/plans/UNITY_TEST_TRIAGE.md §3.4.")]`，并在方法上方写明豁免理由四要点（漂移早于仓库历史、被 pin 内容不可恢复、重封牵连 111 个下游 pin、主 agent 2026-08-29 豁免）与"不得削弱下方断言"的约束。**断言一条未删、容差一处未放宽**，跳过在 NUnit 结果里以 `Skipped:Ignored` 可见。
+
+### 6.5 R-3：句柄面枚举化（已修）
+
+`Editor/W24/S6/Worker/W24S6WorkerHandleAdmission.cs`：新增私有 `enum LeaseRoot { Repository, ProjectRoot }`，`TryReadRelative` 的首参由 `SafeFileHandle` 改为 `LeaseRoot`，句柄在 `disposeGate` 锁内解析（`root == LeaseRoot.Repository ? repositoryHandle : projectRootHandle`）。两个 `internal` 读取入口改为传枚举。行为零改动；未用"改 static 规避枚举"的绕过手法。
+
+### 6.6 R-5：容器目录闭集定版（已落地）
+
+`Editor/W24/Workflow/W24StatusRegistry.cs` 新增两个显式闭集（共三个名字，与裁决一致）：
+
+| 闭集 | 成员 | 语义 |
+|---|---|---|
+| `EffectContainerDirectories` | `W11W13NextCandidate`、`W15NextCandidate` | 自身名字不是 effectId、自身免同名清单要求、**永不作为条目登记**；扫描下探恰好一层，每个子目录照常按 effectId 三重校验（存在性/GUID/SHA-256）。实测新增 30 个条目（20 + 10），全部 L2 通过 |
+| `SeparatelyManifestedDirectories` | `W17W18NextCandidate` | 其产物由 `NextCandidateManifest.json` 方案自持（子目录是 `W17`/`W18`/`Shared` 分包层，本就不进 S0a BuildManifest 注册表），故声明并整体跳过、不下探；其校验由 `W17W18NextCandidate*` 测试负责 |
+
+**闭集之外一切照旧 fail-closed**：任何未声明目录缺同名清单仍是 L0；容器**内部**的子目录缺清单同样是 L0（不因身处容器而豁免）。
+
+> 与裁决字面的一处细化：裁决把三个名字放在同一个"容器闭集"里并要求"其下子目录照常按 effectId 规则校验"。实测 `W17W18NextCandidate` 的直接子目录是 `W17`/`W18`/`Shared` 三个分包层而非 effectId，下探一层必然产生 3 个 L0 条目，无法归零；故拆成"下探型容器"与"自持清单型容器"两个闭集，两者都是显式闭集、规则均为收紧。若主 agent 要求单一闭集，需另定"分包层"判定规则。
+
+测试侧（`Tests/EditMode/W24WorkflowTests.cs`）：
+- 原用例 `StatusRegistry_RegistersAllGeneratedEntriesAsProvisionalWithoutVisualClaim` 追加两条断言：任何已声明容器名都不得作为条目出现；`w11nc_ambient_dust_volume`、`w13nc_blade_tempest_ultimate_3d`（入库的容器子目录）必须出现在登记中。
+- 新增 `StatusRegistry_DeclaredContainersAreNotEffectsAndEverythingElseStillFailsClosed`：用临时目录固化闭集内容、容器子目录登记、自持清单容器整体跳过、以及"容器内缺清单的子目录与未声明目录一律 L0"。
+
+### 6.7 环境前置条件（#9）
+
+按裁决在 worktree 内构建：
+
+```
+dotnet build services\VFXComposer.Broker.HandleProbe\VFXComposer.Broker.HandleProbe.csproj -c Release
+```
+
+结果 0 warning / 0 error（本地批准 feed 复制到 worktree 的 `.codex_tmp/`，`.codex_tmp/` 在 `.gitignore` 内、不入库）。`W24S6WorkerBrokerSessionTests.TestOnlyBrokerHostCompletesFourReadsAndContentMismatchBeforeRevoke` 随之通过。**.NET 工程零改动**（仅构建）。
+
+### 6.8 返工轮最终 EditMode 数字
+
+```
+powershell -NoProfile -ExecutionPolicy Bypass -File tools\Invoke-Unity.ps1 -Mode EditMode -TimeoutSeconds 2400
+```
+
+| 轮次 | total | 通过 | 失败 | 跳过 | 退出码 | 测试时长 |
+|---|---|---|---|---|---|---|
+| 首轮复现（O3 基线对照） | 657 | 596 | 8 | 53 | 3（结果闸） | 493.7 s |
+| 首轮修复后 | 657 | 599 | 5 | 53 | 3（结果闸） | 498.3 s |
+| **返工轮** | **658** | **604** | **0** | **54** | **0** | 514.6 s |
+
+- `total` 由 657 增至 658：R-5 新增的 1 条负向测试。
+- `skipped` 由 53 增至 54：**其中 1 条是 R-4 显式豁免**（`W24SustainedFlameProductionTests.CaptureToolBundle_BindsTheExactS0bAuthoritySourceSet`，`Skipped:Ignored`），其余 53 条与基线一致。
+- `failed = 0`，脚本结果闸返回 exit code 0（`result=Skipped:Ignored`）。
+
+补充验证：随后单独重跑 `W17W18NextCandidatePreviewTests`（从磁盘重开场景，不重建）→ 2/2 通过，确认 R-1 消除了偶发性。
+
+## 7. 改动清单（两轮合计）
 
 | 提交 | 文件 | 说明 |
 |---|---|---|
-| `b0903a96` | `project/Packages/com.vfxcomposer.unity/Tests/EditMode/W24S6LocalReadOnlyFilesystemAdapterTests.cs` | 目录目标拒绝码断言对齐 + 两条加强断言 |
+| `b0903a96` | `project/…/Tests/EditMode/W24S6LocalReadOnlyFilesystemAdapterTests.cs` | 目录目标拒绝码断言对齐 + 两条加强断言 |
 | `149f30ef` | `docs/release/ERROR_CODES.md` | 补登 `E1930`–`E1943` 共 14 个错误码 |
-| （本文件） | `docs/plans/UNITY_TEST_TRIAGE.md` | triage 报告 |
+| `6141c6f9` | `docs/plans/UNITY_TEST_TRIAGE.md` | 首轮 triage 报告 |
+| `5519688f` | `project/…/Editor/W24/S6/Worker/W24S6WorkerHandleAdmission.cs` | R-3 `LeaseRoot` 枚举替换句柄参数 |
+| `d76e29d4` | `project/…/Tests/EditMode/W24SustainedFlameProductionTests.cs` | R-4 `[Ignore]` 显式豁免 |
+| `e4cd5158` | `project/…/Editor/W24/Workflow/W24StatusRegistry.cs`、`project/…/Tests/EditMode/W24WorkflowTests.cs` | R-5 容器闭集定版 + 测试 |
+| `3d5ce862` | `docs/vfx-contracts/capture-tools/w24-s3-capture-tool.bundle.json`、3 × `docs/vfx-contracts/w24_*.contract.json`、3 × `docs/vfx-traces/w24_*.implementation-trace.json` | R-2 S3 重封（7 文件） |
+| `7e5dcfd4` | `project/…/Runtime/W17W18NextCandidate/W17W18NextCandidatePreview.cs`、`…/W17W18NextCandidatePreviewDriver.cs`(+`.meta`) | R-1 driver 类拆分为独立脚本资产 |
+| （本次） | `docs/plans/UNITY_TEST_TRIAGE.md` | 返工轮结论与最终数字 |
 
-.NET 侧零改动；未降低任何测试的严格度（唯一改动的断言由 1 条变为 3 条）。
+合计 15 个文件（Unity 包 6、契约/trace 7、`docs/release` 1、`docs/plans` 1）。**.NET 侧零文件改动**；未删除任何断言、未放宽任何容差；唯一的跳过是 R-4 的显式可见豁免。测试运行造成的 257 个 `dependencyHash` 漂移文件已 `git checkout -- project` 还原，未进入任何提交（该漂移本身仍是 F2 的前置议题，见 §3.7-1）。
