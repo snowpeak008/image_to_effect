@@ -21,6 +21,8 @@ public static class AiDesktopRuntimeFactory
         return new ProviderDesktopRuntime(
             new ProviderConfigurationStore(Path.Combine(root, "providers.json")),
             new ProviderSecretStore(Path.Combine(root, "secrets")),
-            new ProviderHealthRegistry());
+            new ProviderHealthRegistry(),
+            privateImageTempRoot: null,
+            recipeDraftStorePath: Path.Combine(root, "recipe-drafts.json"));
     }
 }
