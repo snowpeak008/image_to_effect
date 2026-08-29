@@ -174,6 +174,44 @@ public sealed class JobStoreTests
     }
 
     [TestMethod]
+    public void ArtifactsBeyondTheBoundedCountAreRejectedAndLeaveTheJobUntouched()
+    {
+        var store = new JobStore(JobQueueTestHarness.CreateStoreDirectory());
+        var job = store.Enqueue(JobQueueTestHarness.Request());
+        store.TryClaim(job.JobId);
+        for (var index = 0; index < JobRecord.MaximumArtifactCount; index++)
+        {
+            store.AppendArtifact(job.JobId, "artifact-" + index);
+        }
+
+        Assert.ThrowsExactly<ArgumentOutOfRangeException>(
+            () => store.AppendArtifact(job.JobId, "artifact-overflow"));
+
+        var current = JobQueueTestHarness.GetJob(store, job.JobId);
+        Assert.AreEqual(JobRecord.MaximumArtifactCount, current.ArtifactIds.Count);
+        CollectionAssert.DoesNotContain(current.ArtifactIds.ToArray(), "artifact-overflow");
+        Assert.AreEqual(
+            JobRecord.MaximumArtifactCount,
+            store.ReadEvents(job.JobId).Count(e => e.Kind == JobStoreEventKinds.Artifact),
+            "A rejected artifact must not leave an event behind.");
+    }
+
+    [TestMethod]
+    public void PayloadBeyondTheBoundedLengthIsRejectedBeforeItReachesTheStore()
+    {
+        var store = new JobStore(JobQueueTestHarness.CreateStoreDirectory());
+        var atBound = new string('p', JobRecord.MaximumPayloadLength);
+        var accepted = store.Enqueue(JobQueueTestHarness.Request(payload: atBound));
+
+        Assert.ThrowsExactly<ArgumentOutOfRangeException>(
+            () => JobQueueTestHarness.Request(payload: atBound + "p"));
+
+        var jobs = store.ReadSnapshot().Jobs;
+        Assert.AreEqual(1, jobs.Count, "The rejected submission must never reach the store.");
+        Assert.AreEqual(accepted.JobId, jobs[0].JobId);
+    }
+
+    [TestMethod]
     public void ResubmitCreatesAFreshJobWithTheSameEntryKeyAndLeavesTheOriginalUntouched()
     {
         var store = new JobStore(JobQueueTestHarness.CreateStoreDirectory());

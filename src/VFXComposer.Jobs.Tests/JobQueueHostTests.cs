@@ -315,6 +315,86 @@ public sealed class JobQueueHostTests
     }
 
     [TestMethod]
+    public async Task AHostSideIoFaultSettlesTheJobWithTheHostFaultCodeAndKeepsTheQueueDraining()
+    {
+        var store = new JobStore(JobQueueTestHarness.CreateStoreDirectory());
+        var executed = new List<string>();
+        var executor = new DelegateJobExecutor("test.job", (context, _) =>
+        {
+            lock (executed)
+            {
+                executed.Add(context.Payload);
+            }
+
+            return Task.CompletedTask;
+        });
+        var blocked = store.Enqueue(JobQueueTestHarness.Request(payload: "blocked"));
+        var survivor = store.Enqueue(JobQueueTestHarness.Request(payload: "survivor"));
+
+        // A real IO fault instead of an injected seam: a file occupies the exact path of the
+        // job's scratch directory, so the loop's Directory.CreateDirectory throws IOException,
+        // which is not a JobQueueException and used to fault the loop task outright.
+        var scratchPath = store.GetTemporaryDirectory(blocked.JobId);
+        Directory.CreateDirectory(Path.GetDirectoryName(scratchPath)!);
+        await File.WriteAllTextAsync(scratchPath, "occupied");
+
+        var host = new JobQueueHost(store, [executor], JobQueueTestHarness.FastOptions);
+        host.Start();
+        await JobQueueTestHarness.WaitUntilAsync(() =>
+            JobQueueTestHarness.GetJob(store, survivor.JobId).State == JobStatusStates.Succeeded);
+
+        var settled = JobQueueTestHarness.GetJob(store, blocked.JobId);
+        Assert.AreEqual(JobStatusStates.Failed, settled.State, "A host-side fault must settle the claimed job.");
+        Assert.AreEqual(JobQueueDiagnosticCodes.ExecutorHostFault, settled.FinalDiagnosticCode);
+        CollectionAssert.AreEqual(
+            new[] { "survivor" },
+            executed,
+            "The faulted job never reaches its payload, and the next job runs normally.");
+
+        await host.DisposeAsync();
+
+        // Teardown neither hangs nor rethrows, and the executor lease was really released.
+        await using var successor = new JobQueueHost(store, [executor], JobQueueTestHarness.FastOptions);
+        successor.Start();
+        Assert.IsTrue(successor.IsExecuting);
+    }
+
+    [TestMethod]
+    public async Task AHostWithoutPayloadExecutorsNeitherClaimsJobsNorTakesTheExecutorLock()
+    {
+        var store = new JobStore(JobQueueTestHarness.CreateStoreDirectory());
+        var job = store.Enqueue(JobQueueTestHarness.Request());
+
+        var observer = new JobQueueHost(store, Array.Empty<IJobExecutor>(), JobQueueTestHarness.FastOptions);
+        observer.Start();
+        try
+        {
+            Assert.IsFalse(observer.IsExecuting, "A host with no executors must never own queue execution.");
+            await Task.Delay(250);
+            Assert.AreEqual(
+                JobStatusStates.Queued,
+                JobQueueTestHarness.GetJob(store, job.JobId).State,
+                "An observer must not claim a job it could never execute.");
+            Assert.IsFalse(
+                File.Exists(store.ExecutorLockPath),
+                "An observer must not even create the executor lock anchor.");
+
+            // The entry surface that does have an executor takes over while the observer is live.
+            var executor = new DelegateJobExecutor("test.job", (_, _) => Task.CompletedTask);
+            await using var worker = new JobQueueHost(store, [executor], JobQueueTestHarness.FastOptions);
+            worker.Start();
+
+            Assert.IsTrue(worker.IsExecuting);
+            await JobQueueTestHarness.WaitUntilAsync(() =>
+                JobQueueTestHarness.GetJob(store, job.JobId).State == JobStatusStates.Succeeded);
+        }
+        finally
+        {
+            await observer.DisposeAsync();
+        }
+    }
+
+    [TestMethod]
     public async Task AbortBatchPolicyCancelsTheRemainingQueuedBatchJobs()
     {
         var store = new JobStore(JobQueueTestHarness.CreateStoreDirectory());
