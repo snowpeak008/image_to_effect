@@ -1,4 +1,5 @@
 using System.Text.Json;
+using System.Text.Json.Nodes;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using VFXComposer.AI.Contracts;
 using VFXComposer.AI.Contracts.Chat;
@@ -151,6 +152,28 @@ public sealed class RecipeGenerationServiceTests
     }
 
     [TestMethod]
+    public async Task BothRequestFormsAgreeOnTheCanonicalHashOfTheSameRecipe()
+    {
+        var reshaped = ReorderedAndIndented(ValidRecipeJson);
+        Assert.AreNotEqual(ValidRecipeJson, reshaped, "The two transport shapes must differ textually for this comparison to mean anything.");
+
+        var plainTextGateway = new FakeChatChannelGateway();
+        plainTextGateway.EnqueueText("```json\n" + reshaped + "\n```");
+        var plainText = await new RecipeGenerationService(() => plainTextGateway).GenerateAsync(Request());
+
+        var structuredGateway = new FakeChatChannelGateway();
+        structuredGateway.EnqueueStructured(ValidRecipeJson);
+        var structured = await new RecipeGenerationService(() => structuredGateway)
+            .GenerateAsync(Request(form: RecipeRequestForm.StructuredOutput));
+
+        Assert.AreEqual(RecipeGenerationOutcome.Drafted, plainText.Outcome);
+        Assert.AreEqual(RecipeGenerationOutcome.Drafted, structured.Outcome);
+        Assert.AreEqual(plainText.Draft!.CanonicalSha256, structured.Draft!.CanonicalSha256);
+        Assert.AreEqual(plainText.Draft.RecipeJson, structured.Draft.RecipeJson);
+        Assert.AreEqual(plainText.Draft.RecipeId, structured.Draft.RecipeId);
+    }
+
+    [TestMethod]
     public async Task ThePromptEmbedsTheCatalogButNeverLeaksIntoDiagnostics()
     {
         var gateway = new FakeChatChannelGateway();
@@ -170,6 +193,29 @@ public sealed class RecipeGenerationServiceTests
         int retryLimit = RecipeChannelLimits.DefaultRetryLimit,
         RecipeRequestForm form = RecipeRequestForm.PlainText) =>
         new(Guid.NewGuid().ToString("N"), "synthetic effect description", retryLimit, form);
+
+    /// <summary>Rewrites the same recipe with reversed object key order and indentation.</summary>
+    private static string ReorderedAndIndented(string json) =>
+        Reorder(JsonNode.Parse(json)!).ToJsonString(new JsonSerializerOptions { WriteIndented = true });
+
+    private static JsonNode Reorder(JsonNode node)
+    {
+        switch (node)
+        {
+            case JsonObject obj:
+                var reordered = new JsonObject();
+                foreach (var property in obj.ToList().AsEnumerable().Reverse())
+                {
+                    reordered[property.Key] = property.Value is null ? null : Reorder(property.Value);
+                }
+
+                return reordered;
+            case JsonArray array:
+                return new JsonArray(array.Select(static item => item is null ? null : Reorder(item)).ToArray());
+            default:
+                return JsonNode.Parse(node.ToJsonString())!;
+        }
+    }
 
     private sealed class FakeChatChannelGateway : IChatChannelGateway
     {
