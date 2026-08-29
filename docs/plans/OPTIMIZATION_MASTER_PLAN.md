@@ -157,6 +157,7 @@ flowchart LR
 - 目标：把 recipe 草稿交给 Unity 侧编译器构建 Prefab。执行体按 ADR-007 裁决：用户显式触发的 Unity batchmode 短生命进程（扩展 `Invoke-Unity.ps1` 纪律），不复用只读链路、不给 Worker 加写权限；写入面为封闭清单 `Assets/VFX/Generated/**` + `ProjectSettings/VFXComposer/BuildManifests/*.manifest.json`，`Assets/VFX/Shared` 构建期只读。
 - 范围（ADR-007 裁决）：首版限 v1 `VfxCompiler` 模板域；`Impact2DCompiler`/`Area2DCompiler` 因无条件 `Ensure()` 覆盖 Shared，在提供只验证模式前不进 AI 构建范围。
 - 开工前置决策（来自 R4）：生产闸走 `BuildProduction`（含 `W24S5ProductionGateRequest`）还是新增等价受限入口；由主 agent 在派发时定版。
+- 开工前置决策（来自 O4，2026-08-29）：一次 EditMode 全量会改写 257 个已跟踪文件（194 个 BuildManifest 的 `dependencyHash` + 62 生成物 + `EditorBuildSettings.asset`），该哈希是机器相关导入产物哈希。F2 设计时必须先定版清单可移植性策略（候选：`dependencyHash` 移出入库清单、构建后还原纪律、或哈希规范化），并让"生成区零 diff"断言在该策略下可判定。
 - 验收标准：一个样例 recipe 端到端产出 Prefab；越界路径写入被拒绝且有测试（含 Windows 保留名等负向用例）。
 
 **F3 Jobs 串行队列**（依赖 P0-1、R3）
@@ -201,7 +202,7 @@ flowchart LR
 | O1 | DONE | 开发子 agent | 主 agent 验收 PASS（.gitignore 补齐、空目录清理、退役清单交付；worktree/分支退役延后到 O2/O3 合并后执行，`codex/m1`、`codex/m2` 两个未并入分支暂保留） |
 | O2 | DONE | 开发子 agent | 主 agent 验收 PASS（脚本三条路径实测；`-SkipLockedRestore` 为 O3 修复前过渡开关，O3 合并后停用） |
 | O3 | DONE | 开发子 agent | 验收 PASS 并合并（`1aba917f`）：锁修复无版本变化、锁定 restore 18/18、450/450 独立复核一致；轻闸 `-SkipLockedRestore` 不再需要 |
-| O4 | DISPATCHED | 开发子 agent | Unity 8 个既有测试失败 triage（F2 前置）。首个实例开工即卡死（疑受 19:00 worktree 事故波及），20:20 已重派至新 worktree `D:\wt\i2s-o4b`（分支 task/O4b-unity-test-triage） |
+| O4 | DELIVERED | 开发子 agent | 返工轮中。首轮交付：2 项已修（错误码清单补登 14 码、W24FS107 断言修正且严格度上升），EditMode 596→599 通过。主 agent 裁决（2026-08-29）：①ERROR_CODES.md 越界追认批准；②R-1 批准拆分 driver 类到独立文件（纯搬移）；③R-2 批准 S3 侧最小重封（约 4 文件，allow-list 相应扩展）；④R-4 sustained flame pin 豁免（漂移早于仓库历史、重封牵连 111 文件）——测试以显式 Ignore + 理由注释落地，指向 TRIAGE 文档；⑤R-3 批准 LeaseRoot 枚举替换句柄参数（零行为改动）；⑥R-5 定版：注册表维护显式容器目录闭集（当前 3 个名字），容器自身免同名清单、其子目录照常校验，未知无清单目录仍 fail-closed。⑦dependencyHash 漂移记入 F2 开工前置决策 |
 | F1 | DONE | 开发子 agent | 独立审计 PASS（复跑：锁定 restore 18/18、构建 0/0、全量 483/483 全绿、24 文件全部在 allow-list）；合并 `fd7b508f` 并推送；worktree 与分支已退役。3 条非阻塞建议见下 |
 | F3 | DONE | 开发子 agent | 独立审计 PASS（合并态复跑 532/532 全绿、构建 0/0、46 文件全在 allow-list、共享文件纯加法）；合并 `2b71eb9` 已推送；worktree/分支已退役。**REQ-003-12 裁决：条件豁免成立**——Worker 取消映射分支仅在 F2 弃 batchmode 改走 Worker 路线时才需交付，batchmode 分支（精确 PID 终止+临时目录清理）已交付有测试；若未来 Worker 化需重开条目 |
 | F3b | DONE | 开发子 agent | 主 agent 初审 PASS（小任务免独立审计）：7 文件全在 allow-list，合并态 538/538 全绿、构建 0/0，交付含反向变异验证；新增 VFXJ0016；零 executor 宿主定版为纯观察者（不取锁不恢复不领取）。合并 `e36d5a8d` 已推送，worktree/分支已退役 |
