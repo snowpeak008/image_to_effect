@@ -218,7 +218,7 @@ flowchart LR
 | F4 | DONE | 开发子 agent | 独立审计 PASS（合并态 625/625 全绿、36 文件纯新增、退出码 8 码逐码测试、路径逃逸 9 形态负向、6 条已知限制核实属实）；合并 `9d4e23ed` 已推送；worktree/分支已退役 |
 | F3c | DONE | 开发子 agent | 主 agent 初审 PASS（9 文件全在 allow-list，合并态 635/635 全绿、构建 0/0）：store schema 升版 `/2`（版本 1 按 VFXJ0009 fail-closed，itemId 不可恢复故不做兼容读取）、`JobRecord` 纯加法 API（Batch.Core/Cli 零改动通过编译）、Jobs 页两态展示。合并 `c24c9de7` 已推送，worktree/分支已退役。注意：开发机旧 job store 首次读取会拒绝，删除 `%LocalAppData%\VFXComposer\Jobs` 重建即可 |
 | F5 | DONE | 开发子 agent | 独立审计 PASS（Release 复跑 692/692 全绿、真实管道冒烟 6 项符合预期、39 文件全在 allow-list、零新 NuGet）；合并 `0a5b918f` 已推送，worktree/分支已退役。台账补正：F5 实为 **4 笔提交**（含首笔 `60fdd80a` 批次取消执行层）。工具数裁决：8 个正确（任务卡"5+1=6"系主 agent 起草笔误，REQ-002-10 已勘误为 8）。**验收注意：测试复跑必须用 Release 配置**——Debug 下 Broker/LocalE2E 38 条会因 U4FS001（校验器要求 Release Broker.exe）失败，属既有设计非缺陷 |
-| F2 | IN_PROGRESS | 开发子 agent | 首轮按"不可行则停手"条款正确停手（交付 F1 审计建议①的哈希互比测试 `97312cd4`，693/693 全绿）：报告两个真实阻塞（`BuildProduction` 无可达成功路径；strict E8014 与项目外暂存矛盾）+ 三候选方案。主 agent 裁决采纳方案 A（ADR-007 升 v1.2 增补写入面成员 3，构建走 legacy `Build` + 计划绑定提交），已续派同一 agent 继续（worktree `D:\wt\i2s-f2` 与分支保留） |
+| F2 | DELIVERED | 开发子 agent | 审计中（本地集成合并 `8b36fb6f` 未推送）。首轮按"不可行则停手"条款正确停手（两个真实阻塞 + 三候选方案，主 agent 裁决采纳方案 A → ADR-007 v1.2）；续派后完成交付：端到端主流程连通（`vfxc batch run` → Unity batchmode → strict 特效三件套，零越界、强制重跑字节一致），.NET 733/733（+40）、EditMode 684=630/0/54（+26），44 文件全在 allow-list，禁区零改动。7 条已知限制待审计核实，其中⑥指出 EditMode 全量污染并非全部 dependencyHash-only（部分 prefab 因 Runtime 序列化字段连锁重写），主计划还原纪律表述待 F6 前修正措辞 |
 | F6 | BLOCKED | — | 等 F2（F5/F3c 已完成） |
 
 已知非阻塞遗留（P0-1 交付报告）：①`services/VFXComposer.Broker.HandleProbe` 与 `services/VFXComposer.Broker.Tests` 的 `packages.lock.json` 自 baseline 起与引用图不同步（归入 O3）；②`.gitignore` 未覆盖 `tests/**` 构建产物（归入 O1）。
