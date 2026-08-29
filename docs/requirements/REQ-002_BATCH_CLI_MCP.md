@@ -294,7 +294,7 @@ MCP 客户端可用的能力 = 当前用户在本机能用 CLI 做的事，不�
 | REQ-002-07 | 批次报告 `vfxcomposer.batch-report/1` 落盘，逐条含 outcome/诊断/产物 identity 计数 | P0 |
 | REQ-002-08 | CLI 输出、MCP 返回、报告、日志四处均无 prompt 原文、secret、raw endpoint、项目绝对路径；有负向测试 | P0 |
 | REQ-002-09 | MCP server 仅 stdio transport；不创建任何网络 listener；无参数启动 fail-closed | P0 |
-| REQ-002-10 | MCP 工具集为 §7.2 的 7 个闭集工具；参数有界、未知字段拒绝 | P0 |
+| REQ-002-10 | MCP 工具集为 §7.2 的 7 个闭集工具 + §6.2 勘误新增的 `vfx_cancel_batch`，共 8 个（勘误 2026-08-29）；参数有界、未知字段拒绝 | P0 |
 | REQ-002-11 | 每个 MCP 工具与对应 CLI 命令调用同一执行层 API；同输入产生等价队列条目与报告，有一致性测试 | P0 |
 | REQ-002-12 | 工具/命令面不存在任何 authority/approval/skip 参数；传入即拒绝并返回稳定错误码 | P0 |
 | REQ-002-13 | 清单序 = 入队序 = 执行序；并发提交多批次时批间也严格串行（队列全局 FIFO，REQ-003） | P0 |

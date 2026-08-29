@@ -208,7 +208,7 @@ flowchart LR
 | F3b | DONE | 开发子 agent | 主 agent 初审 PASS（小任务免独立审计）：7 文件全在 allow-list，合并态 538/538 全绿、构建 0/0，交付含反向变异验证；新增 VFXJ0016；零 executor 宿主定版为纯观察者（不取锁不恢复不领取）。合并 `e36d5a8d` 已推送，worktree/分支已退役 |
 | F4 | DONE | 开发子 agent | 独立审计 PASS（合并态 625/625 全绿、36 文件纯新增、退出码 8 码逐码测试、路径逃逸 9 形态负向、6 条已知限制核实属实）；合并 `9d4e23ed` 已推送；worktree/分支已退役 |
 | F3c | DONE | 开发子 agent | 主 agent 初审 PASS（9 文件全在 allow-list，合并态 635/635 全绿、构建 0/0）：store schema 升版 `/2`（版本 1 按 VFXJ0009 fail-closed，itemId 不可恢复故不做兼容读取）、`JobRecord` 纯加法 API（Batch.Core/Cli 零改动通过编译）、Jobs 页两态展示。合并 `c24c9de7` 已推送，worktree/分支已退役。注意：开发机旧 job store 首次读取会拒绝，删除 `%LocalAppData%\VFXComposer\Jobs` 重建即可 |
-| F5 | DISPATCHED | 开发子 agent | MCP stdio 入口（底座定版：手写 JSON-RPC），随卡收纳 F4 审计建议 ①②③ |
+| F5 | DELIVERED | 开发子 agent | 审计中（39 文件，已本地集成合并 `0a5b918f`，未推送：构建 0/0，合并态 692/692 全绿，Mcp.Tests 44 + Cli.Tests 100）。工具数裁决：8 个正确（任务卡"5+1=6"系主 agent 起草笔误，REQ-002 §7.2 实为 7 个，REQ-002-10 已勘误为 8） |
 | F2/F6 | BLOCKED | — | F2 等 O4（F1 已完成）；F6 等 F2/F5/F3c |
 
 已知非阻塞遗留（P0-1 交付报告）：①`services/VFXComposer.Broker.HandleProbe` 与 `services/VFXComposer.Broker.Tests` 的 `packages.lock.json` 自 baseline 起与引用图不同步（归入 O3）；②`.gitignore` 未覆盖 `tests/**` 构建产物（归入 O1）。
