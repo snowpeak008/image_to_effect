@@ -208,7 +208,7 @@ flowchart LR
 | F3b | DONE | 开发子 agent | 主 agent 初审 PASS（小任务免独立审计）：7 文件全在 allow-list，合并态 538/538 全绿、构建 0/0，交付含反向变异验证；新增 VFXJ0016；零 executor 宿主定版为纯观察者（不取锁不恢复不领取）。合并 `e36d5a8d` 已推送，worktree/分支已退役 |
 | F4 | DONE | 开发子 agent | 独立审计 PASS（合并态 625/625 全绿、36 文件纯新增、退出码 8 码逐码测试、路径逃逸 9 形态负向、6 条已知限制核实属实）；合并 `9d4e23ed` 已推送；worktree/分支已退役 |
 | F3c | DONE | 开发子 agent | 主 agent 初审 PASS（9 文件全在 allow-list，合并态 635/635 全绿、构建 0/0）：store schema 升版 `/2`（版本 1 按 VFXJ0009 fail-closed，itemId 不可恢复故不做兼容读取）、`JobRecord` 纯加法 API（Batch.Core/Cli 零改动通过编译）、Jobs 页两态展示。合并 `c24c9de7` 已推送，worktree/分支已退役。注意：开发机旧 job store 首次读取会拒绝，删除 `%LocalAppData%\VFXComposer\Jobs` 重建即可 |
-| F5 | DELIVERED | 开发子 agent | 审计中（39 文件，已本地集成合并 `0a5b918f`，未推送：构建 0/0，合并态 692/692 全绿，Mcp.Tests 44 + Cli.Tests 100）。工具数裁决：8 个正确（任务卡"5+1=6"系主 agent 起草笔误，REQ-002 §7.2 实为 7 个，REQ-002-10 已勘误为 8） |
+| F5 | DONE | 开发子 agent | 独立审计 PASS（Release 复跑 692/692 全绿、真实管道冒烟 6 项符合预期、39 文件全在 allow-list、零新 NuGet）；合并 `0a5b918f` 已推送，worktree/分支已退役。台账补正：F5 实为 **4 笔提交**（含首笔 `60fdd80a` 批次取消执行层）。工具数裁决：8 个正确（任务卡"5+1=6"系主 agent 起草笔误，REQ-002-10 已勘误为 8）。**验收注意：测试复跑必须用 Release 配置**——Debug 下 Broker/LocalE2E 38 条会因 U4FS001（校验器要求 Release Broker.exe）失败，属既有设计非缺陷 |
 | F2/F6 | BLOCKED | — | F2 等 O4（F1 已完成）；F6 等 F2/F5/F3c |
 
 已知非阻塞遗留（P0-1 交付报告）：①`services/VFXComposer.Broker.HandleProbe` 与 `services/VFXComposer.Broker.Tests` 的 `packages.lock.json` 自 baseline 起与引用图不同步（归入 O3）；②`.gitignore` 未覆盖 `tests/**` 构建产物（归入 O1）。
@@ -216,6 +216,8 @@ flowchart LR
 F1 审计非阻塞建议（后续任务顺带处理）：①补一条直接互比 PlainText/StructuredOutput 两形态哈希的测试（可并入 F2）；②`CreateViewModel` 的 `SendChatAsync`/`GenerateRecipeAsync` 末尾裸 `catch` 无稳定错误码——master 既有风格，统一治理另立小任务；③Desktop 侧未来可自动优选 `StructuredOutput` 形态（增强，非需求）。
 
 F3 审计非阻塞建议处置：建议 1/2/4/6/7 收进 F3b 任务卡；建议 3（执行器锁跨进程真杀测试，可仿 `RevisionLockHost` 先例）留给 F6 端到端验收裁量；建议 5（Jobs 页批次分组折叠交互）登记为 v1 已知限制，不排期；建议 8（lock 文件末行换行）为 NuGet 生成物，忽略。
+
+F5 审计非阻塞建议处置（11 条）：①`BatchQueueReportBuilder.EntryLabel` 改 `job.ItemId ?? job.JobId` 并修正失实注释（F3c 已落 ItemId）→ **F6 必做**（决定 `vfx_get_batch_report` 满足 REQ-003 §9.1）；②等价性测试改构造性（反射遍历 + 显式排除清单）→ F6；⑤IL 扫描面纳入 `vfxc`/`vfxc-mcp` 装配体（与 F4 建议⑤合并）→ F6；⑥MCP 侧 validate 零网络测试 → F6；③batchId `single-` 前缀无保留机制（注释断言过强，实际风险低）、④派生清单 onFailure 无断言、⑦Ctrl+C 假象、⑧initialize 必需成员按可选处理、⑨常量重复 → F6 裁量；⑩状态板已补正 4 提交；⑪一文件多类型与仓库既有风格一致，不计违规。
 
 F4 审计非阻塞建议处置：①批次级取消（REQ-002 内部不一致，已记勘误）→ F5 任务卡；②Pending 退出码显式映射 → F5；③notice 附带 VFXJ 稳定码 → F5；④ValidationFailed/ChannelFailed 区分码（需 Jobs 新码）→ F6 裁量；⑤生产组合根零网络真实用例 → F6；⑥`Cli.csproj` 引用 `AI.Providers` 记为**有意偏离**（组合根需绑定 `AiDesktopRuntimeFactory` 门面，`Batch.Core` 保持干净；若 F5 遇到同样问题再考虑抽独立装配体）；⑦argv 回显有界，无动作；⑧F6 allow-list 应纳入 `batches/` 样例清单与 schema。F4 已知限制 1（JobRecord 无 itemId）→ 新任务卡 F3c。
 
