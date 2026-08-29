@@ -3,6 +3,8 @@
 > **CURRENT CLOSEOUT — U6 FINAL GO / A0–A6 CLOSED — FINAL ACCEPTED/GO (2026-08-29).** ADR-005's ordinary-user route is closed at `100/100`; ADR-006's AI two-channel scope is independently accepted at `100/100`, with `P0/P1/P2=0/0/0`. No AI work package is active; later AI requirements require a new milestone. The retained pre-U0 plan below is historical provenance only: its Service/SCM/privileged nodes are not current dependencies, blockers, implementation work, or audit work.
 >
 > Normative tokens: `USER_MODE_LOCAL_CREATIVE_TOOL_V1` and `AI_PROVIDER_TWO_CHANNEL_ROUTING_V1`.
+>
+> Forward development: sequencing for all new work is owned solely by `docs/plans/OPTIMIZATION_MASTER_PLAN.md` (the post-closeout P0/R/O/F milestone series). Day-to-day task acceptance follows `docs/plans/CODING_STANDARDS.md`; per-task receipts are no longer required, and `eng/run-phase2-gate.ps1` is retained as a milestone-level quality gate only.
 
 ## Current user-mode closeout and post-U6 AI plan
 
@@ -62,6 +64,8 @@ A6 `WP-AI-PROVIDER-FINAL-AUDIT` is `CLOSED — FINAL ACCEPTED/GO — P0/P1/P2=0/
 ---
 
 ## Historical pre-U0 plan (superseded for product delivery)
+
+> Historical — superseded by U6/A6 closeout. Every section below is retained provenance frozen at its stated dates. Any `PHASE_..._IN_PROGRESS`, `[IN PROGRESS]`, `[NOT STARTED]`, `NO_GO`, "pending audit", or deferred/blocked statement below describes the retired pre-U0 privileged route only; no pre-U0 phase or package is active, schedulable, or blocking.
 
 Date: 2026-08-26; production-read architecture freeze: 2026-08-28  
 Architecture authority: `docs/rules/ADR-002_STANDALONE_DESKTOP_UNITY_WORKER_BROKER.md`; `docs/rules/ADR-004_WINDOWS_BROKER_INSTALLATION_AND_PRODUCTION_READ.md` for Windows production-read gating  

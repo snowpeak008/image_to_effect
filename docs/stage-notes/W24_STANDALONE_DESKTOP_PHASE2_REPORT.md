@@ -3,6 +3,8 @@
 > **CURRENT CLOSEOUT — U6 FINAL GO / A0–A6 CLOSED — FINAL ACCEPTED/GO (2026-08-29).** ADR-005's ordinary-user Phase-2 route is complete at `100/100`; ADR-006's separate AI two-channel scope is independently accepted at `100/100`, with `P0/P1/P2=0/0/0`. No AI work package is active; a later AI requirement needs a new milestone. The pre-U0 report below remains historical evidence only; its privileged route and blockers are not current delivery dependencies.
 >
 > Normative tokens: `USER_MODE_LOCAL_CREATIVE_TOOL_V1` and `AI_PROVIDER_TWO_CHANNEL_ROUTING_V1`.
+>
+> Forward development: sequencing for all new work is owned solely by `docs/plans/OPTIMIZATION_MASTER_PLAN.md` (the post-closeout P0/R/O/F milestone series). Day-to-day task acceptance follows `docs/plans/CODING_STANDARDS.md`; per-task receipts are no longer required, and `eng/run-phase2-gate.ps1` is retained as a milestone-level quality gate only.
 
 ## U6 final audit closeout and A2–A6 final acceptance report
 
@@ -35,6 +37,8 @@ A6 `WP-AI-PROVIDER-FINAL-AUDIT` is `CLOSED — FINAL ACCEPTED/GO — P0/P1/P2=0/
 ---
 
 ## Historical pre-U0 Phase-2 report (superseded for product delivery)
+
+> Historical — superseded by U6/A6 closeout. Every section below is retained provenance frozen at its stated dates. Any `PHASE_2_FOUNDATION_IN_PROGRESS`, `PRODUCTION_CONNECTION_NO_GO`, "pending audit", or blocker statement below describes the retired pre-U0 privileged route only; no pre-U0 phase or package is active, schedulable, or blocking.
 
 Date: 2026-08-26; production-read architecture freeze update: 2026-08-28  
 Status: `PHASE_2_FOUNDATION_IN_PROGRESS / PRODUCTION_CONNECTION_NO_GO / BROKER_TO_UNITY_TEST_READ_SCOPED_GO / PRODUCTION_READ_DAG_REBASE_STOPPED_REMEDIATION_COMPLETE_FRESH_INDEPENDENT_AUDIT_PENDING`  

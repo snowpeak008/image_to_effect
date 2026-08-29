@@ -1,5 +1,7 @@
 # POST-U6 AI Provider 双通道实施计划
 
+> **Historical — superseded by U6/A6 closeout（2026-08-29）**：本文件是 A0 时点的计划输入，下文"A1 `ACTIVE`"、"A2–A6 `NOT STARTED`"等状态已全部过时——A0–A6 现已全部关闭（A6 `CLOSED — FINAL ACCEPTED/GO — P0/P1/P2=0/0/0`，ADR-006 以 `100/100` 验收），无活动 AI 工作包。现行规范与验收状态以 `docs/rules/ADR-006_AI_PROVIDER_TWO_CHANNEL_ROUTING.md` 与 `docs/coordination/W24_EVIDENCE_INDEX.md` 为准；后续开发的唯一顺序依据是 `docs/plans/OPTIMIZATION_MASTER_PLAN.md`（P0/R/O/F 系列任务卡），日常任务验收按 `docs/plans/CODING_STANDARDS.md`，不再要求逐任务 receipt。
+
 > **状态：A0 已关闭；A1 `ACTIVE`，但必须按 2026-08-29 用户产品决定重构后重新验收。** 本文件是只改文档的计划重基线；不实现 AI、网络、设置 UI、Broker、Worker、Unity、项目写入或 runner 改动。
 >
 > **计划输入：** 两个独立 API 通道、用户可自由填写和保存的 Provider endpoint，以及固定版本 [`snowpeak008/Tom_doc@dd0f9ffc32d426735f7fb8960640e9b7ae9337bf`](https://github.com/snowpeak008/Tom_doc/tree/dd0f9ffc32d426735f7fb8960640e9b7ae9337bf) 的非敏感导入设计参考。
@@ -9,6 +11,8 @@
 本计划是 ADR-005 USER_MODE 路线关闭后的独立产品链，不能反向成为 U0–U6 的依赖、验收证据或生产 GO 理由。精确依赖为：
 
 `A0 -> A1 -> (A2 || A3) -> A4 -> A5 -> A6`
+
+*以下为 A0 时点的状态快照（historical — superseded by U6/A6 closeout）：A1–A6 现已全部关闭，最终状态见顶部标注与 `docs/coordination/W24_EVIDENCE_INDEX.md`。*
 
 | 节点 | 当前状态 | 边界 |
 |---|---|---|
@@ -123,4 +127,4 @@ A4 的 Desktop 仅调用 Gateway 与设置管理契约；设置页清晰区分�
 
 以下均为 STOP：把 endpoint 保存/resolve 重新绑定到 URI、scheme、host、port、user-info、query、fragment 或上游合法性检查；把本地配置通过说成网络授权；任意 fallback；失败时回写配置；普通诊断或默认导出泄漏 raw endpoint；导入 Tom 密文；AI 结果自动写入 Unity。
 
-本文件随此次七文档 rebase 通过 `git diff --check` 且工作树 clean 后 `FINAL STOPPED`。下一步仅是独立 A1 重构和重验。
+本文件随此次七文档 rebase 通过 `git diff --check` 且工作树 clean 后 `FINAL STOPPED`。下一步仅是独立 A1 重构和重验。*（Historical——该"下一步"已完成：A1 已按本计划重构并最终验收，A2–A6 亦已全部关闭。）*

@@ -3,6 +3,8 @@
 > **SUPERSEDED FOR PRODUCT DELIVERY (2026-08-28).** `ADR-005_USER_MODE_BROKER_WORKER_ARCHITECTURE.md` is the sole current Phase-2 architecture. Everything below is retained byte-for-byte as historical dormant-route provenance: it is not a current implementation or audit queue, dependency, blocker, or activation prerequisite. In particular D1/D1R, ServiceHost/install, I1, R1, A1, B1 and the privileged route must not continue. Only C1/C2 and separately reviewed ordinary-user-compatible P1/S1 fragments may enter U0-U6 under ADR-005.
 >
 > Current replacement architecture token: `USER_MODE_LOCAL_CREATIVE_TOOL_V1`.
+>
+> Post-closeout update (2026-08-29): U0–U6 and A0–A6 are closed and no work package from this ADR's route is active. The in-body status lines below (`Accepted — architecture freeze only`, `fresh independent audit pending`) and every numbered section heading are part of the frozen historical body; no audit is pending and no privileged node may resume. Sequencing for all new work is owned solely by `docs/plans/OPTIMIZATION_MASTER_PLAN.md` (the P0/R/O/F milestone series), with day-to-day task acceptance per `docs/plans/CODING_STANDARDS.md` and no per-task receipt requirement.
 
 状态：`Accepted — architecture freeze only; implementation and production activation remain NO-GO`  
 Package remediation state: `WP-P2-PRODUCTION-READ-DAG-REBASE-1` documentation remediation complete; fresh independent audit pending; neither implementation nor package GO  
