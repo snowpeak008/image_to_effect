@@ -148,7 +148,7 @@ flowchart LR
 - 验收标准：给定固定 mock AI 响应，解析/校验/错误路径测试全绿；不产生自动网络请求。
 
 **F2 受限构建执行**（依赖 F1、R4）
-- 目标：把 recipe 草稿交给 Unity 侧编译器构建 Prefab：走 Unity batchmode `-executeMethod`（复用 `tools/Invoke-Unity.ps1` 路径）或 Worker 命令面（`ValidateRecipe`/`BuildCandidate` 合同），写入限定 `Assets/Generated`。
+- 目标：把 recipe 草稿交给 Unity 侧编译器构建 Prefab：走 Unity batchmode `-executeMethod`（复用 `tools/Invoke-Unity.ps1` 路径）或 Worker 命令面（`ValidateRecipe`/`BuildCandidate` 合同），写入限定 `Assets/VFX/Generated`（`Assets/VFX/Shared` 政策按 ADR-007）。
 - 验收标准：一个样例 recipe 端到端产出 Prefab；越界路径写入被拒绝且有测试。
 
 **F3 Jobs 串行队列**（依赖 P0-1、R3）
@@ -173,11 +173,11 @@ flowchart LR
 |---|---|---|---|
 | P0-1 | DONE | 开发子 agent | 初审 PASS（merge `3375a8fe`，构建 0/0，测试 450/450）；O3 复跑作独立复核 |
 | P0-2 | DISPATCHED | 开发子 agent | 待验收 |
-| R1 | DISPATCHED | 开发子 agent | 待验收 |
+| R1 | DELIVERED | 开发子 agent | 审计中（REQ-001 已交付，23 条需求/9 条验收场景） |
 | R2 | DISPATCHED | 开发子 agent | 待验收 |
 | R3 | DISPATCHED | 开发子 agent | 待验收 |
-| R4 | BLOCKED(R1) | — | — |
-| O1 | DISPATCHED | 开发子 agent | 待验收 |
+| R4 | DISPATCHED | 开发子 agent | 待验收 |
+| O1 | DONE | 开发子 agent | 主 agent 验收 PASS（.gitignore 补齐、空目录清理、退役清单交付；worktree/分支退役延后到 O2/O3 合并后执行，`codex/m1`、`codex/m2` 两个未并入分支暂保留） |
 | O2 | DISPATCHED | 开发子 agent | 待验收（独立 worktree） |
 | O3 | DISPATCHED | 开发子 agent | 待验收（独立 worktree，兼作 P0-1 独立复核；含 baseline 锁文件漂移修复） |
 | F1–F6 | BLOCKED | — | — |

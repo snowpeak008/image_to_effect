@@ -56,6 +56,14 @@
 /src/**/obj/
 /services/**/bin/
 /services/**/obj/
+/tests/**/bin/
+/tests/**/obj/
+
+# Per-project `dotnet test` output (TRX/coverage) folders under the product roots.
+/apps/**/TestResults/
+/src/**/TestResults/
+/services/**/TestResults/
+/tests/**/TestResults/
 
 # Local Python bytecode/cache from deterministic VFX tooling tests.
 **/__pycache__/
