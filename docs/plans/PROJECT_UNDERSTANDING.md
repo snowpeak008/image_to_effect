@@ -26,7 +26,7 @@ VFX Composer：通过**文字对话生成单个 Unity 特效**、通过 **CLI/MC
 | 质量闸 | `eng/run-phase2-gate.ps1`（重闸）+ `eng/run-task-acceptance.ps1`（轻闸，O2 新增） | 日常任务用轻闸；里程碑收口/协议变更/发布前用重闸 |
 
 关键代码事实（审计核实过）：
-- 写入面封闭双成员：`Assets/VFX/Generated/**` + `ProjectSettings/VFXComposer/BuildManifests/<id>.manifest.json`（ADR-007）。
+- 写入面封闭三成员：`Assets/VFX/Generated/**` + `ProjectSettings/VFXComposer/BuildManifests/<id>.manifest.json` + `Assets/VFX/Recipes/<id>.json` 构建溯源单文件（ADR-007 v1.2）。
 - `Assets/VFX/Shared` 构建期只读；`Impact2D/Area2D` 的 `SharedLibrary.Ensure()` 是**强制覆盖收敛**而非幂等补齐，故首版 AI 构建范围只限 v1 `VfxCompiler` 域。
 - 构建约定：.NET SDK 8.0.420 锁定、C# 12、TreatWarningsAsErrors、NuGet 仅本地批准 feed（`.codex_tmp/w24-phase1-approved-feed`，39 包，**未跟踪**——新 worktree 必须从主工作区复制）、Windows PowerShell 5.1（不支持 `&&`）。
 

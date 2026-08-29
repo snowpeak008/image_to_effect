@@ -23,14 +23,15 @@ REQ-001 §9 与本 ADR 直接相关的风险：R-1（写入根表述不一致）
 
 ## 2. 决策
 
-### 2.1 写入面：封闭双成员清单，资产产物唯一根为 `Assets/VFX/Generated`（裁决 a）
+### 2.1 写入面：封闭三成员清单，资产产物唯一根为 `Assets/VFX/Generated`（裁决 a；v1.2 增补成员 3）
 
-AI 触发的构建任务对 Unity 项目目录（`project/`）的全部合法写入是一个**封闭枚举清单**，有且仅有两个成员：
+AI 触发的构建任务对 Unity 项目目录（`project/`）的全部合法写入是一个**封闭枚举清单**，有且仅有三个成员：
 
 1. **资产产物唯一根 `Assets/VFX/Generated/**`**（与 `VfxCompiler.GeneratedRoot` 常量逐字一致）：最终 Prefab、克隆材质、`BuildManifest.json`、构建期临时目录（§2.4）全部落在此根之下。
 2. **审计元数据单点 `ProjectSettings/VFXComposer/BuildManifests/<effectId>.manifest.json`**：既有编译器的权威所有权 manifest，非资产、产品自有命名空间、单文件原子替换。它与 Worker 只读白名单共享同一路径，原子替换保证读侧永远只见旧或新完整版本。
+3. **构建溯源单文件 `Assets/VFX/Recipes/<Sanitize(effectId)>.json`**（v1.2 增补，据 F2 停手报告裁决）：用户已确认、哈希已复验的 recipe JSON 在构建流程内落盘为 strict 溯源输入，满足 `VfxProductionRules` 的 E8014 强制要求（strict 产出必须能在 `Assets/VFX/Recipes/**` 按规范化哈希溯源到 recipe 源）。约束：只允许 batchmode 构建入口在哈希复验通过之后写入（Desktop 依旧零直接项目 I/O）；单文件原子替换（`.pending` + `File.Replace` 同款纪律）；文件名经 Sanitize + containment 双层守卫并显式拒绝 Windows 保留设备名；**未经用户确认的草稿永不落盘到此路径**。增补理由：不增补则任何新 AI 特效都必须人工登记 `legacyEffectIds`（写 `ProjectSettings/VFXComposer/VfxProjectRules.json`，同样越界且使 strict 溯源形同虚设）——历史上 cohort-i/k 的 AI recipe 正是靠该人工登记绕行的；成员 3 使 strict 溯源对 AI 产物诚实成立。
 
-清单之外的任何显式写入意图一律禁止：`Assets/VFX/Templates/**`、`Assets/VFX/Shared/**`（§2.2）、`ProjectSettings/**` 其余路径、`Packages/**`、以及项目目录外的任意仓库路径。Unity 编辑器自身对 `Library/**`、`Temp/**` 等缓存目录的写入是编辑器运行的固有副作用，不是产品的显式写入意图，不属于本清单管辖，也不得被解释为写入授权。构建日志、NUnit 结果、recipe 输入暂存一律放在项目目录之外（仓库 `test-results/` 或用户应用数据目录），不属于项目写入面。
+清单之外的任何显式写入意图一律禁止：`Assets/VFX/Templates/**`、`Assets/VFX/Shared/**`（§2.2）、`ProjectSettings/**` 其余路径（含 `VfxProjectRules.json` 的 `legacyEffectIds` 登记）、`Packages/**`、以及项目目录外的任意仓库路径。Unity 编辑器自身对 `Library/**`、`Temp/**` 等缓存目录的写入是编辑器运行的固有副作用，不是产品的显式写入意图，不属于本清单管辖，也不得被解释为写入授权。构建日志、NUnit 结果、**未确认草稿**的输入暂存一律放在项目目录之外（仓库 `test-results/` 或用户应用数据目录），不属于项目写入面；已确认 recipe 的溯源落盘是且仅是成员 3。
 
 越界即 fail-closed，且必须是**双层防御**：
 
@@ -96,7 +97,7 @@ AI 触发的构建任务对 Unity 项目目录（`project/`）的全部合法写
 
 - **沿用历史文本 `Assets/Generated`**：否。与代码常量不符，会使 F2 验收标准歧义（REQ-001 R-1）。
 - **每模板族一个写入根 / 多根**：否。扩大 containment 审计面，`E600`/`E601` 的单根检查是现成且已被测试覆盖的防线。
-- **把 `ProjectSettings/VFXComposer/BuildManifests` 的 manifest 迁入 Generated 以凑成字面上的"唯一根"**：否。会破坏 Worker 只读白名单、W24 S4/S5 的既有审计事实与 `50_MACHINE_ENFORCEMENT` 所依赖的外置所有权 Manifest 设计，收益为零。如实枚举双成员清单比制造一个假的"唯一"更安全。
+- **把 `ProjectSettings/VFXComposer/BuildManifests` 的 manifest 迁入 Generated 以凑成字面上的"唯一根"**：否。会破坏 Worker 只读白名单、W24 S4/S5 的既有审计事实与 `50_MACHINE_ENFORCEMENT` 所依赖的外置所有权 Manifest 设计，收益为零。如实枚举封闭清单比制造一个假的"唯一"更安全。
 
 ### 3.2 Shared 政策（对应 §2.2）
 
@@ -183,9 +184,9 @@ AI 触发的构建任务对 Unity 项目目录（`project/`）的全部合法写
 1. **主计划表述更正**：已完成——主 agent 已将 `OPTIMIZATION_MASTER_PLAN.md` 中的 "`Assets/Generated`" 更正为 `Assets/VFX/Generated`（REQ-001 R-1，本 ADR §2.1 裁决以代码为准）。
 2. **CODING_STANDARDS §3.2 文本更新**："`Assets/VFX/Shared` 裁决前一律视为只读"应更新为引用本 ADR 的长期规则。
 3. **`docs/rules/README.md` 阅读顺序**：已完成——README 已收录 ADR-005/006/007（阅读顺序第 11–13 条）。
-4. **R-6 生产闸取舍**（REQ-001）：本 ADR 已硬性要求"计划-提交一致性复核"（§2.3），但 AI 构建具体走 `DryRunProduction`/`BuildProduction`（需构造 `W24S5ProductionGateRequest`）还是新增等价受限入口，属 F2 开工前的实现定版，建议由主 agent 在 F2 任务卡中指定。
+4. **R-6 生产闸取舍**（REQ-001）：**已裁决（v1.2，据 F2 停手报告）**。F2 核实：`BuildProduction` 对 AI recipe 无可达成功路径——formal 分支要求 `docs/` 下已持久化的 design contract/implementation trace（AI recipe 不具备，凑齐等于向 `docs/**` 写入并伪造证据链，W24S5-010/-020 必拒）；legacy 分支是死路（`TryValidateAuthoritativeLegacy` 放行但 `CommitFormalManifest` 第一条即拒绝 `LegacyDevelopment`，E24S5-092），且全仓 `BuildProduction` 零成功调用点。裁决：AI 构建**不走 `W24S5ProductionGate`**，走 legacy `Build` + F2 执行器层实现的"计划绑定提交"（DryRun 产出计划 → 提交前复核 recipeHash/revision/buildHash/输出路径一致，等价 `MatchesExactPlan` 语义），satisfies §2.3 硬性要求；strict 溯源由写入面成员 3 诚实满足。legacy 批准死路本身判定为 W24 既有代码缺陷，**保持现状不修**（其效果是 fail-closed，修复反而会打开一条本 ADR 不需要的提交路径），仅记录在案。
 5. **常驻可写 Unity 会话**：batchmode 冷启动（分钟级）对交互体验的影响（REQ-001 R-3/R-9）在本 ADR 中以"短生命进程 + 队列调度缓解"处理；若产品层面最终无法接受延迟，引入常驻写会话需另立 ADR，由用户拍板。
-6. **REQ-001 的 `ProjectSettings/**` 只读表述需修正**：REQ-001 §4 非目标 1 与 REQ-001-18 写"`ProjectSettings/**` 对构建任务只读"，与本 ADR §2.1 的双成员写入面清单（含 `ProjectSettings/VFXComposer/BuildManifests/<effectId>.manifest.json` 审计元数据单点）矛盾，应修正为"除 BuildManifests 单点外只读"。冲突以本 ADR 为准；主 agent 已并行派发 REQ-001 v0.3 修正。
+6. **REQ-001 的 `ProjectSettings/**` 只读表述需修正**：REQ-001 §4 非目标 1 与 REQ-001-18 写"`ProjectSettings/**` 对构建任务只读"，与本 ADR §2.1 的封闭写入面清单（含 `ProjectSettings/VFXComposer/BuildManifests/<effectId>.manifest.json` 审计元数据单点）矛盾，应修正为"除 BuildManifests 单点外只读"。冲突以本 ADR 为准；主 agent 已并行派发 REQ-001 v0.3 修正。
 
 ## 8. 变更记录
 
@@ -193,3 +194,4 @@ AI 触发的构建任务对 Unity 项目目录（`project/`）的全部合法写
 |---|---|---|
 | v0.1 | 2026-08-29 | 初版（任务卡 R4 交付） |
 | v1.1 | 2026-08-29 | 独立审计 PASS（无阻塞）后按 6 条建议微调并转正为 `ACCEPTED`：修正 `Ensure()` 写入面为 `Shared/<Family>` 子树（`Shared/Shaders` 为只读预置依赖）；补全 `Invoke-Unity.ps1` 四模式事实；加固 §2.5 重试与 ADR-006 预留的解释边界；§7 遗留点 1/3 标记已完成、新增 REQ-001 `ProjectSettings/**` 只读表述矛盾一条。 |
+| v1.2 | 2026-08-29 | 据 F2 停手报告（`BuildProduction` 无可达成功路径 + strict E8014 溯源要求与项目外暂存矛盾）由主 agent 裁决修订：§2.1 写入面增补成员 3（`Assets/VFX/Recipes/<Sanitize(effectId)>.json` 构建溯源单文件，仅构建入口在哈希复验后原子写入）；§7 遗留点 4 定版为"legacy `Build` + 执行器层计划绑定提交，不走 W24S5 闸"；legacy 批准死路（E24S5-092）记录为 W24 既有缺陷、保持 fail-closed 不修。 |
