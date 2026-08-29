@@ -16,7 +16,7 @@
 | ~~ADR-007 v1.1 微调~~ | 已完成并转 ACCEPTED，已合入 | 完成 |
 | ~~REQ-001 v0.3~~ | 已完成，已合入 | 完成 |
 | O3 基线 — **已交付待验收**（分支 `task/O3-baseline`，提交 `a6ee7253` 锁修复 + `f73ccea0` 基线报告，未合并） | 锁文件修复（3 文件、无版本变化）、锁定 restore 18/18 通过、构建 0/0、.NET 测试 450/450（独立复核与 P0-1 一致）、Unity EditMode 596 通过/8 失败/53 跳过 | 用户回来后：验收合并 → 停用轻闸 `-SkipLockedRestore`。**新发现：Unity 包 8 个确定性既有测试失败**（契约 pin 漂移 ×2、错误码清单不同步、preview 场景缺 driver ×2、W24FS107≠109、句柄暴露、状态注册断言；两种图形模式一致，与 O3 改动无关）——**F2 以 Unity 编译链路为验收面前必须先 triage 归零或明确豁免**，建议作为新任务 O4 派发 |
-| F1 开发（worktree `D:\wt\i2s-f1`，分支 `task/F1-recipe-generation`） | Recipe 结构化生成通道（模板快照/生成服务/契约/Create 页/测试） | 交付后派独立审计（代码任务必须审计），PASS 后合并 |
+| F1 开发 — **已中断暂停**（分支 `task/F1-recipe-generation`，WIP 提交 `558cfcb1`，11 文件 +2589 行，未合并） | 已完成并提交：契约层 DTO（含草稿状态机与 `IRecipeGenerationChannel`）、`IAiDesktopRuntime` 扩展、模板目录快照（嵌入资源）、规范化哈希、输出解析器、L1 校验器、prompt 模板。半成品：`RecipeGenerationService`（重试编排，设计定稿未写文件）。未开始：`RecipeDraftStore`、运行时接线、Desktop Create 页、全部测试 | 恢复时 resume 原 F1 agent（id 见 SESSION_LOG）或重派：从 `RecipeGenerationService.cs` 续写 → `RecipeDraftStore` → 接线 → Desktop 页 → 测试；**先跑 `dotnet build VFXComposer.sln -c Release`**（WIP 新文件未经编译验证）；注意 Desktop.Tests 的 `FakeDesktopRuntime` 等实现需补 `IAiDesktopRuntime` 新增的两个成员 |
 
 ### 工作区待提交文件
 
