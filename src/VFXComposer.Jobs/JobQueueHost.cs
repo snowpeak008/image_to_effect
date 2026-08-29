@@ -18,6 +18,7 @@ public sealed class JobQueueHost : IAsyncDisposable
     private readonly CancellationTokenSource _shutdown = new();
     private JobExecutorLock? _lease;
     private Task? _loop;
+    private bool _started;
 
     public JobQueueHost(
         JobStore store,
@@ -44,15 +45,31 @@ public sealed class JobQueueHost : IAsyncDisposable
     }
 
     /// <summary>
+    /// True once this host owns queue execution. A host constructed without payload executors is
+    /// never an executor (see <see cref="Start"/>), so this stays false for observation-only
+    /// entry surfaces.
+    /// </summary>
+    public bool IsExecuting => _lease is not null;
+
+    /// <summary>
     /// Acquires the executor lock, settles crashed RUNNING jobs as DISCONNECTED, disposes
     /// recorded orphan processes by exact PID + start time, applies retention, then starts the
     /// serial execution loop. A second live host fails closed here with the stable lock error.
+    /// A host without registered payload executors starts as a pure observer instead: it takes
+    /// no executor lock, runs no recovery and claims nothing, so an entry surface that cannot
+    /// execute anything can never strand another surface's job (VFXJ0006) or block its executor.
     /// </summary>
     public void Start()
     {
-        if (_lease is not null)
+        if (_started)
         {
             throw new InvalidOperationException("The executor host is already started.");
+        }
+
+        if (_executors.Count == 0)
+        {
+            _started = true;
+            return;
         }
 
         _lease = JobExecutorLock.Acquire(_store.ExecutorLockPath);
@@ -74,24 +91,41 @@ public sealed class JobQueueHost : IAsyncDisposable
         }
 
         _loop = Task.Run(RunLoopAsync);
+        _started = true;
     }
 
+    /// <summary>
+    /// Stops the loop and releases the executor lease. Teardown never surfaces a fault: entry
+    /// surfaces dispose the host from shutdown handlers (Desktop's <c>async void</c> Exit), where
+    /// a rethrow would take the process down instead of exiting it.
+    /// </summary>
     public async ValueTask DisposeAsync()
     {
-        if (!_shutdown.IsCancellationRequested)
+        try
         {
-            await _shutdown.CancelAsync();
-        }
+            if (!_shutdown.IsCancellationRequested)
+            {
+                await _shutdown.CancelAsync();
+            }
 
-        if (_loop is not null)
+            if (_loop is not null)
+            {
+                await _loop;
+            }
+        }
+        catch (Exception)
         {
-            await _loop;
+            // The loop already settles every job fault with a stable code, so anything arriving
+            // here is a teardown-time fault with no job left to attribute it to. Observing it
+            // keeps it off the unobserved-task path; the lease still gets released below.
+        }
+        finally
+        {
             _loop = null;
+            _lease?.Dispose();
+            _lease = null;
+            _shutdown.Dispose();
         }
-
-        _lease?.Dispose();
-        _lease = null;
-        _shutdown.Dispose();
     }
 
     private async Task RunLoopAsync()
@@ -99,59 +133,78 @@ public sealed class JobQueueHost : IAsyncDisposable
         var projectLockBackoff = _options.ProjectLockInitialBackoff;
         while (!_shutdown.IsCancellationRequested)
         {
-            JobRecord? head;
+            JobRecord? claimed = null;
             try
             {
-                head = _store.PeekNextQueued();
+                JobRecord? head;
+                try
+                {
+                    head = _store.PeekNextQueued();
+                }
+                catch (JobQueueException)
+                {
+                    await DelaySafeAsync(_options.IdlePollInterval);
+                    continue;
+                }
+
+                if (head is null)
+                {
+                    TrySetQueueState(JobQueueStates.Idle);
+                    await DelaySafeAsync(_options.IdlePollInterval);
+                    continue;
+                }
+
+                _executors.TryGetValue(head.JobKind, out var executor);
+                if (executor is not null &&
+                    executor.RequiresProjectLock &&
+                    _projectLockProbe.Probe() == ProjectLockAvailability.Busy)
+                {
+                    // The editor owning the project is a normal working condition, not a job
+                    // failure: the job stays QUEUED and the queue waits with bounded backoff.
+                    TrySetQueueState(JobQueueStates.WaitingProjectLock);
+                    await DelaySafeAsync(projectLockBackoff);
+                    var doubled = projectLockBackoff + projectLockBackoff;
+                    projectLockBackoff = doubled <= _options.ProjectLockMaximumBackoff
+                        ? doubled
+                        : _options.ProjectLockMaximumBackoff;
+                    continue;
+                }
+
+                projectLockBackoff = _options.ProjectLockInitialBackoff;
+                try
+                {
+                    claimed = _store.TryClaim(head.JobId);
+                }
+                catch (JobQueueException)
+                {
+                    await DelaySafeAsync(_options.IdlePollInterval);
+                    continue;
+                }
+
+                if (claimed is null)
+                {
+                    continue;
+                }
+
+                TrySetQueueState(JobQueueStates.Executing);
+                await ExecuteClaimedAsync(claimed, executor);
             }
-            catch (JobQueueException)
+            catch (Exception)
             {
+                // Last-resort barrier for host-side faults that are not modelled as
+                // JobQueueException — scratch-directory creation hitting a read-only or
+                // conflicting path, a store mutation rejected on shape, a misbehaving injected
+                // seam. Without it the loop task would fault and stop silently: the claimed job
+                // would stay RUNNING forever and the executor lock would stay held for the whole
+                // process lifetime. Instead the current job is settled with a stable code and
+                // the queue keeps draining.
+                if (claimed is not null)
+                {
+                    SettleHostFault(claimed);
+                }
+
                 await DelaySafeAsync(_options.IdlePollInterval);
-                continue;
             }
-
-            if (head is null)
-            {
-                TrySetQueueState(JobQueueStates.Idle);
-                await DelaySafeAsync(_options.IdlePollInterval);
-                continue;
-            }
-
-            _executors.TryGetValue(head.JobKind, out var executor);
-            if (executor is not null &&
-                executor.RequiresProjectLock &&
-                _projectLockProbe.Probe() == ProjectLockAvailability.Busy)
-            {
-                // The editor owning the project is a normal working condition, not a job
-                // failure: the job stays QUEUED and the queue waits with bounded backoff.
-                TrySetQueueState(JobQueueStates.WaitingProjectLock);
-                await DelaySafeAsync(projectLockBackoff);
-                var doubled = projectLockBackoff + projectLockBackoff;
-                projectLockBackoff = doubled <= _options.ProjectLockMaximumBackoff
-                    ? doubled
-                    : _options.ProjectLockMaximumBackoff;
-                continue;
-            }
-
-            projectLockBackoff = _options.ProjectLockInitialBackoff;
-            JobRecord? claimed;
-            try
-            {
-                claimed = _store.TryClaim(head.JobId);
-            }
-            catch (JobQueueException)
-            {
-                await DelaySafeAsync(_options.IdlePollInterval);
-                continue;
-            }
-
-            if (claimed is null)
-            {
-                continue;
-            }
-
-            TrySetQueueState(JobQueueStates.Executing);
-            await ExecuteClaimedAsync(claimed, executor);
         }
 
         TrySetQueueState(JobQueueStates.Idle);
@@ -298,6 +351,21 @@ public sealed class JobQueueHost : IAsyncDisposable
                 // Abort propagation is retried implicitly: the remaining jobs will fail the same
                 // way when executed, so a storage hiccup here must not stall the loop.
             }
+        }
+    }
+
+    private void SettleHostFault(JobRecord job)
+    {
+        try
+        {
+            Settle(job, JobStatusStates.Failed, JobQueueDiagnosticCodes.ExecutorHostFault);
+        }
+        catch (Exception)
+        {
+            // The store refused the fallback verdict as well. The straggler is left to the next
+            // startup recovery pass, which settles it DISCONNECTED; the loop must still survive,
+            // so the only thing left to do here is release the scratch directory.
+            _store.DeleteTemporaryDirectory(job.JobId);
         }
     }
 

@@ -26,8 +26,9 @@ public sealed partial class App : Application
                 // Local composition only: the runtime derives current-user storage but creates no provider adapter,
                 // health probe, DNS request, or HTTP client until an explicit Create/Preview action.
                 var aiRuntime = AiDesktopRuntimeFactory.CreateCurrentUser();
-                // Local current-user job store; no payload executors are registered yet (F1/F2
-                // plug in later), so this process only hosts recovery + observation for now.
+                // Local current-user job store. No payload executors are registered yet (F1/F2
+                // plug in later), so the host stays a pure observer: it takes no executor lock and
+                // claims nothing, leaving the queue to whichever entry surface can actually run it.
                 var jobStore = JobQueueFactory.CreateCurrentUserStore();
                 JobQueueHost? jobHost = null;
                 try

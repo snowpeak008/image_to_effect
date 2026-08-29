@@ -25,6 +25,7 @@ public static class JobQueueDiagnosticCodes
     public const string JobNotFound = "VFXJ0013";
     public const string EventLogWriteFailed = "VFXJ0014";
     public const string BatchAborted = "VFXJ0015";
+    public const string ExecutorHostFault = "VFXJ0016";
 
     public static IReadOnlySet<string> All => JobQueueDiagnosticCatalog.Codes;
 }
@@ -117,6 +118,11 @@ public static class JobQueueDiagnosticCatalog
                 DiagnosticSeverities.Error,
                 "An earlier job in the batch failed and the batch policy is abort.",
                 Retryable: false),
+            new JobQueueDiagnosticDefinition(
+                JobQueueDiagnosticCodes.ExecutorHostFault,
+                DiagnosticSeverities.Error,
+                "The executor host failed outside the job payload; the job was settled as failed.",
+                Retryable: true),
         }.ToFrozenDictionary(definition => definition.Code, StringComparer.Ordinal);
 
     internal static FrozenSet<string> Codes { get; } =
