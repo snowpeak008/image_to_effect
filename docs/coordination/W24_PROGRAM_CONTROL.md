@@ -1,6 +1,6 @@
 # W24 program control
 
-> **CURRENT CONTROL PLANE — U6 FINAL GO / A0 AI ARCHITECTURE FREEZE (2026-08-28).** ADR-005's USER_MODE route is closed at `100/100`; ADR-006 controls the separate post-U6 AI-provider route. Old Service/SCM/privileged nodes are historical only and are neither active, schedulable, auditable, nor blockers.
+> **CURRENT CONTROL PLANE — U6 FINAL GO / A0 AI ENDPOINT REBASE (2026-08-29).** ADR-005's USER_MODE route is closed at `100/100`; ADR-006 controls the separate post-U6 AI-provider route with user-owned opaque endpoints. Old Service/SCM/privileged nodes are historical only and are neither active, schedulable, auditable, nor blockers.
 >
 > Normative tokens: `USER_MODE_LOCAL_CREATIVE_TOOL_V1` and `AI_PROVIDER_TWO_CHANNEL_ROUTING_V1`.
 
@@ -16,8 +16,8 @@
 | U5 local E2E | `CLOSED / SCOPED GO — LOCAL_ORDINARY_USER_E2E` | Source commit `365e7612b1be276aa74f4ab36f40482a0858e1ae`, integrated at `b9de2eb47e4e9d9ea29e0490b9dfc745a4dc307d`; exact 17-file closeout and independent acceptance `P0/P1/P2=0/0/0`. |
 | U6 final audit | `CLOSED — FINAL GO — P0/P1/P2=0/0/0` | Accepted independent receipt `u6-independent-final-audit-20260828T232640380Z`; no U6 repair or source work remains. |
 | USER_MODE main architecture | `CLOSED — 100/100` | ADR-005 route is complete; this is not an AI-provider or external-service activation. |
-| Post-U6 AI A0 | `CLOSED — DOCS ONLY` | ADR-006 and this five-document control publication are completed in this same single documentation commit; existing U6 unified-gate evidence only, no project-gate rerun. |
-| A1 `AI_PROVIDER_FOUNDATION` | `ACTIVE` — sole active package. | Foundation only; no real Chat/Image HTTP, no Desktop wiring, and exact owned roots apply. |
+| Post-U6 AI A0 | `CLOSED — DOCS ONLY`; endpoint contract rebased in the current seven-document decision update. | Existing U6 unified-gate evidence only, no project-gate rerun. |
+| A1 `AI_PROVIDER_FOUNDATION` | `ACTIVE` — sole active package. | Rework to `OpaqueEndpoint`, then revalidate; no real Chat/Image HTTP, no Desktop wiring, and exact owned roots apply. |
 | A2 Chat adapter | `NOT STARTED` | May begin only after A1 closeout. |
 | A3 Image adapter | `NOT STARTED` | May begin only after A1 closeout. |
 | A4 Desktop wiring | `NOT STARTED` | May begin only after A2 and A3 closeout. |
@@ -41,7 +41,7 @@ The completed USER_MODE DAG is:
 | U5 | `CLOSED / SCOPED GO — LOCAL_ORDINARY_USER_E2E`; standalone ordinary-user Worker and real local E2E are accepted at source `365e7612b1be276aa74f4ab36f40482a0858e1ae`, integration `b9de2eb47e4e9d9ea29e0490b9dfc745a4dc307d`. | Accepted U4 integration. |
 | U6 | `CLOSED — FINAL GO — P0/P1/P2=0/0/0`; accepted independent frozen-byte/evidence audit. | Frozen U0-U5 integration and accepted final receipt. |
 
-The exact formal post-U6 AI DAG is `A0 -> A1 -> (A2 || A3) -> A4 -> A5 -> A6`. A0 is closed in this documentation commit; A1 is the unique active package; A2-A6 are not started. The AI program is separate from the closed USER_MODE `100/100` accounting.
+The exact formal post-U6 AI DAG is `A0 -> A1 -> (A2 || A3) -> A4 -> A5 -> A6`. A0 is closed; A1 is the unique active package; A2-A6 are not started. The earlier A1 `NO-GO — P0/P1/P2=0/0/1` is superseded by the user endpoint decision and requires a code rework/revalidation, not a GO inference. The AI program is separate from the closed USER_MODE `100/100` accounting.
 
 ### U3 closed evidence
 
@@ -121,11 +121,11 @@ The other-user denial claim remains deliberately bounded to `CurrentUserOnly` st
 
 The result closes the entire ADR-005 USER_MODE main architecture at `100/100`. It neither adds nor permits an AI provider, credential, external network request, Desktop project I/O, Unity mutation, or authority claim. The default Broker remains exact `W24FS001` stderr / exit `23` on no-argument launch.
 
-The AI A0 documentation freeze is closed in this same commit, with no U6 gate replay. ADR-006 freezes `ChatLlm` and `ImageGeneration` as isolated, exact one-profile/capability/model bindings, with Origin as metadata and explicit independent protocol. It prohibits fallback, undocumented auth, cookie/script/custom-header/DLL/TLS-bypass behavior, secret/raw diagnostic leakage, and automatic Unity writes.
+The AI A0 documentation freeze is closed, with no U6 gate replay. ADR-006 freezes `ChatLlm` and `ImageGeneration` as isolated, exact one-profile/capability/model bindings, with Origin as metadata and explicit independent protocol. It prohibits fallback, undocumented auth, cookie/script/custom-header/DLL/TLS-bypass behavior, secret/raw diagnostic leakage, and automatic Unity writes. Provider endpoint is `OpaqueEndpoint`: a user-defined string which local configuration saves and resolves unchanged; local acceptance is never network authorization.
 
-`A1 — AI_PROVIDER_FOUNDATION` is the unique `ACTIVE` package. Its exact owned roots are `src/VFXComposer.AI.Contracts/**`, `src/VFXComposer.AI.Providers/**`, `src/VFXComposer.AI.Tests/**`, `docs/schemas/desktop/vfxcomposer-ai-provider-config-v1.schema.json`, `VFXComposer.sln`, `eng/verify-phase2-schemas.py`, `eng/run-phase2-gate.ps1`, and `eng/phase2-baseline-roots.json`; the verifier is the only additional file beyond the three roots, schema, solution, runner, and baseline. Any other path, central package-management change, or external `.csproj` dependency is STOP. A1 has no real Chat/Image HTTP. A2-A6 remain `NOT STARTED`.
+`A1 — AI_PROVIDER_FOUNDATION` is the unique `ACTIVE` package. Its exact owned roots are `src/VFXComposer.AI.Contracts/**`, `src/VFXComposer.AI.Providers/**`, `src/VFXComposer.AI.Tests/**`, `docs/schemas/desktop/vfxcomposer-ai-provider-config-v1.schema.json`, `VFXComposer.sln`, `eng/verify-phase2-schemas.py`, `eng/run-phase2-gate.ps1`, and `eng/phase2-baseline-roots.json`; the verifier is the only additional file beyond the three roots, schema, solution, runner, and baseline. Any other path, central package-management change, or external `.csproj` dependency is STOP. The prior A1 `NO-GO — P0/P1/P2=0/0/1` is superseded by user requirements: rework to `OpaqueEndpoint`, with structural/type/bounded-storage-only local validation, then revalidate. A1 has no real Chat/Image HTTP. A2-A6 remain `NOT STARTED`.
 
-The first A1 writer is `STOPPED — ZERO WRITES`: the new AI schema would be desktop schema 23 while `eng/verify-phase2-schemas.py` line 57 hard-codes 22. A1 must change the expected total to 23, preserve `Phase 2=13`, `positive=14`, and `negative=236`, and add AI-schema structural validation with positive and negative cases; merely loosening the count is STOP.
+The first A1 writer remains `STOPPED — ZERO WRITES` until its scoped rework begins. Its revalidation must show arbitrary bounded endpoint strings, including user-info/query/fragment and non-URI-like text, save and resolve unchanged; structural/size failures still fail; config acceptance invokes no network; and request-time A2/A3 adapter failures are stable/redacted with no write-back or fallback. Endpoint values may contain credentials, so ordinary logs/exceptions/receipts/UI/default export display only a redacted summary; explicit editing may show the original user value and configuration export requires an explicit include choice plus warning. `SecretRef`/DPAPI remains recommended, and Tom `ApiKeyProtected` remains excluded.
 
 After this publication, the current control state is `FINAL STOPPED` for U6 and A0. Only the separately scoped A1 package may proceed.
 

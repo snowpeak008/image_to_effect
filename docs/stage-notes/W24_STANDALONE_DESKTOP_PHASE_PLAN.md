@@ -1,6 +1,6 @@
 # W24 standalone desktop — file-level implementation plan
 
-> **CURRENT CLOSEOUT — U6 FINAL GO / A0 AI ARCHITECTURE FREEZE (2026-08-28).** ADR-005's ordinary-user route is closed at `100/100`; ADR-006 freezes the separate post-U6 AI-provider route. The retained pre-U0 plan below is historical provenance only: its Service/SCM/privileged nodes are not current dependencies, blockers, implementation work, or audit work.
+> **CURRENT CLOSEOUT — U6 FINAL GO / A0 AI ENDPOINT REBASE (2026-08-29).** ADR-005's ordinary-user route is closed at `100/100`; ADR-006 now defines user-owned opaque provider endpoints for the separate post-U6 AI route. The retained pre-U0 plan below is historical provenance only: its Service/SCM/privileged nodes are not current dependencies, blockers, implementation work, or audit work.
 >
 > Normative tokens: `USER_MODE_LOCAL_CREATIVE_TOOL_V1` and `AI_PROVIDER_TWO_CHANNEL_ROUTING_V1`.
 
@@ -27,15 +27,15 @@ The exact formal AI delivery DAG is `A0 -> A1 -> (A2 || A3) -> A4 -> A5 -> A6`.
 
 | Node | State | Planned boundary |
 |---|---|---|
-| A0 `AI_PROVIDER_TWO_CHANNEL_ROUTING` | `CLOSED — DOCS ONLY` in this same single documentation commit. | ADR-006 plus this plan/report/control/registry/evidence publication; existing U6 evidence only, no project-gate rerun and no implementation bytes. |
-| A1 `AI_PROVIDER_FOUNDATION` | `ACTIVE` — the sole active package. | Contracts, strict configuration/security/store/import/resolver/Gateway foundation; no real Chat or Image HTTP. |
+| A0 `AI_PROVIDER_TWO_CHANNEL_ROUTING` | `CLOSED — DOCS ONLY`; its endpoint contract is rebased by this seven-document decision update. | Existing U6 evidence only, no project-gate rerun and no implementation bytes. |
+| A1 `AI_PROVIDER_FOUNDATION` | `ACTIVE` — the sole active package. | Rework the prior endpoint admission model to `OpaqueEndpoint`, then revalidate contracts/configuration/store/import/resolver/Gateway; no real Chat or Image HTTP. |
 | A2 Chat adapter lane | `NOT STARTED`. | Explicit Chat-only adapter behavior after A1. |
 | A3 Image adapter lane | `NOT STARTED`. | Explicit Image-only adapter, downloader/cache behavior after A1. |
 | A4 Desktop wiring | `NOT STARTED`. | Desktop uses the Gateway only; no direct provider transport or project write. |
 | A5 mock E2E | `NOT STARTED`. | Controlled mock-only end-to-end evidence. |
 | A6 independent AI audit | `NOT STARTED`. | Read-only audit of frozen A0–A5 bytes. |
 
-ADR-006 freezes two mandatory channels: all LLM/conversation work uses only the one explicit `ChatLlm` binding, and all image generation uses only the one explicit `ImageGeneration` binding. Each binding resolves exactly one profile/capability/model; a profile may serve both only through separately chosen capabilities. Origin (`Official`, `Relay`, `Friend`, `Subscription`, `Custom`) is metadata, not protocol or routing. Unknown, missing, cross-channel, or failed state has no implicit or fallback route.
+ADR-006 freezes two mandatory channels: all LLM/conversation work uses only the one explicit `ChatLlm` binding, and all image generation uses only the one explicit `ImageGeneration` binding. Each binding resolves exactly one profile/capability/model; a profile may serve both only through separately chosen capabilities. Origin (`Official`, `Relay`, `Friend`, `Subscription`, `Custom`) is metadata, not protocol or routing. Unknown, missing, cross-channel, or failed state has no implicit or fallback route. The endpoint is `OpaqueEndpoint`: a user-supplied string saved and resolved unchanged, including official, relay, friend, subscription, and custom values. Local configuration acceptance is never network authorization.
 
 ### A1 exact ownership and stop line
 
@@ -46,12 +46,13 @@ The A1 owned roots are exactly:
 3. `src/VFXComposer.AI.Tests/**`
 4. `docs/schemas/desktop/vfxcomposer-ai-provider-config-v1.schema.json`
 5. `VFXComposer.sln`
-6. `eng/run-phase2-gate.ps1`
-7. `eng/phase2-baseline-roots.json`
+6. `eng/verify-phase2-schemas.py`
+7. `eng/run-phase2-gate.ps1`
+8. `eng/phase2-baseline-roots.json`
 
-A1 must STOP for any other path, including a central package-management file or an external `.csproj` dependency. It may deliver core contracts/profile/channel bindings/schema, strict versioned atomic JSON with `.bak`, DPAPI CurrentUser SecretRef store, configuration fingerprint, health/adapter-registry skeleton, safe Tom draft import, resolver, and `IAiGateway`; it must not implement real provider HTTP. Its minimum test matrix is canonical configuration, migration/future rejection, corrupt backup, DPAPI plaintext/unreadable failure, URI policy, capability/channel fail-closed behavior, no fallback, Tom-secret exclusion, internal boundary, and redaction.
+A1 must STOP for any other path, including a central package-management file or an external `.csproj` dependency. Its earlier `NO-GO — P0/P1/P2=0/0/1` is superseded by the user requirement, not upgraded to GO. It must replace endpoint admission with `OpaqueEndpoint`: schema/storage enforce only structure, type, version, duplicate/unknown-field handling, and bounded storage size; no URI, scheme, host, port, user-info, query, fragment, or upstream-validity decision may block save or resolution. A1 may deliver core contracts/profile/channel bindings/schema, strict versioned atomic JSON with `.bak`, DPAPI CurrentUser SecretRef store, configuration fingerprint, health/adapter-registry skeleton, safe Tom draft import, resolver, and `IAiGateway`; it must not implement real provider HTTP. Its minimum revalidation matrix is arbitrary bounded endpoint save/resolve unchanged; structural/size failures only; zero network invocation during config acceptance; request-time adapter failure/no write-back/no fallback; DPAPI/plaintext and backup recovery; channel mismatch; Tom-secret exclusion; boundary; and redaction.
 
-All credentials are documented API-token/OAuth only. Cookie scraping, scripts/CLI, custom-header templates, dynamic DLLs, TLS bypasses, non-loopback HTTP, raw diagnostic data, and automatic Unity writes are prohibited. Configuration uses DPAPI CurrentUser plus SecretRef and atomic JSON/`.bak`; Tom import accepts only non-sensitive metadata and never decrypts `ApiKeyProtected`; images remain in a private cache only.
+`SecretRef` with DPAPI CurrentUser remains the recommended formal key store, but endpoint text containing credentials is not rejected and is always treated as sensitive. A2/A3, not A1, will attempt protocol-specific request construction from the original `OpaqueEndpoint` at call time. Construction/network/upstream failure returns a stable redacted error, never changes configuration and never falls back. Logs, exceptions, receipts, ordinary UI, and default export show only a redacted endpoint summary; the explicit edit surface may show the user value, and configuration export requires explicit inclusion plus a credential-exposure warning. Cookie scraping, scripts/CLI, custom-header templates, dynamic DLLs, TLS bypasses, raw diagnostic data, and automatic Unity writes remain prohibited.
 
 ---
 
