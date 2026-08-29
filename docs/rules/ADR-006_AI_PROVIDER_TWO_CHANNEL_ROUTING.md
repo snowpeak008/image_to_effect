@@ -1,101 +1,107 @@
-# ADR-006: AI provider two-channel routing
+# ADR-006: AI provider two-channel routing and user-defined endpoints
 
-Status: `ACCEPTED — A0 ARCHITECTURE FREEZE` on `2026-08-28`. This ADR is the A0 documentation closeout and publishes A1. It adds no provider runtime, network traffic, credential, Desktop UI, Broker, Worker, Unity, project-write, or production-service capability.
+Status: `ACCEPTED — A0 ARCHITECTURE FREEZE, REBASED BY USER PRODUCT DECISION` on `2026-08-29`.
 
 Normative architecture token: `AI_PROVIDER_TWO_CHANNEL_ROUTING_V1`.
 
-Depends on: ADR-005 final U6 scoped GO. This ADR does not supersede, reopen, or alter ADR-005's ordinary-user Broker/Worker route.
+This ADR is a documentation-only rebase of the post-U6 AI contract. It changes no source, runner, network behavior, credential, Desktop UI, Broker, Worker, Unity, project-write, or production-service capability. It supersedes only the earlier endpoint-admission design; ADR-005's ordinary-user Broker/Worker route remains closed and unchanged.
 
-## 1. U6 closeout and program boundary
+## 1. Program boundary and delivery state
 
-The independent frozen-byte receipt `u6-independent-final-audit-20260828T232640380Z` is accepted as the U6 final GO: `P0=0 / P1=0 / P2=0`. Its `summary.json` is `passed: true`; its frozen-root replay reports `0` mismatches; its point-in-time residue reports no runtime processes, VFX Composer named pipes, or owned LocalE2E temporary roots; and its source manifest records `16607` entries with SHA-256 `592bfeaab629e8cb9b100cf82fd3ce95c5be23972742501be34e57f1908a2284`.
+The accepted U6 receipt remains the closeout for the USER_MODE architecture: `P0=0 / P1=0 / P2=0`, with the default Broker contract unchanged (`W24FS001` on stderr and exit `23` for no-argument launch). That final GO is not an AI-provider runtime claim.
 
-Accordingly, the ADR-005 USER_MODE main architecture is `CLOSED — FINAL GO — 100/100`. This is completion of the defined user-mode route, not an AI-provider runtime claim. The default Broker contract remains unchanged: launch with no arguments writes only `W24FS001` to stderr and exits `23`.
-
-A0 closes in the same single documentation commit that accepts this ADR. It uses the existing U6 unified-gate evidence only; A0 does not rerun the project gate. The only A0 validation command is a documentation diff check. A0 neither adds nor accepts implementation bytes.
-
-The post-U6 AI delivery DAG is exactly:
+The post-U6 AI DAG remains exactly:
 
 `A0 -> A1 -> (A2 || A3) -> A4 -> A5 -> A6`.
 
-At publication, `A0` is `CLOSED`; `A1` is the sole `ACTIVE` package; `A2`, `A3`, `A4`, `A5`, and `A6` are `NOT STARTED`. No node may skip its predecessor, and A2/A3 may overlap only after A1 has frozen their disjoint ownership.
+`A0` is closed. `A1 — AI_PROVIDER_FOUNDATION` remains the sole `ACTIVE` package; `A2` through `A6` remain `NOT STARTED`. The earlier A1 review verdict `NO-GO — P0/P1/P2=0/0/1` is superseded by this user product decision, not converted into a GO and not erased as historical evidence. A1 must rework its endpoint model to `OpaqueEndpoint`, then rerun its scoped validation and independent review before it may close.
 
-## 2. Decision: two mandatory, isolated channels
+## 2. Decision: two explicit channels, no fallback
 
 There are exactly two product AI channels:
 
 | Channel | Sole permitted work | Mandatory binding |
 |---|---|---|
-| `ChatLlm` | Every LLM, chat, conversation, and text-generation operation. | The explicit `ChatLlm` channel binding only. |
-| `ImageGeneration` | Every image-generation operation. | The explicit `ImageGeneration` channel binding only. |
+| `ChatLlm` | All LLM, conversation, and text-generation operations. | The one explicit `ChatLlm` binding. |
+| `ImageGeneration` | All image-generation operations. | The one explicit `ImageGeneration` binding. |
 
-Each channel has exactly one explicit binding to one `ProviderProfile`, one declared capability, and one explicit model. A capability therefore contains a stable capability ID and model ID; a binding cannot name a list, priority, or optional second choice. One profile may declare both a chat capability and an image capability, but the user must separately choose, validate, and display each channel binding. Sharing a profile never shares a capability, model selection, adapter, health result, request, failure, or fallback path.
+Each channel resolves exactly one explicit `ProviderProfile`, declared capability, model, and protocol. A profile may serve both channels only through separately selected capabilities and separately displayed bindings. Origin (`Official`, `Relay`, `Friend`, `Subscription`, or `Custom`) is descriptive metadata; it does not infer a protocol, request format, authentication method, adapter, model, or fallback.
 
-Every product call enters `IAiGateway` with a versioned channel-specific request DTO. Feature callers cannot supply a profile ID, model override, endpoint, protocol, adapter, authorization/header, or fallback candidate. Before any future request is constructed, Gateway resolves the immutable settings snapshot and validates the exact channel binding, enabled profile, selected model/capability, explicit protocol, endpoint policy, and auth reference. Missing, disabled, unknown, mismatched, stale, corrupt, or unverified state fails closed with zero network traffic.
+Feature callers enter `IAiGateway` with channel-specific request DTOs. They cannot select a profile, model, protocol, endpoint, adapter, header, credential, or second choice. Missing, disabled, unknown, cross-channel, stale, corrupt, or unsupported binding state fails closed before network activity.
 
-The following are forbidden:
+The following remain forbidden:
 
-- implicit default, last-successful, only-enabled, environment, PATH, URL, model-name, web-site-name, or import-derived routing;
-- a fallback list or retry to another profile, model, endpoint, origin, adapter, or channel;
-- using an image profile for chat or a chat profile for image generation;
-- automatic protocol detection or an unknown protocol falling back to an OpenAI-compatible, chat, image, or other adapter.
+- implicit default, last-successful, only-enabled, environment, PATH, display-name, model-name, origin, import-derived, or URL-derived routing;
+- fallback or retry to another channel, profile, capability, model, endpoint, origin, or adapter;
+- automatic protocol detection, or an unknown protocol falling back to an OpenAI-compatible or any other adapter;
+- cookie scraping, browser-state access, scripts, CLI/sidecars, dynamic provider DLLs, arbitrary header templates, or TLS-validation bypasses.
 
-Bounded retries, if introduced by a later adapter node, may be only for the same resolved channel, profile, model, endpoint, protocol, and request, and must remain cancellable. A failure never selects a different route.
+Bounded retries may later be added only for the already resolved one route and request. A failure never chooses a different route.
 
-## 3. Profile, protocol, origin, and authentication model
+## 3. Decision: endpoint is an opaque, user-owned configuration string
 
-`ProviderProfile`, `ProtocolBinding`, `EndpointDefinition`, `AuthDescriptor(SecretRef)`, `CapabilityDefinition`, `ChannelBinding`, immutable settings snapshot, health result, and request/response diagnostics are distinct versioned concepts. Public contracts contain neither plaintext nor protected credential payloads.
+`OpaqueEndpoint` is the endpoint contract. Its value is a user-supplied, user-editable configuration string that the product saves and resolves as entered. It may represent an official API, relay, friend-provided service, subscription-related custom address, or any other custom address. It may contain a scheme, host, port, user-info, path, query, fragment, or text that is not a URI at all.
 
-`Origin` is only descriptive metadata with this closed vocabulary: `Official`, `Relay`, `Friend`, `Subscription`, and `Custom`. Origin does not select a protocol, URL shape, adapter, header, authentication mechanism, or fallback. `ProtocolId` is independently explicit, versioned, implemented, and tested; protocol cannot be inferred from Origin, a URL, a model name, an imported field, or a display name.
+The persisted configuration and its JSON Schema enforce only aggregate structure, required fields, field types, supported version/revision rules, duplicate/unknown-field handling, and bounded storage size. For `OpaqueEndpoint`, validation is limited to a string and a reasonable non-empty storage bound. It must not validate URI syntax, scheme, host, port, user-info, query, fragment, provider-specific path, or upstream service legality. It must not normalize, strip, repair, reject, or reinterpret the string during local save or configuration resolution.
 
-Only a provider's documented API-token authentication or documented OAuth flow may be supported. `Subscription` remains metadata, not permission to automate a subscription login. The implementation must not scrape cookies, browser state, or credentials; execute scripts or CLI/sidecar programs; generate arbitrary/custom header templates; load dynamic DLLs for provider access; bypass TLS validation; or use certificate-validation exceptions. There is no custom auth-header, cookie, shell, dynamic-library, or TLS-bypass extension point.
+Configuration acceptance is not network authorization. In particular, local schema acceptance and resolver acceptance do not promise that a request can be formed, that a host is reachable, or that an upstream service will accept it. They also do not authorize any other route.
 
-Endpoints must use HTTPS. An explicit, user-visible loopback HTTP development exception may be permitted only for a loopback host and must not send a production secret. All non-loopback HTTP is rejected.
+The formal key store remains the recommended place for API secrets: authentication is represented by `SecretRef`, protected with Windows DPAPI `CurrentUser` and product-specific versioned purpose/entropy. A profile is not rejected merely because the endpoint itself contains credentials in user-info or query text. Embedded endpoint credentials are treated as sensitive endpoint content, never as a replacement for the formal `SecretRef` design.
 
-## 4. Local storage, diagnostics, import, and image boundary
+## 4. Request-time interpretation and failure behavior
 
-AI configuration is current-user application data, not Unity project configuration. A strict, versioned aggregate JSON document is written atomically on the target volume and preserves the previous `.bak` file. Writes use a new temporary file, bounded UTF-8 serialization, flush/replace-or-move semantics, and cleanup; reads enforce size limits, canonical/strict shape, duplicate/unknown-field rejection, and exact supported-version policy. A future version, corrupt primary/backup, unreadable file, failed recovery, or stale revision fails closed and must never silently replace user settings with an empty default.
+A1 must provide `OpaqueEndpoint` storage, codec/schema support, redaction, and configuration resolution only. It must not parse the value as a URI merely to decide whether settings may be saved or resolved, and it must not add real Chat or Image HTTP.
 
-Secrets are referred to only by `SecretRef`. The provider store protects their payloads with Windows DPAPI `CurrentUser` plus a product-specific, versioned purpose/entropy. Plaintext exists only for the shortest save or request-assembly interval, is not returned by public APIs, and is never included in profiles, settings snapshots, fingerprints, DTOs, errors, logs, receipts, telemetry, cache keys, or exports. Every configuration change creates a new revision and a non-secret configuration fingerprint; it invalidates health/verification state without activating or rebinding a channel.
+A2 and A3 are the first lanes allowed to interpret an `OpaqueEndpoint` at call time. The explicitly bound adapter makes a best-effort, protocol-specific attempt to construct its one request from the original stored string. If it cannot construct a request, encounters a network failure, or receives an upstream rejection, it returns a stable redacted failure for that call.
 
-Logs, receipts, diagnostics, telemetry, and exports must not contain a key, token, `Authorization` value, authentication header, SecretRef payload, prompt, raw request, raw response, provider URL, or base64/binary image data. Redacted stable diagnostic codes and limited non-sensitive state are the only allowed observability surface.
+Such a failure must not rewrite, normalize, disable, delete, or otherwise mutate the saved configuration. It must not select a different profile, model, endpoint, adapter, protocol, channel, or fallback route. Request-time usability is therefore distinct from local configuration persistence.
 
-The fixed design input is [`snowpeak008/Tom_doc@dd0f9ffc32d426735f7fb8960640e9b7ae9337bf`](https://github.com/snowpeak008/Tom_doc/tree/dd0f9ffc32d426735f7fb8960640e9b7ae9337bf). Tom import is a user-confirmed, non-sensitive draft import only. It uses a strict allow-list for metadata such as display name, origin suggestion, endpoint, model, and timeout. `ApiKeyProtected` is never copied, parsed, decrypted, re-encrypted, returned, logged, or persisted. Old verification state is discarded; command paths, sidecar/CLI hints, cookies, and automatic relay-protocol detection are rejected. An imported draft cannot create an active binding until the user explicitly selects a protocol, capability/model, credential, and channel binding.
+## 5. Storage, observability, import, and export
 
-Images are private, untrusted artifacts. Future image output may enter only a verified per-user private cache, with no prompt/model/endpoint/secret in names or manifests. It must not automatically write to Unity, `Assets`, recipes, patches, or any project path. Explicit Desktop user export is a later, separately bounded action.
+AI configuration remains current-user application data, not Unity project configuration. The aggregate stays versioned and atomically written with bounded UTF-8 serialization and a preserved `.bak`; corrupt or unsupported aggregate data fails closed rather than silently replacing user settings. This integrity handling does not become endpoint syntax validation.
 
-## 5. Module and process boundary
+Raw endpoint strings can contain sensitive query parameters or user-info. Logs, exceptions, receipts, telemetry, diagnostics, normal UI, cache keys, and default exports must show only a redacted endpoint summary and stable error code. They must never emit the raw endpoint, user-info, query, fragment, key, token, `Authorization` value, authentication header, SecretRef payload, prompt, raw request, raw response, or image bytes.
 
-The implementation boundary is fixed to these three modules:
+An explicit provider-profile editing surface may display the user's raw endpoint value so that the user can edit it. That exception is limited to the deliberate edit interaction and must not flow into surrounding diagnostics. Configuration export must require an explicit "include provider configuration" choice and a warning that the exported raw endpoint may contain credentials or other sensitive data; it must not include configuration by default. SecretRef payloads remain excluded from exports.
 
-| Module | Responsibility | Prohibited dependency or behavior |
+The fixed Tom design input remains [`snowpeak008/Tom_doc@dd0f9ffc32d426735f7fb8960640e9b7ae9337bf`](https://github.com/snowpeak008/Tom_doc/tree/dd0f9ffc32d426735f7fb8960640e9b7ae9337bf). Tom import is user-confirmed draft import only. A source endpoint may be carried as the same opaque user value and must be redacted in preview outside an explicit edit action. `ApiKeyProtected` is never copied, parsed, decrypted, re-encrypted, returned, logged, or persisted. Command paths, sidecar/CLI hints, cookies, and automatic protocol detection are rejected. Import cannot activate a channel binding without explicit user selection of protocol, capability/model, credential, and channel.
+
+Future image output remains a private, untrusted artifact. It must not automatically write to Unity, `Assets`, recipes, patches, or any project path. A later explicit Desktop export remains a separately bounded action.
+
+## 6. Module boundary and A1 rework contract
+
+| Module | Responsibility | Prohibited behavior |
 |---|---|---|
-| `VFXComposer.AI.Contracts` | Pure versioned channel/profile/capability/binding/request/response/diagnostic contracts and `IAiGateway`. | Provider transport implementation, Desktop UI, Broker, Worker, Unity, project I/O, and secret payloads. |
-| `VFXComposer.AI.Providers` | Strict settings/store/DPAPI/import/fingerprint/health/registry/Gateway configuration resolution. | Broker, Worker, Unity, project writes, real adapter traffic in A1, and UI controls. |
-| `VFXComposer.AI.Tests` | Contract, boundary, storage, import, resolver, and redaction tests with fakes only. | Real credentials, real provider traffic, and project mutation. |
+| `VFXComposer.AI.Contracts` | Versioned channel/profile/capability/binding/request/response/diagnostic contracts, including `OpaqueEndpoint` and `IAiGateway`. | Provider transport, Desktop UI, Broker, Worker, Unity, project I/O, secret payloads. |
+| `VFXComposer.AI.Providers` | Atomic settings/DPAPI store, import, fingerprint, redaction, configuration resolution, and descriptive registry skeleton. | Local endpoint rejection/parsing as a save-or-resolve gate, real A1 adapter traffic, Broker/Worker/Unity/project writes. |
+| `VFXComposer.AI.Tests` | Contract, store, import, resolver, redaction, and request-time adapter-boundary tests using synthetic data/fakes. | Real credentials, real provider traffic, and project mutation. |
 
-Broker, Worker, and Unity have no AI secret, secret resolution, provider configuration, or AI network responsibility. Desktop may use only the Gateway and constrained settings-management contracts; it has no direct AI `HttpClient`/transport route and no secret-handling route. No image or AI result may cross this boundary into automatic Unity/project writing.
+Broker, Worker, and Unity have no AI secret, secret-resolution, provider-configuration, or provider-network role. Desktop may use only Gateway and constrained settings-management contracts; it has no direct provider transport route.
 
-## 6. A1 release contract
-
-`A1` is `ACTIVE — AI_PROVIDER_FOUNDATION`. It is the only active post-U6 package. Its owned roots are exactly:
+A1 retains its published owned roots:
 
 1. `src/VFXComposer.AI.Contracts/**`
 2. `src/VFXComposer.AI.Providers/**`
 3. `src/VFXComposer.AI.Tests/**`
 4. `docs/schemas/desktop/vfxcomposer-ai-provider-config-v1.schema.json`
 5. `VFXComposer.sln`
-6. `eng/run-phase2-gate.ps1`
-7. `eng/phase2-baseline-roots.json`
+6. `eng/verify-phase2-schemas.py`
+7. `eng/run-phase2-gate.ps1`
+8. `eng/phase2-baseline-roots.json`
 
-No other path is authorized. In particular, A1 must STOP rather than edit a central package-management file, a project file outside an owned root, an existing external `.csproj`, Broker, Worker, Unity, Desktop, existing stage note, ADR-005, or any unrelated source/lock/configuration file. A dependency that requires such an external central-package or `.csproj` change is a STOP condition, not implicit authorization.
+This documentation rebase does not exercise that implementation authority: it edits only the seven named AI control documents. The subsequent A1 rework must replace endpoint admission with `OpaqueEndpoint`, retain the explicit channel binding and no-fallback invariants, and revalidate from the revised contract.
 
-A1 must deliver only the foundation: core contracts; profile/channel bindings; the configuration schema; strict versioned atomic JSON store with `.bak`; DPAPI CurrentUser SecretRef store; configuration revision/fingerprint; health and adapter-registry skeletons; safe Tom draft import; configuration resolver; and `IAiGateway`. The registry is descriptive/fail-closed only in A1. A1 must not implement real Chat or Image HTTP, a real protocol adapter, image generation/download/cache, Desktop UI wiring, Broker/Worker/Unity change, or external provider verification.
+At minimum, A1 revalidation must prove:
 
-At minimum, A1 tests must cover canonical configuration; migration and future-version rejection; corrupt primary/backup recovery behavior; DPAPI no-plaintext and unreadable-payload failure; URI policy; capability/channel mismatch failure; no fallback; Tom secret exclusion; internal dependency/process boundary; and redaction. Resolver-negative tests must prove zero outbound handler invocation. Tests use synthetic data and local fakes only.
+- arbitrary bounded endpoint strings, including malformed URI-like input and strings with user-info, query, and fragments, save and resolve unchanged;
+- aggregate/schema structural failures and storage-size overflow still fail correctly, without treating endpoint syntax as a structural failure;
+- configuration acceptance does not invoke a network handler or claim network authorization;
+- request-time adapter parsing failures, network failures, and upstream rejections return stable redacted errors with no configuration write-back and no fallback;
+- redaction protects endpoint-embedded sensitive material in logs, exceptions, receipts, ordinary UI, and default export, while explicit editing and warned configuration export follow the stated consent rules;
+- DPAPI/`SecretRef`, corrupt primary/backup behavior, Tom `ApiKeyProtected` exclusion, channel/capability mismatch, and Contracts/Providers/Tests/Broker/Worker/Unity/Desktop boundaries remain intact.
 
 ## 7. Consequences and stop line
 
-`A2` (Chat adapter lane), `A3` (Image adapter lane), `A4` (Desktop wiring), `A5` (mock E2E), and `A6` (independent audit) remain `NOT STARTED`. A2 and A3 are the first nodes that may add their respective protocol/transport behavior, subject to a later explicit owned-root release. No future node may weaken the channel, credential, network, logging, import, cache, or Unity-write prohibitions in this ADR without a new ADR and explicit publication.
+`A2` (Chat adapter), `A3` (Image adapter), `A4` (Desktop wiring), `A5` (mock E2E), and `A6` (independent audit) remain `NOT STARTED`. A2/A3 may add their respective request-time adapter behavior only after A1's reworked contract is independently accepted. No later node may use endpoint acceptance to infer permission for a different route, weaken endpoint redaction, or introduce fallback.
 
-This ADR is final for A0. After its single documentation commit and clean-tree verification, work stops here except for the separately authorized A1 package.
+After this documentation commit passes `git diff --check` and the worktree is clean, this rebase is `FINAL STOPPED`. Only the separately authorized A1 implementation rework may proceed.

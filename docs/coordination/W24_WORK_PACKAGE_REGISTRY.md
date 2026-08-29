@@ -1,6 +1,6 @@
 # W24 work-package registry
 
-> **CURRENT REGISTRY — U6 FINAL GO / A0 AI ARCHITECTURE FREEZE (2026-08-28).** ADR-005's USER_MODE route is closed at `100/100`; ADR-006 governs the separate post-U6 AI chain. Every pre-U0 package entry retained later in this file is historical provenance, not an active contract, dependency, blocker, or audit queue.
+> **CURRENT REGISTRY — U6 FINAL GO / A0 AI ENDPOINT REBASE (2026-08-29).** ADR-005's USER_MODE route is closed at `100/100`; ADR-006 governs the separate post-U6 AI chain with user-owned opaque endpoints. Every pre-U0 package entry retained later in this file is historical provenance, not an active contract, dependency, blocker, or audit queue.
 >
 > Normative tokens: `USER_MODE_LOCAL_CREATIVE_TOOL_V1` and `AI_PROVIDER_TWO_CHANNEL_ROUTING_V1`.
 
@@ -18,15 +18,15 @@ Exact DAG: `U0 -> U1`; `U0 -> U2`; `U1 + U2 -> U3`; `U3 -> U4 -> U5 -> U6`.
 | U5 `WP-USERMODE-LOCAL-E2E` | `CLOSED / SCOPED GO — LOCAL_ORDINARY_USER_E2E`; source `365e7612b1be276aa74f4ab36f40482a0858e1ae`, integrated at `b9de2eb47e4e9d9ea29e0490b9dfc745a4dc307d`, exactly 17 owned files. | Independent acceptance `P0/P1/P2=0/0/0`; Protocol `108/108`, Client `16/16`, Broker `183/183`, LocalE2E `17/17`, real bundle and cleanup evidence accepted. |
 | U6 `WP-USERMODE-FINAL-AUDIT` | `CLOSED — FINAL GO — P0/P1/P2=0/0/0`; accepted receipt `u6-independent-final-audit-20260828T232640380Z`. | USER_MODE final closeout; no source repair or reopening. |
 | USER_MODE main architecture | `CLOSED — 100/100`. | ADR-005 scope is complete; no AI-provider capability follows from this accounting. |
-| A0 `AI_PROVIDER_TWO_CHANNEL_ROUTING` | `CLOSED — DOCS ONLY` in this same single documentation commit. | ADR-006 freeze; existing U6 evidence only and no project-gate rerun. |
-| A1 `AI_PROVIDER_FOUNDATION` | `ACTIVE` — sole active package. | Exact owned roots only; contracts/configuration/security/import/Gateway foundation, no real Chat/Image HTTP. |
+| A0 `AI_PROVIDER_TWO_CHANNEL_ROUTING` | `CLOSED — DOCS ONLY`; endpoint contract rebased by this seven-document decision update. | Existing U6 evidence only and no project-gate rerun. |
+| A1 `AI_PROVIDER_FOUNDATION` | `ACTIVE` — sole active package. | Exact owned roots only; rework to `OpaqueEndpoint`, configuration/security/import/Gateway foundation, no real Chat/Image HTTP. |
 | A2 `AI_CHAT_ADAPTER` | `NOT STARTED`. | Waits for closed A1. |
 | A3 `AI_IMAGE_ADAPTER` | `NOT STARTED`. | Waits for closed A1. |
 | A4 `AI_DESKTOP_WIRING` | `NOT STARTED`. | Waits for closed A2 and A3. |
 | A5 `AI_MOCK_E2E` | `NOT STARTED`. | Waits for closed A4. |
 | A6 `AI_INDEPENDENT_FINAL_AUDIT` | `NOT STARTED`. | Waits for closed A5. |
 
-U1 through U6 are closed/integrated, scoped GO, or final GO. A0 is closed. `A1 — AI_PROVIDER_FOUNDATION` is the sole active package; A2-A6 are not started and there are no other current implementation nodes.
+U1 through U6 are closed/integrated, scoped GO, or final GO. A0 is closed. `A1 — AI_PROVIDER_FOUNDATION` is the sole active package; its earlier `NO-GO — P0/P1/P2=0/0/1` is superseded by the changed user endpoint requirement and must be reworked/revalidated. A2-A6 are not started and there are no other current implementation nodes.
 
 ### U3 exact closed ownership and evidence
 
@@ -102,7 +102,7 @@ The accepted scope is the ADR-005 local ordinary-user route only: Protocol-only 
 
 The closed U6 result makes the ADR-005 USER_MODE main architecture `100/100`. It preserves the default Broker no-argument behavior `W24FS001`/exit `23`; it does not authorize an AI provider, credential, network request, image cache, Desktop wiring, or Unity/project mutation.
 
-The formal AI DAG is `A0 -> A1 -> (A2 || A3) -> A4 -> A5 -> A6`. A0 is closed in this same documentation commit; it has no implementation bytes and uses the existing U6 unified-gate evidence only. A1 is uniquely active; A2-A6 are not started. ADR-006's mandatory dual-channel policy requires `ChatLlm` for all LLM/conversation work and `ImageGeneration` for all image generation, with one explicit profile/capability/model per channel, Origin metadata distinct from protocol, and zero fallback.
+The formal AI DAG is `A0 -> A1 -> (A2 || A3) -> A4 -> A5 -> A6`. A0 is closed; it has no implementation bytes and uses the existing U6 unified-gate evidence only. A1 is uniquely active; A2-A6 are not started. ADR-006's mandatory dual-channel policy requires `ChatLlm` for all LLM/conversation work and `ImageGeneration` for all image generation, with one explicit profile/capability/model per channel, Origin metadata distinct from protocol, and zero fallback. Endpoint is a user-owned `OpaqueEndpoint` string, so local configuration save/resolve is deliberately separate from request-time adapter usability and never authorizes a network request.
 
 `A1 — AI_PROVIDER_FOUNDATION` owns exactly and only:
 
@@ -115,7 +115,7 @@ The formal AI DAG is `A0 -> A1 -> (A2 || A3) -> A4 -> A5 -> A6`. A0 is closed in
 7. `eng/run-phase2-gate.ps1`
 8. `eng/phase2-baseline-roots.json`
 
-`eng/verify-phase2-schemas.py` is the only additional A1 file beyond the three roots, schema, solution, runner, and baseline. Any other path is forbidden. A central package-management change or an external `.csproj` dependency is an immediate STOP. The first A1 writer is `STOPPED — ZERO WRITES`: the new AI schema would be desktop schema 23 while verifier line 57 hard-codes 22. A1 must change the expected total to 23, preserve `Phase 2=13`, `positive=14`, and `negative=236`, and add AI-schema structural validation with positive and negative cases; merely loosening the count is STOP. A1 may implement only contracts/profile/channel bindings/schema, strict versioned atomic JSON with `.bak`, DPAPI CurrentUser SecretRef storage, configuration fingerprint, health/adapter-registry skeletons, Tom non-sensitive draft import, resolver, and `IAiGateway`; real Chat/Image HTTP is prohibited. Required tests include canonical configuration, migration/future rejection, corrupt backup, DPAPI no-plaintext/unreadable failure, URI policy, channel/capability fail-closed behavior, no fallback, Tom secret exclusion, internal boundary, and redaction.
+`eng/verify-phase2-schemas.py` is the only additional A1 file beyond the three roots, schema, solution, runner, and baseline. Any other path is forbidden. A central package-management change or an external `.csproj` dependency is an immediate STOP. The first A1 writer is `STOPPED — ZERO WRITES` pending its rework from endpoint admission to `OpaqueEndpoint`; the old `NO-GO — P0/P1/P2=0/0/1` is superseded by the user requirement rather than accepted. A1 must make the schema/storage layer validate only structure, type, version, duplicate/unknown fields, and bounded storage size; it must save and resolve endpoint text unchanged regardless of URI-like syntax, scheme, host, port, user-info, query, fragment, or upstream legality. A1 may implement only contracts/profile/channel bindings/schema, strict versioned atomic JSON with `.bak`, DPAPI CurrentUser SecretRef storage, configuration fingerprint, health/adapter-registry skeletons, Tom non-sensitive draft import, resolver, and `IAiGateway`; real Chat/Image HTTP is prohibited. Required tests include arbitrary bounded endpoint save/resolve, structural/size failure, zero network invocation during configuration acceptance, request-time A2/A3 parsing/network/upstream error redaction with no write-back/no fallback, channel/capability fail-closed behavior, DPAPI/backup behavior, Tom secret exclusion, internal boundary, and redaction. `SecretRef` remains recommended but URL-embedded credentials cannot reject a profile; normal observability/default export must redact them, while explicit edit and warned explicit configuration export are permitted.
 
 After this publication the registry is `FINAL STOPPED` for U6/A0. Only A1 can proceed.
 
