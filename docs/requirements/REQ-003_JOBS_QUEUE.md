@@ -133,7 +133,7 @@ stateDiagram-v2
 ### 7.1 队列存储
 
 - 位置：当前用户应用数据目录（与 AI 设置同级策略；**不在 Unity 项目内**，Desktop 不因此获得项目写入权）。
-- 形态：版本化 store，schema 建议 `vfxcomposer.job-store/1`：
+- 形态：版本化 store，schema 建议 `vfxcomposer.job-store/1`（**勘误 2026-08-29**：F3c 为持久化 `itemId` 已升版至 `vfxcomposer.job-store/2`，版本 1 文件按未知版本 fail-closed 拒绝；事件日志仍为 `vfxcomposer.job-event/1`）：
   - **快照**：队列与各 job 的当前状态（原子写 + `.bak` 恢复，语义对齐 `ProviderConfigurationStore` 的"读取→校验→原子 replace"与损坏恢复规则）；
   - **事件日志**：append-only（JSONL），逐条记录状态迁移/进度/日志/产物/完成事件，字段与 Protocol Job DTO 对齐。
 - 解析纪律：未知字段拒绝；不支持的 store 版本 fail-closed（不静默迁移）。
