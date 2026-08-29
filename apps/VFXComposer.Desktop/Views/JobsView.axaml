@@ -9,8 +9,93 @@
       <TextBlock FontSize="28" FontWeight="SemiBold" Text="{Binding Title}" />
       <TextBlock Classes="muted" Text="{Binding Description}" TextWrapping="Wrap" />
     </StackPanel>
+
+    <Border
+        Background="#3A3320"
+        BorderBrush="#F1D39A"
+        BorderThickness="1"
+        CornerRadius="5"
+        Padding="10"
+        IsVisible="{Binding IsWaitingForProjectLock}">
+      <TextBlock Foreground="#F1D39A" Text="{Binding QueueStatus}" TextWrapping="Wrap" />
+    </Border>
+
     <Border Classes="card">
-      <TextBlock Classes="muted" Text="{Binding EmptyStateMessage}" />
+      <StackPanel Spacing="8">
+        <Grid ColumnDefinitions="*,Auto" ColumnSpacing="8">
+          <TextBlock Classes="muted" VerticalAlignment="Center" Text="{Binding QueueStatus}" />
+          <Button Grid.Column="1" Command="{Binding RefreshCommand}" Content="Refresh" />
+        </Grid>
+        <TextBlock Foreground="#E39A9A" Text="{Binding StoreStatus}" TextWrapping="Wrap" IsVisible="{Binding StoreStatus, Converter={x:Static StringConverters.IsNotNullOrEmpty}}" />
+        <TextBlock Classes="muted" Text="{Binding EmptyStateMessage}" IsVisible="{Binding !HasJobs}" />
+        <ListBox ItemsSource="{Binding Jobs}" SelectedItem="{Binding SelectedJob}" IsVisible="{Binding HasJobs}">
+          <ListBox.ItemTemplate>
+            <DataTemplate x:DataType="vm:JobListItemViewModel">
+              <Border Margin="0,3" Padding="10" BorderBrush="#343A45" BorderThickness="1" CornerRadius="5">
+                <StackPanel Spacing="4">
+                  <Grid ColumnDefinitions="*,Auto" ColumnSpacing="8">
+                    <StackPanel Orientation="Horizontal" Spacing="8">
+                      <TextBlock FontWeight="SemiBold" Text="{Binding ShortJobId}" />
+                      <TextBlock Classes="muted" Text="{Binding SourceEntry}" />
+                      <TextBlock Classes="muted" Text="{Binding JobKind}" />
+                      <TextBlock Classes="muted" Text="{Binding BatchDisplay}" />
+                    </StackPanel>
+                    <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="8">
+                      <TextBlock FontWeight="SemiBold" Foreground="#9AE3B0" Text="RUNNING" IsVisible="{Binding IsRunning}" />
+                      <TextBlock Text="{Binding State}" IsVisible="{Binding !IsRunning}" />
+                      <TextBlock Classes="muted" Text="{Binding ProgressDisplay}" />
+                    </StackPanel>
+                  </Grid>
+                  <StackPanel Orientation="Horizontal" Spacing="12">
+                    <TextBlock Classes="muted" Text="{Binding EnqueuedDisplay, StringFormat='Queued {0}'}" />
+                    <TextBlock Classes="muted" Text="{Binding StartedDisplay, StringFormat='Started {0}'}" />
+                    <TextBlock Classes="muted" Text="{Binding CompletedDisplay, StringFormat='Finished {0}'}" />
+                    <TextBlock Classes="muted" Text="{Binding DiagnosticDisplay}" />
+                  </StackPanel>
+                  <StackPanel Orientation="Horizontal" Spacing="8">
+                    <Button
+                        Content="Cancel"
+                        IsVisible="{Binding CanCancel}"
+                        IsEnabled="{Binding !IsCancelPending}"
+                        Command="{Binding $parent[ListBox].((vm:JobsViewModel)DataContext).RequestCancelCommand}"
+                        CommandParameter="{Binding}" />
+                    <Button
+                        Content="Confirm cancel"
+                        IsVisible="{Binding IsCancelPending}"
+                        Command="{Binding $parent[ListBox].((vm:JobsViewModel)DataContext).ConfirmCancelCommand}"
+                        CommandParameter="{Binding}" />
+                    <Button
+                        Content="Keep"
+                        IsVisible="{Binding IsCancelPending}"
+                        Command="{Binding $parent[ListBox].((vm:JobsViewModel)DataContext).DismissCancelCommand}"
+                        CommandParameter="{Binding}" />
+                    <Button
+                        Content="Re-enqueue"
+                        IsVisible="{Binding CanResubmit}"
+                        Command="{Binding $parent[ListBox].((vm:JobsViewModel)DataContext).ResubmitCommand}"
+                        CommandParameter="{Binding}" />
+                  </StackPanel>
+                </StackPanel>
+              </Border>
+            </DataTemplate>
+          </ListBox.ItemTemplate>
+        </ListBox>
+      </StackPanel>
+    </Border>
+
+    <Border Classes="card" IsVisible="{Binding SelectedJob, Converter={x:Static ObjectConverters.IsNotNull}}">
+      <StackPanel Spacing="8">
+        <TextBlock FontWeight="SemiBold" Text="Timeline" />
+        <TextBlock Classes="muted" Text="{Binding SelectedArtifacts}" TextWrapping="Wrap" />
+        <TextBlock Classes="muted" Text="{Binding SelectedDiagnostic}" TextWrapping="Wrap" IsVisible="{Binding SelectedDiagnostic, Converter={x:Static StringConverters.IsNotNullOrEmpty}}" />
+        <ItemsControl ItemsSource="{Binding SelectedJobTimeline}">
+          <ItemsControl.ItemTemplate>
+            <DataTemplate x:DataType="x:String">
+              <TextBlock Classes="muted" Text="{Binding}" TextWrapping="Wrap" />
+            </DataTemplate>
+          </ItemsControl.ItemTemplate>
+        </ItemsControl>
+      </StackPanel>
     </Border>
   </StackPanel>
 </UserControl>

@@ -4,6 +4,7 @@ using CommunityToolkit.Mvvm.Input;
 using VFXComposer.AI.Contracts.Desktop;
 using VFXComposer.Client;
 using VFXComposer.Desktop.Services;
+using VFXComposer.Jobs;
 
 namespace VFXComposer.Desktop.ViewModels;
 
@@ -29,7 +30,8 @@ public sealed class MainWindowViewModel : ObservableObject, IAsyncDisposable
         VfxComposerClient client,
         IInMemoryDiagnosticSink diagnostics,
         IUiErrorBoundary errorBoundary,
-        IAiDesktopRuntime? aiRuntime = null)
+        IAiDesktopRuntime? aiRuntime = null,
+        IJobQueueClient? jobQueue = null)
     {
         _client = client ?? throw new ArgumentNullException(nameof(client));
         _diagnostics = diagnostics ?? throw new ArgumentNullException(nameof(diagnostics));
@@ -48,7 +50,7 @@ public sealed class MainWindowViewModel : ObservableObject, IAsyncDisposable
                 new(_previewPage),
                 new(new PatchViewModel()),
                 new(new ReviewViewModel()),
-                new(new JobsViewModel()),
+                new(new JobsViewModel(jobQueue)),
                 new(_settingsPage),
             ]));
 
@@ -129,7 +131,8 @@ public sealed class MainWindowViewModel : ObservableObject, IAsyncDisposable
     public static MainWindowViewModel CreateDisconnected(
         IInMemoryDiagnosticSink? diagnostics = null,
         IUiErrorBoundary? errorBoundary = null,
-        IAiDesktopRuntime? aiRuntime = null)
+        IAiDesktopRuntime? aiRuntime = null,
+        IJobQueueClient? jobQueue = null)
     {
         diagnostics ??= new InMemoryDiagnosticSink();
         errorBoundary ??= new UiErrorBoundary(diagnostics);
@@ -138,7 +141,8 @@ public sealed class MainWindowViewModel : ObservableObject, IAsyncDisposable
             VfxComposerClient.CreateDisconnected(),
             diagnostics,
             errorBoundary,
-            aiRuntime);
+            aiRuntime,
+            jobQueue);
     }
 
     public static MainWindowViewModel CreateUserMode(
@@ -147,7 +151,8 @@ public sealed class MainWindowViewModel : ObservableObject, IAsyncDisposable
         IUiDispatcher dispatcher,
         IInMemoryDiagnosticSink? diagnostics = null,
         IUiErrorBoundary? errorBoundary = null,
-        IAiDesktopRuntime? aiRuntime = null)
+        IAiDesktopRuntime? aiRuntime = null,
+        IJobQueueClient? jobQueue = null)
     {
         ArgumentNullException.ThrowIfNull(session);
         ArgumentNullException.ThrowIfNull(selectionDialog);
@@ -155,7 +160,7 @@ public sealed class MainWindowViewModel : ObservableObject, IAsyncDisposable
         diagnostics ??= new InMemoryDiagnosticSink();
         errorBoundary ??= new UiErrorBoundary(diagnostics);
         var result = new MainWindowViewModel(
-            VfxComposerClient.CreateDisconnected(), diagnostics, errorBoundary, aiRuntime)
+            VfxComposerClient.CreateDisconnected(), diagnostics, errorBoundary, aiRuntime, jobQueue)
         {
             _session = session,
             _selectionDialog = selectionDialog,

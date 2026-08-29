@@ -278,6 +278,13 @@
           "VFXComposer.AI.Contracts": "[1.0.0, )",
           "VFXComposer.AI.Providers": "[1.0.0, )",
           "VFXComposer.Client": "[1.0.0, )",
+          "VFXComposer.Jobs": "[1.0.0, )",
+          "VFXComposer.Protocol": "[1.0.0, )"
+        }
+      },
+      "vfxcomposer.jobs": {
+        "type": "Project",
+        "dependencies": {
           "VFXComposer.Protocol": "[1.0.0, )"
         }
       },
