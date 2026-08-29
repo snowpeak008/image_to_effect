@@ -1,4 +1,7 @@
+using System.Buffers;
 using System.Collections.Frozen;
+using System.Text;
+using System.Text.Json;
 
 namespace VFXComposer.Mcp;
 
@@ -24,9 +27,38 @@ public static class McpToolNames
 /// it describes the bounds, while the bounds themselves are enforced by the hand-written argument
 /// binder, matching the decision not to take a JSON Schema validation dependency.
 /// </summary>
-public sealed record McpTool(string Name, string Description, string InputSchemaJson)
+public sealed record McpTool
 {
+    public McpTool(string name, string description, string inputSchemaJson)
+    {
+        Name = name;
+        Description = description;
+        InputSchemaJson = Compact(inputSchemaJson);
+    }
+
+    public string Name { get; }
+
+    public string Description { get; }
+
+    /// <summary>
+    /// The schema as it goes on the wire: schemas are authored readably in source and normalised
+    /// here, because the newline-delimited framing has no room for a document's line breaks.
+    /// </summary>
+    public string InputSchemaJson { get; }
+
     public override string ToString() => "McpTool(" + Name + ")";
+
+    private static string Compact(string json)
+    {
+        using var document = JsonDocument.Parse(json);
+        var buffer = new ArrayBufferWriter<byte>(json.Length);
+        using (var writer = new Utf8JsonWriter(buffer, new JsonWriterOptions { Indented = false }))
+        {
+            document.RootElement.WriteTo(writer);
+        }
+
+        return Encoding.UTF8.GetString(buffer.WrittenSpan);
+    }
 }
 
 /// <summary>The closed tool set, in advertisement order.</summary>
