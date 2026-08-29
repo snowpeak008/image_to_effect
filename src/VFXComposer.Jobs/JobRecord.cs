@@ -36,7 +36,8 @@ public sealed record JobRecord
         string? finalDiagnosticCode,
         IReadOnlyList<string> artifactIds,
         int? childProcessId,
-        DateTimeOffset? childProcessStartUtc)
+        DateTimeOffset? childProcessStartUtc,
+        string? itemId = null)
     {
         JobId = JobsGuard.Token(jobId, nameof(jobId));
         RequestId = JobsGuard.Token(requestId, nameof(requestId));
@@ -49,6 +50,7 @@ public sealed record JobRecord
         }
 
         BatchId = batchId is null ? null : JobsGuard.Token(batchId, nameof(batchId));
+        ItemId = itemId is null ? null : JobsGuard.Token(itemId, nameof(itemId));
         if ((batchId is null) != (batchPolicy is null))
         {
             throw new ArgumentException("batchPolicy must be present exactly when batchId is present.", nameof(batchPolicy));
@@ -123,6 +125,17 @@ public sealed record JobRecord
 
     [JsonPropertyName("batchId")] public string? BatchId { get; }
     [JsonPropertyName("batchPolicy")] public string? BatchPolicy { get; }
+
+    /// <summary>
+    /// Manifest-authored entry name of a batch item; null when the submission is not a batch
+    /// entry. It is a displayable identifier (REQ-003 §9.1) and stays stable across
+    /// resubmissions, matching the entry idempotency key it feeds. It is never copied into an
+    /// exception or diagnostic message. Persisted from store schema
+    /// <c>vfxcomposer.job-store/2</c> on; within that schema an absent member reads as null,
+    /// while an older snapshot is rejected by the version gate instead of being read as
+    /// "no item".
+    /// </summary>
+    [JsonPropertyName("itemId")] public string? ItemId { get; }
     [JsonPropertyName("sourceEntry")] public string SourceEntry { get; }
     [JsonPropertyName("jobKind")] public string JobKind { get; }
 
@@ -316,6 +329,7 @@ public sealed record JobRecord
             setFinalDiagnosticCode ? finalDiagnosticCode : FinalDiagnosticCode,
             artifactIds ?? ArtifactIds,
             setChildProcess ? childProcessId : ChildProcessId,
-            setChildProcess ? childProcessStartUtc : ChildProcessStartUtc);
+            setChildProcess ? childProcessStartUtc : ChildProcessStartUtc,
+            ItemId);
     }
 }

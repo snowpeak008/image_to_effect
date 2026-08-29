@@ -29,6 +29,8 @@ public sealed class JobListItemViewModel : ObservableObject
         BatchDisplay = record.BatchId is null
             ? "—"
             : record.BatchId + " (" + record.BatchPolicy + ")";
+        ItemId = record.ItemId;
+        HasItemId = record.ItemId is not null;
         EnqueuedDisplay = FormatTime(record.EnqueuedAtUtc);
         Update(record);
     }
@@ -38,6 +40,13 @@ public sealed class JobListItemViewModel : ObservableObject
     public string SourceEntry { get; }
     public string JobKind { get; }
     public string BatchDisplay { get; }
+
+    /// <summary>Batch entry name, or null for a submission that is not a batch entry.</summary>
+    public string? ItemId { get; }
+
+    /// <summary>False for a non-batch job, whose row and detail omit the item slot entirely.</summary>
+    public bool HasItemId { get; }
+
     public string EnqueuedDisplay { get; }
 
     public string State

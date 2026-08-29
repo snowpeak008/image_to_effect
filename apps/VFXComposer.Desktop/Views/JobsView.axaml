@@ -39,6 +39,7 @@
                       <TextBlock Classes="muted" Text="{Binding SourceEntry}" />
                       <TextBlock Classes="muted" Text="{Binding JobKind}" />
                       <TextBlock Classes="muted" Text="{Binding BatchDisplay}" />
+                      <TextBlock Classes="muted" Text="{Binding ItemId, StringFormat='item {0}'}" IsVisible="{Binding HasItemId}" />
                     </StackPanel>
                     <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="8">
                       <TextBlock FontWeight="SemiBold" Foreground="#9AE3B0" Text="RUNNING" IsVisible="{Binding IsRunning}" />
@@ -86,6 +87,7 @@
     <Border Classes="card" IsVisible="{Binding SelectedJob, Converter={x:Static ObjectConverters.IsNotNull}}">
       <StackPanel Spacing="8">
         <TextBlock FontWeight="SemiBold" Text="Timeline" />
+        <TextBlock Classes="muted" Text="{Binding SelectedItemDisplay}" TextWrapping="Wrap" IsVisible="{Binding SelectedItemDisplay, Converter={x:Static StringConverters.IsNotNullOrEmpty}}" />
         <TextBlock Classes="muted" Text="{Binding SelectedArtifacts}" TextWrapping="Wrap" />
         <TextBlock Classes="muted" Text="{Binding SelectedDiagnostic}" TextWrapping="Wrap" IsVisible="{Binding SelectedDiagnostic, Converter={x:Static StringConverters.IsNotNullOrEmpty}}" />
         <ItemsControl ItemsSource="{Binding SelectedJobTimeline}">

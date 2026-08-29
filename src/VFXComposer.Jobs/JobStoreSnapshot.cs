@@ -4,12 +4,14 @@ namespace VFXComposer.Jobs;
 
 /// <summary>
 /// Versioned store snapshot: the authoritative current state of the queue. Unknown fields and
-/// unknown schema versions are rejected fail-closed; there is no silent migration.
+/// unknown schema versions are rejected fail-closed; there is no silent migration. Version 2
+/// added the persisted <see cref="JobRecord.ItemId"/>; a version 1 file is rejected rather than
+/// read as "no item id", because the item id of a version 1 record is unrecoverable.
 /// </summary>
 [JsonUnmappedMemberHandling(JsonUnmappedMemberHandling.Disallow)]
 public sealed record JobStoreSnapshot
 {
-    public const string CurrentSchema = "vfxcomposer.job-store/1";
+    public const string CurrentSchema = "vfxcomposer.job-store/2";
 
     [JsonConstructor]
     public JobStoreSnapshot(
