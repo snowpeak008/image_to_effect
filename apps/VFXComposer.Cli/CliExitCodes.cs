@@ -1,3 +1,5 @@
+using VFXComposer.Batch.Core;
+
 namespace VFXComposer.Cli;
 
 /// <summary>
@@ -29,4 +31,18 @@ public static class CliExitCodes
 
     /// <summary>The user interrupted the foreground run; enqueued jobs keep running.</summary>
     public const int Interrupted = 130;
+
+    /// <summary>
+    /// Maps a batch verdict onto the table. Every verdict is spelled out and the fallback is a
+    /// failure code, so <see cref="BatchVerdict.Pending"/> — a batch reported complete while
+    /// entries are still open — and any verdict added later can never be reported as a clean run.
+    /// </summary>
+    public static int ForVerdict(BatchVerdict verdict) => verdict switch
+    {
+        BatchVerdict.AllSucceeded => Success,
+        BatchVerdict.CompletedWithFailures => BatchCompletedWithFailures,
+        BatchVerdict.Aborted => BatchAborted,
+        BatchVerdict.Pending => QueueUnavailable,
+        _ => QueueUnavailable,
+    };
 }

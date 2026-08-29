@@ -192,6 +192,7 @@ public static class CliArguments
         (CliCommandGroups.Batch, CliCommandActions.Validate) => true,
         (CliCommandGroups.Batch, CliCommandActions.Run) => true,
         (CliCommandGroups.Batch, CliCommandActions.Status) => true,
+        (CliCommandGroups.Batch, CliCommandActions.Cancel) => true,
         (CliCommandGroups.Job, CliCommandActions.Status) => true,
         (CliCommandGroups.Job, CliCommandActions.Cancel) => true,
         (CliCommandGroups.Queue, CliCommandActions.List) => true,

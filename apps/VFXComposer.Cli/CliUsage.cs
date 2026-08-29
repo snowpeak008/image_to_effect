@@ -11,6 +11,7 @@ internal static class CliUsage
         writer.WriteLine("  vfxc batch validate <manifest>   Validate a batch manifest. No network, no writes, no enqueue.");
         writer.WriteLine("  vfxc batch run <manifest>        Enqueue every entry in manifest order and track the batch.");
         writer.WriteLine("  vfxc batch status <batchId>      Show the queue entries of one batch.");
+        writer.WriteLine("  vfxc batch cancel <batchId>      Request cancellation of every entry of one batch.");
         writer.WriteLine("  vfxc job status <jobId>          Show one queue entry.");
         writer.WriteLine("  vfxc job cancel <jobId>          Request cancellation of one queue entry.");
         writer.WriteLine("  vfxc queue list                  Show the queue state and every entry.");

@@ -256,6 +256,78 @@ public sealed class CliRunnerTests
         Assert.AreEqual(CliExitCodes.Success, await fixture.RunAsync(["job", "status", jobId]));
         Assert.AreEqual(CliExitCodes.Success, await fixture.RunAsync(["batch", "status", "fire-pack"]));
         Assert.AreEqual(CliExitCodes.Success, await fixture.RunAsync(["job", "cancel", jobId]));
+        Assert.AreEqual(CliExitCodes.Success, await fixture.RunAsync(["batch", "cancel", "fire-pack"]));
+    }
+
+    [TestMethod]
+    public async Task BatchCancelSettlesEveryQueuedEntryOfTheBatch()
+    {
+        var fixture = new CliFixture { AllowExecutor = false };
+        var manifest = fixture.WriteManifest(CliTestHarness.ThreePromptManifest());
+        await fixture.RunAsync(["batch", "run", manifest, "--detach"]);
+        fixture.Reset();
+
+        var exit = await fixture.RunAsync(["batch", "cancel", "fire-pack"]);
+
+        Assert.AreEqual(CliExitCodes.Success, exit, fixture.Output + fixture.Errors);
+        StringAssert.Contains(fixture.Output, "batch fire-pack: requested=3 accepted=3 noOp=0");
+        var jobs = fixture.Store.ReadSnapshot().Jobs;
+        Assert.IsTrue(jobs.All(job =>
+            job.State == JobStatusStates.Cancelled &&
+            job.FinalDiagnosticCode == JobQueueDiagnosticCodes.CancelledQueued));
+    }
+
+    [TestMethod]
+    public async Task BatchCancelIsIdempotentAndFailsClosedOnAnUnknownBatch()
+    {
+        var fixture = new CliFixture { AllowExecutor = false };
+        var manifest = fixture.WriteManifest(CliTestHarness.ThreePromptManifest());
+        await fixture.RunAsync(["batch", "run", manifest, "--detach"]);
+        await fixture.RunAsync(["batch", "cancel", "fire-pack"]);
+        fixture.Reset();
+
+        var repeatExit = await fixture.RunAsync(["batch", "cancel", "fire-pack"]);
+        var unknownExit = await fixture.RunAsync(["batch", "cancel", "absent-pack"]);
+
+        Assert.AreEqual(CliExitCodes.Success, repeatExit, fixture.Output + fixture.Errors);
+        StringAssert.Contains(fixture.Output, "requested=3 accepted=0 noOp=3");
+        Assert.AreEqual(CliExitCodes.DataError, unknownExit);
+        StringAssert.Contains(fixture.Errors, CliNoticeCodes.NotFound);
+    }
+
+    [TestMethod]
+    public async Task QueueFailureNoticesCarryTheStableJobsCode()
+    {
+        var fixture = new CliFixture { QueueClientOverride = new UnavailableQueueClient() };
+
+        var listExit = await fixture.RunAsync(["queue", "list"]);
+        var cancelExit = await fixture.RunAsync(["batch", "cancel", "fire-pack"]);
+        var jsonExit = await fixture.RunAsync(["queue", "list", "--json"]);
+
+        Assert.AreEqual(CliExitCodes.QueueUnavailable, listExit);
+        Assert.AreEqual(CliExitCodes.QueueUnavailable, cancelExit);
+        Assert.AreEqual(CliExitCodes.QueueUnavailable, jsonExit);
+        StringAssert.Contains(fixture.Errors, JobQueueDiagnosticCodes.StoreUnavailable);
+        var notice = fixture.Errors
+            .Split('\n', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)
+            .Where(line => line.StartsWith('{'))
+            .Select(line => JsonDocument.Parse(line).RootElement)
+            .Single(element => element.GetProperty("kind").GetString() == "notice");
+        Assert.AreEqual(
+            JobQueueDiagnosticCodes.StoreUnavailable,
+            notice.GetProperty("queueDiagnostic").GetString());
+    }
+
+    [TestMethod]
+    public async Task AJobNotFoundCancellationCarriesTheStableJobsCode()
+    {
+        var fixture = new CliFixture();
+
+        var exit = await fixture.RunAsync(["job", "cancel", "job-missing"]);
+
+        Assert.AreEqual(CliExitCodes.DataError, exit);
+        StringAssert.Contains(fixture.Errors, CliNoticeCodes.NotFound);
+        StringAssert.Contains(fixture.Errors, JobQueueDiagnosticCodes.JobNotFound);
     }
 
     [TestMethod]

@@ -50,6 +50,17 @@ public static class BatchFailurePolicies
         Abort => JobBatchPolicies.Abort,
         _ => throw new ArgumentOutOfRangeException(nameof(policy)),
     };
+
+    /// <summary>
+    /// Translates the persisted queue policy back into the manifest word, for surfaces that
+    /// reconstruct a batch view from the queue alone rather than from a manifest.
+    /// </summary>
+    public static string FromQueuePolicy(string queuePolicy) => queuePolicy switch
+    {
+        JobBatchPolicies.Continue => Continue,
+        JobBatchPolicies.Abort => Abort,
+        _ => throw new ArgumentOutOfRangeException(nameof(queuePolicy)),
+    };
 }
 
 /// <summary>Closed constraint key vocabulary shared by <c>defaults</c> and <c>items[].constraints</c>.</summary>

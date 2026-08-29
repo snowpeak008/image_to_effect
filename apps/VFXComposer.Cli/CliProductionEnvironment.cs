@@ -1,4 +1,3 @@
-using VFXComposer.AI.Contracts;
 using VFXComposer.AI.Contracts.Desktop;
 using VFXComposer.AI.Contracts.Recipes;
 using VFXComposer.AI.Providers.Desktop;
@@ -96,24 +95,6 @@ internal sealed class DesktopGenerationRuntime : ICliGenerationRuntime
 
     public ValueTask DisposeAsync() => _runtime.DisposeAsync();
 
-    /// <summary>
-    /// Recipe build entries have no executor in this build, so only prompt generation can be
-    /// offered. Prompt generation itself is offered only when the one ChatLlm binding exists:
-    /// an unbound channel rejects the whole manifest instead of silently running a subset.
-    /// </summary>
-    private static BatchCapabilityProfile ProbeCapability(IAiDesktopRuntime runtime)
-    {
-        try
-        {
-            var bound = runtime.Settings.Load().ChannelStatuses.Any(status =>
-                status.Channel == AiChannel.ChatLlm && status.State != AiDesktopChannelStatusKind.Unbound);
-            return bound ? BatchCapabilityProfile.GenerationOnly : BatchCapabilityProfile.GenerationUnavailable;
-        }
-        catch (AiGatewayException)
-        {
-            // Unreadable settings are fail-closed: the batch is refused rather than started
-            // against an unknown route.
-            return BatchCapabilityProfile.GenerationUnavailable;
-        }
-    }
+    private static BatchCapabilityProfile ProbeCapability(IAiDesktopRuntime runtime) =>
+        BatchCapabilityProbe.FromDesktopRuntime(runtime);
 }
