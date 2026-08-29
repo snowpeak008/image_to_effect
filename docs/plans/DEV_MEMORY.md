@@ -1,6 +1,7 @@
 # 开发记忆与恢复指南
 
 > 暂停时间：2026-08-29 18:20 前后。恢复开发时按 §3 步骤执行即可无缝续接。
+> **更新（2026-08-29 19:25）**：已恢复开发。O3 已合并（`1aba917f`）；F1 已完成审计（PASS，全量 483/483）并合入 master（`fd7b508f`，worktree/分支已退役）。当前在途：F3（Jobs 队列，`D:\wt\i2s-f3`）、O4（Unity 测试 triage）。下一步：O4 归零后拍板 F2 生产闸（§2 决策 2）并派发 F2；F3 交付后审计合并，然后 F4。
 > 文件夹导航：`OPTIMIZATION_MASTER_PLAN.md`（总计划+任务卡+状态板）｜`CODING_STANDARDS.md`（验收标准）｜`PROJECT_UNDERSTANDING.md`（项目理解）｜`SESSION_LOG_2026-08-29.md`（本次对话记录）｜`WORKTREE_RETIREMENT.md`（worktree 退役清单）｜`BASELINE_REPORT.md`（O3 交付后出现）。
 
 ## 1. 暂停时刻的精确状态
@@ -35,7 +36,7 @@
 1. 查看在途四个子 agent 的完成通知/交付报告（若会话已断，直接看各 worktree 分支的提交与工作区 diff：`git -C D:\wt\i2s-o3 log --oneline master..HEAD`，`git -C D:\wt\i2s-f1 log --oneline master..HEAD`，主工作区 `git status`）。
 2. 验收并提交小任务批：ADR-007 v1.1（确认状态 ACCEPTED）+ REQ-001 v0.3 + `docs/rules/README.md`，一个 docs 提交推送。随后把 `CODING_STANDARDS.md` §3.2 的"裁决前只读"措辞更新为引用 ADR-007 定版规则（主 agent 自己改，属管理文件）。
 3. 验收 O3：核对锁文件 diff 与基线数字 → 合并 `task/O3-baseline` → 验证 `dotnet restore -p:RestoreLockedMode=true` 全绿 → 推送 → 通告轻闸停用 `-SkipLockedRestore`。
-4. 验收 F1：先跑轻闸（`eng/run-task-acceptance.ps1`，此时应可用锁定模式），再派**独立审计子 agent**（代码任务必须独立审计：allow-list 合规、测试质量、redaction、零自动网络）→ 一次返工回合 → 合并推送。
+4. ~~验收 F1~~：已完成——独立审计 PASS（锁定 restore 18/18、构建 0/0、全量 483/483），合并 `fd7b508f` 推送；3 条非阻塞建议登记在主计划状态板下方。
 5. 按 §2 拍板决策 1，派发 F3（依赖 R3✓、P0-1✓）；F1 合并后派发 F2（依赖 F1✓、R4✓，注意 F2 任务卡里的生产闸决策与 Windows 保留名负向测试要求）。
 6. 之后按主计划 DAG：F4（依赖 F1/F3/R2）→ F5 → F6。每步遵循 §5 治理模型（见 `PROJECT_UNDERSTANDING.md`）。
 

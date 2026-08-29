@@ -191,10 +191,14 @@ flowchart LR
 | O2 | DONE | 开发子 agent | 主 agent 验收 PASS（脚本三条路径实测；`-SkipLockedRestore` 为 O3 修复前过渡开关，O3 合并后停用） |
 | O3 | DONE | 开发子 agent | 验收 PASS 并合并（`1aba917f`）：锁修复无版本变化、锁定 restore 18/18、450/450 独立复核一致；轻闸 `-SkipLockedRestore` 不再需要 |
 | O4 | DISPATCHED | 开发子 agent | Unity 8 个既有测试失败 triage（独立 worktree，F2 前置） |
-| F1 | DELIVERED | 开发子 agent | 审计中（分支 `task/F1-recipe-generation` @ `6cd61636`：构建 0/0，AI.Tests 103 绿，Desktop.Tests 29 绿） |
+| F1 | DONE | 开发子 agent | 独立审计 PASS（复跑：锁定 restore 18/18、构建 0/0、全量 483/483 全绿、24 文件全部在 allow-list）；合并 `fd7b508f` 并推送；worktree 与分支已退役。3 条非阻塞建议见下 |
 | F3 | DISPATCHED | 开发子 agent | 宿主形态已定版（库+跨进程单写者锁），独立 worktree 开发中 |
-| F2/F4–F6 | BLOCKED | — | F2 等 F1+O4；F4 等 F1+F3；F5 等 F4；F6 等 F2/F3/F4 |
+| F2/F4–F6 | BLOCKED | — | F2 等 O4（F1 已完成）；F4 等 F3（F1 已完成）；F5 等 F4；F6 等 F2/F3/F4 |
 
 已知非阻塞遗留（P0-1 交付报告）：①`services/VFXComposer.Broker.HandleProbe` 与 `services/VFXComposer.Broker.Tests` 的 `packages.lock.json` 自 baseline 起与引用图不同步（归入 O3）；②`.gitignore` 未覆盖 `tests/**` 构建产物（归入 O1）。
+
+F1 审计非阻塞建议（后续任务顺带处理）：①补一条直接互比 PlainText/StructuredOutput 两形态哈希的测试（可并入 F2）；②`CreateViewModel` 的 `SendChatAsync`/`GenerateRecipeAsync` 末尾裸 `catch` 无稳定错误码——master 既有风格，统一治理另立小任务；③Desktop 侧未来可自动优选 `StructuredOutput` 形态（增强，非需求）。
+
+运维事件（2026-08-29）：`D:\wt\i2s-f1` worktree 在 F1 审计期间发现损坏（磁盘文件大面积缺失，疑与 `D:\wt\` 上并发任务相互影响有关）；F1 提交未受损（已全部合入 master），该 worktree 已强制退役。**后续并行 worktree 验收时应先 `git status` 核实磁盘完整性。**
 
 > 状态板由主 agent 在每次派发/验收后更新。
