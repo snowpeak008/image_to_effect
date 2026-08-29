@@ -29,7 +29,7 @@
 3. **提交纪律**：开发子 agent 不得直接提交到 master；合并由主 agent 在验收 PASS 后执行。
 4. **验收基线**：Release 构建 0 warning/0 error（仓库已开 `TreatWarningsAsErrors`）、锁定 restore、相关测试全绿、符合 `docs/plans/CODING_STANDARDS.md`。
 5. 本计划与旧治理文档（receipt/独立审计/gate 全套）冲突时，以本计划为准：保留 `eng/run-phase2-gate.ps1` 作为里程碑级质量闸，日常任务验收用第 4 条基线，不再要求 receipt 官僚层。
-6. **子 agent 模型策略**（用户定版，2026-08-29）：后续派发的子 agent 一律使用 **Claude Sonnet 5 Thinking**；仅限 Claude 系模型，禁止其他厂商模型；不使用 Opus/Fable 等更高档位（控制消耗）。轻量文档修订不再单独派发子 agent，由主 agent 直接完成。已在途任务（F3、O4、F1 审计）维持原模型不变。
+6. **子 agent 模型策略**（用户定版，2026-08-29）：后续派发的子 agent 一律使用 **Claude Opus 5 Thinking (High)**；仅限 Claude 系模型，禁止其他厂商模型。轻量文档修订不再单独派发子 agent，由主 agent 直接完成。已在途任务（F3、O4、F1 审计）维持原模型不变。
 
 ## 3. 阶段 DAG 与并行泳道
 
