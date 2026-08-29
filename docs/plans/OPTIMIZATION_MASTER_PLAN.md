@@ -164,7 +164,12 @@ flowchart LR
 - 宿主形态已定版（主 agent，2026-08-29）：执行层做成**库**（新程序集 `src/VFXComposer.Jobs`，仅依赖 Protocol）+ 跨进程 durable 单写者锁（复用 `ProviderConfigurationRevisionLock` 模式）；Desktop/CLI/MCP 各入口在进程内宿主执行器，锁保证全局并发=1；不引入常驻服务与新网络面。CLI `--detach` 语义由 F4 在此模型上实现（提交进程退出后队列状态在 store 中，接续执行由下一个宿主进程恢复）。
 - 验收标准：入队/执行/取消/崩溃恢复测试全绿；并发提交时严格串行执行。
 
-**F4 CLI 批量入口**（依赖 F1、F3、R2）
+**F3b Jobs 队列加固**（依赖 F3；F4 的前置。来源：F3 审计非阻塞建议 1/2/4/6/7）
+- 目标：① `JobQueueHost` 执行循环补非 `JobQueueException` 兜底（磁盘/权限故障时把当前 job 以稳定码定局后继续循环，不得让队列静默停摆或留下 RUNNING 悬挂 + 锁占用）；② 宿主无注册 executor 时不领取 job（或不取执行器锁），消除 Desktop 零 executor 宿主抢锁把未来 CLI job 判死（VFXJ0006）的前向风险；③ `SystemJobProcessInspector` 补"启动时间不匹配则不终止"的真实子进程测试（REQ-003-08 防 PID 复用路径），并在注释说明 1 秒容差来源；④ 产物数 ≤64 与 payload ≤65536 的越界拒绝负向测试。
+- allow-list：`src/VFXComposer.Jobs/**`、`src/VFXComposer.Jobs.Tests/**`、`apps/VFXComposer.Desktop/App.axaml.cs`（仅②需要时）、`apps/VFXComposer.Desktop.Tests/**`（仅②需要时）。
+- 验收标准：构建 0/0；全量测试全绿（≥532）；①②各有专项测试。
+
+**F4 CLI 批量入口**（依赖 F1、F3、F3b、R2）
 - 目标：独立 CLI（新 console 工程），读取需求清单文件，逐条入队生成，输出进度与结果汇总。
 - 验收标准：样例清单批量跑通；单条失败不中断整批（按 R2 语义）。
 
@@ -192,12 +197,15 @@ flowchart LR
 | O3 | DONE | 开发子 agent | 验收 PASS 并合并（`1aba917f`）：锁修复无版本变化、锁定 restore 18/18、450/450 独立复核一致；轻闸 `-SkipLockedRestore` 不再需要 |
 | O4 | DISPATCHED | 开发子 agent | Unity 8 个既有测试失败 triage（独立 worktree，F2 前置） |
 | F1 | DONE | 开发子 agent | 独立审计 PASS（复跑：锁定 restore 18/18、构建 0/0、全量 483/483 全绿、24 文件全部在 allow-list）；合并 `fd7b508f` 并推送；worktree 与分支已退役。3 条非阻塞建议见下 |
-| F3 | DELIVERED | 开发子 agent | 审计中（分支 3 提交已本地集成合并 `2b71eb9`，未推送：构建 0/0，合并态全量 532/532 全绿，Jobs.Tests 41 项）。REQ-003-12 的 Worker 取消映射豁免待审计确认后由主 agent 裁决 |
-| F2/F4–F6 | BLOCKED | — | F2 等 O4（F1 已完成）；F4 等 F3（F1 已完成）；F5 等 F4；F6 等 F2/F3/F4 |
+| F3 | DONE | 开发子 agent | 独立审计 PASS（合并态复跑 532/532 全绿、构建 0/0、46 文件全在 allow-list、共享文件纯加法）；合并 `2b71eb9` 已推送；worktree/分支已退役。**REQ-003-12 裁决：条件豁免成立**——Worker 取消映射分支仅在 F2 弃 batchmode 改走 Worker 路线时才需交付，batchmode 分支（精确 PID 终止+临时目录清理）已交付有测试；若未来 Worker 化需重开条目 |
+| F3b | DISPATCHED | 开发子 agent | Jobs 队列加固（审计建议 1/2/4/6/7），F4 前置 |
+| F2/F4–F6 | BLOCKED | — | F2 等 O4（F1 已完成）；F4 等 F3b；F5 等 F4；F6 等 F2/F3/F4 |
 
 已知非阻塞遗留（P0-1 交付报告）：①`services/VFXComposer.Broker.HandleProbe` 与 `services/VFXComposer.Broker.Tests` 的 `packages.lock.json` 自 baseline 起与引用图不同步（归入 O3）；②`.gitignore` 未覆盖 `tests/**` 构建产物（归入 O1）。
 
 F1 审计非阻塞建议（后续任务顺带处理）：①补一条直接互比 PlainText/StructuredOutput 两形态哈希的测试（可并入 F2）；②`CreateViewModel` 的 `SendChatAsync`/`GenerateRecipeAsync` 末尾裸 `catch` 无稳定错误码——master 既有风格，统一治理另立小任务；③Desktop 侧未来可自动优选 `StructuredOutput` 形态（增强，非需求）。
+
+F3 审计非阻塞建议处置：建议 1/2/4/6/7 收进 F3b 任务卡；建议 3（执行器锁跨进程真杀测试，可仿 `RevisionLockHost` 先例）留给 F6 端到端验收裁量；建议 5（Jobs 页批次分组折叠交互）登记为 v1 已知限制，不排期；建议 8（lock 文件末行换行）为 NuGet 生成物，忽略。
 
 运维事件（2026-08-29 约 19:00）：`D:\wt\` 下全部在途 worktree（i2s-f1/i2s-f3/i2s-o4）被外部清空一次（F3 交付报告推测为 worktree 退役清理波及在途目录）。F3 agent 用 `git worktree repair` + 重建源码恢复并改为逐单元提交；F1 提交未受损（已合入 master），其 worktree 已退役。**教训：worktree 退役只能由主 agent 在确认无在途任务共用 `D:\wt\` 时执行；并行 worktree 验收前先 `git status` 核实磁盘完整性；开发子 agent 应逐逻辑单元提交。**
 
