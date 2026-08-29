@@ -1,6 +1,6 @@
 # ADR-006: AI provider two-channel routing and user-defined endpoints
 
-Status: `ACCEPTED — A0–A3 CLOSED; A4 DESKTOP WIRING SOLE ACTIVE` on `2026-08-29`.
+Status: `ACCEPTED — A0–A4 CLOSED; A5 AI_MOCK_E2E SOLE ACTIVE` on `2026-08-29`.
 
 Normative architecture token: `AI_PROVIDER_TWO_CHANNEL_ROUTING_V1`.
 
@@ -18,7 +18,7 @@ The post-U6 AI DAG remains exactly:
 
 Combined QC `P1#1` remains superseded by the explicit requirement clarification: standard .NET/HTTP request-time `RequestUri` normalization is not a configuration-storage finding. Combined QC `P1#2` is closed by the A3 redirect transport boundary. Neither closeout is a live-provider, paid-image, Desktop integration, project-write, Broker, Worker, or Unity claim.
 
-`A4 — AI_DESKTOP_WIRING` is now the sole `ACTIVE` package. `A5 — AI_MOCK_E2E` and `A6 — AI_INDEPENDENT_FINAL_AUDIT` remain `NOT STARTED`; A5 alone owns mock-handler, cross-channel end-to-end evidence.
+`A4 — AI_DESKTOP_WIRING` is `CLOSED — FINAL GO — P0/P1/P2=0/0/0`. Its accepted source sequence is `fc986d11`, `ffc9f609`, and `cc5ff806`; the final receipt is `186/186`, with AI `77/77`, Desktop `22/22`, and `423/423` total tests, frozen-root replay `0`, and owned-runtime/artifact residue `0`. `A5 — AI_MOCK_E2E` is now the sole `ACTIVE` package. `A6 — AI_INDEPENDENT_FINAL_AUDIT` remains `NOT STARTED`.
 
 ## 2. Decision: two explicit channels, no fallback
 
@@ -101,11 +101,11 @@ A1 retains its published owned roots:
 7. `eng/run-phase2-gate.ps1`
 8. `eng/phase2-baseline-roots.json`
 
-The A1 ownership is historical closed ownership. A2 closed with only `src/VFXComposer.AI.Contracts/Chat/**`, `src/VFXComposer.AI.Providers/Chat/**`, and `src/VFXComposer.AI.Tests/Chat/**`; A3 closed with the corresponding `Image/**` roots. A4 may consume those outputs but may not reopen their closed leaf ownership except for the expressly listed Chat integration overlays below.
+The A1 ownership is historical closed ownership. A2 closed with only `src/VFXComposer.AI.Contracts/Chat/**`, `src/VFXComposer.AI.Providers/Chat/**`, and `src/VFXComposer.AI.Tests/Chat/**`; A3 closed with the corresponding `Image/**` roots. A4 consumed those outputs without reopening their closed leaf ownership except for the expressly listed Chat integration overlays below.
 
-### A4 exact owned scope and stop line
+### A4 closed ownership and final evidence
 
-A4 may add only these new roots/leaves:
+A4 added only these new roots/leaves:
 
 1. `src/VFXComposer.AI.Contracts/Desktop/**`
 2. `src/VFXComposer.AI.Providers/Desktop/**`
@@ -113,7 +113,7 @@ A4 may add only these new roots/leaves:
 4. `apps/VFXComposer.Desktop/Services/PrivateImagePreviewDecoder.cs`
 5. `apps/VFXComposer.Desktop.Tests/AiDesktopIntegrationTests.cs`
 
-A4 may modify only these existing integration surfaces:
+A4 modified only these existing integration surfaces:
 
 1. `src/VFXComposer.AI.Providers/ProviderConfigurationResolver.cs`
 2. `src/VFXComposer.AI.Providers/ProviderSecretStore.cs`
@@ -126,12 +126,28 @@ A4 may modify only these existing integration surfaces:
 9. `apps/VFXComposer.Desktop.Tests/AiDesktopIntegrationTests.cs`, `apps/VFXComposer.Desktop.Tests/NoProjectAccessSurfaceTests.cs`, `apps/VFXComposer.Desktop.Tests/VFXComposer.Desktop.Tests.csproj`, and `apps/VFXComposer.Desktop.Tests/packages.lock.json`
 10. `eng/run-phase2-gate.ps1` and `eng/phase2-baseline-roots.json`
 
-This is an all-and-only preflight allow-list. A4 must STOP rather than widen it for `src/VFXComposer.Client/**`, any Broker, Worker, Unity, project, or solution path; `src/VFXComposer.AI.Providers/Image/OpenAiCompatibleImageGateway.cs`; or `apps/VFXComposer.Desktop/Views/MainWindow.axaml`. A4 cannot add an automatic health/probe/prompt/image request, raw-secret recovery, a direct Desktop transport, a fallback route, project access, Unity write, or mock-handler cross-channel E2E. The latter is owned by A5.
+This was A4's all-and-only preflight allow-list. A4 stopped rather than widen it for `src/VFXComposer.Client/**`, any Broker, Worker, Unity, project, or solution path; `src/VFXComposer.AI.Providers/Image/OpenAiCompatibleImageGateway.cs`; or `apps/VFXComposer.Desktop/Views/MainWindow.axaml`. It added no automatic health/probe/prompt/image request, raw-secret recovery, direct Desktop transport, fallback route, project access, Unity write, or mock-handler cross-channel E2E.
 
-The active A4 proof obligations include: exact configuration/codec/store/edit round trips for arbitrary bounded endpoint text; zero network on save/start/page navigation; `Unknown` health allowing an explicit user prompt and being recorded only from that request result; no automatic Image health or paid request; secret re-entry and revoke fail-closed behavior; no vendor-path concatenation, normalized-value persistence, or fallback; redaction of endpoint/secret/prompt/raw payloads; the in-memory, promptly closed preview stream; and static/runtime proof of zero Desktop project/Unity/file/network API surface except for the named decoder's `Stream` input. A4 may use focused fake/spy tests for its UI/contract boundary, but must STOP before mock-handler cross-channel E2E; A5 owns that evidence.
+The A4 final record is `CLOSED — FINAL GO — P0/P1/P2=0/0/0`. The accepted implementation commits are `fc986d11` (Desktop provider wiring), `ffc9f609` (health/secret QC remediation), and `cc5ff806` (final baseline binding). The receipt records `186/186`, AI `77/77`, Desktop `22/22`, `423/423` total tests, frozen-root replay `0`, and owned runtime/pipe/private-artifact residue `0`. This closes the opaque configuration, zero-auto-network, secret/revoke, redaction, decoder-stream, and zero Desktop project-write controls, but is not mock-handler cross-channel E2E evidence.
+
+### A5 exact active scope and stop line
+
+A5 is the sole package with implementation write authority. Its implementation scope is all-and-only:
+
+1. `tests/VFXComposer.AiLocalE2E.Tests/**`
+2. `src/VFXComposer.AI.Providers/Desktop/ProviderDesktopRuntime.cs`
+3. `VFXComposer.sln`
+4. `eng/run-phase2-gate.ps1`
+5. `eng/phase2-baseline-roots.json`
+
+`ProviderDesktopRuntime.cs` is the only production seam. A5 must retain the existing constructor and may add only an optional `privateImageTempRoot` that is transparently passed to `ImageGateway`; the production `null` behavior remains unchanged. No other production path, provider handler, Desktop UI/decoder, Client, Broker, Worker, Unity, project, or documentation/runtime path is owned by A5.
+
+A5 must use a real loopback `TcpListener` and the production runtime plus production `HttpClient` handlers. Handler injection, external-network access, and paid-provider calls are forbidden. Its local end-to-end evidence starts with Settings CRUD, DPAPI storage, and explicit isolated bindings, then exercises Create Chat and Preview Image for both base64 and URL image results through the existing decoder. It must cover restart persistence, channel isolation, opaque endpoint handling, redacted failures, explicit revoke/fail-closed behavior, private-artifact cleanup, and zero project writes.
+
+The A5 gate must add exact root replay, locked Release build, A5 test, product-assembly binding, and `vfxcomposer-a5` owned-residue checks. It must prove no root drift, build/test/binding failure, stale `vfxcomposer-a5` private artifact, handler injection, external/paid call, cross-channel fallback, secret/prompt/raw-payload/image-byte leak, or project write. Any sixth implementation path, a changed production `null` behavior, or failed cleanup is STOP. A6 remains `NOT STARTED` until A5 closes.
 
 ## 7. Consequences and stop line
 
-`A2` and `A3` are final closed GO packages. A4 is the only active writer; A5 (mock E2E) and A6 (independent audit) remain not started. No later node may use endpoint acceptance to infer permission for a different route, weaken endpoint/secret/prompt/image redaction, add vendor-path construction, persist a normalized endpoint, introduce fallback, conduct background network activity, write project/Unity state, or treat A2/A3 component evidence as cross-channel E2E evidence.
+`A2` and `A3` are final closed GO packages, and A4 is `CLOSED — FINAL GO — P0/P1/P2=0/0/0`. A5 is the only active writer; A6 remains not started. No later node may use endpoint acceptance to infer permission for a different route, weaken endpoint/secret/prompt/image redaction, add vendor-path construction, persist a normalized endpoint, introduce fallback, conduct background network activity, write project/Unity state, or treat A2/A3/A4 component evidence as cross-channel E2E evidence.
 
-A4 must STOP on any allow-list expansion, nonzero save/start/navigation network observation, implicit health/paid image request, secret read-back, failed revoke containment, raw-data leak, decoder file/network/project/Unity API use, test that crosses into A5 mock-handler E2E ownership, validation failure, or a dirty/unexplained worktree. It may publish only after its exact scope, gate/baseline update, required focused tests, locked Release solution build, redaction and forbidden-surface scans, and clean-worktree review are recorded; this ADR grants neither A5 nor A6 an early start.
+A5 must STOP on any scope expansion; handler injection; non-loopback, external, or paid traffic; changed production `null` behavior; project write; fallback; raw-data leak; failed restart/revoke/cleanup containment; root/build/test/binding/`vfxcomposer-a5` residue gate failure; or dirty/unexplained worktree. It may publish only after its exact scope and all local loopback E2E evidence are recorded; this ADR grants A6 no early start.

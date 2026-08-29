@@ -1,6 +1,6 @@
 # W24 standalone desktop — file-level implementation plan
 
-> **CURRENT CLOSEOUT — U6 FINAL GO / A0 AI ENDPOINT REBASE (2026-08-29).** ADR-005's ordinary-user route is closed at `100/100`; ADR-006 now defines user-owned opaque provider endpoints for the separate post-U6 AI route. The retained pre-U0 plan below is historical provenance only: its Service/SCM/privileged nodes are not current dependencies, blockers, implementation work, or audit work.
+> **CURRENT CLOSEOUT — U6 FINAL GO / A0–A4 CLOSED / A5 SOLE ACTIVE (2026-08-29).** ADR-005's ordinary-user route is closed at `100/100`; ADR-006 defines user-owned opaque provider endpoints for the separate post-U6 AI route. The retained pre-U0 plan below is historical provenance only: its Service/SCM/privileged nodes are not current dependencies, blockers, implementation work, or audit work.
 >
 > Normative tokens: `USER_MODE_LOCAL_CREATIVE_TOOL_V1` and `AI_PROVIDER_TWO_CHANNEL_ROUTING_V1`.
 
@@ -31,35 +31,31 @@ The exact formal AI delivery DAG is `A0 -> A1 -> (A2 || A3) -> A4 -> A5 -> A6`.
 | A1 `AI_PROVIDER_FOUNDATION` | `CLOSED — FINAL ACCEPTED — GO`. | `OpaqueEndpoint`, configuration, redaction, DPAPI/`SecretRef`, and Gateway foundation; no initial real HTTP. |
 | A2 `WP-AI-CHAT-CHANNEL` | `CLOSED — FINAL GO — P0/P1/P2=0/0/0`. | Accepted source `55ee0993f71375ee0245cbee54815e7988fe04fd` plus Chat redirect closure `2678cb62be9ac9ff5a05c9a5b605a75c60effb5c`; Chat `23/23 × 3`. |
 | A3 `WP-AI-IMAGE-CHANNEL` | `CLOSED — FINAL GO — P0/P1/P2=0/0/0`. | Accepted source `c7c4adcfcc80c732bfaf87b0dfea11294b4af741` plus Image redirect closure `12b58ac69efe3175cf49a6ee129b3784b5b3da5c`; Image `20/20`. |
-| A4 `AI_DESKTOP_WIRING` | `ACTIVE` — the sole active package. | Bounded Desktop settings/create/preview integration, contracts, tests, runner, and baseline only. |
-| A5 `AI_MOCK_E2E` | `NOT STARTED`. | The only owner of mock-handler cross-channel E2E. |
+| A4 `AI_DESKTOP_WIRING` | `CLOSED — FINAL GO — P0/P1/P2=0/0/0`. | Commits `fc986d11`, `ffc9f609`, and `cc5ff806`; receipt `186/186`; AI `77/77`, Desktop `22/22`, `423/423` total; root/residue `0`. |
+| A5 `AI_MOCK_E2E` | `ACTIVE — SOLE WRITER`. | Exact five-path local-loopback E2E scope below. |
 | A6 `AI_INDEPENDENT_FINAL_AUDIT` | `NOT STARTED`. | Read-only audit of frozen A0–A5 bytes. |
 
-The A2/A3 closeout also records a Release solution build with `0 warnings / 0 errors`. It closes the former redirect-handling P1 and does not prove live provider availability, paid image generation, UI integration, or cross-channel E2E. A4 is consequently the only implementation writer.
+The A2/A3 closeout also records a Release solution build with `0 warnings / 0 errors`. A4 then closed at `FINAL GO — P0/P1/P2=0/0/0`. Its final record is commits `fc986d11`, `ffc9f609`, and `cc5ff806`; receipt `186/186`; AI `77/77`, Desktop `22/22`, `423/423` total tests; and frozen-root plus owned-residue `0`. That component closeout does not prove mock-handler cross-channel E2E. A5 is consequently the only implementation writer.
 
 ADR-006 freezes two mandatory channels: all LLM/conversation work uses only the one explicit `ChatLlm` binding, and all image generation uses only the one explicit `ImageGeneration` binding. Each binding resolves exactly one profile/capability/model; a profile may serve both only through separately chosen capabilities. Origin (`Official`, `Relay`, `Friend`, `Subscription`, `Custom`) is metadata, not protocol or routing. Unknown, missing, cross-channel, or failed state has no implicit or fallback route. The endpoint is `OpaqueEndpoint`: a user-supplied string saved and resolved unchanged, including official, relay, friend, subscription, and custom values. Local configuration acceptance is never network authorization.
 
-### A4 exact ownership, UI contract, and stop line
+### A4 final closeout and A5 exact active contract
 
-A4 may create only `src/VFXComposer.AI.Contracts/Desktop/**`, `src/VFXComposer.AI.Providers/Desktop/**`, `src/VFXComposer.AI.Tests/Desktop/**`, `apps/VFXComposer.Desktop/Services/PrivateImagePreviewDecoder.cs`, and `apps/VFXComposer.Desktop.Tests/AiDesktopIntegrationTests.cs`. It may modify only:
+A4 is `CLOSED — FINAL GO — P0/P1/P2=0/0/0`. Its accepted source sequence is `fc986d11` (Desktop provider wiring), `ffc9f609` (health/secret QC remediation), and `cc5ff806` (final baseline binding). The final receipt is `186/186`, with AI `77/77`, Desktop `22/22`, `423/423` total tests, frozen-root replay `0`, and owned runtime/pipe/private-artifact residue `0`. Its closed controls remain opaque configuration round trips, zero automatic network activity, explicit health/prompt behavior, entry-only secret/revoke containment, no fallback, redaction, promptly closed preview streams, and no Desktop project write. This is a component closeout, not A5 mock-handler cross-channel E2E evidence.
 
-1. `src/VFXComposer.AI.Providers/ProviderConfigurationResolver.cs` and `src/VFXComposer.AI.Providers/ProviderSecretStore.cs`;
-2. `src/VFXComposer.AI.Providers/Chat/ChatRouteResolver.cs` and `src/VFXComposer.AI.Providers/Chat/ChatChannelGateway.cs`;
-3. `src/VFXComposer.AI.Tests/Chat/**` and `src/VFXComposer.AI.Tests/ProviderSafetySurfaceTests.cs`;
-4. `apps/VFXComposer.Desktop/VFXComposer.Desktop.csproj`, `apps/VFXComposer.Desktop/packages.lock.json`, and `apps/VFXComposer.Desktop/App.axaml.cs`;
-5. the existing MainWindow, Create, Settings, and Preview view models, and the Create, Settings, and Preview views/code-behind;
-6. `apps/VFXComposer.Desktop.Tests/NoProjectAccessSurfaceTests.cs`, `apps/VFXComposer.Desktop.Tests/VFXComposer.Desktop.Tests.csproj`, and `apps/VFXComposer.Desktop.Tests/packages.lock.json`; and
-7. `eng/run-phase2-gate.ps1` and `eng/phase2-baseline-roots.json`.
+A5 `AI_MOCK_E2E` is the sole active writer. Its implementation allow-list is exactly:
 
-This list is exhaustive. A4 must STOP rather than alter `src/VFXComposer.Client/**`, any Broker/Worker/Unity/project path, `VFXComposer.sln`, `src/VFXComposer.AI.Providers/Image/OpenAiCompatibleImageGateway.cs`, or `apps/VFXComposer.Desktop/Views/MainWindow.axaml`. It does not authorize a common source edit merely because A2/A3 are closed.
+1. `tests/VFXComposer.AiLocalE2E.Tests/**`
+2. `src/VFXComposer.AI.Providers/Desktop/ProviderDesktopRuntime.cs`
+3. `VFXComposer.sln`
+4. `eng/run-phase2-gate.ps1`
+5. `eng/phase2-baseline-roots.json`
 
-Settings must show redacted profile/endpoint summaries outside a deliberate edit interaction. It may save an opaque endpoint exactly as entered, but saving configuration, opening the application, and navigating between Create, Settings, and Preview must perform zero network activity: no DNS, endpoint parsing/probing, HTTP-client creation, health request, credential refresh, image download, or paid call. The initial health value is `Unknown`, and it cannot block an explicit user prompt. That actual prompt is the only first request and its success/failure records health for its already explicit route. Image has no automatic health probe and no automatic paid request; a generation call requires a separate deliberate user action.
+`ProviderDesktopRuntime.cs` is the unique production seam. A5 preserves the existing constructor and may add only an optional `privateImageTempRoot` that is passed through to `ImageGateway`; production remains `null` and behaviorally unchanged. No other product path is authorized.
 
-Secret handling is entry-only. A secret entry is blank/redacted after use and no plaintext secret, `SecretRef` payload, authorization value, prompt, raw request/response, endpoint user-info/query, or image bytes may reach ordinary UI, logs, exceptions, receipts, telemetry, cache keys, or default export. Where a binding needs a secret, a changed/new binding requires explicit re-entry; it cannot recover the previous plaintext or borrow a different profile's secret. Explicit revoke removes the selected `SecretRef` through the secret store, clears transient UI state, and leaves the route fail-closed until deliberate re-entry. No failure may choose another profile, credential, protocol, adapter, model, endpoint, or channel.
+A5 must use a real loopback `TcpListener` together with the production runtime and production `HttpClient` handlers. It must not inject a handler, call an external endpoint, or make a paid-provider request. The end-to-end chain is Settings CRUD plus DPAPI and explicit bindings, then Create Chat, then Preview Image for both base64 and URL responses through the existing decoder. It must prove restart persistence, channel isolation, opaque-endpoint behavior, redacted failures, revoke/fail-closed containment, private-artifact cleanup, and zero project writes.
 
-Create may submit only the user-selected explicit `ChatLlm` request through `IAiGateway`; it neither preflights nor falls back. Preview may display only a provider-issued image stream. `PrivateImagePreviewDecoder` is the sole Desktop stream exception: it takes that `Stream`, produces an in-memory Avalonia `Bitmap`, and closes the stream immediately on both success and failure. It may not use `File`, `Directory`, `Path`, `FileStream`, `Environment`, `System.Net`, any project path, or Unity API. Image output remains private/untrusted and is never automatically exported or written to Unity/`Assets`/recipes/patches.
-
-A4 must prove exact opaque configuration round trips; zero network on save/start/page navigation; `Unknown`-to-explicit-prompt health handling; zero automatic Image health/paid calls; secret re-entry/revoke; no fallback or normalized-value persistence; redaction; prompt/response failure handling; prompt stream closure; and zero Desktop project/Unity/file/network surface except the decoder's inbound stream. It may use focused fakes/spies for these component assertions, but must STOP before a mock-handler cross-channel E2E test: that evidence belongs to A5. Publication also requires the exact runner/baseline update, targeted Desktop/AI tests, locked Release solution build, forbidden-surface/redaction scans, `git diff --check`, and a clean worktree.
+The gate update must add root replay, locked Release build, A5 test, product-assembly binding, and `vfxcomposer-a5` owned-residue checks. Any nonzero root/build/test/binding/`vfxcomposer-a5` residue result, handler injection, non-loopback/external/paid traffic, changed production `null` behavior, scope expansion, fallback, sensitive-data leak, or project write is STOP. A6 remains `NOT STARTED` until this package closes.
 
 ---
 
