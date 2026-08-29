@@ -180,7 +180,7 @@ flowchart LR
 | R1 | DONE | 开发子 agent | 独立审计 PASS（映射 19 项属实、无阻塞问题）；3 条建议已微调完毕（v0.2），REQ-001 已合入 |
 | R2 | DONE | 开发子 agent | 独立审计 PASS；4 条建议已微调（v0.2），REQ-002 已合入 |
 | R3 | DONE | 开发子 agent | 独立审计 PASS；同轮微调（v0.2），REQ-003 已合入 |
-| R4 | DELIVERED | 开发子 agent | 审计中（ADR-007 PROPOSED，a–g 七项裁决完成） |
+| R4 | DONE | 开发子 agent | 独立审计 PASS（15 项代码事实核查 13 项完全属实，无阻塞）；6 条建议微调中，微调后转 ACCEPTED 合入 |
 | O1 | DONE | 开发子 agent | 主 agent 验收 PASS（.gitignore 补齐、空目录清理、退役清单交付；worktree/分支退役延后到 O2/O3 合并后执行，`codex/m1`、`codex/m2` 两个未并入分支暂保留） |
 | O2 | DONE | 开发子 agent | 主 agent 验收 PASS（脚本三条路径实测；`-SkipLockedRestore` 为 O3 修复前过渡开关，O3 合并后停用） |
 | O3 | DISPATCHED | 开发子 agent | 待验收（独立 worktree，兼作 P0-1 独立复核；含 baseline 锁文件漂移修复） |
