@@ -1,4 +1,5 @@
 using System.Collections.ObjectModel;
+using VFXComposer.AI.Contracts.Recipes;
 
 namespace VFXComposer.AI.Contracts.Desktop;
 
@@ -297,6 +298,12 @@ public interface IAiDesktopRuntime : IAsyncDisposable
 
     IAiDesktopSettings Settings { get; }
 
+    /// <summary>Structured Recipe generation over the same explicit ChatLlm binding as <see cref="Gateway"/>.</summary>
+    IRecipeGenerationChannel RecipeGeneration { get; }
+
+    /// <summary>Recipe draft persistence in current-user application data; never a Unity project path.</summary>
+    IRecipeDraftStore RecipeDrafts { get; }
+
     ValueTask<Stream> OpenImageArtifactAsync(string privateArtifactId, CancellationToken cancellationToken = default);
 }
 
@@ -305,7 +312,12 @@ public static class AiDesktopRuntime
 {
     public static IAiDesktopRuntime Unavailable { get; } = new UnavailableRuntime();
 
-    private sealed class UnavailableRuntime : IAiDesktopRuntime, IAiGateway, IAiDesktopSettings
+    private sealed class UnavailableRuntime :
+        IAiDesktopRuntime,
+        IAiGateway,
+        IAiDesktopSettings,
+        IRecipeGenerationChannel,
+        IRecipeDraftStore
     {
         private static readonly AiDesktopSettingsSnapshot Empty = new(
             0,
@@ -318,6 +330,21 @@ public static class AiDesktopRuntime
 
         public IAiGateway Gateway => this;
         public IAiDesktopSettings Settings => this;
+        public IRecipeGenerationChannel RecipeGeneration => this;
+        public IRecipeDraftStore RecipeDrafts => this;
+
+        public ValueTask<RecipeGenerationResult> GenerateAsync(
+            RecipeGenerationRequest request,
+            CancellationToken cancellationToken = default) =>
+            ValueTask.FromException<RecipeGenerationResult>(new AiGatewayException(AiErrorCode.ConfigurationUnavailable));
+
+        public RecipeDraftRecord Save(RecipeDraftRecord record) =>
+            throw new RecipeDraftStoreException(RecipeDraftStoreErrorCode.StorageFailed);
+
+        public RecipeDraftRecord Confirm(string draftId, string canonicalSha256) =>
+            throw new RecipeDraftStoreException(RecipeDraftStoreErrorCode.StorageFailed);
+
+        public RecipeDraftRecord? TryGet(string draftId) => null;
 
         public ValueTask<ChatResponse> ChatAsync(ChatRequest request, CancellationToken cancellationToken = default) =>
             ValueTask.FromException<ChatResponse>(new AiGatewayException(AiErrorCode.ConfigurationUnavailable));

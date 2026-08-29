@@ -1,0 +1,173 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://vfxcomposer.local/schema/recipe-v1.schema.json",
+  "title": "VFX Composer Recipe v1 (contract revision 1.4)",
+  "description": "AI-readable structural contract revision 1.4. recipeVersion remains 1 for byte-compatible legacy Recipes; optional style, behavior, content, and composite orchestration blocks are validated by the authoritative C# parser and live registries.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["recipeVersion", "id", "dimension", "archetype", "targetProfile", "randomSeed", "stages", "metadata"],
+  "properties": {
+    "recipeVersion": { "const": 1 },
+    "revision": { "type": "integer", "minimum": 1, "default": 1, "description": "Optional for backward compatibility: omitted v1 Recipe JSON parses as revision 1." },
+    "id": { "type": "string", "minLength": 1 },
+    "name": { "type": "string" },
+    "dimension": { "enum": ["2d", "3d"] },
+    "archetype": { "enum": ["projectile", "impact", "slash", "aura", "area", "beam", "trail", "shield", "spawn", "transform", "composite", "environment", "screen_ui", "status", "decal", "weapon_trail", "destruction", "lifecycle", "portal", "loot"] },
+    "style": {
+      "oneOf": [
+        { "const": "stylized", "description": "Legacy v1 form." },
+        { "$ref": "#/$defs/style" }
+      ]
+    },
+    "behavior": { "$ref": "#/$defs/behavior" },
+    "content": { "$ref": "#/$defs/content" },
+    "archetypeParameters": { "type": "object", "additionalProperties": true, "description": "Archetype-specific semantic values. The authoritative C# ArchetypeParameterRegistry validates exact keys, required fields, JSON types, and ranges." },
+    "targetProfile": { "enum": ["mobile_medium", "pc_editor"] },
+    "randomSeed": { "type": "integer", "minimum": 0, "maximum": 4294967295 },
+    "stages": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/stage" } },
+    "timeline": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/timelineEvent" }, "description": "Composite-only ordered Runtime Entry reference events." },
+    "camera_hints": { "type": "array", "items": { "$ref": "#/$defs/cameraHint" }, "description": "Composite-only data channel; the effect never owns the gameplay camera." },
+    "gates": { "type": "array", "items": { "$ref": "#/$defs/stageGate" }, "description": "Composite-only external animation/event gates." },
+    "metadata": { "$ref": "#/$defs/metadata" }
+  },
+  "$defs": {
+    "style": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["token"],
+      "properties": {
+        "token": { "enum": ["stylized", "cartoon", "pixel", "inkwash", "semireal", "holo", "dark", "neon", "lowpoly", "crystal", "candy", "cosmic", "steampunk", "ghost"] },
+        "palette": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": { "primary": { "type": "string" }, "secondary": { "type": "string" }, "accent": { "type": "string" } }
+        },
+        "outline": { "type": "number", "minimum": 0, "maximum": 1 },
+        "shading_steps": { "type": "integer", "minimum": 1, "maximum": 8 },
+        "noise_scale": { "type": "number", "exclusiveMinimum": 0, "maximum": 32 },
+        "glow_strength": { "type": "number", "minimum": 0, "maximum": 8 },
+        "snap_fps": { "type": "number" }, "palette_lut": { "type": "string" }, "virtual_res": { "type": "number" },
+        "atlas_id": { "type": "string" }, "atlas_fps": { "type": "number" }, "loop_mode": { "type": "string" },
+        "ink_density": { "type": "number" }, "bleed_radius": { "type": "number" }, "flyaway_threshold": { "type": "number" },
+        "noise_primary_speed": { "type": "number" }, "noise_detail_speed": { "type": "number" },
+        "glitch_rate": { "type": "number" }, "glitch_offset": { "type": "number" }, "flat_shading": { "type": "boolean" },
+        "facet_mesh": { "type": "string" }, "dispersion_strength": { "type": "number" }, "squash_curve": { "type": "string" },
+        "nebula_noise": { "type": "string" }, "step_fps": { "type": "number" }, "ghost_pulse_fps": { "type": "number" }
+      }
+    },
+    "behavior": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "motion": { "$ref": "#/$defs/motionBehavior" },
+        "hit": { "$ref": "#/$defs/hitBehavior" },
+        "emission": { "$ref": "#/$defs/emissionBehavior" },
+        "timing": { "$ref": "#/$defs/timingBehavior" }
+      }
+    },
+    "content": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["family", "parameters"],
+      "properties": {
+        "family": { "enum": ["fire", "frost", "lightning", "water", "wind", "earth", "nature", "toxic", "holy", "shadow", "arcane", "environment", "hit_feedback", "screen_ui", "game_ui"] },
+        "parameters": { "type": "object", "additionalProperties": true, "description": "Exact keys, JSON types, enumerations, and ranges are authoritative in ContentParameterRegistry for the Recipe id." }
+      }
+    },
+    "motionBehavior": {
+      "type": "object", "additionalProperties": false, "required": ["type"],
+      "properties": {
+        "type": { "enum": ["linear", "accel", "parabola", "homing", "wave", "boomerang", "bounce", "orbit_then_strike", "sweep", "dash", "expand_ring", "implode", "moving_zone", "growth_stage"] },
+        "speed": { "type": "number" }, "init_speed": { "type": "number" }, "accel": { "type": "number" }, "max_speed": { "type": "number" },
+        "apex_height": { "type": "number" }, "flight_time": { "type": "number" }, "turn_rate": { "type": "number" }, "lose_target_mode": { "type": "string" },
+        "amplitude": { "type": "number" }, "frequency": { "type": "number" }, "out_distance": { "type": "number" }, "hover_time": { "type": "number" },
+        "return_speed": { "type": "number" }, "bounce_count": { "type": "integer" }, "energy_damping": { "type": "number" }, "orbit_radius": { "type": "number" },
+        "orbit_turns": { "type": "number" }, "orbit_time": { "type": "number" }, "strike_speed": { "type": "number" }, "sweep_speed_max": { "type": "number" },
+        "inertia": { "type": "number" }, "distance": { "type": "number" }, "duration": { "type": "number" }, "max_radius": { "type": "number" },
+        "expand_speed": { "type": "number" }, "edge_thickness": { "type": "number" }, "start_radius": { "type": "number" }, "collapse_time": { "type": "number" },
+        "follow_lag": { "type": "number" }, "residue_slot": { "type": "string" }, "stage_count": { "type": "integer" }, "base_radius": { "type": "number" }
+      }
+    },
+    "hitBehavior": {
+      "type": "object", "additionalProperties": false, "required": ["type"],
+      "properties": {
+        "type": { "enum": ["single", "pierce", "split", "chain_hop", "reflect", "occlude", "arc_link"] },
+        "max_hits": { "type": "integer" }, "damping_per_hit": { "type": "number" }, "impact_slot": { "type": "string" },
+        "child_count": { "type": "integer" }, "split_angle": { "type": "number" }, "trigger": { "type": "string" },
+        "hop_count": { "type": "integer" }, "hop_range": { "type": "number" }, "damping": { "type": "number" },
+        "max_segments": { "type": "integer" }, "damping_per_bounce": { "type": "number" }, "probe_interval": { "type": "number" },
+        "burn_point": { "type": "string" }, "sag": { "type": "number" }, "jitter": { "type": "number" }
+      }
+    },
+    "emissionBehavior": {
+      "type": "object", "additionalProperties": false, "required": ["type"],
+      "properties": {
+        "type": { "enum": ["single", "fan", "burst_stagger", "ring", "volley_showcase", "converge"] },
+        "count": { "type": "integer" }, "spread_angle": { "type": "number" }, "stagger": { "type": "number" },
+        "ring_radius": { "type": "number" }, "source_count": { "type": "integer" }, "focus_growth": { "type": "number" },
+        "fan_count": { "type": "integer" }, "fan_spread_angle": { "type": "number" }, "burst_count": { "type": "integer" },
+        "burst_stagger": { "type": "number" }, "ring_count": { "type": "integer" }, "phase_duration": { "type": "number" }
+      }
+    },
+    "timingBehavior": {
+      "type": "object", "additionalProperties": false, "required": ["type"],
+      "properties": {
+        "type": { "enum": ["instant", "hitscan", "sustained", "charge_scale", "telegraph", "delay_fuse", "tick_pulse", "charge_release", "channel_interrupt", "chain_sequence"] },
+        "max_range": { "type": "number" }, "linger": { "type": "number" }, "level_1": { "type": "number" }, "level_2": { "type": "number" },
+        "per_level_width": { "type": "number" }, "warn_duration": { "type": "number" }, "shape": { "type": "string" }, "fill_style": { "type": "string" },
+        "impact_slot": { "type": "string" }, "fuse_time": { "type": "number" }, "blink_accelerate": { "type": "boolean" },
+        "tick_interval": { "type": "number" }, "tick_visual_slot": { "type": "string" }, "per_level_scale": { "type": "number" }, "overcharge": { "type": "boolean" },
+        "channel_time": { "type": "number" }, "interrupt_scatter_scale": { "type": "number" }, "count": { "type": "integer" }, "interval": { "type": "number" }, "topology": { "type": "string" }
+      }
+    },
+    "metadata": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["createdBy", "templateCatalogVersion"],
+      "properties": {
+        "createdBy": { "type": "string" },
+        "templateCatalogVersion": { "type": "string" }
+      }
+    },
+    "timelineEvent": {
+      "type": "object", "additionalProperties": false, "required": ["t", "ref_id", "action"],
+      "properties": {
+        "t": { "type": "number", "minimum": 0 }, "ref_id": { "type": "string", "minLength": 1 }, "action": { "enum": ["play", "stop"] },
+        "overrides": { "type": "object", "additionalProperties": false, "properties": { "palette": { "type": "string" }, "scale": { "type": "number" }, "position": { "type": "array", "minItems": 3, "maxItems": 3, "items": { "type": "number" } }, "rotation": { "type": "array", "minItems": 3, "maxItems": 3, "items": { "type": "number" } } } }
+      }
+    },
+    "cameraHint": {
+      "type": "object", "additionalProperties": false, "required": ["t", "type", "strength"],
+      "properties": { "t": { "type": "number", "minimum": 0 }, "type": { "enum": ["shake", "zoom", "slowmo"] }, "strength": { "type": "number", "minimum": 0, "maximum": 1 } }
+    },
+    "stageGate": {
+      "type": "object", "additionalProperties": false, "required": ["t", "wait_for"],
+      "properties": { "t": { "type": "number", "minimum": 0 }, "wait_for": { "type": "string", "minLength": 1 } }
+    },
+    "stage": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "trigger", "duration", "modules", "enabled"],
+      "properties": {
+        "id": { "type": "string", "minLength": 1 },
+        "trigger": { "enum": ["manual", "after_previous", "on_launch", "on_hit", "on_end"] },
+        "duration": { "type": "number", "minimum": 0 },
+        "enabled": { "type": "boolean" },
+        "modules": { "type": "array", "items": { "$ref": "#/$defs/module" } }
+      }
+    },
+    "module": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "kind", "templateId", "parameters", "enabled"],
+      "properties": {
+        "id": { "type": "string", "minLength": 1 },
+        "kind": { "enum": ["energy_body", "sprite_emitter", "secondary_particles", "motion_trail", "impact_flash", "impact_burst", "shockwave", "sub_effect"] },
+        "templateId": { "type": "string" },
+        "parameters": { "type": "object", "additionalProperties": true, "description": "Keys and value contracts are selected by the resolved live TemplateCatalog Manifest." },
+        "attachTo": { "type": "string" },
+        "enabled": { "type": "boolean" }
+      }
+    }
+  }
+}
