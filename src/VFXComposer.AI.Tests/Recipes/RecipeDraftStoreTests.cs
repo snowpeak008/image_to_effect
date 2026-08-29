@@ -77,6 +77,71 @@ public sealed class RecipeDraftStoreTests
     }
 
     [TestMethod]
+    public void AConfirmedDraftAdvancesToExactlyOneTerminalBuildOutcome()
+    {
+        var path = StorePath();
+        var store = new RecipeDraftStore(path);
+        var record = store.Save(RecipeDraftRecord.Create(DraftedResult(), DateTimeOffset.UtcNow));
+        store.Confirm(record.DraftId, record.CanonicalSha256!);
+
+        var built = new RecipeDraftStore(path).MarkBuilt(record.DraftId, record.CanonicalSha256!);
+        Assert.AreEqual(RecipeDraftStatus.Built, built.Status);
+        Assert.AreEqual(record.CanonicalSha256, built.CanonicalSha256);
+        Assert.AreEqual(RecipeDraftStatus.Built, new RecipeDraftStore(path).TryGet(record.DraftId)!.Status);
+
+        var reAdvanced = Throws(() => store.MarkBuildFailed(record.DraftId, record.CanonicalSha256!));
+        Assert.AreEqual(RecipeDraftStoreErrorCode.InvalidStatus, reAdvanced.Code);
+    }
+
+    [TestMethod]
+    public void BuildTransitionsRefuseUnconfirmedDraftsStaleHashesAndUnknownIdentities()
+    {
+        var store = new RecipeDraftStore(StorePath());
+        var pending = store.Save(RecipeDraftRecord.Create(DraftedResult(), DateTimeOffset.UtcNow));
+
+        var unconfirmed = Throws(() => store.MarkBuilt(pending.DraftId, pending.CanonicalSha256!));
+        Assert.AreEqual(RecipeDraftStoreErrorCode.InvalidStatus, unconfirmed.Code);
+
+        var unconfirmedFailure = Throws(() => store.MarkBuildFailed(pending.DraftId, pending.CanonicalSha256!));
+        Assert.AreEqual(RecipeDraftStoreErrorCode.InvalidStatus, unconfirmedFailure.Code);
+
+        store.Confirm(pending.DraftId, pending.CanonicalSha256!);
+        var stale = Throws(() => store.MarkBuilt(pending.DraftId, new string('0', 64)));
+        Assert.AreEqual(RecipeDraftStoreErrorCode.HashMismatch, stale.Code);
+
+        var unknown = Throws(() => store.MarkBuildFailed("draft-missing", pending.CanonicalSha256!));
+        Assert.AreEqual(RecipeDraftStoreErrorCode.NotFound, unknown.Code);
+
+        var failed = store.MarkBuildFailed(pending.DraftId, pending.CanonicalSha256!);
+        Assert.AreEqual(RecipeDraftStatus.BuildFailed, failed.Status);
+    }
+
+    [TestMethod]
+    public void TheAwaitingBuildBacklogListsOnlyConfirmedDraftsInConfirmationOrder()
+    {
+        var store = new RecipeDraftStore(StorePath());
+        var first = store.Save(RecipeDraftRecord.Create(DraftedResult(), DateTimeOffset.UtcNow));
+        var second = store.Save(RecipeDraftRecord.Create(DraftedResult(), DateTimeOffset.UtcNow));
+        store.Save(RecipeDraftRecord.Create(FailedResult(), DateTimeOffset.UtcNow));
+        var pendingOnly = store.Save(RecipeDraftRecord.Create(DraftedResult(), DateTimeOffset.UtcNow));
+
+        store.Confirm(first.DraftId, first.CanonicalSha256!);
+        store.Confirm(second.DraftId, second.CanonicalSha256!);
+
+        var backlog = store.ListConfirmedAwaitingBuild();
+
+        CollectionAssert.AreEqual(
+            new[] { first.DraftId, second.DraftId },
+            backlog.Select(static record => record.DraftId).ToArray());
+        Assert.IsFalse(backlog.Any(record => record.DraftId == pendingOnly.DraftId));
+
+        store.MarkBuilt(first.DraftId, first.CanonicalSha256!);
+        CollectionAssert.AreEqual(
+            new[] { second.DraftId },
+            store.ListConfirmedAwaitingBuild().Select(static record => record.DraftId).ToArray());
+    }
+
+    [TestMethod]
     public void ACorruptPrimaryIsRecoveredFromTheBackupCopy()
     {
         var path = StorePath();

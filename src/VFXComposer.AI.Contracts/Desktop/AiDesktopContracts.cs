@@ -346,6 +346,14 @@ public static class AiDesktopRuntime
 
         public RecipeDraftRecord? TryGet(string draftId) => null;
 
+        public IReadOnlyList<RecipeDraftRecord> ListConfirmedAwaitingBuild() => Array.Empty<RecipeDraftRecord>();
+
+        public RecipeDraftRecord MarkBuilt(string draftId, string canonicalSha256) =>
+            throw new RecipeDraftStoreException(RecipeDraftStoreErrorCode.StorageFailed);
+
+        public RecipeDraftRecord MarkBuildFailed(string draftId, string canonicalSha256) =>
+            throw new RecipeDraftStoreException(RecipeDraftStoreErrorCode.StorageFailed);
+
         public ValueTask<ChatResponse> ChatAsync(ChatRequest request, CancellationToken cancellationToken = default) =>
             ValueTask.FromException<ChatResponse>(new AiGatewayException(AiErrorCode.ConfigurationUnavailable));
 

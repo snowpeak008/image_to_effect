@@ -42,7 +42,41 @@ public sealed class RecipeDraftStore : IRecipeDraftStore
         }
     }
 
-    public RecipeDraftRecord Confirm(string draftId, string canonicalSha256)
+    public RecipeDraftRecord Confirm(string draftId, string canonicalSha256) =>
+        Advance(draftId, canonicalSha256, RecipeDraftStatus.PendingConfirmation, RecipeDraftStatus.ConfirmedAwaitingBuild);
+
+    public RecipeDraftRecord MarkBuilt(string draftId, string canonicalSha256) =>
+        Advance(draftId, canonicalSha256, RecipeDraftStatus.ConfirmedAwaitingBuild, RecipeDraftStatus.Built);
+
+    public RecipeDraftRecord MarkBuildFailed(string draftId, string canonicalSha256) =>
+        Advance(draftId, canonicalSha256, RecipeDraftStatus.ConfirmedAwaitingBuild, RecipeDraftStatus.BuildFailed);
+
+    public RecipeDraftRecord? TryGet(string draftId)
+    {
+        ArgumentException.ThrowIfNullOrWhiteSpace(draftId);
+        lock (_gate)
+        {
+            return LoadCore().Find(record => string.Equals(record.DraftId, draftId, StringComparison.Ordinal));
+        }
+    }
+
+    public IReadOnlyList<RecipeDraftRecord> ListConfirmedAwaitingBuild()
+    {
+        lock (_gate)
+        {
+            return LoadCore()
+                .Where(static record => record.Status == RecipeDraftStatus.ConfirmedAwaitingBuild)
+                .OrderBy(static record => record.UpdatedUtc)
+                .ThenBy(static record => record.DraftId, StringComparer.Ordinal)
+                .ToArray();
+        }
+    }
+
+    private RecipeDraftRecord Advance(
+        string draftId,
+        string canonicalSha256,
+        RecipeDraftStatus required,
+        RecipeDraftStatus next)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(draftId);
         ArgumentException.ThrowIfNullOrWhiteSpace(canonicalSha256);
@@ -56,7 +90,7 @@ public sealed class RecipeDraftStore : IRecipeDraftStore
             }
 
             var current = records[index];
-            if (current.Status != RecipeDraftStatus.PendingConfirmation)
+            if (current.Status != required)
             {
                 throw new RecipeDraftStoreException(RecipeDraftStoreErrorCode.InvalidStatus);
             }
@@ -66,9 +100,9 @@ public sealed class RecipeDraftStore : IRecipeDraftStore
                 throw new RecipeDraftStoreException(RecipeDraftStoreErrorCode.HashMismatch);
             }
 
-            var confirmed = new RecipeDraftRecord(
+            var advanced = new RecipeDraftRecord(
                 current.DraftId,
-                RecipeDraftStatus.ConfirmedAwaitingBuild,
+                next,
                 current.CreatedUtc,
                 DateTimeOffset.UtcNow,
                 current.CorrelationId,
@@ -82,18 +116,9 @@ public sealed class RecipeDraftStore : IRecipeDraftStore
                 current.TargetProfile,
                 current.Issues,
                 current.RequestCount);
-            records[index] = confirmed;
+            records[index] = advanced;
             Persist(records);
-            return confirmed;
-        }
-    }
-
-    public RecipeDraftRecord? TryGet(string draftId)
-    {
-        ArgumentException.ThrowIfNullOrWhiteSpace(draftId);
-        lock (_gate)
-        {
-            return LoadCore().Find(record => string.Equals(record.DraftId, draftId, StringComparison.Ordinal));
+            return advanced;
         }
     }
 

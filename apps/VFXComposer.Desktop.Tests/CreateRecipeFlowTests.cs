@@ -278,6 +278,15 @@ public sealed class CreateRecipeFlowTests
         public RecipeDraftRecord? TryGet(string draftId) =>
             Records.TryGetValue(draftId, out var record) ? record : null;
 
+        public IReadOnlyList<RecipeDraftRecord> ListConfirmedAwaitingBuild() =>
+            Records.Values.Where(static record => record.Status == RecipeDraftStatus.ConfirmedAwaitingBuild).ToArray();
+
+        public RecipeDraftRecord MarkBuilt(string draftId, string canonicalSha256) =>
+            throw new NotSupportedException("The Create page never advances build state.");
+
+        public RecipeDraftRecord MarkBuildFailed(string draftId, string canonicalSha256) =>
+            throw new NotSupportedException("The Create page never advances build state.");
+
         public ValueTask<ChatResponse> ChatAsync(ChatRequest request, CancellationToken cancellationToken = default) =>
             throw new NotSupportedException();
 
