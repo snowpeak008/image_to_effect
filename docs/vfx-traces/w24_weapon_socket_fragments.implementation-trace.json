@@ -3,7 +3,7 @@
   "traceStatus": "PENDING_FIRST_FORMAL_BUILD_BINDING",
   "effectId": "w24_weapon_socket_fragments",
   "contractRevision": 25,
-  "contractHash": "sha256:88c752a126d0c0922861af647158b884dfb9095b173e573d3279239ca0f3dc4d",
+  "contractHash": "sha256:e011654dad1a437413eca2dc9844964a9e08da61bff1437f8a63e3d7561a6228",
   "buildHash": "pending:formal-build",
   "captureProfileHash": "pending:formal-build",
   "runtimeEntryAssetPath": "Assets/VFX/Generated/w24_weapon_socket_fragments/VFX_w24_weapon_socket_fragments.prefab",

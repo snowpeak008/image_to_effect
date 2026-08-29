@@ -3,7 +3,7 @@
   "traceStatus": "PENDING_FIRST_FORMAL_BUILD_BINDING",
   "effectId": "w24_moving_projectile_trail",
   "contractRevision": 26,
-  "contractHash": "sha256:93fce950b2bbea9de590bdbc9594f43bce5894ebf4ccbacafbe370af8d279b58",
+  "contractHash": "sha256:220354280ebebf9779db279fa660dac1728c2944261717aab1e55e6041b8c8be",
   "buildHash": "pending:formal-build",
   "captureProfileHash": "pending:formal-build",
   "runtimeEntryAssetPath": "Assets/VFX/Generated/w24_moving_projectile_trail/VFX_w24_moving_projectile_trail.prefab",

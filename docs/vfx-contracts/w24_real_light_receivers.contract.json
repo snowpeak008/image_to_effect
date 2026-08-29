@@ -1,5 +1,5 @@
 {
-  "contractVersion": "w24-s1/1.0", "effectId": "w24_real_light_receivers", "contractRevision": 24, "contractHash": "sha256:0a7b6c6715834f17c5b4864346c015cc3b96bbd32b5be734d3b2b6b38e959859",
+  "contractVersion": "w24-s1/1.0", "effectId": "w24_real_light_receivers", "contractRevision": 24, "contractHash": "sha256:fb54bb65118140b996afe8d44923a99d1190ddc15b692b58e196a254b771fbd6",
   "lifecycle": {
     "kind": "event_driven",
     "start": {"entryConditions": ["muzzle or fire light event"], "deadlineSeconds": 0.1, "completionConditions": ["actual Light enabled within budget"]},
@@ -22,7 +22,7 @@
     "prefabManifestSerializedReference": "ProjectSettings/VFXComposer/BuildManifests/w24_real_light_receivers.manifest.json#buildHash", "prefabManifestHash": "pending:formal-build",
     "rendererAssetSerializedReference": "Assets/Settings/VFXPreviewUniversalRenderer.asset", "volumeSerializedReference": "ProjectSettings/GraphicsSettings.asset (no per-scene Volume; bloom/tone mapping disabled)", "resolution": {"width": 960, "height": 540}, "fps": 60,
     "background": "dark neutral", "colorSpace": "Linear", "hdr": false, "msaaSamples": 1, "renderTextureFormat": "ARGB32", "bloom": {"enabled": false, "settingsReference": "none"}, "toneMapping": "None",
-    "captureToolVersion": "w24-s3-capture/3.5", "captureToolHash": "sha256:f605aacf4d27128347a2a8434a29cebc95aa789af73df55cc26c6fd7a0e42726", "canonicalSeed": 24301, "robustnessSeeds": [24311, 24321]
+    "captureToolVersion": "w24-s3-capture/3.5", "captureToolHash": "sha256:c300573cc86ba8ba2e31bc9ef88c3e5d689f18a4f74531160c93c068e133c432", "canonicalSeed": 24301, "robustnessSeeds": [24311, 24321]
   },
   "semanticStateMachine": {
     "deterministicForSameSeed": true,
