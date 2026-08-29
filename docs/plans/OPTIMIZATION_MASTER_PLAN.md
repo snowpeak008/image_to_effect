@@ -157,7 +157,7 @@ flowchart LR
 - 目标：把 recipe 草稿交给 Unity 侧编译器构建 Prefab。执行体按 ADR-007 裁决：用户显式触发的 Unity batchmode 短生命进程（扩展 `Invoke-Unity.ps1` 纪律），不复用只读链路、不给 Worker 加写权限；写入面为封闭清单 `Assets/VFX/Generated/**` + `ProjectSettings/VFXComposer/BuildManifests/*.manifest.json`，`Assets/VFX/Shared` 构建期只读。
 - 范围（ADR-007 裁决）：首版限 v1 `VfxCompiler` 模板域；`Impact2DCompiler`/`Area2DCompiler` 因无条件 `Ensure()` 覆盖 Shared，在提供只验证模式前不进 AI 构建范围。
 - ~~生产闸初版决策（复用 `BuildProduction`）~~ **已被 F2 停手报告推翻并重新定版（主 agent，2026-08-29，ADR-007 v1.2）**：F2 核实 `BuildProduction` 对 AI recipe 无可达成功路径（formal 分支要求 docs/ 契约与 trace，legacy 分支被 `CommitFormalManifest` 拒绝 E24S5-092 成死路，全仓零成功调用点）；且 strict E8014 要求 recipe 已在 `Assets/VFX/Recipes/**` 溯源，与项目外暂存矛盾。裁决采纳候选方案 A：①ADR-007 写入面增补成员 3（`Assets/VFX/Recipes/<Sanitize(effectId)>.json` 构建溯源单文件，仅构建入口哈希复验后原子写入）；②构建走 legacy `Build` + 执行器层计划绑定提交（DryRun 计划 → 提交前复核 recipeHash/revision/buildHash/输出路径，等价 `MatchesExactPlan` 语义），不走 `W24S5ProductionGate`；③legacy 批准死路记录为 W24 既有缺陷，保持 fail-closed 不修。附带定版：Unity 侧无 catalog 版本号（`templateCatalogVersion` 为自由文本），F2 的 catalog 比对降级为**记录性**字段（构建结果记录 recipe 声称的 catalog 版本文本 + 派生身份哈希如模板 id/version/assetGuid），硬性门槛保持"逐模板存在性 + L2 权威校验"（模板漂移必然在此失败）。
-- 清单可移植性已定版（主 agent，2026-08-29，v1）：**还原纪律方案**——`dependencyHash` 属机器相关导入产物哈希，构建/测试轮次后的 dependencyHash-only 漂移一律 `git checkout` 还原不入提交；"生成区零 diff"断言实现为排除 `dependencyHash` 字段的语义比较。把 `dependencyHash` 移出入库清单的 schema 改造记为后续债务（F6 后评估）。若 F2 实施中发现还原纪律不可行（如该哈希有契约消费者），停手报告。
+- 清单可移植性已定版（主 agent，2026-08-29，v1；措辞按 F2 审计建议 2 修正）：**还原纪律方案**——构建/测试轮次后 `project/` 的**一切漂移**（`dependencyHash`、`buildHash`、manifest 新字段、时间戳、Runtime 序列化连锁的 prefab 重写、未跟踪残留）一律 `git checkout -- project; git clean -fd project` 还原不入提交；"生成区零 diff"断言不能只排除 `dependencyHash` 字段，应改用未跟踪条目计数或还原后比对。把 `dependencyHash` 移出入库清单的 schema 改造记为后续债务（F6 后评估）。
 - 验收标准：一个样例 recipe 端到端产出 Prefab；越界路径写入被拒绝且有测试（含 Windows 保留名等负向用例）。
 
 **F3 Jobs 串行队列**（依赖 P0-1、R3）
@@ -192,8 +192,9 @@ flowchart LR
   - ② CLI/MCP 双面等价性测试改构造性：反射遍历 `JobRecord` 属性 + 显式排除清单（`JobId`/`RequestId`/`IdempotencyKey`/时间戳/`SourceEntry`），当前 `ItemId` 已漏在断言外（F5 建议②）。
   - ③ IL 扫描面（`NoProjectAccessSurfaceTests.ProductAssemblies`）纳入 `vfxc`/`vfxc-mcp` 两个入口装配体（F4 建议⑤ + F5 建议⑤合并）。
   - ④ MCP 侧 `vfx_validate_manifest` 零网络证据补齐（F5 建议⑥）；生产组合根零网络真实用例（F4 建议⑤余项）。
-  - ⑤ `batches/` 样例清单 + schema 入库（F4 建议⑧），作为 E2E 批量流程的固定输入。
-- 裁量项（时间允许则做，否则逐条记录不做理由）：F5 建议③（`single-` 保留前缀或注释降级）、④（派生清单 onFailure 断言）、⑦（MCP Ctrl+C 假象）、⑧（initialize 必需成员）、⑨（常量重复）；F4 建议④（ValidationFailed/ChannelFailed 区分码）；F3 建议 3（执行器锁跨进程真杀测试）；F1 建议②（Desktop 裸 catch 稳定码治理）。
+  - ⑤ `batches/` 样例清单 + schema 入库（F4 建议⑧），作为 E2E 批量流程的固定输入。样例 recipe 必须符合 strict 结构预算（F2 已知限制①：至多 2 个渲染模块 stage、无 attachTo 链、三 stage 根齐全）。
+  - ⑥ VFXB 精确失败码持久化到队列可见面（F2 审计建议①：如 artifact `failure:VFXB00xx` 或诊断详情字段，使构建失败排障不依赖 Unity 日志）。
+- 裁量项（时间允许则做，否则逐条记录不做理由）：F5 建议③（`single-` 保留前缀或注释降级）、④（派生清单 onFailure 断言）、⑦（MCP Ctrl+C 假象）、⑧（initialize 必需成员）、⑨（常量重复）；F4 建议④（ValidationFailed/ChannelFailed 区分码）；F3 建议 3（执行器锁跨进程真杀测试）；F1 建议②（Desktop 裸 catch 稳定码治理）；F2 审计建议③（查明 E2E 空目录 `Assets/VFX/Shared/Materials|Textures` 创建方）、④（`InlineManifestRecipeProbe` 注释过时修正，顺带）、⑤（入口 `WriteResult` 结果路径项目外复验）。
 - E2E 范围：流程一（Desktop 对话 → recipe 草稿 → 确认 → 构建 → Prefab 三件套核验）可用 mock 通道 + 真实 Unity batchmode；流程二（CLI 清单批量 → 队列串行 → 报告/退出码核验）+ MCP 冒烟（提交/状态/取消往返）。人工验收脚本写入 `eng/`。
 - allow-list：`tests/**`（新 E2E 工程）、`batches/**`（样例清单与 schema）、`eng/**`（验收脚本）、清算项①-④涉及的 `src/VFXComposer.Batch.Core/**`、`apps/VFXComposer.Cli*/**`、`apps/VFXComposer.Mcp*/**`、`src/VFXComposer.*.Tests/**`；禁止改动 Jobs 核心语义与 Unity 包生产代码。
 - 验收标准：两条主流程在干净环境一次跑通并有记录；必做清算项①-⑤全部落地有测试；Release 全量测试不回退；EditMode 基线不回退；dependencyHash 还原纪律照旧。
@@ -218,7 +219,7 @@ flowchart LR
 | F4 | DONE | 开发子 agent | 独立审计 PASS（合并态 625/625 全绿、36 文件纯新增、退出码 8 码逐码测试、路径逃逸 9 形态负向、6 条已知限制核实属实）；合并 `9d4e23ed` 已推送；worktree/分支已退役 |
 | F3c | DONE | 开发子 agent | 主 agent 初审 PASS（9 文件全在 allow-list，合并态 635/635 全绿、构建 0/0）：store schema 升版 `/2`（版本 1 按 VFXJ0009 fail-closed，itemId 不可恢复故不做兼容读取）、`JobRecord` 纯加法 API（Batch.Core/Cli 零改动通过编译）、Jobs 页两态展示。合并 `c24c9de7` 已推送，worktree/分支已退役。注意：开发机旧 job store 首次读取会拒绝，删除 `%LocalAppData%\VFXComposer\Jobs` 重建即可 |
 | F5 | DONE | 开发子 agent | 独立审计 PASS（Release 复跑 692/692 全绿、真实管道冒烟 6 项符合预期、39 文件全在 allow-list、零新 NuGet）；合并 `0a5b918f` 已推送，worktree/分支已退役。台账补正：F5 实为 **4 笔提交**（含首笔 `60fdd80a` 批次取消执行层）。工具数裁决：8 个正确（任务卡"5+1=6"系主 agent 起草笔误，REQ-002-10 已勘误为 8）。**验收注意：测试复跑必须用 Release 配置**——Debug 下 Broker/LocalE2E 38 条会因 U4FS001（校验器要求 Release Broker.exe）失败，属既有设计非缺陷 |
-| F2 | DELIVERED | 开发子 agent | 审计中（本地集成合并 `8b36fb6f` 未推送）。首轮按"不可行则停手"条款正确停手（两个真实阻塞 + 三候选方案，主 agent 裁决采纳方案 A → ADR-007 v1.2）；续派后完成交付：端到端主流程连通（`vfxc batch run` → Unity batchmode → strict 特效三件套，零越界、强制重跑字节一致），.NET 733/733（+40）、EditMode 684=630/0/54（+26），44 文件全在 allow-list，禁区零改动。7 条已知限制待审计核实，其中⑥指出 EditMode 全量污染并非全部 dependencyHash-only（部分 prefab 因 Runtime 序列化字段连锁重写），主计划还原纪律表述待 F6 前修正措辞 |
+| F2 | DONE | 开发子 agent | 独立审计 **PASS-with-remarks 零阻塞**：复跑数字与交付完全一致（Release 0/0、.NET 733/733、EditMode 684=630/0/54）；E2E 实测三件套零越界（git status 恰 5 条目）、`--force` 重跑逐字节一致、保留名 `con` 负向全零创建；45 文件全在 allow-list，禁区零命中，`RecipeCanonicalJson` 纯搬移核实，store formatVersion 保持 1 评估为安全（旧版读新状态词 fail-closed）。首轮停手事件与方案 A 裁决见 ADR-007 v1.2。合并 `8b36fb6f` 已推送，worktree/分支已退役。6 条非阻塞建议见下 |
 | F6 | BLOCKED | — | 等 F2（F5/F3c 已完成） |
 
 已知非阻塞遗留（P0-1 交付报告）：①`services/VFXComposer.Broker.HandleProbe` 与 `services/VFXComposer.Broker.Tests` 的 `packages.lock.json` 自 baseline 起与引用图不同步（归入 O3）；②`.gitignore` 未覆盖 `tests/**` 构建产物（归入 O1）。
@@ -226,6 +227,8 @@ flowchart LR
 F1 审计非阻塞建议（后续任务顺带处理）：①补一条直接互比 PlainText/StructuredOutput 两形态哈希的测试（可并入 F2）；②`CreateViewModel` 的 `SendChatAsync`/`GenerateRecipeAsync` 末尾裸 `catch` 无稳定错误码——master 既有风格，统一治理另立小任务；③Desktop 侧未来可自动优选 `StructuredOutput` 形态（增强，非需求）。
 
 F3 审计非阻塞建议处置：建议 1/2/4/6/7 收进 F3b 任务卡；建议 3（执行器锁跨进程真杀测试，可仿 `RevisionLockHost` 先例）留给 F6 端到端验收裁量；建议 5（Jobs 页批次分组折叠交互）登记为 v1 已知限制，不排期；建议 8（lock 文件末行换行）为 NuGet 生成物，忽略。
+
+F2 审计非阻塞建议处置（6 条）：①VFXB 精确失败码持久化到队列可见面（当前只 VFXJ0004，精确码随 scratch 清理丢失）→ **F6 必做⑥**；②主计划还原纪律措辞修正 → 已由主 agent 落实（见 F2 任务卡）；③E2E 产生空目录 `Assets/VFX/Shared/Materials|Textures`（零内容，疑编辑器目录创建副作用）→ F6 查明确认非写入面隐患；④`McpToolInvoker.InlineManifestRecipeProbe` 注释首句过时 → F6 顺带修正；⑤入口 `WriteResult` 结果路径项目外复验（现由 wrapper exit 64 守卫）→ F6 裁量；⑥`RestoreProvenance` 回滚非原子直写（哈希复验 fail-closed 兜底在）→ 记录为已知限制，不排期。F2 已知限制①（strict 结构预算收窄 v1 recipe 形状：至多 2 个渲染模块 stage、无 attachTo 链）→ F6 的 E2E 样例与 F1 prompt 收窄裁量；限制④同建议①；限制⑥同建议②。
 
 F5 审计非阻塞建议处置（11 条）：①`BatchQueueReportBuilder.EntryLabel` 改 `job.ItemId ?? job.JobId` 并修正失实注释（F3c 已落 ItemId）→ **F6 必做**（决定 `vfx_get_batch_report` 满足 REQ-003 §9.1）；②等价性测试改构造性（反射遍历 + 显式排除清单）→ F6；⑤IL 扫描面纳入 `vfxc`/`vfxc-mcp` 装配体（与 F4 建议⑤合并）→ F6；⑥MCP 侧 validate 零网络测试 → F6；③batchId `single-` 前缀无保留机制（注释断言过强，实际风险低）、④派生清单 onFailure 无断言、⑦Ctrl+C 假象、⑧initialize 必需成员按可选处理、⑨常量重复 → F6 裁量；⑩状态板已补正 4 提交；⑪一文件多类型与仓库既有风格一致，不计违规。
 
