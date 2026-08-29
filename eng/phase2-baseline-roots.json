@@ -1,7 +1,7 @@
 {
   "formatVersion": 1,
   "algorithm": "SHA-256 of UTF-8(no BOM) lines: lowercase file hash, two spaces, repository-relative forward-slash path, LF; paths sorted before row construction with StringComparer.Ordinal; bin/obj segments excluded",
-  "capturedUtc": "2026-08-29T04:23:15.3909470Z",
+  "capturedUtc": "2026-08-29T06:35:03.2787174Z",
   "roots": [
     {
       "path": "src/VFXComposer.Protocol",
@@ -25,7 +25,7 @@
       "path": "src/VFXComposer.AI.Providers",
       "kind": "directory",
       "count": 26,
-      "sha256": "6b49cca09dbe79e1ad14fcc55037023a30a9c48f1f07d5b36547a7b763fae54c"
+      "sha256": "9398f4e0df8b2f139ef225b5b6a16061ad3629f0e7d6dcb9072b90bd18cbda45"
     },
     {
       "path": "src/VFXComposer.AI.Tests",
@@ -100,6 +100,12 @@
       "sha256": "35181d44b89b72e531e8b55c72bd6bb48e3aa0cf10f6e06af37d68849f69b67c"
     },
     {
+      "path": "tests/VFXComposer.AiLocalE2E.Tests",
+      "kind": "directory",
+      "count": 5,
+      "sha256": "ba5faf94c2c4abe6ba46bbfe1632b4b19828eb2e50d5cdf503b0ec95ae59a484"
+    },
+    {
       "path": "project/Packages/com.vfxcomposer.unity",
       "kind": "directory",
       "count": 782,
@@ -109,7 +115,7 @@
       "path": "VFXComposer.sln",
       "kind": "file",
       "count": 1,
-      "sha256": "1d6016418b2537567f25c75c27f6a36f80d13c624a0777355685170280ccc58c"
+      "sha256": "0c6a70dcc3e59d1e2436288ce470e383d0fe652f5e8180eca76cdd787622826f"
     }
   ]
 }
