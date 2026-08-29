@@ -1,6 +1,6 @@
 # ADR-006: AI provider two-channel routing and user-defined endpoints
 
-Status: `ACCEPTED — A0 ARCHITECTURE FREEZE, REBASED BY USER PRODUCT DECISION` on `2026-08-29`.
+Status: `ACCEPTED — A0 ARCHITECTURE FREEZE; A1 CLOSED; A2+A3 ACTIVE / COMBINED NO-GO PENDING A3 P1#2 REMEDIATION` on `2026-08-29`.
 
 Normative architecture token: `AI_PROVIDER_TWO_CHANNEL_ROUTING_V1`.
 
@@ -14,7 +14,9 @@ The post-U6 AI DAG remains exactly:
 
 `A0 -> A1 -> (A2 || A3) -> A4 -> A5 -> A6`.
 
-`A0` is closed. `A1 — AI_PROVIDER_FOUNDATION` remains the sole `ACTIVE` package; `A2` through `A6` remain `NOT STARTED`. The earlier A1 review verdict `NO-GO — P0/P1/P2=0/0/1` is superseded by this user product decision, not converted into a GO and not erased as historical evidence. A1 must rework its endpoint model to `OpaqueEndpoint`, then rerun its scoped validation and independent review before it may close.
+`A0` and `A1 — AI_PROVIDER_FOUNDATION` are closed; A1 is finally accepted at merged source commit `698e770a35062cc4135872147a401dce40adcb51`. `A2` and `A3` are the only concurrent `ACTIVE` packages, but their combined quality-control state is `NO-GO`. `A4` through `A6` remain `NOT STARTED`.
+
+Combined QC `P1#1` is superseded by this explicit user requirement clarification: the premise that standard .NET/HTTP request-time `RequestUri` normalization violates opaque configuration exactness is not a source finding and requires no source remediation. Combined QC `P1#2` is separate and remains open: Image's arbitrary public `HttpMessageHandler` injection requires one A3 remediation. Until that remediation and its review close, both A2 and A3 remain `ACTIVE / NO-GO`; this ADR grants no release or integration GO.
 
 ## 2. Decision: two explicit channels, no fallback
 
@@ -42,7 +44,7 @@ Bounded retries may later be added only for the already resolved one route and r
 
 `OpaqueEndpoint` is the endpoint contract. Its value is a user-supplied, user-editable configuration string that the product saves and resolves as entered. It may represent an official API, relay, friend-provided service, subscription-related custom address, or any other custom address. It may contain a scheme, host, port, user-info, path, query, fragment, or text that is not a URI at all.
 
-The persisted configuration and its JSON Schema enforce only aggregate structure, required fields, field types, supported version/revision rules, duplicate/unknown-field handling, and bounded storage size. For `OpaqueEndpoint`, validation is limited to a string and a reasonable non-empty storage bound. It must not validate URI syntax, scheme, host, port, user-info, query, fragment, provider-specific path, or upstream service legality. It must not normalize, strip, repair, reject, or reinterpret the string during local save or configuration resolution.
+At every configuration boundary — configuration JSON/codec, atomic store, resolver, imported draft, and explicit UI editing value — `OpaqueEndpoint.Value` is a byte/string-exact user value. It must round-trip as entered. Those layers enforce only aggregate structure, required fields, field types, supported version/revision rules, duplicate/unknown-field handling, and bounded storage size. For `OpaqueEndpoint`, admission is limited to a string and a reasonable non-empty storage bound: there is no URI or upstream pre-validation, URI parsing as an admission gate, normalization, trimming, repair, rejection, reinterpretation, or write-back of a different value.
 
 Configuration acceptance is not network authorization. In particular, local schema acceptance and resolver acceptance do not promise that a request can be formed, that a host is reachable, or that an upstream service will accept it. They also do not authorize any other route.
 
@@ -50,11 +52,13 @@ The formal key store remains the recommended place for API secrets: authenticati
 
 ## 4. Request-time interpretation and failure behavior
 
-A1 must provide `OpaqueEndpoint` storage, codec/schema support, redaction, and configuration resolution only. It must not parse the value as a URI merely to decide whether settings may be saved or resolved, and it must not add real Chat or Image HTTP.
+A1 provides the closed `OpaqueEndpoint` storage, codec/schema support, redaction, and configuration resolution foundation only. It does not parse an endpoint to decide whether settings save or resolve; it contains no real Chat or Image HTTP.
 
-A2 and A3 are the first lanes allowed to interpret an `OpaqueEndpoint` at call time. The explicitly bound adapter makes a best-effort, protocol-specific attempt to construct its one request from the original stored string. If it cannot construct a request, encounters a network failure, or receives an upstream rejection, it returns a stable redacted failure for that call.
+Only A2 and A3 may interpret the original stored string, and only while constructing the one request for their already explicit binding. They may give that string to the .NET/HTTP stack to form a `RequestUri`; standard interpretation and canonicalization performed by that stack are permitted for that transient request representation. This request-time behavior does not alter the byte/string-exact configuration value.
 
-Such a failure must not rewrite, normalize, disable, delete, or otherwise mutate the saved configuration. It must not select a different profile, model, endpoint, adapter, protocol, channel, or fallback route. Request-time usability is therefore distinct from local configuration persistence.
+If .NET/HTTP cannot interpret the value as a request URI, the adapter returns a stable redacted request-construction failure for that call. If a request is formed, the selected upstream is the final authority on request/protocol acceptance; network and upstream rejection likewise return a stable redacted failure. No adapter may append or concatenate a vendor/provider path to the endpoint: the user value is the complete request target for its explicit protocol.
+
+Neither success nor failure may persist a normalized `RequestUri`, rewrite, normalize, disable, delete, or otherwise mutate saved configuration. It must not select a different profile, model, endpoint, adapter, protocol, channel, or fallback route. Request-time usability is therefore distinct from local configuration persistence.
 
 ## 5. Storage, observability, import, and export
 
@@ -68,7 +72,7 @@ The fixed Tom design input remains [`snowpeak008/Tom_doc@dd0f9ffc32d426735f7fb89
 
 Future image output remains a private, untrusted artifact. It must not automatically write to Unity, `Assets`, recipes, patches, or any project path. A later explicit Desktop export remains a separately bounded action.
 
-## 6. Module boundary and A1 rework contract
+## 6. Module boundary and active-channel contract
 
 | Module | Responsibility | Prohibited behavior |
 |---|---|---|
@@ -89,19 +93,12 @@ A1 retains its published owned roots:
 7. `eng/run-phase2-gate.ps1`
 8. `eng/phase2-baseline-roots.json`
 
-This documentation rebase does not exercise that implementation authority: it edits only the seven named AI control documents. The subsequent A1 rework must replace endpoint admission with `OpaqueEndpoint`, retain the explicit channel binding and no-fallback invariants, and revalidate from the revised contract.
+The A1 ownership is historical closed ownership; this clarification edits only the seven named AI control documents and does not reopen it. A2 owns only `src/VFXComposer.AI.Contracts/Chat/**`, `src/VFXComposer.AI.Providers/Chat/**`, and `src/VFXComposer.AI.Tests/Chat/**`; A3 owns the corresponding `Image/**` roots. Their root sets are disjoint, and neither may use the clarification as authority to edit a shared file, project file, runner, baseline, or A1-owned path.
 
-At minimum, A1 revalidation must prove:
-
-- arbitrary bounded endpoint strings, including malformed URI-like input and strings with user-info, query, and fragments, save and resolve unchanged;
-- aggregate/schema structural failures and storage-size overflow still fail correctly, without treating endpoint syntax as a structural failure;
-- configuration acceptance does not invoke a network handler or claim network authorization;
-- request-time adapter parsing failures, network failures, and upstream rejections return stable redacted errors with no configuration write-back and no fallback;
-- redaction protects endpoint-embedded sensitive material in logs, exceptions, receipts, ordinary UI, and default export, while explicit editing and warned configuration export follow the stated consent rules;
-- DPAPI/`SecretRef`, corrupt primary/backup behavior, Tom `ApiKeyProtected` exclusion, channel/capability mismatch, and Contracts/Providers/Tests/Broker/Worker/Unity/Desktop boundaries remain intact.
+The active-channel proof obligations include: exact configuration/codec/store/edit round trips for arbitrary bounded endpoint text; no configuration-time network invocation; request-time .NET/HTTP `RequestUri` interpretation that leaves the saved value untouched; stable redacted failures when it cannot be interpreted or when network/upstream handling fails; no vendor-path concatenation, normalized-value persistence, or fallback; and protection of endpoint-embedded sensitive material in logs, exceptions, receipts, ordinary UI, and default export.
 
 ## 7. Consequences and stop line
 
-`A2` (Chat adapter), `A3` (Image adapter), `A4` (Desktop wiring), `A5` (mock E2E), and `A6` (independent audit) remain `NOT STARTED`. A2/A3 may add their respective request-time adapter behavior only after A1's reworked contract is independently accepted. No later node may use endpoint acceptance to infer permission for a different route, weaken endpoint redaction, or introduce fallback.
+`A2` and `A3` remain `ACTIVE / NO-GO`; A3 has exactly one still-required remediation for QC P1#2, Image arbitrary public handler injection. A4 (Desktop wiring), A5 (mock E2E), and A6 (independent audit) remain `NOT STARTED`. No later node may use endpoint acceptance to infer permission for a different route, weaken endpoint redaction, add vendor-path construction, persist a normalized endpoint, or introduce fallback.
 
-After this documentation commit passes `git diff --check` and the worktree is clean, this rebase is `FINAL STOPPED`. Only the separately authorized A1 implementation rework may proceed.
+After this documentation commit passes `git diff --check` and the worktree is clean, this clarification is `FINAL STOPPED`. It does not close the combined QC gate or authorize source work beyond the separately tracked P1#2 remediation.
