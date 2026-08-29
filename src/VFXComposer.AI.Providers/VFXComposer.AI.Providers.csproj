@@ -8,4 +8,9 @@
   <ItemGroup>
     <ProjectReference Include="..\VFXComposer.AI.Contracts\VFXComposer.AI.Contracts.csproj" />
   </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Recipes\Assets\recipe-v1-template-catalog.snapshot.json" />
+    <EmbeddedResource Include="Recipes\Assets\recipe-v1.schema.json" />
+  </ItemGroup>
 </Project>

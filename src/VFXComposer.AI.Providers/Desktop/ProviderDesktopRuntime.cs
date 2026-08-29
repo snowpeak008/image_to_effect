@@ -1,7 +1,10 @@
 using VFXComposer.AI.Contracts;
+using VFXComposer.AI.Contracts.Chat;
 using VFXComposer.AI.Contracts.Desktop;
+using VFXComposer.AI.Contracts.Recipes;
 using VFXComposer.AI.Providers.Chat;
 using VFXComposer.AI.Providers.Image;
+using VFXComposer.AI.Providers.Recipes;
 
 namespace VFXComposer.AI.Providers.Desktop;
 
@@ -30,6 +33,20 @@ public sealed class ProviderDesktopRuntime : IAiDesktopRuntime
         ProviderSecretStore secretStore,
         ProviderHealthRegistry healthRegistry,
         string? privateImageTempRoot)
+        : this(configurationStore, secretStore, healthRegistry, privateImageTempRoot, recipeDraftStorePath: null)
+    {
+    }
+
+    /// <summary>
+    /// Composes the Desktop runtime with an optional caller-owned recipe draft store path. When it is omitted the
+    /// store lives beside the other current-user AI state in local application data.
+    /// </summary>
+    public ProviderDesktopRuntime(
+        ProviderConfigurationStore configurationStore,
+        ProviderSecretStore secretStore,
+        ProviderHealthRegistry healthRegistry,
+        string? privateImageTempRoot,
+        string? recipeDraftStorePath)
     {
         ArgumentNullException.ThrowIfNull(configurationStore);
         ArgumentNullException.ThrowIfNull(secretStore);
@@ -40,11 +57,19 @@ public sealed class ProviderDesktopRuntime : IAiDesktopRuntime
             secretStore,
             healthRegistry,
             _gateway.InvalidateConfiguration);
+        // The service only captures the accessor; the network-capable chat gateway itself is still constructed
+        // lazily inside the first explicit generate request.
+        RecipeGeneration = new RecipeGenerationService(_gateway.AcquireChatChannel);
+        RecipeDrafts = new RecipeDraftStore(recipeDraftStorePath ?? DefaultRecipeDraftStorePath());
     }
 
     public IAiGateway Gateway => _gateway;
 
     public IAiDesktopSettings Settings { get; }
+
+    public IRecipeGenerationChannel RecipeGeneration { get; }
+
+    public IRecipeDraftStore RecipeDrafts { get; }
 
     public ValueTask<Stream> OpenImageArtifactAsync(string privateArtifactId, CancellationToken cancellationToken = default) =>
         _gateway.OpenImageArtifactAsync(privateArtifactId, cancellationToken);
@@ -53,6 +78,17 @@ public sealed class ProviderDesktopRuntime : IAiDesktopRuntime
     {
         _gateway.Dispose();
         return ValueTask.CompletedTask;
+    }
+
+    private static string DefaultRecipeDraftStorePath()
+    {
+        var localApplicationData = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
+        if (string.IsNullOrWhiteSpace(localApplicationData))
+        {
+            throw new AiGatewayException(AiErrorCode.ConfigurationUnavailable);
+        }
+
+        return Path.Combine(localApplicationData, "VFXComposer", "AI", "recipe-drafts.json");
     }
 }
 
@@ -93,17 +129,23 @@ internal sealed class DesktopAiGateway : IAiGateway, IDisposable
     public async ValueTask<ChatResponse> ChatAsync(ChatRequest request, CancellationToken cancellationToken = default)
     {
         ArgumentNullException.ThrowIfNull(request);
+        var gateway = (ChatChannelGateway)AcquireChatChannel();
+        return await gateway.ChatAsync(request, cancellationToken).ConfigureAwait(false);
+    }
+
+    /// <summary>
+    /// Returns the one lazily constructed ChatLlm gateway. This is deliberately the only HTTP-client construction
+    /// point for Chat, and it is reached only by a submitted user prompt or an explicit recipe generate action;
+    /// settings/save/start/navigation never call it.
+    /// </summary>
+    internal IChatChannelGateway AcquireChatChannel()
+    {
         ThrowIfDisposed();
-        ChatChannelGateway gateway;
         lock (_gate)
         {
             ThrowIfDisposed();
-            // This is deliberately the first HTTP-client construction point for Chat, and is reached only by a
-            // submitted user prompt. Settings/save/start/navigation do not call this method.
-            gateway = _chat ??= ChatChannelGateway.Create(_configurationStore, _health, _secretStore);
+            return _chat ??= ChatChannelGateway.Create(_configurationStore, _health, _secretStore);
         }
-
-        return await gateway.ChatAsync(request, cancellationToken).ConfigureAwait(false);
     }
 
     public async ValueTask<ImageGenerationResponse> GenerateImageAsync(

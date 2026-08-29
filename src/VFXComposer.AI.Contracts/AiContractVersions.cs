@@ -7,4 +7,6 @@ public static class AiContractVersions
     public const string Gateway = "vfxcomposer.ai.gateway/1";
     public const string ChatRequest = "vfxcomposer.ai.chat-request/1";
     public const string ImageGenerationRequest = "vfxcomposer.ai.image-generation-request/1";
+    public const string RecipeGenerationRequest = "vfxcomposer.ai.recipe-generation-request/1";
+    public const int RecipeDraftRecordFormatVersion = 1;
 }

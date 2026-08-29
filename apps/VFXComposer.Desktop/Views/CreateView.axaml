@@ -19,6 +19,21 @@
     </Border>
     <Border Classes="card">
       <StackPanel Spacing="10">
+        <TextBlock FontWeight="SemiBold" Text="Generate recipe" />
+        <TextBlock Classes="muted" Text="Describe the effect; one explicit click sends the generation request through the configured chat binding. The draft below is not built until you confirm it." TextWrapping="Wrap" />
+        <TextBox AcceptsReturn="True" Height="96" TextWrapping="Wrap" Watermark="Describe the visual effect to generate" Text="{Binding EffectDescription}" />
+        <StackPanel Orientation="Horizontal" Spacing="8">
+          <Button Command="{Binding GenerateRecipeCommand}" Content="Generate recipe draft" />
+          <Button Command="{Binding CancelGenerateRecipeCommand}" Content="Cancel" />
+          <Button Command="{Binding ConfirmRecipeDraftCommand}" Content="Confirm draft" />
+        </StackPanel>
+        <TextBlock Classes="muted" Text="{Binding RecipeStatus}" TextWrapping="Wrap" />
+        <TextBox AcceptsReturn="True" Height="72" IsReadOnly="True" Text="{Binding RecipeValidationSummary}" TextWrapping="Wrap" Watermark="Validation results appear here" />
+        <TextBox AcceptsReturn="True" Height="180" IsReadOnly="True" FontFamily="Consolas,Menlo,monospace" Text="{Binding RecipeDraftJson}" TextWrapping="Wrap" Watermark="Draft recipe JSON appears here" />
+      </StackPanel>
+    </Border>
+    <Border Classes="card">
+      <StackPanel Spacing="10">
         <TextBlock FontWeight="SemiBold" Text="Chat" />
         <TextBlock Classes="muted" Text="This sends one explicit ChatLlm prompt through the configured binding." TextWrapping="Wrap" />
         <TextBox AcceptsReturn="True" Height="96" TextWrapping="Wrap" Watermark="Ask the selected chat provider" Text="{Binding ChatPrompt}" />
