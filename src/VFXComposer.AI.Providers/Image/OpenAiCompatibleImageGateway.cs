@@ -27,10 +27,11 @@ public sealed class OpenAiCompatibleImageGateway : IImageGateway, IPrivateImageA
     private int _disposed;
 
     /// <summary>
-    /// Creates an adapter with injected handlers. This overload is intended for composition roots and deterministic
-    /// mock-<see cref="HttpMessageHandler"/> tests; the caller owns injected handlers and the supplied cache.
+    /// Test-only transport seam. The scoped AI test assembly can inject deterministic mock
+    /// <see cref="HttpMessageHandler"/> instances; production callers must use <see cref="Create"/>, which owns
+    /// separate non-redirecting handlers for generation and artifact download.
     /// </summary>
-    public OpenAiCompatibleImageGateway(
+    internal OpenAiCompatibleImageGateway(
         ResolvedProviderRoute route,
         IImageCredentialSource credentials,
         PrivateImageArtifactCache cache,

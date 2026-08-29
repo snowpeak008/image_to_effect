@@ -114,15 +114,20 @@ public sealed class OpenAiCompatibleImageGatewaySafetyTests
     [TestMethod]
     public async Task UrlRedirectIsRejectedWithoutFollowingIt()
     {
+        const string artifactUrl = "https://cdn.example.test/image.png";
+        const string redirectedUrl = "https://other-host.example.test/redirected.png";
         using var temp = new A3PrivateTempDirectory();
         using var cache = new PrivateImageArtifactCache(temp.Path);
         using var credentials = new A3StaticCredentialSource();
         using var api = new A3RecordingHandler((_, _, _) =>
-            Task.FromResult(A3ImageTestSupport.UrlResponse("https://cdn.example.test/image.png")));
-        using var download = new A3RecordingHandler((_, _, _) =>
+            Task.FromResult(A3ImageTestSupport.UrlResponse(artifactUrl)));
+        using var download = new A3RecordingHandler((request, call, _) =>
         {
+            Assert.AreEqual(1, call, "A redirect must not trigger a second artifact request.");
+            Assert.AreEqual(artifactUrl, request.Uri);
+            Assert.IsFalse(request.HasHeader("Authorization"));
             var response = A3ImageTestSupport.Image(HttpStatusCode.Found, [], "image/png");
-            response.Headers.Location = new Uri("https://other-host.example.test/redirected.png");
+            response.Headers.Location = new Uri(redirectedUrl);
             return Task.FromResult(response);
         });
         using var gateway = new OpenAiCompatibleImageGateway(A3ImageTestSupport.Route(), credentials, cache, api, download);
@@ -133,6 +138,38 @@ public sealed class OpenAiCompatibleImageGatewaySafetyTests
 
         Assert.AreEqual(1, api.CallCount);
         Assert.AreEqual(1, download.CallCount);
+        Assert.AreEqual(artifactUrl, download.Requests.Single().Uri);
+        Assert.AreNotEqual(redirectedUrl, download.Requests.Single().Uri);
+        Assert.IsFalse(download.Requests.Single().HasHeader("Authorization"));
+    }
+
+    [TestMethod]
+    public async Task GenerationRedirectIsRejectedWithoutFollowingIt()
+    {
+        const string endpoint = "https://images.example.test/v1/images/generations";
+        const string redirectedUrl = "https://other-host.example.test/redirected-generation";
+        using var temp = new A3PrivateTempDirectory();
+        using var cache = new PrivateImageArtifactCache(temp.Path);
+        using var credentials = new A3StaticCredentialSource();
+        using var api = new A3RecordingHandler((request, call, _) =>
+        {
+            Assert.AreEqual(1, call, "A generation redirect must not trigger a second request.");
+            Assert.AreEqual(endpoint, request.Uri);
+            var response = A3ImageTestSupport.Json(HttpStatusCode.Found, "synthetic redirect response");
+            response.Headers.Location = new Uri(redirectedUrl);
+            return Task.FromResult(response);
+        });
+        using var download = new A3RecordingHandler((_, _, _) => throw new AssertFailedException("A generation redirect must not download an artifact."));
+        using var gateway = new OpenAiCompatibleImageGateway(A3ImageTestSupport.Route(endpoint), credentials, cache, api, download);
+
+        await A3ImageTestSupport.AssertImageErrorAsync(
+            ImageErrorCode.UpstreamRejected,
+            () => gateway.GenerateImageAsync(new ImageChannelRequest("correlation-generation-redirect", "synthetic prompt")).AsTask());
+
+        Assert.AreEqual(1, api.CallCount);
+        Assert.AreEqual(0, download.CallCount);
+        Assert.AreEqual(endpoint, api.Requests.Single().Uri);
+        Assert.AreNotEqual(redirectedUrl, api.Requests.Single().Uri);
     }
 
     [TestMethod]
