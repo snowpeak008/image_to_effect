@@ -31,13 +31,16 @@ public static class BatchQueueReportBuilder
         var disconnected = 0;
         var pending = 0;
         var failurePolicy = BatchFailurePolicies.Continue;
+        if (batchJobs.Count > 0 && batchJobs[0].BatchPolicy is string queuePolicy)
+        {
+            // One submission fixes one policy for its entries. Resubmitting the same batch id under
+            // a different policy would mix them, so the earliest entry in queue order decides what
+            // the report says the batch was asked to do.
+            failurePolicy = BatchFailurePolicies.FromQueuePolicy(queuePolicy);
+        }
+
         foreach (var job in batchJobs)
         {
-            if (job.BatchPolicy is string queuePolicy)
-            {
-                failurePolicy = BatchFailurePolicies.FromQueuePolicy(queuePolicy);
-            }
-
             switch (job.State)
             {
                 case JobStatusStates.Succeeded when job.IsTerminal:
