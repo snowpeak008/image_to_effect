@@ -299,7 +299,7 @@ public sealed class JobStoreTests
         var directory = JobQueueTestHarness.CreateStoreDirectory();
         var store = new JobStore(directory);
         store.Enqueue(JobQueueTestHarness.Request());
-        var futureSnapshot = """{"schema":"vfxcomposer.job-store/2","queueState":"IDLE","nextQueuePosition":2,"jobs":[]}""";
+        var futureSnapshot = """{"schema":"vfxcomposer.job-store/3","queueState":"IDLE","nextQueuePosition":2,"jobs":[]}""";
         File.WriteAllText(Path.Combine(directory, "job-store.json"), futureSnapshot);
         File.Delete(Path.Combine(directory, "job-store.json.bak"));
 
@@ -313,7 +313,7 @@ public sealed class JobStoreTests
     {
         var directory = JobQueueTestHarness.CreateStoreDirectory();
         var store = new JobStore(directory);
-        var unknownField = """{"schema":"vfxcomposer.job-store/1","queueState":"IDLE","nextQueuePosition":1,"jobs":[],"surprise":true}""";
+        var unknownField = """{"schema":"vfxcomposer.job-store/2","queueState":"IDLE","nextQueuePosition":1,"jobs":[],"surprise":true}""";
         File.WriteAllText(Path.Combine(directory, "job-store.json"), unknownField);
 
         var exception = Assert.ThrowsExactly<JobQueueException>(() => store.ReadSnapshot());
