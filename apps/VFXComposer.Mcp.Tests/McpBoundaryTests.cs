@@ -303,7 +303,7 @@ public sealed class McpBoundaryTests
 
         public IJobQueueClient Client { get; }
 
-        public bool TryStartExecutor(IJobExecutor executor) => false;
+        public bool TryStartExecutors(IReadOnlyList<IJobExecutor> executors) => false;
 
         public ValueTask DisposeAsync() => ValueTask.CompletedTask;
     }
@@ -317,6 +317,8 @@ public sealed class McpBoundaryTests
 
         public IRecipeDraftStore DraftStore =>
             throw new InvalidOperationException("A detached submission must never touch the draft store.");
+
+        public IJobExecutor? CreateRecipeBuildExecutor() => null;
 
         public ValueTask DisposeAsync() => ValueTask.CompletedTask;
     }

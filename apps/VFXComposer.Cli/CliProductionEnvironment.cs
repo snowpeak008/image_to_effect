@@ -40,10 +40,18 @@ internal sealed class JobStoreQueueSession : ICliQueueSession
 
     public override string ToString() => "JobStoreQueueSession";
 
-    public bool TryStartExecutor(IJobExecutor executor)
+    public bool TryStartExecutors(IReadOnlyList<IJobExecutor> executors)
     {
-        ArgumentNullException.ThrowIfNull(executor);
-        var host = new JobQueueHost(_store, [executor]);
+        ArgumentNullException.ThrowIfNull(executors);
+        // The real project-lock probe is wired only when a build-capable host is present; without it
+        // the queue would happily start a build while the graphical editor owns the project.
+        var buildHost = executors.Any(static executor => executor.RequiresProjectLock)
+            ? UnityBuildHostLocator.TryLocate()
+            : null;
+        var host = new JobQueueHost(
+            _store,
+            executors,
+            projectLockProbe: buildHost is null ? null : new UnityProjectLockProbe(buildHost.ProjectPath));
         try
         {
             host.Start();
@@ -78,11 +86,13 @@ internal sealed class JobStoreQueueSession : ICliQueueSession
 internal sealed class DesktopGenerationRuntime : ICliGenerationRuntime
 {
     private readonly IAiDesktopRuntime _runtime;
+    private readonly UnityBuildHost? _buildHost;
 
     public DesktopGenerationRuntime()
     {
         _runtime = AiDesktopRuntimeFactory.CreateCurrentUser();
-        Capability = ProbeCapability(_runtime);
+        _buildHost = UnityBuildHostLocator.TryLocate();
+        Capability = BatchCapabilityProbe.FromDesktopRuntime(_runtime, recipeBuildSupported: _buildHost is not null);
     }
 
     public BatchCapabilityProfile Capability { get; }
@@ -95,6 +105,10 @@ internal sealed class DesktopGenerationRuntime : ICliGenerationRuntime
 
     public ValueTask DisposeAsync() => _runtime.DisposeAsync();
 
-    private static BatchCapabilityProfile ProbeCapability(IAiDesktopRuntime runtime) =>
-        BatchCapabilityProbe.FromDesktopRuntime(runtime);
+    public IJobExecutor? CreateRecipeBuildExecutor() =>
+        _buildHost is null
+            ? null
+            : new RecipeBuildJobExecutor(new RecipeBuildOrchestrator(
+                new UnityBatchmodeRecipeBuildRunner(_buildHost.WrapperScriptPath),
+                () => _runtime.RecipeDrafts));
 }

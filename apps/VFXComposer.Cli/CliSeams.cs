@@ -17,6 +17,12 @@ public interface ICliGenerationRuntime : IAsyncDisposable
     IRecipeGenerationChannel GenerationChannel { get; }
 
     IRecipeDraftStore DraftStore { get; }
+
+    /// <summary>
+    /// The restricted build executor, or null when this host cannot reach the Unity project. It is
+    /// created only for a foreground run, so a detached submission never resolves build paths.
+    /// </summary>
+    IJobExecutor? CreateRecipeBuildExecutor();
 }
 
 /// <summary>
@@ -28,11 +34,11 @@ public interface ICliQueueSession : IAsyncDisposable
     IJobQueueClient Client { get; }
 
     /// <summary>
-    /// Hosts the payload executor in this process. Returns false when another process already
+    /// Hosts the payload executors in this process. Returns false when another process already
     /// owns queue execution, in which case this process keeps observing while that executor
     /// drains the queue.
     /// </summary>
-    bool TryStartExecutor(IJobExecutor executor);
+    bool TryStartExecutors(IReadOnlyList<IJobExecutor> executors);
 }
 
 /// <summary>

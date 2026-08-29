@@ -55,7 +55,11 @@ internal sealed class DesktopCapabilityRuntime : IMcpGenerationRuntime
     public DesktopCapabilityRuntime()
     {
         _runtime = AiDesktopRuntimeFactory.CreateCurrentUser();
-        Capability = BatchCapabilityProbe.FromDesktopRuntime(_runtime);
+        // This surface never executes a job, so build capability means "a build-capable host exists
+        // for this repository", which is what makes a recipe manifest acceptable to submit here.
+        Capability = BatchCapabilityProbe.FromDesktopRuntime(
+            _runtime,
+            recipeBuildSupported: UnityBuildHostLocator.TryLocate() is not null);
     }
 
     public BatchCapabilityProfile Capability { get; }

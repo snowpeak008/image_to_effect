@@ -8,4 +8,7 @@ public static class BatchJobKinds
 {
     /// <summary>One prompt entry generating a Recipe draft on the F1 channel.</summary>
     public const string RecipeGeneration = "vfx.recipe.generate.v1";
+
+    /// <summary>One confirmed recipe built into a Prefab through the restricted Unity build path.</summary>
+    public const string RecipeBuild = "vfx.recipe.build.v1";
 }

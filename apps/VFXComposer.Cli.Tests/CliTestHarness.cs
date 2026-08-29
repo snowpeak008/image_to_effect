@@ -263,11 +263,13 @@ internal sealed class FakeGenerationRuntime : ICliGenerationRuntime
     public FakeGenerationRuntime(
         IRecipeGenerationChannel channel,
         IRecipeDraftStore draftStore,
-        BatchCapabilityProfile? capability = null)
+        BatchCapabilityProfile? capability = null,
+        IJobExecutor? recipeBuildExecutor = null)
     {
         GenerationChannel = channel;
         DraftStore = draftStore;
         Capability = capability ?? BatchCapabilityProfile.GenerationOnly;
+        RecipeBuildExecutor = recipeBuildExecutor;
     }
 
     public BatchCapabilityProfile Capability { get; }
@@ -276,7 +278,12 @@ internal sealed class FakeGenerationRuntime : ICliGenerationRuntime
 
     public IRecipeDraftStore DraftStore { get; }
 
+    /// <summary>Injected build executor; null keeps the host generation-only.</summary>
+    public IJobExecutor? RecipeBuildExecutor { get; }
+
     public bool Disposed { get; private set; }
+
+    public IJobExecutor? CreateRecipeBuildExecutor() => RecipeBuildExecutor;
 
     public ValueTask DisposeAsync()
     {
@@ -300,14 +307,14 @@ internal sealed class TestQueueSession : ICliQueueSession
 
     public IJobQueueClient Client => _store;
 
-    public bool TryStartExecutor(IJobExecutor executor)
+    public bool TryStartExecutors(IReadOnlyList<IJobExecutor> executors)
     {
         if (!_allowExecutor)
         {
             return false;
         }
 
-        var host = new JobQueueHost(_store, [executor], CliTestHarness.FastHostOptions);
+        var host = new JobQueueHost(_store, executors, CliTestHarness.FastHostOptions);
         host.Start();
         _host = host;
         return true;
@@ -333,7 +340,7 @@ internal sealed class StubQueueSession : ICliQueueSession
 
     public IJobQueueClient Client { get; }
 
-    public bool TryStartExecutor(IJobExecutor executor) => false;
+    public bool TryStartExecutors(IReadOnlyList<IJobExecutor> executors) => false;
 
     public ValueTask DisposeAsync() => ValueTask.CompletedTask;
 }
