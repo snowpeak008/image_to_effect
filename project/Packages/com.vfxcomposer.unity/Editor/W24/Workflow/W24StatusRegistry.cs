@@ -47,6 +47,20 @@ namespace VFXComposer.Editor.W24.Workflow
         public const string BuildManifestRelativePath = "ProjectSettings/VFXComposer/BuildManifests";
         public const string FreezeSchema = "W24-S0A-PROVISIONAL-STATUS-V2";
 
+        /// <summary>
+        /// Closed set of grouping directories whose own name is not an effectId but whose children are
+        /// registered in the S0a BuildManifest registry. A container is never registered itself; the scan
+        /// descends exactly one level and applies the ordinary effectId rules to each child.
+        /// </summary>
+        public static readonly string[] EffectContainerDirectories = { "W11W13NextCandidate", "W15NextCandidate" };
+
+        /// <summary>
+        /// Closed set of grouping directories whose outputs are owned by the next-candidate manifest scheme
+        /// (a <c>NextCandidateManifest.json</c> beside each output) instead of the S0a BuildManifest registry.
+        /// They are declared here, are never registered, and are not descended into.
+        /// </summary>
+        public static readonly string[] SeparatelyManifestedDirectories = { "W17W18NextCandidate" };
+
         public static W24StatusSnapshot ScanProject(string projectRoot)
         {
             if (string.IsNullOrEmpty(projectRoot)) throw new ArgumentException("Project root is required.", nameof(projectRoot));
@@ -60,8 +74,18 @@ namespace VFXComposer.Editor.W24.Workflow
             var entries = new List<W24StatusRegistration>();
             foreach (var directory in Directory.GetDirectories(generatedDirectory).OrderBy(path => Path.GetFileName(path), StringComparer.Ordinal))
             {
-                var effectId = Path.GetFileName(directory);
-                entries.Add(Register(projectRoot, effectId, Path.Combine(manifestDirectory, effectId + ".manifest.json")));
+                var name = Path.GetFileName(directory);
+                if (SeparatelyManifestedDirectories.Contains(name, StringComparer.Ordinal)) continue;
+                if (EffectContainerDirectories.Contains(name, StringComparer.Ordinal))
+                {
+                    foreach (var child in Directory.GetDirectories(directory).OrderBy(path => Path.GetFileName(path), StringComparer.Ordinal))
+                    {
+                        var childId = Path.GetFileName(child);
+                        entries.Add(Register(projectRoot, childId, Path.Combine(manifestDirectory, childId + ".manifest.json")));
+                    }
+                    continue;
+                }
+                entries.Add(Register(projectRoot, name, Path.Combine(manifestDirectory, name + ".manifest.json")));
             }
             return new W24StatusSnapshot(entries);
         }
