@@ -17,11 +17,24 @@ public sealed class ProviderDesktopRuntime : IAiDesktopRuntime
         ProviderConfigurationStore configurationStore,
         ProviderSecretStore secretStore,
         ProviderHealthRegistry healthRegistry)
+        : this(configurationStore, secretStore, healthRegistry, privateImageTempRoot: null)
+    {
+    }
+
+    /// <summary>
+    /// Composes the Desktop runtime with an optional caller-owned private image temporary root. Production continues
+    /// to use the three-argument constructor and therefore leaves image-cache placement unchanged.
+    /// </summary>
+    public ProviderDesktopRuntime(
+        ProviderConfigurationStore configurationStore,
+        ProviderSecretStore secretStore,
+        ProviderHealthRegistry healthRegistry,
+        string? privateImageTempRoot)
     {
         ArgumentNullException.ThrowIfNull(configurationStore);
         ArgumentNullException.ThrowIfNull(secretStore);
         ArgumentNullException.ThrowIfNull(healthRegistry);
-        _gateway = new DesktopAiGateway(configurationStore, secretStore, healthRegistry);
+        _gateway = new DesktopAiGateway(configurationStore, secretStore, healthRegistry, privateImageTempRoot);
         Settings = new ProviderDesktopSettings(
             configurationStore,
             secretStore,
@@ -50,6 +63,7 @@ internal sealed class DesktopAiGateway : IAiGateway, IDisposable
     private readonly ProviderSecretStore _secretStore;
     private readonly ProviderHealthRegistry _health;
     private readonly ProviderConfigurationResolver _resolver;
+    private readonly string? _privateImageTempRoot;
     private ChatChannelGateway? _chat;
     private OpenAiCompatibleImageGateway? _image;
     private ConfigurationFingerprint? _imageFingerprint;
@@ -59,11 +73,21 @@ internal sealed class DesktopAiGateway : IAiGateway, IDisposable
         ProviderConfigurationStore configurationStore,
         ProviderSecretStore secretStore,
         ProviderHealthRegistry health)
+        : this(configurationStore, secretStore, health, privateImageTempRoot: null)
+    {
+    }
+
+    public DesktopAiGateway(
+        ProviderConfigurationStore configurationStore,
+        ProviderSecretStore secretStore,
+        ProviderHealthRegistry health,
+        string? privateImageTempRoot)
     {
         _configurationStore = configurationStore ?? throw new ArgumentNullException(nameof(configurationStore));
         _secretStore = secretStore ?? throw new ArgumentNullException(nameof(secretStore));
         _health = health ?? throw new ArgumentNullException(nameof(health));
         _resolver = new ProviderConfigurationResolver(AllowlistedProviderRegistry.Default, _health, _secretStore);
+        _privateImageTempRoot = privateImageTempRoot;
     }
 
     public async ValueTask<ChatResponse> ChatAsync(ChatRequest request, CancellationToken cancellationToken = default)
@@ -103,7 +127,7 @@ internal sealed class DesktopAiGateway : IAiGateway, IDisposable
             if (_image is null || _imageFingerprint is null || !_imageFingerprint.Equals(route.ConfigurationFingerprint))
             {
                 retired = _image;
-                _image = OpenAiCompatibleImageGateway.Create(route, _secretStore);
+                _image = OpenAiCompatibleImageGateway.Create(route, _secretStore, _privateImageTempRoot);
                 _imageFingerprint = route.ConfigurationFingerprint;
             }
 
