@@ -15,6 +15,13 @@ public interface IJobProcessInspector
 /// <summary>Real implementation over <see cref="Process"/> with a one-second start-time tolerance.</summary>
 public sealed class SystemJobProcessInspector : IJobProcessInspector
 {
+    // Why a tolerance instead of an equality check: Process.StartTime exposes the OS process
+    // creation time as a local-time DateTime, so the comparison here reconstructs an instant
+    // through a local-time round-trip, and the recorded value comes from whatever the executor
+    // observed when it spawned the child rather than from this very read. A one-second window
+    // absorbs those representation differences and stays orders of magnitude below any realistic
+    // PID-reuse interval, so the anti-reuse guarantee of REQ-003-08 still holds: a recycled PID
+    // belongs to a process created seconds or longer after the recorded one.
     private static readonly TimeSpan StartTimeTolerance = TimeSpan.FromSeconds(1);
 
     public void TerminateExact(int processId, DateTimeOffset processStartUtc)
