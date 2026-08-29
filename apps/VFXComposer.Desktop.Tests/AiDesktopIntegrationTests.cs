@@ -274,6 +274,14 @@ public sealed class AiDesktopIntegrationTests
 
         public RecipeDraftRecord? TryGet(string draftId) => null;
 
+        public IReadOnlyList<RecipeDraftRecord> ListConfirmedAwaitingBuild() => Array.Empty<RecipeDraftRecord>();
+
+        public RecipeDraftRecord MarkBuilt(string draftId, string canonicalSha256) =>
+            throw new RecipeDraftStoreException(RecipeDraftStoreErrorCode.StorageFailed);
+
+        public RecipeDraftRecord MarkBuildFailed(string draftId, string canonicalSha256) =>
+            throw new RecipeDraftStoreException(RecipeDraftStoreErrorCode.StorageFailed);
+
         private static byte[] CreateValidPng()
         {
             using var output = new MemoryStream();

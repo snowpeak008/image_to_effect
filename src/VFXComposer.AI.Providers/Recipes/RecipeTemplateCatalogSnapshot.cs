@@ -1,6 +1,7 @@
 using System.Reflection;
 using System.Text.Json;
 using VFXComposer.AI.Contracts.Chat;
+using VFXComposer.AI.Contracts.Recipes;
 
 namespace VFXComposer.AI.Providers.Recipes;
 

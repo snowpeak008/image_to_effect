@@ -4,14 +4,15 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Text.Json;
 
-namespace VFXComposer.AI.Providers.Recipes;
+namespace VFXComposer.AI.Contracts.Recipes;
 
 /// <summary>
 /// .NET twin of the Unity-side RecipeCanonicalizer rules: object keys ordinal-sorted, arrays kept in order,
 /// integers written invariantly, floats via round-trip formatting with zero collapsed to "0", duplicate
-/// properties rejected. The canonical text feeds the SHA-256 confirmation binding (REQ-001-15).
+/// properties rejected. The canonical text feeds the SHA-256 confirmation binding (REQ-001-15), which is
+/// also what the restricted build entry point recomputes before it trusts a submitted recipe (ADR-007 §2.3).
 /// </summary>
-internal static class RecipeCanonicalJson
+public static class RecipeCanonicalJson
 {
     public static string Canonicalize(string json)
     {

@@ -12,22 +12,26 @@ namespace VFXComposer.Batch.Core;
 public static class BatchCapabilityProbe
 {
     /// <summary>
-    /// Recipe build entries have no executor in this build, so only prompt generation can be
-    /// offered, and only when the one ChatLlm binding exists. An unbound or unreadable
-    /// configuration refuses the whole manifest instead of silently running a subset.
+    /// Prompt generation is offered only when the one ChatLlm binding exists; an unbound or
+    /// unreadable configuration refuses prompt entries instead of silently running a subset. Recipe
+    /// build capability is independent of the AI configuration — the restricted build path never
+    /// touches a channel — so <paramref name="recipeBuildSupported"/> reflects whether the host
+    /// registered the build executor.
     /// </summary>
-    public static BatchCapabilityProfile FromDesktopRuntime(IAiDesktopRuntime runtime)
+    public static BatchCapabilityProfile FromDesktopRuntime(IAiDesktopRuntime runtime, bool recipeBuildSupported = false)
     {
         ArgumentNullException.ThrowIfNull(runtime);
+        bool bound;
         try
         {
-            var bound = runtime.Settings.Load().ChannelStatuses.Any(status =>
+            bound = runtime.Settings.Load().ChannelStatuses.Any(status =>
                 status.Channel == AiChannel.ChatLlm && status.State != AiDesktopChannelStatusKind.Unbound);
-            return bound ? BatchCapabilityProfile.GenerationOnly : BatchCapabilityProfile.GenerationUnavailable;
         }
         catch (AiGatewayException)
         {
-            return BatchCapabilityProfile.GenerationUnavailable;
+            bound = false;
         }
+
+        return new BatchCapabilityProfile(bound, recipeBuildSupported);
     }
 }

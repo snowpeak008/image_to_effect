@@ -184,13 +184,75 @@ internal sealed class InMemoryRecipeDraftStore : IRecipeDraftStore
     }
 
     public RecipeDraftRecord Confirm(string draftId, string canonicalSha256) =>
-        throw new RecipeDraftStoreException(RecipeDraftStoreErrorCode.InvalidStatus);
+        Advance(draftId, canonicalSha256, RecipeDraftStatus.PendingConfirmation, RecipeDraftStatus.ConfirmedAwaitingBuild);
+
+    public RecipeDraftRecord MarkBuilt(string draftId, string canonicalSha256) =>
+        Advance(draftId, canonicalSha256, RecipeDraftStatus.ConfirmedAwaitingBuild, RecipeDraftStatus.Built);
+
+    public RecipeDraftRecord MarkBuildFailed(string draftId, string canonicalSha256) =>
+        Advance(draftId, canonicalSha256, RecipeDraftStatus.ConfirmedAwaitingBuild, RecipeDraftStatus.BuildFailed);
 
     public RecipeDraftRecord? TryGet(string draftId)
     {
         lock (_records)
         {
             return _records.TryGetValue(draftId, out var record) ? record : null;
+        }
+    }
+
+    public IReadOnlyList<RecipeDraftRecord> ListConfirmedAwaitingBuild()
+    {
+        lock (_records)
+        {
+            return _records.Values
+                .Where(static record => record.Status == RecipeDraftStatus.ConfirmedAwaitingBuild)
+                .OrderBy(static record => record.UpdatedUtc)
+                .ThenBy(static record => record.DraftId, StringComparer.Ordinal)
+                .ToArray();
+        }
+    }
+
+    private RecipeDraftRecord Advance(
+        string draftId,
+        string canonicalSha256,
+        RecipeDraftStatus required,
+        RecipeDraftStatus next)
+    {
+        lock (_records)
+        {
+            if (!_records.TryGetValue(draftId, out var current))
+            {
+                throw new RecipeDraftStoreException(RecipeDraftStoreErrorCode.NotFound);
+            }
+
+            if (current.Status != required)
+            {
+                throw new RecipeDraftStoreException(RecipeDraftStoreErrorCode.InvalidStatus);
+            }
+
+            if (!string.Equals(current.CanonicalSha256, canonicalSha256, StringComparison.Ordinal))
+            {
+                throw new RecipeDraftStoreException(RecipeDraftStoreErrorCode.HashMismatch);
+            }
+
+            var advanced = new RecipeDraftRecord(
+                current.DraftId,
+                next,
+                current.CreatedUtc,
+                DateTimeOffset.UtcNow,
+                current.CorrelationId,
+                current.PromptTemplateVersion,
+                current.TemplateCatalogVersion,
+                current.RecipeJson,
+                current.CanonicalSha256,
+                current.RecipeId,
+                current.Archetype,
+                current.Dimension,
+                current.TargetProfile,
+                current.Issues,
+                current.RequestCount);
+            _records[draftId] = advanced;
+            return advanced;
         }
     }
 }
@@ -201,11 +263,13 @@ internal sealed class FakeGenerationRuntime : ICliGenerationRuntime
     public FakeGenerationRuntime(
         IRecipeGenerationChannel channel,
         IRecipeDraftStore draftStore,
-        BatchCapabilityProfile? capability = null)
+        BatchCapabilityProfile? capability = null,
+        IJobExecutor? recipeBuildExecutor = null)
     {
         GenerationChannel = channel;
         DraftStore = draftStore;
         Capability = capability ?? BatchCapabilityProfile.GenerationOnly;
+        RecipeBuildExecutor = recipeBuildExecutor;
     }
 
     public BatchCapabilityProfile Capability { get; }
@@ -214,7 +278,12 @@ internal sealed class FakeGenerationRuntime : ICliGenerationRuntime
 
     public IRecipeDraftStore DraftStore { get; }
 
+    /// <summary>Injected build executor; null keeps the host generation-only.</summary>
+    public IJobExecutor? RecipeBuildExecutor { get; }
+
     public bool Disposed { get; private set; }
+
+    public IJobExecutor? CreateRecipeBuildExecutor() => RecipeBuildExecutor;
 
     public ValueTask DisposeAsync()
     {
@@ -238,14 +307,14 @@ internal sealed class TestQueueSession : ICliQueueSession
 
     public IJobQueueClient Client => _store;
 
-    public bool TryStartExecutor(IJobExecutor executor)
+    public bool TryStartExecutors(IReadOnlyList<IJobExecutor> executors)
     {
         if (!_allowExecutor)
         {
             return false;
         }
 
-        var host = new JobQueueHost(_store, [executor], CliTestHarness.FastHostOptions);
+        var host = new JobQueueHost(_store, executors, CliTestHarness.FastHostOptions);
         host.Start();
         _host = host;
         return true;
@@ -271,7 +340,7 @@ internal sealed class StubQueueSession : ICliQueueSession
 
     public IJobQueueClient Client { get; }
 
-    public bool TryStartExecutor(IJobExecutor executor) => false;
+    public bool TryStartExecutors(IReadOnlyList<IJobExecutor> executors) => false;
 
     public ValueTask DisposeAsync() => ValueTask.CompletedTask;
 }

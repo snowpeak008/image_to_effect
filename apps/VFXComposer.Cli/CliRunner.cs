@@ -100,10 +100,8 @@ public static class CliRunner
         }
 
         await using var runtime = environment.OpenGenerationRuntime();
-        var parsed = BatchManifestParser.Parse(
-            manifestJson,
-            new FileSystemBatchRecipeProbe(ManifestDirectory(manifestPath)),
-            runtime.Capability);
+        var recipes = new FileSystemBatchRecipeProbe(ManifestDirectory(manifestPath));
+        var parsed = BatchManifestParser.Parse(manifestJson, recipes, runtime.Capability);
         foreach (var issue in parsed.Issues)
         {
             presenter.Issue(issue);
@@ -130,13 +128,18 @@ public static class CliRunner
             // Skipping entries whose content already succeeded is the default (REQ-002 §12,
             // REQ-002-16); --resume is the explicit spelling of that default and --force is the
             // only switch that turns it off. The parser enforces that the two never combine.
-            submission = new BatchSubmissionService(queue.Client, JobSourceEntries.Cli)
+            submission = new BatchSubmissionService(queue.Client, JobSourceEntries.Cli, recipes)
                 .Submit(manifest, command.Run.Force);
         }
         catch (JobQueueException exception)
         {
             errorPresenter.Notice(CliNoticeCodes.QueueUnavailable, exception.Message, exception.Code);
             return CliExitCodes.QueueUnavailable;
+        }
+        catch (InvalidDataException)
+        {
+            errorPresenter.Notice(CliNoticeCodes.ManifestRejected, CliNoticeCatalog.Require(CliNoticeCodes.ManifestRejected));
+            return CliExitCodes.DataError;
         }
 
         foreach (var skipped in submission.Items.Where(static item => item.JobId is null))
@@ -158,10 +161,16 @@ public static class CliRunner
                 : CliExitCodes.QueueUnavailable;
         }
 
-        var executor = new RecipeGenerationJobExecutor(
-            () => runtime.GenerationChannel,
-            () => runtime.DraftStore);
-        if (!queue.TryStartExecutor(executor))
+        var executors = new List<IJobExecutor>
+        {
+            new RecipeGenerationJobExecutor(() => runtime.GenerationChannel, () => runtime.DraftStore),
+        };
+        if (runtime.CreateRecipeBuildExecutor() is IJobExecutor buildExecutor)
+        {
+            executors.Add(buildExecutor);
+        }
+
+        if (!queue.TryStartExecutors(executors))
         {
             presenter.Notice(
                 CliNoticeCodes.ObservingForeignExecutor,

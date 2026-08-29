@@ -41,17 +41,23 @@ public sealed class BatchSubmissionService
 {
     private readonly IJobQueueClient _queue;
     private readonly string _sourceEntry;
+    private readonly IBatchRecipeSource? _recipes;
 
     /// <summary>
     /// The submitting surface is recorded on every entry it creates, so a queue reader can tell
     /// which entry point asked for the work (REQ-003 §9.1). It is provenance only: it never
     /// selects behaviour, and the same manifest submitted from two surfaces produces otherwise
     /// identical entries.
+    ///
+    /// <para><paramref name="recipes"/> is required only for manifests containing recipe entries:
+    /// their content is sealed into the payload at submission time so the build never re-reads a
+    /// path that could have changed. A recipe entry without a source fails the whole submission.</para>
     /// </summary>
-    public BatchSubmissionService(IJobQueueClient queue, string sourceEntry)
+    public BatchSubmissionService(IJobQueueClient queue, string sourceEntry, IBatchRecipeSource? recipes = null)
     {
         _queue = queue ?? throw new ArgumentNullException(nameof(queue));
         _sourceEntry = RequireSourceEntry(sourceEntry);
+        _recipes = recipes;
     }
 
     public override string ToString() => "BatchSubmissionService(" + _sourceEntry + ")";
@@ -71,7 +77,7 @@ public sealed class BatchSubmissionService
         {
             foreach (var item in manifest.Items)
             {
-                var request = CreateRequest(_sourceEntry, manifest, queuePolicy, item);
+                var request = CreateRequest(_sourceEntry, manifest, queuePolicy, item, ReadRecipe(item));
                 if (completedKeys.Contains(request.EntryIdempotencyKey))
                 {
                     submitted.Add(new BatchSubmissionItem(
@@ -99,27 +105,56 @@ public sealed class BatchSubmissionService
         return new BatchSubmissionResult(manifest.BatchId, queuePolicy, submitted);
     }
 
-    /// <summary>Derives the queue request for one entry, including its canonical payload.</summary>
+    /// <summary>
+    /// Derives the queue request for one entry, including its canonical payload. Recipe entries
+    /// require their already-read content; prompt entries ignore it.
+    /// </summary>
     public static JobEnqueueRequest CreateRequest(
         string sourceEntry,
         BatchManifest manifest,
         string queuePolicy,
-        BatchManifestItem item)
+        BatchManifestItem item,
+        string? recipeJson = null)
     {
         ArgumentNullException.ThrowIfNull(manifest);
         ArgumentNullException.ThrowIfNull(item);
-        if (!string.Equals(item.Kind, BatchItemKinds.Prompt, StringComparison.Ordinal))
+        var jobKind = item.Kind switch
         {
-            throw new ArgumentException("Only prompt entries are executable in this build.", nameof(item));
-        }
+            BatchItemKinds.Prompt => BatchJobKinds.RecipeGeneration,
+            BatchItemKinds.Recipe => BatchJobKinds.RecipeBuild,
+            _ => throw new ArgumentException("Unknown manifest entry kind.", nameof(item)),
+        };
+
+        // Submitting a batch is the explicit build authorization for its recipe entries
+        // (REQ-002-21); the per-draft confirmation gate applies to the single-effect Chat flow only.
+        var payload = string.Equals(item.Kind, BatchItemKinds.Recipe, StringComparison.Ordinal)
+            ? BatchRecipeBuildPayload.Create(
+                item,
+                recipeJson ?? throw new ArgumentException("A recipe entry requires its recipe content.", nameof(recipeJson)))
+            : BatchGenerationPayload.Create(item);
 
         return new JobEnqueueRequest(
             RequireSourceEntry(sourceEntry),
-            BatchJobKinds.RecipeGeneration,
-            BatchGenerationPayload.Create(item),
+            jobKind,
+            payload,
             manifest.BatchId,
             queuePolicy,
             item.ItemId);
+    }
+
+    private string? ReadRecipe(BatchManifestItem item)
+    {
+        if (!string.Equals(item.Kind, BatchItemKinds.Recipe, StringComparison.Ordinal))
+        {
+            return null;
+        }
+
+        if (_recipes is null)
+        {
+            throw new ArgumentException("This surface cannot read recipe entries.", nameof(item));
+        }
+
+        return _recipes.Read(item.RecipePath ?? throw new ArgumentException("A recipe entry requires its path.", nameof(item)));
     }
 
     private static string RequireSourceEntry(string sourceEntry) =>

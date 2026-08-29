@@ -387,12 +387,22 @@ public sealed class RecipeGenerationResult
     }
 }
 
-/// <summary>Draft lifecycle states. Confirmation only flips state; the build itself is a separate milestone (F2).</summary>
+/// <summary>
+/// Draft lifecycle states. Confirmation only flips state; the restricted build path then advances the
+/// confirmed draft to exactly one terminal build outcome. Only
+/// <see cref="ConfirmedAwaitingBuild"/> may advance to <see cref="Built"/> or <see cref="BuildFailed"/>.
+/// </summary>
 public enum RecipeDraftStatus
 {
     PendingConfirmation,
     Failed,
     ConfirmedAwaitingBuild,
+
+    /// <summary>The restricted build path produced the Prefab and its provenance/audit records.</summary>
+    Built,
+
+    /// <summary>The restricted build path refused or failed the build; the build is never retried automatically.</summary>
+    BuildFailed,
 }
 
 /// <summary>One persisted draft record in user application data. The user can inspect and delete it at any time.</summary>
@@ -571,7 +581,10 @@ public interface IRecipeGenerationChannel
         CancellationToken cancellationToken = default);
 }
 
-/// <summary>Draft persistence in current-user application data. Confirmation binds to the canonical hash.</summary>
+/// <summary>
+/// Draft persistence in current-user application data. Every state-advancing member re-verifies the
+/// canonical hash, so a stale caller can never advance content the user did not confirm.
+/// </summary>
 public interface IRecipeDraftStore
 {
     RecipeDraftRecord Save(RecipeDraftRecord record);
@@ -580,4 +593,19 @@ public interface IRecipeDraftStore
     RecipeDraftRecord Confirm(string draftId, string canonicalSha256);
 
     RecipeDraftRecord? TryGet(string draftId);
+
+    /// <summary>
+    /// The confirmed drafts still awaiting a build, oldest confirmation first so a caller draining the
+    /// backlog preserves confirmation order.
+    /// </summary>
+    IReadOnlyList<RecipeDraftRecord> ListConfirmedAwaitingBuild();
+
+    /// <summary>
+    /// Records a successful build. Only <see cref="RecipeDraftStatus.ConfirmedAwaitingBuild"/> may advance;
+    /// any other state fails closed with InvalidStatus and a stale hash with HashMismatch.
+    /// </summary>
+    RecipeDraftRecord MarkBuilt(string draftId, string canonicalSha256);
+
+    /// <summary>Records a refused or failed build under the same transition rules as <see cref="MarkBuilt"/>.</summary>
+    RecipeDraftRecord MarkBuildFailed(string draftId, string canonicalSha256);
 }
