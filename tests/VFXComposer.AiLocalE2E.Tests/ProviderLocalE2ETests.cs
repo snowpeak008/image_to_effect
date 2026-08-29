@@ -1,10 +1,14 @@
 using Avalonia;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System.Net;
+using System.Net.Sockets;
+using System.Text;
 using VFXComposer.AI.Contracts;
 using VFXComposer.AI.Contracts.Chat;
 using VFXComposer.AI.Contracts.Desktop;
 using VFXComposer.AI.Providers.Desktop;
 using VFXComposer.Desktop;
+using VFXComposer.Desktop.Services;
 using VFXComposer.Desktop.ViewModels;
 
 namespace VFXComposer.AiLocalE2E.Tests;
@@ -24,6 +28,49 @@ public sealed class ProviderLocalE2ETests
     [ClassInitialize]
     public static void InitializeAvalonia(TestContext _) =>
         AppBuilder.Configure<App>().UsePlatformDetect().SetupWithoutStarting();
+
+    [TestMethod]
+    public async Task LoopbackAssertionsRejectDuplicateAuthorizationHeaders()
+    {
+        const string target = "/a5/duplicate-authorization?mode=exact";
+        var targetWasPreserved = false;
+        var duplicateAuthorizationWasRejected = false;
+        await using var server = new LoopbackProviderServer((request, _) =>
+        {
+            targetWasPreserved = request.IsTarget(target);
+            duplicateAuthorizationWasRejected = !request.MatchesJsonPost(
+                target,
+                "Bearer duplicate-authorization",
+                static _ => true);
+            return ValueTask.FromResult(LoopbackResponse.Json(200, "{}"));
+        });
+
+        var endpoint = new Uri(server.Endpoint(target), UriKind.Absolute);
+        using var client = new TcpClient();
+        await client.ConnectAsync(IPAddress.Loopback, endpoint.Port);
+        await using var stream = client.GetStream();
+        const string body = "{\"probe\":true}";
+        var request =
+            "POST " + target + " HTTP/1.1\r\n" +
+            "Host: 127.0.0.1\r\n" +
+            "Authorization: Bearer duplicate-authorization\r\n" +
+            "Authorization: Bearer duplicate-authorization\r\n" +
+            "Content-Type: application/json\r\n" +
+            "Content-Length: " + Encoding.ASCII.GetByteCount(body).ToString(System.Globalization.CultureInfo.InvariantCulture) + "\r\n" +
+            "Connection: close\r\n\r\n" +
+            body;
+        await stream.WriteAsync(Encoding.ASCII.GetBytes(request));
+        await stream.FlushAsync();
+        var response = new byte[128];
+        var responseBytes = await stream.ReadAsync(response);
+
+        Assert.IsTrue(responseBytes > 0, "The raw loopback request did not receive its scripted response.");
+        Assert.IsTrue(targetWasPreserved, "The loopback listener did not preserve the exact path and query.");
+        Assert.IsTrue(duplicateAuthorizationWasRejected,
+            "Duplicate Authorization headers were collapsed instead of failing the exact-one assertion.");
+        Assert.AreEqual(1, server.RequestCount, "The duplicate-header probe made an unexpected number of loopback requests.");
+        Assert.IsFalse(server.HasResponderFailure, "The scripted loopback responder failed.");
+    }
 
     [TestMethod]
     public async Task ProductionDesktopHandlers_SendExactChatAndBase64PreviewRequests()
@@ -442,6 +489,182 @@ public sealed class ProviderLocalE2ETests
     }
 
     [TestMethod]
+    public async Task ProductionFailurePayloadsStayRedactedAcrossExceptionsAndViewModels()
+    {
+        const string chatUpstreamTarget = "/a5/chat-upstream-sentinel?opaque=a5-endpoint-secret-sentinel";
+        const string imageUpstreamTarget = "/a5/image-upstream-sentinel?opaque=a5-endpoint-secret-sentinel";
+        const string imageBase64Target = "/a5/image-base64-sentinel?opaque=a5-endpoint-secret-sentinel";
+        const string imageRawTarget = "/a5/image-raw-sentinel?opaque=a5-endpoint-secret-sentinel";
+        const string rawArtifactTarget = "/a5/artifact-raw-sentinel?opaque=a5-endpoint-secret-sentinel";
+        var rawArtifactUrl = string.Empty;
+        await using var server = new LoopbackProviderServer((request, _) =>
+        {
+            if (request.IsTarget(chatUpstreamTarget) || request.IsTarget(imageUpstreamTarget))
+            {
+                return ValueTask.FromResult(LoopbackResponse.Json(500, A5LoopbackPayloads.UpstreamFailureJson()));
+            }
+
+            if (request.IsTarget(imageBase64Target))
+            {
+                return ValueTask.FromResult(LoopbackResponse.Json(200, A5LoopbackPayloads.ImageBase64SentinelJson()));
+            }
+
+            if (request.IsTarget(imageRawTarget))
+            {
+                return ValueTask.FromResult(LoopbackResponse.Json(200, A5LoopbackPayloads.ImageUrlJson(rawArtifactUrl)));
+            }
+
+            if (request.IsTarget(rawArtifactTarget))
+            {
+                return ValueTask.FromResult(LoopbackResponse.Image(
+                    A5LoopbackPayloads.ImageRawBytesSentinelBytes(),
+                    "image/png"));
+            }
+
+            return ValueTask.FromResult(LoopbackResponse.Empty(404));
+        });
+        rawArtifactUrl = server.Endpoint(rawArtifactTarget);
+
+        using var root = new A5TemporaryRoot();
+        var runtime = root.CreateRuntime();
+        try
+        {
+            var settings = A5DesktopSettings.ConfigureTwoProfiles(
+                runtime,
+                server.Endpoint(chatUpstreamTarget),
+                server.Endpoint(imageUpstreamTarget));
+
+            var chatException = await CaptureChatFailureAsync(runtime);
+            Assert.AreEqual(ChatChannelErrorCode.UpstreamUnavailable, chatException.Code,
+                "The upstream Chat failure did not retain its stable error code.");
+            AssertRedacted(chatException);
+
+            await runtime.DisposeAsync();
+            root.AssertNoPrivateImageSessionDirectories();
+            runtime = root.CreateRuntime();
+            settings = new SettingsViewModel(runtime);
+            var create = new CreateViewModel(runtime)
+            {
+                ChatPrompt = A5TestValues.ChatPrompt,
+            };
+            await create.SendChatCommand.ExecuteAsync(null);
+            Assert.AreEqual("Chat unavailable: UpstreamUnavailable.", create.ChatStatus,
+                "Create did not redact the upstream Chat failure into its stable status.");
+            AssertRedacted(create.ChatStatus);
+
+            var imageUpstreamException = await CaptureImageFailureAsync(runtime);
+            Assert.AreEqual(ImageErrorCode.UpstreamUnavailable, imageUpstreamException.Code,
+                "The upstream Image failure did not retain its stable error code.");
+            AssertRedacted(imageUpstreamException);
+
+            await runtime.DisposeAsync();
+            root.AssertNoPrivateImageSessionDirectories();
+            runtime = root.CreateRuntime();
+            settings = new SettingsViewModel(runtime);
+            await AssertPreviewFailureAsync(runtime, "Image unavailable: UpstreamUnavailable.");
+
+            SaveImageEndpointThroughSettingsCrud(settings, server.Endpoint(imageBase64Target));
+            await runtime.DisposeAsync();
+            root.AssertNoPrivateImageSessionDirectories();
+            runtime = root.CreateRuntime();
+            var imageBase64Exception = await CaptureImageFailureAsync(runtime);
+            Assert.AreEqual(ImageErrorCode.ArtifactMimeNotAllowed, imageBase64Exception.Code,
+                "The base64 image sentinel did not remain an invalid private artifact.");
+            AssertRedacted(imageBase64Exception);
+
+            await runtime.DisposeAsync();
+            root.AssertNoPrivateImageSessionDirectories();
+            runtime = root.CreateRuntime();
+            settings = new SettingsViewModel(runtime);
+            await AssertPreviewFailureAsync(runtime, "Image unavailable: ArtifactMimeNotAllowed.");
+
+            SaveImageEndpointThroughSettingsCrud(settings, server.Endpoint(imageRawTarget));
+            await runtime.DisposeAsync();
+            root.AssertNoPrivateImageSessionDirectories();
+            runtime = root.CreateRuntime();
+            var imageRawException = await CaptureImageFailureAsync(runtime);
+            Assert.AreEqual(ImageErrorCode.ArtifactMimeNotAllowed, imageRawException.Code,
+                "The raw image byte sentinel did not remain an invalid private artifact.");
+            AssertRedacted(imageRawException);
+
+            await runtime.DisposeAsync();
+            root.AssertNoPrivateImageSessionDirectories();
+            runtime = root.CreateRuntime();
+            await AssertPreviewFailureAsync(runtime, "Image unavailable: ArtifactMimeNotAllowed.");
+
+            Assert.AreEqual(10, server.RequestCount,
+                "Failure handling made an unexpected number of selected-route loopback requests.");
+        }
+        finally
+        {
+            await runtime.DisposeAsync();
+            root.AssertNoPrivateImageSessionDirectories();
+        }
+
+        Assert.IsFalse(server.HasResponderFailure, "The scripted loopback responder failed.");
+    }
+
+    [TestMethod]
+    public async Task NeverSavedSecretsFailClosedFromSettingsCrudCreateAndPreview()
+    {
+        await using var server = new LoopbackProviderServer((_, _) =>
+            ValueTask.FromResult(LoopbackResponse.Empty(500)));
+
+        using var root = new A5TemporaryRoot();
+        var runtime = root.CreateRuntime();
+        try
+        {
+            var settings = A5DesktopSettings.ConfigureTwoProfilesWithoutSecrets(
+                runtime,
+                server.Endpoint(ChatTarget),
+                server.Endpoint(ImageTarget));
+            var snapshot = runtime.Settings.Load();
+            Assert.AreEqual(2, settings.Profiles.Count, "Settings CRUD did not create both deliberate profiles.");
+            Assert.AreEqual(2, snapshot.Bindings.Count, "Settings CRUD did not persist both explicit bindings.");
+            Assert.IsTrue(snapshot.Profiles.All(profile => !profile.HasSecret),
+                "A never-entered secret was unexpectedly persisted or inferred.");
+
+            var create = new CreateViewModel(runtime)
+            {
+                ChatPrompt = A5TestValues.ChatPrompt,
+            };
+            await create.SendChatCommand.ExecuteAsync(null);
+            Assert.AreEqual("Chat unavailable: SecretUnavailable.", create.ChatStatus,
+                "Create did not surface the fail-closed ChatLlm secret result.");
+            AssertRedacted(create.ChatStatus);
+
+            var preview = new PreviewViewModel(runtime)
+            {
+                ImagePrompt = A5TestValues.ImagePrompt,
+                ImageWidth = 64,
+                ImageHeight = 64,
+            };
+            try
+            {
+                await preview.GenerateImageCommand.ExecuteAsync(null);
+                Assert.IsNull(preview.PreviewImage, "Preview created an image without a deliberately saved secret.");
+                Assert.AreEqual("Image unavailable: SecretUnavailable.", preview.ImageStatus,
+                    "Preview did not surface the fail-closed ImageGeneration secret result.");
+                AssertRedacted(preview.ImageStatus);
+            }
+            finally
+            {
+                preview.Dispose();
+            }
+
+            Assert.AreEqual(0, server.RequestCount,
+                "A never-saved secret reached loopback transport from Create or Preview.");
+        }
+        finally
+        {
+            await runtime.DisposeAsync();
+            root.AssertNoPrivateImageSessionDirectories();
+        }
+
+        Assert.IsFalse(server.HasResponderFailure, "The scripted loopback responder failed.");
+    }
+
+    [TestMethod]
     public async Task RevokedOrMissingSecretsFailBeforeAnyNetworkAction()
     {
         await using var server = new LoopbackProviderServer((_, _) =>
@@ -537,6 +760,39 @@ public sealed class ProviderLocalE2ETests
         64,
         64);
 
+    private static void SaveImageEndpointThroughSettingsCrud(SettingsViewModel settings, string endpoint)
+    {
+        settings.SelectedProfileId = A5TestValues.ImageProfileId;
+        settings.BeginSelectedProfileEditCommand.Execute(null);
+        settings.ProfileOpaqueEndpoint = endpoint;
+        settings.SecretEntry = string.Empty;
+        settings.SaveProfileCommand.Execute(null);
+        Assert.AreEqual("Provider profile saved.", settings.ProfileStatus,
+            "Settings CRUD did not save the explicitly edited ImageGeneration endpoint.");
+    }
+
+    private static async Task AssertPreviewFailureAsync(ProviderDesktopRuntime runtime, string expectedStatus)
+    {
+        var preview = new PreviewViewModel(runtime)
+        {
+            ImagePrompt = A5TestValues.ImagePrompt,
+            ImageWidth = 64,
+            ImageHeight = 64,
+        };
+        try
+        {
+            await preview.GenerateImageCommand.ExecuteAsync(null);
+            Assert.IsNull(preview.PreviewImage, "Preview created an image from a failing provider response.");
+            Assert.AreEqual(expectedStatus, preview.ImageStatus,
+                "Preview did not surface the stable redacted image failure status.");
+            AssertRedacted(preview.ImageStatus);
+        }
+        finally
+        {
+            preview.Dispose();
+        }
+    }
+
     private static async Task<ChatChannelException> CaptureChatFailureAsync(ProviderDesktopRuntime runtime)
     {
         try
@@ -582,7 +838,24 @@ public sealed class ProviderLocalE2ETests
         throw new InvalidOperationException();
     }
 
-    private static void AssertRedacted(Exception exception) => AssertRedacted(exception.ToString());
+    private static void AssertRedacted(Exception exception)
+    {
+        ArgumentNullException.ThrowIfNull(exception);
+        AssertRedacted(exception.Message);
+        AssertRedacted(exception.ToString());
+
+        var diagnostics = new InMemoryDiagnosticSink();
+        new UiErrorBoundary(diagnostics).Capture("a5-provider-failure", exception);
+        foreach (var diagnostic in diagnostics.Snapshot)
+        {
+            AssertRedacted(diagnostic.Code);
+            AssertRedacted(diagnostic.Message);
+            if (diagnostic.Detail is not null)
+            {
+                AssertRedacted(diagnostic.Detail);
+            }
+        }
+    }
 
     private static void AssertRedacted(string diagnostic)
     {
@@ -594,6 +867,9 @@ public sealed class ProviderLocalE2ETests
             A5TestValues.ChatPrompt,
             A5TestValues.ImagePrompt,
             A5TestValues.EndpointMarker,
+            A5TestValues.UpstreamBodySentinel,
+            A5TestValues.ImageRawBytesSentinel,
+            A5TestValues.ImageBase64Sentinel,
         })
         {
             Assert.IsFalse(diagnostic.Contains(sensitiveValue, StringComparison.Ordinal),

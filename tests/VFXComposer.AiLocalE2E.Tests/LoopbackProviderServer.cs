@@ -219,7 +219,7 @@ internal sealed class LoopbackProviderServer : IAsyncDisposable
             throw new InvalidDataException("Loopback request line is invalid.");
         }
 
-        var headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+        var headers = new List<LoopbackHeader>();
         for (var index = 1; index < lines.Length; index++)
         {
             var line = lines[index];
@@ -234,13 +234,20 @@ internal sealed class LoopbackProviderServer : IAsyncDisposable
                 throw new InvalidDataException("Loopback request header is invalid.");
             }
 
-            headers[line[..colon]] = line[(colon + 1)..].TrimStart();
+            // Keep every header line. In particular, collapsing duplicate Authorization fields would let a future
+            // transport regression evade the exact-one authorization assertion below.
+            headers.Add(new LoopbackHeader(line[..colon], line[(colon + 1)..].TrimStart()));
         }
 
         var contentLength = 0;
-        if (headers.TryGetValue("Content-Length", out var contentLengthText) &&
-            (!int.TryParse(contentLengthText, System.Globalization.NumberStyles.None, System.Globalization.CultureInfo.InvariantCulture, out contentLength) ||
-             contentLength is < 0 or > MaximumRequestBodyBytes))
+        var contentLengths = headers
+            .Where(static header => string.Equals(header.Name, "Content-Length", StringComparison.OrdinalIgnoreCase))
+            .Select(static header => header.Value)
+            .ToArray();
+        if (contentLengths.Length > 1 ||
+            (contentLengths.Length == 1 &&
+             (!int.TryParse(contentLengths[0], System.Globalization.NumberStyles.None, System.Globalization.CultureInfo.InvariantCulture, out contentLength) ||
+              contentLength is < 0 or > MaximumRequestBodyBytes)))
         {
             throw new InvalidDataException("Loopback request content length is invalid.");
         }
@@ -308,15 +315,17 @@ internal sealed class LoopbackProviderServer : IAsyncDisposable
     }
 }
 
+internal readonly record struct LoopbackHeader(string Name, string Value);
+
 /// <summary>Ephemeral raw request data. Its public surface offers only safe predicates and a redacted formatter.</summary>
 internal sealed class LoopbackRequest : IDisposable
 {
     private readonly string _method;
     private readonly string _target;
-    private readonly IReadOnlyDictionary<string, string> _headers;
+    private readonly IReadOnlyList<LoopbackHeader> _headers;
     private byte[] _body;
 
-    internal LoopbackRequest(string method, string target, IReadOnlyDictionary<string, string> headers, byte[] body)
+    internal LoopbackRequest(string method, string target, IReadOnlyList<LoopbackHeader> headers, byte[] body)
     {
         _method = method;
         _target = target;
@@ -332,12 +341,14 @@ internal sealed class LoopbackRequest : IDisposable
         Func<JsonElement, bool> bodyMatches)
     {
         ArgumentNullException.ThrowIfNull(bodyMatches);
+        var authorization = HeaderValues("Authorization");
+        var contentTypes = HeaderValues("Content-Type");
         if (!string.Equals(_method, "POST", StringComparison.Ordinal) ||
             !string.Equals(_target, expectedTarget, StringComparison.Ordinal) ||
-            !_headers.TryGetValue("Authorization", out var authorization) ||
-            !string.Equals(authorization, expectedAuthorization, StringComparison.Ordinal) ||
-            !_headers.TryGetValue("Content-Type", out var contentType) ||
-            !contentType.StartsWith("application/json", StringComparison.OrdinalIgnoreCase))
+            authorization.Length != 1 ||
+            !string.Equals(authorization[0], expectedAuthorization, StringComparison.Ordinal) ||
+            contentTypes.Length != 1 ||
+            !contentTypes[0].StartsWith("application/json", StringComparison.OrdinalIgnoreCase))
         {
             return false;
         }
@@ -360,7 +371,7 @@ internal sealed class LoopbackRequest : IDisposable
     public bool MatchesUnauthenticatedGet(string expectedTarget) =>
         string.Equals(_method, "GET", StringComparison.Ordinal) &&
         string.Equals(_target, expectedTarget, StringComparison.Ordinal) &&
-        !_headers.ContainsKey("Authorization") &&
+        HeaderValues("Authorization").Length == 0 &&
         _body.Length == 0;
 
     public override string ToString() => "LoopbackRequest(<redacted>)";
@@ -370,6 +381,11 @@ internal sealed class LoopbackRequest : IDisposable
         var body = Interlocked.Exchange(ref _body, Array.Empty<byte>());
         CryptographicOperations.ZeroMemory(body);
     }
+
+    private string[] HeaderValues(string name) => _headers
+        .Where(header => string.Equals(header.Name, name, StringComparison.OrdinalIgnoreCase))
+        .Select(static header => header.Value)
+        .ToArray();
 }
 
 /// <summary>Bounded scripted loopback response; it never formats or retains request data.</summary>

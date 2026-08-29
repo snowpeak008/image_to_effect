@@ -1,6 +1,7 @@
 using System.Buffers.Binary;
 using System.IO.Compression;
 using System.Security.Cryptography;
+using System.Text;
 using System.Text.Json;
 using VFXComposer.AI.Contracts;
 using VFXComposer.AI.Contracts.Desktop;
@@ -23,6 +24,9 @@ internal static class A5TestValues
     public const string ChatPrompt = "a5-chat-prompt-sentinel";
     public const string ImagePrompt = "a5-image-prompt-sentinel";
     public const string EndpointMarker = "a5-endpoint-secret-sentinel";
+    public const string UpstreamBodySentinel = "a5-upstream-body-sentinel";
+    public const string ImageRawBytesSentinel = "a5-image-raw-bytes-sentinel";
+    public const string ImageBase64Sentinel = "YTUtaW1hZ2UtcmF3LWJ5dGVzLXNlbnRpbmVs";
     public const string ChatResult = "a5-chat-result";
 }
 
@@ -103,6 +107,38 @@ internal static class A5DesktopSettings
         return settings;
     }
 
+    public static SettingsViewModel ConfigureTwoProfilesWithoutSecrets(
+        ProviderDesktopRuntime runtime,
+        string chatEndpoint,
+        string imageEndpoint,
+        int timeoutSeconds = 30)
+    {
+        var settings = new SettingsViewModel(runtime);
+        SaveProfile(
+            settings,
+            A5TestValues.ChatProfileId,
+            chatEndpoint,
+            timeoutSeconds,
+            A5TestValues.ChatCapabilityId,
+            A5TestValues.ChatModel,
+            imageCapabilityId: null,
+            imageModel: null,
+            secret: null);
+        SaveProfile(
+            settings,
+            A5TestValues.ImageProfileId,
+            imageEndpoint,
+            timeoutSeconds,
+            chatCapabilityId: null,
+            chatModel: null,
+            imageCapabilityId: A5TestValues.ImageCapabilityId,
+            imageModel: A5TestValues.ImageModel,
+            secret: null);
+        BindChat(settings, A5TestValues.ChatProfileId, A5TestValues.ChatCapabilityId, A5TestValues.ChatModel);
+        BindImage(settings, A5TestValues.ImageProfileId, A5TestValues.ImageCapabilityId, A5TestValues.ImageModel);
+        return settings;
+    }
+
     public static void BindChat(SettingsViewModel settings, string profileId, string capabilityId, string modelId)
     {
         settings.ChatBindingProfileId = profileId;
@@ -166,7 +202,7 @@ internal static class A5DesktopSettings
         string? chatModel,
         string? imageCapabilityId,
         string? imageModel,
-        string secret)
+        string? secret)
     {
         settings.BeginNewProfileCommand.Execute(null);
         settings.ProfileId = profileId;
@@ -180,7 +216,7 @@ internal static class A5DesktopSettings
         settings.ChatModelId = chatModel ?? string.Empty;
         settings.ImageCapabilityId = imageCapabilityId ?? string.Empty;
         settings.ImageModelId = imageModel ?? string.Empty;
-        settings.SecretEntry = secret;
+        settings.SecretEntry = secret ?? string.Empty;
         settings.SaveProfileCommand.Execute(null);
     }
 }
@@ -198,19 +234,30 @@ internal static class A5LoopbackPayloads
     public static string ImageUrlJson(string url) =>
         "{\"data\":[{\"url\":" + JsonSerializer.Serialize(url) + "}]}";
 
+    public static string UpstreamFailureJson() =>
+        "{\"error\":\"" + A5TestValues.UpstreamBodySentinel + "\"}";
+
+    public static string ImageBase64SentinelJson() =>
+        "{\"data\":[{\"b64_json\":\"" + A5TestValues.ImageBase64Sentinel + "\"}]}";
+
     public static byte[] OnePixelPngBytes() => OnePixelPng.ToArray();
+
+    public static byte[] ImageRawBytesSentinelBytes() =>
+        Encoding.UTF8.GetBytes(A5TestValues.ImageRawBytesSentinel);
 
     public static bool IsExactChatBody(JsonElement body)
     {
         try
         {
             return body.ValueKind == JsonValueKind.Object &&
+                HasExactlyPropertyNames(body, "model", "messages") &&
                 body.TryGetProperty("model", out var model) &&
                 string.Equals(model.GetString(), A5TestValues.ChatModel, StringComparison.Ordinal) &&
                 body.TryGetProperty("messages", out var messages) &&
                 messages.ValueKind == JsonValueKind.Array &&
                 messages.GetArrayLength() == 1 &&
                 messages[0].ValueKind == JsonValueKind.Object &&
+                HasExactlyPropertyNames(messages[0], "role", "content") &&
                 messages[0].TryGetProperty("role", out var role) &&
                 string.Equals(role.GetString(), "user", StringComparison.Ordinal) &&
                 messages[0].TryGetProperty("content", out var content) &&
@@ -227,6 +274,7 @@ internal static class A5LoopbackPayloads
         try
         {
             return body.ValueKind == JsonValueKind.Object &&
+                HasExactlyPropertyNames(body, "model", "prompt", "size", "n", "response_format") &&
                 body.TryGetProperty("model", out var model) &&
                 string.Equals(model.GetString(), A5TestValues.ImageModel, StringComparison.Ordinal) &&
                 body.TryGetProperty("prompt", out var prompt) &&
@@ -242,6 +290,30 @@ internal static class A5LoopbackPayloads
         {
             return false;
         }
+    }
+
+    private static bool HasExactlyPropertyNames(JsonElement element, params string[] expectedNames)
+    {
+        if (element.ValueKind != JsonValueKind.Object)
+        {
+            return false;
+        }
+
+        var remaining = new HashSet<string>(expectedNames, StringComparer.Ordinal);
+        if (remaining.Count != expectedNames.Length)
+        {
+            return false;
+        }
+
+        foreach (var property in element.EnumerateObject())
+        {
+            if (!remaining.Remove(property.Name))
+            {
+                return false;
+            }
+        }
+
+        return remaining.Count == 0;
     }
 
     private static byte[] CreateOnePixelPng()

@@ -103,7 +103,7 @@
       "path": "tests/VFXComposer.AiLocalE2E.Tests",
       "kind": "directory",
       "count": 5,
-      "sha256": "8b598fc8838f72764a81461b26fde540529103ec35c922b2e62abf38ff09a1a2"
+      "sha256": "ba5faf94c2c4abe6ba46bbfe1632b4b19828eb2e50d5cdf503b0ec95ae59a484"
     },
     {
       "path": "project/Packages/com.vfxcomposer.unity",

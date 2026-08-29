@@ -465,7 +465,10 @@ function Get-A5ReceiptRedactionSnapshot {
         "a5-image-secret-sentinel",
         "a5-chat-prompt-sentinel",
         "a5-image-prompt-sentinel",
-        "a5-endpoint-secret-sentinel"
+        "a5-endpoint-secret-sentinel",
+        "a5-upstream-body-sentinel",
+        "a5-image-raw-bytes-sentinel",
+        "YTUtaW1hZ2UtcmF3LWJ5dGVzLXNlbnRpbmVs"
     )
     $matches = @()
     foreach ($file in Get-ChildItem -LiteralPath $Root -Recurse -File -Force) {
@@ -711,7 +714,7 @@ if (($a5ProductBindingBeforeTests | ConvertTo-Json -Depth 8 -Compress) -cne ($a5
 $a5Redaction = Get-A5ReceiptRedactionSnapshot -Root $ReceiptRoot
 Write-Json -Path (Join-Path $ReceiptRoot "a5-receipt-redaction.json") -Value $a5Redaction
 if ($a5Redaction.matchCount -ne 0) {
-    $failures.Add("A5 test receipts contained a sensitive endpoint, credential, or prompt marker")
+    $failures.Add("A5 test receipts contained a sensitive endpoint, credential, prompt, upstream-body, or image-payload marker")
 }
 
 $postFiles = Get-RepositoryFiles
