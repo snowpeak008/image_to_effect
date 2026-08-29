@@ -198,3 +198,22 @@
 | E1857 | `/timeline/<ref_id>` | Referenced Runtime Entry Prefab is missing. | manifest runtime path / existing Runtime Entry |
 | E1858 | `/build` | Composite Runtime Entry construction failed. | exception detail / valid strict output |
 | E1859 | `/budget/<metric>` | Composite simultaneous peak exceeds its registered composition limit. | computed peak / particles 200, PS 10, materials 10, renderers 14 |
+
+## Element next-candidate compiler (W3–W8)
+
+| Code | Stable path | Human meaning | actual/allowed |
+| --- | --- | --- | --- |
+| E1930 | `/content/family` | Element next-candidate compiler accepts only the W3–W8 authority families. | actualValue / registered family list |
+| E1931 | `/id` | Recipe is not registered in the W3–W8 element next-candidate cohort. | actualValue / registered cohort id |
+| E1932 | `/content/family` | Recipe id and element family disagree. | actualValue / id-implied family |
+| E1933 | `/content/parameters/<name>` | Content parameter has no physical carrier/timing binding. | actualValue / bound carrier or timing |
+| E1934 | `/targetProfile` | Compiled next-candidate budget exceeds the fixed family ceiling. | computed budget / family ceiling |
+| E1935 | `/recipe` | Element next-candidate Recipe asset is missing. | asset path / existing Recipe |
+| E1936 | `/build` | Element next-candidate build transaction failed. | exception detail / successful build |
+| E1937 | `/build/prefab` | Next-candidate Prefab is missing after save. | n.a. / saved Prefab |
+| E1938 | `/build/runtimeEntry` | Next-candidate Prefab must own exactly one `IVfxRuntimeEntry`. | actualValue / exactly 1 |
+| E1939 | `/build/runtimeEntry` | Dedicated element visual executor is missing. | n.a. / `ElementNextCandidateVisualExecutor` |
+| E1940 | `/budget/renderers` | Renderer budget exceeded. | actualValue / allowedRange |
+| E1941 | `/budget/particleSystems` | Candidate must use one pooled deterministic detail batch. | actualValue / exactly 1 |
+| E1942 | `/build/physics` | Element visual execution must remain deterministic and Rigidbody-free. | actualValue / 0 Rigidbody |
+| E1943 | `/budget` | Runtime budget readback failed. | n.a. / executor budget within limits |
