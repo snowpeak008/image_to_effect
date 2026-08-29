@@ -119,6 +119,12 @@ public static class BatchReportBuilder
         DefaultIgnoreCondition = JsonIgnoreCondition.Never,
     };
 
+    private static readonly JsonSerializerOptions CompactSerializerOptions = new()
+    {
+        WriteIndented = false,
+        DefaultIgnoreCondition = JsonIgnoreCondition.Never,
+    };
+
     public static BatchReport Create(
         BatchManifest manifest,
         BatchSubmissionResult submission,
@@ -218,6 +224,16 @@ public static class BatchReportBuilder
     {
         ArgumentNullException.ThrowIfNull(report);
         return JsonSerializer.Serialize(report, SerializerOptions);
+    }
+
+    /// <summary>
+    /// Compact form for surfaces that embed the report inside another document instead of writing
+    /// it to a file, where the indented form's line breaks would be unwelcome.
+    /// </summary>
+    public static string SerializeCompact(BatchReport report)
+    {
+        ArgumentNullException.ThrowIfNull(report);
+        return JsonSerializer.Serialize(report, CompactSerializerOptions);
     }
 
     public static BatchReport Deserialize(string json)

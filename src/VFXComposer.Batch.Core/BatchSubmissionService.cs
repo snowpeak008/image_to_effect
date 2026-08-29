@@ -40,13 +40,21 @@ public sealed record BatchSubmissionResult(
 public sealed class BatchSubmissionService
 {
     private readonly IJobQueueClient _queue;
+    private readonly string _sourceEntry;
 
-    public BatchSubmissionService(IJobQueueClient queue)
+    /// <summary>
+    /// The submitting surface is recorded on every entry it creates, so a queue reader can tell
+    /// which entry point asked for the work (REQ-003 §9.1). It is provenance only: it never
+    /// selects behaviour, and the same manifest submitted from two surfaces produces otherwise
+    /// identical entries.
+    /// </summary>
+    public BatchSubmissionService(IJobQueueClient queue, string sourceEntry)
     {
         _queue = queue ?? throw new ArgumentNullException(nameof(queue));
+        _sourceEntry = RequireSourceEntry(sourceEntry);
     }
 
-    public override string ToString() => "BatchSubmissionService";
+    public override string ToString() => "BatchSubmissionService(" + _sourceEntry + ")";
 
     /// <summary>
     /// Submits every entry in manifest order. The store is probed before the first enqueue so an
@@ -63,7 +71,7 @@ public sealed class BatchSubmissionService
         {
             foreach (var item in manifest.Items)
             {
-                var request = CreateRequest(manifest, queuePolicy, item);
+                var request = CreateRequest(_sourceEntry, manifest, queuePolicy, item);
                 if (completedKeys.Contains(request.EntryIdempotencyKey))
                 {
                     submitted.Add(new BatchSubmissionItem(
@@ -92,7 +100,11 @@ public sealed class BatchSubmissionService
     }
 
     /// <summary>Derives the queue request for one entry, including its canonical payload.</summary>
-    public static JobEnqueueRequest CreateRequest(BatchManifest manifest, string queuePolicy, BatchManifestItem item)
+    public static JobEnqueueRequest CreateRequest(
+        string sourceEntry,
+        BatchManifest manifest,
+        string queuePolicy,
+        BatchManifestItem item)
     {
         ArgumentNullException.ThrowIfNull(manifest);
         ArgumentNullException.ThrowIfNull(item);
@@ -102,13 +114,18 @@ public sealed class BatchSubmissionService
         }
 
         return new JobEnqueueRequest(
-            JobSourceEntries.Cli,
+            RequireSourceEntry(sourceEntry),
             BatchJobKinds.RecipeGeneration,
             BatchGenerationPayload.Create(item),
             manifest.BatchId,
             queuePolicy,
             item.ItemId);
     }
+
+    private static string RequireSourceEntry(string sourceEntry) =>
+        JobSourceEntries.All.Contains(sourceEntry)
+            ? sourceEntry
+            : throw new ArgumentOutOfRangeException(nameof(sourceEntry));
 
     private HashSet<string> ReadCompletedEntryKeys()
     {

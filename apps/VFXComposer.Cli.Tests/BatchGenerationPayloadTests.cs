@@ -42,19 +42,25 @@ public sealed class BatchGenerationPayloadTests
     public void EntryKeyIsStableForContentAndChangesWithIt()
     {
         var manifest = Manifest("batch-a", PromptItem("alpha", "text", BatchConstraints.Empty));
-        var baseline = BatchSubmissionService.CreateRequest(manifest, JobBatchPolicies.Continue, manifest.Items[0]);
+        var baseline = BatchSubmissionService.CreateRequest(
+            JobSourceEntries.Cli, manifest, JobBatchPolicies.Continue, manifest.Items[0]);
 
-        var repeat = BatchSubmissionService.CreateRequest(manifest, JobBatchPolicies.Continue, manifest.Items[0]);
-        var otherPolicy = BatchSubmissionService.CreateRequest(manifest, JobBatchPolicies.Abort, manifest.Items[0]);
+        var repeat = BatchSubmissionService.CreateRequest(
+            JobSourceEntries.Cli, manifest, JobBatchPolicies.Continue, manifest.Items[0]);
+        var otherPolicy = BatchSubmissionService.CreateRequest(
+            JobSourceEntries.Cli, manifest, JobBatchPolicies.Abort, manifest.Items[0]);
         var otherPrompt = BatchSubmissionService.CreateRequest(
+            JobSourceEntries.Cli,
             manifest,
             JobBatchPolicies.Continue,
             PromptItem("alpha", "different text", BatchConstraints.Empty));
         var otherItemId = BatchSubmissionService.CreateRequest(
+            JobSourceEntries.Cli,
             manifest,
             JobBatchPolicies.Continue,
             PromptItem("beta", "text", BatchConstraints.Empty));
         var otherBatch = BatchSubmissionService.CreateRequest(
+            JobSourceEntries.Cli,
             Manifest("batch-b", manifest.Items[0]),
             JobBatchPolicies.Continue,
             manifest.Items[0]);
@@ -97,7 +103,8 @@ public sealed class BatchGenerationPayloadTests
 
         Assert.ThrowsExactly<ArgumentException>(() => BatchGenerationPayload.Create(recipeItem));
         Assert.ThrowsExactly<ArgumentException>(() =>
-            BatchSubmissionService.CreateRequest(Manifest("b", recipeItem), JobBatchPolicies.Continue, recipeItem));
+            BatchSubmissionService.CreateRequest(
+                JobSourceEntries.Cli, Manifest("b", recipeItem), JobBatchPolicies.Continue, recipeItem));
     }
 
     [TestMethod]

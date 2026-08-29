@@ -13,7 +13,7 @@ public sealed class BatchReportTests
     {
         var store = new JobStore(CliTestHarness.CreateDirectory());
         var manifest = BatchSubmissionAndTrackingTests.Manifest("alpha", "beta", "gamma");
-        var service = new BatchSubmissionService(store);
+        var service = new BatchSubmissionService(store, JobSourceEntries.Cli);
         service.Submit(manifest, force: false);
         await CliTestHarness.DrainAsync(store, Executor(), expectedTerminalJobs: 3);
         var second = service.Submit(manifest, force: false);
@@ -46,7 +46,7 @@ public sealed class BatchReportTests
     {
         var store = new JobStore(CliTestHarness.CreateDirectory());
         var manifest = BatchSubmissionAndTrackingTests.Manifest("alpha");
-        var submission = new BatchSubmissionService(store).Submit(manifest, force: false);
+        var submission = new BatchSubmissionService(store, JobSourceEntries.Cli).Submit(manifest, force: false);
         await CliTestHarness.DrainAsync(store, Executor(), expectedTerminalJobs: 1);
         var tracked = await new BatchTracker(store, CliTestHarness.FastTracking)
             .TrackAsync(submission.Items, new RecordingTrackingSink(), CancellationToken.None);
@@ -67,7 +67,7 @@ public sealed class BatchReportTests
     {
         var store = new JobStore(CliTestHarness.CreateDirectory());
         var manifest = BatchSubmissionAndTrackingTests.Manifest("alpha");
-        var submission = new BatchSubmissionService(store).Submit(manifest, force: false);
+        var submission = new BatchSubmissionService(store, JobSourceEntries.Cli).Submit(manifest, force: false);
 
         var report = BatchReportBuilder.Create(
             manifest,
