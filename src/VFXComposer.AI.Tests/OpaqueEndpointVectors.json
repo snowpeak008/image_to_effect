@@ -1,0 +1,41 @@
+{
+  "formatVersion": 1,
+  "vectors": [
+    {
+      "name": "invalid-ipv6",
+      "value": "https://[2001:db8::not-an-ipv6]/v1"
+    },
+    {
+      "name": "port-99999",
+      "value": "https://provider.example.invalid:99999/v1"
+    },
+    {
+      "name": "userinfo-query-fragment",
+      "value": "https://user:token@provider.example.invalid/v1?api_key=query-secret#fragment"
+    },
+    {
+      "name": "custom-scheme",
+      "value": "custom+relay://tenant/path?token=opaque#anchor"
+    },
+    {
+      "name": "relative-text",
+      "value": "../relative endpoint?option=value#fragment"
+    },
+    {
+      "name": "custom-text",
+      "value": "this is deliberately not a URI"
+    },
+    {
+      "name": "whitespace",
+      "value": " \t endpoint text with surrounding whitespace \r\n"
+    },
+    {
+      "name": "empty",
+      "value": ""
+    },
+    {
+      "name": "unicode",
+      "value": "https://例子.测试/路径?令牌=秘密#片段"
+    }
+  ]
+}

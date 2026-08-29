@@ -72,15 +72,14 @@ internal static class Program
 
     private static AiProviderSettings CreateSettings(long revision)
     {
-        var secretScope = SecretScope.Production;
         var profile = new ProviderProfile(
             "profile-primary",
             "Revision lock host",
             ProviderOrigin.Official,
             true,
             new ProtocolBinding(ProviderProtocols.OpenAiCompatibleV1),
-            EndpointPolicy.Create("https://provider.example.invalid/v1/", false, secretScope),
-            new AuthDescriptor(new SecretRef("secret-primary"), secretScope),
+            new OpaqueEndpoint("https://provider.example.invalid/v1/"),
+            new AuthDescriptor(new SecretRef("secret-primary"), SecretScope.Production),
             30,
             [new CapabilityDefinition("chat-main", AiChannel.ChatLlm, "chat-model-1")]);
         return new AiProviderSettings(

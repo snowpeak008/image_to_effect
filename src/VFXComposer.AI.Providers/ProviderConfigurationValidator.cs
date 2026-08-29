@@ -2,7 +2,7 @@ using VFXComposer.AI.Contracts;
 
 namespace VFXComposer.AI.Providers;
 
-/// <summary>Validation that is intentionally stricter than a future adapter's input needs.</summary>
+/// <summary>Validates configuration structure and exact channel bindings without interpreting opaque endpoint text.</summary>
 public static class ProviderConfigurationValidator
 {
     public static void Validate(AiProviderSettings settings)
@@ -18,7 +18,9 @@ public static class ProviderConfigurationValidator
         var secretOwners = new Dictionary<string, string>(StringComparer.Ordinal);
         foreach (var profile in settings.Profiles)
         {
-            if (!Enum.IsDefined(profile.Origin) || !profiles.TryAdd(profile.Id, profile))
+            if (!Enum.IsDefined(profile.Origin) ||
+                !Enum.IsDefined(profile.Auth.SecretScope) ||
+                !profiles.TryAdd(profile.Id, profile))
             {
                 throw new AiGatewayException(AiErrorCode.ConfigurationInvalid);
             }
@@ -28,7 +30,6 @@ public static class ProviderConfigurationValidator
                 throw new AiGatewayException(AiErrorCode.ConfigurationInvalid);
             }
 
-            ValidateEndpoint(profile.Endpoint, profile.Auth);
             foreach (var capability in profile.Capabilities)
             {
                 if (!Enum.IsDefined(capability.Channel) || !allCapabilities.Add(capability.Id))
@@ -59,16 +60,6 @@ public static class ProviderConfigurationValidator
             {
                 throw new AiGatewayException(AiErrorCode.CapabilityMismatch);
             }
-        }
-    }
-
-    public static void ValidateEndpoint(EndpointDefinition endpoint, AuthDescriptor auth)
-    {
-        ArgumentNullException.ThrowIfNull(endpoint);
-        ArgumentNullException.ThrowIfNull(auth);
-        if (!EndpointPolicy.IsValid(endpoint, auth.SecretScope))
-        {
-            throw new AiGatewayException(AiErrorCode.EndpointRejected);
         }
     }
 

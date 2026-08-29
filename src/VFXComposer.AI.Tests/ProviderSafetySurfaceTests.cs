@@ -1,5 +1,6 @@
 using System.Reflection;
 using System.Text;
+using System.Text.Json;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using VFXComposer.AI.Contracts;
 using VFXComposer.AI.Providers;
@@ -42,8 +43,8 @@ public sealed class ProviderSafetySurfaceTests
     public void RedactionAndDtoFormattingNeverExposeSyntheticSensitiveValues()
     {
         const string prompt = "synthetic prompt should not escape";
-        const string endpoint = "https://provider.example.invalid/private";
-        var settings = A1TestSupport.Settings(endpoint: new Uri(endpoint));
+        const string endpoint = "https://user:synthetic-user-info@provider.example.invalid/private?query=synthetic-query#synthetic-fragment";
+        var settings = A1TestSupport.Settings(endpointValue: endpoint);
         var configuration = A1TestSupport.Read(settings);
         var profile = configuration.Settings.Profiles[0];
         var route = new ResolvedProviderRoute(
@@ -54,6 +55,12 @@ public sealed class ProviderSafetySurfaceTests
             configuration.Fingerprint);
 
         Assert.AreEqual(ProviderRedaction.Redacted, ProviderRedaction.Redact(prompt));
+        var endpointSummary = ProviderRedaction.RedactEndpoint(profile.Endpoint);
+        Assert.IsTrue(endpointSummary.Contains("length=", StringComparison.Ordinal));
+        Assert.IsTrue(endpointSummary.Contains("fingerprint=sha256:", StringComparison.Ordinal));
+        Assert.IsFalse(endpointSummary.Contains(endpoint, StringComparison.Ordinal));
+        Assert.IsFalse(endpointSummary.Contains("synthetic-user-info", StringComparison.Ordinal));
+        Assert.IsFalse(endpointSummary.Contains("synthetic-query", StringComparison.Ordinal));
         Assert.IsFalse(route.ToString().Contains(endpoint, StringComparison.Ordinal));
         Assert.IsFalse(profile.ToString().Contains(endpoint, StringComparison.Ordinal));
         Assert.IsFalse(new ChatRequest("correlation-2", [new ChatMessage(ChatRole.User, prompt)]).ToString().Contains(prompt, StringComparison.Ordinal));
@@ -87,6 +94,7 @@ public sealed class ProviderSafetySurfaceTests
 
                 var draft = importer.Import(source, relayProtocolConfirmed: false);
                 Assert.AreEqual(fixture.Origin, draft.OriginSuggestion, fixture.Type);
+                Assert.AreEqual(fixture.BaseUrl, draft.Endpoint.Value, fixture.Type);
                 Assert.AreEqual(fixture.Model, draft.ModelId, fixture.Type);
                 Assert.AreEqual(fixture.Origin == ProviderOrigin.Subscription, draft.RequiresEndpointConfiguration, fixture.Type);
                 Assert.IsFalse(draft.RequiresRelayProtocolConfirmation, fixture.Type);
@@ -108,6 +116,7 @@ public sealed class ProviderSafetySurfaceTests
         {
             var confirmedRelay = importer.Import(relay, relayProtocolConfirmed: true);
             Assert.IsFalse(confirmedRelay.RequiresRelayProtocolConfirmation);
+            Assert.AreEqual("https://relay.example.invalid/v1/", confirmedRelay.Endpoint.Value);
             Assert.AreEqual("auto", confirmedRelay.RelayProtocolSuggestion);
         }
         finally
@@ -124,6 +133,24 @@ public sealed class ProviderSafetySurfaceTests
             name.Contains("Verification", StringComparison.OrdinalIgnoreCase)));
     }
 
+    [TestMethod]
+    public void TomImport_PreservesOpaqueBaseUrlWithoutUriParsing()
+    {
+        const string baseUrl = "  custom+relay://user:token@[2001:db8::not-an-ipv6]:99999/relative?query=secret#fragment  ";
+        var source = TomFixture("custom", baseUrl, "chat-model-opaque", relayProtocol: "auto");
+        try
+        {
+            var draft = new TomProviderDraftImporter().Import(source, relayProtocolConfirmed: false);
+            Assert.AreEqual(baseUrl, draft.Endpoint.Value);
+            Assert.IsFalse(draft.RequiresEndpointConfiguration);
+            Assert.IsFalse(draft.ToString().Contains("query=secret", StringComparison.Ordinal));
+        }
+        finally
+        {
+            System.Security.Cryptography.CryptographicOperations.ZeroMemory(source);
+        }
+    }
+
     private static byte[] TomFixture(string type, string baseUrl, string model, string relayProtocol)
     {
         var json = $$"""
@@ -132,7 +159,7 @@ public sealed class ProviderSafetySurfaceTests
           "Type":"{{type}}",
           "DisplayName":"{{type}} fixture",
           "Enabled":true,
-          "BaseUrl":"{{baseUrl}}",
+          "BaseUrl":{{JsonSerializer.Serialize(baseUrl)}},
           "ApiKeyProtected":"synthetic-never-import",
           "DefaultModel":"{{model}}",
           "CommandPath":"synthetic-command-path",

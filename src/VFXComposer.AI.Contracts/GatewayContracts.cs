@@ -152,7 +152,6 @@ public static class AiErrorCatalog
         AiErrorCode.ProfileDisabled => "The selected provider profile is disabled.",
         AiErrorCode.CapabilityMismatch => "The configured capability does not match the requested channel.",
         AiErrorCode.ProtocolNotAllowed => "The configured provider protocol is not allowed.",
-        AiErrorCode.EndpointRejected => "The configured provider endpoint is not allowed.",
         AiErrorCode.SecretUnavailable => "The configured credential reference is unavailable.",
         AiErrorCode.HealthUnverified => "The configured provider route is not verified.",
         AiErrorCode.HealthStale => "The configured provider health result is stale.",

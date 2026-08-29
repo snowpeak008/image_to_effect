@@ -8,46 +8,15 @@ namespace VFXComposer.AI.Tests;
 public sealed class ProviderResolutionTests
 {
     [TestMethod]
-    public void EndpointPolicy_RejectsCredentialsQueriesOversizeNonHttpAndNonLoopbackHttp()
+    public void Resolver_DoesNotInterpretOpaqueEndpointText()
     {
-        Assert.ThrowsExactly<ArgumentException>(() => EndpointPolicy.Create(
-            "https://user:password@provider.example.invalid/v1/",
-            allowLoopbackHttp: false,
-            secretScope: SecretScope.Production));
-        Assert.ThrowsExactly<ArgumentException>(() => EndpointPolicy.Create(
-            "https://provider.example.invalid/v1/?api_key=query-credentials-are-not-a-service-root",
-            allowLoopbackHttp: false,
-            secretScope: SecretScope.Production));
+        const string endpoint = "https://[2001:db8::not-an-ipv6]:99999/v1?token=synthetic#fragment";
+        var configuration = A1TestSupport.Read(A1TestSupport.Settings(endpointValue: endpoint));
+        var health = new ProviderHealthRegistry();
+        health.Record(A1TestSupport.VerifiedHealth(configuration, AiChannel.ChatLlm, "chat-main"));
 
-        const string endpointPrefix = "https://provider.example.invalid/";
-        var oversizedEndpoint = endpointPrefix + new string('a', EndpointDefinition.MaximumUriLength - endpointPrefix.Length + 1);
-        Assert.ThrowsExactly<ArgumentException>(() => EndpointPolicy.Create(
-            oversizedEndpoint,
-            allowLoopbackHttp: false,
-            secretScope: SecretScope.Production));
-
-        Assert.ThrowsExactly<ArgumentException>(() => EndpointPolicy.Create(
-            "ftp://provider.example.invalid/",
-            allowLoopbackHttp: false,
-            secretScope: SecretScope.Production));
-        Assert.ThrowsExactly<ArgumentException>(() => EndpointPolicy.Create(
-            "http://provider.example.invalid/",
-            allowLoopbackHttp: true,
-            secretScope: SecretScope.DevelopmentOnly));
-    }
-
-    [TestMethod]
-    public void EndpointPolicy_AllowsOnlyExplicitDevelopmentLoopbackHttp()
-    {
-        var settings = A1TestSupport.Settings(
-            endpoint: new Uri("http://127.0.0.1:8787/v1/"),
-            secretScope: SecretScope.DevelopmentOnly);
-        ProviderConfigurationValidator.Validate(settings);
-
-        Assert.ThrowsExactly<ArgumentException>(() => EndpointPolicy.Create(
-            "http://localhost:8787/v1/",
-            allowLoopbackHttp: true,
-            secretScope: SecretScope.Production));
+        var route = A1TestSupport.Resolver(health).Resolve(AiChannel.ChatLlm, configuration);
+        Assert.AreEqual(endpoint, route.Profile.Endpoint.Value);
     }
 
     [TestMethod]
@@ -59,7 +28,7 @@ public sealed class ProviderResolutionTests
             ProviderOrigin.Official,
             true,
             new ProtocolBinding(ProviderProtocols.OpenAiCompatibleV1),
-            EndpointPolicy.Create("https://provider.example.invalid/", false, SecretScope.Production),
+            new OpaqueEndpoint("https://provider.example.invalid/"),
             new AuthDescriptor(new SecretRef("secret-cross"), SecretScope.Production),
             30,
             [new CapabilityDefinition("image-only", AiChannel.ImageGeneration, "image-model-1")]);

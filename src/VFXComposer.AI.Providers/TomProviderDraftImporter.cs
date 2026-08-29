@@ -25,7 +25,7 @@ public sealed class TomProviderDraftImporter
             _ = StrictUtf8.GetCharCount(utf8Json);
             var fields = ReadTomFields(utf8Json);
             var origin = ParseOriginFromTomType(fields.Type!);
-            var endpoint = ParseEndpoint(origin, fields.BaseUrl!);
+            var endpoint = ParseEndpoint(fields.BaseUrl!);
             var modelId = new CapabilityDefinition("tom-import-capability", AiChannel.ChatLlm, fields.DefaultModel!).ModelId;
             var relayProtocolSuggestion = ParseRelayProtocolSuggestion(origin, fields.RelayProtocol!);
             if (origin == ProviderOrigin.Relay && !relayProtocolConfirmed)
@@ -180,24 +180,13 @@ public sealed class TomProviderDraftImporter
         _ => throw new AiGatewayException(AiErrorCode.ImportRejected),
     };
 
-    private static Uri? ParseEndpoint(ProviderOrigin origin, string baseUrl)
+    private static OpaqueEndpoint ParseEndpoint(string baseUrl)
     {
-        if (string.IsNullOrWhiteSpace(baseUrl))
-        {
-            if (origin == ProviderOrigin.Subscription)
-            {
-                return null;
-            }
-
-            throw new AiGatewayException(AiErrorCode.ImportRejected);
-        }
-
         try
         {
-            return EndpointPolicy.Create(
-                baseUrl,
-                allowLoopbackHttp: false,
-                secretScope: SecretScope.Production).Uri;
+            // Tom's BaseUrl is migrated exactly as a user-owned opaque value. Import does not infer URI validity,
+            // protocol compatibility, or request authorization from it.
+            return new OpaqueEndpoint(baseUrl);
         }
         catch (ArgumentException)
         {
@@ -245,7 +234,7 @@ public sealed class TomProviderDraft
     public TomProviderDraft(
         string displayName,
         ProviderOrigin originSuggestion,
-        Uri? endpoint,
+        OpaqueEndpoint endpoint,
         string modelId,
         int timeoutSeconds,
         string? relayProtocolSuggestion,
@@ -253,7 +242,7 @@ public sealed class TomProviderDraft
     {
         DisplayName = displayName ?? throw new ArgumentNullException(nameof(displayName));
         OriginSuggestion = originSuggestion;
-        Endpoint = endpoint;
+        Endpoint = endpoint ?? throw new ArgumentNullException(nameof(endpoint));
         ModelId = modelId ?? throw new ArgumentNullException(nameof(modelId));
         TimeoutSeconds = timeoutSeconds;
         RelayProtocolSuggestion = relayProtocolSuggestion;
@@ -262,12 +251,12 @@ public sealed class TomProviderDraft
 
     public string DisplayName { get; }
     public ProviderOrigin OriginSuggestion { get; }
-    public Uri? Endpoint { get; }
+    public OpaqueEndpoint Endpoint { get; }
     public string ModelId { get; }
     public int TimeoutSeconds { get; }
     public string? RelayProtocolSuggestion { get; }
     public bool RequiresRelayProtocolConfirmation { get; }
-    public bool RequiresEndpointConfiguration => Endpoint is null;
+    public bool RequiresEndpointConfiguration => Endpoint.Value.Length == 0;
 
     public override string ToString() => "TomProviderDraft(<redacted>)";
 }

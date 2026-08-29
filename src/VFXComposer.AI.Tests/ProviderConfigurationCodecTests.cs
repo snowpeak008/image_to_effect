@@ -160,7 +160,7 @@ public sealed class ProviderConfigurationCodecTests
             ProviderOrigin.Custom,
             false,
             new ProtocolBinding(ProviderProtocols.OpenAiCompatibleV1),
-            EndpointPolicy.Create("https://secondary.example.invalid/v1/", false, SecretScope.Production),
+            new OpaqueEndpoint("https://secondary.example.invalid/v1/"),
             new AuthDescriptor(first.Auth.SecretRef, SecretScope.Production),
             30,
             [new CapabilityDefinition("chat-secondary", AiChannel.ChatLlm, "chat-model-2")]);
@@ -171,12 +171,11 @@ public sealed class ProviderConfigurationCodecTests
     }
 
     [TestMethod]
-    public void CodecAndSchema_StayInParityForProtocolAndEndpointBoundaries()
+    public void Codec_EnforcesOpaqueEndpointUtf8StorageBoundWithoutUriAdmission()
     {
-        const string endpointPrefix = "https://provider.example.invalid/";
-        var endpointAtLimit = endpointPrefix + new string('a', EndpointDefinition.MaximumUriLength - endpointPrefix.Length);
-        Assert.AreEqual(EndpointDefinition.MaximumUriLength, endpointAtLimit.Length);
-        var boundarySettings = A1TestSupport.Settings(endpoint: new Uri(endpointAtLimit));
+        var endpointAtLimit = new string('a', OpaqueEndpoint.MaximumUtf8ByteLength);
+        Assert.AreEqual(OpaqueEndpoint.MaximumUtf8ByteLength, Encoding.UTF8.GetByteCount(endpointAtLimit));
+        var boundarySettings = A1TestSupport.Settings(endpointValue: endpointAtLimit);
         var boundaryBytes = ProviderConfigurationCodec.Serialize(boundarySettings);
         try
         {
@@ -188,14 +187,8 @@ public sealed class ProviderConfigurationCodecTests
         }
 
         Assert.ThrowsExactly<ArgumentException>(() => new ProtocolBinding("1openai-compatible-v1"));
-        Assert.ThrowsExactly<ArgumentException>(() => EndpointPolicy.Create(
-            "https://provider.example.invalid/v1/?api_key=must-not-be-a-service-root",
-            false,
-            SecretScope.Production));
-        Assert.ThrowsExactly<ArgumentException>(() => EndpointPolicy.Create(
-            endpointAtLimit + "a",
-            false,
-            SecretScope.Production));
+        Assert.ThrowsExactly<ArgumentOutOfRangeException>(() => new OpaqueEndpoint(endpointAtLimit + "a"));
+        Assert.ThrowsExactly<ArgumentOutOfRangeException>(() => new OpaqueEndpoint(new string('\u754c', 2731)));
 
         var canonical = ProviderConfigurationCodec.Serialize(A1TestSupport.Settings());
         try
@@ -208,14 +201,9 @@ public sealed class ProviderConfigurationCodecTests
                 AiErrorCode.ConfigurationInvalid);
             AssertCodecRejects(canonicalText.Replace(
                 "https://provider.example.invalid/v1/",
-                "https://provider.example.invalid/v1/?api_key=must-not-be-an-endpoint-field",
-                StringComparison.Ordinal),
-                AiErrorCode.EndpointRejected);
-            AssertCodecRejects(canonicalText.Replace(
-                "https://provider.example.invalid/v1/",
                 endpointAtLimit + "a",
                 StringComparison.Ordinal),
-                AiErrorCode.EndpointRejected);
+                AiErrorCode.ConfigurationInvalid);
         }
         finally
         {

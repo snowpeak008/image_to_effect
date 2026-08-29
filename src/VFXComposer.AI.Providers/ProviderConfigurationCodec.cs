@@ -113,7 +113,7 @@ public static class ProviderConfigurationCodec
         var protocolElement = RequireObjectProperty(element, "protocol");
         ValidateObject(protocolElement, "id");
         var endpointElement = RequireObjectProperty(element, "endpoint");
-        ValidateObject(endpointElement, "uri", "allowLoopbackHttp");
+        ValidateObject(endpointElement, "value");
         var authElement = RequireObjectProperty(element, "auth");
         ValidateObject(authElement, "secretRef", "secretScope");
 
@@ -129,18 +129,7 @@ public static class ProviderConfigurationCodec
         }
 
         var secretScope = ParseEnum<SecretScope>(RequireString(authElement, "secretScope"));
-        EndpointDefinition endpoint;
-        try
-        {
-            endpoint = EndpointPolicy.Create(
-                RequireString(endpointElement, "uri"),
-                RequireBoolean(endpointElement, "allowLoopbackHttp"),
-                secretScope);
-        }
-        catch (ArgumentException)
-        {
-            throw new AiGatewayException(AiErrorCode.EndpointRejected);
-        }
+        var endpoint = new OpaqueEndpoint(RequireString(endpointElement, "value"));
 
         return new ProviderProfile(
             RequireString(element, "id"),
@@ -214,8 +203,7 @@ public static class ProviderConfigurationCodec
         writer.WriteString("id", profile.Protocol.ProtocolId);
         writer.WriteEndObject();
         writer.WriteStartObject("endpoint");
-        writer.WriteString("uri", profile.Endpoint.CanonicalWireUri);
-        writer.WriteBoolean("allowLoopbackHttp", profile.Endpoint.AllowLoopbackHttp);
+        writer.WriteString("value", profile.Endpoint.Value);
         writer.WriteEndObject();
         writer.WriteStartObject("auth");
         writer.WriteString("secretRef", profile.Auth.SecretRef.Id);

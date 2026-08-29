@@ -17,7 +17,7 @@ public enum ProviderOrigin
     Custom,
 }
 
-/// <summary>Whether a secret may be used by an explicitly enabled loopback development endpoint.</summary>
+/// <summary>The declared scope of a credential reference. It does not constrain an endpoint value.</summary>
 public enum SecretScope
 {
     Production,
@@ -40,7 +40,6 @@ public enum AiErrorCode
     ProfileDisabled,
     CapabilityMismatch,
     ProtocolNotAllowed,
-    EndpointRejected,
     SecretUnavailable,
     HealthUnverified,
     HealthStale,
@@ -77,26 +76,6 @@ public sealed class ProtocolBinding
     public string ProtocolId { get; }
 
     public override string ToString() => "ProtocolBinding(" + ProtocolId + ")";
-}
-
-public sealed class EndpointDefinition
-{
-    public const int MaximumUriLength = 2048;
-
-    // EndpointPolicy is the sole constructor caller. Keeping this constructor assembly-internal prevents callers
-    // from retaining a non-canonical Uri and makes the policy result the endpoint's only representation.
-    internal EndpointDefinition(Uri canonicalUri, string canonicalWireUri, bool allowLoopbackHttp)
-    {
-        Uri = canonicalUri ?? throw new ArgumentNullException(nameof(canonicalUri));
-        CanonicalWireUri = canonicalWireUri ?? throw new ArgumentNullException(nameof(canonicalWireUri));
-        AllowLoopbackHttp = allowLoopbackHttp;
-    }
-
-    public Uri Uri { get; }
-    public string CanonicalWireUri { get; }
-    public bool AllowLoopbackHttp { get; }
-
-    public override string ToString() => "EndpointDefinition(<redacted>)";
 }
 
 public sealed class AuthDescriptor
@@ -137,7 +116,7 @@ public sealed class ProviderProfile
         ProviderOrigin origin,
         bool enabled,
         ProtocolBinding protocol,
-        EndpointDefinition endpoint,
+        OpaqueEndpoint endpoint,
         AuthDescriptor auth,
         int timeoutSeconds,
         IEnumerable<CapabilityDefinition> capabilities)
@@ -147,15 +126,8 @@ public sealed class ProviderProfile
         Origin = origin;
         Enabled = enabled;
         Protocol = protocol ?? throw new ArgumentNullException(nameof(protocol));
-        var checkedEndpoint = endpoint ?? throw new ArgumentNullException(nameof(endpoint));
-        var checkedAuth = auth ?? throw new ArgumentNullException(nameof(auth));
-        if (!EndpointPolicy.IsValid(checkedEndpoint, checkedAuth.SecretScope))
-        {
-            throw new ArgumentException("Endpoint does not match the declared secret scope.", nameof(endpoint));
-        }
-
-        Endpoint = checkedEndpoint;
-        Auth = checkedAuth;
+        Endpoint = endpoint ?? throw new ArgumentNullException(nameof(endpoint));
+        Auth = auth ?? throw new ArgumentNullException(nameof(auth));
         if (timeoutSeconds is < 1 or > 300)
         {
             throw new ArgumentOutOfRangeException(nameof(timeoutSeconds));
@@ -174,7 +146,7 @@ public sealed class ProviderProfile
     public ProviderOrigin Origin { get; }
     public bool Enabled { get; }
     public ProtocolBinding Protocol { get; }
-    public EndpointDefinition Endpoint { get; }
+    public OpaqueEndpoint Endpoint { get; }
     public AuthDescriptor Auth { get; }
     public int TimeoutSeconds { get; }
     public IReadOnlyList<CapabilityDefinition> Capabilities { get; }

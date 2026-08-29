@@ -9,19 +9,18 @@ internal static class A1TestSupport
         long revision = 1,
         bool includeChatBinding = true,
         bool includeImageBinding = false,
-        Uri? endpoint = null,
+        string endpointValue = "https://provider.example.invalid/v1/",
         SecretScope secretScope = SecretScope.Production,
         bool enabled = true,
         string protocolId = ProviderProtocols.OpenAiCompatibleV1)
     {
-        endpoint ??= new Uri("https://provider.example.invalid/v1/");
         var profile = new ProviderProfile(
             "profile-primary",
             "Primary provider",
             ProviderOrigin.Official,
             enabled,
             new ProtocolBinding(protocolId),
-            EndpointPolicy.Create(endpoint, endpoint.Scheme == Uri.UriSchemeHttp, secretScope),
+            new OpaqueEndpoint(endpointValue),
             new AuthDescriptor(new SecretRef("secret-primary"), secretScope),
             30,
             [
