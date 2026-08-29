@@ -276,7 +276,12 @@ namespace VFXComposer.Tests.EditMode
             string planHash;
             var result = adapter.Inspect(EnvelopeJson(new[] { Operation("directory", W24S6McpOperationKind.ParseRecipeSyntax, directoryTarget, OtherHash) },
                 ProjectIdentity, W24S6McpAuthority.ReadOnly, out planHash), planHash);
-            Assert.That(result.Operations.Single().Diagnostics.Single().Code, Is.EqualTo("W24FS109"));
+            Assert.That(result.Operations.Single().Diagnostics.Single().Code, Is.EqualTo("W24FS107"),
+                "FILE_NON_DIRECTORY_FILE refuses the directory at the real leaf open, so the rejection is reported by the target-open code.");
+            Assert.That(W24S6WindowsReadOnlyFile.TargetOpenAttemptCountForTests, Is.EqualTo(1),
+                "The declared leaf must reach one real NtOpenFile attempt instead of a pre-open path guess.");
+            Assert.That(W24S6WindowsReadOnlyFile.FileMetadataAcceptedForTests(0x10, 1, 0), Is.False,
+                "The deterministic production predicate also rejects the directory attribute as non-regular even if NtOpenFile returned its handle.");
         }
 
         [Test]
