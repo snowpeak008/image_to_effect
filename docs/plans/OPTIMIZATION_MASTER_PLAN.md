@@ -148,8 +148,10 @@ flowchart LR
 - 验收标准：给定固定 mock AI 响应，解析/校验/错误路径测试全绿；不产生自动网络请求。
 
 **F2 受限构建执行**（依赖 F1、R4）
-- 目标：把 recipe 草稿交给 Unity 侧编译器构建 Prefab：走 Unity batchmode `-executeMethod`（复用 `tools/Invoke-Unity.ps1` 路径）或 Worker 命令面（`ValidateRecipe`/`BuildCandidate` 合同），写入限定 `Assets/VFX/Generated`（`Assets/VFX/Shared` 政策按 ADR-007）。
-- 验收标准：一个样例 recipe 端到端产出 Prefab；越界路径写入被拒绝且有测试。
+- 目标：把 recipe 草稿交给 Unity 侧编译器构建 Prefab。执行体按 ADR-007 裁决：用户显式触发的 Unity batchmode 短生命进程（扩展 `Invoke-Unity.ps1` 纪律），不复用只读链路、不给 Worker 加写权限；写入面为封闭清单 `Assets/VFX/Generated/**` + `ProjectSettings/VFXComposer/BuildManifests/*.manifest.json`，`Assets/VFX/Shared` 构建期只读。
+- 范围（ADR-007 裁决）：首版限 v1 `VfxCompiler` 模板域；`Impact2DCompiler`/`Area2DCompiler` 因无条件 `Ensure()` 覆盖 Shared，在提供只验证模式前不进 AI 构建范围。
+- 开工前置决策（来自 R4）：生产闸走 `BuildProduction`（含 `W24S5ProductionGateRequest`）还是新增等价受限入口；由主 agent 在派发时定版。
+- 验收标准：一个样例 recipe 端到端产出 Prefab；越界路径写入被拒绝且有测试（含 Windows 保留名等负向用例）。
 
 **F3 Jobs 串行队列**（依赖 P0-1、R3）
 - 目标：实现单并发持久化任务队列 + Desktop Jobs 页（列表/进度/取消），复用 Protocol Job DTO。
@@ -176,13 +178,14 @@ flowchart LR
 | P0-1 | DONE | 开发子 agent | 初审 PASS（merge `3375a8fe`，构建 0/0，测试 450/450）；O3 复跑作独立复核 |
 | P0-2 | DONE | 开发子 agent | 主 agent 验收 PASS（5 文件纯追加标注，历史数字零改动）；范围外遗留（stage-notes/ADR-004/ai-workflow README 指针）追加为 P0-2b |
 | R1 | DONE | 开发子 agent | 独立审计 PASS（映射 19 项属实、无阻塞问题）；3 条建议已微调完毕（v0.2），REQ-001 已合入 |
-| R2 | DELIVERED | 开发子 agent | 审计中（REQ-002 已交付，20 条需求/6 条验收场景） |
-| R3 | DELIVERED | 开发子 agent | 审计中（REQ-003 已交付，18 条需求/6 条验收场景） |
-| R4 | DISPATCHED | 开发子 agent | 待验收 |
+| R2 | DONE | 开发子 agent | 独立审计 PASS；4 条建议已微调（v0.2），REQ-002 已合入 |
+| R3 | DONE | 开发子 agent | 独立审计 PASS；同轮微调（v0.2），REQ-003 已合入 |
+| R4 | DELIVERED | 开发子 agent | 审计中（ADR-007 PROPOSED，a–g 七项裁决完成） |
 | O1 | DONE | 开发子 agent | 主 agent 验收 PASS（.gitignore 补齐、空目录清理、退役清单交付；worktree/分支退役延后到 O2/O3 合并后执行，`codex/m1`、`codex/m2` 两个未并入分支暂保留） |
 | O2 | DONE | 开发子 agent | 主 agent 验收 PASS（脚本三条路径实测；`-SkipLockedRestore` 为 O3 修复前过渡开关，O3 合并后停用） |
 | O3 | DISPATCHED | 开发子 agent | 待验收（独立 worktree，兼作 P0-1 独立复核；含 baseline 锁文件漂移修复） |
-| F1–F6 | BLOCKED | — | — |
+| F1 | DISPATCHED | 开发子 agent | 独立 worktree 开发中 |
+| F2–F6 | BLOCKED | — | — |
 
 已知非阻塞遗留（P0-1 交付报告）：①`services/VFXComposer.Broker.HandleProbe` 与 `services/VFXComposer.Broker.Tests` 的 `packages.lock.json` 自 baseline 起与引用图不同步（归入 O3）；②`.gitignore` 未覆盖 `tests/**` 构建产物（归入 O1）。
 
