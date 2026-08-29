@@ -1,6 +1,6 @@
 # W24 work-package registry
 
-> **CURRENT REGISTRY — U6 FINAL GO / A0 AI ENDPOINT REBASE (2026-08-29).** ADR-005's USER_MODE route is closed at `100/100`; ADR-006 governs the separate post-U6 AI chain with user-owned opaque endpoints. Every pre-U0 package entry retained later in this file is historical provenance, not an active contract, dependency, blocker, or audit queue.
+> **CURRENT REGISTRY — U6 FINAL GO / A1 FINAL ACCEPTED / A2+A3 ACTIVE (2026-08-29).** ADR-005's USER_MODE route is closed at `100/100`; ADR-006 governs the separate post-U6 AI chain with user-owned opaque endpoints. A1 is closed at final acceptance; A2 and A3 are the only active, zero-overlap channel packages. Every pre-U0 package entry retained later in this file is historical provenance, not an active contract, dependency, blocker, or audit queue.
 >
 > Normative tokens: `USER_MODE_LOCAL_CREATIVE_TOOL_V1` and `AI_PROVIDER_TWO_CHANNEL_ROUTING_V1`.
 
@@ -19,14 +19,14 @@ Exact DAG: `U0 -> U1`; `U0 -> U2`; `U1 + U2 -> U3`; `U3 -> U4 -> U5 -> U6`.
 | U6 `WP-USERMODE-FINAL-AUDIT` | `CLOSED — FINAL GO — P0/P1/P2=0/0/0`; accepted receipt `u6-independent-final-audit-20260828T232640380Z`. | USER_MODE final closeout; no source repair or reopening. |
 | USER_MODE main architecture | `CLOSED — 100/100`. | ADR-005 scope is complete; no AI-provider capability follows from this accounting. |
 | A0 `AI_PROVIDER_TWO_CHANNEL_ROUTING` | `CLOSED — DOCS ONLY`; endpoint contract rebased by this seven-document decision update. | Existing U6 evidence only and no project-gate rerun. |
-| A1 `AI_PROVIDER_FOUNDATION` | `ACTIVE` — sole active package. | Exact owned roots only; rework to `OpaqueEndpoint`, configuration/security/import/Gateway foundation, no real Chat/Image HTTP. |
-| A2 `AI_CHAT_ADAPTER` | `NOT STARTED`. | Waits for closed A1. |
-| A3 `AI_IMAGE_ADAPTER` | `NOT STARTED`. | Waits for closed A1. |
+| A1 `AI_PROVIDER_FOUNDATION` | `CLOSED — FINAL ACCEPTED — GO`; source commit `698e770a35062cc4135872147a401dce40adcb51`. | Exact `OpaqueEndpoint` configuration foundation only; no real Chat/Image HTTP. |
+| A2 `WP-AI-CHAT-CHANNEL` | `ACTIVE`. | Only `Chat/**` Contracts/Providers/Tests; request-time chat transport, no shared file. |
+| A3 `WP-AI-IMAGE-CHANNEL` | `ACTIVE`. | Only `Image/**` Contracts/Providers/Tests; request-time image transport, no shared file. |
 | A4 `AI_DESKTOP_WIRING` | `NOT STARTED`. | Waits for closed A2 and A3. |
 | A5 `AI_MOCK_E2E` | `NOT STARTED`. | Waits for closed A4. |
 | A6 `AI_INDEPENDENT_FINAL_AUDIT` | `NOT STARTED`. | Waits for closed A5. |
 
-U1 through U6 are closed/integrated, scoped GO, or final GO. A0 is closed. `A1 — AI_PROVIDER_FOUNDATION` is the sole active package; its earlier `NO-GO — P0/P1/P2=0/0/1` is superseded by the changed user endpoint requirement and must be reworked/revalidated. A2-A6 are not started and there are no other current implementation nodes.
+U1 through U6 are closed/integrated, scoped GO, or final GO. A0 and A1 are closed. Exactly A2 and A3 are active, are independently owned, and share no writable source/test/contract file; A4-A6 are `NOT STARTED` and there are no other current implementation nodes.
 
 ### U3 exact closed ownership and evidence
 
@@ -102,9 +102,9 @@ The accepted scope is the ADR-005 local ordinary-user route only: Protocol-only 
 
 The closed U6 result makes the ADR-005 USER_MODE main architecture `100/100`. It preserves the default Broker no-argument behavior `W24FS001`/exit `23`; it does not authorize an AI provider, credential, network request, image cache, Desktop wiring, or Unity/project mutation.
 
-The formal AI DAG is `A0 -> A1 -> (A2 || A3) -> A4 -> A5 -> A6`. A0 is closed; it has no implementation bytes and uses the existing U6 unified-gate evidence only. A1 is uniquely active; A2-A6 are not started. ADR-006's mandatory dual-channel policy requires `ChatLlm` for all LLM/conversation work and `ImageGeneration` for all image generation, with one explicit profile/capability/model per channel, Origin metadata distinct from protocol, and zero fallback. Endpoint is a user-owned `OpaqueEndpoint` string, so local configuration save/resolve is deliberately separate from request-time adapter usability and never authorizes a network request.
+The formal AI DAG is `A0 -> A1 -> (A2 || A3) -> A4 -> A5 -> A6`. A0 and A1 are closed; A2 and A3 are concurrently `ACTIVE`; A4-A6 are `NOT STARTED`. ADR-006's mandatory dual-channel policy requires `ChatLlm` for all LLM/conversation work and `ImageGeneration` for all image generation, with one explicit profile/capability/model per channel, Origin metadata distinct from protocol, and zero fallback. Endpoint is a user-owned `OpaqueEndpoint` string, so local configuration save/resolve is deliberately separate from request-time adapter usability and never authorizes a network request.
 
-`A1 — AI_PROVIDER_FOUNDATION` owns exactly and only:
+`A1 — AI_PROVIDER_FOUNDATION` closed with exactly these owned paths:
 
 1. `src/VFXComposer.AI.Contracts/**`
 2. `src/VFXComposer.AI.Providers/**`
@@ -115,9 +115,25 @@ The formal AI DAG is `A0 -> A1 -> (A2 || A3) -> A4 -> A5 -> A6`. A0 is closed; i
 7. `eng/run-phase2-gate.ps1`
 8. `eng/phase2-baseline-roots.json`
 
-`eng/verify-phase2-schemas.py` is the only additional A1 file beyond the three roots, schema, solution, runner, and baseline. Any other path is forbidden. A central package-management change or an external `.csproj` dependency is an immediate STOP. The first A1 writer is `STOPPED — ZERO WRITES` pending its rework from endpoint admission to `OpaqueEndpoint`; the old `NO-GO — P0/P1/P2=0/0/1` is superseded by the user requirement rather than accepted. A1 must make the schema/storage layer validate only structure, type, version, duplicate/unknown fields, and bounded storage size; it must save and resolve endpoint text unchanged regardless of URI-like syntax, scheme, host, port, user-info, query, fragment, or upstream legality. A1 may implement only contracts/profile/channel bindings/schema, strict versioned atomic JSON with `.bak`, DPAPI CurrentUser SecretRef storage, configuration fingerprint, health/adapter-registry skeletons, Tom non-sensitive draft import, resolver, and `IAiGateway`; real Chat/Image HTTP is prohibited. Required tests include arbitrary bounded endpoint save/resolve, structural/size failure, zero network invocation during configuration acceptance, request-time A2/A3 parsing/network/upstream error redaction with no write-back/no fallback, channel/capability fail-closed behavior, DPAPI/backup behavior, Tom secret exclusion, internal boundary, and redaction. `SecretRef` remains recommended but URL-embedded credentials cannot reject a profile; normal observability/default export must redact them, while explicit edit and warned explicit configuration export are permitted.
+`eng/verify-phase2-schemas.py` was the only additional A1 file beyond the three roots, schema, solution, runner, and baseline. The accepted source commit is `698e770a35062cc4135872147a401dce40adcb51`. Its `OpaqueEndpoint` storage/resolution is exact for arbitrary bounded text, including URI-like syntax, scheme, host, port, user-info, query, fragment, and non-URI-like text; only structure/type/version/duplicate/unknown-field/size checks remain local. Acceptance invokes no network and no local result authorizes a request. Final evidence is AI `23/23 × 3`, schema opaque-endpoint vectors `9`, and receipt `D:\wt\i2s-a1\.codex_tmp\a1-phase2-gate-092b7d6b3aeb4246928688323771e8b8` with `167/167` self-excluded receipt entries, Release solution `0 warnings / 0 errors`, frozen-root replay `0`, and residue `0`. A1 remains closed; no A2/A3 work may modify any A1 path.
 
-After this publication the registry is `FINAL STOPPED` for U6/A0. Only A1 can proceed.
+`A2 — WP-AI-CHAT-CHANNEL` owns exactly and only:
+
+1. `src/VFXComposer.AI.Contracts/Chat/**`
+2. `src/VFXComposer.AI.Providers/Chat/**`
+3. `src/VFXComposer.AI.Tests/Chat/**`
+
+At request time A2 interprets the selected channel protocol and uses the stored full endpoint URL unchanged: no normalization, modification, path append, or concatenation. It may support explicit OpenAI Chat/Responses, Anthropic Messages, Gemini GenerateContent, and OpenAI-compatible requests only. Authorization is constructed per request, never through `DefaultHeaders`; fallback is prohibited; cancellation, timeout, `429`, malformed request/response, parser, network, and upstream failures must be typed and redacted; tests use mock handlers only.
+
+`A3 — WP-AI-IMAGE-CHANNEL` owns exactly and only:
+
+1. `src/VFXComposer.AI.Contracts/Image/**`
+2. `src/VFXComposer.AI.Providers/Image/**`
+3. `src/VFXComposer.AI.Tests/Image/**`
+
+A3 may make only OpenAI Images-compatible requests at the stored full endpoint exactly as supplied. It normalizes `b64` and URL results. URL download must never forward authorization and must enforce redirect, MIME, byte, dimension, and hash limits before a private temporary artifact is retained. It must not write Unity/project state, retry automatically, or add paid CI.
+
+The A2 and A3 root sets are disjoint: no common file, `.csproj`, lock, solution, runner, or baseline may change. The existing SDK glob must compile and test each scoped subtree; an insufficient glob is STOP, not authority to edit a project file. Both packages require targeted tests plus a locked Release solution build. Neither independently updates the runner/baseline or runs an independent gate; A4 is the first integration node allowed to update the runner/baseline/gate. A4-A6 remain `NOT STARTED`.
 
 ## Current trust and reuse rules
 
