@@ -116,7 +116,17 @@
         }
       },
       "vfxcomposer.broker.handleprobe": {
-        "type": "Project"
+        "type": "Project",
+        "dependencies": {
+          "VFXComposer.Broker": "[1.0.0, )",
+          "VFXComposer.Protocol": "[1.0.0, )"
+        }
+      },
+      "vfxcomposer.client": {
+        "type": "Project",
+        "dependencies": {
+          "VFXComposer.Protocol": "[1.0.0, )"
+        }
       },
       "vfxcomposer.protocol": {
         "type": "Project"
