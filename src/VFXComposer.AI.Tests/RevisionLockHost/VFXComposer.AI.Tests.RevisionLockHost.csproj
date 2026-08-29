@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <AssemblyName>VFXComposer.AI.Tests.RevisionLockHost</AssemblyName>
+    <RootNamespace>VFXComposer.AI.Tests.RevisionLockHost</RootNamespace>
+    <Description>Isolated process host for AI provider revision-lock integration tests.</Description>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\VFXComposer.AI.Contracts\VFXComposer.AI.Contracts.csproj" />
+    <ProjectReference Include="..\..\VFXComposer.AI.Providers\VFXComposer.AI.Providers.csproj" />
+  </ItemGroup>
+</Project>

@@ -1,7 +1,7 @@
 {
   "formatVersion": 1,
   "algorithm": "SHA-256 of UTF-8(no BOM) lines: lowercase file hash, two spaces, repository-relative forward-slash path, LF; paths sorted before row construction with StringComparer.Ordinal; bin/obj segments excluded",
-  "capturedUtc": "2026-08-28T14:21:00.7105623Z",
+  "capturedUtc": "2026-08-29T01:39:03.8009550Z",
   "roots": [
     {
       "path": "src/VFXComposer.Protocol",
@@ -14,6 +14,24 @@
       "kind": "directory",
       "count": 26,
       "sha256": "c4d119e33aa57327574425fb1aac95df3dcd6b4779830770e5b8fea4d0866a16"
+    },
+    {
+      "path": "src/VFXComposer.AI.Contracts",
+      "kind": "directory",
+      "count": 7,
+      "sha256": "4f473d0a2abb188995de5a4ddb38e0053ad7e045d6d71606541847f336f20747"
+    },
+    {
+      "path": "src/VFXComposer.AI.Providers",
+      "kind": "directory",
+      "count": 16,
+      "sha256": "3e2f4ee3d00b2aadb03710f3df0eeb2b1c90bc79a539192d0257d8f36261a011"
+    },
+    {
+      "path": "src/VFXComposer.AI.Tests",
+      "kind": "directory",
+      "count": 13,
+      "sha256": "dbdf4fa74fa80d9943342094d4a01e447be7c42ad94393fafd8ab71d7806312c"
     },
     {
       "path": "src/VFXComposer.Client",
@@ -30,8 +48,8 @@
     {
       "path": "docs/schemas/desktop",
       "kind": "directory",
-      "count": 36,
-      "sha256": "0e41683a2c93c832e5ea6d86667c726eaad3ce65336ce25bb1d9be6b5cb47538"
+      "count": 37,
+      "sha256": "167541eb25f76ba05a43fce93fd9e3b7c24a89294e868523845a337ff79de10c"
     },
     {
       "path": "apps/VFXComposer.Desktop",
@@ -91,7 +109,7 @@
       "path": "VFXComposer.sln",
       "kind": "file",
       "count": 1,
-      "sha256": "e799fb4111c427084a3e636f6e17ecd9417ebebe35e2a08a680ae6c5a68e2961"
+      "sha256": "1d6016418b2537567f25c75c27f6a36f80d13c624a0777355685170280ccc58c"
     }
   ]
 }
