@@ -175,7 +175,7 @@ flowchart LR
 |---|---|---|---|
 | P0-1 | DONE | 开发子 agent | 初审 PASS（merge `3375a8fe`，构建 0/0，测试 450/450）；O3 复跑作独立复核 |
 | P0-2 | DONE | 开发子 agent | 主 agent 验收 PASS（5 文件纯追加标注，历史数字零改动）；范围外遗留（stage-notes/ADR-004/ai-workflow README 指针）追加为 P0-2b |
-| R1 | DONE | 开发子 agent | 独立审计 PASS（映射 19 项属实、无阻塞问题）；3 条非阻塞建议已派发微调 |
+| R1 | DONE | 开发子 agent | 独立审计 PASS（映射 19 项属实、无阻塞问题）；3 条建议已微调完毕（v0.2），REQ-001 已合入 |
 | R2 | DELIVERED | 开发子 agent | 审计中（REQ-002 已交付，20 条需求/6 条验收场景） |
 | R3 | DELIVERED | 开发子 agent | 审计中（REQ-003 已交付，18 条需求/6 条验收场景） |
 | R4 | DISPATCHED | 开发子 agent | 待验收 |
