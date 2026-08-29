@@ -15,5 +15,6 @@
     <ProjectReference Include="..\..\src\VFXComposer.Protocol\VFXComposer.Protocol.csproj" />
     <ProjectReference Include="..\..\src\VFXComposer.AI.Contracts\VFXComposer.AI.Contracts.csproj" />
     <ProjectReference Include="..\..\src\VFXComposer.AI.Providers\VFXComposer.AI.Providers.csproj" />
+    <ProjectReference Include="..\..\src\VFXComposer.Jobs\VFXComposer.Jobs.csproj" />
   </ItemGroup>
 </Project>

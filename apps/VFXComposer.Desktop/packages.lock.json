@@ -200,6 +200,12 @@
           "VFXComposer.Protocol": "[1.0.0, )"
         }
       },
+      "vfxcomposer.jobs": {
+        "type": "Project",
+        "dependencies": {
+          "VFXComposer.Protocol": "[1.0.0, )"
+        }
+      },
       "vfxcomposer.protocol": {
         "type": "Project"
       }
