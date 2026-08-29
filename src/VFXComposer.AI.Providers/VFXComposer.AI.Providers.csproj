@@ -1,0 +1,11 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <AssemblyName>VFXComposer.AI.Providers</AssemblyName>
+    <RootNamespace>VFXComposer.AI.Providers</RootNamespace>
+    <Description>Fail-closed local AI provider configuration foundation for VFX Composer.</Description>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\VFXComposer.AI.Contracts\VFXComposer.AI.Contracts.csproj" />
+  </ItemGroup>
+</Project>

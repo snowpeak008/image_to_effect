@@ -1,0 +1,239 @@
+using System.Reflection;
+using System.Text;
+using System.Text.Json;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using VFXComposer.AI.Contracts;
+using VFXComposer.AI.Providers;
+
+namespace VFXComposer.AI.Tests;
+
+[TestClass]
+public sealed class ProviderSafetySurfaceTests
+{
+    [TestMethod]
+    public void ContractAssemblyHasNoProviderTransportFileBrokerOrUnityDependency()
+    {
+        var references = typeof(AiProviderSettings).Assembly.GetReferencedAssemblies()
+            .Select(static reference => reference.Name ?? string.Empty)
+            .ToArray();
+        Assert.IsFalse(references.Any(static name => name.Contains("Http", StringComparison.OrdinalIgnoreCase)));
+        Assert.IsFalse(references.Any(static name => name.Contains("Broker", StringComparison.OrdinalIgnoreCase)));
+        Assert.IsFalse(references.Any(static name => name.Contains("Unity", StringComparison.OrdinalIgnoreCase)));
+        Assert.IsFalse(references.Any(static name => name.Contains("Providers", StringComparison.OrdinalIgnoreCase)));
+    }
+
+    [TestMethod]
+    public void GatewayPerformsNoTransportWhenConfigurationFailsClosed()
+    {
+        using var directory = new A1TestDirectory();
+        var store = new ProviderConfigurationStore(System.IO.Path.Combine(directory.Path, "providers.json"));
+        var gateway = new ConfigurationAiGateway(
+            store,
+            A1TestSupport.Resolver(new ProviderHealthRegistry(), secretReadable: false));
+        A1TestSupport.Throws(
+            AiErrorCode.ConfigurationUnavailable,
+            () => gateway.ChatAsync(new ChatRequest("correlation-1", [new ChatMessage(ChatRole.User, "synthetic prompt")])).GetAwaiter().GetResult());
+    }
+
+    [TestMethod]
+    public void SystemNetHttpSurfaceIsConfinedToChatAndImageProviderNamespaces()
+    {
+        var offenders = typeof(ConfigurationAiGateway).Assembly
+            .GetTypes()
+            .Where(type => !IsTransportNamespace(type.Namespace))
+            .Where(TypeReferencesSystemNetHttp)
+            .Select(type => type.FullName ?? type.Name)
+            .Order(StringComparer.Ordinal)
+            .ToArray();
+
+        CollectionAssert.AreEqual(Array.Empty<string>(), offenders);
+    }
+
+    [TestMethod]
+    public void RedactionAndDtoFormattingNeverExposeSyntheticSensitiveValues()
+    {
+        const string prompt = "synthetic prompt should not escape";
+        const string endpoint = "https://user:synthetic-user-info@provider.example.invalid/private?query=synthetic-query#synthetic-fragment";
+        var settings = A1TestSupport.Settings(endpointValue: endpoint);
+        var configuration = A1TestSupport.Read(settings);
+        var profile = configuration.Settings.Profiles[0];
+        var route = new ResolvedProviderRoute(
+            AiChannel.ChatLlm,
+            profile,
+            profile.Capabilities[0],
+            configuration.Settings.ChannelBindings[0],
+            configuration.Fingerprint);
+
+        Assert.AreEqual(ProviderRedaction.Redacted, ProviderRedaction.Redact(prompt));
+        var endpointSummary = ProviderRedaction.RedactEndpoint(profile.Endpoint);
+        Assert.IsTrue(endpointSummary.Contains("length=", StringComparison.Ordinal));
+        Assert.IsTrue(endpointSummary.Contains("fingerprint=sha256:", StringComparison.Ordinal));
+        Assert.IsFalse(endpointSummary.Contains(endpoint, StringComparison.Ordinal));
+        Assert.IsFalse(endpointSummary.Contains("synthetic-user-info", StringComparison.Ordinal));
+        Assert.IsFalse(endpointSummary.Contains("synthetic-query", StringComparison.Ordinal));
+        Assert.IsFalse(route.ToString().Contains(endpoint, StringComparison.Ordinal));
+        Assert.IsFalse(profile.ToString().Contains(endpoint, StringComparison.Ordinal));
+        Assert.IsFalse(new ChatRequest("correlation-2", [new ChatMessage(ChatRole.User, prompt)]).ToString().Contains(prompt, StringComparison.Ordinal));
+    }
+
+    [TestMethod]
+    public void TomImportUsesTheRealFixedShapeSkipsSensitiveFieldsAndKeepsRelayAutoAsAConfirmationOnlySuggestion()
+    {
+        var importer = new TomProviderDraftImporter();
+        var fixtures = new[]
+        {
+            (Type: "openai", Origin: ProviderOrigin.Official, BaseUrl: "https://official.example.invalid/v1/", Model: "chat-model-1"),
+            (Type: "relay-api", Origin: ProviderOrigin.Relay, BaseUrl: "https://relay.example.invalid/v1/", Model: "chat-model-2"),
+            (Type: "openai-compatible", Origin: ProviderOrigin.Friend, BaseUrl: "https://friend.example.invalid/v1/", Model: "chat-model-3"),
+            (Type: "openai-codex-login", Origin: ProviderOrigin.Subscription, BaseUrl: string.Empty, Model: "codex"),
+            (Type: "custom", Origin: ProviderOrigin.Custom, BaseUrl: "https://custom.example.invalid/v1/", Model: "chat-model-5"),
+        };
+
+        foreach (var fixture in fixtures)
+        {
+            var source = TomFixture(fixture.Type, fixture.BaseUrl, fixture.Model, relayProtocol: "auto");
+            try
+            {
+                if (fixture.Origin == ProviderOrigin.Relay)
+                {
+                    A1TestSupport.Throws(
+                        AiErrorCode.ImportConfirmationRequired,
+                        () => importer.Import(source, relayProtocolConfirmed: false));
+                    continue;
+                }
+
+                var draft = importer.Import(source, relayProtocolConfirmed: false);
+                Assert.AreEqual(fixture.Origin, draft.OriginSuggestion, fixture.Type);
+                Assert.AreEqual(fixture.BaseUrl, draft.Endpoint.Value, fixture.Type);
+                Assert.AreEqual(fixture.Model, draft.ModelId, fixture.Type);
+                Assert.AreEqual(fixture.Origin == ProviderOrigin.Subscription, draft.RequiresEndpointConfiguration, fixture.Type);
+                Assert.IsFalse(draft.RequiresRelayProtocolConfirmation, fixture.Type);
+                Assert.AreEqual(
+                    null,
+                    draft.RelayProtocolSuggestion,
+                    fixture.Type);
+                Assert.IsFalse(draft.ToString().Contains("synthetic-never-import", StringComparison.Ordinal));
+                Assert.IsFalse(draft.ToString().Contains("synthetic-command-path", StringComparison.Ordinal));
+            }
+            finally
+            {
+                System.Security.Cryptography.CryptographicOperations.ZeroMemory(source);
+            }
+        }
+
+        var relay = TomFixture("relay-api", "https://relay.example.invalid/v1/", "chat-model-relay", relayProtocol: "auto");
+        try
+        {
+            var confirmedRelay = importer.Import(relay, relayProtocolConfirmed: true);
+            Assert.IsFalse(confirmedRelay.RequiresRelayProtocolConfirmation);
+            Assert.AreEqual("https://relay.example.invalid/v1/", confirmedRelay.Endpoint.Value);
+            Assert.AreEqual("auto", confirmedRelay.RelayProtocolSuggestion);
+        }
+        finally
+        {
+            System.Security.Cryptography.CryptographicOperations.ZeroMemory(relay);
+        }
+
+        var draftPropertyNames = typeof(TomProviderDraft).GetProperties(BindingFlags.Public | BindingFlags.Instance)
+            .Select(static property => property.Name)
+            .ToArray();
+        Assert.IsFalse(draftPropertyNames.Any(static name =>
+            name.Contains("ApiKey", StringComparison.OrdinalIgnoreCase) ||
+            name.Contains("Command", StringComparison.OrdinalIgnoreCase) ||
+            name.Contains("Verification", StringComparison.OrdinalIgnoreCase)));
+    }
+
+    [TestMethod]
+    public void TomImport_PreservesOpaqueBaseUrlWithoutUriParsing()
+    {
+        const string baseUrl = "  custom+relay://user:token@[2001:db8::not-an-ipv6]:99999/relative?query=secret#fragment  ";
+        var source = TomFixture("custom", baseUrl, "chat-model-opaque", relayProtocol: "auto");
+        try
+        {
+            var draft = new TomProviderDraftImporter().Import(source, relayProtocolConfirmed: false);
+            Assert.AreEqual(baseUrl, draft.Endpoint.Value);
+            Assert.IsFalse(draft.RequiresEndpointConfiguration);
+            Assert.IsFalse(draft.ToString().Contains("query=secret", StringComparison.Ordinal));
+        }
+        finally
+        {
+            System.Security.Cryptography.CryptographicOperations.ZeroMemory(source);
+        }
+    }
+
+    private static byte[] TomFixture(string type, string baseUrl, string model, string relayProtocol)
+    {
+        var json = $$"""
+        {
+          "Id":"fixture-{{type}}",
+          "Type":"{{type}}",
+          "DisplayName":"{{type}} fixture",
+          "Enabled":true,
+          "BaseUrl":{{JsonSerializer.Serialize(baseUrl)}},
+          "ApiKeyProtected":"synthetic-never-import",
+          "DefaultModel":"{{model}}",
+          "CommandPath":"synthetic-command-path",
+          "RelayWebsiteName":"synthetic-relay-site",
+          "RelayProtocol":"{{relayProtocol}}",
+          "RelayDetectionSummary":"synthetic-detection",
+          "RelayDetectionConfidence":99,
+          "TimeoutSeconds":30,
+          "UseJsonSchema":true,
+          "SaveRawResponse":true,
+          "VerificationAvailable":true,
+          "VerificationSignature":"synthetic-verification-signature",
+          "VerificationMessage":"synthetic-verification-message",
+          "LastVerifiedAtUtc":"2026-08-28T00:00:00Z"
+        }
+        """;
+        return Encoding.UTF8.GetBytes(json);
+    }
+
+    private static bool IsTransportNamespace(string? namespaceName) =>
+        string.Equals(namespaceName, "VFXComposer.AI.Providers.Chat", StringComparison.Ordinal) ||
+        string.Equals(namespaceName, "VFXComposer.AI.Providers.Image", StringComparison.Ordinal);
+
+    private static bool TypeReferencesSystemNetHttp(Type type)
+    {
+        const BindingFlags Members =
+            BindingFlags.Instance |
+            BindingFlags.Static |
+            BindingFlags.Public |
+            BindingFlags.NonPublic |
+            BindingFlags.DeclaredOnly;
+
+        if (IsSystemNetHttp(type.BaseType) || type.GetInterfaces().Any(IsSystemNetHttp))
+        {
+            return true;
+        }
+
+        if (type.GetFields(Members).Any(field => IsSystemNetHttp(field.FieldType)) ||
+            type.GetProperties(Members).Any(property => IsSystemNetHttp(property.PropertyType)))
+        {
+            return true;
+        }
+
+        return type.GetMethods(Members).Any(method =>
+            IsSystemNetHttp(method.ReturnType) || method.GetParameters().Any(parameter => IsSystemNetHttp(parameter.ParameterType)));
+    }
+
+    private static bool IsSystemNetHttp(Type? type)
+    {
+        if (type is null)
+        {
+            return false;
+        }
+
+        if (type.IsByRef || type.IsPointer || type.IsArray)
+        {
+            return IsSystemNetHttp(type.GetElementType());
+        }
+
+        if ((type.FullName ?? type.Name).StartsWith("System.Net.Http.", StringComparison.Ordinal))
+        {
+            return true;
+        }
+
+        return type.IsGenericType && type.GetGenericArguments().Any(IsSystemNetHttp);
+    }
+}

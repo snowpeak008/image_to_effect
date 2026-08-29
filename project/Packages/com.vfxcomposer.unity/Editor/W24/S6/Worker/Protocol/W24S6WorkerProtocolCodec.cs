@@ -26,6 +26,10 @@ namespace VFXComposer.Editor.W24.S6.Worker.Protocol
 #if UNITY_INCLUDE_TESTS
         internal const string RevokeAcknowledgementKind = "worker.project.handle.revoke.ack";
 #endif
+        internal const string LocatorKind = "worker.project.locator";
+#if UNITY_INCLUDE_TESTS
+        internal const string LocatorAcknowledgementKind = "worker.project.locator.ack";
+#endif
         internal const string HandleEncoding = "win-handle-u64-lower-hex/1";
 #if UNITY_INCLUDE_TESTS
         internal const string GrantAccepted = "GRANT_ACCEPTED";
@@ -33,6 +37,7 @@ namespace VFXComposer.Editor.W24.S6.Worker.Protocol
         internal const string LeaseRevoked = "LEASE_REVOKED";
 #if UNITY_INCLUDE_TESTS
         internal const string HandlesClosed = "HANDLES_CLOSED";
+        internal const string LocatorAccepted = "LOCATOR_ACCEPTED";
 #endif
         internal const string GrantSelfHashType = "vfxcomposer.worker-project-handle-grant/1";
 #if UNITY_INCLUDE_TESTS
@@ -41,6 +46,10 @@ namespace VFXComposer.Editor.W24.S6.Worker.Protocol
         internal const string RevokeSelfHashType = "vfxcomposer.worker-project-handle-revoke/1";
 #if UNITY_INCLUDE_TESTS
         internal const string RevokeAcknowledgementSelfHashType = "vfxcomposer.worker-project-handle-revoke-ack/1";
+#endif
+        internal const string LocatorSelfHashType = "vfxcomposer.worker-project-locator/1";
+#if UNITY_INCLUDE_TESTS
+        internal const string LocatorAcknowledgementSelfHashType = "vfxcomposer.worker-project-locator-ack/1";
 #endif
         internal const int MaximumMessageBytes = 65536;
 
@@ -77,12 +86,27 @@ namespace VFXComposer.Editor.W24.S6.Worker.Protocol
             "reasonCode", "selfHash"
         };
 
+        private static readonly string[] LocatorFields =
+        {
+            "protocolVersion", "messageKind", "requestId", "registeredProjectId",
+            "projectIdentity", "volumeIdentity", "repositoryIdentity", "projectRootIdentity",
+            "brokerGeneration", "registrationGeneration", "enrollmentGeneration",
+            "workerSessionId", "workerProcessEpoch", "selfHash"
+        };
+
 #if UNITY_INCLUDE_TESTS
         private static readonly string[] RevokeAcknowledgementFields =
         {
             "protocolVersion", "messageKind", "requestId", "leaseId", "brokerGeneration",
             "leaseGeneration", "workerSessionId", "workerProcessEpoch", "grantSelfHash",
             "revokeSelfHash", "disposition", "selfHash"
+        };
+
+        private static readonly string[] LocatorAcknowledgementFields =
+        {
+            "protocolVersion", "messageKind", "requestId", "registeredProjectId",
+            "brokerGeneration", "registrationGeneration", "enrollmentGeneration",
+            "workerSessionId", "workerProcessEpoch", "locatorSelfHash", "disposition", "selfHash"
         };
 #endif
 
@@ -94,6 +118,11 @@ namespace VFXComposer.Editor.W24.S6.Worker.Protocol
         internal static W24S6WorkerProjectHandleRevoke DecodeRevoke(byte[] utf8Json)
         {
             return Decode(utf8Json, ParseRevoke);
+        }
+
+        internal static W24S6WorkerProjectLocator DecodeLocator(byte[] utf8Json)
+        {
+            return Decode(utf8Json, ParseLocator);
         }
 
 #if UNITY_INCLUDE_TESTS
@@ -161,6 +190,53 @@ namespace VFXComposer.Editor.W24.S6.Worker.Protocol
             byte[] utf8Json)
         {
             return Decode(utf8Json, ParseRevokeAcknowledgement);
+        }
+
+        internal static W24S6WorkerProjectLocatorAcknowledgement DecodeLocatorAcknowledgementForTests(
+            byte[] utf8Json,
+            W24S6WorkerProjectLocator locator)
+        {
+            if (locator == null) throw new W24S6WorkerProtocolException();
+            var acknowledgement = Decode(utf8Json, ParseLocatorAcknowledgement);
+            if (!MatchesLocator(locator, acknowledgement)) throw new W24S6WorkerProtocolException();
+            return acknowledgement;
+        }
+
+        internal static byte[] CreateLocatorAcknowledgementForTests(W24S6WorkerProjectLocator locator)
+        {
+            if (locator == null) throw new W24S6WorkerProtocolException();
+            try
+            {
+                var root = new JObject
+                {
+                    ["brokerGeneration"] = locator.BrokerGeneration,
+                    ["disposition"] = LocatorAccepted,
+                    ["enrollmentGeneration"] = locator.EnrollmentGeneration,
+                    ["locatorSelfHash"] = WriteTypedHash(locator.SelfHash, true),
+                    ["messageKind"] = LocatorAcknowledgementKind,
+                    ["protocolVersion"] = locator.ProtocolVersion,
+                    ["registeredProjectId"] = locator.RegisteredProjectId,
+                    ["registrationGeneration"] = locator.RegistrationGeneration,
+                    ["requestId"] = locator.RequestId,
+                    ["workerProcessEpoch"] = locator.WorkerProcessEpoch,
+                    ["workerSessionId"] = locator.WorkerSessionId
+                };
+                var bytes = Seal(
+                    root,
+                    LocatorAcknowledgementSelfHashType,
+                    "workerProcessEpoch",
+                    true);
+                DecodeLocatorAcknowledgementForTests(bytes, locator);
+                return bytes;
+            }
+            catch (W24S6WorkerProtocolException)
+            {
+                throw;
+            }
+            catch (Exception exception) when (IsExpectedFailure(exception))
+            {
+                throw new W24S6WorkerProtocolException();
+            }
         }
 
         internal static byte[] CreateGrantAcknowledgementForTests(
@@ -329,6 +405,30 @@ namespace VFXComposer.Editor.W24.S6.Worker.Protocol
                 selfHash);
         }
 
+        private static W24S6WorkerProjectLocator ParseLocator(JObject root)
+        {
+            RequireExactFields(root, LocatorFields);
+            RequireConstant(root, "protocolVersion", ProtocolVersion);
+            RequireConstant(root, "messageKind", LocatorKind);
+            var selfHash = RequireTypedHash(root, "selfHash", LocatorSelfHashType);
+            RequireSelfHash(root, selfHash, LocatorSelfHashType);
+            return new W24S6WorkerProjectLocator(
+                ProtocolVersion,
+                LocatorKind,
+                RequireToken(root, "requestId"),
+                RequireToken(root, "registeredProjectId"),
+                RequireTypedHash(root, "projectIdentity", ProjectIdentityType),
+                RequireTypedHash(root, "volumeIdentity", VolumeIdentityType),
+                RequireTypedHash(root, "repositoryIdentity", DirectoryIdentityType),
+                RequireTypedHash(root, "projectRootIdentity", DirectoryIdentityType),
+                RequireGeneration(root, "brokerGeneration"),
+                RequireGeneration(root, "registrationGeneration"),
+                RequireGeneration(root, "enrollmentGeneration"),
+                RequireToken(root, "workerSessionId"),
+                RequireToken(root, "workerProcessEpoch"),
+                selfHash);
+        }
+
 #if UNITY_INCLUDE_TESTS
         private static W24S6WorkerProjectHandleRevokeAcknowledgement ParseRevokeAcknowledgement(JObject root)
         {
@@ -350,6 +450,44 @@ namespace VFXComposer.Editor.W24.S6.Worker.Protocol
                 RequireTypedHash(root, "revokeSelfHash", RevokeSelfHashType),
                 RequireConstant(root, "disposition", HandlesClosed),
                 selfHash);
+        }
+
+        private static W24S6WorkerProjectLocatorAcknowledgement ParseLocatorAcknowledgement(JObject root)
+        {
+            RequireExactFields(root, LocatorAcknowledgementFields);
+            RequireConstant(root, "protocolVersion", ProtocolVersion);
+            RequireConstant(root, "messageKind", LocatorAcknowledgementKind);
+            var selfHash = RequireTypedHash(root, "selfHash", LocatorAcknowledgementSelfHashType);
+            RequireSelfHash(root, selfHash, LocatorAcknowledgementSelfHashType);
+            return new W24S6WorkerProjectLocatorAcknowledgement(
+                ProtocolVersion,
+                LocatorAcknowledgementKind,
+                RequireToken(root, "requestId"),
+                RequireToken(root, "registeredProjectId"),
+                RequireGeneration(root, "brokerGeneration"),
+                RequireGeneration(root, "registrationGeneration"),
+                RequireGeneration(root, "enrollmentGeneration"),
+                RequireToken(root, "workerSessionId"),
+                RequireToken(root, "workerProcessEpoch"),
+                RequireTypedHash(root, "locatorSelfHash", LocatorSelfHashType),
+                RequireConstant(root, "disposition", LocatorAccepted),
+                selfHash);
+        }
+
+        private static bool MatchesLocator(
+            W24S6WorkerProjectLocator locator,
+            W24S6WorkerProjectLocatorAcknowledgement acknowledgement)
+        {
+            return locator != null && acknowledgement != null &&
+                   string.Equals(locator.ProtocolVersion, acknowledgement.ProtocolVersion, StringComparison.Ordinal) &&
+                   string.Equals(locator.RequestId, acknowledgement.RequestId, StringComparison.Ordinal) &&
+                   string.Equals(locator.RegisteredProjectId, acknowledgement.RegisteredProjectId, StringComparison.Ordinal) &&
+                   locator.BrokerGeneration == acknowledgement.BrokerGeneration &&
+                   locator.RegistrationGeneration == acknowledgement.RegistrationGeneration &&
+                   locator.EnrollmentGeneration == acknowledgement.EnrollmentGeneration &&
+                   string.Equals(locator.WorkerSessionId, acknowledgement.WorkerSessionId, StringComparison.Ordinal) &&
+                   string.Equals(locator.WorkerProcessEpoch, acknowledgement.WorkerProcessEpoch, StringComparison.Ordinal) &&
+                   FixedTimeEquals(locator.SelfHash, acknowledgement.LocatorSelfHash);
         }
 
         private static bool MatchesGrant(
@@ -452,16 +590,42 @@ namespace VFXComposer.Editor.W24.S6.Worker.Protocol
         }
 
 #if UNITY_INCLUDE_TESTS
-        private static byte[] Seal(JObject root, string typeTag)
+        private static byte[] Seal(
+            JObject root,
+            string typeTag,
+            string selfHashBeforeField = null,
+            bool canonicalTypedHashOrder = false)
         {
             if (root["selfHash"] != null) throw new InvalidDataException();
-            root["selfHash"] = WriteTypedHash(ComputeTypedHash(typeTag, Canonicalize(root)));
+            var selfHash = WriteTypedHash(
+                ComputeTypedHash(typeTag, Canonicalize(root)),
+                canonicalTypedHashOrder);
+            if (selfHashBeforeField == null)
+            {
+                root["selfHash"] = selfHash;
+            }
+            else
+            {
+                var next = root.Property(selfHashBeforeField);
+                if (next == null) throw new InvalidDataException();
+                next.AddBeforeSelf(new JProperty("selfHash", selfHash));
+            }
             return StrictUtf8.GetBytes(root.ToString(Formatting.None));
         }
 
-        private static JObject WriteTypedHash(W24S6WorkerTypedHash hash)
+        private static JObject WriteTypedHash(
+            W24S6WorkerTypedHash hash,
+            bool canonicalPropertyOrder = false)
         {
             if (hash == null) throw new InvalidDataException();
+            if (canonicalPropertyOrder)
+            {
+                return new JObject
+                {
+                    ["digest"] = hash.Digest,
+                    ["typeTag"] = hash.TypeTag
+                };
+            }
             return new JObject
             {
                 ["typeTag"] = hash.TypeTag,

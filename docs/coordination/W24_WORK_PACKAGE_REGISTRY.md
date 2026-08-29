@@ -1,5 +1,160 @@
 # W24 work-package registry
 
+> **CURRENT REGISTRY — U6 FINAL GO / A0–A6 CLOSED — FINAL ACCEPTED/GO (2026-08-29).** ADR-005's USER_MODE route is closed at `100/100`; ADR-006's separate AI two-channel scope is accepted at `100/100`, with `P0/P1/P2=0/0/0`. No AI work package is active; a later AI requirement requires a new milestone. Every pre-U0 package entry retained later in this file is historical provenance, not an active contract, dependency, blocker, or audit queue.
+>
+> Normative tokens: `USER_MODE_LOCAL_CREATIVE_TOOL_V1` and `AI_PROVIDER_TWO_CHANNEL_ROUTING_V1`.
+
+## Current seven-node registry and integration status
+
+Exact DAG: `U0 -> U1`; `U0 -> U2`; `U1 + U2 -> U3`; `U3 -> U4 -> U5 -> U6`.
+
+| Node | Contract | Acceptance boundary |
+|---|---|---|
+| U0 `USER_MODE_ARCHITECTURE_SIMPLIFICATION` | `CLOSED`; docs-only architecture rebase in commit `53c1eeb4577a7067d8702fdea9866adf01733191`. | Architecture-only, no runtime GO. |
+| U1 `C3_W1_ACTUAL_UNITY_WORKER_CONNECTOR` | `CLOSED / INTEGRATED`; commit `48cd27103f8fe0c510770b1584b326f55fca3485`; declared U1 gates complete. | Strict schema/vector/codec parity and connector lifecycle negatives only; no second wire contract, Desktop integration, arbitrary path, project read, or authority. |
+| U2 `USER_MODE_CHILD_PIPE_SESSION` | `CLOSED / INTEGRATED`; commit `4b2f9a81a82911d68b8b64864ae05a03f9690b2e`; the initial audit recorded `P1=3`, and one remediation closed with `42/42` three times plus Broker `171/171`. | The remediation result is not represented as a second independent-audit verdict. No Service/SCM/privilege/SACL/loaded-image/enrollment claim. |
+| U3 `USER_PROJECT_SELECTION_READ_CONTAINMENT` | `CLOSED / INTEGRATED`; source commit `0123616e21d656b2374809a13aeb2769f0324e7e`, merged at `027ba07448dd6d4a0741a67937427cd2d37b2649`; exact seven files. | Broker `8/8`, Unity `9/9`, no-tests PASS, unified Broker `179/179`, manifest SHA-256 prefix `b716…`; zero Desktop project I/O and no privileged route. |
+| U4 `DESKTOP_USER_MODE_INTEGRATION` | `CLOSED / INTEGRATED`; source `2295b022348dc1514c72846533b86430bc4762ad`, integration `e1a6a9a37d3125717afbe795d283a07ffa242060`. | Accepted targets Protocol `108/108`, Client `14/14`, Broker `183/183`, Desktop `12/12`; r2 receipt manifest `b741fef9ab35a683363993cfeeb74abd2b1cbc26f5e3988574febfe1349a66eb`. |
+| U5 `WP-USERMODE-LOCAL-E2E` | `CLOSED / SCOPED GO — LOCAL_ORDINARY_USER_E2E`; source `365e7612b1be276aa74f4ab36f40482a0858e1ae`, integrated at `b9de2eb47e4e9d9ea29e0490b9dfc745a4dc307d`, exactly 17 owned files. | Independent acceptance `P0/P1/P2=0/0/0`; Protocol `108/108`, Client `16/16`, Broker `183/183`, LocalE2E `17/17`, real bundle and cleanup evidence accepted. |
+| U6 `WP-USERMODE-FINAL-AUDIT` | `CLOSED — FINAL GO — P0/P1/P2=0/0/0`; accepted receipt `u6-independent-final-audit-20260828T232640380Z`. | USER_MODE final closeout; no source repair or reopening. |
+| USER_MODE main architecture | `CLOSED — 100/100`. | ADR-005 scope is complete; no AI-provider capability follows from this accounting. |
+| A0 `AI_PROVIDER_TWO_CHANNEL_ROUTING` | `CLOSED — DOCS ONLY`; endpoint contract rebased by this seven-document decision update. | Existing U6 evidence only and no project-gate rerun. |
+| A1 `AI_PROVIDER_FOUNDATION` | `CLOSED — FINAL ACCEPTED — GO`; source commit `698e770a35062cc4135872147a401dce40adcb51`. | Exact `OpaqueEndpoint` configuration foundation only; no real Chat/Image HTTP. |
+| A2 `WP-AI-CHAT-CHANNEL` | `CLOSED — FINAL GO — P0/P1/P2=0/0/0`. | `55ee0993f71375ee0245cbee54815e7988fe04fd`, then redirect closure `2678cb62be9ac9ff5a05c9a5b605a75c60effb5c`; Chat `23/23 × 3`. |
+| A3 `WP-AI-IMAGE-CHANNEL` | `CLOSED — FINAL GO — P0/P1/P2=0/0/0`. | `c7c4adcfcc80c732bfaf87b0dfea11294b4af741`, then redirect closure `12b58ac69efe3175cf49a6ee129b3784b5b3da5c`; Image `20/20`. |
+| A4 `AI_DESKTOP_WIRING` | `CLOSED — FINAL GO — P0/P1/P2=0/0/0`. | `fc986d11`, `ffc9f609`, `cc5ff806`; receipt `186/186`; AI `77/77`, Desktop `22/22`, `423/423` total; root/residue `0`. |
+| A5 `AI_MOCK_E2E` | `CLOSED — FINAL ACCEPTED / GO — P0/P1/P2=0/0/0`. | `9152c7e6` + `14abb1d3`, merge `c6f9920f`; real-loopback `11/11`, receipt `a5-final-acceptance-14abb1d3-bootstrap`. |
+| A6 `WP-AI-PROVIDER-FINAL-AUDIT` | `CLOSED — FINAL ACCEPTED/GO — P0/P1/P2=0/0/0`. | Git-ignored receipt `.codex_tmp/a6-ai-provider-final-audit-20260829T000000Z/audit-summary.json`; `434/434`, schemas `23`, source stable/root `0`/residue `0`, Broker `W24FS001`/`23`, feed `39/39`, `18` unique ignored locks, tracked locks unchanged. |
+
+U1 through U6 are closed/integrated, scoped GO, or final GO. A0–A6 are closed; no AI work package is active. ADR-006 AI functionality is final accepted at `100/100`; later AI work requires a separately published milestone.
+
+### U3 exact closed ownership and evidence
+
+1. `services/VFXComposer.Broker/Registration/UserModeProjectSelectionStore.cs`
+2. `services/VFXComposer.Broker/Ipc/UserModeProjectReadSession.cs`
+3. `services/VFXComposer.Broker.Tests/UserModeProjectSelectionReadTests.cs`
+4. `project/Packages/com.vfxcomposer.unity/Editor/W24/S6/Worker/W24S6UserModeProjectReadSession.cs`
+5. `project/Packages/com.vfxcomposer.unity/Editor/W24/S6/Worker/W24S6UserModeProjectReadSession.cs.meta`
+6. `project/Packages/com.vfxcomposer.unity/Tests/EditMode/W24S6UserModeProjectReadSessionTests.cs`
+7. `project/Packages/com.vfxcomposer.unity/Tests/EditMode/W24S6UserModeProjectReadSessionTests.cs.meta`
+
+U3 is closed at source commit `0123616e21d656b2374809a13aeb2769f0324e7e` and integrated at `027ba07448dd6d4a0741a67937427cd2d37b2649`. The closeout records Broker `8/8`, Unity `9/9`, no-tests PASS, unified Broker `179/179`, and manifest SHA-256 prefix `b716…`. It remains limited to an ordinary explicit current-user local project path, a restricted session-bound locator, and a bounded Worker-only read.
+
+### U4 integrated closeout and retained exact ownership
+
+U4 is closed at source commit `2295b022348dc1514c72846533b86430bc4762ad` and integrated by `e1a6a9a37d3125717afbe795d283a07ffa242060`. Accepted targets are Protocol `108/108`, Client `14/14`, Broker `183/183`, and Desktop `12/12`. The r2 unified receipt records the Release solution build at `0 warnings / 0 errors`, schema `22 / 13 / 14 / 236`, default smoke `W24FS001`/exit `23`, and manifest `b741fef9ab35a683363993cfeeb74abd2b1cbc26f5e3988574febfe1349a66eb`.
+
+The stopped first U4 writer is rejected historical provenance only: it referenced a nonexistent `VFXComposer.UnityWorker.exe`, launched before selection, accepted before strict C2 ACK, and crossed ownership into `apps/VFXComposer.Desktop.Tests/NoProjectAccessSurfaceTests.cs`. Its isolated bytes are not accepted evidence.
+
+1. `src/VFXComposer.Protocol/Ipc/UserModeDesktopSessionCodec.cs`
+2. `src/VFXComposer.Protocol.Tests/UserModeDesktopSessionCodecTests.cs`
+3. `src/VFXComposer.Client/IUserModeDesktopSession.cs`
+4. `src/VFXComposer.Client/UserModeBrokerProcessHost.cs`
+5. `src/VFXComposer.Client/UserModeDesktopSession.cs`
+6. `src/VFXComposer.Client.Tests/UserModeDesktopSessionTests.cs`
+7. `services/VFXComposer.Broker/Program.cs`
+8. `services/VFXComposer.Broker/Ipc/UserModeDesktopBrokerHost.cs`
+9. `services/VFXComposer.Broker.Tests/UserModeDesktopBrokerHostTests.cs`
+10. `services/VFXComposer.Broker.Tests/UserModeBrokerProgramTests.cs`
+11. `apps/VFXComposer.Desktop/App.axaml.cs`
+12. `apps/VFXComposer.Desktop/Services/IProjectSelectionDialog.cs`
+13. `apps/VFXComposer.Desktop/Services/AvaloniaProjectSelectionDialog.cs`
+14. `apps/VFXComposer.Desktop/Services/AvaloniaUiDispatcher.cs`
+15. `apps/VFXComposer.Desktop/ViewModels/MainWindowViewModel.cs`
+16. `apps/VFXComposer.Desktop/Views/MainWindow.axaml`
+17. `apps/VFXComposer.Desktop.Tests/UserModeDesktopIntegrationTests.cs`
+18. `apps/VFXComposer.Desktop.Tests/UserModeProjectSelectionTests.cs`
+19. `apps/VFXComposer.Desktop.Tests/NoProjectAccessSurfaceTests.cs`
+
+U4 owns no csproj, solution, package, or lock file. Its retained component boundary is: no Worker before explicit selection; fixed `Path.Combine(AppContext.BaseDirectory, "VFXComposer.UnityWorker.exe")` path; selected canonical root as `WorkingDirectory`; U2 admission then locator send then strict C2 ACK before `SelectAccepted`; and old Worker/session disposal on reselect/restart. Desktop performs no project `File`/`Directory` access and no direct Worker connection. Its scripted peer was test-only and cannot prove real Worker/E2E. The no-argument Broker behavior remains `W24FS001` on stderr and exit `23`, with no listener. No Service/SCM, privilege, SACL, loaded-image, command, mutation, evidence, verdict, or authority is in scope.
+
+### U5 closed exact ownership and accepted evidence
+
+`WP-USERMODE-LOCAL-E2E` is closed and owns exactly these accepted files:
+
+1. `services/VFXComposer.UnityWorker/VFXComposer.UnityWorker.csproj`
+2. `services/VFXComposer.UnityWorker/packages.lock.json`
+3. `services/VFXComposer.UnityWorker/Program.cs`
+4. `services/VFXComposer.UnityWorker/UserModeUnityWorkerHost.cs`
+5. `services/VFXComposer.UnityWorker/UserModeWorkerBootstrapPeerCodec.cs`
+6. `tests/VFXComposer.LocalE2E.Tests/VFXComposer.LocalE2E.Tests.csproj`
+7. `tests/VFXComposer.LocalE2E.Tests/packages.lock.json`
+8. `tests/VFXComposer.LocalE2E.Tests/LocalUserModeE2EFixture.cs`
+9. `tests/VFXComposer.LocalE2E.Tests/LocalUserModeHappyPathTests.cs`
+10. `tests/VFXComposer.LocalE2E.Tests/LocalUserModeAdversarialTests.cs`
+11. `tests/VFXComposer.LocalE2E.Tests/LocalUserModeCrashRecoveryTests.cs`
+12. `tests/VFXComposer.LocalE2E.Tests/LocalUserModeContractTests.cs`
+13. `VFXComposer.sln`
+14. `eng/run-phase2-gate.ps1`
+15. `eng/phase2-baseline-roots.json`
+16. `src/VFXComposer.Client/UserModeDesktopSession.cs`
+17. `src/VFXComposer.Client.Tests/UserModeDesktopSessionTests.cs`
+
+U5 is closed at source `365e7612b1be276aa74f4ab36f40482a0858e1ae`, integrated at `b9de2eb47e4e9d9ea29e0490b9dfc745a4dc307d`, with independent acceptance `P0/P1/P2=0/0/0`. The receipt `U5-local-e2e-independent-acceptance-20260828T144950082Z` has exactly `121` manifest rows. It reports Protocol `108/108`, Client `16/16`, Broker `183/183`, LocalE2E `17/17`, Release solution `0 warnings / 0 errors`, schema PASS `22 total / 13 Phase 2 / 14 positive / 236 negative`, and empty-stdout/exact-`W24FS001`-stderr/exit-`23` Broker smoke.
+
+Frozen-root replay reports `0` mismatches. The residue snapshot reports `0` runtime processes, `0` VFX Composer named pipes, and `0` LocalE2E temporary roots, while explicitly remaining a point-in-time observation rather than proof of historical absence. Pre/post binding receipts establish that the staged LocalE2E Broker and Worker files match the tested product assemblies by SHA-256/MVID. This closes the previous 12/17 attempt and its five remediation items; those preliminary failures are historical provenance, not open U5 defects.
+
+The accepted scope is the ADR-005 local ordinary-user route only: Protocol-only Worker, public Desktop/Client -> Broker -> Worker execution, explicit selected-project binding, strict C2 ACK before bounded reads, strict nonce/session/generation/PID-epoch correlation, malformed/path/protocol rejection, crash/cancel/restart/partial-frame handling, and leak cleanup. The cross-user claim remains limited to `CurrentUserOnly` static/IL plus existing unit evidence, with no created-account or literal multi-user E2E claim. No same-user adversary, Service/SCM, privileged, production activation, authority, or installed-package claim is accepted.
+
+### U6 final frozen-byte audit closeout
+
+`WP-USERMODE-FINAL-AUDIT` is closed at `FINAL GO — P0/P1/P2=0/0/0`. Its accepted independent receipt is `u6-independent-final-audit-20260828T232640380Z`: the summary is passed, the source manifest has `16607` rows at SHA-256 `592bfeaab629e8cb9b100cf82fd3ce95c5be23972742501be34e57f1908a2284`, frozen-root replay reports `0` mismatches, and point-in-time process/pipe/owned-temp-root residue is empty. This final receipt supersedes the earlier failed U6 publication checkpoint.
+
+The closed U6 result makes the ADR-005 USER_MODE main architecture `100/100`. It preserves the default Broker no-argument behavior `W24FS001`/exit `23`; it does not authorize an AI provider, credential, network request, image cache, Desktop wiring, or Unity/project mutation.
+
+The formal AI DAG is `A0 -> A1 -> (A2 || A3) -> A4 -> A5 -> A6`. A0–A6 are closed; A2, A3, and A4 are final GO, A5 is `CLOSED — FINAL ACCEPTED / GO`, and A6 is `CLOSED — FINAL ACCEPTED/GO`, all at `P0/P1/P2=0/0/0`. ADR-006's mandatory dual-channel policy requires `ChatLlm` for all LLM/conversation work and `ImageGeneration` for all image generation, with independent explicit profile, secret, capability/model, and protocol per channel and zero fallback. Endpoint is arbitrary bounded user `OpaqueEndpoint` text, including empty and whitespace values, so local configuration save/resolve is deliberately separate from request-time-only interpretation and never authorizes a network request. The scope is final accepted at `100/100`; no AI work package is active.
+
+`A1 — AI_PROVIDER_FOUNDATION` closed with exactly these owned paths:
+
+1. `src/VFXComposer.AI.Contracts/**`
+2. `src/VFXComposer.AI.Providers/**`
+3. `src/VFXComposer.AI.Tests/**`
+4. `docs/schemas/desktop/vfxcomposer-ai-provider-config-v1.schema.json`
+5. `VFXComposer.sln`
+6. `eng/verify-phase2-schemas.py`
+7. `eng/run-phase2-gate.ps1`
+8. `eng/phase2-baseline-roots.json`
+
+`eng/verify-phase2-schemas.py` was the only additional A1 file beyond the three roots, schema, solution, runner, and baseline. The accepted source commit is `698e770a35062cc4135872147a401dce40adcb51`. Its `OpaqueEndpoint` storage/resolution is exact for arbitrary bounded text, including URI-like syntax, scheme, host, port, user-info, query, fragment, and non-URI-like text; only structure/type/version/duplicate/unknown-field/size checks remain local. Acceptance invokes no network and no local result authorizes a request. Final evidence is AI `23/23 × 3`, schema opaque-endpoint vectors `9`, and receipt `D:\wt\i2s-a1\.codex_tmp\a1-phase2-gate-092b7d6b3aeb4246928688323771e8b8` with `167/167` self-excluded receipt entries, Release solution `0 warnings / 0 errors`, frozen-root replay `0`, and residue `0`. A1 remains closed; no A2/A3 work may modify any A1 path.
+
+`A2 — WP-AI-CHAT-CHANNEL` is `CLOSED — FINAL GO — P0/P1/P2=0/0/0`: accepted source `55ee0993f71375ee0245cbee54815e7988fe04fd`, redirect boundary closure `2678cb62be9ac9ff5a05c9a5b605a75c60effb5c`, and Chat `23/23 × 3`. `A3 — WP-AI-IMAGE-CHANNEL` is equivalently closed: accepted source `c7c4adcfcc80c732bfaf87b0dfea11294b4af741`, redirect boundary closure `12b58ac69efe3175cf49a6ee129b3784b5b3da5c`, and Image `20/20`. Their shared Release solution result is `0 warnings / 0 errors`. A2's stored-full-endpoint/per-request-auth/no-normalization/no-path-append/no-fallback/redacted-failure rule and A3's stored-full-endpoint/no-auth-forwarded redirect/MIME/byte/dimension/hash/private-artifact rule remain closed outputs, not permission for Desktop to open a direct transport.
+
+### A4/A5 final closeouts and A6 final acceptance
+
+A4 is `CLOSED — FINAL GO — P0/P1/P2=0/0/0`. Its accepted commits are `fc986d11`, `ffc9f609`, and `cc5ff806`. The final receipt records `186/186`; AI `77/77`, Desktop `22/22`, and `423/423` total tests; frozen-root replay `0`; and owned runtime/pipe/private-artifact residue `0`. The closeout remains limited to its former exact Desktop/AI scope and its opaque-config, zero-auto-network, secret/revoke, redaction, decoder-stream, no-fallback, and no-project-write controls. It is not A5 mock-handler cross-channel E2E proof.
+
+A5 is closed. Its implementation scope was exactly:
+
+1. `tests/VFXComposer.AiLocalE2E.Tests/**`
+2. `src/VFXComposer.AI.Providers/Desktop/ProviderDesktopRuntime.cs`
+3. `VFXComposer.sln`
+4. `eng/run-phase2-gate.ps1`
+5. `eng/phase2-baseline-roots.json`
+
+`ProviderDesktopRuntime.cs` was A5's only production seam. The existing constructor remains; the only production addition is optional `privateImageTempRoot`, transparently passed to `ImageGateway`. Production passes `null` and therefore retains its current behavior. Any sixth implementation path remains STOP.
+
+A5 ran a real loopback `TcpListener` against the production runtime and production `HttpClient` handlers. It used no handler injection, external endpoint, or paid-provider call. The accepted tests take Settings CRUD/DPAPI/explicit bindings through Create Chat and then Preview Image, covering both base64 and URL image responses through the existing decoder, restart persistence, channel isolation, opaque endpoint fidelity, redacted failures, revoke/fail-closed behavior, private-artifact cleanup, and no project writes.
+
+The final A5 receipt `a5-final-acceptance-14abb1d3-bootstrap` records source `9152c7e6`, remediation `14abb1d3`, merge `c6f9920f`, `11/11`, `P0/P1/P2=0/0/0`, `209` SHA-256 receipt hashes, exact root replay `0`, locked Release build, product-assembly binding, unchanged tracked locks, and `vfxcomposer-a5` residue `0`. A nonzero root/build/test/binding/`vfxcomposer-a5` residue result, scope drift, production-`null` drift, injected handler, external/paid traffic, fallback, sensitive-data leak, failed cleanup, or project write remains STOP.
+
+A6 `WP-AI-PROVIDER-FINAL-AUDIT` is `CLOSED — FINAL ACCEPTED/GO — P0/P1/P2=0/0/0`. The accepted Git-ignored receipt `.codex_tmp/a6-ai-provider-final-audit-20260829T000000Z/audit-summary.json` records independent gate `434/434`, schemas `23`, source stable/root `0`/residue `0`, empty-stdout/exact-`W24FS001`-stderr/exit-`23` Broker smoke, approved package feed `39/39`, `18` unique ignored locks, and unchanged tracked locks. It finishes the frozen A0–A5 audit with no repair or product-gate rerun. The final result accepts ADR-006 dual-channel scope at `100/100`: Chat owns every LLM/conversation request, Image owns every image-generation request, channel profile/secret/protocol are independent, and no fallback exists. `OpaqueEndpoint` is arbitrary bounded text including empty/whitespace, interpreted only at request time. This is neither real paid-provider authentication nor a production release. All A0–A6 are closed; future work must use a new milestone.
+
+## Current trust and reuse rules
+
+Trust is limited to the current logged-in user, actively launched local product processes, and explicit project choice. The route defends cross-user access, freshness, exact process/session/project correlation, protocol strictness, release-layout path expectation, redaction and crash cleanup; it does not defend malicious same-user code, admin/kernel control, offline tampering, or a deliberately malicious chosen project. Hashes/signatures are release integrity only.
+
+C1/C2 are accepted reuse inputs. P1 named-pipe and S1 lifecycle/ownership fragments are candidates only to the extent they work for an ordinary-user topology and are revalidated within a U-node. The stopped M1 candidate earns no acceptance credit and is U1 review input only; M2 `fa8843be` remains historical and is not merged.
+
+D1/D1R, ServiceHost/install, I1, R1, A1, B1, SCM/privileged E2E and their audits are retired product-delivery history. They must receive no further implementation or audit and cannot block U1-U6. No Windows Service, SCM, `LocalSystem`, privileged enrollment, `SeSecurityPrivilege`, `SeRestorePrivilege`, strict-SACL live gate, loaded-image proof or privileged issuer may be silently reintroduced.
+
+## Frozen planning baseline
+
+U0 closeout freezes `45/100`, reported as **42%-48% complete**, under weights `U0=8`, `U1=22`, `U2=22`, `U3=18`, `U4=12`, `U5=12`, `U6=6` plus accepted C1/C2 and reviewable ordinary-user P1/S1 reuse credit. The stopped M1/M2 work contributes zero. The new remaining route is estimated **45%-55% shorter** than the superseded privileged route, with a 50% planning point. The algorithm cannot be replaced by line/test/receipt counting.
+
+---
+
+## Historical pre-U0 package registry (superseded for product delivery)
+
 Status date: `2026-08-28`
 
 ## 1. Registry

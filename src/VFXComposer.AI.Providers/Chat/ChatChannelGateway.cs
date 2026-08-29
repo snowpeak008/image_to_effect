@@ -1,0 +1,408 @@
+using System.Buffers;
+using System.Net;
+using System.Security.Cryptography;
+using VFXComposer.AI.Contracts;
+using VFXComposer.AI.Contracts.Chat;
+
+namespace VFXComposer.AI.Providers.Chat;
+
+/// <summary>
+/// Request-time transport for one persisted ChatLlm binding.  Endpoint text stays opaque until the instant a single
+/// request is constructed, and a failed call never writes configuration or selects another route.
+/// </summary>
+public sealed class ChatChannelGateway : IChatChannelGateway, IDisposable
+{
+    private readonly ProviderConfigurationStore _configurationStore;
+    private readonly ProviderSecretStore _secretStore;
+    private readonly ProviderHealthRegistry _health;
+    private readonly ChatRouteResolver _routeResolver;
+    private readonly HttpClient _httpClient;
+    private int _disposed;
+
+    /// <summary>
+    /// Creates the production gateway with a gateway-owned HTTP handler that never follows redirect locations.
+    /// </summary>
+    public static ChatChannelGateway Create(
+        ProviderConfigurationStore configurationStore,
+        ProviderHealthRegistry healthRegistry,
+        ProviderSecretStore secretStore)
+    {
+        ArgumentNullException.ThrowIfNull(configurationStore);
+        ArgumentNullException.ThrowIfNull(healthRegistry);
+        ArgumentNullException.ThrowIfNull(secretStore);
+        return new ChatChannelGateway(configurationStore, healthRegistry, secretStore, CreateProductionClient());
+    }
+
+    /// <summary>
+    /// Test-only transport seam. It is internal and exposed only to the scoped AI test assembly; production callers
+    /// must use <see cref="Create"/>, which owns the non-redirecting HTTP handler.
+    /// </summary>
+    internal ChatChannelGateway(
+        ProviderConfigurationStore configurationStore,
+        ProviderHealthRegistry healthRegistry,
+        ProviderSecretStore secretStore,
+        HttpMessageHandler handler)
+        : this(
+            configurationStore,
+            healthRegistry,
+            secretStore,
+            new HttpClient(handler ?? throw new ArgumentNullException(nameof(handler)), disposeHandler: true)
+            {
+                Timeout = Timeout.InfiniteTimeSpan,
+            })
+    {
+    }
+
+    private ChatChannelGateway(
+        ProviderConfigurationStore configurationStore,
+        ProviderHealthRegistry healthRegistry,
+        ProviderSecretStore secretStore,
+        HttpClient httpClient)
+    {
+        _configurationStore = configurationStore ?? throw new ArgumentNullException(nameof(configurationStore));
+        _secretStore = secretStore ?? throw new ArgumentNullException(nameof(secretStore));
+        _health = healthRegistry ?? throw new ArgumentNullException(nameof(healthRegistry));
+        _routeResolver = new ChatRouteResolver(_health, _secretStore);
+        _httpClient = httpClient ?? throw new ArgumentNullException(nameof(httpClient));
+    }
+
+    public async ValueTask<ChatChannelResult> CompleteAsync(
+        ChatChannelRequest request,
+        CancellationToken cancellationToken = default)
+    {
+        ThrowIfDisposed();
+        ArgumentNullException.ThrowIfNull(request);
+
+        ChatResolvedRoute route;
+        try
+        {
+            // Resolve once, before any await.  This immutable snapshot pins the selected profile/capability/model/
+            // protocol for the complete call even if another thread saves a newer configuration while it is in flight.
+            // Health Unknown is deliberately admissible only because this call is an explicit user prompt. There is
+            // no preflight or automatic health request; the result below becomes the first observation.
+            route = _routeResolver.Resolve(_configurationStore.Load().Configuration, allowUnknownHealth: true);
+        }
+        catch (ChatChannelException)
+        {
+            throw;
+        }
+        catch (AiGatewayException exception)
+        {
+            throw ChatErrorMapper.FromA1(exception);
+        }
+
+        byte[]? payload = null;
+        try
+        {
+            // Cancellation is deliberately observed only after the explicit route has been resolved. This keeps the
+            // prompt result (including a pre-cancelled prompt) attached to the exact persisted route without parsing
+            // or retaining an endpoint anywhere outside this request-time operation.
+            cancellationToken.ThrowIfCancellationRequested();
+            var requestUri = CreateRequestUri(route.Profile.Endpoint);
+            payload = ChatProtocolCodec.CreateRequestPayload(route, request);
+            using var message = new HttpRequestMessage(HttpMethod.Post, requestUri)
+            {
+                Content = new ByteArrayContent(payload),
+            };
+            message.Content.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("application/json");
+
+            try
+            {
+                using (var secret = _secretStore.OpenSecret(route.Profile.Id, route.Profile.Auth.SecretRef))
+                {
+                    ChatProtocolCodec.ApplyAuthentication(message, route.Protocol, secret.Bytes);
+                }
+            }
+            catch (ChatChannelException)
+            {
+                throw;
+            }
+            catch (AiGatewayException exception)
+            {
+                throw ChatErrorMapper.FromA1(exception);
+            }
+
+            using var timeout = new CancellationTokenSource(TimeSpan.FromSeconds(route.Profile.TimeoutSeconds));
+            using var linkedCancellation = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken, timeout.Token);
+            HttpResponseMessage response;
+            try
+            {
+                response = await _httpClient.SendAsync(
+                    message,
+                    HttpCompletionOption.ResponseHeadersRead,
+                    linkedCancellation.Token).ConfigureAwait(false);
+            }
+            catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested)
+            {
+                throw new ChatChannelException(ChatChannelErrorCode.Cancelled);
+            }
+            catch (OperationCanceledException) when (timeout.IsCancellationRequested)
+            {
+                throw new ChatChannelException(ChatChannelErrorCode.TimedOut);
+            }
+            catch (OperationCanceledException)
+            {
+                throw new ChatChannelException(ChatChannelErrorCode.Cancelled);
+            }
+            catch (HttpRequestException)
+            {
+                throw new ChatChannelException(ChatChannelErrorCode.TransportFailed, retryable: true);
+            }
+            catch (IOException)
+            {
+                throw new ChatChannelException(ChatChannelErrorCode.TransportFailed, retryable: true);
+            }
+
+            using (response)
+            {
+                if (!response.IsSuccessStatusCode)
+                {
+                    throw MapStatus(response.StatusCode);
+                }
+
+                if (response.Content is null)
+                {
+                    throw new ChatChannelException(ChatChannelErrorCode.ResponseMalformed);
+                }
+
+                byte[]? responseBytes = null;
+                try
+                {
+                    responseBytes = await ReadBoundedResponseAsync(response.Content, linkedCancellation.Token).ConfigureAwait(false);
+                    var result = ChatProtocolCodec.ParseSuccessResponse(route.Protocol, request, responseBytes);
+                    RecordObservedHealth(route, ProviderHealthState.Verified, reasonCode: null);
+                    return result;
+                }
+                catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested)
+                {
+                    throw new ChatChannelException(ChatChannelErrorCode.Cancelled);
+                }
+                catch (OperationCanceledException) when (timeout.IsCancellationRequested)
+                {
+                    throw new ChatChannelException(ChatChannelErrorCode.TimedOut);
+                }
+                catch (HttpRequestException)
+                {
+                    throw new ChatChannelException(ChatChannelErrorCode.TransportFailed, retryable: true);
+                }
+                catch (IOException)
+                {
+                    throw new ChatChannelException(ChatChannelErrorCode.TransportFailed, retryable: true);
+                }
+                finally
+                {
+                    if (responseBytes is not null)
+                    {
+                        CryptographicOperations.ZeroMemory(responseBytes);
+                    }
+                }
+            }
+        }
+        catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested)
+        {
+            throw RecordObservedFailure(route, new ChatChannelException(ChatChannelErrorCode.Cancelled));
+        }
+        catch (OperationCanceledException)
+        {
+            throw RecordObservedFailure(route, new ChatChannelException(ChatChannelErrorCode.Cancelled));
+        }
+        catch (HttpRequestException)
+        {
+            throw RecordObservedFailure(route, new ChatChannelException(
+                ChatChannelErrorCode.TransportFailed,
+                retryable: true));
+        }
+        catch (IOException)
+        {
+            throw RecordObservedFailure(route, new ChatChannelException(
+                ChatChannelErrorCode.TransportFailed,
+                retryable: true));
+        }
+        catch (ArgumentException)
+        {
+            throw RecordObservedFailure(route, new ChatChannelException(ChatChannelErrorCode.RequestInvalid));
+        }
+        catch (InvalidOperationException)
+        {
+            throw RecordObservedFailure(route, new ChatChannelException(ChatChannelErrorCode.RequestInvalid));
+        }
+        catch (ChatChannelException exception)
+        {
+            RecordObservedFailure(route, exception);
+            throw;
+        }
+        finally
+        {
+            if (payload is not null)
+            {
+                CryptographicOperations.ZeroMemory(payload);
+            }
+        }
+    }
+
+    public async ValueTask<ChatResponse> ChatAsync(ChatRequest request, CancellationToken cancellationToken = default)
+    {
+        ArgumentNullException.ThrowIfNull(request);
+        var channelRequest = new ChatChannelRequest(
+            request.CorrelationId,
+            request.Messages.Select(static message => new ChatChannelMessage(message.Role, message.Content)));
+        var result = await CompleteAsync(channelRequest, cancellationToken).ConfigureAwait(false);
+        try
+        {
+            return new ChatResponse(request.CorrelationId, result.Text);
+        }
+        catch (ArgumentException)
+        {
+            // The A1-compatible response DTO has a smaller text bound than the richer A2 result contract.
+            throw new ChatChannelException(ChatChannelErrorCode.ResponseTooLarge);
+        }
+    }
+
+    public void Dispose()
+    {
+        if (Interlocked.Exchange(ref _disposed, 1) == 0)
+        {
+            _httpClient.Dispose();
+        }
+    }
+
+    public override string ToString() => "ChatChannelGateway(<redacted>)";
+
+    private static HttpClient CreateProductionClient() => new(
+        new HttpClientHandler
+        {
+            AllowAutoRedirect = false,
+            UseCookies = false,
+        },
+        disposeHandler: true)
+    {
+        Timeout = Timeout.InfiniteTimeSpan,
+    };
+
+    private static Uri CreateRequestUri(OpaqueEndpoint endpoint)
+    {
+        ArgumentNullException.ThrowIfNull(endpoint);
+        try
+        {
+            // Preserve endpoint.Value as supplied.  The only interpretation is the necessary best-effort URI creation
+            // at send time; there is deliberately no trimming, normalisation, path append, query edit, or concatenation.
+            if (!Uri.TryCreate(endpoint.Value, UriKind.Absolute, out var requestUri) ||
+                requestUri is null ||
+                (requestUri.Scheme != Uri.UriSchemeHttp && requestUri.Scheme != Uri.UriSchemeHttps))
+            {
+                throw new ChatChannelException(ChatChannelErrorCode.EndpointUnusable);
+            }
+
+            return requestUri;
+        }
+        catch (ChatChannelException)
+        {
+            throw;
+        }
+        catch (UriFormatException)
+        {
+            throw new ChatChannelException(ChatChannelErrorCode.EndpointUnusable);
+        }
+        catch (ArgumentException)
+        {
+            throw new ChatChannelException(ChatChannelErrorCode.EndpointUnusable);
+        }
+    }
+
+    private static ChatChannelException MapStatus(HttpStatusCode statusCode)
+    {
+        // Redirect targets are intentionally neither parsed nor sent. Apart from preventing route selection from a
+        // provider response, this keeps request-local authorization confined to the configured endpoint.
+        if ((int)statusCode is >= 300 and <= 399)
+        {
+            return new ChatChannelException(ChatChannelErrorCode.UpstreamRejected);
+        }
+
+        return statusCode switch
+        {
+            HttpStatusCode.Unauthorized or HttpStatusCode.Forbidden =>
+                new ChatChannelException(ChatChannelErrorCode.AuthenticationFailed),
+            (HttpStatusCode)429 => new ChatChannelException(ChatChannelErrorCode.RateLimited, retryable: true),
+            >= HttpStatusCode.InternalServerError =>
+                new ChatChannelException(ChatChannelErrorCode.UpstreamUnavailable, retryable: true),
+            _ => new ChatChannelException(ChatChannelErrorCode.UpstreamRejected),
+        };
+    }
+
+    private static async ValueTask<byte[]> ReadBoundedResponseAsync(HttpContent content, CancellationToken cancellationToken)
+    {
+        ArgumentNullException.ThrowIfNull(content);
+        if (content.Headers.ContentLength is long contentLength && contentLength > ChatChannelLimits.MaximumResponseBytes)
+        {
+            throw new ChatChannelException(ChatChannelErrorCode.ResponseTooLarge);
+        }
+
+        await using var stream = await content.ReadAsStreamAsync(cancellationToken).ConfigureAwait(false);
+        var rented = ArrayPool<byte>.Shared.Rent(16 * 1024);
+        using var buffer = new MemoryStream();
+        try
+        {
+            while (true)
+            {
+                var count = await stream.ReadAsync(rented.AsMemory(0, rented.Length), cancellationToken).ConfigureAwait(false);
+                if (count == 0)
+                {
+                    break;
+                }
+
+                if (buffer.Length > ChatChannelLimits.MaximumResponseBytes - count)
+                {
+                    throw new ChatChannelException(ChatChannelErrorCode.ResponseTooLarge);
+                }
+
+                buffer.Write(rented, 0, count);
+            }
+
+            return buffer.ToArray();
+        }
+        finally
+        {
+            if (buffer.TryGetBuffer(out var segment))
+            {
+                CryptographicOperations.ZeroMemory(segment.AsSpan(0, checked((int)buffer.Length)));
+            }
+
+            CryptographicOperations.ZeroMemory(rented);
+            ArrayPool<byte>.Shared.Return(rented, clearArray: false);
+        }
+    }
+
+    private void ThrowIfDisposed()
+    {
+        if (Volatile.Read(ref _disposed) != 0)
+        {
+            throw new ObjectDisposedException(nameof(ChatChannelGateway));
+        }
+    }
+
+    private void RecordObservedHealth(
+        ChatResolvedRoute route,
+        ProviderHealthState state,
+        AiErrorCode? reasonCode)
+    {
+        _health.Record(new ProviderHealth(
+            route.Profile.Id,
+            route.Capability.Id,
+            AiChannel.ChatLlm,
+            route.ConfigurationFingerprint,
+            state,
+            DateTimeOffset.UtcNow,
+            reasonCode));
+    }
+
+    private ChatChannelException RecordObservedFailure(ChatResolvedRoute route, ChatChannelException exception)
+    {
+        ArgumentNullException.ThrowIfNull(route);
+        ArgumentNullException.ThrowIfNull(exception);
+
+        // ProviderHealth stores a closed, shared error vocabulary rather than transport-local details. In
+        // particular, it never retains an endpoint, HTTP status payload, credential, prompt, or exception text.
+        RecordObservedHealth(route, ProviderHealthState.Unhealthy, AiErrorCode.AdapterUnavailable);
+        return exception;
+    }
+}

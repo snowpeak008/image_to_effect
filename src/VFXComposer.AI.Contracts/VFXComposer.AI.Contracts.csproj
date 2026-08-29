@@ -1,0 +1,7 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <AssemblyName>VFXComposer.AI.Contracts</AssemblyName>
+    <RootNamespace>VFXComposer.AI.Contracts</RootNamespace>
+    <Description>Pure immutable AI provider contracts for VFX Composer.</Description>
+  </PropertyGroup>
+</Project>

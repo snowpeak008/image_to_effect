@@ -150,7 +150,105 @@ namespace VFXComposer.Editor.W24.S6.Worker.Protocol
         internal string ReasonCode { get; private set; }
     }
 
+    /// <summary>
+    /// Immutable Unity projection of the host-owned C2 Worker project locator.
+    /// It carries identity correlations only and cannot locate or read a project.
+    /// </summary>
+    internal sealed class W24S6WorkerProjectLocator
+    {
+        internal W24S6WorkerProjectLocator(
+            string protocolVersion,
+            string messageKind,
+            string requestId,
+            string registeredProjectId,
+            W24S6WorkerTypedHash projectIdentity,
+            W24S6WorkerTypedHash volumeIdentity,
+            W24S6WorkerTypedHash repositoryIdentity,
+            W24S6WorkerTypedHash projectRootIdentity,
+            long brokerGeneration,
+            long registrationGeneration,
+            long enrollmentGeneration,
+            string workerSessionId,
+            string workerProcessEpoch,
+            W24S6WorkerTypedHash selfHash)
+        {
+            ProtocolVersion = protocolVersion;
+            MessageKind = messageKind;
+            RequestId = requestId;
+            RegisteredProjectId = registeredProjectId;
+            ProjectIdentity = projectIdentity;
+            VolumeIdentity = volumeIdentity;
+            RepositoryIdentity = repositoryIdentity;
+            ProjectRootIdentity = projectRootIdentity;
+            BrokerGeneration = brokerGeneration;
+            RegistrationGeneration = registrationGeneration;
+            EnrollmentGeneration = enrollmentGeneration;
+            WorkerSessionId = workerSessionId;
+            WorkerProcessEpoch = workerProcessEpoch;
+            SelfHash = selfHash;
+        }
+
+        internal string ProtocolVersion { get; private set; }
+        internal string MessageKind { get; private set; }
+        internal string RequestId { get; private set; }
+        internal string RegisteredProjectId { get; private set; }
+        internal W24S6WorkerTypedHash ProjectIdentity { get; private set; }
+        internal W24S6WorkerTypedHash VolumeIdentity { get; private set; }
+        internal W24S6WorkerTypedHash RepositoryIdentity { get; private set; }
+        internal W24S6WorkerTypedHash ProjectRootIdentity { get; private set; }
+        internal long BrokerGeneration { get; private set; }
+        internal long RegistrationGeneration { get; private set; }
+        internal long EnrollmentGeneration { get; private set; }
+        internal string WorkerSessionId { get; private set; }
+        internal string WorkerProcessEpoch { get; private set; }
+        internal W24S6WorkerTypedHash SelfHash { get; private set; }
+    }
+
 #if UNITY_INCLUDE_TESTS
+    internal sealed class W24S6WorkerProjectLocatorAcknowledgement
+    {
+        internal W24S6WorkerProjectLocatorAcknowledgement(
+            string protocolVersion,
+            string messageKind,
+            string requestId,
+            string registeredProjectId,
+            long brokerGeneration,
+            long registrationGeneration,
+            long enrollmentGeneration,
+            string workerSessionId,
+            string workerProcessEpoch,
+            W24S6WorkerTypedHash locatorSelfHash,
+            string disposition,
+            W24S6WorkerTypedHash selfHash)
+        {
+            ProtocolVersion = protocolVersion;
+            MessageKind = messageKind;
+            RequestId = requestId;
+            RegisteredProjectId = registeredProjectId;
+            BrokerGeneration = brokerGeneration;
+            RegistrationGeneration = registrationGeneration;
+            EnrollmentGeneration = enrollmentGeneration;
+            WorkerSessionId = workerSessionId;
+            WorkerProcessEpoch = workerProcessEpoch;
+            LocatorSelfHash = locatorSelfHash;
+            Disposition = disposition;
+            SelfHash = selfHash;
+        }
+
+        internal string ProtocolVersion { get; private set; }
+        internal string MessageKind { get; private set; }
+        internal string RequestId { get; private set; }
+        internal string RegisteredProjectId { get; private set; }
+        internal long BrokerGeneration { get; private set; }
+        internal long RegistrationGeneration { get; private set; }
+        internal long EnrollmentGeneration { get; private set; }
+        internal string WorkerSessionId { get; private set; }
+        internal string WorkerProcessEpoch { get; private set; }
+        internal W24S6WorkerTypedHash LocatorSelfHash { get; private set; }
+        internal string Disposition { get; private set; }
+        internal W24S6WorkerTypedHash SelfHash { get; private set; }
+    }
+
     internal sealed class W24S6WorkerProjectHandleRevokeAcknowledgement : W24S6WorkerLifecycleMessage
     {
         internal W24S6WorkerProjectHandleRevokeAcknowledgement(

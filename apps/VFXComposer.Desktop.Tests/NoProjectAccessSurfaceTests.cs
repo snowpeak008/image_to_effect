@@ -3,6 +3,7 @@ using System.Reflection;
 using System.Reflection.Emit;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using VFXComposer.Client;
+using VFXComposer.Desktop.Services;
 using VFXComposer.Desktop.ViewModels;
 
 namespace VFXComposer.Desktop.Tests;
@@ -21,6 +22,18 @@ public sealed class NoProjectAccessSurfaceTests
     [
         typeof(VfxComposerClient).Assembly,
         typeof(MainWindowViewModel).Assembly,
+    ];
+
+    private const string PrivateImagePreviewDecoderType =
+        "VFXComposer.Desktop.Services.PrivateImagePreviewDecoder";
+
+    // U4 permits this exact Client-only process/control-pipe implementation.
+    // The Desktop assembly and every other Client type remain fully inspected.
+    private static readonly string[] UserModeClientInfrastructureAllowlist =
+    [
+        "VFXComposer.Client.IUserModeBrokerProcessHost",
+        "VFXComposer.Client.UserModeBrokerProcessHost",
+        "VFXComposer.Client.UserModeDesktopSession",
     ];
 
     private static readonly string[] ProhibitedIdentifierFragments =
@@ -103,6 +116,61 @@ public sealed class NoProjectAccessSurfaceTests
             "The access-surface scanner must resolve prohibited member references in private method IL.");
     }
 
+    [TestMethod]
+    public void U4ClientInfrastructureAllowlistIsExactAndClosed()
+    {
+        CollectionAssert.AreEquivalent(
+            new[]
+            {
+                "VFXComposer.Client.IUserModeBrokerProcessHost",
+                "VFXComposer.Client.UserModeBrokerProcessHost",
+                "VFXComposer.Client.UserModeDesktopSession",
+            },
+            UserModeClientInfrastructureAllowlist);
+        Assert.IsTrue(UserModeClientInfrastructureAllowlist.All(name =>
+            name.StartsWith("VFXComposer.Client.", StringComparison.Ordinal)));
+    }
+
+    [TestMethod]
+    public void PrivatePreviewStreamAllowanceIsExactAndClosed()
+    {
+        var decoder = typeof(PrivateImagePreviewDecoder);
+        Assert.AreEqual(PrivateImagePreviewDecoderType, decoder.FullName);
+        CollectionAssert.AreEqual(
+            new[] { "DecodeAsync" },
+            decoder.GetMethods(BindingFlags.Public | BindingFlags.Static | BindingFlags.DeclaredOnly)
+                .Select(method => method.Name)
+                .Order(StringComparer.Ordinal)
+                .ToArray());
+    }
+
+    [TestMethod]
+    public void PrivatePreviewStreamAllowanceRejectsTypesThatOnlyShareTheDecoderPrefix()
+    {
+        var assembly = AssemblyBuilder.DefineDynamicAssembly(
+            new AssemblyName("VFXComposer.Desktop.Tests.PreviewScannerFixture"),
+            AssemblyBuilderAccess.Run);
+        var module = assembly.DefineDynamicModule("fixture");
+        var typeBuilder = module.DefineType(
+            PrivateImagePreviewDecoderType + "Shadow",
+            TypeAttributes.Public | TypeAttributes.Abstract | TypeAttributes.Sealed);
+        var method = typeBuilder.DefineMethod(
+            "PassThrough",
+            MethodAttributes.Public | MethodAttributes.Static,
+            typeof(void),
+            [typeof(System.IO.Stream)]);
+        method.GetILGenerator().Emit(OpCodes.Ret);
+        var shadow = typeBuilder.CreateType()!;
+
+        var violations = ScanType(shadow).ToArray();
+
+        Assert.IsTrue(
+            violations.Any(violation => violation.Contains(
+                "prohibited type reference System.IO.Stream",
+                StringComparison.Ordinal)),
+            "Only PrivateImagePreviewDecoder.DecodeAsync and its compiler-generated state machine may receive Stream.");
+    }
+
     private static IEnumerable<string> ScanAssembly(Assembly assembly)
     {
         var assemblyName = assembly.GetName().Name ?? "<unnamed>";
@@ -116,11 +184,24 @@ public sealed class NoProjectAccessSurfaceTests
 
         foreach (var type in assembly.GetTypes())
         {
+            if (IsAllowlistedUserModeClientInfrastructure(type))
+            {
+                continue;
+            }
+
             foreach (var violation in ScanType(type))
             {
                 yield return $"{assemblyName}: {violation}";
             }
         }
+    }
+
+    private static bool IsAllowlistedUserModeClientInfrastructure(Type type)
+    {
+        var fullName = type.FullName;
+        return fullName is not null && UserModeClientInfrastructureAllowlist.Any(allowlisted =>
+            string.Equals(fullName, allowlisted, StringComparison.Ordinal) ||
+            fullName.StartsWith(allowlisted + "+", StringComparison.Ordinal));
     }
 
     private static IEnumerable<string> ScanType(Type type)
@@ -518,6 +599,14 @@ public sealed class NoProjectAccessSurfaceTests
             yield break;
         }
 
+        // The decoder is the only Desktop component allowed to receive the provider-issued in-memory stream. It still
+        // receives no filesystem, environment, network, project, or Unity type exemption.
+        if (type == typeof(System.IO.Stream) &&
+            IsPrivatePreviewStreamContext(context))
+        {
+            yield break;
+        }
+
         if (type.HasElementType)
         {
             foreach (var violation in CheckTypeReference(type.GetElementType(), context))
@@ -556,6 +645,36 @@ public sealed class NoProjectAccessSurfaceTests
                 yield return violation;
             }
         }
+    }
+
+    private static bool IsPrivatePreviewStreamContext(string context)
+    {
+        ArgumentNullException.ThrowIfNull(context);
+        var directMethod = PrivateImagePreviewDecoderType + ".DecodeAsync";
+        if (context.StartsWith(directMethod + " ", StringComparison.Ordinal))
+        {
+            return true;
+        }
+
+        // Roslyn emits the async state machine as PrivateImagePreviewDecoder+<DecodeAsync>d__<ordinal>. The scanner
+        // must inspect that generated type because it owns the local Stream field and DisposeAsync call, but no type
+        // that merely begins with the decoder's name receives this exemption.
+        var stateMachinePrefix = PrivateImagePreviewDecoderType + "+<DecodeAsync>d__";
+        if (!context.StartsWith(stateMachinePrefix, StringComparison.Ordinal))
+        {
+            return false;
+        }
+
+        var index = stateMachinePrefix.Length;
+        var firstOrdinalDigit = index;
+        while (index < context.Length && char.IsAsciiDigit(context[index]))
+        {
+            index++;
+        }
+
+        return index > firstOrdinalDigit &&
+            index < context.Length &&
+            (context[index] == '.' || context[index] == ' ');
     }
 
     private static IEnumerable<string> ScanCustomAttributes(

@@ -28,6 +28,8 @@ PHASE2_NAMES = (
     "vfxcomposer-worker-project-locator-v1.schema.json",
     "vfxcomposer-worker-project-locator-ack-v1.schema.json",
 )
+AI_PROVIDER_CONFIG_NAME = "vfxcomposer-ai-provider-config-v1.schema.json"
+AI_OPAQUE_ENDPOINT_VECTOR_PATH = ROOT / "src" / "VFXComposer.AI.Tests" / "OpaqueEndpointVectors.json"
 
 
 def typed(type_tag: str) -> dict:
@@ -54,7 +56,7 @@ def load() -> tuple[dict[str, dict], Registry]:
         Draft202012Validator.check_schema(schema)
         schemas[path.name] = schema
         resources.append((schema["$id"], Resource.from_contents(schema)))
-    if len(schemas) != 22 or set(PHASE2_NAMES) - schemas.keys():
+    if len(schemas) != 23 or set(PHASE2_NAMES) - schemas.keys() or AI_PROVIDER_CONFIG_NAME not in schemas:
         raise AssertionError("The current desktop schema set is not exact.")
     return schemas, Registry().with_resources(resources)
 
@@ -481,6 +483,141 @@ def main() -> None:
     else:
         raise AssertionError("locator accepted a duplicate decoded property name")
 
+    ai_validator = Draft202012Validator(schemas[AI_PROVIDER_CONFIG_NAME], registry=registry)
+    ai_positive = {
+        "formatVersion": 1,
+        "revision": 1,
+        "profiles": [
+            {
+                "id": "profile-primary",
+                "displayName": "Primary provider",
+                "origin": "Official",
+                "enabled": True,
+                "protocol": {"id": "openai-compatible-v1"},
+                "endpoint": {
+                    "value": "https://provider.example.invalid/v1/",
+                },
+                "auth": {
+                    "secretRef": "secret-primary",
+                    "secretScope": "Production",
+                },
+                "timeoutSeconds": 30,
+                "capabilities": [
+                    {
+                        "id": "chat-main",
+                        "channel": "ChatLlm",
+                        "modelId": "chat-model-1",
+                    }
+                ],
+            }
+        ],
+        "channelBindings": [
+            {
+                "channel": "ChatLlm",
+                "profileId": "profile-primary",
+                "capabilityId": "chat-main",
+                "modelId": "chat-model-1",
+            }
+        ],
+    }
+    if not ai_validator.is_valid(ai_positive):
+        raise AssertionError("AI provider schema rejected its positive fixture")
+
+    endpoint_at_limit = "a" * 8192
+    if len(endpoint_at_limit) != 8192:
+        raise AssertionError("AI provider opaque-endpoint boundary fixture is invalid")
+    ai_endpoint_boundary_positive = copy.deepcopy(ai_positive)
+    ai_endpoint_boundary_positive["profiles"][0]["endpoint"]["value"] = endpoint_at_limit
+    if not ai_validator.is_valid(ai_endpoint_boundary_positive):
+        raise AssertionError("AI provider schema rejected its opaque-endpoint size boundary")
+
+    ai_negative_count = 0
+    for invalid in (
+        {key: value for key, value in ai_positive.items() if key != "revision"},
+        {**ai_positive, "apiKeyProtected": "must-not-be-a-schema-field"},
+        {**ai_positive, "formatVersion": 2},
+        {
+            **ai_positive,
+            "profiles": [
+                {
+                    **ai_positive["profiles"][0],
+                    "auth": {"secretRef": "secret-primary", "apiKey": "not-allowed"},
+                }
+            ],
+        },
+        {
+            **ai_positive,
+            "profiles": [
+                {
+                    **ai_positive["profiles"][0],
+                    "endpoint": {"value": 42},
+                }
+            ],
+        },
+        {
+            **ai_positive,
+            "profiles": [
+                {
+                    **ai_positive["profiles"][0],
+                    "protocol": {"id": "1openai-compatible-v1"},
+                }
+            ],
+        },
+        {
+            **ai_positive,
+            "profiles": [
+                {
+                    **ai_positive["profiles"][0],
+                    "endpoint": {"value": endpoint_at_limit + "a"},
+                }
+            ],
+        },
+        {
+            **ai_positive,
+            "profiles": [
+                {
+                    **ai_positive["profiles"][0],
+                    "endpoint": {"value": "", "unexpected": True},
+                }
+            ],
+        },
+    ):
+        if ai_validator.is_valid(invalid):
+            raise AssertionError("AI provider schema accepted a negative fixture")
+        ai_negative_count += 1
+
+    opaque_endpoint_vector_payload = strict_json_load(AI_OPAQUE_ENDPOINT_VECTOR_PATH.read_text(encoding="utf-8"))
+    if not isinstance(opaque_endpoint_vector_payload, dict) or opaque_endpoint_vector_payload.get("formatVersion") != 1:
+        raise AssertionError("AI opaque-endpoint vector corpus is invalid")
+    opaque_endpoint_vectors = opaque_endpoint_vector_payload.get("vectors")
+    if not isinstance(opaque_endpoint_vectors, list) or not opaque_endpoint_vectors:
+        raise AssertionError("AI opaque-endpoint vector corpus is empty")
+
+    opaque_endpoint_vector_names: set[str] = set()
+    ai_opaque_vector_count = 0
+    for vector in opaque_endpoint_vectors:
+        if not isinstance(vector, dict):
+            raise AssertionError("AI opaque-endpoint vector is not an object")
+        required = {"name", "value"}
+        if set(vector) != required:
+            raise AssertionError("AI opaque-endpoint vector shape is invalid")
+        name = vector["name"]
+        value = vector["value"]
+        if (
+            not isinstance(name, str)
+            or not name
+            or name in opaque_endpoint_vector_names
+            or not isinstance(value, str)
+        ):
+            raise AssertionError("AI opaque-endpoint vector values are invalid")
+        opaque_endpoint_vector_names.add(name)
+
+        candidate = copy.deepcopy(ai_positive)
+        candidate["profiles"][0]["endpoint"] = {"value": value}
+        if not ai_validator.is_valid(candidate):
+            raise AssertionError(f"AI provider schema rejected opaque endpoint vector {name}")
+        ai_opaque_vector_count += 1
+
     print(json.dumps({
         "schema": "w24-phase2-schema-verification/1",
         "status": "PASS",
@@ -489,6 +626,12 @@ def main() -> None:
         "phase2SchemaCount": len(PHASE2_NAMES),
         "positiveCount": positive_count,
         "negativeCount": negative_count,
+        "aiProviderSchemaValidation": {
+            "status": "PASS",
+            "positiveCount": 2 + ai_opaque_vector_count,
+            "negativeCount": ai_negative_count,
+            "opaqueEndpointVectorCount": len(opaque_endpoint_vectors),
+        },
     }, separators=(",", ":")))
 
 
