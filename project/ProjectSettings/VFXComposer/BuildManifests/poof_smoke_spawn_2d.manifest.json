@@ -29,50 +29,43 @@
       "path": "Assets/VFX/Shared/Shaders/VfxLayeredRamp.shader",
       "guid": "81928f0d6aa7a2e4c8cb73230126637f",
       "assetType": "Shader",
-      "version": null,
-      "dependencyHash": "64048683c60561907c22fac9564aba1d"
+      "version": null
     },
     {
       "path": "Assets/VFX/Shared/Styles/Materials/MAT_Style_cartoon.mat",
       "guid": "2ee9c40c235eb2b40aa82abe0083efd5",
       "assetType": "Material",
-      "version": null,
-      "dependencyHash": "73817bfdee17a69c36a04f8a4e589041"
+      "version": null
     },
     {
       "path": "Assets/VFX/Shared/Styles/Meshes/M_Style_Burst.asset",
       "guid": "0def46dac13f1d8449cd98d98de17a15",
       "assetType": "Mesh",
-      "version": null,
-      "dependencyHash": "56e972a8f8588a864d379a7611c49c63"
+      "version": null
     },
     {
       "path": "Assets/VFX/Shared/Styles/Meshes/M_Style_Cone.asset",
       "guid": "8a296d5e70420f647a6e1f646af993cd",
       "assetType": "Mesh",
-      "version": null,
-      "dependencyHash": "69fd53314f71778bd2e32f584650207e"
+      "version": null
     },
     {
       "path": "Assets/VFX/Shared/Styles/Meshes/M_Style_Ring.asset",
       "guid": "df59364e370c085418d31c0f952bcf1a",
       "assetType": "Mesh",
-      "version": null,
-      "dependencyHash": "021f9d0fab5159d1d05310de3284c997"
+      "version": null
     },
     {
       "path": "Assets/VFX/Shared/Styles/Meshes/M_Style_Shard.asset",
       "guid": "506c8c0bcf8b14645948b3dbb02a1b3f",
       "assetType": "Mesh",
-      "version": null,
-      "dependencyHash": "ff113f023e398b26696f0c501ae28324"
+      "version": null
     },
     {
       "path": "Packages/com.vfxcomposer.unity/Runtime/Components/StyledVfxController.cs",
       "guid": "ca6f81a249967414c96082671e07dcaa",
       "assetType": "MonoScript",
-      "version": null,
-      "dependencyHash": "486e1b8ba27b5e00b709bc5fd2b5624a"
+      "version": null
     }
   ],
   "cost": {

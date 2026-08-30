@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using VFXComposer.Editor.Domain;
 using VFXComposer.Editor.W24.S5;
@@ -56,6 +57,12 @@ namespace VFXComposer.Editor.Build
         public string TemplateVersion;
         public string AssetGuid;
         public string AssetPath;
+
+        // Held in memory so the compilers can fold it into buildHash (a template asset content change
+        // must still move buildHash and force a rebuild), but never serialized into the committed
+        // BuildManifest.json: GetAssetDependencyHash is machine/Library-local and made the committed
+        // artifact non-portable, churning on every environment. See D4 (dependencyHash 移出入库清单).
+        [JsonIgnore]
         public string DependencyHash;
     }
 

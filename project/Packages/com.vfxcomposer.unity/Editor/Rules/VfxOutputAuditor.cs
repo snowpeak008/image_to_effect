@@ -117,7 +117,7 @@ namespace VFXComposer.Editor.Rules
                 if (path.StartsWith("Assets/", StringComparison.Ordinal) || path.StartsWith("Packages/", StringComparison.Ordinal))
                 {
                     if (!allowed.Any(root => path.StartsWith(root, StringComparison.Ordinal))) report.Add("E8013", ValidationSeverity.Error, "/dependencies", "Runtime Entry has an out-of-policy dependency.", new JValue(path), string.Join(", ", allowed.ToArray()));
-                    records.Add(new VfxDependencyRecord { Path = path, Guid = AssetDatabase.AssetPathToGUID(path), AssetType = AssetType(path), Version = null, DependencyHash = AssetDatabase.GetAssetDependencyHash(path).ToString() });
+                    records.Add(new VfxDependencyRecord { Path = path, Guid = AssetDatabase.AssetPathToGUID(path), AssetType = AssetType(path), Version = null });
                 }
             }
             return records;

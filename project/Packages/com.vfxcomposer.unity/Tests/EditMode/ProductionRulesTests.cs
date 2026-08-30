@@ -94,7 +94,9 @@ namespace VFXComposer.Tests.EditMode
                 Assert.That(((JArray)manifest["ownedOutputs"]).Count, Is.GreaterThan(0));
                 Assert.That(((JArray)manifest["ownedOutputs"]).All(item => !((string)item["path"]).EndsWith("BuildManifest.json", StringComparison.Ordinal)), Is.True);
                 Assert.That(((JArray)manifest["ownedOutputs"]).All(item => !string.IsNullOrEmpty((string)item["guid"]) && ((string)item["sha256"]).Length == 64), Is.True);
-                Assert.That(((JArray)manifest["dependencies"]).All(item => !string.IsNullOrEmpty((string)item["path"]) && item["dependencyHash"] != null), Is.True);
+                // D4: dependency records keep their identity (path/guid/assetType) but no longer carry the
+                // machine-local dependencyHash, which was never compared and churned the committed manifest.
+                Assert.That(((JArray)manifest["dependencies"]).All(item => !string.IsNullOrEmpty((string)item["path"]) && item["dependencyHash"] == null), Is.True);
                 Assert.That(manifest["cost"]["localTextureBytes"], Is.Not.Null);
                 Assert.That(manifest["cost"]["dependencyResidentTextureBytes"], Is.Not.Null);
                 var prefab = AssetDatabase.LoadAssetAtPath<GameObject>((string)manifest["runtimeEntry"]["path"]);

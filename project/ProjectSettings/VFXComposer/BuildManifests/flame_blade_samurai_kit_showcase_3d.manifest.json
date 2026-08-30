@@ -35,372 +35,319 @@
       "path": "Assets/VFX/Generated/blade_tempest_ultimate_3d/Composition.json",
       "guid": "bea2904975cbb504685371b2043c86a9",
       "assetType": "TextAsset",
-      "version": null,
-      "dependencyHash": "c125bf1ad8b2ca056a39675118443dd2"
+      "version": null
     },
     {
       "path": "Assets/VFX/Generated/blade_tempest_ultimate_3d/VFX_blade_tempest_ultimate_3d.prefab",
       "guid": "65cb95d9fdeaab04e9519c9099d6c4db",
       "assetType": "GameObject",
-      "version": null,
-      "dependencyHash": "b4a0e3199c416b0c1cf50f9bb998b287"
+      "version": null
     },
     {
       "path": "Assets/VFX/Generated/death_dissolve_lifecycle_3d/VFX_death_dissolve_lifecycle_3d.prefab",
       "guid": "2014600f8d246ea418b3ba18041d66b0",
       "assetType": "GameObject",
-      "version": null,
-      "dependencyHash": "4cd214341e8d950da48d8c9c8b4dbfd5"
+      "version": null
     },
     {
       "path": "Assets/VFX/Generated/flame_dash_slash_3d/VFX_flame_dash_slash_3d.prefab",
       "guid": "cde63db081c25ad4f9f792b8ff0717c3",
       "assetType": "GameObject",
-      "version": null,
-      "dependencyHash": "2b0f71aeddac1d0eef66535b8a2cd5bb"
+      "version": null
     },
     {
       "path": "Assets/VFX/Generated/focus_charge_3d/VFX_focus_charge_3d.prefab",
       "guid": "af94060cc32f7ef41bdcb604ce105ab6",
       "assetType": "GameObject",
-      "version": null,
-      "dependencyHash": "17843b6257154fd13af415822265d1ae"
+      "version": null
     },
     {
       "path": "Assets/VFX/Generated/gale_dash_trail_2d/VFX_gale_dash_trail_2d.prefab",
       "guid": "8d539c613009ce046adc7c21ddb3b088",
       "assetType": "GameObject",
-      "version": null,
-      "dependencyHash": "e7642b6b5251a31c1b97b7b18bfa7737"
+      "version": null
     },
     {
       "path": "Assets/VFX/Generated/hero_entrance_lifecycle_3d/VFX_hero_entrance_lifecycle_3d.prefab",
       "guid": "177da1edea2ae5e4e85eff836dca0750",
       "assetType": "GameObject",
-      "version": null,
-      "dependencyHash": "87760330d72e163cd4ca00276ee25f51"
+      "version": null
     },
     {
       "path": "Assets/VFX/Generated/katana_sheath_ember_idle_3d/VFX_katana_sheath_ember_idle_3d.prefab",
       "guid": "6deeddd8b6beab54189ee9e170f935a4",
       "assetType": "GameObject",
-      "version": null,
-      "dependencyHash": "c5d26f99684e49a6d4c6f70c4dd26981"
+      "version": null
     },
     {
       "path": "Assets/VFX/Generated/katana_trail_weapon_3d/VFX_katana_trail_weapon_3d.prefab",
       "guid": "0828ddeb474b47d4ba9152ed259e4df5",
       "assetType": "GameObject",
-      "version": null,
-      "dependencyHash": "3c19656390e3dfffcd76d51426312971"
+      "version": null
     },
     {
       "path": "Assets/VFX/Generated/parry_spark_impact_3d/VFX_parry_spark_impact_3d.prefab",
       "guid": "122fbd51ccbc60f4c84094fcd28afed1",
       "assetType": "GameObject",
-      "version": null,
-      "dependencyHash": "d7a32ae358da75d8d2d7447c4a204d8c"
+      "version": null
     },
     {
       "path": "Assets/VFX/Generated/slash_3d_stylized/S12_S12_SlashAfterimage.mat",
       "guid": "c71f25238ec6de849a1963449b1ecaa7",
       "assetType": "Material",
-      "version": null,
-      "dependencyHash": "ddd4931ae49528bb669a7ed39256e584"
+      "version": null
     },
     {
       "path": "Assets/VFX/Generated/slash_3d_stylized/S12_S12_SlashBlade.mat",
       "guid": "7c6dae8ef3dfba7408f636b68717b7a4",
       "assetType": "Material",
-      "version": null,
-      "dependencyHash": "3d65aa220a984644ee63c67b50c588aa"
+      "version": null
     },
     {
       "path": "Assets/VFX/Generated/slash_3d_stylized/S12_S12_SlashPrimary.mat",
       "guid": "6488d5a34c05ddf40b62789a86458e3c",
       "assetType": "Material",
-      "version": null,
-      "dependencyHash": "4f0037bb8779af1e4fb8ea30b15dfce8"
+      "version": null
     },
     {
       "path": "Assets/VFX/Generated/slash_3d_stylized/S12_S12_SlashSpark.mat",
       "guid": "9d44d163c73a61c46a11d45cb8ffda9f",
       "assetType": "Material",
-      "version": null,
-      "dependencyHash": "e70571728f00974bb5181e63eacdae53"
+      "version": null
     },
     {
       "path": "Assets/VFX/Generated/slash_3d_stylized/VFX_Slash_3D_Stylized.prefab",
       "guid": "0dc223c2ffbe2c14aa24f424440f1cd2",
       "assetType": "GameObject",
-      "version": null,
-      "dependencyHash": "c8b1d59d010a00611d8c8ab3f683f41a"
+      "version": null
     },
     {
       "path": "Assets/VFX/Shared/CoverageGalleryB/Materials/MAT_CoverageB_Additive.mat",
       "guid": "688b79adff1f3474da55fb0deedff137",
       "assetType": "Material",
-      "version": null,
-      "dependencyHash": "0b0b0e70d4676ffab060eedfd9b3ebea"
+      "version": null
     },
     {
       "path": "Assets/VFX/Shared/CoverageGalleryB/Meshes/M_CoverageB_Ring.asset",
       "guid": "7a536dcec1985cf4a9e09e6df4dbd583",
       "assetType": "Mesh",
-      "version": null,
-      "dependencyHash": "2925f46e6811e075fedcad822cb3dfcf"
+      "version": null
     },
     {
       "path": "Assets/VFX/Shared/Shaders/CoverageGalleryBUnlit.shader",
       "guid": "36a2072c324a26a479dfb498994d4812",
       "assetType": "Shader",
-      "version": null,
-      "dependencyHash": "64f6028fba878ab561a8418a3ea09753"
+      "version": null
     },
     {
       "path": "Assets/VFX/Shared/Shaders/VfxDissolveEdge.shader",
       "guid": "5b0bcf875e86f60489700456c2154aee",
       "assetType": "Shader",
-      "version": null,
-      "dependencyHash": "30bc399c9c079542d29fbf6700020364"
+      "version": null
     },
     {
       "path": "Assets/VFX/Shared/Shaders/VfxLayeredRamp.shader",
       "guid": "81928f0d6aa7a2e4c8cb73230126637f",
       "assetType": "Shader",
-      "version": null,
-      "dependencyHash": "64048683c60561907c22fac9564aba1d"
+      "version": null
     },
     {
       "path": "Assets/VFX/Shared/Shaders/VfxSoftNoise.shader",
       "guid": "a6e4e3aa82ac7c84d9dd012aaae56c67",
       "assetType": "Shader",
-      "version": null,
-      "dependencyHash": "daf4e4d9c28a30f0230301e6f07535a5"
+      "version": null
     },
     {
       "path": "Assets/VFX/Shared/Styles/Materials/MAT_Style_dark.mat",
       "guid": "06882d319d21ef44f95b00f7814e3463",
       "assetType": "Material",
-      "version": null,
-      "dependencyHash": "2c79c1062f8c6f82579a1c8f8d0ed21d"
+      "version": null
     },
     {
       "path": "Assets/VFX/Shared/Styles/Materials/MAT_Style_semireal.mat",
       "guid": "a6593efc800a7e848b872ad54cde6b3f",
       "assetType": "Material",
-      "version": null,
-      "dependencyHash": "fabed6c73355309b4089b8513d6ca8fe"
+      "version": null
     },
     {
       "path": "Assets/VFX/Shared/Styles/Materials/MAT_Style_stylized.mat",
       "guid": "0034e6cb149f4034ca9562644ff7ae8d",
       "assetType": "Material",
-      "version": null,
-      "dependencyHash": "7f3751282b1f62d6cb78f412797ce124"
+      "version": null
     },
     {
       "path": "Assets/VFX/Shared/Styles/Meshes/M_Style_Burst.asset",
       "guid": "0def46dac13f1d8449cd98d98de17a15",
       "assetType": "Mesh",
-      "version": null,
-      "dependencyHash": "56e972a8f8588a864d379a7611c49c63"
+      "version": null
     },
     {
       "path": "Assets/VFX/Shared/Styles/Meshes/M_Style_Cone.asset",
       "guid": "8a296d5e70420f647a6e1f646af993cd",
       "assetType": "Mesh",
-      "version": null,
-      "dependencyHash": "69fd53314f71778bd2e32f584650207e"
+      "version": null
     },
     {
       "path": "Assets/VFX/Shared/Styles/Meshes/M_Style_Quad.asset",
       "guid": "7f415b79b45b04d4ab5e3f4dd61605aa",
       "assetType": "Mesh",
-      "version": null,
-      "dependencyHash": "01e83f0bfc8392031ac8f5694416ab10"
+      "version": null
     },
     {
       "path": "Assets/VFX/Shared/Styles/Meshes/M_Style_Ribbon.asset",
       "guid": "dddd70cae322a2e40b1c5daa80492bd6",
       "assetType": "Mesh",
-      "version": null,
-      "dependencyHash": "63b4bdca2af28668b73b3c2e60589468"
+      "version": null
     },
     {
       "path": "Assets/VFX/Shared/Styles/Meshes/M_Style_Ring.asset",
       "guid": "df59364e370c085418d31c0f952bcf1a",
       "assetType": "Mesh",
-      "version": null,
-      "dependencyHash": "021f9d0fab5159d1d05310de3284c997"
+      "version": null
     },
     {
       "path": "Assets/VFX/Shared/Styles/Meshes/M_Style_Shard.asset",
       "guid": "506c8c0bcf8b14645948b3dbb02a1b3f",
       "assetType": "Mesh",
-      "version": null,
-      "dependencyHash": "ff113f023e398b26696f0c501ae28324"
+      "version": null
     },
     {
       "path": "Assets/VFX/Templates/3D/Slash/Materials/S12SlashRevealUnlit.shader",
       "guid": "ea2cafe5706f4254c80e4024370e8f19",
       "assetType": "Shader",
-      "version": null,
-      "dependencyHash": "1c7c3e697cdc0826ae47f44cf4f4c791"
+      "version": null
     },
     {
       "path": "Assets/VFX/Templates/3D/Slash/Materials/S15PaintedCrescentUnlit.shader",
       "guid": "9255784678cd56b439e24ec610ecf846",
       "assetType": "Shader",
-      "version": null,
-      "dependencyHash": "27a12f3b7b4cf114bf93b75a29b2de5c"
+      "version": null
     },
     {
       "path": "Assets/VFX/Templates/3D/Slash/Materials/S15SparkAtlasUnlit.shader",
       "guid": "51dbfee3510116f4bb159a1d5f5e7aa9",
       "assetType": "Shader",
-      "version": null,
-      "dependencyHash": "bc4da47f3f52e29529c459de9b37b2a4"
+      "version": null
     },
     {
       "path": "Assets/VFX/Templates/3D/Slash/Meshes/MESH_S12A_DiamondSpark.asset",
       "guid": "c6dc773ad0d047d4c8579dc6c0379e67",
       "assetType": "Mesh",
-      "version": null,
-      "dependencyHash": "0181217483d441e71c67d4210de9261d"
+      "version": null
     },
     {
       "path": "Assets/VFX/Templates/3D/Slash/Meshes/MESH_S15_IgnitionCombined.asset",
       "guid": "cb17f7d7d56b001409bfebf9fcee9468",
       "assetType": "Mesh",
-      "version": null,
-      "dependencyHash": "d3214a870c677a59f3cc4cf0dfd05cc7"
+      "version": null
     },
     {
       "path": "Assets/VFX/Templates/3D/Slash/Meshes/MESH_S15_PaintedAfterimagePlane.asset",
       "guid": "60bb375f5dc0f8d4aaf666cab88d26a6",
       "assetType": "Mesh",
-      "version": null,
-      "dependencyHash": "af31919e2b4b598c41031e780416b62c"
+      "version": null
     },
     {
       "path": "Assets/VFX/Templates/3D/Slash/Meshes/MESH_S15_PaintedCrescentActionPlane.asset",
       "guid": "6cc4f35676c007e4ba903c83a3a540db",
       "assetType": "Mesh",
-      "version": null,
-      "dependencyHash": "bc9c847c36e6e7237775e01ae18aaff1"
+      "version": null
     },
     {
       "path": "Assets/VFX/Templates/3D/Slash/Meshes/MESH_S15_PaintedResiduePlane.asset",
       "guid": "88fce47444e46c945a137e9803fe280c",
       "assetType": "Mesh",
-      "version": null,
-      "dependencyHash": "3f64455df761fb56bdded165574dadd2"
+      "version": null
     },
     {
       "path": "Assets/VFX/Templates/3D/Slash/Meshes/MESH_S15_SparkAtlasQuad.asset",
       "guid": "2bbeadd5b7ee2dd438c733f3ad3cfae3",
       "assetType": "Mesh",
-      "version": null,
-      "dependencyHash": "0217a94e52b8baf27baeaec477acd53d"
+      "version": null
     },
     {
       "path": "Assets/VFX/Templates/3D/Slash/Meshes/MESH_S15_SparkOuterEdgeSpawn.asset",
       "guid": "19d7083a1d904a0489d2c2c83b7c4563",
       "assetType": "Mesh",
-      "version": null,
-      "dependencyHash": "e390930d3584d159e8348c22e2b7064e"
+      "version": null
     },
     {
       "path": "Assets/VFX/Templates/3D/Slash/Textures/S15_FieryCrescent_Main_v1.png",
       "guid": "c9716fca2971a1b4da71af9f19a99547",
       "assetType": "Texture2D",
-      "version": null,
-      "dependencyHash": "2a839a97b3674287dcc43e4b22b1506f"
+      "version": null
     },
     {
       "path": "Assets/VFX/Templates/3D/Slash/Textures/S15_SlashBreakupNoise_v1.png",
       "guid": "65313cd0f2b9eee4085ad69983cd5bd1",
       "assetType": "Texture2D",
-      "version": null,
-      "dependencyHash": "c6e7167636c6fd972f6de42de14a508b"
+      "version": null
     },
     {
       "path": "Assets/VFX/Templates/3D/Slash/Textures/S15_SparkAtlas_v1.png",
       "guid": "7d6f8a3fc2e5c0d4a993efafe1bc815b",
       "assetType": "Texture2D",
-      "version": null,
-      "dependencyHash": "5a47a1b0e0f3ab643dcff65b908a9db6"
+      "version": null
     },
     {
       "path": "Packages/com.unity.render-pipelines.universal/Editor/AssetVersion.cs",
       "guid": "d0353a89b1f911e48b9e16bdc9f2e058",
       "assetType": "MonoScript",
-      "version": null,
-      "dependencyHash": "32658fcbbe1a332050004e3b27abb4a3"
+      "version": null
     },
     {
       "path": "Packages/com.unity.render-pipelines.universal/Shaders/Particles/ParticlesUnlit.shader",
       "guid": "0406db5a14f94604a8c57ccfbc9f3b46",
       "assetType": "Shader",
-      "version": null,
-      "dependencyHash": "b7b185925fcbf7b0661368a240b860d4"
+      "version": null
     },
     {
       "path": "Packages/com.vfxcomposer.unity/Runtime/Components/CompositeVfxController.cs",
       "guid": "07d8735a81864834c8f1bda23acf4be2",
       "assetType": "MonoScript",
-      "version": null,
-      "dependencyHash": "a03093d837c5c54c7177d9382c2bd82e"
+      "version": null
     },
     {
       "path": "Packages/com.vfxcomposer.unity/Runtime/Components/InteractionGalleryVfxController.cs",
       "guid": "9c06fdbb4482a7a40862522ad88717b6",
       "assetType": "MonoScript",
-      "version": null,
-      "dependencyHash": "856d2bcba33bff8d21dd532335cfda8f"
+      "version": null
     },
     {
       "path": "Packages/com.vfxcomposer.unity/Runtime/Components/PlannedContentVfxController.cs",
       "guid": "d7026b029b67ff34ab508d467bebadb9",
       "assetType": "MonoScript",
-      "version": null,
-      "dependencyHash": "c187aa39e7cac5a6339214f4fce2a150"
+      "version": null
     },
     {
       "path": "Packages/com.vfxcomposer.unity/Runtime/Components/SlashAfterimageAlpha.cs",
       "guid": "2c1e1ba4cf17323429541298eff6252a",
       "assetType": "MonoScript",
-      "version": null,
-      "dependencyHash": "ed78896b37721f1ffa55a2233cd3ebf5"
+      "version": null
     },
     {
       "path": "Packages/com.vfxcomposer.unity/Runtime/Components/SlashArcSweepReveal.cs",
       "guid": "be3e53d50cc00a846b261073b00c1a9e",
       "assetType": "MonoScript",
-      "version": null,
-      "dependencyHash": "f7a37848f7367101983836d611fed0e2"
+      "version": null
     },
     {
       "path": "Packages/com.vfxcomposer.unity/Runtime/Components/SlashEffectController.cs",
       "guid": "348e18c253d102c46875b0c84289b40e",
       "assetType": "MonoScript",
-      "version": null,
-      "dependencyHash": "4cb3fab25aa808be9b5088e5187c4779"
+      "version": null
     },
     {
       "path": "Packages/com.vfxcomposer.unity/Runtime/Components/SlashPaintedLayerFade.cs",
       "guid": "f3ac579e54504bf479543da28fe31ee5",
       "assetType": "MonoScript",
-      "version": null,
-      "dependencyHash": "2bceaef53a8ed2272515842fcf6fd557"
+      "version": null
     },
     {
       "path": "Packages/com.vfxcomposer.unity/Runtime/Components/StyledVfxController.cs",
       "guid": "ca6f81a249967414c96082671e07dcaa",
       "assetType": "MonoScript",
-      "version": null,
-      "dependencyHash": "486e1b8ba27b5e00b709bc5fd2b5624a"
+      "version": null
     }
   ],
   "cost": {

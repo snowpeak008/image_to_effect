@@ -29,71 +29,61 @@
       "path": "Assets/VFX/Shared/Frost/Materials/MAT_Frost_BrokenRing_Additive.mat",
       "guid": "8505c20e2b820c4448843486b6c3f17e",
       "assetType": "Material",
-      "version": null,
-      "dependencyHash": "42783e496a996af5b902d8da1b35c45a"
+      "version": null
     },
     {
       "path": "Assets/VFX/Shared/Frost/Materials/MAT_Frost_ImpactCore_Additive.mat",
       "guid": "ef1b74bfc8381124eb2a5e4b58d86bd5",
       "assetType": "Material",
-      "version": null,
-      "dependencyHash": "f12d099af245db670ab7f4c8c82caa58"
+      "version": null
     },
     {
       "path": "Assets/VFX/Shared/Frost/Materials/MAT_Frost_MistRing_Additive.mat",
       "guid": "2727df622d456e34a98471a4a601adc5",
       "assetType": "Material",
-      "version": null,
-      "dependencyHash": "827cdc35d6bb6128baa389ef1c4d1256"
+      "version": null
     },
     {
       "path": "Assets/VFX/Shared/Frost/Materials/MAT_Frost_Mote_Additive.mat",
       "guid": "cf29a5d05991c1145918a99d81ad1bf7",
       "assetType": "Material",
-      "version": null,
-      "dependencyHash": "371e265c4c3153663aa6623915cc81b1"
+      "version": null
     },
     {
       "path": "Assets/VFX/Shared/Frost/Materials/MAT_Frost_Shard_Additive.mat",
       "guid": "2b79c1efbb61264419b60738f5a9b7d0",
       "assetType": "Material",
-      "version": null,
-      "dependencyHash": "e9ff9a89bbfd9c5c91a183907fd8f3bd"
+      "version": null
     },
     {
       "path": "Assets/VFX/Shared/Frost/Meshes/M_Frost_BrokenRingSegments_v1.asset",
       "guid": "ae0412aa20856514cb18f287b12e10de",
       "assetType": "Mesh",
-      "version": null,
-      "dependencyHash": "18ac2ea074ad07e1a440d124d1976e9f"
+      "version": null
     },
     {
       "path": "Assets/VFX/Shared/Frost/Textures/T_Frost_ShardAtlas_A_v1.png",
       "guid": "40178ca1fa0974046ac33c31607ce7a6",
       "assetType": "Texture2D",
-      "version": null,
-      "dependencyHash": "9067343ff939967137c3843e587486c1"
+      "version": null
     },
     {
       "path": "Assets/VFX/Shared/Shaders/Impact2DAdditiveUnlit.shader",
       "guid": "d41201b4206d2134086e6cee43b9e4e5",
       "assetType": "Shader",
-      "version": null,
-      "dependencyHash": "224f821ef54e7b95f9584cfb887bbfbd"
+      "version": null
     },
     {
       "path": "Assets/VFX/Shared/Shaders/Impact2DProceduralUnlit.shader",
       "guid": "9b3aafd54d25b7142a9958ee2520021e",
       "assetType": "Shader",
-      "version": null,
-      "dependencyHash": "6955202a00243017dcde6b2069dfd331"
+      "version": null
     },
     {
       "path": "Packages/com.vfxcomposer.unity/Runtime/Components/TimedImpactVfxController.cs",
       "guid": "4d93f460942f8e34b97145a6ef7525ca",
       "assetType": "MonoScript",
-      "version": null,
-      "dependencyHash": "0b5bcbe4dd7dcfaf95ddf8b338f09cb3"
+      "version": null
     }
   ],
   "cost": {
