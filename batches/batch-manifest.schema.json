@@ -1,0 +1,87 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://vfxcomposer.local/schemas/batch-manifest-v1.json",
+  "title": "VFX Composer batch manifest (vfxcomposer.batch-manifest/1)",
+  "description": "Fixed input for the F6 CLI/MCP batch end-to-end flow. This schema is a tooling and documentation aid; the authoritative validator is the hand-written VFXComposer.Batch.Core.BatchManifestParser (REQ-002 §5.4), which additionally enforces the capability gate and the recipe-reference probe that JSON Schema cannot express.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "batchId", "items"],
+  "properties": {
+    "schemaVersion": {
+      "const": "vfxcomposer.batch-manifest/1"
+    },
+    "batchId": {
+      "$ref": "#/$defs/token",
+      "description": "Batch identity. Reused as the queue-side batch id."
+    },
+    "onFailure": {
+      "enum": ["continue", "abort"],
+      "default": "continue",
+      "description": "Queue policy when an item fails. Absent means continue."
+    },
+    "defaults": {
+      "$ref": "#/$defs/constraints",
+      "description": "Constraint values inherited by every item that does not set its own."
+    },
+    "items": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 64,
+      "items": { "$ref": "#/$defs/item" }
+    }
+  },
+  "$defs": {
+    "token": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 96,
+      "pattern": "^[A-Za-z0-9._-]+$"
+    },
+    "constraints": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "archetype": { "type": "string", "maxLength": 96 },
+        "dimension": { "enum": ["2d", "3d"] },
+        "element": { "type": "string", "maxLength": 96 },
+        "style": { "type": "string", "maxLength": 96 },
+        "targetProfile": { "type": "string", "maxLength": 96 },
+        "randomSeed": { "type": "integer" }
+      }
+    },
+    "item": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["itemId", "kind"],
+      "properties": {
+        "itemId": { "$ref": "#/$defs/token" },
+        "kind": { "enum": ["prompt", "recipe"] },
+        "prompt": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 8192,
+          "description": "Natural-language request. Present exactly when kind is prompt."
+        },
+        "recipePath": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256,
+          "description": "Manifest-relative path to a recipe JSON. Present exactly when kind is recipe. A recipe-kind item is only build-capable from a manifest that has a location on disk (see BatchManifestParser); a recipe consumed by the F2 restricted build must additionally satisfy the strict structural budget (at most two render-module stages, no attachTo chain, all three stage roots present)."
+        },
+        "constraints": { "$ref": "#/$defs/constraints" }
+      },
+      "oneOf": [
+        {
+          "properties": { "kind": { "const": "prompt" } },
+          "required": ["prompt"],
+          "not": { "required": ["recipePath"] }
+        },
+        {
+          "properties": { "kind": { "const": "recipe" } },
+          "required": ["recipePath"],
+          "not": { "required": ["prompt"] }
+        }
+      ]
+    }
+  }
+}

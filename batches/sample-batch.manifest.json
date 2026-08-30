@@ -1,0 +1,43 @@
+{
+  "schemaVersion": "vfxcomposer.batch-manifest/1",
+  "batchId": "sample-fire-pack",
+  "onFailure": "continue",
+  "defaults": {
+    "dimension": "2d",
+    "style": "stylized",
+    "targetProfile": "mobile_medium"
+  },
+  "items": [
+    {
+      "itemId": "fireball-big-slow",
+      "kind": "prompt",
+      "prompt": "a bigger, slower fireball with a long ember trail",
+      "constraints": {
+        "archetype": "projectile",
+        "element": "fire",
+        "randomSeed": 42
+      }
+    },
+    {
+      "itemId": "frost-nova-burst",
+      "kind": "prompt",
+      "prompt": "a compact frost nova that expands once and fades",
+      "constraints": {
+        "archetype": "area",
+        "element": "frost",
+        "randomSeed": 7
+      }
+    },
+    {
+      "itemId": "spark-hit-3d",
+      "kind": "prompt",
+      "prompt": "a short bright spark impact for a melee hit",
+      "constraints": {
+        "archetype": "impact",
+        "element": "lightning",
+        "dimension": "3d",
+        "randomSeed": 128
+      }
+    }
+  ]
+}
