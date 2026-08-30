@@ -86,7 +86,7 @@ public static class McpToolCatalog
             IdentifierSchema("batchId", "The batch identifier returned at submission time.")),
         new McpTool(
             McpToolNames.JobStatus,
-            "Report the state, progress and diagnostic of one queue entry.",
+            "Report the state, progress, diagnostic and artifact identities of one queue entry.",
             IdentifierSchema("jobId", "The job identifier returned at submission time.")),
         new McpTool(
             McpToolNames.CancelJob,

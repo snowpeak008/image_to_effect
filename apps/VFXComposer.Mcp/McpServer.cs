@@ -170,10 +170,13 @@ public sealed class McpServer
             return Rejected(JsonRpcErrorCodes.InvalidParams, McpDiagnosticCodes.InvalidRequest);
         }
 
-        if (request.Parameters is JsonElement parameters &&
-            parameters.TryGetProperty("protocolVersion", out var requested) &&
-            (requested.ValueKind != JsonValueKind.String ||
-                (requested.GetString() ?? string.Empty).Length is 0 or > MaximumProtocolVersionLength))
+        // protocolVersion is a required member of the handshake, not an optional one: a params
+        // object that omits it, or carries it in the wrong shape, refuses the handshake rather than
+        // negotiating against an absent version (F5 audit ⑧).
+        if (request.Parameters is not JsonElement parameters ||
+            !parameters.TryGetProperty("protocolVersion", out var requested) ||
+            requested.ValueKind != JsonValueKind.String ||
+            (requested.GetString() ?? string.Empty).Length is 0 or > MaximumProtocolVersionLength)
         {
             return Rejected(JsonRpcErrorCodes.InvalidParams, McpDiagnosticCodes.InvalidRequest);
         }

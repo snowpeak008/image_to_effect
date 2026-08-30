@@ -239,7 +239,7 @@ internal sealed class McpToolInvoker
                 writer.WriteString("queueState", snapshot.QueueState);
                 writer.WritePropertyName("job");
                 writer.WriteStartObject();
-                WriteJobBody(writer, job);
+                WriteJobBody(writer, job, includeArtifactIds: true);
                 writer.WriteEndObject();
             }));
         }
@@ -383,6 +383,9 @@ internal sealed class McpToolInvoker
         return Encoding.UTF8.GetString(buffer.WrittenSpan);
     }
 
+    // The "single-" prefix is a derived-id convention for readability, not a reserved namespace: a
+    // batch submitted with a manifest batchId of "single-..." is not rejected, and the SHA-derived
+    // suffix keeps a real collision negligible rather than impossible (F5 audit ③).
     private static string DeriveSingleBatchId(string itemId) =>
         "single-" + Convert.ToHexString(SHA256.HashData(Encoding.UTF8.GetBytes(itemId)))
             .ToLowerInvariant()[..32];
@@ -430,8 +433,10 @@ internal sealed class McpToolInvoker
     /// <summary>
     /// The queue-entry projection. Field names follow the Protocol job event DTOs, which is the
     /// same shape the CLI NDJSON stream emits, so both surfaces describe one entry identically.
+    /// The single-entry tool additionally spells out the artifact identities the list projections
+    /// only count, which is where a refused build's precise code becomes readable.
     /// </summary>
-    private static void WriteJobBody(Utf8JsonWriter writer, JobRecord job)
+    internal static void WriteJobBody(Utf8JsonWriter writer, JobRecord job, bool includeArtifactIds = false)
     {
         writer.WriteString("jobId", job.JobId);
         writer.WriteString("sourceEntry", job.SourceEntry);
@@ -442,6 +447,11 @@ internal sealed class McpToolInvoker
         if (job.BatchId is string batchId)
         {
             writer.WriteString("batchId", batchId);
+        }
+
+        if (job.ItemId is string itemId)
+        {
+            writer.WriteString("itemId", itemId);
         }
 
         if (job.FinalDiagnosticCode is string diagnostic)
@@ -455,6 +465,18 @@ internal sealed class McpToolInvoker
         }
 
         writer.WriteNumber("artifactCount", job.ArtifactIds.Count);
+        if (!includeArtifactIds)
+        {
+            return;
+        }
+
+        writer.WriteStartArray("artifactIds");
+        foreach (var artifactId in job.ArtifactIds)
+        {
+            writer.WriteStringValue(artifactId);
+        }
+
+        writer.WriteEndArray();
     }
 
     private static void WriteIssues(Utf8JsonWriter writer, IReadOnlyList<BatchValidationIssue> issues)
@@ -522,10 +544,11 @@ internal sealed class McpToolInvoker
     }
 
     /// <summary>
-    /// Recipe probe for a manifest that arrived as inline content. There is no directory to
-    /// resolve a reference against, so every reference is reported missing and the manifest is
-    /// refused; a recipe entry is already outside this build's executable capability, and this
-    /// keeps the refusal in place if that ever changes.
+    /// Recipe probe for a manifest that arrived as inline content. A recipe reference is resolved
+    /// relative to the manifest's own directory, and inline content has no directory, so every
+    /// reference is reported missing and the manifest is refused (B201). This holds independently
+    /// of the capability gate: a build-capable host does accept recipe entries, but only from a
+    /// manifest that has a location on disk to resolve them against.
     /// </summary>
     private sealed class InlineManifestRecipeProbe : IBatchRecipeProbe
     {

@@ -17,8 +17,9 @@ switch (decision.Action)
 using var interrupt = new CancellationTokenSource();
 Console.CancelKeyPress += (_, eventArgs) =>
 {
-    // Ctrl+C ends the session. Already enqueued jobs keep running under the executor, exactly as
-    // when the client simply closes the transport (REQ-002 §12).
+    // Ctrl+C ends this stdio session, exactly as the client closing the transport does. This server
+    // only enqueues; jobs already in the store are unaffected and run whenever a host that owns the
+    // executor drains them, not "under" this process (REQ-002 §12).
     eventArgs.Cancel = true;
     interrupt.Cancel();
 };

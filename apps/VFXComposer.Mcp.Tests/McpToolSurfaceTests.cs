@@ -158,9 +158,14 @@ public sealed class McpToolSurfaceTests
             payload.RootElement.GetProperty("disposition").GetString());
         var batchId = payload.RootElement.GetProperty("batchId").GetString()!;
         StringAssert.StartsWith(batchId, "single-");
+        Assert.AreEqual(
+            BatchFailurePolicies.Continue,
+            payload.RootElement.GetProperty("onFailure").GetString(),
+            "The derived one-entry manifest settles under the continue policy (F5 audit ④).");
         var jobs = fixture.Store.ReadSnapshot().Jobs;
         Assert.AreEqual(1, jobs.Count);
         Assert.AreEqual(batchId, jobs[0].BatchId);
+        Assert.AreEqual(JobBatchPolicies.Continue, jobs[0].BatchPolicy);
         Assert.AreEqual(payload.RootElement.GetProperty("jobId").GetString(), jobs[0].JobId);
     }
 

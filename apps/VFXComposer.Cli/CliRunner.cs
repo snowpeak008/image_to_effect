@@ -315,7 +315,7 @@ public static class CliRunner
             return CliExitCodes.DataError;
         }
 
-        presenter.JobLine(job);
+        presenter.JobDetail(job);
         return CliExitCodes.Success;
     }
 

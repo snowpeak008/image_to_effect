@@ -69,6 +69,31 @@ public sealed class CliRunnerTests
     }
 
     [TestMethod]
+    public async Task TheCheckedInSampleManifestRunsGreenThroughTheRealRunner()
+    {
+        // F6 flow-two acceptance: the batches/ sample that ships as the fixed input is not just
+        // parseable (BatchesSampleManifestTests) but runs end to end through the real runner —
+        // manifest → serial queue → per-entry drain → report/exit code — on the mock channel.
+        var fixture = new CliFixture(shouldFail: static _ => false);
+        var manifest = fixture.WriteManifest(File.ReadAllText(TestRepository.SampleManifestPath()));
+
+        var exit = await fixture.RunAsync(["batch", "run", manifest]);
+
+        Assert.AreEqual(CliExitCodes.Success, exit, fixture.Output + fixture.Errors);
+        var report = fixture.ReadReport(manifest);
+        Assert.AreEqual("sample-fire-pack", report.BatchId);
+        Assert.AreEqual(3, report.Summary.Succeeded);
+        Assert.AreEqual(0, report.Summary.Failed);
+        Assert.AreEqual(0, report.Summary.Pending);
+        CollectionAssert.AreEqual(
+            new[] { "fireball-big-slow", "frost-nova-burst", "spark-hit-3d" },
+            report.Items.Select(static item => item.ItemId).ToArray());
+        Assert.IsTrue(
+            fixture.Store.ReadSnapshot().Jobs.All(job => job.State == JobStatusStates.Succeeded),
+            "Every entry of the shipped sample settles Succeeded on the mock channel.");
+    }
+
+    [TestMethod]
     public async Task ASingleFailureDoesNotStopTheBatchUnderTheContinuePolicy()
     {
         var fixture = new CliFixture();
@@ -81,7 +106,7 @@ public sealed class CliRunnerTests
         Assert.AreEqual(2, report.Summary.Succeeded);
         Assert.AreEqual(1, report.Summary.Failed);
         Assert.AreEqual(
-            JobQueueDiagnosticCodes.ExecutionFailed,
+            JobQueueDiagnosticCodes.GenerationValidationExhausted,
             report.Items.Single(item => item.ItemId == "beta").Diagnostic);
         Assert.AreEqual(
             JobCompletionOutcomes.Succeeded,

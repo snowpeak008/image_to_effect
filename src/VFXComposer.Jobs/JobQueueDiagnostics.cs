@@ -26,6 +26,8 @@ public static class JobQueueDiagnosticCodes
     public const string EventLogWriteFailed = "VFXJ0014";
     public const string BatchAborted = "VFXJ0015";
     public const string ExecutorHostFault = "VFXJ0016";
+    public const string GenerationValidationExhausted = "VFXJ0017";
+    public const string GenerationChannelFailed = "VFXJ0018";
 
     public static IReadOnlySet<string> All => JobQueueDiagnosticCatalog.Codes;
 }
@@ -123,6 +125,16 @@ public static class JobQueueDiagnosticCatalog
                 DiagnosticSeverities.Error,
                 "The executor host failed outside the job payload; the job was settled as failed.",
                 Retryable: true),
+            new JobQueueDiagnosticDefinition(
+                JobQueueDiagnosticCodes.GenerationValidationExhausted,
+                DiagnosticSeverities.Error,
+                "Recipe generation exhausted its validation retry budget; the job was settled as failed.",
+                Retryable: false),
+            new JobQueueDiagnosticDefinition(
+                JobQueueDiagnosticCodes.GenerationChannelFailed,
+                DiagnosticSeverities.Error,
+                "The recipe generation channel failed; the job was settled as failed.",
+                Retryable: false),
         }.ToFrozenDictionary(definition => definition.Code, StringComparer.Ordinal);
 
     internal static FrozenSet<string> Codes { get; } =

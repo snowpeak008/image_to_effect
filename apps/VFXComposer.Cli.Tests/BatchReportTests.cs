@@ -30,7 +30,7 @@ public sealed class BatchReportTests
         Assert.AreEqual(0, report.Summary.Pending);
         var beta = report.Items.Single(item => item.ItemId == "beta");
         Assert.AreEqual(JobCompletionOutcomes.Failed, beta.Outcome);
-        Assert.AreEqual(JobQueueDiagnosticCodes.ExecutionFailed, beta.Diagnostic);
+        Assert.AreEqual(JobQueueDiagnosticCodes.GenerationValidationExhausted, beta.Diagnostic);
         var alpha = report.Items.Single(item => item.ItemId == "alpha");
         Assert.AreEqual(BatchItemDispositions.SkippedIdempotent, alpha.Outcome);
         Assert.IsNull(alpha.JobId);

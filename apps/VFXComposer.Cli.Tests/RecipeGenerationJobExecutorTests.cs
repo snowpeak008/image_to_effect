@@ -56,7 +56,7 @@ public sealed class RecipeGenerationJobExecutorTests
             Payload("a broken effect"));
 
         Assert.AreEqual(JobStatusStates.Failed, job.State);
-        Assert.AreEqual(JobQueueDiagnosticCodes.ExecutionFailed, job.FinalDiagnosticCode);
+        Assert.AreEqual(JobQueueDiagnosticCodes.GenerationValidationExhausted, job.FinalDiagnosticCode);
     }
 
     [TestMethod]
@@ -70,7 +70,7 @@ public sealed class RecipeGenerationJobExecutorTests
             Payload("an unreachable provider"));
 
         Assert.AreEqual(JobStatusStates.Failed, job.State);
-        Assert.AreEqual(JobQueueDiagnosticCodes.ExecutionFailed, job.FinalDiagnosticCode);
+        Assert.AreEqual(JobQueueDiagnosticCodes.GenerationChannelFailed, job.FinalDiagnosticCode);
         Assert.AreEqual(0, drafts.Records.Count);
     }
 
@@ -113,7 +113,7 @@ public sealed class RecipeGenerationJobExecutorTests
         Assert.AreEqual(
             JobQueueDiagnosticCodes.ExecutionFailed,
             job.FinalDiagnosticCode,
-            "A channel-reported cancellation without a host cancellation request is still a terminal failure.");
+            "A channel-reported cancellation surfaces as OperationCanceled and, with no host cancel, settles under the generic execution code — not a generation-outcome code.");
     }
 
     private static RecipeGenerationJobExecutor Executor(

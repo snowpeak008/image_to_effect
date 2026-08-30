@@ -107,7 +107,9 @@ public sealed class RecipeBuildOrchestratorTests
         CollectionAssert.Contains(decision.Result!.IssueCodes.ToArray(), "E308");
         Assert.AreEqual(RecipeDraftStatus.BuildFailed, store.TryGet(draft.DraftId)!.Status);
         Assert.AreEqual(1, sink.Logs.Count);
-        Assert.AreEqual(0, sink.Artifacts.Count);
+        // Must-do ⑥: the precise build code survives on the queue-visible artifact surface, so a
+        // refusal is diagnosable without reading the Unity log the scratch directory later deletes.
+        CollectionAssert.AreEqual(new[] { "failure:VFXB0008" }, sink.Artifacts.ToArray());
     }
 
     [TestMethod]

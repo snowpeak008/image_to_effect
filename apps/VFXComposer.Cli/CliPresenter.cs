@@ -257,6 +257,30 @@ internal sealed class CliPresenter
         _writer.WriteLine(line.ToString());
     }
 
+    /// <summary>
+    /// The single-entry view. It spells out the artifact identities the list views only count,
+    /// because this is where an operator looks to find out what one entry produced — or, for a
+    /// refused build, which stage refused it.
+    /// </summary>
+    public void JobDetail(JobRecord job)
+    {
+        if (_json)
+        {
+            WriteJson(writer =>
+            {
+                WriteJobBody(writer, job);
+                WriteArtifactIds(writer, job);
+            });
+            return;
+        }
+
+        JobLine(job);
+        foreach (var artifactId in job.ArtifactIds)
+        {
+            _writer.WriteLine("  artifact " + artifactId);
+        }
+    }
+
     public void CancellationResult(string jobId, JobCancellationResult result)
     {
         if (_json)
@@ -316,7 +340,12 @@ internal sealed class CliPresenter
 
     public void Line(string text) => _writer.WriteLine(text);
 
-    private static void WriteJobBody(Utf8JsonWriter writer, JobRecord job)
+    /// <summary>
+    /// The queue-entry body shared by the line and detail views. Its field set is kept identical to
+    /// the MCP entry projection (minus the CLI-only <c>kind</c> envelope tag), a constraint
+    /// <c>JobEntryProjectionEquivalenceTests</c> enforces constructively against JobRecord itself.
+    /// </summary>
+    internal static void WriteJobBody(Utf8JsonWriter writer, JobRecord job)
     {
         writer.WriteString("kind", "job");
         writer.WriteString("jobId", job.JobId);
@@ -324,7 +353,9 @@ internal sealed class CliPresenter
         writer.WriteString("jobKind", job.JobKind);
         writer.WriteString("state", job.State);
         writer.WriteNumber("progressPermille", job.LastProgressPermille);
+        writer.WriteBoolean("cancelRequested", job.CancelRequested);
         WriteOptionalString(writer, "batchId", job.BatchId);
+        WriteOptionalString(writer, "itemId", job.ItemId);
         WriteOptionalString(writer, "diagnostic", job.FinalDiagnosticCode);
         if (job.IsTerminal)
         {
@@ -332,6 +363,17 @@ internal sealed class CliPresenter
         }
 
         writer.WriteNumber("artifactCount", job.ArtifactIds.Count);
+    }
+
+    internal static void WriteArtifactIds(Utf8JsonWriter writer, JobRecord job)
+    {
+        writer.WriteStartArray("artifactIds");
+        foreach (var artifactId in job.ArtifactIds)
+        {
+            writer.WriteStringValue(artifactId);
+        }
+
+        writer.WriteEndArray();
     }
 
     private static void WriteOptionalString(Utf8JsonWriter writer, string propertyName, string? value)
