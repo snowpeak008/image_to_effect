@@ -39,4 +39,30 @@ public sealed class BatchesSampleManifestTests
         Assert.AreEqual("3d", manifest.Items[2].Constraints.Dimension, "The item overrides the manifest default.");
         Assert.AreEqual("mobile_medium", manifest.Items[0].Constraints.TargetProfile, "The item inherits the manifest default.");
     }
+
+    [TestMethod]
+    public void TheCheckedInRecipeKindSampleResolvesItsBundledStrictRecipe()
+    {
+        // The recipe this references is validated for real by a Unity batchmode build (F6 flow one,
+        // evidence in docs/stage-notes/F6_E2E_EVIDENCE.md): it satisfies the F2 strict budget
+        // (one render-module stage, no attachTo chain, all three stage roots). Here we prove the
+        // manifest resolves it through the real filesystem probe under a build-capable profile.
+        var batchesDirectory = Path.GetDirectoryName(TestRepository.SampleManifestPath())!;
+        var json = File.ReadAllText(Path.Combine(batchesDirectory, "sample-batch-recipe.manifest.json"));
+
+        var result = BatchManifestParser.Parse(
+            json,
+            new FileSystemBatchRecipeProbe(batchesDirectory),
+            BatchCapabilityProfile.GenerationAndRecipeBuild);
+
+        Assert.IsTrue(
+            result.IsValid,
+            string.Join("; ", result.Issues.Select(static issue => issue.Code + " " + issue.Path)));
+
+        var item = result.Manifest!.Items.Single();
+        Assert.AreEqual("sample-recipe-pack", result.Manifest.BatchId);
+        Assert.AreEqual(BatchFailurePolicies.Abort, result.Manifest.FailurePolicy);
+        Assert.AreEqual(BatchItemKinds.Recipe, item.Kind);
+        Assert.AreEqual("recipes/spark_projectile_2d.json", item.RecipePath);
+    }
 }

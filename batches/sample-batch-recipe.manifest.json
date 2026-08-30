@@ -1,0 +1,12 @@
+{
+  "schemaVersion": "vfxcomposer.batch-manifest/1",
+  "batchId": "sample-recipe-pack",
+  "onFailure": "abort",
+  "items": [
+    {
+      "itemId": "spark-projectile",
+      "kind": "recipe",
+      "recipePath": "recipes/spark_projectile_2d.json"
+    }
+  ]
+}
