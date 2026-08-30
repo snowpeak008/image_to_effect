@@ -340,7 +340,12 @@ internal sealed class CliPresenter
 
     public void Line(string text) => _writer.WriteLine(text);
 
-    private static void WriteJobBody(Utf8JsonWriter writer, JobRecord job)
+    /// <summary>
+    /// The queue-entry body shared by the line and detail views. Its field set is kept identical to
+    /// the MCP entry projection (minus the CLI-only <c>kind</c> envelope tag), a constraint
+    /// <c>JobEntryProjectionEquivalenceTests</c> enforces constructively against JobRecord itself.
+    /// </summary>
+    internal static void WriteJobBody(Utf8JsonWriter writer, JobRecord job)
     {
         writer.WriteString("kind", "job");
         writer.WriteString("jobId", job.JobId);
@@ -348,7 +353,9 @@ internal sealed class CliPresenter
         writer.WriteString("jobKind", job.JobKind);
         writer.WriteString("state", job.State);
         writer.WriteNumber("progressPermille", job.LastProgressPermille);
+        writer.WriteBoolean("cancelRequested", job.CancelRequested);
         WriteOptionalString(writer, "batchId", job.BatchId);
+        WriteOptionalString(writer, "itemId", job.ItemId);
         WriteOptionalString(writer, "diagnostic", job.FinalDiagnosticCode);
         if (job.IsTerminal)
         {
@@ -358,7 +365,7 @@ internal sealed class CliPresenter
         writer.WriteNumber("artifactCount", job.ArtifactIds.Count);
     }
 
-    private static void WriteArtifactIds(Utf8JsonWriter writer, JobRecord job)
+    internal static void WriteArtifactIds(Utf8JsonWriter writer, JobRecord job)
     {
         writer.WriteStartArray("artifactIds");
         foreach (var artifactId in job.ArtifactIds)

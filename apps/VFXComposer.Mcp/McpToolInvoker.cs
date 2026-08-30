@@ -433,7 +433,7 @@ internal sealed class McpToolInvoker
     /// The single-entry tool additionally spells out the artifact identities the list projections
     /// only count, which is where a refused build's precise code becomes readable.
     /// </summary>
-    private static void WriteJobBody(Utf8JsonWriter writer, JobRecord job, bool includeArtifactIds = false)
+    internal static void WriteJobBody(Utf8JsonWriter writer, JobRecord job, bool includeArtifactIds = false)
     {
         writer.WriteString("jobId", job.JobId);
         writer.WriteString("sourceEntry", job.SourceEntry);
@@ -444,6 +444,11 @@ internal sealed class McpToolInvoker
         if (job.BatchId is string batchId)
         {
             writer.WriteString("batchId", batchId);
+        }
+
+        if (job.ItemId is string itemId)
+        {
+            writer.WriteString("itemId", itemId);
         }
 
         if (job.FinalDiagnosticCode is string diagnostic)
