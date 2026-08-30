@@ -150,7 +150,7 @@ unityVersion
 sourceRecipePath
 runtimeEntry { kind, path, guid }
 ownedOutputs[] { path, guid, assetType, sha256 }
-dependencies[] { path, guid, assetType, version, dependencyHash }
+dependencies[] { path, guid, assetType, version }
 cost { particles, particleSystems, renderers, materials, trails, duration,
        localTextureBytes, dependencyResidentTextureBytes }
 generatedAtUtc

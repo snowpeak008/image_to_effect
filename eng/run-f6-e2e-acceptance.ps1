@@ -121,8 +121,9 @@ Write-Host @"
        - ProjectSettings/VFXComposer/BuildManifests/<effectId>.manifest.json
        - Assets/VFX/Recipes/<effectId>.json (build provenance)
   4. Confirm the effect looks correct (user's visual sign-off; not a machine gate).
-  5. dependencyHash / build drift under project/ is restored, never committed
-     (git checkout -- project; git clean -fd project).
+  5. Any build drift under project/ is restored, never committed
+     (git checkout -- project; git clean -fd project). Note: dependencyHash is no
+     longer a committed manifest field (D4), so that particular churn is gone.
 "@ | Out-Host
 
 Write-Host "-- Manual flow two (provider-backed; the machine suites cover the mock path) --" -ForegroundColor Yellow

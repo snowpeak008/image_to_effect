@@ -27,7 +27,9 @@ namespace VFXComposer.Editor.Rules
         public string Guid;
         public string AssetType;
         public string Version;
-        public string DependencyHash;
+        // DependencyHash was removed (D4): it was AssetDatabase.GetAssetDependencyHash over the Runtime
+        // Entry's transitive closure — machine/Library-local, never compared for verification, and the
+        // dominant source of non-portable churn in the committed ownership manifest.
     }
 
     [Serializable]

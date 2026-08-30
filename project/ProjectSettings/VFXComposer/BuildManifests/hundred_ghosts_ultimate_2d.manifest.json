@@ -35,113 +35,97 @@
       "path": "Assets/VFX/Generated/ink_dragon_trail_2d/VFX_ink_dragon_trail_2d.prefab",
       "guid": "2bb274b911006be44b747aa81dfbcd95",
       "assetType": "GameObject",
-      "version": null,
-      "dependencyHash": "f99844a410358f480ce4251f2626a20a"
+      "version": null
     },
     {
       "path": "Assets/VFX/Generated/phantom_wail_area_2d/VFX_phantom_wail_area_2d.prefab",
       "guid": "5e6502ab8b088e843bd36a4994874dd8",
       "assetType": "GameObject",
-      "version": null,
-      "dependencyHash": "eaa87615f65e4e83bfe9408224013cbd"
+      "version": null
     },
     {
       "path": "Assets/VFX/Generated/shadow_grasp_area_2d/VFX_shadow_grasp_area_2d.prefab",
       "guid": "e99b81dded4da0b4e9d8345bcfaabcb4",
       "assetType": "GameObject",
-      "version": null,
-      "dependencyHash": "7840705603efb63eccf9e9d953c1003f"
+      "version": null
     },
     {
       "path": "Assets/VFX/Shared/Shaders/VfxDissolveEdge.shader",
       "guid": "5b0bcf875e86f60489700456c2154aee",
       "assetType": "Shader",
-      "version": null,
-      "dependencyHash": "30bc399c9c079542d29fbf6700020364"
+      "version": null
     },
     {
       "path": "Assets/VFX/Shared/Shaders/VfxInkBrush.shader",
       "guid": "1aa4c96a53155d84bb4bbcc0191a7e44",
       "assetType": "Shader",
-      "version": null,
-      "dependencyHash": "480f54d659ea0471673419623827719f"
+      "version": null
     },
     {
       "path": "Assets/VFX/Shared/Shaders/VfxSoftNoise.shader",
       "guid": "a6e4e3aa82ac7c84d9dd012aaae56c67",
       "assetType": "Shader",
-      "version": null,
-      "dependencyHash": "daf4e4d9c28a30f0230301e6f07535a5"
+      "version": null
     },
     {
       "path": "Assets/VFX/Shared/Styles/Materials/MAT_Style_dark.mat",
       "guid": "06882d319d21ef44f95b00f7814e3463",
       "assetType": "Material",
-      "version": null,
-      "dependencyHash": "2c79c1062f8c6f82579a1c8f8d0ed21d"
+      "version": null
     },
     {
       "path": "Assets/VFX/Shared/Styles/Materials/MAT_Style_ghost.mat",
       "guid": "537b7c3b77b57e841a12e48bf1cc1aaf",
       "assetType": "Material",
-      "version": null,
-      "dependencyHash": "efe1cadbae6aa7b3e1bc9ab8aba7c9b1"
+      "version": null
     },
     {
       "path": "Assets/VFX/Shared/Styles/Materials/MAT_Style_inkwash.mat",
       "guid": "bf25c0c6a91d68548a6c62bb24fcfc83",
       "assetType": "Material",
-      "version": null,
-      "dependencyHash": "fa1334c7258fcbea505c87de87210648"
+      "version": null
     },
     {
       "path": "Assets/VFX/Shared/Styles/Meshes/M_Style_Burst.asset",
       "guid": "0def46dac13f1d8449cd98d98de17a15",
       "assetType": "Mesh",
-      "version": null,
-      "dependencyHash": "56e972a8f8588a864d379a7611c49c63"
+      "version": null
     },
     {
       "path": "Assets/VFX/Shared/Styles/Meshes/M_Style_Quad.asset",
       "guid": "7f415b79b45b04d4ab5e3f4dd61605aa",
       "assetType": "Mesh",
-      "version": null,
-      "dependencyHash": "01e83f0bfc8392031ac8f5694416ab10"
+      "version": null
     },
     {
       "path": "Assets/VFX/Shared/Styles/Meshes/M_Style_Ribbon.asset",
       "guid": "dddd70cae322a2e40b1c5daa80492bd6",
       "assetType": "Mesh",
-      "version": null,
-      "dependencyHash": "63b4bdca2af28668b73b3c2e60589468"
+      "version": null
     },
     {
       "path": "Assets/VFX/Shared/Styles/Meshes/M_Style_Ring.asset",
       "guid": "df59364e370c085418d31c0f952bcf1a",
       "assetType": "Mesh",
-      "version": null,
-      "dependencyHash": "021f9d0fab5159d1d05310de3284c997"
+      "version": null
     },
     {
       "path": "Assets/VFX/Shared/Styles/Meshes/M_Style_Shard.asset",
       "guid": "506c8c0bcf8b14645948b3dbb02a1b3f",
       "assetType": "Mesh",
-      "version": null,
-      "dependencyHash": "ff113f023e398b26696f0c501ae28324"
+      "version": null
     },
     {
       "path": "Packages/com.vfxcomposer.unity/Runtime/Components/CompositeVfxController.cs",
       "guid": "07d8735a81864834c8f1bda23acf4be2",
       "assetType": "MonoScript",
-      "version": null,
-      "dependencyHash": "570863f0966daccfed5bf3e887baa10e"
+      "version": null
     },
     {
       "path": "Packages/com.vfxcomposer.unity/Runtime/Components/StyledVfxController.cs",
       "guid": "ca6f81a249967414c96082671e07dcaa",
       "assetType": "MonoScript",
-      "version": null,
-      "dependencyHash": "486e1b8ba27b5e00b709bc5fd2b5624a"
+      "version": null
     }
   ],
   "cost": {

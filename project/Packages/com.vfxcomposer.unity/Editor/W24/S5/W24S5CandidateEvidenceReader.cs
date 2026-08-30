@@ -527,12 +527,13 @@ namespace VFXComposer.Editor.W24.S5
             foreach (var token in dependencies)
             {
                 var dependency = RequiredArrayObject(token, "Manifest dependency");
-                RequireExactly(dependency, "path", "guid", "assetType", "version", "dependencyHash");
+                // D4: dependencyHash was removed from the dependency record — machine-local and never
+                // compared. The formal reader now requires exactly the portable identity fields.
+                RequireExactly(dependency, "path", "guid", "assetType", "version");
                 RequiredPath(dependency, "path");
                 RequiredGuid(dependency, "guid");
                 RequiredString(dependency, "assetType", 128);
                 RequireNullOrBoundedString(dependency, "version", 128);
-                RequiredLowerHex(dependency, "dependencyHash", 32);
             }
 
             var cost = RequiredObject(manifest, "cost");

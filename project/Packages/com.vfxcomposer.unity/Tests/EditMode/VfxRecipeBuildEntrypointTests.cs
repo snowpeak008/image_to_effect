@@ -298,6 +298,40 @@ namespace VFXComposer.Tests.EditMode
             Assert.That(bumped, Is.Not.EqualTo(first), "A template version bump must move the catalog identity.");
         }
 
+        [Test]
+        public void RestoringProvenanceOverAnExistingRecipeSwapsInThePriorBytesAtomicallyAndLeavesNoPending()
+        {
+            var provenancePath = "Assets/VFX/Recipes/" + EffectId + ".json";
+            var absolute = Absolute(provenancePath);
+            Directory.CreateDirectory(Path.GetDirectoryName(absolute));
+            var priorBytes = Encoding.UTF8.GetBytes("{\"prior\":\"last-good\"}");
+            // The current on-disk state is a newer, different provenance the failed build had just landed.
+            File.WriteAllBytes(absolute, Encoding.UTF8.GetBytes("{\"newer\":\"failed-build\"}"));
+            // A stale sibling from an earlier interrupted write must not survive the restore.
+            File.WriteAllText(absolute + ".pending", "stale", new UTF8Encoding(false));
+
+            VfxRecipeBuildEntrypoint.RestoreProvenance(EffectId, priorBytes, existed: true);
+
+            CollectionAssert.AreEqual(priorBytes, File.ReadAllBytes(absolute), "The last-good bytes must be restored exactly.");
+            Assert.That(File.Exists(absolute + ".pending"), Is.False, "The atomic restore must leave no .pending residue.");
+        }
+
+        [Test]
+        public void RestoringProvenanceThatDidNotExistRemovesTheRecipeAndItsMeta()
+        {
+            var provenancePath = "Assets/VFX/Recipes/" + EffectId + ".json";
+            var absolute = Absolute(provenancePath);
+            Directory.CreateDirectory(Path.GetDirectoryName(absolute));
+            // The build wrote a fresh provenance where none existed before; the rollback must erase it wholly.
+            File.WriteAllText(absolute, "{\"fresh\":true}", new UTF8Encoding(false));
+            File.WriteAllText(absolute + ".meta", "meta", new UTF8Encoding(false));
+
+            VfxRecipeBuildEntrypoint.RestoreProvenance(EffectId, priorBytes: null, existed: false);
+
+            Assert.That(File.Exists(absolute), Is.False, "A provenance that never existed must be deleted on rollback.");
+            Assert.That(File.Exists(absolute + ".meta"), Is.False, "The generated .meta must be deleted with it.");
+        }
+
         private VfxRecipeBuildRequest Request(string recipeJson)
         {
             var path = Path.Combine(stagingRoot, "staged-recipe.json");

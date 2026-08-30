@@ -15,5 +15,11 @@
   <ItemGroup>
     <ProjectReference Include="..\VFXComposer.Jobs\VFXComposer.Jobs.csproj" />
     <ProjectReference Include="..\VFXComposer.Protocol\VFXComposer.Protocol.csproj" />
+    <ProjectReference Include="JobExecutorLockHost\VFXComposer.Jobs.Tests.JobExecutorLockHost.csproj"
+                      ReferenceOutputAssembly="false" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="JobExecutorLockHost\**\*.cs" />
   </ItemGroup>
 </Project>

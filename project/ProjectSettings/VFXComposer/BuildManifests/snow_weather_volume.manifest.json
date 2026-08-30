@@ -29,43 +29,37 @@
       "path": "Assets/VFX/Shared/CoverageGalleryB/Materials/MAT_CoverageB_Additive.mat",
       "guid": "688b79adff1f3474da55fb0deedff137",
       "assetType": "Material",
-      "version": null,
-      "dependencyHash": "0b0b0e70d4676ffab060eedfd9b3ebea"
+      "version": null
     },
     {
       "path": "Assets/VFX/Shared/CoverageGalleryB/Materials/MAT_CoverageB_Alpha.mat",
       "guid": "a84952a854859674991a6e3fe826514a",
       "assetType": "Material",
-      "version": null,
-      "dependencyHash": "6f1e099067ca8e046370c9a5c87d8158"
+      "version": null
     },
     {
       "path": "Assets/VFX/Shared/CoverageGalleryB/Meshes/M_CoverageB_Cloud.asset",
       "guid": "53d26abbb26ba274593c671d17278097",
       "assetType": "Mesh",
-      "version": null,
-      "dependencyHash": "80109da5b4c011ae5027d9dbb3971d56"
+      "version": null
     },
     {
       "path": "Assets/VFX/Shared/CoverageGalleryB/Prefabs/PF_CoverageB_Particles.prefab",
       "guid": "70f199efb6fa95243bfdc29f0ac52b45",
       "assetType": "GameObject",
-      "version": null,
-      "dependencyHash": "4ca484495d85edc18be403e3c11759f1"
+      "version": null
     },
     {
       "path": "Assets/VFX/Shared/Shaders/CoverageGalleryBUnlit.shader",
       "guid": "36a2072c324a26a479dfb498994d4812",
       "assetType": "Shader",
-      "version": null,
-      "dependencyHash": "64f6028fba878ab561a8418a3ea09753"
+      "version": null
     },
     {
       "path": "Packages/com.vfxcomposer.unity/Runtime/Components/CoverageGalleryVfxController.cs",
       "guid": "18601207a015a6140b357c3de1ce8608",
       "assetType": "MonoScript",
-      "version": null,
-      "dependencyHash": "b7413138fabc3a05f2522721ad65632e"
+      "version": null
     }
   ],
   "cost": {

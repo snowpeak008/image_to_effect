@@ -29,43 +29,37 @@
       "path": "Assets/VFX/Shared/Shaders/VfxLayeredRamp.shader",
       "guid": "81928f0d6aa7a2e4c8cb73230126637f",
       "assetType": "Shader",
-      "version": null,
-      "dependencyHash": "64048683c60561907c22fac9564aba1d"
+      "version": null
     },
     {
       "path": "Assets/VFX/Shared/Styles/Materials/MAT_Style_stylized.mat",
       "guid": "0034e6cb149f4034ca9562644ff7ae8d",
       "assetType": "Material",
-      "version": null,
-      "dependencyHash": "7f3751282b1f62d6cb78f412797ce124"
+      "version": null
     },
     {
       "path": "Assets/VFX/Shared/Styles/Meshes/M_Style_Burst.asset",
       "guid": "0def46dac13f1d8449cd98d98de17a15",
       "assetType": "Mesh",
-      "version": null,
-      "dependencyHash": "56e972a8f8588a864d379a7611c49c63"
+      "version": null
     },
     {
       "path": "Assets/VFX/Shared/Styles/Meshes/M_Style_Ribbon.asset",
       "guid": "dddd70cae322a2e40b1c5daa80492bd6",
       "assetType": "Mesh",
-      "version": null,
-      "dependencyHash": "63b4bdca2af28668b73b3c2e60589468"
+      "version": null
     },
     {
       "path": "Assets/VFX/Shared/Styles/Meshes/M_Style_Shard.asset",
       "guid": "506c8c0bcf8b14645948b3dbb02a1b3f",
       "assetType": "Mesh",
-      "version": null,
-      "dependencyHash": "ff113f023e398b26696f0c501ae28324"
+      "version": null
     },
     {
       "path": "Packages/com.vfxcomposer.unity/Runtime/Components/StyledVfxController.cs",
       "guid": "ca6f81a249967414c96082671e07dcaa",
       "assetType": "MonoScript",
-      "version": null,
-      "dependencyHash": "486e1b8ba27b5e00b709bc5fd2b5624a"
+      "version": null
     }
   ],
   "cost": {

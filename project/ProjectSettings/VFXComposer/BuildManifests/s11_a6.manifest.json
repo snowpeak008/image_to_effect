@@ -71,64 +71,55 @@
       "path": "Assets/VFX/Templates/2D/Textures/VFX2D_Ember.png",
       "guid": "2473925f189aadf49bd3392eb912d164",
       "assetType": "Texture2D",
-      "version": null,
-      "dependencyHash": "c28eef9b3c24613638561815067e5280"
+      "version": null
     },
     {
       "path": "Assets/VFX/Templates/2D/Textures/VFX2D_FireCore.png",
       "guid": "db1681a7fbdc4a94f89153d768ed4ab0",
       "assetType": "Texture2D",
-      "version": null,
-      "dependencyHash": "d1d83a1d4bb80328bfc1b8db9576b7d4"
+      "version": null
     },
     {
       "path": "Assets/VFX/Templates/2D/Textures/VFX2D_FireTrail.png",
       "guid": "1a5cacac18736f940b624e020d7854d7",
       "assetType": "Texture2D",
-      "version": null,
-      "dependencyHash": "fe88e46317792133ae1c2ccb52571ad6"
+      "version": null
     },
     {
       "path": "Assets/VFX/Templates/2D/Textures/VFX2D_ImpactStreak.png",
       "guid": "d17050d159af2e541865ec8ca2c1dcaa",
       "assetType": "Texture2D",
-      "version": null,
-      "dependencyHash": "511d8bec4f2a706008cdf5dcf58e5386"
+      "version": null
     },
     {
       "path": "Assets/VFX/Templates/2D/Textures/VFX2D_LaunchFlash.png",
       "guid": "ee295a0c1599b7b458b940a1ac2fbbf1",
       "assetType": "Texture2D",
-      "version": null,
-      "dependencyHash": "ec0bb98bf282dcabf092d445b2231b46"
+      "version": null
     },
     {
       "path": "Assets/VFX/Templates/2D/Textures/VFX2D_ShockwaveRing.png",
       "guid": "bc036c3d227550f42beae2c8a8a34637",
       "assetType": "Texture2D",
-      "version": null,
-      "dependencyHash": "288a47224e147722adc50c5881c40126"
+      "version": null
     },
     {
       "path": "Packages/com.unity.render-pipelines.universal/Editor/AssetVersion.cs",
       "guid": "d0353a89b1f911e48b9e16bdc9f2e058",
       "assetType": "MonoScript",
-      "version": null,
-      "dependencyHash": "32658fcbbe1a332050004e3b27abb4a3"
+      "version": null
     },
     {
       "path": "Packages/com.unity.render-pipelines.universal/Shaders/Particles/ParticlesUnlit.shader",
       "guid": "0406db5a14f94604a8c57ccfbc9f3b46",
       "assetType": "Shader",
-      "version": null,
-      "dependencyHash": "b7b185925fcbf7b0661368a240b860d4"
+      "version": null
     },
     {
       "path": "Packages/com.vfxcomposer.unity/Runtime/Components/GeneratedVfxController.cs",
       "guid": "95375c27028a27440aba608c4070f13c",
       "assetType": "MonoScript",
-      "version": null,
-      "dependencyHash": "84f23e5ab123318ec5a468206d637ab8"
+      "version": null
     }
   ],
   "cost": {

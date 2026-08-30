@@ -29,36 +29,31 @@
       "path": "Assets/VFX/Shared/Shaders/VfxLayeredRamp.shader",
       "guid": "81928f0d6aa7a2e4c8cb73230126637f",
       "assetType": "Shader",
-      "version": null,
-      "dependencyHash": "64048683c60561907c22fac9564aba1d"
+      "version": null
     },
     {
       "path": "Assets/VFX/Shared/Styles/Materials/MAT_Style_steampunk.mat",
       "guid": "495290e581cc56b4789b8bdb4d4521ea",
       "assetType": "Material",
-      "version": null,
-      "dependencyHash": "74e19b970f93025b43ace825827392d8"
+      "version": null
     },
     {
       "path": "Assets/VFX/Shared/Styles/Meshes/M_Style_Burst.asset",
       "guid": "0def46dac13f1d8449cd98d98de17a15",
       "assetType": "Mesh",
-      "version": null,
-      "dependencyHash": "56e972a8f8588a864d379a7611c49c63"
+      "version": null
     },
     {
       "path": "Assets/VFX/Shared/Styles/Meshes/M_Style_Quad.asset",
       "guid": "7f415b79b45b04d4ab5e3f4dd61605aa",
       "assetType": "Mesh",
-      "version": null,
-      "dependencyHash": "01e83f0bfc8392031ac8f5694416ab10"
+      "version": null
     },
     {
       "path": "Packages/com.vfxcomposer.unity/Runtime/Components/StyledVfxController.cs",
       "guid": "ca6f81a249967414c96082671e07dcaa",
       "assetType": "MonoScript",
-      "version": null,
-      "dependencyHash": "486e1b8ba27b5e00b709bc5fd2b5624a"
+      "version": null
     }
   ],
   "cost": {

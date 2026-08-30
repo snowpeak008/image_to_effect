@@ -35,141 +35,121 @@
       "path": "Assets/VFX/Generated/meteor_impact_3d/VFX_meteor_impact_3d.prefab",
       "guid": "de5d30552a4d5c242861536ab5e4aa4d",
       "assetType": "GameObject",
-      "version": null,
-      "dependencyHash": "09826181e44b5a0aaf2310588af33ece"
+      "version": null
     },
     {
       "path": "Assets/VFX/Generated/smoke_plume_area_3d/VFX_smoke_plume_area_3d.prefab",
       "guid": "5fd40fcb15c3dea4ba616bacebf7b829",
       "assetType": "GameObject",
-      "version": null,
-      "dependencyHash": "e7270a95fa9a36cd7c558c3645041682"
+      "version": null
     },
     {
       "path": "Assets/VFX/Generated/warning_telegraph_3d/VFX_warning_telegraph_3d.prefab",
       "guid": "07b53908adc51d741a6b540cf5f637ad",
       "assetType": "GameObject",
-      "version": null,
-      "dependencyHash": "a4833423b1507d47bcdcf12ae380111f"
+      "version": null
     },
     {
       "path": "Assets/VFX/Shared/CoverageGalleryB/Materials/MAT_CoverageB_Additive.mat",
       "guid": "688b79adff1f3474da55fb0deedff137",
       "assetType": "Material",
-      "version": null,
-      "dependencyHash": "0b0b0e70d4676ffab060eedfd9b3ebea"
+      "version": null
     },
     {
       "path": "Assets/VFX/Shared/CoverageGalleryB/Materials/MAT_CoverageB_Alpha.mat",
       "guid": "a84952a854859674991a6e3fe826514a",
       "assetType": "Material",
-      "version": null,
-      "dependencyHash": "6f1e099067ca8e046370c9a5c87d8158"
+      "version": null
     },
     {
       "path": "Assets/VFX/Shared/CoverageGalleryB/Meshes/M_CoverageB_Burst.asset",
       "guid": "39c17e75e16db7843a3bd8cc07912a7c",
       "assetType": "Mesh",
-      "version": null,
-      "dependencyHash": "331411bc82f007b47c06b680bd4401d2"
+      "version": null
     },
     {
       "path": "Assets/VFX/Shared/CoverageGalleryB/Meshes/M_CoverageB_Quad.asset",
       "guid": "ea74b7ca76a79bc44b173c14298bbdba",
       "assetType": "Mesh",
-      "version": null,
-      "dependencyHash": "65761f362d1fc645474a82095f5d7535"
+      "version": null
     },
     {
       "path": "Assets/VFX/Shared/CoverageGalleryB/Meshes/M_CoverageB_Ring.asset",
       "guid": "7a536dcec1985cf4a9e09e6df4dbd583",
       "assetType": "Mesh",
-      "version": null,
-      "dependencyHash": "2925f46e6811e075fedcad822cb3dfcf"
+      "version": null
     },
     {
       "path": "Assets/VFX/Shared/CoverageGalleryB/Prefabs/PF_CoverageB_Particles.prefab",
       "guid": "70f199efb6fa95243bfdc29f0ac52b45",
       "assetType": "GameObject",
-      "version": null,
-      "dependencyHash": "4ca484495d85edc18be403e3c11759f1"
+      "version": null
     },
     {
       "path": "Assets/VFX/Shared/Shaders/CoverageGalleryBUnlit.shader",
       "guid": "36a2072c324a26a479dfb498994d4812",
       "assetType": "Shader",
-      "version": null,
-      "dependencyHash": "64f6028fba878ab561a8418a3ea09753"
+      "version": null
     },
     {
       "path": "Assets/VFX/Shared/Shaders/VfxSoftNoise.shader",
       "guid": "a6e4e3aa82ac7c84d9dd012aaae56c67",
       "assetType": "Shader",
-      "version": null,
-      "dependencyHash": "daf4e4d9c28a30f0230301e6f07535a5"
+      "version": null
     },
     {
       "path": "Assets/VFX/Shared/Styles/Materials/MAT_Style_semireal.mat",
       "guid": "a6593efc800a7e848b872ad54cde6b3f",
       "assetType": "Material",
-      "version": null,
-      "dependencyHash": "fabed6c73355309b4089b8513d6ca8fe"
+      "version": null
     },
     {
       "path": "Assets/VFX/Shared/Styles/Meshes/M_Style_Burst.asset",
       "guid": "0def46dac13f1d8449cd98d98de17a15",
       "assetType": "Mesh",
-      "version": null,
-      "dependencyHash": "56e972a8f8588a864d379a7611c49c63"
+      "version": null
     },
     {
       "path": "Assets/VFX/Shared/Styles/Meshes/M_Style_Quad.asset",
       "guid": "7f415b79b45b04d4ab5e3f4dd61605aa",
       "assetType": "Mesh",
-      "version": null,
-      "dependencyHash": "01e83f0bfc8392031ac8f5694416ab10"
+      "version": null
     },
     {
       "path": "Assets/VFX/Shared/Styles/Meshes/M_Style_Ring.asset",
       "guid": "df59364e370c085418d31c0f952bcf1a",
       "assetType": "Mesh",
-      "version": null,
-      "dependencyHash": "021f9d0fab5159d1d05310de3284c997"
+      "version": null
     },
     {
       "path": "Assets/VFX/Shared/Styles/Meshes/M_Style_Shard.asset",
       "guid": "506c8c0bcf8b14645948b3dbb02a1b3f",
       "assetType": "Mesh",
-      "version": null,
-      "dependencyHash": "ff113f023e398b26696f0c501ae28324"
+      "version": null
     },
     {
       "path": "Packages/com.vfxcomposer.unity/Runtime/Components/CompositeVfxController.cs",
       "guid": "07d8735a81864834c8f1bda23acf4be2",
       "assetType": "MonoScript",
-      "version": null,
-      "dependencyHash": "570863f0966daccfed5bf3e887baa10e"
+      "version": null
     },
     {
       "path": "Packages/com.vfxcomposer.unity/Runtime/Components/CoverageGalleryVfxController.cs",
       "guid": "18601207a015a6140b357c3de1ce8608",
       "assetType": "MonoScript",
-      "version": null,
-      "dependencyHash": "b7413138fabc3a05f2522721ad65632e"
+      "version": null
     },
     {
       "path": "Packages/com.vfxcomposer.unity/Runtime/Components/InteractionGalleryVfxController.cs",
       "guid": "9c06fdbb4482a7a40862522ad88717b6",
       "assetType": "MonoScript",
-      "version": null,
-      "dependencyHash": "856d2bcba33bff8d21dd532335cfda8f"
+      "version": null
     },
     {
       "path": "Packages/com.vfxcomposer.unity/Runtime/Components/StyledVfxController.cs",
       "guid": "ca6f81a249967414c96082671e07dcaa",
       "assetType": "MonoScript",
-      "version": null,
-      "dependencyHash": "486e1b8ba27b5e00b709bc5fd2b5624a"
+      "version": null
     }
   ],
   "cost": {

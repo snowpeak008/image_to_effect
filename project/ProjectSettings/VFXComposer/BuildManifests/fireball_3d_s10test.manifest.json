@@ -77,50 +77,43 @@
       "path": "Assets/VFX/Templates/3D/Meshes/MESH_3D_BillboardFlame.asset",
       "guid": "82dd7548694244649adbb7166816eefd",
       "assetType": "Mesh",
-      "version": null,
-      "dependencyHash": "40e99f301558ea794e56b2407b52519f"
+      "version": null
     },
     {
       "path": "Assets/VFX/Templates/3D/Meshes/MESH_3D_ShockwaveRing.asset",
       "guid": "346cb4f405d5dbe4c8703fd0ca6e600a",
       "assetType": "Mesh",
-      "version": null,
-      "dependencyHash": "545306341570a3db59e4aa5a77639bad"
+      "version": null
     },
     {
       "path": "Packages/com.unity.render-pipelines.universal/Editor/AssetVersion.cs",
       "guid": "d0353a89b1f911e48b9e16bdc9f2e058",
       "assetType": "MonoScript",
-      "version": null,
-      "dependencyHash": "32658fcbbe1a332050004e3b27abb4a3"
+      "version": null
     },
     {
       "path": "Packages/com.unity.render-pipelines.universal/Shaders/Particles/ParticlesUnlit.shader",
       "guid": "0406db5a14f94604a8c57ccfbc9f3b46",
       "assetType": "Shader",
-      "version": null,
-      "dependencyHash": "b7b185925fcbf7b0661368a240b860d4"
+      "version": null
     },
     {
       "path": "Packages/com.unity.render-pipelines.universal/Shaders/Unlit.shader",
       "guid": "650dd9526735d5b46b79224bc6e94025",
       "assetType": "Shader",
-      "version": null,
-      "dependencyHash": "6cd57f70de0063eb6fa4b398e3b20c79"
+      "version": null
     },
     {
       "path": "Packages/com.vfxcomposer.unity/Runtime/Components/CameraFacingBillboard.cs",
       "guid": "b4b2efca55ff81249a724bb90639b45e",
       "assetType": "MonoScript",
-      "version": null,
-      "dependencyHash": "3b412fecbe960f63adaeee0a3b8c6573"
+      "version": null
     },
     {
       "path": "Packages/com.vfxcomposer.unity/Runtime/Components/GeneratedVfxController.cs",
       "guid": "95375c27028a27440aba608c4070f13c",
       "assetType": "MonoScript",
-      "version": null,
-      "dependencyHash": "84f23e5ab123318ec5a468206d637ab8"
+      "version": null
     }
   ],
   "cost": {

@@ -18,43 +18,37 @@
       "templateId": "PFT_3D_Embers",
       "templateVersion": "1.0.0",
       "assetGuid": "960d30658a5aa5f4e8a48a4dac171c6c",
-      "assetPath": "Assets/VFX/Templates/3D/Prefabs/PFT_3D_Embers.prefab",
-      "dependencyHash": "f601a3e2b7973406ab99b2da46878cd5"
+      "assetPath": "Assets/VFX/Templates/3D/Prefabs/PFT_3D_Embers.prefab"
     },
     {
       "templateId": "PFT_3D_FireCore",
       "templateVersion": "1.0.0",
       "assetGuid": "39025b13b4ad89b4a8aa54833fba71c1",
-      "assetPath": "Assets/VFX/Templates/3D/Prefabs/PFT_3D_FireCore.prefab",
-      "dependencyHash": "10cd45c92ecb1c3ece7f1c956cda6de8"
+      "assetPath": "Assets/VFX/Templates/3D/Prefabs/PFT_3D_FireCore.prefab"
     },
     {
       "templateId": "PFT_3D_FireImpact",
       "templateVersion": "1.0.0",
       "assetGuid": "150a97a57fb7d134b8a4732b6dc81840",
-      "assetPath": "Assets/VFX/Templates/3D/Prefabs/PFT_3D_FireImpact.prefab",
-      "dependencyHash": "573825cab85f3429abc6b42702a131f3"
+      "assetPath": "Assets/VFX/Templates/3D/Prefabs/PFT_3D_FireImpact.prefab"
     },
     {
       "templateId": "PFT_3D_FireTrail",
       "templateVersion": "1.0.0",
       "assetGuid": "837b9a4997d514e44813dd4edee34513",
-      "assetPath": "Assets/VFX/Templates/3D/Prefabs/PFT_3D_FireTrail.prefab",
-      "dependencyHash": "c019eb05a54aa6affab81e6f28e30fb8"
+      "assetPath": "Assets/VFX/Templates/3D/Prefabs/PFT_3D_FireTrail.prefab"
     },
     {
       "templateId": "PFT_3D_LaunchFlash",
       "templateVersion": "1.0.0",
       "assetGuid": "cb75b9516f6e41744872cdc6b21fd462",
-      "assetPath": "Assets/VFX/Templates/3D/Prefabs/PFT_3D_LaunchFlash.prefab",
-      "dependencyHash": "5fa4bfa930e33070183ee83de7bd6f1f"
+      "assetPath": "Assets/VFX/Templates/3D/Prefabs/PFT_3D_LaunchFlash.prefab"
     },
     {
       "templateId": "PFT_3D_Shockwave",
       "templateVersion": "1.0.0",
       "assetGuid": "b5cb6b035f75a1743ad26d15a1111e45",
-      "assetPath": "Assets/VFX/Templates/3D/Prefabs/PFT_3D_Shockwave.prefab",
-      "dependencyHash": "30bd805600323d8a96b25fc5ed1e1c71"
+      "assetPath": "Assets/VFX/Templates/3D/Prefabs/PFT_3D_Shockwave.prefab"
     }
   ]
 }

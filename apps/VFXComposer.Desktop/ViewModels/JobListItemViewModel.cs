@@ -26,6 +26,7 @@ public sealed class JobListItemViewModel : ObservableObject
         ShortJobId = record.JobId.Length > 12 ? record.JobId[..12] : record.JobId;
         SourceEntry = record.SourceEntry;
         JobKind = record.JobKind;
+        BatchId = record.BatchId;
         BatchDisplay = record.BatchId is null
             ? "—"
             : record.BatchId + " (" + record.BatchPolicy + ")";
@@ -40,6 +41,9 @@ public sealed class JobListItemViewModel : ObservableObject
     public string SourceEntry { get; }
     public string JobKind { get; }
     public string BatchDisplay { get; }
+
+    /// <summary>Raw batch identity used to group the Jobs page; null for a non-batch job.</summary>
+    public string? BatchId { get; }
 
     /// <summary>Batch entry name, or null for a submission that is not a batch entry.</summary>
     public string? ItemId { get; }
