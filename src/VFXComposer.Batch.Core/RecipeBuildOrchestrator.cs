@@ -21,6 +21,21 @@ public static class RecipeBuildFailureCodes
     public const string ResultIdentityMismatch = "VFXB1010";
     public const string StagingFailed = "VFXB1011";
     public const string DraftTransitionFailed = "VFXB1012";
+
+    /// <summary>
+    /// Artifact-identity prefix that carries the precise build code onto the queue entry. The queue
+    /// settles a failed build under its own closed <c>VFXJ</c> vocabulary, and the Unity result file
+    /// lives in the job scratch directory that completion deletes, so this artifact is the only
+    /// place the exact code survives on a surface a queue reader can reach.
+    /// </summary>
+    public const string FailureArtifactPrefix = "failure:";
+
+    /// <summary>The artifact identity that reports <paramref name="code"/> on the queue entry.</summary>
+    public static string FailureArtifact(string code)
+    {
+        ArgumentException.ThrowIfNullOrWhiteSpace(code);
+        return FailureArtifactPrefix + code;
+    }
 }
 
 /// <summary>
@@ -106,7 +121,8 @@ public sealed class RecipeBuildOrchestrator
 
     /// <summary>
     /// Executes one build. Cancellation propagates as <see cref="OperationCanceledException"/> and
-    /// leaves the draft in its confirmed state so the user can re-enqueue it.
+    /// leaves the draft in its confirmed state so the user can re-enqueue it. Every other refusal
+    /// leaves its precise build code on the queue entry before returning.
     /// </summary>
     public async Task<RecipeBuildDecision> ExecuteAsync(
         string payload,
@@ -116,7 +132,33 @@ public sealed class RecipeBuildOrchestrator
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(temporaryDirectory);
         ArgumentNullException.ThrowIfNull(sink);
+        RecipeBuildDecision decision;
+        try
+        {
+            decision = await BuildAsync(payload, temporaryDirectory, sink, cancellationToken).ConfigureAwait(false);
+        }
+        catch (RecipeBuildFailureException exception)
+        {
+            ReportFailure(sink, exception.Code);
+            throw;
+        }
 
+        if (decision.Succeeded && decision.Result is not null)
+        {
+            ReportArtifacts(sink, decision.Result);
+            return decision;
+        }
+
+        ReportFailure(sink, decision.FailureCode ?? RecipeBuildFailureCodes.ProcessFailed);
+        return decision;
+    }
+
+    private async Task<RecipeBuildDecision> BuildAsync(
+        string payload,
+        string temporaryDirectory,
+        IRecipeBuildSink sink,
+        CancellationToken cancellationToken)
+    {
         BatchRecipeBuildPayloadContent content;
         try
         {
@@ -174,17 +216,6 @@ public sealed class RecipeBuildOrchestrator
 
         var decision = Interpret(exitCode, resultPath, content);
         AdvanceDraft(draftStore, content, decision, sink);
-        if (decision.Succeeded && decision.Result is not null)
-        {
-            ReportArtifacts(sink, decision.Result);
-        }
-        else
-        {
-            // The queue's log vocabulary is closed, so the event log carries the queue-level code and
-            // the precise build code travels on the decision the executor turns into its failure.
-            sink.ReportLog(JobLogLevels.Error, JobQueueDiagnosticCodes.ExecutionFailed);
-        }
-
         return decision;
     }
 
@@ -340,6 +371,17 @@ public sealed class RecipeBuildOrchestrator
                 throw new RecipeBuildFailureException(RecipeBuildFailureCodes.DraftTransitionFailed);
             }
         }
+    }
+
+    /// <summary>
+    /// Reports one refusal on the queue entry: the queue-level code in the closed event vocabulary,
+    /// and the precise build code as an artifact identity so the entry itself says which stage
+    /// refused, without anyone having to read the Unity log.
+    /// </summary>
+    private static void ReportFailure(IRecipeBuildSink sink, string failureCode)
+    {
+        sink.ReportArtifact(RecipeBuildFailureCodes.FailureArtifact(failureCode));
+        sink.ReportLog(JobLogLevels.Error, JobQueueDiagnosticCodes.ExecutionFailed);
     }
 
     private static void ReportArtifacts(IRecipeBuildSink sink, UnityRecipeBuildResult result)

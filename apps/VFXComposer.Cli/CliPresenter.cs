@@ -257,6 +257,30 @@ internal sealed class CliPresenter
         _writer.WriteLine(line.ToString());
     }
 
+    /// <summary>
+    /// The single-entry view. It spells out the artifact identities the list views only count,
+    /// because this is where an operator looks to find out what one entry produced — or, for a
+    /// refused build, which stage refused it.
+    /// </summary>
+    public void JobDetail(JobRecord job)
+    {
+        if (_json)
+        {
+            WriteJson(writer =>
+            {
+                WriteJobBody(writer, job);
+                WriteArtifactIds(writer, job);
+            });
+            return;
+        }
+
+        JobLine(job);
+        foreach (var artifactId in job.ArtifactIds)
+        {
+            _writer.WriteLine("  artifact " + artifactId);
+        }
+    }
+
     public void CancellationResult(string jobId, JobCancellationResult result)
     {
         if (_json)
@@ -332,6 +356,17 @@ internal sealed class CliPresenter
         }
 
         writer.WriteNumber("artifactCount", job.ArtifactIds.Count);
+    }
+
+    private static void WriteArtifactIds(Utf8JsonWriter writer, JobRecord job)
+    {
+        writer.WriteStartArray("artifactIds");
+        foreach (var artifactId in job.ArtifactIds)
+        {
+            writer.WriteStringValue(artifactId);
+        }
+
+        writer.WriteEndArray();
     }
 
     private static void WriteOptionalString(Utf8JsonWriter writer, string propertyName, string? value)

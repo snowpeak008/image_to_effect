@@ -86,9 +86,9 @@ public static class BatchQueueReportBuilder
     }
 
     /// <summary>
-    /// Per-entry label of a queue-derived report. The store does not persist the manifest item id
-    /// yet, so the job id stands in as the entry label; this is the single place that changes once
-    /// the store carries the item id.
+    /// Per-entry label of a queue-derived report. The store persists the manifest item id, so this
+    /// report labels its entries exactly as the manifest-derived one does (REQ-003 §9.1). An entry
+    /// submitted outside a manifest carries no item id and falls back to its job id.
     /// </summary>
-    private static string EntryLabel(JobRecord job) => job.JobId;
+    private static string EntryLabel(JobRecord job) => job.ItemId ?? job.JobId;
 }
