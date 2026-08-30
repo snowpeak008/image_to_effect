@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <AssemblyName>VFXComposer.Jobs.Tests.JobExecutorLockHost</AssemblyName>
+    <RootNamespace>VFXComposer.Jobs.Tests.JobExecutorLockHost</RootNamespace>
+    <Description>Isolated process host for the Jobs executor-lock cross-process test.</Description>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\VFXComposer.Jobs\VFXComposer.Jobs.csproj" />
+    <ProjectReference Include="..\..\VFXComposer.Protocol\VFXComposer.Protocol.csproj" />
+  </ItemGroup>
+</Project>
