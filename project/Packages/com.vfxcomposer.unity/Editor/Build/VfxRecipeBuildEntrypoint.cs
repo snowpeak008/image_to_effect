@@ -390,13 +390,30 @@ namespace VFXComposer.Editor.Build
             }
         }
 
-        private static void RestoreProvenance(string effectId, byte[] priorBytes, bool existed)
+        // internal (not private) so the EditMode suite can drive the rollback restore in isolation:
+        // the production callers only reach it after a post-provenance build failure, a path no public
+        // build request exercises deterministically.
+        internal static void RestoreProvenance(string effectId, byte[] priorBytes, bool existed)
         {
             var assetPath = VfxRecipeBuildWriteSurface.ProvenanceRecipeFor(effectId);
             var absolute = VfxRecipeBuildWriteSurface.ProjectAbsolute(assetPath);
             if (existed)
             {
-                File.WriteAllBytes(absolute, priorBytes);
+                // Restore the last-good bytes with the same atomic discipline as TryWriteProvenance:
+                // a direct overwrite that is interrupted would leave the last-good provenance half-written,
+                // so stage to a sibling and swap it in with a single atomic replace instead.
+                var pending = absolute + ".pending";
+                try
+                {
+                    if (File.Exists(pending)) File.Delete(pending);
+                    File.WriteAllBytes(pending, priorBytes);
+                    ReplaceWithBoundedRetry(pending, absolute);
+                }
+                finally
+                {
+                    if (File.Exists(pending)) File.Delete(pending);
+                }
+
                 AssetDatabase.ImportAsset(assetPath, ImportAssetOptions.ForceUpdate);
                 return;
             }
