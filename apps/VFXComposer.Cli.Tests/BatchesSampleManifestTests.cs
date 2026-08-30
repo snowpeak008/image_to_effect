@@ -15,7 +15,7 @@ public sealed class BatchesSampleManifestTests
     [TestMethod]
     public void TheCheckedInSampleManifestParsesAsAValidThreeItemBatch()
     {
-        var json = File.ReadAllText(Path.Combine(RepositoryRoot(), "batches", "sample-batch.manifest.json"));
+        var json = File.ReadAllText(TestRepository.SampleManifestPath());
 
         var result = BatchManifestParser.Parse(
             json,
@@ -38,22 +38,5 @@ public sealed class BatchesSampleManifestTests
         Assert.AreEqual("2d", manifest.Items[1].Constraints.Dimension, "The item inherits the manifest default.");
         Assert.AreEqual("3d", manifest.Items[2].Constraints.Dimension, "The item overrides the manifest default.");
         Assert.AreEqual("mobile_medium", manifest.Items[0].Constraints.TargetProfile, "The item inherits the manifest default.");
-    }
-
-    /// <summary>Walks up from the test binary until it finds the solution that roots the repository.</summary>
-    private static string RepositoryRoot()
-    {
-        var directory = new DirectoryInfo(AppContext.BaseDirectory);
-        while (directory is not null)
-        {
-            if (File.Exists(Path.Combine(directory.FullName, "VFXComposer.sln")))
-            {
-                return directory.FullName;
-            }
-
-            directory = directory.Parent;
-        }
-
-        throw new InvalidOperationException("Could not locate VFXComposer.sln above " + AppContext.BaseDirectory + ".");
     }
 }
