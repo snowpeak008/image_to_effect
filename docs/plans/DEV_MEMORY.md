@@ -1,6 +1,7 @@
 # 开发记忆与恢复指南
 
 > 暂停时间：2026-08-29 18:20 前后。恢复开发时按 §3 步骤执行即可无缝续接。
+> **更新（2026-08-30，崩溃恢复会话）**：Cursor 曾在 F6 开发中途崩溃。核查结论：git 完好、master 干净且与 origin 同步。环境验证通过——Release 0/0、.NET 全量 **733/733**（与基线逐位吻合，SDK 8.0.420）。分支盘点：所有 `codex/u*`/`codex/a*`/`usermode-integration` 相对 master 0 未合并（早经 P0-1 并入）；`codex/m1`/`codex/m2` 各 1 未合并（归档保留）。**关键恢复**：F2 已合入解锁 F6，且 F6 子 agent 崩溃前的未提交 WIP 从 worktree `D:\wt\i2s-f6` 找回，补配套断言后转绿并提交至分支 `task/F6-e2e-acceptance`：`a23c6b6c`（必做①③④⑥）+ `fea2577e`（必做⑤ prompt 部分）；worktree 全量 **739/739**（+6）。**下一步**：补必做②（等价性构造化反射测试）→ 搭 E2E 骨架（流程一 Desktop 对话→构建需真实 Unity batchmode，本机 Hub 在但缺 2022.3.62f3c1 Editor，用 mock 通道 + eng/ 手工脚本兜住；流程二 CLI 批量 + MCP 冒烟纯 .NET 可跑）→ strict-budget recipe-kind 样例 → 独立审计 → 合并 master。F6 分支两笔提交未推送、未合 master、未审计。
 > **更新（2026-08-29 20:00）**：O3、F1、F3、F3b 均已合入 master（最新 `e36d5a8d`，全量 538/538）。REQ-003-12 裁决为条件豁免（F2 维持 batchmode 即有效）。当前在途：O4（Unity 测试 triage）、F4（CLI 批量入口）。下一步：O4 归零后拍板 F2 生产闸（§2 决策 2）并派发 F2；F4 交付后审计合并，再定版 F5 MCP 底座（§2 决策 3，倾向手写 stdio JSON-RPC）。另见主计划"运维事件"：worktree 退役操作仅由主 agent 在确认无在途任务时执行。
 > 文件夹导航：`OPTIMIZATION_MASTER_PLAN.md`（总计划+任务卡+状态板）｜`CODING_STANDARDS.md`（验收标准）｜`PROJECT_UNDERSTANDING.md`（项目理解）｜`SESSION_LOG_2026-08-29.md`（本次对话记录）｜`WORKTREE_RETIREMENT.md`（worktree 退役清单）｜`BASELINE_REPORT.md`（O3 交付后出现）。
 
