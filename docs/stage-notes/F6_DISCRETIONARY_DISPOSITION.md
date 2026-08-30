@@ -31,4 +31,6 @@
 | **D3** 执行器锁跨进程真杀测试 | F3 审计3 | `365857b5` | 仿 `RevisionLockHost` 建独立宿主可执行（`hold-executor`）：真进程占锁→跨进程互斥被拒（`ExecutorLockUnavailable`）→Kill 后新宿主接管。Jobs.Tests 57/57。 |
 | **D4** dependencyHash 移出入库清单 | §160 后续债务 | `9c5e5ace` | `VfxDependencyRecord` 删字段、`VfxBuildTemplate` 加 `[JsonIgnore]`（保留 buildHash 语义）、formal reader 校验放宽；机械迁移 229 个入库清单（纯 dependencyHash 去除、无时间戳漂移）；S12A/S12B 冻结门哈希经真 .NET 复算重定值。EditMode 全量 686/686。 |
 
-复验（分支尖端 `9c5e5ace`）：**EditMode 全量 686/0/54**（54 跳过含 R-4 显式豁免）；**.NET Release 全 11 测试工程 0 失败**（sln 级 9 工程 715 通过 + 独立 `Client.Tests` 16 + `Broker.ServiceHost.Tests` 16 = 747）。待用户批准合并 master + 推送。
+复验（分支尖端 `9c5e5ace`）：**EditMode 全量 686/0/54**（54 跳过含 R-4 显式豁免）；**.NET Release 全 11 测试工程 0 失败**（sln 级 9 工程 715 通过 + 独立 `Client.Tests` 16 + `Broker.ServiceHost.Tests` 16 = 747）。
+
+**独立审计 PASS（合并前，2026-08-30）**：范围/allow-list 合规（253 文件、无禁区/无 .meta 污染）；D4 迁移经程序化验证 **229/229 纯字段去除**（`strip(master)==分支`、零附带漂移、零残留、全合法 JSON）；buildHash 语义保留、幂等只看 buildHash；冻结门哈希经真 .NET 语义独立复算逐字节吻合；.NET Release 复跑 747/0 复现；对抗性无阻断。备注（审计 R1）：仓库另有一份 **pre-D4 冻结原始采集快照** `artifacts/vfx-calibration/.../source-authority/.../sustained_flame_3d.manifest.json` 仍含旧 `dependencyHash`——该快照相对 master **未改动**、不经 formal reader 枚举，属历史证据不受本次迁移影响。
