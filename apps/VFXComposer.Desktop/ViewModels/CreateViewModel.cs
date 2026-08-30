@@ -123,6 +123,9 @@ public sealed class CreateViewModel : WorkspacePageViewModel
 
     private bool CanSendChat() => !string.IsNullOrWhiteSpace(ChatPrompt);
 
+    /// <summary>Stable code for an unexpected failure that carries no code of its own (F1 audit ②).</summary>
+    private const string UnexpectedFailureCode = "VFXUI001";
+
     private async Task SendChatAsync()
     {
         if (!CanSendChat())
@@ -156,7 +159,9 @@ public sealed class CreateViewModel : WorkspacePageViewModel
         }
         catch
         {
-            ChatStatus = "Chat unavailable.";
+            // The typed catches above carry the failure's own stable code; an unexpected failure has
+            // none, so it settles under this fixed code rather than an untraceable bare message.
+            ChatStatus = "Chat unavailable: " + UnexpectedFailureCode + ".";
         }
     }
 
@@ -214,7 +219,7 @@ public sealed class CreateViewModel : WorkspacePageViewModel
         }
         catch
         {
-            RecipeStatus = "Generation unavailable.";
+            RecipeStatus = "Generation unavailable: " + UnexpectedFailureCode + ".";
         }
     }
 

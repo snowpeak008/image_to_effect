@@ -62,9 +62,12 @@ public sealed class RecipeGenerationJobExecutor : IJobExecutor
 
         if (result.Outcome != RecipeGenerationOutcome.Drafted)
         {
-            // Validation exhaustion and channel failures are both terminal for this job: the queue
-            // never retries by itself, and the stable code is all the entry surface may show.
-            throw new JobQueueException(JobQueueDiagnosticCodes.ExecutionFailed);
+            // Both are terminal — the queue never retries by itself — but they settle under distinct
+            // codes so the entry surface distinguishes an exhausted validation budget from a channel
+            // failure without reading prose (F4 audit ④).
+            throw new JobQueueException(result.Outcome == RecipeGenerationOutcome.ValidationFailed
+                ? JobQueueDiagnosticCodes.GenerationValidationExhausted
+                : JobQueueDiagnosticCodes.GenerationChannelFailed);
         }
 
         var record = _acquireDraftStore().Save(RecipeDraftRecord.Create(result, DateTimeOffset.UtcNow));

@@ -383,6 +383,9 @@ internal sealed class McpToolInvoker
         return Encoding.UTF8.GetString(buffer.WrittenSpan);
     }
 
+    // The "single-" prefix is a derived-id convention for readability, not a reserved namespace: a
+    // batch submitted with a manifest batchId of "single-..." is not rejected, and the SHA-derived
+    // suffix keeps a real collision negligible rather than impossible (F5 audit ③).
     private static string DeriveSingleBatchId(string itemId) =>
         "single-" + Convert.ToHexString(SHA256.HashData(Encoding.UTF8.GetBytes(itemId)))
             .ToLowerInvariant()[..32];

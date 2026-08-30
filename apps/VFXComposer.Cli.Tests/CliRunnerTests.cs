@@ -106,7 +106,7 @@ public sealed class CliRunnerTests
         Assert.AreEqual(2, report.Summary.Succeeded);
         Assert.AreEqual(1, report.Summary.Failed);
         Assert.AreEqual(
-            JobQueueDiagnosticCodes.ExecutionFailed,
+            JobQueueDiagnosticCodes.GenerationValidationExhausted,
             report.Items.Single(item => item.ItemId == "beta").Diagnostic);
         Assert.AreEqual(
             JobCompletionOutcomes.Succeeded,
