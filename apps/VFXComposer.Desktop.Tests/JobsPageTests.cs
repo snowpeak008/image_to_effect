@@ -23,6 +23,35 @@ public sealed class JobsPageTests
     }
 
     [TestMethod]
+    public void BatchEntriesFoldIntoCollapsibleGroupsThatSurviveRefresh()
+    {
+        var queue = new FakeJobQueueClient();
+        queue.AddQueuedBatchEntry("job-a0000000001", "batch-fire", "alpha");
+        queue.AddQueuedBatchEntry("job-a0000000002", "batch-fire", "beta");
+        queue.AddQueued("job-solo00000001");
+        var viewModel = new JobsViewModel(queue);
+
+        viewModel.Refresh();
+
+        Assert.IsTrue(viewModel.HasBatches);
+        var batch = viewModel.Batches.Single(group => group.BatchId == "batch-fire");
+        Assert.AreEqual(2, batch.Count);
+        Assert.IsTrue(batch.IsExpanded, "A group starts expanded.");
+        StringAssert.Contains(batch.Header, "2 jobs");
+        var individual = viewModel.Batches.Single(group => group.BatchId is null);
+        Assert.AreEqual(1, individual.Count);
+        StringAssert.Contains(individual.Header, "Individual");
+        Assert.AreEqual(3, viewModel.Jobs.Count, "The flat list is unchanged by grouping.");
+
+        // A fold the user set must survive the page's periodic refresh.
+        batch.IsExpanded = false;
+        viewModel.Refresh();
+        Assert.IsFalse(
+            viewModel.Batches.Single(group => group.BatchId == "batch-fire").IsExpanded,
+            "A user-collapsed group stays collapsed across a refresh tick.");
+    }
+
+    [TestMethod]
     public void ListShowsRunningFirstWithStatesProgressAndDiagnosticCodes()
     {
         var queue = new FakeJobQueueClient();
