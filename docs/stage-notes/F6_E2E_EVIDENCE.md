@@ -48,5 +48,5 @@
 
 ## 全量机器基线
 
-Release 0 warning / 0 error；.NET 全量 **744/744**（较基线 733 +11：F6 新增测试）。备注：全解并行跑
+Release 0 warning / 0 error；.NET 全量 **745/745**（较基线 733 +12：F6 新增测试）。备注：全解并行跑
 偶发 1 例 MCP stdio 时序 flake（既有、单跑必绿）。
