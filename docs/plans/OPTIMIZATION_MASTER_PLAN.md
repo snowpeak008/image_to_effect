@@ -237,3 +237,26 @@ F4 审计非阻塞建议处置：①批次级取消（REQ-002 内部不一致，
 运维事件（2026-08-29 约 19:00）：`D:\wt\` 下全部在途 worktree（i2s-f1/i2s-f3/i2s-o4）被外部清空一次（F3 交付报告推测为 worktree 退役清理波及在途目录）。F3 agent 用 `git worktree repair` + 重建源码恢复并改为逐单元提交；F1 提交未受损（已合入 master），其 worktree 已退役。**教训：worktree 退役只能由主 agent 在确认无在途任务共用 `D:\wt\` 时执行；并行 worktree 验收前先 `git status` 核实磁盘完整性；开发子 agent 应逐逻辑单元提交。**
 
 > 状态板由主 agent 在每次派发/验收后更新。
+
+## 6. 追加需求：Desktop 双语系统（2026-08-31，用户提出）
+
+**需求**：桌面软件增加中/英文切换。评估盘点（2026-08-31）：Desktop 用户可见文案约 78 条 XAML 硬编码 + 约 90 条 ViewModel 静态句 + 约 45 条动态拼接模板（其中约 30 条嵌稳定错误码/技术标识）+ 1 条旁路对话框标题；约 34 条测试断言了英文文案；无既有 UI 偏好存储（AI 配置在 `%LocalAppData%/VFXComposer/AI/providers.json`，属 revision/bindings 域，不混放）；MVVM 为 CommunityToolkit `ObservableObject` + 手工组合根，无消息总线。
+
+**主 agent 设计裁决（定版）**：
+
+1. **机制**：零新 NuGet，手写本地化——`UiLanguage` 闭集（`English`/`ChineseSimplified`）、`UiStringCatalog`（闭集键 + 双语字典，嵌入代码，非 .resx；双语平价由测试钉住：键集相等、占位符 `{n}` 数目一致、值非空非未译占位）、`LocalizationService`（`ObservableObject`，字符串索引器 + 语言变更时发 `Item[]` 属性通知与 `LanguageChanged` 事件）。XAML 经索引器绑定实现切换即刷；ViewModel 结构性文案（Title/Description/EmptyState/标签）订阅事件即刷；**VM 持有的状态快照串在下次状态更新时刷新，登记为 v1 已知限制**（消除它要把 ~45 处动态站点改为语义状态存储，收益不配成本）。
+2. **范围边界**：仅 Desktop UI 层。稳定错误码（`VFXJ/VFXB/VFXC/VFXMCP/E*/U4FS*/AI ReasonCode`）及其英文消息**原样不译**（机器可读诊断载体、有测试钉格式），嵌码模板只译外壳句；`JobListItemViewModel` 直出的协议词（State/JobKind 等）v1 不译；CLI/MCP 输出、日志、AI prompt 模板（版本化）一律不动。
+3. **持久化**：新建 `%LocalAppData%/VFXComposer/ui-preferences.json`（与 `AI/`、`Jobs/` 并列），复用 `AtomicFileWriter` 原子写，schema `vfxcomposer.ui-preferences/1`；文件缺失/损坏/未知版本 → 回退默认值继续启动（偏好非安全配置，fail-safe 而非 fail-closed），下次显式保存时重建。首次运行默认跟随 OS UI culture（`zh*` → 中文，否则英文）；用户显式选择后以持久化为准。
+4. **切换 UI**：Settings 页新增 Language/语言 节，两选项，选中立即生效并持久化。
+5. **测试策略**：既有 34 条断言英文文案的测试改为经 catalog 常量断言（锁语义不锁语言，测试内显式固定英文 locale）；新增平价/切换/持久化往返/损坏回退测试。
+
+**F7a Desktop 本地化基建与切换**（依赖：无；先行）
+- 目标：上述裁决 1/3/4/5 的全部基建落地；`WorkspacePageViewModel` 的 Title/Description/EmptyStateMessage 改为键派生 + 语言变更通知；示范接入四个面：MainWindow（窗口标题/顶栏/连接区 6 条 + 导航）、Dashboard（全部 10 条）、Settings 页自身全部 37 条 XAML + VM 句、旁路对话框标题。
+- allow-list：`apps/VFXComposer.Desktop/**`、`apps/VFXComposer.Desktop.Tests/**`。禁区：`src/**`、`apps/VFXComposer.Cli*/**`、`apps/VFXComposer.Mcp*/**`、`project/**`、`docs/**`、`Directory.Packages.props`（零新 NuGet）。
+- 验收标准：Release 构建 0/0；Desktop.Tests 全绿且受影响断言改经 catalog；.NET 全量不回退（≥747）；切换测试证明运行中改语言后已接入面的文案即刷；持久化往返与损坏回退有测试。
+- 状态：已派发（2026-08-31），交付后主 agent 初审合入；独立审计放在 F7b 之后对整个双语特性一次覆盖（控制子 agent 消耗）。
+
+**F7b Desktop 全页文案迁移**（依赖 F7a）
+- 目标：其余各页（Create 16、Jobs 11、Preview 6、Library/Patch/Review 的 VM 句）XAML 与 ViewModel 全部用户可见文案迁移至 catalog（静态句 + 动态模板；嵌码模板按裁决 2 只译外壳）；34 条既有测试全部适配；补齐全部页面的切换即刷。
+- allow-list/验收：同 F7a；另加"catalog 无孤儿键、无未接线键"的收尾断言。
+- 状态：待派发（F7a 合入后）。
