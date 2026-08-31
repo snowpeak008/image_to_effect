@@ -1,4 +1,3 @@
-using Avalonia;
 using System.Buffers.Binary;
 using System.IO.Compression;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -18,8 +17,7 @@ public sealed class AiDesktopIntegrationTests
     private const string RawEndpoint = "https://user:synthetic-secret@example.invalid/complete?token=synthetic-query#fragment";
 
     [ClassInitialize]
-    public static void InitializeAvalonia(TestContext _) =>
-        AppBuilder.Configure<App>().UsePlatformDetect().SetupWithoutStarting();
+    public static void InitializeAvalonia(TestContext _) => AvaloniaTestPlatform.EnsureInitialized();
 
     [TestMethod]
     public void StartupSaveAndCreateSettingsPreviewNavigationDoNotCallEitherGateway()

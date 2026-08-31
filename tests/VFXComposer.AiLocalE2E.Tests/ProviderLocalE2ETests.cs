@@ -8,6 +8,7 @@ using VFXComposer.AI.Contracts.Chat;
 using VFXComposer.AI.Contracts.Desktop;
 using VFXComposer.AI.Providers.Desktop;
 using VFXComposer.Desktop;
+using VFXComposer.Desktop.Localization;
 using VFXComposer.Desktop.Services;
 using VFXComposer.Desktop.ViewModels;
 
@@ -120,7 +121,7 @@ public sealed class ProviderLocalE2ETests
                 "The chat opaque endpoint was not retained verbatim in its explicit editor.");
             Assert.AreEqual(string.Empty, settings.SecretEntry, "The entry-only secret field was retained after save.");
 
-            var create = new CreateViewModel(runtime)
+            var create = new CreateViewModel(new LocalizationService(UiLanguage.English), runtime)
             {
                 ChatPrompt = A5TestValues.ChatPrompt,
             };
@@ -128,7 +129,7 @@ public sealed class ProviderLocalE2ETests
             Assert.AreEqual(A5TestValues.ChatResult, create.ChatResponse, "The bound chat response was not surfaced.");
             Assert.AreEqual("Chat completed.", create.ChatStatus, "The Create handler did not report completion.");
 
-            var preview = new PreviewViewModel(runtime)
+            var preview = new PreviewViewModel(new LocalizationService(UiLanguage.English), runtime)
             {
                 ImagePrompt = A5TestValues.ImagePrompt,
                 ImageWidth = 64,
@@ -193,7 +194,7 @@ public sealed class ProviderLocalE2ETests
         try
         {
             A5DesktopSettings.ConfigureTwoProfiles(runtime, server.Endpoint(ChatTarget), server.Endpoint(ImageTarget));
-            var preview = new PreviewViewModel(runtime)
+            var preview = new PreviewViewModel(new LocalizationService(UiLanguage.English), runtime)
             {
                 ImagePrompt = A5TestValues.ImagePrompt,
                 ImageWidth = 64,
@@ -267,7 +268,7 @@ public sealed class ProviderLocalE2ETests
             Assert.IsTrue(string.Equals(edit.Profile.OpaqueEndpoint, chatEndpoint, StringComparison.Ordinal),
                 "The opaque endpoint was not persisted exactly across restart.");
 
-            var create = new CreateViewModel(restarted)
+            var create = new CreateViewModel(new LocalizationService(UiLanguage.English), restarted)
             {
                 ChatPrompt = A5TestValues.ChatPrompt,
             };
@@ -349,7 +350,7 @@ public sealed class ProviderLocalE2ETests
         try
         {
             A5DesktopSettings.ConfigureTwoProfiles(first, opaqueEndpoint, server.Endpoint(ImageTarget));
-            var editor = new SettingsViewModel(first)
+            var editor = new SettingsViewModel(new LocalizationService(UiLanguage.English), first)
             {
                 SelectedProfileId = A5TestValues.ChatProfileId,
             };
@@ -371,7 +372,7 @@ public sealed class ProviderLocalE2ETests
             Assert.IsTrue(string.Equals(edit.Profile.OpaqueEndpoint, opaqueEndpoint, StringComparison.Ordinal),
                 "Restart changed the opaque endpoint value.");
 
-            var create = new CreateViewModel(restarted)
+            var create = new CreateViewModel(new LocalizationService(UiLanguage.English), restarted)
             {
                 ChatPrompt = A5TestValues.ChatPrompt,
             };
@@ -542,8 +543,8 @@ public sealed class ProviderLocalE2ETests
             await runtime.DisposeAsync();
             root.AssertNoPrivateImageSessionDirectories();
             runtime = root.CreateRuntime();
-            settings = new SettingsViewModel(runtime);
-            var create = new CreateViewModel(runtime)
+            settings = new SettingsViewModel(new LocalizationService(UiLanguage.English), runtime);
+            var create = new CreateViewModel(new LocalizationService(UiLanguage.English), runtime)
             {
                 ChatPrompt = A5TestValues.ChatPrompt,
             };
@@ -560,7 +561,7 @@ public sealed class ProviderLocalE2ETests
             await runtime.DisposeAsync();
             root.AssertNoPrivateImageSessionDirectories();
             runtime = root.CreateRuntime();
-            settings = new SettingsViewModel(runtime);
+            settings = new SettingsViewModel(new LocalizationService(UiLanguage.English), runtime);
             await AssertPreviewFailureAsync(runtime, "Image unavailable: UpstreamUnavailable.");
 
             SaveImageEndpointThroughSettingsCrud(settings, server.Endpoint(imageBase64Target));
@@ -575,7 +576,7 @@ public sealed class ProviderLocalE2ETests
             await runtime.DisposeAsync();
             root.AssertNoPrivateImageSessionDirectories();
             runtime = root.CreateRuntime();
-            settings = new SettingsViewModel(runtime);
+            settings = new SettingsViewModel(new LocalizationService(UiLanguage.English), runtime);
             await AssertPreviewFailureAsync(runtime, "Image unavailable: ArtifactMimeNotAllowed.");
 
             SaveImageEndpointThroughSettingsCrud(settings, server.Endpoint(imageRawTarget));
@@ -624,7 +625,7 @@ public sealed class ProviderLocalE2ETests
             Assert.IsTrue(snapshot.Profiles.All(profile => !profile.HasSecret),
                 "A never-entered secret was unexpectedly persisted or inferred.");
 
-            var create = new CreateViewModel(runtime)
+            var create = new CreateViewModel(new LocalizationService(UiLanguage.English), runtime)
             {
                 ChatPrompt = A5TestValues.ChatPrompt,
             };
@@ -633,7 +634,7 @@ public sealed class ProviderLocalE2ETests
                 "Create did not surface the fail-closed ChatLlm secret result.");
             AssertRedacted(create.ChatStatus);
 
-            var preview = new PreviewViewModel(runtime)
+            var preview = new PreviewViewModel(new LocalizationService(UiLanguage.English), runtime)
             {
                 ImagePrompt = A5TestValues.ImagePrompt,
                 ImageWidth = 64,
@@ -773,7 +774,7 @@ public sealed class ProviderLocalE2ETests
 
     private static async Task AssertPreviewFailureAsync(ProviderDesktopRuntime runtime, string expectedStatus)
     {
-        var preview = new PreviewViewModel(runtime)
+        var preview = new PreviewViewModel(new LocalizationService(UiLanguage.English), runtime)
         {
             ImagePrompt = A5TestValues.ImagePrompt,
             ImageWidth = 64,
