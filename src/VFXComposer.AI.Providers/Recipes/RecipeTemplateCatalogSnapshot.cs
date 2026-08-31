@@ -47,7 +47,12 @@ public sealed class RecipeTemplateCatalogSnapshot
     public IReadOnlyList<string> BuildableDimensions { get; }
     public IReadOnlyList<TemplateSnapshot> Templates { get; }
 
-    /// <summary>The machine-generated canonical Recipe example, serialized without indentation.</summary>
+    /// <summary>
+    /// The machine-generated canonical Recipe example, serialized without indentation. It mirrors the Unity export
+    /// of <c>fireball_2d</c> and is therefore an eight-module effect with attachTo edges that only clears the
+    /// project build audit through the legacy per-id exemption. It is a contract fixture, not an authoring model:
+    /// the recipe prompt injects its own strict-budget reference recipe instead.
+    /// </summary>
     public string CanonicalExampleJson { get; }
 
     public override string ToString() => "RecipeTemplateCatalogSnapshot(" + TemplateCatalogVersion + ")";
