@@ -260,3 +260,41 @@ F4 审计非阻塞建议处置：①批次级取消（REQ-002 内部不一致，
 - 目标：其余各页（Create 16、Jobs 11、Preview 6、Library/Patch/Review 的 VM 句）XAML 与 ViewModel 全部用户可见文案迁移至 catalog（静态句 + 动态模板；嵌码模板按裁决 2 只译外壳）；34 条既有测试全部适配；补齐全部页面的切换即刷。
 - allow-list/验收：同 F7a；另加"catalog 无孤儿键、无未接线键"的收尾断言。
 - 状态：**DONE**（独立审计 **PASS-with-remarks 零阻塞**，2026-08-31）：复跑与交付完全一致（Release 0/0、全量 807/807、Desktop.Tests 99）；`UiPreferencesStore` 豁免四维度核实精确闭合且 F7b 未扩面；平价/收尾断言为构造性全量遍历（漏译无法蒙混）；六页切换测试断言"中文真渲染、英文真消失"；三项追认做法核实语义等价；范围零越界。审计 7 条译文建议中 6 条已由主 agent 落实并复跑 Desktop.Tests 99/99（`已解析的` 术语修正、Provider 大小写 15 处、Endpoint 起句、Dashboard 描述去生造词、`对话`、`机器裁定`、`制品库`）。其余非阻塞建议处置：③豁免嵌套分支收紧为 `+<` 前缀、⑤硬编码扫描扩内联文本、⑥RenderedText 纳入 ContentControl、⑧AiLocalE2E 字面英文断言改经 catalog → 登记为可选后续小任务，不排期；⑦Settings 快照点逐一点名：`ProfileStatus`、`SecretPresence`、`Chat/ImageBindingStatus` 的 Unavailable 回退值（v1 已知限制的精确清单）；⑨`JobExecutorLockHost` Release 下输出 `bin\Debug\` 属既有缺陷（基线即存在），登记不归本特性。交付细节：catalog 114→184 键（+70），Release 0/0，全量 807/807（Desktop.Tests 89→99），20 文件全在 allow-list 零越界；六页全部做到切换即刷（超出 v1 快照限制的最低要求，剩余快照句仅 Settings 三处属 F7a 定版限制）。**主 agent 追认三项做法**：①Jobs `RUNNING` 徽标绑定协议词 `State` 不新建键（协议词不译裁决的自然延伸）；②XAML 行内 `StringFormat` 改 VM 键派生属性（Avalonia 格式串不可绑定）；③`JobsViewModel.cs` 既有裸 NUL 字节改 `\0` 转义（语义等价，文件恢复为文本）。独立审计覆盖 F7a+F7b 全特性，重点复核 UiPreferencesStore 豁免与 184 键中文译文质量。
+
+## 7. 追加需求三：生成体验大改版（2026-08-31，主 agent 定案，用户批准"大幅优化"方向）
+
+**背景**：用户反馈自由文本输入不友好，提出简单/专业双模式设想（示例引导 + 需求拆解与多轮精修）。主 agent 起草方案后派独立评审（Opus 5），评审 PASS 骨架但纠正了四个事实错误并建议重心转移，主 agent 采纳并定案。
+
+**评审纠正的事实（后续任务卡的共同事实底座）**：
+1. 模板目录实为 **6 个模板 / 11 个参数**（全火系：Embers/FireCore/FireImpact/FireTrail/LaunchFlash/Shockwave），非 12；`buildableArchetypes=["projectile"]`、维度仅 2d。strict 预算（projectile→simple 档：maxDepth=2、maxLocalMaterials=2）意味着**全 recipe 至多 1~2 个渲染模块、无 attachTo、三 stage 根必须齐全**，真实形状空间约 20 余种。
+2. **prompt 参考样例自相矛盾（当前最大失败源）**：`recipe-v1-template-catalog.snapshot.json` 的 `canonicalExample` 是 `fireball_2d`（8 模块、双 attachTo），靠 `legacyEffectIds` 豁免才合法；任何新 id 照它生成必违反 R8011/R8004 构建失败。prompt 里"use exactly three stages"进一步引导填满三段。
+3. **参数上下界从未在 .NET 侧校验**：`MinLiteral/MaxLiteral` 唯一消费者是 prompt 表格渲染；L1 对模块参数只查"是对象"；越界要到 Unity L2 才发现（REQ-001 AC-2 的描述与实现不符）。
+4. **Desktop 无构建面**：不引用 Batch.Core，F3b 定版零 executor 纯观察者；确认草稿后用户必须切命令行。另：`BudgetCalculator`（mobile_medium，MaxMaterials=8）与 strict 审计（≤2）两层预算不一致且后者在构建后才跑——记入债务。
+
+**主 agent 裁决（定版）**：
+- **v1 砍掉"需求规格 IR + 两段式拆解调用"**（评审建议 2）：在 6 模板空间里 IR 与 recipe 同构，成本（新 schema/校验器/确认 UI/双语键/请求翻倍/ADR-007 v1.3 改版）不配收益。**艺术家知识不砍**——反馈翻译表、美学惯例、精修纪律进精修 prompt 模板。模板库扩充后 IR 重估（见暂缓项）。
+- 预算转投**确定性三件套**：L1.5 目录感知预校验、参数面板、精修覆盖守卫（AI 精修后逐字段 diff，用户手改且本轮未点名的参数自动还原，保守匹配、fail-safe 偏向保留人改）。
+- 多轮精修每轮显式用户动作，不违反 ADR-006；治理路径 = REQ-004 新 PRD + REQ-001 v0.5 将非目标 3 标注 superseded-by-REQ-004（禁止两文档并存矛盾）。精修不需要 ADR 改版（砍掉两段式后请求预算不变形）。
+- 请求预算条款写**请求数**不写 token（provider 细节不渗入 feature 层）：一次精修动作至多 1+N；预算与错误码序列进任务时间线。
+- prompt 模板保持纯英文（F7 裁决 2 不动）；示例卡存"语言中立预置骨架 + 双语展示文案"。
+- `ui-preferences` 加模式字段须升 schema `/2` 并做 `/1` 兼容读取（避免语言偏好静默重置）。
+- 版本链语义：线性链 + 回退即截断；每版一条记录带 `origin ∈ {ai_draft, ai_refine, human_edit}` + `parentDraftId`；确认绑定哈希不变（人改必落新版回 PendingConfirmation）；store 升版仿 F3c（旧版 fail-closed），**跨入口共享 store 的三入口同版本部署约束写入 REQ-004**；容量改"每 lineage 上限 + 全局上限"两级（顺带关闭 REQ-001 开放问题 O-2）。
+
+**任务卡序列**（照旧：一人一卡、Opus 5 High、worktree 隔离、初审 + 里程碑独立审计）：
+
+| 卡 | 内容 | 依赖 |
+|---|---|---|
+| **F8-0 prompt 合规性修正**（最高优先） | 参考样例换为 strict 合规样例（`batches/recipes/spark_projectile_2d.json` 真机验证过，可作 canonical example 或并列增补）；prompt 明写 strict 红线（三 stage 根 + 全 recipe ≤2 渲染模块 + 禁 attachTo）替换"exactly three stages"误导句；注意快照再导出纪律（strict 约束优先写 prompt 侧而非快照侧）；16 KiB 上界内完成；快照/确定性测试同步 | 无 |
+| **R5 需求定版** | `REQ-004_GUIDED_GENERATION.md`：双模式定义、精修语义（锚定=原始描述+当前草稿+本轮反馈三件套）、版本链与两级 cap、跨入口 store 兼容与部署约束、请求数硬顶、参数面板语义、手改/AI 改优先级、艺术家知识源文档章程；同卡 REQ-001 v0.5 勘误（非目标 3 superseded、AC-2 与实现不符的勘误、O-2 关闭指向） | 无（与 F8-0 并行） |
+| **R6 Desktop 构建闭环设计定版** | 评估"Desktop 内直接提交构建"：F3b 零 executor 裁决重开、`NoProjectAccessSurfaceTests` IL 扫描面方案（Desktop 引 Batch.Core 的豁免设计 vs 独立宿主进程）、Unity 锁探测接线、ADR-005/007 合规论证；产出设计文档供 F8c | R5 |
+| **F8a1 Providers 预校验层** | L1.5：模板存在性/kind 匹配/参数键集/上下界/strict 结构预算（模块数、attachTo、三 stage 根）纯代码校验；`issueCode→建议键` 映射表（只产稳定键，文案归 Desktop catalog）；上下界读取 API。v1 只作呈现层预警，不进重试预算不改 GenerationService 判定 | F8-0 |
+| **F8a2 Desktop 简单模式** | 示例卡 **4~6 张、绑定预置 recipe 骨架**（点卡零 AI 直接出草稿）；能力范围提示行（读快照动态渲染）；建议句渲染（键进双语 catalog）；"已确认后如何构建"诚实提示（可复制命令 + 关闭编辑器提醒）；诚实标注"当前仅支持 2D 火系弹道" | F8a1 |
+| **F8b1 PromptAssembler 重构** | 吸收 `RecipePromptTemplate`（重构非并存）：片段化 + 多消息拆分（16 KiB/条 + 256 KiB 请求界）+ 复合版本串写入 `PromptTemplateVersion`（不触发 store 升版）；零行为改动，现有测试不回退 + 组装快照测试 | F8-0 |
+| **F8b2 草稿 store 版本链** | schema 升版（仿 F3c）：lineage/origin/parentDraftId、两级 cap、trim 可见语义；跨入口回归（CLI/MCP 构建取草稿路径） | R5 |
+| **F8b3 参数面板** | 按上下界渲染可编辑面板；手改过 L1.5、落新版本回 PendingConfirmation；零 AI 成本。**交付即闭环里程碑**：AI 出一版 + 手调 + 确认 | F8a1、F8b2 |
+| **F8b4 精修回路** | 每轮 1 请求（1+N 修复预算）：三件套上下文 + 艺术家知识片段（反馈翻译表/美学惯例/只改点名方面纪律）+ 覆盖守卫 + 版本链落盘 + 模式切换 UI（ui-preferences `/2`）。唯一动生成链路的卡，独立审计 | F8b1、F8b2、F8b3、R5 |
+| **F8c Desktop 构建闭环** | 按 R6 设计实现 | R6、F8b3 |
+
+**暂缓/债务**：F8b5（IR 拆解段，模板库扩充后重估）；模板库扩充（多元素族/多原型——真正的表达空间杠杆,属 Unity 侧创作工程,需用户美术方向驱动,单列 track 另议）；两层预算不一致（BudgetCalculator vs strict 审计）；开发侧指针型 vfx-artist skill（收尾顺手做）。
+
+> 里程碑审计安排：F8-0+F8a1+F8a2 合为一次独立审计（简单模式里程碑）；F8b1-F8b4 合为一次（专业模式里程碑）；F8c 单独审计。
