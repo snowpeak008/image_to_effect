@@ -1,4 +1,5 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using VFXComposer.Desktop.Localization;
 using VFXComposer.Desktop.Services;
 using VFXComposer.Desktop.ViewModels;
 
@@ -11,10 +12,16 @@ public sealed class StartupDisconnectedTests
     public void StartupDoesNotRequireBrokerUnityOrARegisteredProject()
     {
         var diagnostics = new InMemoryDiagnosticSink();
-        var viewModel = MainWindowViewModel.CreateDisconnected(diagnostics);
+        var viewModel = MainWindowViewModel.CreateDisconnected(
+            diagnostics,
+            localization: LocalizationTestSupport.CreateEnglish());
 
-        Assert.AreEqual("Disconnected", viewModel.ConnectionDisplay);
-        Assert.AreEqual("No registered project", viewModel.ProjectDisplay);
+        Assert.AreEqual(
+            LocalizationTestSupport.English(UiStringKeys.MainWindowConnectionDisconnected),
+            viewModel.ConnectionDisplay);
+        Assert.AreEqual(
+            LocalizationTestSupport.English(UiStringKeys.MainWindowProjectNone),
+            viewModel.ProjectDisplay);
         Assert.AreEqual("dashboard", viewModel.CurrentPage.Key);
         Assert.IsTrue(diagnostics.Snapshot.Any(item => item.Code == "DESKTOP_READY"));
     }

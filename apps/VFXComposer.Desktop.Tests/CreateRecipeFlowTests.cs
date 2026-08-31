@@ -17,7 +17,7 @@ public sealed class CreateRecipeFlowTests
     public void GenerationIsDisabledWithoutADescriptionAndNothingIsCalledBeforeTheClick()
     {
         var runtime = new FakeRecipeRuntime();
-        var viewModel = new CreateViewModel(runtime);
+        var viewModel = new CreateViewModel(LocalizationTestSupport.CreateEnglish(), runtime);
 
         Assert.IsFalse(viewModel.GenerateRecipeCommand.CanExecute(null));
         viewModel.EffectDescription = "a synthetic fireball";
@@ -31,7 +31,7 @@ public sealed class CreateRecipeFlowTests
     public async Task ADraftedResultLandsAsPendingConfirmationAndConfirmOnlyFlipsTheRetainedState()
     {
         var runtime = new FakeRecipeRuntime { NextResult = DraftedResult };
-        var viewModel = new CreateViewModel(runtime)
+        var viewModel = new CreateViewModel(LocalizationTestSupport.CreateEnglish(), runtime)
         {
             EffectDescription = "a synthetic fireball",
         };
@@ -58,7 +58,7 @@ public sealed class CreateRecipeFlowTests
     public async Task AValidationFailureShowsStableCodesRetainsTheFailedRecordAndCannotBeConfirmed()
     {
         var runtime = new FakeRecipeRuntime { NextResult = FailedResult };
-        var viewModel = new CreateViewModel(runtime)
+        var viewModel = new CreateViewModel(LocalizationTestSupport.CreateEnglish(), runtime)
         {
             EffectDescription = "a synthetic fireball",
         };
@@ -84,7 +84,7 @@ public sealed class CreateRecipeFlowTests
                 "prompt/1",
                 "1.0.0"),
         };
-        var viewModel = new CreateViewModel(runtime)
+        var viewModel = new CreateViewModel(LocalizationTestSupport.CreateEnglish(), runtime)
         {
             EffectDescription = "a synthetic fireball",
         };
@@ -109,7 +109,7 @@ public sealed class CreateRecipeFlowTests
                 "prompt/1",
                 "1.0.0"),
         };
-        var viewModel = new CreateViewModel(runtime)
+        var viewModel = new CreateViewModel(LocalizationTestSupport.CreateEnglish(), runtime)
         {
             EffectDescription = "a synthetic fireball",
         };
@@ -124,7 +124,7 @@ public sealed class CreateRecipeFlowTests
     public async Task ADraftStorageFailureSurfacesItsStableCode()
     {
         var runtime = new FakeRecipeRuntime { NextResult = DraftedResult, ThrowOnSave = true };
-        var viewModel = new CreateViewModel(runtime)
+        var viewModel = new CreateViewModel(LocalizationTestSupport.CreateEnglish(), runtime)
         {
             EffectDescription = "a synthetic fireball",
         };
@@ -140,7 +140,7 @@ public sealed class CreateRecipeFlowTests
     public async Task AStaleConfirmationFailsClosedWithTheHashMismatchCode()
     {
         var runtime = new FakeRecipeRuntime { NextResult = DraftedResult, MutateRecordAfterSave = true };
-        var viewModel = new CreateViewModel(runtime)
+        var viewModel = new CreateViewModel(LocalizationTestSupport.CreateEnglish(), runtime)
         {
             EffectDescription = "a synthetic fireball",
         };

@@ -2,6 +2,7 @@ using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
 using VFXComposer.AI.Providers.Desktop;
+using VFXComposer.Desktop.Localization;
 using VFXComposer.Desktop.Services;
 using VFXComposer.Desktop.ViewModels;
 using VFXComposer.Desktop.Views;
@@ -22,6 +23,11 @@ public sealed partial class App : Application
 
             try
             {
+                // The stored preference wins; a first run (or unusable storage) follows the OS UI culture.
+                var preferences = UiPreferencesStore.TryCreateCurrentUser(diagnostics);
+                var localization = new LocalizationService(
+                    preferences?.Load()?.Language ?? UiLanguages.FromCurrentUiCulture(),
+                    preferences);
                 var session = new VFXComposer.Client.UserModeDesktopSession();
                 // Local composition only: the runtime derives current-user storage but creates no provider adapter,
                 // health probe, DNS request, or HTTP client until an explicit Create/Preview action.
@@ -47,7 +53,7 @@ public sealed partial class App : Application
                 }
 
                 var window = new MainWindow();
-                var selectionDialog = new AvaloniaProjectSelectionDialog(() => desktop.MainWindow);
+                var selectionDialog = new AvaloniaProjectSelectionDialog(() => desktop.MainWindow, localization);
                 var viewModel = MainWindowViewModel.CreateUserMode(
                     session,
                     selectionDialog,
@@ -55,7 +61,8 @@ public sealed partial class App : Application
                     diagnostics,
                     errorBoundary,
                     aiRuntime,
-                    jobStore);
+                    jobStore,
+                    localization);
                 window.DataContext = viewModel;
                 desktop.MainWindow = window;
                 desktop.Exit += async (_, _) =>

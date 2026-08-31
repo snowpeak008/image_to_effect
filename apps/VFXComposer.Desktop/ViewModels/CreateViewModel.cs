@@ -5,6 +5,7 @@ using VFXComposer.AI.Contracts;
 using VFXComposer.AI.Contracts.Chat;
 using VFXComposer.AI.Contracts.Desktop;
 using VFXComposer.AI.Contracts.Recipes;
+using VFXComposer.Desktop.Localization;
 
 namespace VFXComposer.Desktop.ViewModels;
 
@@ -24,12 +25,13 @@ public sealed class CreateViewModel : WorkspacePageViewModel
     private string _recipeValidationSummary = string.Empty;
     private RecipeDraftRecord? _currentDraft;
 
-    public CreateViewModel(IAiDesktopRuntime? runtime = null)
+    public CreateViewModel(LocalizationService localization, IAiDesktopRuntime? runtime = null)
         : base(
+            localization,
             "create",
-            "Create",
-            "Local transient recipe drafts and an explicit ChatLlm prompt.",
-            "Drafts stay in memory and cannot write an external workspace.")
+            UiStringKeys.CreateTitle,
+            UiStringKeys.CreateDescription,
+            UiStringKeys.CreateEmptyState)
     {
         _runtime = runtime ?? AiDesktopRuntime.Unavailable;
         SendChatCommand = new AsyncRelayCommand(SendChatAsync, CanSendChat);

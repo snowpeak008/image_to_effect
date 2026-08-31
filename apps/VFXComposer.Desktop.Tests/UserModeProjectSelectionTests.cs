@@ -1,4 +1,5 @@
 using VFXComposer.Client;
+using VFXComposer.Desktop.Localization;
 using VFXComposer.Desktop.Services;
 using VFXComposer.Desktop.ViewModels;
 
@@ -16,13 +17,16 @@ public sealed class UserModeProjectSelectionTests
         await using var viewModel = MainWindowViewModel.CreateUserMode(
             session,
             dialog,
-            new ImmediateDispatcher());
+            new ImmediateDispatcher(),
+            localization: LocalizationTestSupport.CreateEnglish());
 
         await viewModel.ConnectCommand.ExecuteAsync(null);
         await viewModel.SelectProjectCommand.ExecuteAsync(null);
 
         Assert.AreEqual(selectedRoot, session.LastSelection);
-        Assert.AreEqual("Selected project", viewModel.ProjectDisplay);
+        Assert.AreEqual(
+            LocalizationTestSupport.English(UiStringKeys.MainWindowProjectSelected),
+            viewModel.ProjectDisplay);
         Assert.IsFalse(viewModel.ProjectDisplay.Contains(selectedRoot, StringComparison.Ordinal));
         Assert.IsFalse(viewModel.SessionDisplay.Contains(selectedRoot, StringComparison.Ordinal));
         Assert.IsFalse(viewModel.ReadDisplay.Contains(selectedRoot, StringComparison.Ordinal));

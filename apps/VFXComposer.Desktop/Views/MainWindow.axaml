@@ -5,7 +5,7 @@
     xmlns:vm="using:VFXComposer.Desktop.ViewModels"
     xmlns:views="using:VFXComposer.Desktop.Views"
     x:DataType="vm:MainWindowViewModel"
-    Title="VFX Composer"
+    Title="{Binding Localization[AppProductName]}"
     Width="1180"
     Height="760"
     MinWidth="900"
@@ -83,14 +83,14 @@
     <Border Grid.Row="2" Grid.ColumnSpan="2" Padding="16,9" Background="#1B1F25" BorderBrush="#343A45" BorderThickness="0,1,0,0">
       <Grid ColumnDefinitions="*,Auto,Auto,Auto,Auto" ColumnSpacing="10">
         <StackPanel>
-          <TextBlock Classes="muted" Text="Read-only ordinary-user session; commands and mutation are disabled" />
+          <TextBlock Classes="muted" Text="{Binding Localization[MainWindowReadOnlySessionNotice]}" />
           <TextBlock Classes="muted" Text="{Binding SessionDisplay}" />
           <TextBlock Classes="muted" Text="{Binding ReadDisplay}" />
         </StackPanel>
-        <Button Grid.Column="1" Command="{Binding ConnectCommand}" Content="Connect" />
-        <Button Grid.Column="2" Command="{Binding SelectProjectCommand}" Content="Select project" />
-        <Button Grid.Column="3" Command="{Binding ReadProjectCommand}" Content="Read" />
-        <Button Grid.Column="4" Command="{Binding RecoverCommand}" Content="Restart" />
+        <Button Grid.Column="1" Command="{Binding ConnectCommand}" Content="{Binding Localization[MainWindowConnectAction]}" />
+        <Button Grid.Column="2" Command="{Binding SelectProjectCommand}" Content="{Binding Localization[MainWindowSelectProjectAction]}" />
+        <Button Grid.Column="3" Command="{Binding ReadProjectCommand}" Content="{Binding Localization[MainWindowReadAction]}" />
+        <Button Grid.Column="4" Command="{Binding RecoverCommand}" Content="{Binding Localization[MainWindowRestartAction]}" />
       </Grid>
     </Border>
   </Grid>

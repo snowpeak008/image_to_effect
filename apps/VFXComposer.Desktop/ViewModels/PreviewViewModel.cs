@@ -2,6 +2,7 @@ using Avalonia.Media.Imaging;
 using CommunityToolkit.Mvvm.Input;
 using VFXComposer.AI.Contracts;
 using VFXComposer.AI.Contracts.Desktop;
+using VFXComposer.Desktop.Localization;
 using VFXComposer.Desktop.Services;
 
 namespace VFXComposer.Desktop.ViewModels;
@@ -16,12 +17,13 @@ public sealed class PreviewViewModel : WorkspacePageViewModel, IDisposable
     private string _imageStatus = "Image generation is not configured.";
     private bool _isGenerating;
 
-    public PreviewViewModel(IAiDesktopRuntime? runtime = null)
+    public PreviewViewModel(LocalizationService localization, IAiDesktopRuntime? runtime = null)
         : base(
+            localization,
             "preview",
-            "Preview",
-            "Private image previews arrive only after an explicit ImageGeneration request.",
-            "No private image preview is available")
+            UiStringKeys.PreviewTitle,
+            UiStringKeys.PreviewDescription,
+            UiStringKeys.PreviewEmptyState)
     {
         _runtime = runtime ?? AiDesktopRuntime.Unavailable;
         GenerateImageCommand = new AsyncRelayCommand(GenerateImageAsync, CanGenerateImage);

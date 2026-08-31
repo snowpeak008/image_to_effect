@@ -1,4 +1,5 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using VFXComposer.Desktop.Localization;
 using VFXComposer.Desktop.ViewModels;
 using VFXComposer.Jobs;
 using VFXComposer.Protocol.Jobs;
@@ -13,13 +14,15 @@ public sealed class JobsPageTests
     [TestMethod]
     public void PlaceholderConstructorKeepsTheEmptyStateAndNeverThrows()
     {
-        var viewModel = new JobsViewModel();
+        var viewModel = new JobsViewModel(LocalizationTestSupport.CreateEnglish());
 
         viewModel.Refresh();
 
         Assert.AreEqual("jobs", viewModel.Key);
         Assert.IsFalse(viewModel.HasJobs);
-        Assert.AreEqual("No jobs are running", viewModel.EmptyStateMessage);
+        Assert.AreEqual(
+            LocalizationTestSupport.English(UiStringKeys.JobsEmptyState),
+            viewModel.EmptyStateMessage);
     }
 
     [TestMethod]
@@ -29,7 +32,7 @@ public sealed class JobsPageTests
         queue.AddQueuedBatchEntry("job-a0000000001", "batch-fire", "alpha");
         queue.AddQueuedBatchEntry("job-a0000000002", "batch-fire", "beta");
         queue.AddQueued("job-solo00000001");
-        var viewModel = new JobsViewModel(queue);
+        var viewModel = new JobsViewModel(LocalizationTestSupport.CreateEnglish(), queue);
 
         viewModel.Refresh();
 
@@ -58,7 +61,7 @@ public sealed class JobsPageTests
         queue.AddQueued("job-queued0001");
         queue.AddRunning("job-running001", progressPermille: 420);
         queue.AddFailed("job-failed0001");
-        var viewModel = new JobsViewModel(queue);
+        var viewModel = new JobsViewModel(LocalizationTestSupport.CreateEnglish(), queue);
 
         viewModel.Refresh();
 
@@ -80,7 +83,7 @@ public sealed class JobsPageTests
     {
         var queue = new FakeJobQueueClient { QueueState = JobQueueStates.WaitingProjectLock };
         queue.AddQueued("job-queued0001");
-        var viewModel = new JobsViewModel(queue);
+        var viewModel = new JobsViewModel(LocalizationTestSupport.CreateEnglish(), queue);
 
         viewModel.Refresh();
         Assert.IsTrue(viewModel.IsWaitingForProjectLock);
@@ -96,7 +99,7 @@ public sealed class JobsPageTests
     {
         var queue = new FakeJobQueueClient();
         queue.AddQueued("job-queued0001");
-        var viewModel = new JobsViewModel(queue);
+        var viewModel = new JobsViewModel(LocalizationTestSupport.CreateEnglish(), queue);
         viewModel.Refresh();
         var row = viewModel.Jobs.Single();
 
@@ -119,7 +122,7 @@ public sealed class JobsPageTests
         var queue = new FakeJobQueueClient();
         queue.AddFailed("job-failed0001");
         queue.AddQueued("job-queued0001");
-        var viewModel = new JobsViewModel(queue);
+        var viewModel = new JobsViewModel(LocalizationTestSupport.CreateEnglish(), queue);
         viewModel.Refresh();
 
         viewModel.ResubmitCommand.Execute(viewModel.Jobs.Single(job => job.JobId == "job-queued0001"));
@@ -134,7 +137,7 @@ public sealed class JobsPageTests
     {
         var queue = new FakeJobQueueClient();
         queue.AddFailed("job-failed0001");
-        var viewModel = new JobsViewModel(queue);
+        var viewModel = new JobsViewModel(LocalizationTestSupport.CreateEnglish(), queue);
         viewModel.Refresh();
 
         viewModel.SelectedJob = viewModel.Jobs.Single();
@@ -152,7 +155,7 @@ public sealed class JobsPageTests
         var queue = new FakeJobQueueClient();
         queue.AddQueuedBatchEntry("job-batch00001", "batch-alpha", "fire_slash-01");
         queue.AddQueued("job-solo000001");
-        var viewModel = new JobsViewModel(queue);
+        var viewModel = new JobsViewModel(LocalizationTestSupport.CreateEnglish(), queue);
         viewModel.Refresh();
 
         var batchRow = viewModel.Jobs.Single(job => job.JobId == "job-batch00001");
@@ -179,7 +182,7 @@ public sealed class JobsPageTests
         queue.AddRunning("job-running001", progressPermille: 100);
         queue.AddFailed("job-failed0001");
         queue.AddQueuedBatchEntry("job-batch00001", "batch-alpha", "fire_slash-01");
-        var viewModel = new JobsViewModel(queue);
+        var viewModel = new JobsViewModel(LocalizationTestSupport.CreateEnglish(), queue);
         viewModel.Refresh();
         viewModel.SelectedJob = viewModel.Jobs.Last();
 
@@ -213,7 +216,7 @@ public sealed class JobsPageTests
     public void StoreFailureSurfacesOnlyTheStableCode()
     {
         var queue = new FakeJobQueueClient { ThrowOnRead = true };
-        var viewModel = new JobsViewModel(queue);
+        var viewModel = new JobsViewModel(LocalizationTestSupport.CreateEnglish(), queue);
 
         viewModel.Refresh();
 

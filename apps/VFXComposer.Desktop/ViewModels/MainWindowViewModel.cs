@@ -3,6 +3,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using VFXComposer.AI.Contracts.Desktop;
 using VFXComposer.Client;
+using VFXComposer.Desktop.Localization;
 using VFXComposer.Desktop.Services;
 using VFXComposer.Jobs;
 
@@ -21,42 +22,50 @@ public sealed class MainWindowViewModel : ObservableObject, IAsyncDisposable
     private readonly PreviewViewModel _previewPage;
     private readonly SettingsViewModel _settingsPage;
     private NavigationItemViewModel _selectedNavigationItem;
-    private string _connectionDisplay;
-    private string _projectDisplay;
-    private string _sessionDisplay = "Disconnected";
-    private string _readDisplay = "No read result";
+    private string _connectionKey;
+    private string _projectKey;
+    // Session state names are protocol words, not prose: they stay verbatim in every language.
+    private string _sessionDisplay = UserModeDesktopSessionState.Disconnected.ToString();
+    private string _readKey = UiStringKeys.MainWindowReadNone;
+    private object?[] _readArguments = [];
 
     public MainWindowViewModel(
         VfxComposerClient client,
         IInMemoryDiagnosticSink diagnostics,
         IUiErrorBoundary errorBoundary,
         IAiDesktopRuntime? aiRuntime = null,
-        IJobQueueClient? jobQueue = null)
+        IJobQueueClient? jobQueue = null,
+        LocalizationService? localization = null)
     {
         _client = client ?? throw new ArgumentNullException(nameof(client));
         _diagnostics = diagnostics ?? throw new ArgumentNullException(nameof(diagnostics));
         _errorBoundary = errorBoundary ?? throw new ArgumentNullException(nameof(errorBoundary));
         _aiRuntime = aiRuntime ?? AiDesktopRuntime.Unavailable;
-        _createPage = new CreateViewModel(_aiRuntime);
-        _previewPage = new PreviewViewModel(_aiRuntime);
-        _settingsPage = new SettingsViewModel(_aiRuntime);
+        // A shell built without a stored preference (tests, design time) starts in the default language; the
+        // composition root passes the service that carries the persisted choice.
+        Localization = localization ?? new LocalizationService();
+        _createPage = new CreateViewModel(Localization, _aiRuntime);
+        _previewPage = new PreviewViewModel(Localization, _aiRuntime);
+        _settingsPage = new SettingsViewModel(Localization, _aiRuntime);
 
         NavigationItems = new ReadOnlyObservableCollection<NavigationItemViewModel>(
             new ObservableCollection<NavigationItemViewModel>(
             [
-                new(new DashboardViewModel()),
-                new(new LibraryViewModel()),
+                new(new DashboardViewModel(Localization)),
+                new(new LibraryViewModel(Localization)),
                 new(_createPage),
                 new(_previewPage),
-                new(new PatchViewModel()),
-                new(new ReviewViewModel()),
-                new(new JobsViewModel(jobQueue)),
+                new(new PatchViewModel(Localization)),
+                new(new ReviewViewModel(Localization)),
+                new(new JobsViewModel(Localization, jobQueue)),
                 new(_settingsPage),
             ]));
 
         _selectedNavigationItem = NavigationItems[0];
-        _connectionDisplay = client.CurrentState.ConnectionDisplay;
-        _projectDisplay = client.CurrentState.ProjectDisplay;
+        _connectionKey = ConnectionKeyFor(client.CurrentState.IsConnected);
+        _projectKey = client.CurrentState.HasRegisteredProject
+            ? UiStringKeys.MainWindowProjectRegistered
+            : UiStringKeys.MainWindowProjectNone;
         RefreshCommand = new AsyncRelayCommand(RefreshAsync);
         ConnectCommand = new AsyncRelayCommand(ConnectAsync, () => _session is not null);
         SelectProjectCommand = new AsyncRelayCommand(SelectProjectAsync, () =>
@@ -65,13 +74,17 @@ public sealed class MainWindowViewModel : ObservableObject, IAsyncDisposable
             _session?.State == UserModeDesktopSessionState.Selected);
         RecoverCommand = new AsyncRelayCommand(RecoverAsync, () =>
             _session?.State == UserModeDesktopSessionState.RecoveryRequired);
+        Localization.LanguageChanged += OnLanguageChanged;
 
         _diagnostics.Record(
             "DESKTOP_READY",
             "Desktop shell started without a Broker or Unity dependency.");
     }
 
-    public string ProductName => "VFX Composer";
+    /// <summary>Bound by the window chrome through the string indexer, e.g. <c>{Binding Localization[AppProductName]}</c>.</summary>
+    public LocalizationService Localization { get; }
+
+    public string ProductName => Localization[UiStringKeys.AppProductName];
 
     public ReadOnlyObservableCollection<NavigationItemViewModel> NavigationItems { get; }
 
@@ -90,17 +103,9 @@ public sealed class MainWindowViewModel : ObservableObject, IAsyncDisposable
 
     public WorkspacePageViewModel CurrentPage => SelectedNavigationItem.Page;
 
-    public string ConnectionDisplay
-    {
-        get => _connectionDisplay;
-        private set => SetProperty(ref _connectionDisplay, value);
-    }
+    public string ConnectionDisplay => Localization[_connectionKey];
 
-    public string ProjectDisplay
-    {
-        get => _projectDisplay;
-        private set => SetProperty(ref _projectDisplay, value);
-    }
+    public string ProjectDisplay => Localization[_projectKey];
 
     public IAsyncRelayCommand RefreshCommand { get; }
     public IAsyncRelayCommand ConnectCommand { get; }
@@ -114,11 +119,9 @@ public sealed class MainWindowViewModel : ObservableObject, IAsyncDisposable
         private set => SetProperty(ref _sessionDisplay, value);
     }
 
-    public string ReadDisplay
-    {
-        get => _readDisplay;
-        private set => SetProperty(ref _readDisplay, value);
-    }
+    public string ReadDisplay => _readArguments.Length == 0
+        ? Localization[_readKey]
+        : Localization.Format(_readKey, _readArguments);
 
     public IReadOnlyList<UiDiagnostic> Diagnostics => _diagnostics.Snapshot;
 
@@ -132,7 +135,8 @@ public sealed class MainWindowViewModel : ObservableObject, IAsyncDisposable
         IInMemoryDiagnosticSink? diagnostics = null,
         IUiErrorBoundary? errorBoundary = null,
         IAiDesktopRuntime? aiRuntime = null,
-        IJobQueueClient? jobQueue = null)
+        IJobQueueClient? jobQueue = null,
+        LocalizationService? localization = null)
     {
         diagnostics ??= new InMemoryDiagnosticSink();
         errorBoundary ??= new UiErrorBoundary(diagnostics);
@@ -142,7 +146,8 @@ public sealed class MainWindowViewModel : ObservableObject, IAsyncDisposable
             diagnostics,
             errorBoundary,
             aiRuntime,
-            jobQueue);
+            jobQueue,
+            localization);
     }
 
     public static MainWindowViewModel CreateUserMode(
@@ -152,7 +157,8 @@ public sealed class MainWindowViewModel : ObservableObject, IAsyncDisposable
         IInMemoryDiagnosticSink? diagnostics = null,
         IUiErrorBoundary? errorBoundary = null,
         IAiDesktopRuntime? aiRuntime = null,
-        IJobQueueClient? jobQueue = null)
+        IJobQueueClient? jobQueue = null,
+        LocalizationService? localization = null)
     {
         ArgumentNullException.ThrowIfNull(session);
         ArgumentNullException.ThrowIfNull(selectionDialog);
@@ -160,7 +166,7 @@ public sealed class MainWindowViewModel : ObservableObject, IAsyncDisposable
         diagnostics ??= new InMemoryDiagnosticSink();
         errorBoundary ??= new UiErrorBoundary(diagnostics);
         var result = new MainWindowViewModel(
-            VfxComposerClient.CreateDisconnected(), diagnostics, errorBoundary, aiRuntime, jobQueue)
+            VfxComposerClient.CreateDisconnected(), diagnostics, errorBoundary, aiRuntime, jobQueue, localization)
         {
             _session = session,
             _selectionDialog = selectionDialog,
@@ -193,8 +199,10 @@ public sealed class MainWindowViewModel : ObservableObject, IAsyncDisposable
             async () =>
             {
                 var state = await _client.RefreshStateAsync(RequestCorrelation.CreateNew());
-                ConnectionDisplay = state.ConnectionDisplay;
-                ProjectDisplay = state.ProjectDisplay;
+                SetConnectionKey(ConnectionKeyFor(state.IsConnected));
+                SetProjectKey(state.HasRegisteredProject
+                    ? UiStringKeys.MainWindowProjectRegistered
+                    : UiStringKeys.MainWindowProjectNone);
             });
     }
 
@@ -262,9 +270,14 @@ public sealed class MainWindowViewModel : ObservableObject, IAsyncDisposable
             async token =>
             {
                 var result = await _session.ReadAsync(cancellationToken: token);
-                ReadDisplay = result.Accepted
-                    ? $"Read {result.ByteLength} bytes"
-                    : $"Read rejected: {result.DiagnosticCode ?? "U4FS001"}";
+                if (result.Accepted)
+                {
+                    SetReadKey(UiStringKeys.MainWindowReadAccepted, result.ByteLength);
+                }
+                else
+                {
+                    SetReadKey(UiStringKeys.MainWindowReadRejected, result.DiagnosticCode ?? "U4FS001");
+                }
             });
     }
 
@@ -275,7 +288,7 @@ public sealed class MainWindowViewModel : ObservableObject, IAsyncDisposable
             return;
         }
 
-        ReadDisplay = "No read result";
+        SetReadKey(UiStringKeys.MainWindowReadNone);
         await RunSessionOperationAsync("restart-user-mode", token => _session.RestartAsync(token));
     }
 
@@ -292,19 +305,59 @@ public sealed class MainWindowViewModel : ObservableObject, IAsyncDisposable
 
     private void RefreshSessionPresentation()
     {
-        SessionDisplay = _session?.State.ToString() ?? "Disconnected";
-        ConnectionDisplay = _session?.State is
+        SessionDisplay = _session?.State.ToString() ?? UserModeDesktopSessionState.Disconnected.ToString();
+        SetConnectionKey(ConnectionKeyFor(_session?.State is
             UserModeDesktopSessionState.ConnectedNoProject or
             UserModeDesktopSessionState.Selecting or
             UserModeDesktopSessionState.Selected or
-            UserModeDesktopSessionState.Reading
-                ? "Connected"
-                : "Disconnected";
-        ProjectDisplay = _session?.State is UserModeDesktopSessionState.Selected or UserModeDesktopSessionState.Reading
-            ? "Selected project"
-            : "No registered project";
+            UserModeDesktopSessionState.Reading));
+        SetProjectKey(_session?.State is UserModeDesktopSessionState.Selected or UserModeDesktopSessionState.Reading
+            ? UiStringKeys.MainWindowProjectSelected
+            : UiStringKeys.MainWindowProjectNone);
         SelectProjectCommand.NotifyCanExecuteChanged();
         ReadProjectCommand.NotifyCanExecuteChanged();
         RecoverCommand.NotifyCanExecuteChanged();
+    }
+
+    private static string ConnectionKeyFor(bool connected) => connected
+        ? UiStringKeys.MainWindowConnectionConnected
+        : UiStringKeys.MainWindowConnectionDisconnected;
+
+    private void SetConnectionKey(string key)
+    {
+        if (string.Equals(_connectionKey, key, StringComparison.Ordinal))
+        {
+            return;
+        }
+
+        _connectionKey = key;
+        OnPropertyChanged(nameof(ConnectionDisplay));
+    }
+
+    private void SetProjectKey(string key)
+    {
+        if (string.Equals(_projectKey, key, StringComparison.Ordinal))
+        {
+            return;
+        }
+
+        _projectKey = key;
+        OnPropertyChanged(nameof(ProjectDisplay));
+    }
+
+    // Read outcomes keep their key and arguments instead of a rendered string, so a language switch re-renders them.
+    private void SetReadKey(string key, params object?[] arguments)
+    {
+        _readKey = key;
+        _readArguments = arguments;
+        OnPropertyChanged(nameof(ReadDisplay));
+    }
+
+    private void OnLanguageChanged(object? sender, EventArgs eventArgs)
+    {
+        OnPropertyChanged(nameof(ProductName));
+        OnPropertyChanged(nameof(ConnectionDisplay));
+        OnPropertyChanged(nameof(ProjectDisplay));
+        OnPropertyChanged(nameof(ReadDisplay));
     }
 }
