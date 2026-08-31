@@ -90,6 +90,20 @@ public static class UiStringCatalog
                 "Private image previews arrive only after an explicit ImageGeneration request.",
             [UiStringKeys.PreviewEmptyState] = "No private image preview is available",
 
+            [UiStringKeys.PreviewImageGenerationHeading] = "Private image generation",
+            [UiStringKeys.PreviewImageGenerationNotice] =
+                "Generation is explicit. The returned provider artifact is decoded in memory for this preview only.",
+            [UiStringKeys.PreviewImagePromptWatermark] = "Describe an image",
+            [UiStringKeys.PreviewWidthLabel] = "Width",
+            [UiStringKeys.PreviewHeightLabel] = "Height",
+            [UiStringKeys.PreviewGenerateImageAction] = "Generate private image",
+
+            [UiStringKeys.PreviewImageStatusNotConfigured] = "Image generation is not configured.",
+            [UiStringKeys.PreviewImageStatusReady] = "Private image preview ready.",
+            [UiStringKeys.PreviewImageStatusUnavailableWithCode] = "Image unavailable: {0}.",
+            [UiStringKeys.PreviewImageStatusCancelled] = "Image generation cancelled.",
+            [UiStringKeys.PreviewImageStatusUnavailable] = "Image unavailable.",
+
             [UiStringKeys.PatchTitle] = "Patch",
             [UiStringKeys.PatchDescription] =
                 "Patch validation, diff and transactional apply arrive in Phase 3.",
@@ -269,6 +283,19 @@ public static class UiStringCatalog
             [UiStringKeys.PreviewTitle] = "预览",
             [UiStringKeys.PreviewDescription] = "私有图像预览仅在显式 ImageGeneration 请求之后出现。",
             [UiStringKeys.PreviewEmptyState] = "暂无私有图像预览",
+
+            [UiStringKeys.PreviewImageGenerationHeading] = "私有图像生成",
+            [UiStringKeys.PreviewImageGenerationNotice] = "生成是显式的。返回的 provider 产物仅在内存中解码，只供本次预览使用。",
+            [UiStringKeys.PreviewImagePromptWatermark] = "描述一张图像",
+            [UiStringKeys.PreviewWidthLabel] = "宽度",
+            [UiStringKeys.PreviewHeightLabel] = "高度",
+            [UiStringKeys.PreviewGenerateImageAction] = "生成私有图像",
+
+            [UiStringKeys.PreviewImageStatusNotConfigured] = "图像生成尚未配置。",
+            [UiStringKeys.PreviewImageStatusReady] = "私有图像预览已就绪。",
+            [UiStringKeys.PreviewImageStatusUnavailableWithCode] = "图像不可用：{0}。",
+            [UiStringKeys.PreviewImageStatusCancelled] = "图像生成已取消。",
+            [UiStringKeys.PreviewImageStatusUnavailable] = "图像不可用。",
 
             [UiStringKeys.PatchTitle] = "补丁",
             [UiStringKeys.PatchDescription] = "补丁校验、差异与事务化应用在第 3 阶段提供。",

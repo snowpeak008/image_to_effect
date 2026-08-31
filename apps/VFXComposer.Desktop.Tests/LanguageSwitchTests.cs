@@ -171,6 +171,26 @@ public sealed class LanguageSwitchTests
     }
 
     [TestMethod]
+    public async Task PreviewStatusFollowsALiveLanguageSwitchAndKeepsItsCode()
+    {
+        var localization = LocalizationTestSupport.CreateEnglish();
+        using var preview = new PreviewViewModel(localization) { ImagePrompt = "synthetic prompt" };
+
+        Assert.AreEqual(
+            LocalizationTestSupport.English(UiStringKeys.PreviewImageStatusNotConfigured),
+            preview.ImageStatus);
+
+        await preview.GenerateImageCommand.ExecuteAsync(null);
+        localization.SetLanguage(UiLanguage.ChineseSimplified);
+
+        Assert.AreEqual(
+            LocalizationTestSupport.ChineseSimplifiedFormat(
+                UiStringKeys.PreviewImageStatusUnavailableWithCode,
+                AiErrorCode.ConfigurationUnavailable),
+            preview.ImageStatus);
+    }
+
+    [TestMethod]
     public void SettingsLanguageSelectionAppliesImmediatelyAndPersists()
     {
         var store = new RecordingPreferencesStore();

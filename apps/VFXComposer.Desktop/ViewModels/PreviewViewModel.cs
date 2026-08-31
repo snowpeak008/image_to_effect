@@ -14,7 +14,8 @@ public sealed class PreviewViewModel : WorkspacePageViewModel, IDisposable
     private int _imageWidth = 1024;
     private int _imageHeight = 1024;
     private Bitmap? _previewImage;
-    private string _imageStatus = "Image generation is not configured.";
+    private string _imageStatusKey = UiStringKeys.PreviewImageStatusNotConfigured;
+    private object?[] _imageStatusArguments = [];
     private bool _isGenerating;
 
     public PreviewViewModel(LocalizationService localization, IAiDesktopRuntime? runtime = null)
@@ -59,11 +60,7 @@ public sealed class PreviewViewModel : WorkspacePageViewModel, IDisposable
         private set => SetProperty(ref _previewImage, value);
     }
 
-    public string ImageStatus
-    {
-        get => _imageStatus;
-        private set => SetProperty(ref _imageStatus, value ?? string.Empty);
-    }
+    public string ImageStatus => Localized(_imageStatusKey, _imageStatusArguments);
 
     public bool IsGenerating
     {
@@ -114,27 +111,37 @@ public sealed class PreviewViewModel : WorkspacePageViewModel, IDisposable
             var previous = PreviewImage;
             PreviewImage = decoded;
             previous?.Dispose();
-            ImageStatus = "Private image preview ready.";
+            SetImageStatus(UiStringKeys.PreviewImageStatusReady);
         }
         catch (ImageGatewayException exception)
         {
-            ImageStatus = "Image unavailable: " + exception.Code + ".";
+            SetImageStatus(UiStringKeys.PreviewImageStatusUnavailableWithCode, exception.Code);
         }
         catch (AiGatewayException exception)
         {
-            ImageStatus = "Image unavailable: " + exception.Code + ".";
+            SetImageStatus(UiStringKeys.PreviewImageStatusUnavailableWithCode, exception.Code);
         }
         catch (OperationCanceledException)
         {
-            ImageStatus = "Image generation cancelled.";
+            SetImageStatus(UiStringKeys.PreviewImageStatusCancelled);
         }
         catch
         {
-            ImageStatus = "Image unavailable.";
+            SetImageStatus(UiStringKeys.PreviewImageStatusUnavailable);
         }
         finally
         {
             IsGenerating = false;
         }
+    }
+
+    protected override void RefreshLocalizedText() => OnPropertyChanged(nameof(ImageStatus));
+
+    // The status line keeps its key and arguments instead of a rendered string, so a language switch re-renders it.
+    private void SetImageStatus(string key, params object?[] arguments)
+    {
+        _imageStatusKey = key;
+        _imageStatusArguments = arguments;
+        OnPropertyChanged(nameof(ImageStatus));
     }
 }

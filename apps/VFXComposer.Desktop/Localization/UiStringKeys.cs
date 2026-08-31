@@ -81,6 +81,19 @@ public static class UiStringKeys
     public const string PreviewDescription = "PreviewDescription";
     public const string PreviewEmptyState = "PreviewEmptyState";
 
+    public const string PreviewImageGenerationHeading = "PreviewImageGenerationHeading";
+    public const string PreviewImageGenerationNotice = "PreviewImageGenerationNotice";
+    public const string PreviewImagePromptWatermark = "PreviewImagePromptWatermark";
+    public const string PreviewWidthLabel = "PreviewWidthLabel";
+    public const string PreviewHeightLabel = "PreviewHeightLabel";
+    public const string PreviewGenerateImageAction = "PreviewGenerateImageAction";
+
+    public const string PreviewImageStatusNotConfigured = "PreviewImageStatusNotConfigured";
+    public const string PreviewImageStatusReady = "PreviewImageStatusReady";
+    public const string PreviewImageStatusUnavailableWithCode = "PreviewImageStatusUnavailableWithCode";
+    public const string PreviewImageStatusCancelled = "PreviewImageStatusCancelled";
+    public const string PreviewImageStatusUnavailable = "PreviewImageStatusUnavailable";
+
     public const string PatchTitle = "PatchTitle";
     public const string PatchDescription = "PatchDescription";
     public const string PatchEmptyState = "PatchEmptyState";
