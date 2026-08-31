@@ -284,7 +284,7 @@ F4 审计非阻塞建议处置：①批次级取消（REQ-002 内部不一致，
 
 | 卡 | 内容 | 依赖 |
 |---|---|---|
-| **F8-0 prompt 合规性修正**（最高优先） | 参考样例换为 strict 合规样例（`batches/recipes/spark_projectile_2d.json` 真机验证过，可作 canonical example 或并列增补）；prompt 明写 strict 红线（三 stage 根 + 全 recipe ≤2 渲染模块 + 禁 attachTo）替换"exactly three stages"误导句；注意快照再导出纪律（strict 约束优先写 prompt 侧而非快照侧）；16 KiB 上界内完成；快照/确定性测试同步 | 无 |
+| **F8-0 prompt 合规性修正**（最高优先，**DONE**：合并 `2b60d885` 已推送。子 agent 汇报阶段卡死但开发完整（2 提交、工作区净），主 agent 代行验收复跑：Release 0/0、全量 **814/814**（AI.Tests 107→114）。实现走 prompt 侧内置合规样例（spark_projectile_2d 形状、1 模块、无 attachTo），快照 JSON 未动（注释说明 canonicalExample 何以不可用），红线句 + 版本注册 + 250 行合规测试齐备） | 无 |
 | **R5 需求定版** | `REQ-004_GUIDED_GENERATION.md`：双模式定义、精修语义（锚定=原始描述+当前草稿+本轮反馈三件套）、版本链与两级 cap、跨入口 store 兼容与部署约束、请求数硬顶、参数面板语义、手改/AI 改优先级、艺术家知识源文档章程；同卡 REQ-001 v0.5 勘误（非目标 3 superseded、AC-2 与实现不符的勘误、O-2 关闭指向） | 无（与 F8-0 并行） |
 | **R6 Desktop 构建闭环设计定版** | 评估"Desktop 内直接提交构建"：F3b 零 executor 裁决重开、`NoProjectAccessSurfaceTests` IL 扫描面方案（Desktop 引 Batch.Core 的豁免设计 vs 独立宿主进程）、Unity 锁探测接线、ADR-005/007 合规论证；产出设计文档供 F8c | R5 |
 | **F8a1 Providers 预校验层** | L1.5：模板存在性/kind 匹配/参数键集/上下界/strict 结构预算（模块数、attachTo、三 stage 根）纯代码校验；`issueCode→建议键` 映射表（只产稳定键，文案归 Desktop catalog）；上下界读取 API。v1 只作呈现层预警，不进重试预算不改 GenerationService 判定 | F8-0 |
