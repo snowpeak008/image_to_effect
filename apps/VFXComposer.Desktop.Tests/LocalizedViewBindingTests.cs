@@ -1,4 +1,3 @@
-using System.Text;
 using System.Text.RegularExpressions;
 using Avalonia.Controls;
 using Avalonia.LogicalTree;
@@ -19,37 +18,51 @@ public sealed class LocalizedViewBindingTests
         @"Localization\[(?<key>[A-Za-z0-9]+)\]",
         RegexOptions.CultureInvariant);
 
-    private static readonly string[] LocalizedViews =
+    // Views whose user-visible text is bound through the indexer. Every other view derives its text from the page
+    // view model, so a missing entry here cannot hide an unresolved key: the scan below covers the whole project.
+    private static readonly string[] IndexerBoundViews =
     [
         "MainWindow.axaml",
         "DashboardView.axaml",
         "SettingsView.axaml",
+        "CreateView.axaml",
+        "PreviewView.axaml",
+        "JobsView.axaml",
     ];
 
     [ClassInitialize]
     public static void InitializeAvalonia(TestContext _) => AvaloniaTestPlatform.EnsureInitialized();
 
     [TestMethod]
-    public void EveryIndexerBindingInTheMigratedViewsResolvesACatalogKey()
+    public void EveryIndexerBindingInEveryViewResolvesACatalogKey()
     {
-        var bound = new List<string>();
-        foreach (var view in LocalizedViews)
+        var boundByView = new Dictionary<string, int>(StringComparer.Ordinal);
+        foreach (var file in LocalizationTestSupport.DesktopMarkupFiles())
         {
-            var markup = ReadViewMarkup(view);
+            var markup = LocalizationTestSupport.ReadProjectText(file);
             foreach (var match in IndexerBindingPattern.Matches(markup).Cast<Match>())
             {
                 var key = match.Groups["key"].Value;
-                bound.Add(key);
+                boundByView[file.Name] = boundByView.GetValueOrDefault(file.Name) + 1;
                 foreach (var language in UiStringCatalog.Languages)
                 {
                     Assert.IsTrue(
                         UiStringCatalog.For(language).ContainsKey(key),
-                        $"{view} binds {key}, which {language} does not carry.");
+                        $"{file.Name} binds {key}, which {language} does not carry.");
                 }
             }
         }
 
-        Assert.IsTrue(bound.Count > 40, $"Only {bound.Count} indexer bindings were found in the migrated views.");
+        foreach (var view in IndexerBoundViews)
+        {
+            Assert.IsTrue(
+                boundByView.ContainsKey(view),
+                $"{view} carries no indexer binding, so its text is no longer localized.");
+        }
+
+        Assert.IsTrue(
+            boundByView.Values.Sum() > 70,
+            $"Only {boundByView.Values.Sum()} indexer bindings were found across the shell's views.");
     }
 
     [TestMethod]
@@ -116,27 +129,102 @@ public sealed class LocalizedViewBindingTests
             LocalizationTestSupport.ChineseSimplified(UiStringKeys.SettingsProviderProfilesHeading));
     }
 
+    [TestMethod]
+    public void CreatePageTextIsRerenderedWhenTheLanguageChanges()
+    {
+        var localization = LocalizationTestSupport.CreateEnglish();
+        var view = new CreateView { DataContext = new CreateViewModel(localization) };
+        var heading = LocalizationTestSupport.English(UiStringKeys.CreateGenerateRecipeHeading);
+
+        CollectionAssert.Contains(RenderedText(view), heading);
+
+        localization.SetLanguage(UiLanguage.ChineseSimplified);
+
+        var rendered = RenderedText(view);
+        CollectionAssert.DoesNotContain(rendered, heading);
+        CollectionAssert.Contains(
+            rendered,
+            LocalizationTestSupport.ChineseSimplified(UiStringKeys.CreateGenerateRecipeHeading));
+        CollectionAssert.Contains(
+            rendered,
+            LocalizationTestSupport.ChineseSimplified(UiStringKeys.CreateChatStatusNotConfigured));
+    }
+
+    [TestMethod]
+    public void PreviewPageTextIsRerenderedWhenTheLanguageChanges()
+    {
+        var localization = LocalizationTestSupport.CreateEnglish();
+        using var page = new PreviewViewModel(localization);
+        var view = new PreviewView { DataContext = page };
+        var label = LocalizationTestSupport.English(UiStringKeys.PreviewWidthLabel);
+
+        CollectionAssert.Contains(RenderedText(view), label);
+
+        localization.SetLanguage(UiLanguage.ChineseSimplified);
+
+        var rendered = RenderedText(view);
+        CollectionAssert.DoesNotContain(rendered, label);
+        CollectionAssert.Contains(
+            rendered,
+            LocalizationTestSupport.ChineseSimplified(UiStringKeys.PreviewWidthLabel));
+        CollectionAssert.Contains(
+            rendered,
+            LocalizationTestSupport.ChineseSimplified(UiStringKeys.PreviewImageStatusNotConfigured));
+    }
+
+    [TestMethod]
+    public void JobsPageTextIsRerenderedWhenTheLanguageChanges()
+    {
+        var localization = LocalizationTestSupport.CreateEnglish();
+        var view = new JobsView { DataContext = new JobsViewModel(localization) };
+        var heading = LocalizationTestSupport.English(UiStringKeys.JobsTimelineHeading);
+
+        CollectionAssert.Contains(RenderedText(view), heading);
+
+        localization.SetLanguage(UiLanguage.ChineseSimplified);
+
+        var rendered = RenderedText(view);
+        CollectionAssert.DoesNotContain(rendered, heading);
+        CollectionAssert.Contains(
+            rendered,
+            LocalizationTestSupport.ChineseSimplified(UiStringKeys.JobsTimelineHeading));
+        CollectionAssert.Contains(
+            rendered,
+            LocalizationTestSupport.ChineseSimplified(UiStringKeys.JobsQueueIdle));
+    }
+
+    [TestMethod]
+    public void LibraryPatchAndReviewPageTextIsRerenderedWhenTheLanguageChanges()
+    {
+        var localization = LocalizationTestSupport.CreateEnglish();
+        var library = new LibraryView { DataContext = new LibraryViewModel(localization) };
+        var patch = new PatchView { DataContext = new PatchViewModel(localization) };
+        var review = new ReviewView { DataContext = new ReviewViewModel(localization) };
+
+        CollectionAssert.Contains(
+            RenderedText(review),
+            LocalizationTestSupport.English(UiStringKeys.ReviewAuthorityNotice));
+
+        localization.SetLanguage(UiLanguage.ChineseSimplified);
+
+        CollectionAssert.Contains(
+            RenderedText(library),
+            LocalizationTestSupport.ChineseSimplified(UiStringKeys.LibraryTitle));
+        CollectionAssert.Contains(
+            RenderedText(patch),
+            LocalizationTestSupport.ChineseSimplified(UiStringKeys.PatchEmptyState));
+        var renderedReview = RenderedText(review);
+        CollectionAssert.Contains(
+            renderedReview,
+            LocalizationTestSupport.ChineseSimplified(UiStringKeys.ReviewAuthorityNotice));
+        CollectionAssert.Contains(
+            renderedReview,
+            LocalizationTestSupport.ChineseSimplified(UiStringKeys.ReviewMachineStatus));
+    }
+
     private static List<string?> RenderedText(Control view) => view
         .GetLogicalDescendants()
         .OfType<TextBlock>()
         .Select(block => block.Text)
         .ToList();
-
-    // Compiled bindings validate property paths but not indexer keys, and the compiler keeps no XAML asset to read
-    // back, so the markup is read from the project itself.
-    private static string ReadViewMarkup(string fileName)
-    {
-        for (var directory = new DirectoryInfo(AppContext.BaseDirectory);
-            directory is not null;
-            directory = directory.Parent)
-        {
-            var candidate = Path.Combine(directory.FullName, "VFXComposer.Desktop", "Views", fileName);
-            if (File.Exists(candidate))
-            {
-                return File.ReadAllText(candidate, Encoding.UTF8);
-            }
-        }
-
-        throw new AssertFailedException($"{fileName} was not found above {AppContext.BaseDirectory}.");
-    }
 }

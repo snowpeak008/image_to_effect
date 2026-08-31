@@ -42,9 +42,57 @@ public static class UiStringKeys
     public const string CreateDescription = "CreateDescription";
     public const string CreateEmptyState = "CreateEmptyState";
 
+    public const string CreateRecipeDraftHeading = "CreateRecipeDraftHeading";
+    public const string CreateRecipeNameWatermark = "CreateRecipeNameWatermark";
+    public const string CreateDraftNotesWatermark = "CreateDraftNotesWatermark";
+    public const string CreateGenerateRecipeHeading = "CreateGenerateRecipeHeading";
+    public const string CreateGenerateRecipeNotice = "CreateGenerateRecipeNotice";
+    public const string CreateEffectDescriptionWatermark = "CreateEffectDescriptionWatermark";
+    public const string CreateGenerateDraftAction = "CreateGenerateDraftAction";
+    public const string CreateCancelGenerationAction = "CreateCancelGenerationAction";
+    public const string CreateConfirmDraftAction = "CreateConfirmDraftAction";
+    public const string CreateValidationWatermark = "CreateValidationWatermark";
+    public const string CreateDraftJsonWatermark = "CreateDraftJsonWatermark";
+    public const string CreateChatHeading = "CreateChatHeading";
+    public const string CreateChatNotice = "CreateChatNotice";
+    public const string CreateChatPromptWatermark = "CreateChatPromptWatermark";
+    public const string CreateSendChatAction = "CreateSendChatAction";
+    public const string CreateChatResponseWatermark = "CreateChatResponseWatermark";
+
+    public const string CreateChatStatusNotConfigured = "CreateChatStatusNotConfigured";
+    public const string CreateChatStatusCompleted = "CreateChatStatusCompleted";
+    public const string CreateChatStatusUnavailableWithCode = "CreateChatStatusUnavailableWithCode";
+    public const string CreateChatStatusCancelled = "CreateChatStatusCancelled";
+    public const string CreateRecipeStatusInitial = "CreateRecipeStatusInitial";
+    public const string CreateRecipeStatusGenerating = "CreateRecipeStatusGenerating";
+    public const string CreateRecipeStatusDraftReady = "CreateRecipeStatusDraftReady";
+    public const string CreateRecipeStatusValidationFailed = "CreateRecipeStatusValidationFailed";
+    public const string CreateRecipeStatusGenerationCancelled = "CreateRecipeStatusGenerationCancelled";
+    public const string CreateRecipeStatusGenerationUnavailableWithCode =
+        "CreateRecipeStatusGenerationUnavailableWithCode";
+    public const string CreateRecipeStatusDraftStorageFailedWithCode =
+        "CreateRecipeStatusDraftStorageFailedWithCode";
+    public const string CreateRecipeStatusDraftConfirmed = "CreateRecipeStatusDraftConfirmed";
+    public const string CreateRecipeStatusConfirmationFailedWithCode =
+        "CreateRecipeStatusConfirmationFailedWithCode";
+    public const string CreateValidationPassed = "CreateValidationPassed";
+
     public const string PreviewTitle = "PreviewTitle";
     public const string PreviewDescription = "PreviewDescription";
     public const string PreviewEmptyState = "PreviewEmptyState";
+
+    public const string PreviewImageGenerationHeading = "PreviewImageGenerationHeading";
+    public const string PreviewImageGenerationNotice = "PreviewImageGenerationNotice";
+    public const string PreviewImagePromptWatermark = "PreviewImagePromptWatermark";
+    public const string PreviewWidthLabel = "PreviewWidthLabel";
+    public const string PreviewHeightLabel = "PreviewHeightLabel";
+    public const string PreviewGenerateImageAction = "PreviewGenerateImageAction";
+
+    public const string PreviewImageStatusNotConfigured = "PreviewImageStatusNotConfigured";
+    public const string PreviewImageStatusReady = "PreviewImageStatusReady";
+    public const string PreviewImageStatusUnavailableWithCode = "PreviewImageStatusUnavailableWithCode";
+    public const string PreviewImageStatusCancelled = "PreviewImageStatusCancelled";
+    public const string PreviewImageStatusUnavailable = "PreviewImageStatusUnavailable";
 
     public const string PatchTitle = "PatchTitle";
     public const string PatchDescription = "PatchDescription";
@@ -54,9 +102,41 @@ public static class UiStringKeys
     public const string ReviewDescription = "ReviewDescription";
     public const string ReviewEmptyState = "ReviewEmptyState";
 
+    public const string ReviewMachineStatus = "ReviewMachineStatus";
+    public const string ReviewVisualStatus = "ReviewVisualStatus";
+    public const string ReviewUserVerdictStatus = "ReviewUserVerdictStatus";
+    public const string ReviewL3Status = "ReviewL3Status";
+    public const string ReviewL4Status = "ReviewL4Status";
+    public const string ReviewAuthorityNotice = "ReviewAuthorityNotice";
+
     public const string JobsTitle = "JobsTitle";
     public const string JobsDescription = "JobsDescription";
     public const string JobsEmptyState = "JobsEmptyState";
+
+    public const string JobsRefreshAction = "JobsRefreshAction";
+    public const string JobsCancelAction = "JobsCancelAction";
+    public const string JobsConfirmCancelAction = "JobsConfirmCancelAction";
+    public const string JobsKeepAction = "JobsKeepAction";
+    public const string JobsResubmitAction = "JobsResubmitAction";
+    public const string JobsTimelineHeading = "JobsTimelineHeading";
+    public const string JobsItemLabel = "JobsItemLabel";
+    public const string JobsQueuedAtLabel = "JobsQueuedAtLabel";
+    public const string JobsStartedAtLabel = "JobsStartedAtLabel";
+    public const string JobsFinishedAtLabel = "JobsFinishedAtLabel";
+
+    public const string JobsQueueIdle = "JobsQueueIdle";
+    public const string JobsQueueExecuting = "JobsQueueExecuting";
+    public const string JobsQueueWaitingProjectLock = "JobsQueueWaitingProjectLock";
+    public const string JobsStoreUnavailableWithCode = "JobsStoreUnavailableWithCode";
+    public const string JobsCancelRejectedWithCode = "JobsCancelRejectedWithCode";
+    public const string JobsResubmitRejectedWithCode = "JobsResubmitRejectedWithCode";
+    public const string JobsTimelineUnavailableWithCode = "JobsTimelineUnavailableWithCode";
+    public const string JobsDiagnosticRetryHint = "JobsDiagnosticRetryHint";
+    public const string JobsNoArtifacts = "JobsNoArtifacts";
+    public const string JobsArtifactsWithIds = "JobsArtifactsWithIds";
+    public const string JobsBatchItemDetail = "JobsBatchItemDetail";
+    public const string JobsBatchGroupIndividual = "JobsBatchGroupIndividual";
+    public const string JobsBatchGroupBatch = "JobsBatchGroupBatch";
 
     public const string SettingsTitle = "SettingsTitle";
     public const string SettingsDescription = "SettingsDescription";

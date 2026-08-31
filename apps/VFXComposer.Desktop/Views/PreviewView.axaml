@@ -11,15 +11,15 @@
     </StackPanel>
     <Border Classes="card">
       <StackPanel Spacing="10">
-        <TextBlock FontWeight="SemiBold" Text="Private image generation" />
-        <TextBlock Classes="muted" Text="Generation is explicit. The returned provider artifact is decoded in memory for this preview only." TextWrapping="Wrap" />
-        <TextBox AcceptsReturn="True" Height="90" TextWrapping="Wrap" Watermark="Describe an image" Text="{Binding ImagePrompt}" />
+        <TextBlock FontWeight="SemiBold" Text="{Binding Localization[PreviewImageGenerationHeading]}" />
+        <TextBlock Classes="muted" Text="{Binding Localization[PreviewImageGenerationNotice]}" TextWrapping="Wrap" />
+        <TextBox AcceptsReturn="True" Height="90" TextWrapping="Wrap" Watermark="{Binding Localization[PreviewImagePromptWatermark]}" Text="{Binding ImagePrompt}" />
         <Grid ColumnDefinitions="Auto,110,Auto,110,*" ColumnSpacing="8">
-          <TextBlock VerticalAlignment="Center" Text="Width" />
+          <TextBlock VerticalAlignment="Center" Text="{Binding Localization[PreviewWidthLabel]}" />
           <TextBox Grid.Column="1" Text="{Binding ImageWidth}" />
-          <TextBlock Grid.Column="2" VerticalAlignment="Center" Text="Height" />
+          <TextBlock Grid.Column="2" VerticalAlignment="Center" Text="{Binding Localization[PreviewHeightLabel]}" />
           <TextBox Grid.Column="3" Text="{Binding ImageHeight}" />
-          <Button Grid.Column="4" HorizontalAlignment="Left" Command="{Binding GenerateImageCommand}" Content="Generate private image" />
+          <Button Grid.Column="4" HorizontalAlignment="Left" Command="{Binding GenerateImageCommand}" Content="{Binding Localization[PreviewGenerateImageAction]}" />
         </Grid>
         <TextBlock Classes="muted" Text="{Binding ImageStatus}" TextWrapping="Wrap" />
       </StackPanel>

@@ -3,6 +3,7 @@ using VFXComposer.AI.Contracts;
 using VFXComposer.AI.Contracts.Chat;
 using VFXComposer.AI.Contracts.Desktop;
 using VFXComposer.AI.Contracts.Recipes;
+using VFXComposer.Desktop.Localization;
 using VFXComposer.Desktop.ViewModels;
 
 namespace VFXComposer.Desktop.Tests;
@@ -41,14 +42,21 @@ public sealed class CreateRecipeFlowTests
         Assert.AreEqual(1, runtime.GenerateCalls);
         Assert.AreEqual(RecipeDraftStatus.PendingConfirmation, viewModel.DraftStatus);
         Assert.IsTrue(viewModel.RecipeDraftJson.Contains("synthetic_recipe", StringComparison.Ordinal));
-        Assert.IsTrue(viewModel.RecipeStatus.Contains("confirm", StringComparison.OrdinalIgnoreCase));
+        Assert.AreEqual(
+            LocalizationTestSupport.EnglishFormat(UiStringKeys.CreateRecipeStatusDraftReady, 1),
+            viewModel.RecipeStatus);
+        Assert.AreEqual(
+            LocalizationTestSupport.English(UiStringKeys.CreateValidationPassed),
+            viewModel.RecipeValidationSummary);
         Assert.IsTrue(viewModel.ConfirmRecipeDraftCommand.CanExecute(null));
 
         viewModel.ConfirmRecipeDraftCommand.Execute(null);
 
         Assert.AreEqual(RecipeDraftStatus.ConfirmedAwaitingBuild, viewModel.DraftStatus);
         Assert.IsFalse(viewModel.ConfirmRecipeDraftCommand.CanExecute(null));
-        Assert.IsTrue(viewModel.RecipeStatus.Contains("awaiting build", StringComparison.Ordinal));
+        Assert.AreEqual(
+            LocalizationTestSupport.English(UiStringKeys.CreateRecipeStatusDraftConfirmed),
+            viewModel.RecipeStatus);
         var retained = runtime.Records[viewModel.DraftId!];
         Assert.AreEqual(RecipeDraftStatus.ConfirmedAwaitingBuild, retained.Status);
         Assert.AreEqual(1, runtime.GenerateCalls);
@@ -66,7 +74,10 @@ public sealed class CreateRecipeFlowTests
         await viewModel.GenerateRecipeCommand.ExecuteAsync(null);
 
         Assert.AreEqual(RecipeDraftStatus.Failed, viewModel.DraftStatus);
-        Assert.IsTrue(viewModel.RecipeStatus.Contains("E101", StringComparison.Ordinal));
+        // The shell sentence comes from the catalog; the issue code inside it stays verbatim.
+        Assert.AreEqual(
+            LocalizationTestSupport.EnglishFormat(UiStringKeys.CreateRecipeStatusValidationFailed, 1, "E101"),
+            viewModel.RecipeStatus);
         Assert.IsTrue(viewModel.RecipeValidationSummary.Contains("E101", StringComparison.Ordinal));
         Assert.IsFalse(viewModel.ConfirmRecipeDraftCommand.CanExecute(null));
         Assert.AreEqual(RecipeDraftStatus.Failed, runtime.Records[viewModel.DraftId!].Status);
@@ -116,7 +127,9 @@ public sealed class CreateRecipeFlowTests
 
         await viewModel.GenerateRecipeCommand.ExecuteAsync(null);
 
-        Assert.IsTrue(viewModel.RecipeStatus.Contains("cancelled", StringComparison.OrdinalIgnoreCase));
+        Assert.AreEqual(
+            LocalizationTestSupport.English(UiStringKeys.CreateRecipeStatusGenerationCancelled),
+            viewModel.RecipeStatus);
         Assert.IsNull(viewModel.DraftStatus);
     }
 

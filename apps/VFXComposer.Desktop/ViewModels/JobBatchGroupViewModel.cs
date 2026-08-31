@@ -1,5 +1,6 @@
 using System.Collections.ObjectModel;
 using CommunityToolkit.Mvvm.ComponentModel;
+using VFXComposer.Desktop.Localization;
 
 namespace VFXComposer.Desktop.ViewModels;
 
@@ -10,10 +11,12 @@ namespace VFXComposer.Desktop.ViewModels;
 /// </summary>
 public sealed class JobBatchGroupViewModel : ObservableObject
 {
+    private readonly LocalizationService _localization;
     private bool _isExpanded = true;
 
-    public JobBatchGroupViewModel(string? batchId)
+    public JobBatchGroupViewModel(LocalizationService localization, string? batchId)
     {
+        _localization = localization ?? throw new ArgumentNullException(nameof(localization));
         BatchId = batchId;
     }
 
@@ -26,7 +29,13 @@ public sealed class JobBatchGroupViewModel : ObservableObject
 
     public int Count => Items.Count;
 
-    public string Header { get; private set; } = string.Empty;
+    /// <summary>Group line derived from the catalog, so a language switch re-renders it without a refresh tick.</summary>
+    public string Header => BatchId is null
+        ? _localization.Format(UiStringKeys.JobsBatchGroupIndividual, Count)
+        : _localization.Format(
+            UiStringKeys.JobsBatchGroupBatch,
+            BatchId.Length > 12 ? BatchId[..12] : BatchId,
+            Count);
 
     /// <summary>Fold state, preserved across refreshes by <see cref="JobsViewModel"/>.</summary>
     public bool IsExpanded
@@ -35,13 +44,9 @@ public sealed class JobBatchGroupViewModel : ObservableObject
         set => SetProperty(ref _isExpanded, value);
     }
 
-    /// <summary>Recomputes the header line from the current item count.</summary>
+    /// <summary>Re-renders the header line after the item count or the language changed.</summary>
     public void RefreshHeader()
     {
-        var jobs = Count == 1 ? "1 job" : Count + " jobs";
-        Header = BatchId is null
-            ? "Individual jobs · " + jobs
-            : "Batch " + (BatchId.Length > 12 ? BatchId[..12] : BatchId) + " · " + jobs;
         OnPropertyChanged(nameof(Header));
         OnPropertyChanged(nameof(Count));
     }

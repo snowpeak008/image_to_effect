@@ -1,5 +1,6 @@
 using System.ComponentModel;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using VFXComposer.AI.Contracts;
 using VFXComposer.Client;
 using VFXComposer.Desktop.Localization;
 using VFXComposer.Desktop.Services;
@@ -139,6 +140,54 @@ public sealed class LanguageSwitchTests
             dashboard.L4Status);
         // Technical identifiers survive translation.
         StringAssert.Contains(dashboard.VisualStatus, "VISUAL_PENDING");
+    }
+
+    [TestMethod]
+    public async Task CreateStatusLinesFollowALiveLanguageSwitchAndKeepTheirCodes()
+    {
+        var localization = LocalizationTestSupport.CreateEnglish();
+        var create = new CreateViewModel(localization) { ChatPrompt = "synthetic prompt" };
+
+        Assert.AreEqual(
+            LocalizationTestSupport.English(UiStringKeys.CreateChatStatusNotConfigured),
+            create.ChatStatus);
+        Assert.AreEqual(
+            LocalizationTestSupport.English(UiStringKeys.CreateRecipeStatusInitial),
+            create.RecipeStatus);
+
+        // The unavailable runtime fails closed without a transport, so this exercises a code-carrying status line.
+        await create.SendChatCommand.ExecuteAsync(null);
+        localization.SetLanguage(UiLanguage.ChineseSimplified);
+
+        Assert.AreEqual(
+            LocalizationTestSupport.ChineseSimplifiedFormat(
+                UiStringKeys.CreateChatStatusUnavailableWithCode,
+                AiErrorCode.ConfigurationUnavailable),
+            create.ChatStatus);
+        Assert.AreEqual(
+            LocalizationTestSupport.ChineseSimplified(UiStringKeys.CreateRecipeStatusInitial),
+            create.RecipeStatus);
+        StringAssert.Contains(create.ChatStatus, nameof(AiErrorCode.ConfigurationUnavailable));
+    }
+
+    [TestMethod]
+    public async Task PreviewStatusFollowsALiveLanguageSwitchAndKeepsItsCode()
+    {
+        var localization = LocalizationTestSupport.CreateEnglish();
+        using var preview = new PreviewViewModel(localization) { ImagePrompt = "synthetic prompt" };
+
+        Assert.AreEqual(
+            LocalizationTestSupport.English(UiStringKeys.PreviewImageStatusNotConfigured),
+            preview.ImageStatus);
+
+        await preview.GenerateImageCommand.ExecuteAsync(null);
+        localization.SetLanguage(UiLanguage.ChineseSimplified);
+
+        Assert.AreEqual(
+            LocalizationTestSupport.ChineseSimplifiedFormat(
+                UiStringKeys.PreviewImageStatusUnavailableWithCode,
+                AiErrorCode.ConfigurationUnavailable),
+            preview.ImageStatus);
     }
 
     [TestMethod]
