@@ -259,4 +259,4 @@ F4 审计非阻塞建议处置：①批次级取消（REQ-002 内部不一致，
 **F7b Desktop 全页文案迁移**（依赖 F7a）
 - 目标：其余各页（Create 16、Jobs 11、Preview 6、Library/Patch/Review 的 VM 句）XAML 与 ViewModel 全部用户可见文案迁移至 catalog（静态句 + 动态模板；嵌码模板按裁决 2 只译外壳）；34 条既有测试全部适配；补齐全部页面的切换即刷。
 - allow-list/验收：同 F7a；另加"catalog 无孤儿键、无未接线键"的收尾断言。
-- 状态：待派发（F7a 合入后）。
+- 状态：**DELIVERED-初审 PASS，独立审计中**（2026-08-31，本地集成合并 `c7fd3090` 未推送）：catalog 114→184 键（+70），Release 0/0，全量 807/807（Desktop.Tests 89→99），20 文件全在 allow-list 零越界；六页全部做到切换即刷（超出 v1 快照限制的最低要求，剩余快照句仅 Settings 三处属 F7a 定版限制）。**主 agent 追认三项做法**：①Jobs `RUNNING` 徽标绑定协议词 `State` 不新建键（协议词不译裁决的自然延伸）；②XAML 行内 `StringFormat` 改 VM 键派生属性（Avalonia 格式串不可绑定）；③`JobsViewModel.cs` 既有裸 NUL 字节改 `\0` 转义（语义等价，文件恢复为文本）。独立审计覆盖 F7a+F7b 全特性，重点复核 UiPreferencesStore 豁免与 184 键中文译文质量。
