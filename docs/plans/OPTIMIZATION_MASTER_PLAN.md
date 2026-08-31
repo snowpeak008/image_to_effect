@@ -254,7 +254,7 @@ F4 审计非阻塞建议处置：①批次级取消（REQ-002 内部不一致，
 - 目标：上述裁决 1/3/4/5 的全部基建落地；`WorkspacePageViewModel` 的 Title/Description/EmptyStateMessage 改为键派生 + 语言变更通知；示范接入四个面：MainWindow（窗口标题/顶栏/连接区 6 条 + 导航）、Dashboard（全部 10 条）、Settings 页自身全部 37 条 XAML + VM 句、旁路对话框标题。
 - allow-list：`apps/VFXComposer.Desktop/**`、`apps/VFXComposer.Desktop.Tests/**`。禁区：`src/**`、`apps/VFXComposer.Cli*/**`、`apps/VFXComposer.Mcp*/**`、`project/**`、`docs/**`、`Directory.Packages.props`（零新 NuGet）。
 - 验收标准：Release 构建 0/0；Desktop.Tests 全绿且受影响断言改经 catalog；.NET 全量不回退（≥747）；切换测试证明运行中改语言后已接入面的文案即刷；持久化往返与损坏回退有测试。
-- 状态：已派发（2026-08-31），交付后主 agent 初审合入；独立审计放在 F7b 之后对整个双语特性一次覆盖（控制子 agent 消耗）。
+- 状态：**DONE-初审**（2026-08-31）：114 键 × 双语 228 条，Release 0/0，11 工程 797 条全绿（Desktop.Tests 41→89）；43 文件（41 in allow-list + 2 追认）。**主 agent 裁决追认两项**：①`NoProjectAccessSurfaceTests` 为 `UiPreferencesStore` 增加精确闭合的文件系统豁免（沿 `PrivateImagePreviewDecoder` 先例，守护测试钉住闭合性；实质边界"Desktop 零 Unity 项目 I/O"未松动）——**列为 F7b 后独立审计重点复核项**；②`tests/VFXComposer.AiLocalE2E.Tests` 两文件 15 处构造点纯机械适配（VM 签名新增 LocalizationService，否则解决方案不可构建）。台账注意：子 agent 实测基线为 749（非 747），差异 2 条非本卡引入，审计时对账。已知限制（定版内）：VM 状态快照串下次状态更新时换语言；MainWindow 连接区三处已做成键派生不受此限。
 
 **F7b Desktop 全页文案迁移**（依赖 F7a）
 - 目标：其余各页（Create 16、Jobs 11、Preview 6、Library/Patch/Review 的 VM 句）XAML 与 ViewModel 全部用户可见文案迁移至 catalog（静态句 + 动态模板；嵌码模板按裁决 2 只译外壳）；34 条既有测试全部适配；补齐全部页面的切换即刷。
