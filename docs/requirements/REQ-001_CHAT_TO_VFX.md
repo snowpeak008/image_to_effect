@@ -41,11 +41,15 @@
 
 1. **不做封闭写入面之外的任何自动写入**：构建任务的写入面为 ADR-007（`docs/rules/ADR-007_CONTROLLED_PROJECT_MUTATION.md`，已定版，v1.2）裁决的封闭三成员清单——①资产产物唯一根 `Assets/VFX/Generated/**`；②审计元数据单点 `ProjectSettings/VFXComposer/BuildManifests/<effectId>.manifest.json`（`VfxCompiler` 既有代码事实：构建必写 manifest）；③构建溯源单文件 `Assets/VFX/Recipes/<Sanitize(effectId)>.json`（仅构建入口在用户确认与哈希复验之后原子写入，满足 strict E8014 溯源）。AI 产物不写模板目录、不写任意用户路径；除上述单点外 `ProjectSettings/**` 保持只读（含 `VfxProjectRules.json` 的 `legacyEffectIds`）；模板族共享资产（`Assets/VFX/Shared/**`）不在写入面内，构建任务对其只读。越界即 fail-closed。
 2. **不做 AI 自动选 provider**：ChatLlm 通道保持唯一显式绑定、零 fallback（ADR-006）；通道未绑定即失败，不自动推断、不换 route、不换模型。
-3. **单特效、单对话轮次**：一次生成任务对应一段用户描述、产出至多一个特效；不支持跨任务对话记忆、不支持"在上一个特效基础上改一改"（Patch/多轮迭代属后续需求）；生成任务内部的校验重试不是新的对话轮次。
+3. **单特效、单对话轮次**：一次生成任务对应一段用户描述、产出至多一个特效；不支持跨任务对话记忆、不支持"在上一个特效基础上改一改"（Patch/多轮迭代属后续需求）；生成任务内部的校验重试不是新的对话轮次。**（本条部分 superseded-by-REQ-004，见本节末勘误 E-1。）**
 4. **不做批量生成**（REQ-002 范围）、**不做任务队列语义**（REQ-003 范围）：本需求只要求"同一时刻至多一个构建任务在执行"这一约束成立。
 5. **不做 Recipe v2（S12 Slash）对话生成**：`S12SlashCompiler` 是隔离编译器且只拥有唯一管理产物 `slash_3d_stylized`；首版对话生成只覆盖 Recipe v1（`VfxCompiler` 所辖），可选 archetype/模板以运行时 `TemplateCatalog` 实际登记为准。
 6. **不做自动视觉评审**：Prefab 是否"好看"由用户在 Unity 中人工判断；本需求的成功判据止于"合法 Recipe 构建出合法 Prefab"。
 7. **不承诺真实付费 provider 的可用性**：验收使用 mock/loopback（继承 A5/A6 边界）。
+
+> **勘误 E-1（主 agent 裁决，2026-08-31，主计划 §7 生成体验大改版）**：上列**非目标 3** 中"不支持在上一个特效基础上改一改（Patch/多轮迭代属后续需求）"这一句已被 **`docs/requirements/REQ-004_GUIDED_GENERATION.md` 取代（superseded-by-REQ-004）**——REQ-004 定义了草稿锚定的多轮精修（每轮显式用户动作、单 route、每轮 1+N 请求预算）与线性版本链。原文保留不改，读作："该能力在 REQ-001 的范围内确实不做，其需求依据已移交 REQ-004"。
+>
+> 本条**未被取代**的部分依然有效：①一次生成任务仍产出至多一个特效；②**不支持跨任务对话记忆**——REQ-004 §4 非目标 2 明确不做开放式对话记忆，一轮精修的上下文严格限于"原始描述 + 当前草稿 + 本轮反馈"三件套，多轮连续性由版本链而非对话历史承载；③生成任务内部的校验重试仍不是新的对话轮次。
 
 ## 5. 用户流程
 
@@ -191,7 +195,7 @@ F1 = 生成 + 解析 + 校验（产物止于"通过校验、待确认的 recipe 
 ### 9.2 开放问题（不阻塞 F1 开工）
 
 - O-1 描述输入是否支持参考图（走 ImageGeneration 通道反向描述）——超出本需求，另立需求卡。
-- O-2 草稿的保留份数与清理策略（建议：每任务一份、总量有界、用户可清空）。
+- O-2 草稿的保留份数与清理策略（建议：每任务一份、总量有界、用户可清空）。**已关闭（2026-08-31）**：由 **REQ-004 §7.5「两级容量 cap 与 trim 可见语义」**定版——每 lineage ≤16 版且累计 `recipeJson` ≤1 MiB、全局 ≤8 条 lineage（超出按最久未活动淘汰整条链）、受保护记录（head 与已确认/已构建/已 supersede 版本）不被 trim、一切 trim 与截断对用户可见（取代现行 `RecipeDraftStore.MaximumRetainedRecords = 32` 的单级静默丢弃）。实现归任务卡 F8b2。
 - O-3 L2 校验失败自动回贴 AI（X4 可选路径）是否默认开启，还是要求用户逐次确认。
 
 ## 10. 验收场景
@@ -207,6 +211,17 @@ F1 = 生成 + 解析 + 校验（产物止于"通过校验、待确认的 recipe 
 - Given：mock 第一次返回含未知字段 `foo` 与越界 `rate` 的 JSON，第二次返回合法 Recipe
 - When：用户点击生成
 - Then：L1 拒绝首次输出并产出含精确 `path`/`allowedRange` 的错误报告；系统自动回贴重试恰好 1 次；最终草稿通过校验进入确认态；时间线记录 2 次 AI 请求
+
+> **勘误 E-2（主 agent 裁决，2026-08-31，主计划 §7 评审事实校正第 3 条）**：AC-2 的"越界 `rate`"部分**与实现不符**。代码事实（master，2026-08-31）：
+> - `RecipeL1Validator` 对模块 `parameters` 只校验"它是一个对象"（`ReadObject(..., required: true)`），**既不校验参数键集、也不校验参数值的上下界**；
+> - 快照中的 `MinLiteral`/`MaxLiteral`（`RecipeTemplateCatalogSnapshot`）的唯一消费者是 prompt 表格渲染（`RenderPromptTable`），.NET 侧从未用它做过校验；
+> - 因此参数越界不会被 L1 拒绝、L1 也不会为越界参数产出 `allowedRange`；越界要到 Unity 侧 L2（`RecipeValidator` / registries / `BudgetCalculator`）才被发现。
+>
+> AC-2 中**成立**的部分：未知字段 `foo` 确实被 L1 拒绝（`CheckUnknown`），并产出精确 `path`；`allowedRange` 字段本身存在于报告契约（`RecipeValidationIssue.AllowedRange`）并用于枚举/类型类问题。
+>
+> **去向**：参数上下界（连同模板存在性、kind 匹配、参数键集、strict 结构预算）的 .NET 侧校验由 **L1.5 预校验层**落地，任务卡 **F8a1**，产品语义见 REQ-004 §9.2 与 REQ-004-41/43。F8a1 定版 v1 的 L1.5 只作呈现层预警，不进重试预算、不改生成判定；因此 AC-2 在 F8a1 交付后仍应按"越界不触发 L1 重试"验收，越界的可见性来自 L1.5 预警与参数面板的区间显示。
+>
+> **同源表述一并按本勘误理解**（原文保留不改）：§5.2 失败流 X3 的"含未知字段、坏枚举、越界值（L1 失败）"——其中"越界值"当前属未实现的规格意图，去向同为 F8a1。另注：**REQ-001-09 本身无需勘误**，其拒绝清单（未知字段、缺失必填、坏枚举、类型不符、`recipeVersion != 1`）不含参数上下界，与实现一致。
 
 **AC-3 重试预算耗尽**
 - Given：mock 恒定返回非 JSON 文本；重试上限配置为 2
@@ -251,3 +266,4 @@ F1 = 生成 + 解析 + 校验（产物止于"通过校验、待确认的 recipe 
 | v0.2 | 2026-08-29 | 审计建议微调：映射路径改为 P0-1 合并后的 master 路径（S-1）；R-1/R-8 标记已解决（S-2）；REQ-001-06 等价判定量化（S-3） |
 | v0.3 | 2026-08-29 | 对齐已定版的 ADR-007 双成员封闭写入面：修正 §4 非目标 1 与 REQ-001-18（`ProjectSettings/VFXComposer/BuildManifests/` 审计元数据单点可写、其余 `ProjectSettings/**` 只读），同步 §3 目标、§5.1 流程图、AC-7、R-1/R-2、G-9 的同义表述 |
 | v0.4 | 2026-08-29 | 对齐 ADR-007 v1.2 三成员封闭写入面（F2 停手报告裁决）：写入面增补 `Assets/VFX/Recipes/<Sanitize(effectId)>.json` 构建溯源单文件，同步 §2/§3/§4/REQ-001-18/AC-7/G-9/R-2 表述 |
+| v0.5 | 2026-08-31 | 勘误三处（原文全部保留，仅追加标注与勘误块），任务卡 R5：①§4 非目标 3 的"不支持在上一个特效基础上改一改"标注 **superseded-by-REQ-004**（勘误 E-1，未被取代的部分逐条列明）；②AC-2 的"越界 `rate`"与实现不符，如实标注现状（L1 对模块 `parameters` 只查"是对象"，上下界从未在 .NET 侧校验）与去向（L1.5 / F8a1，见 REQ-004 §9.2），同源表述 §5.2 X3 一并按此理解，并注明 REQ-001-09 本身无需勘误（勘误 E-2）；③§9.2 开放问题 O-2 标注**已由 REQ-004 §7.5（版本链容量）关闭** |

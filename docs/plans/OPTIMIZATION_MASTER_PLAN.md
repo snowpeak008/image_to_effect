@@ -285,7 +285,7 @@ F4 审计非阻塞建议处置：①批次级取消（REQ-002 内部不一致，
 | 卡 | 内容 | 依赖 |
 |---|---|---|
 | **F8-0 prompt 合规性修正**（最高优先，**DONE**：合并 `2b60d885` 已推送。子 agent 汇报阶段卡死但开发完整（2 提交、工作区净），主 agent 代行验收复跑：Release 0/0、全量 **814/814**（AI.Tests 107→114）。实现走 prompt 侧内置合规样例（spark_projectile_2d 形状、1 模块、无 attachTo），快照 JSON 未动（注释说明 canonicalExample 何以不可用），红线句 + 版本注册 + 250 行合规测试齐备） | 无 |
-| **R5 需求定版** | `REQ-004_GUIDED_GENERATION.md`：双模式定义、精修语义（锚定=原始描述+当前草稿+本轮反馈三件套）、版本链与两级 cap、跨入口 store 兼容与部署约束、请求数硬顶、参数面板语义、手改/AI 改优先级、艺术家知识源文档章程；同卡 REQ-001 v0.5 勘误（非目标 3 superseded、AC-2 与实现不符的勘误、O-2 关闭指向） | 无（与 F8-0 并行） |
+| **R5 需求定版**（**DONE**：REQ-004 新增（18 章、57 条编号需求、20 AC、24 行代码映射）+ REQ-001 v0.5 三处勘误，主 agent 初审验收 ACCEPTED。裁决三项：①O-4 追认 `origin` 四值闭集（新增 `preset`）；②O-3 批准覆盖守卫别名词表携带中文别名（本地匹配数据不进 prompt，不违 F7 纯英文裁决）；③RG-6 新发现既有风险——草稿 store 无跨进程锁、三入口 last-write-wins，**F8b2 必须给出可测试的冲突行为定义**。R5 细化决策采纳：lineage ≤16 版/链字节 ≤1 MiB、全局 ≤8 链整链淘汰、受保护记录满 cap 拒新版、store 读界 ≤32 MiB、新增 `UnsupportedVersion` 码与 `Superseded` 终态） | 无（与 F8-0 并行） |
 | **R6 Desktop 构建闭环设计定版** | 评估"Desktop 内直接提交构建"：F3b 零 executor 裁决重开、`NoProjectAccessSurfaceTests` IL 扫描面方案（Desktop 引 Batch.Core 的豁免设计 vs 独立宿主进程）、Unity 锁探测接线、ADR-005/007 合规论证；产出设计文档供 F8c | R5 |
 | **F8a1 Providers 预校验层** | L1.5：模板存在性/kind 匹配/参数键集/上下界/strict 结构预算（模块数、attachTo、三 stage 根）纯代码校验；`issueCode→建议键` 映射表（只产稳定键，文案归 Desktop catalog）；上下界读取 API。v1 只作呈现层预警，不进重试预算不改 GenerationService 判定 | F8-0 |
 | **F8a2 Desktop 简单模式** | 示例卡 **4~6 张、绑定预置 recipe 骨架**（点卡零 AI 直接出草稿）；能力范围提示行（读快照动态渲染）；建议句渲染（键进双语 catalog）；"已确认后如何构建"诚实提示（可复制命令 + 关闭编辑器提醒）；诚实标注"当前仅支持 2D 火系弹道" | F8a1 |
