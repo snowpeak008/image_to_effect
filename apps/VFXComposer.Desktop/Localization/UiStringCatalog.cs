@@ -114,6 +114,15 @@ public static class UiStringCatalog
                 "Evidence and authority remain separate, explicit and provenance-bound.",
             [UiStringKeys.ReviewEmptyState] = "No evidence is available",
 
+            [UiStringKeys.ReviewMachineStatus] = "Machine: Not evaluated",
+            [UiStringKeys.ReviewVisualStatus] = "Visual: VISUAL_PENDING",
+            [UiStringKeys.ReviewUserVerdictStatus] = "User verdict: Not signed",
+            [UiStringKeys.ReviewL3Status] = "L3: Not granted",
+            [UiStringKeys.ReviewL4Status] = "L4: Not granted",
+            [UiStringKeys.ReviewAuthorityNotice] =
+                "Displayed state is not an authority grant. Visual verdicts and L3/L4 require their independent "
+                + "issuers.",
+
             [UiStringKeys.JobsTitle] = "Jobs",
             [UiStringKeys.JobsDescription] =
                 "Local serial job queue: strict FIFO, single global execution slot, durable across restarts.",
@@ -330,6 +339,13 @@ public static class UiStringCatalog
             [UiStringKeys.ReviewTitle] = "评审",
             [UiStringKeys.ReviewDescription] = "证据与授权保持分离、显式且绑定来源。",
             [UiStringKeys.ReviewEmptyState] = "暂无证据",
+
+            [UiStringKeys.ReviewMachineStatus] = "机器：未评估",
+            [UiStringKeys.ReviewVisualStatus] = "视觉：VISUAL_PENDING",
+            [UiStringKeys.ReviewUserVerdictStatus] = "用户裁定：未签署",
+            [UiStringKeys.ReviewL3Status] = "L3：未授予",
+            [UiStringKeys.ReviewL4Status] = "L4：未授予",
+            [UiStringKeys.ReviewAuthorityNotice] = "所显示的状态不构成授权。视觉裁定与 L3/L4 各自需要其独立的签发方。",
 
             [UiStringKeys.JobsTitle] = "任务",
             [UiStringKeys.JobsDescription] = "本地串行任务队列：严格 FIFO、全局单一执行槽、跨重启持久。",

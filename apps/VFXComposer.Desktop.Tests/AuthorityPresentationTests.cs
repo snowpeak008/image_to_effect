@@ -1,5 +1,6 @@
 using System.Reflection;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using VFXComposer.Desktop.Localization;
 using VFXComposer.Desktop.ViewModels;
 
 namespace VFXComposer.Desktop.Tests;
@@ -10,14 +11,35 @@ public sealed class AuthorityPresentationTests
     [TestMethod]
     public void ReviewKeepsMachineVisualUserL3AndL4StatusesDistinct()
     {
-        var review = new ReviewViewModel(LocalizationTestSupport.CreateEnglish());
+        var localization = LocalizationTestSupport.CreateEnglish();
+        var review = new ReviewViewModel(localization);
 
-        Assert.AreEqual("Machine: Not evaluated", review.MachineStatus);
-        Assert.AreEqual("Visual: VISUAL_PENDING", review.VisualStatus);
-        Assert.AreEqual("User verdict: Not signed", review.UserVerdictStatus);
-        Assert.AreEqual("L3: Not granted", review.L3Status);
-        Assert.AreEqual("L4: Not granted", review.L4Status);
-        Assert.IsTrue(review.AuthorityNotice.Contains("not an authority grant", StringComparison.Ordinal));
+        Assert.AreEqual(LocalizationTestSupport.English(UiStringKeys.ReviewMachineStatus), review.MachineStatus);
+        Assert.AreEqual(LocalizationTestSupport.English(UiStringKeys.ReviewVisualStatus), review.VisualStatus);
+        Assert.AreEqual(
+            LocalizationTestSupport.English(UiStringKeys.ReviewUserVerdictStatus),
+            review.UserVerdictStatus);
+        Assert.AreEqual(LocalizationTestSupport.English(UiStringKeys.ReviewL3Status), review.L3Status);
+        Assert.AreEqual(LocalizationTestSupport.English(UiStringKeys.ReviewL4Status), review.L4Status);
+        Assert.AreEqual(
+            LocalizationTestSupport.English(UiStringKeys.ReviewAuthorityNotice),
+            review.AuthorityNotice);
+
+        localization.SetLanguage(UiLanguage.ChineseSimplified);
+
+        // The four domains stay separate lines in every language, and the visual status keeps its protocol word.
+        Assert.AreEqual(
+            LocalizationTestSupport.ChineseSimplified(UiStringKeys.ReviewMachineStatus),
+            review.MachineStatus);
+        Assert.AreEqual(
+            LocalizationTestSupport.ChineseSimplified(UiStringKeys.ReviewUserVerdictStatus),
+            review.UserVerdictStatus);
+        Assert.AreEqual(LocalizationTestSupport.ChineseSimplified(UiStringKeys.ReviewL3Status), review.L3Status);
+        Assert.AreEqual(LocalizationTestSupport.ChineseSimplified(UiStringKeys.ReviewL4Status), review.L4Status);
+        Assert.AreEqual(
+            LocalizationTestSupport.ChineseSimplified(UiStringKeys.ReviewAuthorityNotice),
+            review.AuthorityNotice);
+        StringAssert.Contains(review.VisualStatus, "VISUAL_PENDING");
     }
 
     [TestMethod]

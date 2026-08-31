@@ -102,6 +102,13 @@ public static class UiStringKeys
     public const string ReviewDescription = "ReviewDescription";
     public const string ReviewEmptyState = "ReviewEmptyState";
 
+    public const string ReviewMachineStatus = "ReviewMachineStatus";
+    public const string ReviewVisualStatus = "ReviewVisualStatus";
+    public const string ReviewUserVerdictStatus = "ReviewUserVerdictStatus";
+    public const string ReviewL3Status = "ReviewL3Status";
+    public const string ReviewL4Status = "ReviewL4Status";
+    public const string ReviewAuthorityNotice = "ReviewAuthorityNotice";
+
     public const string JobsTitle = "JobsTitle";
     public const string JobsDescription = "JobsDescription";
     public const string JobsEmptyState = "JobsEmptyState";
