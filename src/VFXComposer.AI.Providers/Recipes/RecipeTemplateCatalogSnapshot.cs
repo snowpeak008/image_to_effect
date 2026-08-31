@@ -1,3 +1,6 @@
+using System.Collections.Frozen;
+using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
 using System.Reflection;
 using System.Text.Json;
 using VFXComposer.AI.Contracts.Chat;
@@ -23,6 +26,8 @@ public sealed class RecipeTemplateCatalogSnapshot
     private static readonly Lazy<RecipeTemplateCatalogSnapshot> Cached = new(Load);
     private static readonly Lazy<JsonElement> CachedRecipeSchema = new(LoadRecipeSchema);
 
+    private readonly FrozenDictionary<string, TemplateSnapshot> _templatesById;
+
     private RecipeTemplateCatalogSnapshot(
         string templateCatalogVersion,
         string contractRevision,
@@ -37,6 +42,7 @@ public sealed class RecipeTemplateCatalogSnapshot
         BuildableDimensions = buildableDimensions;
         Templates = templates;
         CanonicalExampleJson = canonicalExampleJson;
+        _templatesById = templates.ToFrozenDictionary(static template => template.TemplateId, StringComparer.Ordinal);
     }
 
     public static RecipeTemplateCatalogSnapshot Default => Cached.Value;
@@ -63,6 +69,33 @@ public sealed class RecipeTemplateCatalogSnapshot
     /// </summary>
     public static ChatStructuredOutput CreateStructuredOutput() =>
         new("vfx-recipe-v1", CachedRecipeSchema.Value);
+
+    /// <summary>Looks up one committed template by its exact id. Unknown ids are not an exception.</summary>
+    public bool TryGetTemplate(string templateId, [NotNullWhen(true)] out TemplateSnapshot? template)
+    {
+        ArgumentNullException.ThrowIfNull(templateId);
+        return _templatesById.TryGetValue(templateId, out template);
+    }
+
+    /// <summary>
+    /// Looks up one declared parameter by template id and parameter name, carrying its type, inclusive
+    /// <c>[Minimum, Maximum]</c> bounds and default. This is the single read path for parameter editing surfaces
+    /// and for rendering bounds into a suggestion sentence.
+    /// </summary>
+    public bool TryGetParameter(
+        string templateId,
+        string parameterName,
+        [NotNullWhen(true)] out TemplateParameterSnapshot? parameter)
+    {
+        ArgumentNullException.ThrowIfNull(parameterName);
+        if (!TryGetTemplate(templateId, out var template))
+        {
+            parameter = null;
+            return false;
+        }
+
+        return template.TryGetParameter(parameterName, out parameter);
+    }
 
     /// <summary>Renders the deterministic prompt table: one ordinal-ordered row per template parameter.</summary>
     public string RenderPromptTable()
@@ -230,6 +263,8 @@ public sealed class RecipeTemplateCatalogSnapshot
     /// <summary>One template row of the committed snapshot.</summary>
     public sealed class TemplateSnapshot
     {
+        private readonly FrozenDictionary<string, TemplateParameterSnapshot> _parametersByName;
+
         internal TemplateSnapshot(
             string templateId,
             string version,
@@ -242,27 +277,58 @@ public sealed class RecipeTemplateCatalogSnapshot
             Kind = kind;
             Dimension = dimension;
             Parameters = parameters;
+            _parametersByName = parameters.ToFrozenDictionary(static parameter => parameter.Name, StringComparer.Ordinal);
         }
 
         public string TemplateId { get; }
         public string Version { get; }
         public string Kind { get; }
         public string Dimension { get; }
+
+        /// <summary>The declared parameters, ordinal-ordered by name. The set is exhaustive: nothing else is accepted.</summary>
         public IReadOnlyList<TemplateParameterSnapshot> Parameters { get; }
+
+        /// <summary>Looks up one declared parameter by name. Undeclared names are not an exception.</summary>
+        public bool TryGetParameter(string parameterName, [NotNullWhen(true)] out TemplateParameterSnapshot? parameter)
+        {
+            ArgumentNullException.ThrowIfNull(parameterName);
+            return _parametersByName.TryGetValue(parameterName, out parameter);
+        }
 
         public override string ToString() => "TemplateSnapshot(" + TemplateId + ")";
     }
 
-    /// <summary>One declared template parameter. Bounds keep their exact committed JSON literals.</summary>
+    /// <summary>
+    /// One declared template parameter. The <c>*Literal</c> members keep the exact committed JSON text for prompt
+    /// rendering; the parsed members carry the same values as numbers for bounds checking and parameter editing.
+    /// </summary>
     public sealed class TemplateParameterSnapshot
     {
+        /// <summary>The closed set of parameter types the committed snapshot may declare.</summary>
+        internal const string FloatType = "float";
+
+        internal const string IntegerType = "integer";
+
         internal TemplateParameterSnapshot(string name, string type, string minLiteral, string defaultLiteral, string maxLiteral)
         {
+            if (!string.Equals(type, FloatType, StringComparison.Ordinal) &&
+                !string.Equals(type, IntegerType, StringComparison.Ordinal))
+            {
+                throw new InvalidOperationException("The embedded template catalog snapshot is invalid.");
+            }
+
             Name = name;
             Type = type;
             MinLiteral = minLiteral;
             DefaultLiteral = defaultLiteral;
             MaxLiteral = maxLiteral;
+            Minimum = ParseLiteral(minLiteral);
+            Default = ParseLiteral(defaultLiteral);
+            Maximum = ParseLiteral(maxLiteral);
+            if (Minimum > Maximum || Default < Minimum || Default > Maximum)
+            {
+                throw new InvalidOperationException("The embedded template catalog snapshot is invalid.");
+            }
         }
 
         public string Name { get; }
@@ -271,6 +337,27 @@ public sealed class RecipeTemplateCatalogSnapshot
         public string DefaultLiteral { get; }
         public string MaxLiteral { get; }
 
+        /// <summary>The inclusive lower bound.</summary>
+        public double Minimum { get; }
+
+        /// <summary>The inclusive upper bound.</summary>
+        public double Maximum { get; }
+
+        /// <summary>The catalog default, always inside the inclusive bounds.</summary>
+        public double Default { get; }
+
+        /// <summary>True when the declared type only accepts integral values.</summary>
+        public bool IsInteger => string.Equals(Type, IntegerType, StringComparison.Ordinal);
+
+        /// <summary>The inclusive bounds rendered as <c>[min, max]</c> from the exact committed literals.</summary>
+        public string RangeLiteral => "[" + MinLiteral + ", " + MaxLiteral + "]";
+
         public override string ToString() => "TemplateParameterSnapshot(" + Name + ")";
+
+        private static double ParseLiteral(string literal) =>
+            double.TryParse(literal, NumberStyles.Float, CultureInfo.InvariantCulture, out var value) &&
+            double.IsFinite(value)
+                ? value
+                : throw new InvalidOperationException("The embedded template catalog snapshot is invalid.");
     }
 }
