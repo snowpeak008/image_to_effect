@@ -1,13 +1,16 @@
+using VFXComposer.Desktop.Localization;
+
 namespace VFXComposer.Desktop.ViewModels;
 
 public sealed class PatchViewModel : WorkspacePageViewModel
 {
-    public PatchViewModel()
+    public PatchViewModel(LocalizationService localization)
         : base(
+            localization,
             "patch",
-            "Patch",
-            "Patch validation, diff and transactional apply arrive in Phase 3.",
-            "No patch is selected")
+            UiStringKeys.PatchTitle,
+            UiStringKeys.PatchDescription,
+            UiStringKeys.PatchEmptyState)
     {
     }
 }

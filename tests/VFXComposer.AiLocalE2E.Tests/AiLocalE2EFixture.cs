@@ -7,6 +7,7 @@ using VFXComposer.AI.Contracts;
 using VFXComposer.AI.Contracts.Desktop;
 using VFXComposer.AI.Providers;
 using VFXComposer.AI.Providers.Desktop;
+using VFXComposer.Desktop.Localization;
 using VFXComposer.Desktop.ViewModels;
 
 namespace VFXComposer.AiLocalE2E.Tests;
@@ -81,7 +82,7 @@ internal static class A5DesktopSettings
         string imageEndpoint,
         int timeoutSeconds = 30)
     {
-        var settings = new SettingsViewModel(runtime);
+        var settings = new SettingsViewModel(new LocalizationService(UiLanguage.English), runtime);
         SaveProfile(
             settings,
             A5TestValues.ChatProfileId,
@@ -113,7 +114,7 @@ internal static class A5DesktopSettings
         string imageEndpoint,
         int timeoutSeconds = 30)
     {
-        var settings = new SettingsViewModel(runtime);
+        var settings = new SettingsViewModel(new LocalizationService(UiLanguage.English), runtime);
         SaveProfile(
             settings,
             A5TestValues.ChatProfileId,

@@ -11,13 +11,13 @@
     </StackPanel>
     <Border Classes="card">
       <StackPanel Spacing="8">
-        <TextBlock FontSize="17" FontWeight="SemiBold" Text="Project connection" />
+        <TextBlock FontSize="17" FontWeight="SemiBold" Text="{Binding Localization[DashboardProjectConnectionHeading]}" />
         <TextBlock Classes="muted" Text="{Binding EmptyStateMessage}" />
       </StackPanel>
     </Border>
     <Border Classes="card">
       <StackPanel Spacing="8">
-        <TextBlock FontSize="17" FontWeight="SemiBold" Text="Independent status domains" />
+        <TextBlock FontSize="17" FontWeight="SemiBold" Text="{Binding Localization[DashboardStatusDomainsHeading]}" />
         <TextBlock Text="{Binding MachineStatus}" />
         <TextBlock Text="{Binding VisualStatus}" />
         <TextBlock Text="{Binding UserVerdictStatus}" />

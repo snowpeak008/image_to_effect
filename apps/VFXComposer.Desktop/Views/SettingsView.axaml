@@ -13,8 +13,23 @@
 
     <Border Classes="card">
       <StackPanel Spacing="8">
-        <TextBlock FontWeight="SemiBold" Text="Provider profiles" />
-        <TextBlock Classes="muted" Text="Profiles expose redacted endpoint summaries here. Select an identifier and choose Edit to deliberately reveal its exact endpoint text." TextWrapping="Wrap" />
+        <TextBlock FontWeight="SemiBold" Text="{Binding Localization[SettingsLanguageHeading]}" />
+        <TextBlock Classes="muted" Text="{Binding Localization[SettingsLanguageNotice]}" TextWrapping="Wrap" />
+        <RadioButton
+            GroupName="UiLanguageSelection"
+            Content="{Binding Localization[SettingsLanguageEnglishOption]}"
+            IsChecked="{Binding IsEnglishSelected, Mode=TwoWay}" />
+        <RadioButton
+            GroupName="UiLanguageSelection"
+            Content="{Binding Localization[SettingsLanguageChineseSimplifiedOption]}"
+            IsChecked="{Binding IsChineseSimplifiedSelected, Mode=TwoWay}" />
+      </StackPanel>
+    </Border>
+
+    <Border Classes="card">
+      <StackPanel Spacing="8">
+        <TextBlock FontWeight="SemiBold" Text="{Binding Localization[SettingsProviderProfilesHeading]}" />
+        <TextBlock Classes="muted" Text="{Binding Localization[SettingsProviderProfilesNotice]}" TextWrapping="Wrap" />
         <ItemsControl ItemsSource="{Binding Profiles}">
           <ItemsControl.ItemTemplate>
             <DataTemplate x:DataType="contracts:AiDesktopProfileSummary">
@@ -32,10 +47,10 @@
           </ItemsControl.ItemTemplate>
         </ItemsControl>
         <Grid ColumnDefinitions="*,Auto,Auto,Auto" ColumnSpacing="8">
-          <TextBox Watermark="Profile identifier" Text="{Binding SelectedProfileId}" />
-          <Button Grid.Column="1" Command="{Binding BeginNewProfileCommand}" Content="New" />
-          <Button Grid.Column="2" Command="{Binding BeginSelectedProfileEditCommand}" Content="Edit" />
-          <Button Grid.Column="3" Command="{Binding DeleteProfileCommand}" Content="Delete + revoke" />
+          <TextBox Watermark="{Binding Localization[SettingsProfileIdentifierWatermark]}" Text="{Binding SelectedProfileId}" />
+          <Button Grid.Column="1" Command="{Binding BeginNewProfileCommand}" Content="{Binding Localization[SettingsNewAction]}" />
+          <Button Grid.Column="2" Command="{Binding BeginSelectedProfileEditCommand}" Content="{Binding Localization[SettingsEditAction]}" />
+          <Button Grid.Column="3" Command="{Binding DeleteProfileCommand}" Content="{Binding Localization[SettingsDeleteAndRevokeAction]}" />
         </Grid>
         <TextBlock Classes="muted" Text="{Binding ProfileStatus}" TextWrapping="Wrap" />
       </StackPanel>
@@ -43,69 +58,70 @@
 
     <Border Classes="card" IsVisible="{Binding IsEditingProfile}">
       <StackPanel Spacing="9">
-        <TextBlock FontWeight="SemiBold" Text="Profile editor" />
+        <TextBlock FontWeight="SemiBold" Text="{Binding Localization[SettingsProfileEditorHeading]}" />
         <Grid ColumnDefinitions="Auto,*" ColumnSpacing="10" RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto">
-          <TextBlock VerticalAlignment="Center" Text="Identifier" />
+          <TextBlock VerticalAlignment="Center" Text="{Binding Localization[SettingsProfileIdentifierLabel]}" />
           <TextBox Grid.Column="1" Text="{Binding ProfileId}" />
-          <TextBlock Grid.Row="1" VerticalAlignment="Center" Text="Name" />
+          <TextBlock Grid.Row="1" VerticalAlignment="Center" Text="{Binding Localization[SettingsProfileNameLabel]}" />
           <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding ProfileDisplayName}" />
-          <TextBlock Grid.Row="2" VerticalAlignment="Center" Text="Origin" />
+          <TextBlock Grid.Row="2" VerticalAlignment="Center" Text="{Binding Localization[SettingsProfileOriginLabel]}" />
           <ComboBox Grid.Row="2" Grid.Column="1" ItemsSource="{Binding Origins}" SelectedItem="{Binding ProfileOrigin}" />
-          <TextBlock Grid.Row="3" VerticalAlignment="Center" Text="Protocol" />
+          <TextBlock Grid.Row="3" VerticalAlignment="Center" Text="{Binding Localization[SettingsProfileProtocolLabel]}" />
           <TextBox Grid.Row="3" Grid.Column="1" Text="{Binding ProfileProtocolId}" />
-          <TextBlock Grid.Row="4" VerticalAlignment="Center" Text="Timeout" />
+          <TextBlock Grid.Row="4" VerticalAlignment="Center" Text="{Binding Localization[SettingsProfileTimeoutLabel]}" />
           <TextBox Grid.Row="4" Grid.Column="1" Text="{Binding ProfileTimeoutSeconds}" />
-          <CheckBox Grid.Row="5" Grid.ColumnSpan="2" Content="Enabled" IsChecked="{Binding ProfileEnabled}" />
+          <CheckBox Grid.Row="5" Grid.ColumnSpan="2" Content="{Binding Localization[SettingsProfileEnabledLabel]}" IsChecked="{Binding ProfileEnabled}" />
         </Grid>
-        <TextBlock Classes="muted" Text="Exact endpoint text is editable only in this focused editor; it is never copied into the summary above." TextWrapping="Wrap" />
-        <TextBox AcceptsReturn="True" Height="80" TextWrapping="Wrap" Watermark="Exact endpoint text (may include user-info, query, or fragment)" Text="{Binding ProfileOpaqueEndpoint}" />
+        <TextBlock Classes="muted" Text="{Binding Localization[SettingsEndpointEditorNotice]}" TextWrapping="Wrap" />
+        <TextBox AcceptsReturn="True" Height="80" TextWrapping="Wrap" Watermark="{Binding Localization[SettingsEndpointWatermark]}" Text="{Binding ProfileOpaqueEndpoint}" />
         <Grid ColumnDefinitions="Auto,*,Auto,*" ColumnSpacing="8">
-          <TextBlock VerticalAlignment="Center" Text="Chat capability" />
+          <TextBlock VerticalAlignment="Center" Text="{Binding Localization[SettingsChatCapabilityLabel]}" />
           <TextBox Grid.Column="1" Text="{Binding ChatCapabilityId}" />
-          <TextBlock Grid.Column="2" VerticalAlignment="Center" Text="Chat model" />
+          <TextBlock Grid.Column="2" VerticalAlignment="Center" Text="{Binding Localization[SettingsChatModelLabel]}" />
           <TextBox Grid.Column="3" Text="{Binding ChatModelId}" />
         </Grid>
         <Grid ColumnDefinitions="Auto,*,Auto,*" ColumnSpacing="8">
-          <TextBlock VerticalAlignment="Center" Text="Image capability" />
+          <TextBlock VerticalAlignment="Center" Text="{Binding Localization[SettingsImageCapabilityLabel]}" />
           <TextBox Grid.Column="1" Text="{Binding ImageCapabilityId}" />
-          <TextBlock Grid.Column="2" VerticalAlignment="Center" Text="Image model" />
+          <TextBlock Grid.Column="2" VerticalAlignment="Center" Text="{Binding Localization[SettingsImageModelLabel]}" />
           <TextBox Grid.Column="3" Text="{Binding ImageModelId}" />
         </Grid>
         <Grid ColumnDefinitions="Auto,*,Auto,Auto" ColumnSpacing="8">
-          <TextBlock VerticalAlignment="Center" Text="Secret" />
-          <TextBox Grid.Column="1" PasswordChar="●" Text="{Binding SecretEntry}" Watermark="Leave blank to preserve the existing secret" />
+          <TextBlock VerticalAlignment="Center" Text="{Binding Localization[SettingsSecretLabel]}" />
+          <TextBox Grid.Column="1" PasswordChar="●" Text="{Binding SecretEntry}" Watermark="{Binding Localization[SettingsSecretWatermark]}" />
           <TextBlock Grid.Column="2" Classes="muted" VerticalAlignment="Center" Text="{Binding SecretPresence}" />
-          <Button Grid.Column="3" Command="{Binding RevokeSecretCommand}" Content="Revoke secret" />
+          <Button Grid.Column="3" Command="{Binding RevokeSecretCommand}" Content="{Binding Localization[SettingsRevokeSecretAction]}" />
         </Grid>
         <TextBlock Foreground="#F1D39A" Text="{Binding SecurityNotice}" TextWrapping="Wrap" />
-        <Button HorizontalAlignment="Left" Command="{Binding SaveProfileCommand}" Content="Save profile" />
+        <Button HorizontalAlignment="Left" Command="{Binding SaveProfileCommand}" Content="{Binding Localization[SettingsSaveProfileAction]}" />
       </StackPanel>
     </Border>
 
     <Border Classes="card">
       <StackPanel Spacing="10">
-        <TextBlock FontWeight="SemiBold" Text="Explicit channel bindings" />
-        <TextBlock Classes="muted" Text="Chat and Image each require their own profile, capability, and model. Saving one never changes or falls back to the other." TextWrapping="Wrap" />
+        <TextBlock FontWeight="SemiBold" Text="{Binding Localization[SettingsChannelBindingsHeading]}" />
+        <TextBlock Classes="muted" Text="{Binding Localization[SettingsChannelBindingsNotice]}" TextWrapping="Wrap" />
+        <!-- ChatLlm and ImageGeneration are protocol channel identifiers and stay verbatim in every language. -->
         <TextBlock FontWeight="SemiBold" Text="ChatLlm" />
         <Grid ColumnDefinitions="*,*,*" ColumnSpacing="8">
-          <TextBox Watermark="Profile ID" Text="{Binding ChatBindingProfileId}" />
-          <TextBox Grid.Column="1" Watermark="Capability ID" Text="{Binding ChatBindingCapabilityId}" />
-          <TextBox Grid.Column="2" Watermark="Model ID" Text="{Binding ChatBindingModelId}" />
+          <TextBox Watermark="{Binding Localization[SettingsProfileIdWatermark]}" Text="{Binding ChatBindingProfileId}" />
+          <TextBox Grid.Column="1" Watermark="{Binding Localization[SettingsCapabilityIdWatermark]}" Text="{Binding ChatBindingCapabilityId}" />
+          <TextBox Grid.Column="2" Watermark="{Binding Localization[SettingsModelIdWatermark]}" Text="{Binding ChatBindingModelId}" />
         </Grid>
         <StackPanel Orientation="Horizontal" Spacing="8">
-          <Button Command="{Binding SaveChatBindingCommand}" Content="Save chat binding" />
-          <Button Command="{Binding ClearChatBindingCommand}" Content="Clear chat binding" />
+          <Button Command="{Binding SaveChatBindingCommand}" Content="{Binding Localization[SettingsSaveChatBindingAction]}" />
+          <Button Command="{Binding ClearChatBindingCommand}" Content="{Binding Localization[SettingsClearChatBindingAction]}" />
           <TextBlock Classes="muted" VerticalAlignment="Center" Text="{Binding ChatBindingStatus}" />
         </StackPanel>
         <TextBlock FontWeight="SemiBold" Text="ImageGeneration" />
         <Grid ColumnDefinitions="*,*,*" ColumnSpacing="8">
-          <TextBox Watermark="Profile ID" Text="{Binding ImageBindingProfileId}" />
-          <TextBox Grid.Column="1" Watermark="Capability ID" Text="{Binding ImageBindingCapabilityId}" />
-          <TextBox Grid.Column="2" Watermark="Model ID" Text="{Binding ImageBindingModelId}" />
+          <TextBox Watermark="{Binding Localization[SettingsProfileIdWatermark]}" Text="{Binding ImageBindingProfileId}" />
+          <TextBox Grid.Column="1" Watermark="{Binding Localization[SettingsCapabilityIdWatermark]}" Text="{Binding ImageBindingCapabilityId}" />
+          <TextBox Grid.Column="2" Watermark="{Binding Localization[SettingsModelIdWatermark]}" Text="{Binding ImageBindingModelId}" />
         </Grid>
         <StackPanel Orientation="Horizontal" Spacing="8">
-          <Button Command="{Binding SaveImageBindingCommand}" Content="Save image binding" />
-          <Button Command="{Binding ClearImageBindingCommand}" Content="Clear image binding" />
+          <Button Command="{Binding SaveImageBindingCommand}" Content="{Binding Localization[SettingsSaveImageBindingAction]}" />
+          <Button Command="{Binding ClearImageBindingCommand}" Content="{Binding Localization[SettingsClearImageBindingAction]}" />
           <TextBlock Classes="muted" VerticalAlignment="Center" Text="{Binding ImageBindingStatus}" />
         </StackPanel>
       </StackPanel>

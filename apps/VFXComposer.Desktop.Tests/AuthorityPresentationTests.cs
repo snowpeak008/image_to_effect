@@ -10,7 +10,7 @@ public sealed class AuthorityPresentationTests
     [TestMethod]
     public void ReviewKeepsMachineVisualUserL3AndL4StatusesDistinct()
     {
-        var review = new ReviewViewModel();
+        var review = new ReviewViewModel(LocalizationTestSupport.CreateEnglish());
 
         Assert.AreEqual("Machine: Not evaluated", review.MachineStatus);
         Assert.AreEqual("Visual: VISUAL_PENDING", review.VisualStatus);

@@ -27,6 +27,13 @@ public sealed class NoProjectAccessSurfaceTests
     private const string PrivateImagePreviewDecoderType =
         "VFXComposer.Desktop.Services.PrivateImagePreviewDecoder";
 
+    // The current-user UI preference document is the only Desktop storage. U4 forbids project access, not a per-user
+    // preference: this store derives its location from local application data alone and has no API that can accept a
+    // project path. Exactly this one type may therefore reference filesystem and local-application-data types; every
+    // other rule (network, listeners, pipes, Unity, project-path-like literals) still applies inside it.
+    private const string UiPreferencesStoreType =
+        "VFXComposer.Desktop.Services.UiPreferencesStore";
+
     // U4 permits this exact Client-only process/control-pipe implementation.
     // The Desktop assembly and every other Client type remain fully inspected.
     private static readonly string[] UserModeClientInfrastructureAllowlist =
@@ -169,6 +176,46 @@ public sealed class NoProjectAccessSurfaceTests
                 "prohibited type reference System.IO.Stream",
                 StringComparison.Ordinal)),
             "Only PrivateImagePreviewDecoder.DecodeAsync and its compiler-generated state machine may receive Stream.");
+    }
+
+    [TestMethod]
+    public void CurrentUserPreferenceStorageAllowanceIsExactAndClosed()
+    {
+        Assert.AreEqual(UiPreferencesStoreType, typeof(UiPreferencesStore).FullName);
+
+        Assert.IsTrue(IsCurrentUserPreferenceStorageContext(UiPreferencesStoreType + ".Save local"));
+        Assert.IsTrue(IsCurrentUserPreferenceStorageContext(UiPreferencesStoreType + "+<>c.Save local"));
+        Assert.IsFalse(IsCurrentUserPreferenceStorageContext(UiPreferencesStoreType + "Shadow.Save local"));
+        Assert.IsFalse(IsCurrentUserPreferenceStorageContext(
+            "VFXComposer.Desktop.ViewModels.MainWindowViewModel.Save local"));
+
+        var storageContext = UiPreferencesStoreType + ".Save local";
+        Assert.AreEqual(
+            0,
+            CheckTypeReference(typeof(System.IO.FileStream), storageContext).Count());
+
+        // The exemption covers storage only. Everything else stays prohibited inside the store as well.
+        Assert.IsTrue(CheckTypeReference(typeof(System.Net.Sockets.Socket), storageContext).Any());
+        Assert.IsTrue(CheckTypeReference(typeof(System.IO.FileStream), "VFXComposer.Desktop.App.Save local").Any());
+    }
+
+    [TestMethod]
+    public void UiPreferenceStorageExposesNoCallerSuppliedProjectLocation()
+    {
+        // The store's only location input is its own storage directory, and it must be fully qualified: no overload
+        // can be handed a project path, a relative path, or a document name.
+        var parameters = typeof(UiPreferencesStore)
+            .GetConstructors()
+            .SelectMany(constructor => constructor.GetParameters())
+            .Concat(typeof(UiPreferencesStore)
+                .GetMethods(BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public | BindingFlags.DeclaredOnly)
+                .SelectMany(method => method.GetParameters()))
+            .Where(parameter => parameter.ParameterType == typeof(string))
+            .Select(parameter => parameter.Name)
+            .ToArray();
+
+        CollectionAssert.AreEqual(new[] { "storageDirectory" }, parameters);
+        Assert.ThrowsExactly<ArgumentException>(() => new UiPreferencesStore("relative-location"));
     }
 
     private static IEnumerable<string> ScanAssembly(Assembly assembly)
@@ -607,6 +654,11 @@ public sealed class NoProjectAccessSurfaceTests
             yield break;
         }
 
+        if (IsCurrentUserStorageType(type) && IsCurrentUserPreferenceStorageContext(context))
+        {
+            yield break;
+        }
+
         if (type.HasElementType)
         {
             foreach (var violation in CheckTypeReference(type.GetElementType(), context))
@@ -645,6 +697,27 @@ public sealed class NoProjectAccessSurfaceTests
                 yield return violation;
             }
         }
+    }
+
+    private static bool IsCurrentUserStorageType(Type type)
+    {
+        var typeName = type.FullName ?? type.Name;
+        return typeName.StartsWith("System.IO.", StringComparison.Ordinal)
+            || string.Equals(typeName, "System.Environment", StringComparison.Ordinal);
+    }
+
+    private static bool IsCurrentUserPreferenceStorageContext(string context)
+    {
+        ArgumentNullException.ThrowIfNull(context);
+        if (!context.StartsWith(UiPreferencesStoreType, StringComparison.Ordinal))
+        {
+            return false;
+        }
+
+        // Only the store itself, its members and its compiler-generated nested types qualify: a type that merely
+        // begins with the same name receives nothing.
+        var index = UiPreferencesStoreType.Length;
+        return index >= context.Length || context[index] is '.' or ' ' or '+';
     }
 
     private static bool IsPrivatePreviewStreamContext(string context)

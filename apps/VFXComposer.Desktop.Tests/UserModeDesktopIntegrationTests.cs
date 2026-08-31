@@ -1,4 +1,5 @@
 using VFXComposer.Client;
+using VFXComposer.Desktop.Localization;
 using VFXComposer.Desktop.Services;
 using VFXComposer.Desktop.ViewModels;
 
@@ -12,32 +13,36 @@ public sealed class UserModeDesktopIntegrationTests
     {
         var session = new ScriptedSession();
         var diagnostics = new InMemoryDiagnosticSink();
+        var connected = LocalizationTestSupport.English(UiStringKeys.MainWindowConnectionConnected);
+        var disconnected = LocalizationTestSupport.English(UiStringKeys.MainWindowConnectionDisconnected);
+        var noProject = LocalizationTestSupport.English(UiStringKeys.MainWindowProjectNone);
         await using var viewModel = MainWindowViewModel.CreateUserMode(
             session,
             new ScriptedSelectionDialog(null),
             new ImmediateDispatcher(),
-            diagnostics);
+            diagnostics,
+            localization: LocalizationTestSupport.CreateEnglish());
 
-        Assert.AreEqual("Disconnected", viewModel.ConnectionDisplay);
-        Assert.AreEqual("No registered project", viewModel.ProjectDisplay);
+        Assert.AreEqual(disconnected, viewModel.ConnectionDisplay);
+        Assert.AreEqual(noProject, viewModel.ProjectDisplay);
 
         await viewModel.ConnectCommand.ExecuteAsync(null);
 
         Assert.AreEqual(UserModeDesktopSessionState.ConnectedNoProject, session.State);
-        Assert.AreEqual("Connected", viewModel.ConnectionDisplay);
-        Assert.AreEqual("No registered project", viewModel.ProjectDisplay);
+        Assert.AreEqual(connected, viewModel.ConnectionDisplay);
+        Assert.AreEqual(noProject, viewModel.ProjectDisplay);
         Assert.IsTrue(viewModel.SelectProjectCommand.CanExecute(null));
 
         session.EnterRecovery();
 
-        Assert.AreEqual("Disconnected", viewModel.ConnectionDisplay);
+        Assert.AreEqual(disconnected, viewModel.ConnectionDisplay);
         Assert.IsTrue(viewModel.RecoverCommand.CanExecute(null));
         Assert.IsFalse(viewModel.ReadProjectCommand.CanExecute(null));
 
         await viewModel.RecoverCommand.ExecuteAsync(null);
 
         Assert.AreEqual(UserModeDesktopSessionState.ConnectedNoProject, session.State);
-        Assert.AreEqual("Connected", viewModel.ConnectionDisplay);
+        Assert.AreEqual(connected, viewModel.ConnectionDisplay);
         Assert.AreEqual(1, session.RestartCount);
         Assert.IsFalse(diagnostics.Snapshot.Any(item => item.Detail?.Contains("\\", StringComparison.Ordinal) == true));
     }

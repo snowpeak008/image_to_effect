@@ -1,3 +1,5 @@
+using VFXComposer.Desktop.Localization;
+
 namespace VFXComposer.Desktop.ViewModels;
 
 /// <summary>
@@ -5,12 +7,13 @@ namespace VFXComposer.Desktop.ViewModels;
 /// </summary>
 public sealed class ReviewViewModel : WorkspacePageViewModel
 {
-    public ReviewViewModel()
+    public ReviewViewModel(LocalizationService localization)
         : base(
+            localization,
             "review",
-            "Review",
-            "Evidence and authority remain separate, explicit and provenance-bound.",
-            "No evidence is available")
+            UiStringKeys.ReviewTitle,
+            UiStringKeys.ReviewDescription,
+            UiStringKeys.ReviewEmptyState)
     {
     }
 

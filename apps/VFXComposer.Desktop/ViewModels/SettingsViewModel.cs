@@ -2,6 +2,7 @@ using System.Collections.ObjectModel;
 using CommunityToolkit.Mvvm.Input;
 using VFXComposer.AI.Contracts;
 using VFXComposer.AI.Contracts.Desktop;
+using VFXComposer.Desktop.Localization;
 
 namespace VFXComposer.Desktop.ViewModels;
 
@@ -26,25 +27,29 @@ public sealed class SettingsViewModel : WorkspacePageViewModel
     private string _imageCapabilityId = string.Empty;
     private string _imageModelId = string.Empty;
     private string _secretEntry = string.Empty;
-    private string _secretPresence = "No secret configured";
-    private string _profileStatus = "Provider settings have not been loaded.";
+    private string _secretPresence;
+    private string _profileStatus;
     private string _chatBindingProfileId = string.Empty;
     private string _chatBindingCapabilityId = string.Empty;
     private string _chatBindingModelId = string.Empty;
     private string _imageBindingProfileId = string.Empty;
     private string _imageBindingCapabilityId = string.Empty;
     private string _imageBindingModelId = string.Empty;
-    private string _chatBindingStatus = "Unbound";
-    private string _imageBindingStatus = "Unbound";
+    // Channel status words come from the contract enum, so they stay untranslated like every other protocol word.
+    private string _chatBindingStatus = AiDesktopChannelStatusKind.Unbound.ToString();
+    private string _imageBindingStatus = AiDesktopChannelStatusKind.Unbound.ToString();
 
-    public SettingsViewModel(IAiDesktopRuntime? runtime = null)
+    public SettingsViewModel(LocalizationService localization, IAiDesktopRuntime? runtime = null)
         : base(
+            localization,
             "settings",
-            "Settings",
-            "Current-user provider profiles and explicit channel bindings.",
-            "No provider profile is configured")
+            UiStringKeys.SettingsTitle,
+            UiStringKeys.SettingsDescription,
+            UiStringKeys.SettingsEmptyState)
     {
         _runtime = runtime ?? AiDesktopRuntime.Unavailable;
+        _secretPresence = localization[UiStringKeys.SettingsSecretNotConfigured];
+        _profileStatus = localization[UiStringKeys.SettingsStatusNotLoaded];
         Profiles = new ObservableCollection<AiDesktopProfileSummary>();
         Origins = Enum.GetValues<ProviderOrigin>();
         BeginNewProfileCommand = new RelayCommand(BeginNewProfile);
@@ -62,6 +67,31 @@ public sealed class SettingsViewModel : WorkspacePageViewModel
     public ObservableCollection<AiDesktopProfileSummary> Profiles { get; }
 
     public IReadOnlyList<ProviderOrigin> Origins { get; }
+
+    /// <summary>Selecting a language applies it immediately and stores it for the current user.</summary>
+    public bool IsEnglishSelected
+    {
+        get => Localization.Language == UiLanguage.English;
+        set
+        {
+            if (value)
+            {
+                Localization.SetLanguage(UiLanguage.English);
+            }
+        }
+    }
+
+    public bool IsChineseSimplifiedSelected
+    {
+        get => Localization.Language == UiLanguage.ChineseSimplified;
+        set
+        {
+            if (value)
+            {
+                Localization.SetLanguage(UiLanguage.ChineseSimplified);
+            }
+        }
+    }
 
     public string? SelectedProfileId
     {
@@ -221,8 +251,7 @@ public sealed class SettingsViewModel : WorkspacePageViewModel
         private set => SetProperty(ref _imageBindingStatus, value ?? string.Empty);
     }
 
-    public string SecurityNotice =>
-        "Secrets are entry-only. Revoke detaches the selected secret and leaves its route fail-closed until deliberate replacement. Endpoint text is shown only while editing this profile; normal summaries are redacted.";
+    public string SecurityNotice => Localization[UiStringKeys.SettingsSecurityNotice];
 
     public IRelayCommand BeginNewProfileCommand { get; }
     public IRelayCommand BeginSelectedProfileEditCommand { get; }
@@ -239,22 +268,31 @@ public sealed class SettingsViewModel : WorkspacePageViewModel
         try
         {
             ApplySnapshot(_runtime.Settings.Load());
-            ProfileStatus = Profiles.Count == 0 ? "No provider profile is configured." : "Provider settings loaded.";
+            ProfileStatus = Profiles.Count == 0
+                ? Localization[UiStringKeys.SettingsStatusNoProfile]
+                : Localization[UiStringKeys.SettingsStatusLoaded];
         }
         catch (AiGatewayException exception)
         {
             Profiles.Clear();
-            ChatBindingStatus = "Unavailable: " + exception.Code + ".";
-            ImageBindingStatus = "Unavailable: " + exception.Code + ".";
-            ProfileStatus = "Provider settings unavailable: " + exception.Code + ".";
+            ChatBindingStatus = Localization.Format(UiStringKeys.SettingsChannelUnavailableWithCode, exception.Code);
+            ImageBindingStatus = Localization.Format(UiStringKeys.SettingsChannelUnavailableWithCode, exception.Code);
+            ProfileStatus = Localization.Format(UiStringKeys.SettingsStatusUnavailableWithCode, exception.Code);
         }
         catch
         {
             Profiles.Clear();
-            ChatBindingStatus = "Unavailable.";
-            ImageBindingStatus = "Unavailable.";
-            ProfileStatus = "Provider settings unavailable.";
+            ChatBindingStatus = Localization[UiStringKeys.SettingsChannelUnavailable];
+            ImageBindingStatus = Localization[UiStringKeys.SettingsChannelUnavailable];
+            ProfileStatus = Localization[UiStringKeys.SettingsStatusUnavailable];
         }
+    }
+
+    protected override void RefreshLocalizedText()
+    {
+        OnPropertyChanged(nameof(SecurityNotice));
+        OnPropertyChanged(nameof(IsEnglishSelected));
+        OnPropertyChanged(nameof(IsChineseSimplifiedSelected));
     }
 
     private void BeginNewProfile()
@@ -273,8 +311,8 @@ public sealed class SettingsViewModel : WorkspacePageViewModel
         ImageCapabilityId = string.Empty;
         ImageModelId = string.Empty;
         SecretEntry = string.Empty;
-        SecretPresence = "No secret configured";
-        ProfileStatus = "Editing a new provider profile.";
+        SecretPresence = Localization[UiStringKeys.SettingsSecretNotConfigured];
+        ProfileStatus = Localization[UiStringKeys.SettingsStatusEditingNew];
     }
 
     private bool CanEditSelectedProfile() => !string.IsNullOrWhiteSpace(SelectedProfileId);
@@ -305,16 +343,18 @@ public sealed class SettingsViewModel : WorkspacePageViewModel
             ImageCapabilityId = image?.Id ?? string.Empty;
             ImageModelId = image?.ModelId ?? string.Empty;
             SecretEntry = string.Empty;
-            SecretPresence = edit.HasSecret ? "Secret configured" : "No secret configured";
-            ProfileStatus = "Editing selected provider profile.";
+            SecretPresence = SecretPresenceText(edit.HasSecret);
+            ProfileStatus = Localization[UiStringKeys.SettingsStatusEditingSelected];
         }
         catch (AiGatewayException exception)
         {
-            ProfileStatus = "Profile unavailable: " + exception.Code + ".";
+            ProfileStatus = Localization.Format(
+                UiStringKeys.SettingsStatusProfileUnavailableWithCode,
+                exception.Code);
         }
         catch
         {
-            ProfileStatus = "Profile unavailable.";
+            ProfileStatus = Localization[UiStringKeys.SettingsStatusProfileUnavailable];
         }
     }
 
@@ -341,21 +381,21 @@ public sealed class SettingsViewModel : WorkspacePageViewModel
                 SecretEntry);
             ApplySnapshot(snapshot);
             SelectedProfileId = ProfileId;
-            SecretPresence = snapshot.Profiles.SingleOrDefault(profile =>
-                string.Equals(profile.Id, ProfileId, StringComparison.Ordinal))?.HasSecret == true
-                    ? "Secret configured"
-                    : "No secret configured";
-            ProfileStatus = "Provider profile saved.";
+            SecretPresence = SecretPresenceText(snapshot.Profiles.SingleOrDefault(profile =>
+                string.Equals(profile.Id, ProfileId, StringComparison.Ordinal))?.HasSecret == true);
+            ProfileStatus = Localization[UiStringKeys.SettingsStatusProfileSaved];
             IsEditingProfile = false;
             ProfileOpaqueEndpoint = string.Empty;
         }
         catch (AiGatewayException exception)
         {
-            ProfileStatus = "Provider profile not saved: " + exception.Code + ".";
+            ProfileStatus = Localization.Format(
+                UiStringKeys.SettingsStatusProfileNotSavedWithCode,
+                exception.Code);
         }
         catch
         {
-            ProfileStatus = "Provider profile not saved.";
+            ProfileStatus = Localization[UiStringKeys.SettingsStatusProfileNotSaved];
         }
         finally
         {
@@ -378,15 +418,17 @@ public sealed class SettingsViewModel : WorkspacePageViewModel
             SelectedProfileId = null;
             IsEditingProfile = false;
             ClearEditor();
-            ProfileStatus = "Provider profile deleted and its secret revoked.";
+            ProfileStatus = Localization[UiStringKeys.SettingsStatusProfileDeleted];
         }
         catch (AiGatewayException exception)
         {
-            ProfileStatus = "Provider profile not deleted: " + exception.Code + ".";
+            ProfileStatus = Localization.Format(
+                UiStringKeys.SettingsStatusProfileNotDeletedWithCode,
+                exception.Code);
         }
         catch
         {
-            ProfileStatus = "Provider profile not deleted.";
+            ProfileStatus = Localization[UiStringKeys.SettingsStatusProfileNotDeleted];
         }
     }
 
@@ -403,19 +445,19 @@ public sealed class SettingsViewModel : WorkspacePageViewModel
         {
             var snapshot = _runtime.Settings.RevokeSecret(SelectedProfileId!);
             ApplySnapshot(snapshot);
-            SecretPresence = snapshot.Profiles.SingleOrDefault(profile =>
-                string.Equals(profile.Id, SelectedProfileId, StringComparison.Ordinal))?.HasSecret == true
-                    ? "Secret configured"
-                    : "No secret configured";
-            ProfileStatus = "Secret detached. This profile is fail-closed until a new secret is saved.";
+            SecretPresence = SecretPresenceText(snapshot.Profiles.SingleOrDefault(profile =>
+                string.Equals(profile.Id, SelectedProfileId, StringComparison.Ordinal))?.HasSecret == true);
+            ProfileStatus = Localization[UiStringKeys.SettingsStatusSecretRevoked];
         }
         catch (AiGatewayException exception)
         {
-            ProfileStatus = "Secret not revoked: " + exception.Code + ".";
+            ProfileStatus = Localization.Format(
+                UiStringKeys.SettingsStatusSecretNotRevokedWithCode,
+                exception.Code);
         }
         catch
         {
-            ProfileStatus = "Secret not revoked.";
+            ProfileStatus = Localization[UiStringKeys.SettingsStatusSecretNotRevoked];
         }
     }
 
@@ -424,52 +466,65 @@ public sealed class SettingsViewModel : WorkspacePageViewModel
         ChatBindingProfileId,
         ChatBindingCapabilityId,
         ChatBindingModelId,
-        "Chat binding");
+        UiStringKeys.SettingsChatBindingLabel);
 
-    private void ClearChatBinding() => ClearBinding(AiChannel.ChatLlm, "Chat binding");
+    private void ClearChatBinding() => ClearBinding(AiChannel.ChatLlm, UiStringKeys.SettingsChatBindingLabel);
 
     private void SaveImageBinding() => SaveBinding(
         AiChannel.ImageGeneration,
         ImageBindingProfileId,
         ImageBindingCapabilityId,
         ImageBindingModelId,
-        "Image binding");
+        UiStringKeys.SettingsImageBindingLabel);
 
-    private void ClearImageBinding() => ClearBinding(AiChannel.ImageGeneration, "Image binding");
+    private void ClearImageBinding() => ClearBinding(AiChannel.ImageGeneration, UiStringKeys.SettingsImageBindingLabel);
 
-    private void SaveBinding(AiChannel channel, string profileId, string capabilityId, string modelId, string label)
+    private void SaveBinding(
+        AiChannel channel,
+        string profileId,
+        string capabilityId,
+        string modelId,
+        string labelKey)
     {
+        var label = Localization[labelKey];
         try
         {
             var snapshot = _runtime.Settings.SaveChannelBinding(
                 new AiDesktopChannelBindingDraft(channel, profileId, capabilityId, modelId));
             ApplySnapshot(snapshot);
-            ProfileStatus = label + " saved.";
+            ProfileStatus = Localization.Format(UiStringKeys.SettingsBindingSaved, label);
         }
         catch (AiGatewayException exception)
         {
-            ProfileStatus = label + " not saved: " + exception.Code + ".";
+            ProfileStatus = Localization.Format(
+                UiStringKeys.SettingsBindingNotSavedWithCode,
+                label,
+                exception.Code);
         }
         catch
         {
-            ProfileStatus = label + " not saved.";
+            ProfileStatus = Localization.Format(UiStringKeys.SettingsBindingNotSaved, label);
         }
     }
 
-    private void ClearBinding(AiChannel channel, string label)
+    private void ClearBinding(AiChannel channel, string labelKey)
     {
+        var label = Localization[labelKey];
         try
         {
             ApplySnapshot(_runtime.Settings.ClearChannelBinding(channel));
-            ProfileStatus = label + " cleared.";
+            ProfileStatus = Localization.Format(UiStringKeys.SettingsBindingCleared, label);
         }
         catch (AiGatewayException exception)
         {
-            ProfileStatus = label + " not cleared: " + exception.Code + ".";
+            ProfileStatus = Localization.Format(
+                UiStringKeys.SettingsBindingNotClearedWithCode,
+                label,
+                exception.Code);
         }
         catch
         {
-            ProfileStatus = label + " not cleared.";
+            ProfileStatus = Localization.Format(UiStringKeys.SettingsBindingNotCleared, label);
         }
     }
 
@@ -544,11 +599,16 @@ public sealed class SettingsViewModel : WorkspacePageViewModel
         ImageBindingModelId = modelId;
     }
 
-    private static string StatusText(AiDesktopSettingsSnapshot snapshot, AiChannel channel)
+    private string SecretPresenceText(bool hasSecret) => hasSecret
+        ? Localization[UiStringKeys.SettingsSecretConfigured]
+        : Localization[UiStringKeys.SettingsSecretNotConfigured];
+
+    // Channel state and reason codes stay verbatim: they are machine-readable diagnostic carriers, not prose.
+    private string StatusText(AiDesktopSettingsSnapshot snapshot, AiChannel channel)
     {
         var status = snapshot.ChannelStatuses.SingleOrDefault(candidate => candidate.Channel == channel);
         return status is null
-            ? "Unavailable"
+            ? Localization[UiStringKeys.SettingsChannelStatusUnavailable]
             : status.ReasonCode is null
                 ? status.State.ToString()
                 : status.State + ": " + status.ReasonCode + ".";
@@ -564,7 +624,7 @@ public sealed class SettingsViewModel : WorkspacePageViewModel
         ImageCapabilityId = string.Empty;
         ImageModelId = string.Empty;
         SecretEntry = string.Empty;
-        SecretPresence = "No secret configured";
+        SecretPresence = Localization[UiStringKeys.SettingsSecretNotConfigured];
     }
 
     private void NotifySelectionChanged()

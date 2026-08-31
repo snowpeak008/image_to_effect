@@ -1,10 +1,10 @@
-using Avalonia;
 using System.Buffers.Binary;
 using System.IO.Compression;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using VFXComposer.AI.Contracts;
 using VFXComposer.AI.Contracts.Desktop;
 using VFXComposer.AI.Contracts.Recipes;
+using VFXComposer.Desktop.Localization;
 using VFXComposer.Desktop.Services;
 using VFXComposer.Desktop.ViewModels;
 using VFXComposer.Desktop;
@@ -17,8 +17,7 @@ public sealed class AiDesktopIntegrationTests
     private const string RawEndpoint = "https://user:synthetic-secret@example.invalid/complete?token=synthetic-query#fragment";
 
     [ClassInitialize]
-    public static void InitializeAvalonia(TestContext _) =>
-        AppBuilder.Configure<App>().UsePlatformDetect().SetupWithoutStarting();
+    public static void InitializeAvalonia(TestContext _) => AvaloniaTestPlatform.EnsureInitialized();
 
     [TestMethod]
     public void StartupSaveAndCreateSettingsPreviewNavigationDoNotCallEitherGateway()
@@ -50,7 +49,7 @@ public sealed class AiDesktopIntegrationTests
     public async Task CreateSendsOnlyAnExplicitChatPromptThroughTheFakeGateway()
     {
         var runtime = new FakeDesktopRuntime();
-        var viewModel = new CreateViewModel(runtime)
+        var viewModel = new CreateViewModel(LocalizationTestSupport.CreateEnglish(), runtime)
         {
             ChatPrompt = "synthetic chat prompt",
         };
@@ -74,11 +73,11 @@ public sealed class AiDesktopIntegrationTests
             ThrowChatFailure = true,
             ThrowImageFailure = true,
         };
-        var create = new CreateViewModel(runtime)
+        var create = new CreateViewModel(LocalizationTestSupport.CreateEnglish(), runtime)
         {
             ChatPrompt = "synthetic chat prompt",
         };
-        var preview = new PreviewViewModel(runtime)
+        var preview = new PreviewViewModel(LocalizationTestSupport.CreateEnglish(), runtime)
         {
             ImagePrompt = "synthetic image prompt",
         };
@@ -98,7 +97,7 @@ public sealed class AiDesktopIntegrationTests
     public async Task PreviewDecodesOnlyThePrivateStreamAndClosesItImmediately()
     {
         var runtime = new FakeDesktopRuntime();
-        var preview = new PreviewViewModel(runtime)
+        var preview = new PreviewViewModel(LocalizationTestSupport.CreateEnglish(), runtime)
         {
             ImagePrompt = "synthetic image prompt",
         };
@@ -119,7 +118,7 @@ public sealed class AiDesktopIntegrationTests
     {
         var runtime = new FakeDesktopRuntime();
         runtime.Settings.SetExistingProfile();
-        var viewModel = new SettingsViewModel(runtime);
+        var viewModel = new SettingsViewModel(LocalizationTestSupport.CreateEnglish(), runtime);
 
         var summary = viewModel.Profiles.Single();
         Assert.IsFalse(summary.EndpointSummary.Contains("synthetic-secret", StringComparison.Ordinal));
@@ -144,7 +143,7 @@ public sealed class AiDesktopIntegrationTests
     {
         var runtime = new FakeDesktopRuntime();
         runtime.Settings.SetExistingProfile();
-        var viewModel = new SettingsViewModel(runtime)
+        var viewModel = new SettingsViewModel(LocalizationTestSupport.CreateEnglish(), runtime)
         {
             SelectedProfileId = "profile-one",
             SecretEntry = "transient-secret-entry",
@@ -154,9 +153,14 @@ public sealed class AiDesktopIntegrationTests
 
         Assert.AreEqual("profile-one", runtime.Settings.LastRevokedProfileId);
         Assert.AreEqual(string.Empty, viewModel.SecretEntry);
-        Assert.AreEqual("No secret configured", viewModel.SecretPresence);
+        Assert.AreEqual(
+            LocalizationTestSupport.English(UiStringKeys.SettingsSecretNotConfigured),
+            viewModel.SecretPresence);
         Assert.IsFalse(viewModel.Profiles.Single().HasSecret);
-        Assert.IsTrue(viewModel.ProfileStatus.Contains("fail-closed", StringComparison.Ordinal));
+        Assert.AreEqual(
+            LocalizationTestSupport.English(UiStringKeys.SettingsStatusSecretRevoked),
+            viewModel.ProfileStatus);
+        StringAssert.Contains(viewModel.ProfileStatus, "fail-closed");
         Assert.AreEqual(0, runtime.ChatCalls);
         Assert.AreEqual(0, runtime.ImageCalls);
     }
