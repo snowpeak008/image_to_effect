@@ -1,4 +1,5 @@
 using CommunityToolkit.Mvvm.ComponentModel;
+using VFXComposer.Desktop.Localization;
 using VFXComposer.Jobs;
 using VFXComposer.Protocol.Jobs;
 
@@ -7,6 +8,7 @@ namespace VFXComposer.Desktop.ViewModels;
 /// <summary>
 /// One row of the Jobs list. It shows identifiers, closed-set states and stable codes only:
 /// the payload, prompt text and filesystem paths are deliberately absent (REQ-003 §9.9).
+/// State and kind words stay verbatim in every language: they are protocol vocabulary, not prose.
 /// </summary>
 public sealed class JobListItemViewModel : ObservableObject
 {
@@ -20,8 +22,9 @@ public sealed class JobListItemViewModel : ObservableObject
     private bool _canResubmit;
     private bool _isCancelPending;
 
-    public JobListItemViewModel(JobRecord record)
+    public JobListItemViewModel(LocalizationService localization, JobRecord record)
     {
+        Localization = localization ?? throw new ArgumentNullException(nameof(localization));
         JobId = record.JobId;
         ShortJobId = record.JobId.Length > 12 ? record.JobId[..12] : record.JobId;
         SourceEntry = record.SourceEntry;
@@ -35,6 +38,9 @@ public sealed class JobListItemViewModel : ObservableObject
         EnqueuedDisplay = FormatTime(record.EnqueuedAtUtc);
         Update(record);
     }
+
+    /// <summary>Bound by the row template through the string indexer, e.g. <c>{Binding Localization[JobsKeepAction]}</c>.</summary>
+    public LocalizationService Localization { get; }
 
     public string JobId { get; }
     public string ShortJobId { get; }
@@ -53,6 +59,17 @@ public sealed class JobListItemViewModel : ObservableObject
 
     public string EnqueuedDisplay { get; }
 
+    /// <summary>Batch entry line of this row; empty for a submission that is not a batch entry.</summary>
+    public string ItemLine => HasItemId
+        ? Localization.Format(UiStringKeys.JobsItemLabel, ItemId)
+        : string.Empty;
+
+    public string QueuedLine => Localization.Format(UiStringKeys.JobsQueuedAtLabel, EnqueuedDisplay);
+
+    public string StartedLine => Localization.Format(UiStringKeys.JobsStartedAtLabel, StartedDisplay);
+
+    public string FinishedLine => Localization.Format(UiStringKeys.JobsFinishedAtLabel, CompletedDisplay);
+
     public string State
     {
         get => _state;
@@ -68,13 +85,25 @@ public sealed class JobListItemViewModel : ObservableObject
     public string StartedDisplay
     {
         get => _startedDisplay;
-        private set => SetProperty(ref _startedDisplay, value);
+        private set
+        {
+            if (SetProperty(ref _startedDisplay, value))
+            {
+                OnPropertyChanged(nameof(StartedLine));
+            }
+        }
     }
 
     public string CompletedDisplay
     {
         get => _completedDisplay;
-        private set => SetProperty(ref _completedDisplay, value);
+        private set
+        {
+            if (SetProperty(ref _completedDisplay, value))
+            {
+                OnPropertyChanged(nameof(FinishedLine));
+            }
+        }
     }
 
     /// <summary>Stable jobs-domain code of the final verdict, or a dash while non-terminal.</summary>
@@ -125,6 +154,15 @@ public sealed class JobListItemViewModel : ObservableObject
         {
             IsCancelPending = false;
         }
+    }
+
+    /// <summary>Re-renders the row's localized lines; rows are transient, so the page pushes the switch instead of subscribing.</summary>
+    internal void RefreshLocalizedText()
+    {
+        OnPropertyChanged(nameof(ItemLine));
+        OnPropertyChanged(nameof(QueuedLine));
+        OnPropertyChanged(nameof(StartedLine));
+        OnPropertyChanged(nameof(FinishedLine));
     }
 
     private static string FormatTime(DateTimeOffset utc) =>

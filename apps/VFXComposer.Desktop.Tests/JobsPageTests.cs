@@ -40,10 +40,14 @@ public sealed class JobsPageTests
         var batch = viewModel.Batches.Single(group => group.BatchId == "batch-fire");
         Assert.AreEqual(2, batch.Count);
         Assert.IsTrue(batch.IsExpanded, "A group starts expanded.");
-        StringAssert.Contains(batch.Header, "2 jobs");
+        Assert.AreEqual(
+            LocalizationTestSupport.EnglishFormat(UiStringKeys.JobsBatchGroupBatch, "batch-fire", 2),
+            batch.Header);
         var individual = viewModel.Batches.Single(group => group.BatchId is null);
         Assert.AreEqual(1, individual.Count);
-        StringAssert.Contains(individual.Header, "Individual");
+        Assert.AreEqual(
+            LocalizationTestSupport.EnglishFormat(UiStringKeys.JobsBatchGroupIndividual, 1),
+            individual.Header);
         Assert.AreEqual(3, viewModel.Jobs.Count, "The flat list is unchanged by grouping.");
 
         // A fold the user set must survive the page's periodic refresh.
@@ -147,6 +151,72 @@ public sealed class JobsPageTests
         Assert.IsTrue(viewModel.SelectedJobTimeline[^1].Contains(JobQueueDiagnosticCodes.ExecutionFailed, StringComparison.Ordinal));
         Assert.IsTrue(viewModel.SelectedDiagnostic.Contains(JobQueueDiagnosticCodes.ExecutionFailed, StringComparison.Ordinal));
         Assert.IsTrue(viewModel.SelectedDiagnostic.Contains("The job payload failed.", StringComparison.Ordinal));
+        Assert.AreEqual(
+            LocalizationTestSupport.English(UiStringKeys.JobsNoArtifacts),
+            viewModel.SelectedArtifacts);
+    }
+
+    [TestMethod]
+    public void ARetryableVerdictKeepsTheStoreMessageAndAppendsTheCatalogRetryHint()
+    {
+        var queue = new FakeJobQueueClient();
+        queue.AddFailed("job-recovered01", JobQueueDiagnosticCodes.DisconnectedRecovery);
+        var viewModel = new JobsViewModel(LocalizationTestSupport.CreateEnglish(), queue);
+        viewModel.Refresh();
+
+        viewModel.SelectedJob = viewModel.Jobs.Single();
+
+        var definition = JobQueueDiagnosticCatalog.Require(JobQueueDiagnosticCodes.DisconnectedRecovery);
+        StringAssert.Contains(viewModel.SelectedDiagnostic, definition.Message);
+        StringAssert.EndsWith(
+            viewModel.SelectedDiagnostic,
+            LocalizationTestSupport.English(UiStringKeys.JobsDiagnosticRetryHint));
+    }
+
+    [TestMethod]
+    public void QueueStatusRowLinesAndBatchHeadersFollowALiveLanguageSwitch()
+    {
+        var queue = new FakeJobQueueClient { QueueState = JobQueueStates.WaitingProjectLock };
+        queue.AddQueuedBatchEntry("job-batch00001", "batch-alpha", "fire_slash-01");
+        var localization = LocalizationTestSupport.CreateEnglish();
+        var viewModel = new JobsViewModel(localization, queue);
+        viewModel.Refresh();
+        viewModel.SelectedJob = viewModel.Jobs.Single();
+
+        Assert.AreEqual(
+            LocalizationTestSupport.EnglishFormat(
+                UiStringKeys.JobsQueueWaitingProjectLock,
+                JobQueueDiagnosticCodes.WaitingProjectLock),
+            viewModel.QueueStatus);
+
+        localization.SetLanguage(UiLanguage.ChineseSimplified);
+
+        Assert.AreEqual(
+            LocalizationTestSupport.ChineseSimplifiedFormat(
+                UiStringKeys.JobsQueueWaitingProjectLock,
+                JobQueueDiagnosticCodes.WaitingProjectLock),
+            viewModel.QueueStatus);
+        Assert.AreEqual(
+            LocalizationTestSupport.ChineseSimplifiedFormat(
+                UiStringKeys.JobsBatchItemDetail,
+                "fire_slash-01"),
+            viewModel.SelectedItemDisplay);
+        Assert.AreEqual(
+            LocalizationTestSupport.ChineseSimplified(UiStringKeys.JobsNoArtifacts),
+            viewModel.SelectedArtifacts);
+        Assert.AreEqual(
+            LocalizationTestSupport.ChineseSimplifiedFormat(UiStringKeys.JobsBatchGroupBatch, "batch-alpha", 1),
+            viewModel.Batches.Single().Header);
+        var row = viewModel.Jobs.Single();
+        Assert.AreEqual(
+            LocalizationTestSupport.ChineseSimplifiedFormat(UiStringKeys.JobsItemLabel, "fire_slash-01"),
+            row.ItemLine);
+        Assert.AreEqual(
+            LocalizationTestSupport.ChineseSimplifiedFormat(UiStringKeys.JobsQueuedAtLabel, row.EnqueuedDisplay),
+            row.QueuedLine);
+        // The stable code and the protocol state word survive the switch untranslated.
+        StringAssert.Contains(viewModel.QueueStatus, JobQueueDiagnosticCodes.WaitingProjectLock);
+        Assert.AreEqual(JobStatusStates.Queued, row.State);
     }
 
     [TestMethod]
@@ -166,7 +236,13 @@ public sealed class JobsPageTests
         Assert.IsNull(soloRow.ItemId);
 
         viewModel.SelectedJob = batchRow;
-        Assert.AreEqual("Batch item fire_slash-01", viewModel.SelectedItemDisplay);
+        Assert.AreEqual(
+            LocalizationTestSupport.EnglishFormat(UiStringKeys.JobsBatchItemDetail, "fire_slash-01"),
+            viewModel.SelectedItemDisplay);
+        Assert.AreEqual(
+            LocalizationTestSupport.EnglishFormat(UiStringKeys.JobsItemLabel, "fire_slash-01"),
+            batchRow.ItemLine);
+        Assert.AreEqual(string.Empty, soloRow.ItemLine, "A non-batch row renders no item line.");
 
         viewModel.SelectedJob = soloRow;
         Assert.AreEqual(string.Empty, viewModel.SelectedItemDisplay, "The detail line must be absent, not a dash.");
@@ -245,8 +321,8 @@ public sealed class JobsPageTests
         public void AddRunning(string jobId, int progressPermille) =>
             Add(jobId, JobStatusStates.Running, progressPermille, null);
 
-        public void AddFailed(string jobId) =>
-            Add(jobId, JobStatusStates.Failed, 500, JobQueueDiagnosticCodes.ExecutionFailed);
+        public void AddFailed(string jobId, string? diagnosticCode = null) =>
+            Add(jobId, JobStatusStates.Failed, 500, diagnosticCode ?? JobQueueDiagnosticCodes.ExecutionFailed);
 
         public void AddQueuedBatchEntry(string jobId, string batchId, string itemId) =>
             Add(jobId, JobStatusStates.Queued, 0, null, batchId, itemId);

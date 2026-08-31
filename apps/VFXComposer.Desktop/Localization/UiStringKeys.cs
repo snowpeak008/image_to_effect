@@ -106,6 +106,31 @@ public static class UiStringKeys
     public const string JobsDescription = "JobsDescription";
     public const string JobsEmptyState = "JobsEmptyState";
 
+    public const string JobsRefreshAction = "JobsRefreshAction";
+    public const string JobsCancelAction = "JobsCancelAction";
+    public const string JobsConfirmCancelAction = "JobsConfirmCancelAction";
+    public const string JobsKeepAction = "JobsKeepAction";
+    public const string JobsResubmitAction = "JobsResubmitAction";
+    public const string JobsTimelineHeading = "JobsTimelineHeading";
+    public const string JobsItemLabel = "JobsItemLabel";
+    public const string JobsQueuedAtLabel = "JobsQueuedAtLabel";
+    public const string JobsStartedAtLabel = "JobsStartedAtLabel";
+    public const string JobsFinishedAtLabel = "JobsFinishedAtLabel";
+
+    public const string JobsQueueIdle = "JobsQueueIdle";
+    public const string JobsQueueExecuting = "JobsQueueExecuting";
+    public const string JobsQueueWaitingProjectLock = "JobsQueueWaitingProjectLock";
+    public const string JobsStoreUnavailableWithCode = "JobsStoreUnavailableWithCode";
+    public const string JobsCancelRejectedWithCode = "JobsCancelRejectedWithCode";
+    public const string JobsResubmitRejectedWithCode = "JobsResubmitRejectedWithCode";
+    public const string JobsTimelineUnavailableWithCode = "JobsTimelineUnavailableWithCode";
+    public const string JobsDiagnosticRetryHint = "JobsDiagnosticRetryHint";
+    public const string JobsNoArtifacts = "JobsNoArtifacts";
+    public const string JobsArtifactsWithIds = "JobsArtifactsWithIds";
+    public const string JobsBatchItemDetail = "JobsBatchItemDetail";
+    public const string JobsBatchGroupIndividual = "JobsBatchGroupIndividual";
+    public const string JobsBatchGroupBatch = "JobsBatchGroupBatch";
+
     public const string SettingsTitle = "SettingsTitle";
     public const string SettingsDescription = "SettingsDescription";
     public const string SettingsEmptyState = "SettingsEmptyState";
