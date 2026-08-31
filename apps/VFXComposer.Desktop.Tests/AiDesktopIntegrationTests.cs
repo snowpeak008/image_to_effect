@@ -62,7 +62,9 @@ public sealed class AiDesktopIntegrationTests
         Assert.AreEqual(1, runtime.LastChatRequest.Messages.Count);
         Assert.AreEqual(ChatRole.User, runtime.LastChatRequest.Messages[0].Role);
         Assert.AreEqual("synthetic response", viewModel.ChatResponse);
-        Assert.AreEqual("Chat completed.", viewModel.ChatStatus);
+        Assert.AreEqual(
+            LocalizationTestSupport.English(UiStringKeys.CreateChatStatusCompleted),
+            viewModel.ChatStatus);
     }
 
     [TestMethod]

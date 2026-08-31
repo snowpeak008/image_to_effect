@@ -18,11 +18,14 @@ public sealed class CreateViewModel : WorkspacePageViewModel
     private string _draftNotes = string.Empty;
     private string _chatPrompt = string.Empty;
     private string _chatResponse = string.Empty;
-    private string _chatStatus = "Chat is not configured.";
+    private string _chatStatusKey = UiStringKeys.CreateChatStatusNotConfigured;
+    private object?[] _chatStatusArguments = [];
     private string _effectDescription = string.Empty;
-    private string _recipeStatus = "Describe an effect, then generate a draft.";
+    private string _recipeStatusKey = UiStringKeys.CreateRecipeStatusInitial;
+    private object?[] _recipeStatusArguments = [];
     private string _recipeDraftJson = string.Empty;
-    private string _recipeValidationSummary = string.Empty;
+    private string? _validationSummaryKey;
+    private string _validationIssues = string.Empty;
     private RecipeDraftRecord? _currentDraft;
 
     public CreateViewModel(LocalizationService localization, IAiDesktopRuntime? runtime = null)
@@ -72,11 +75,7 @@ public sealed class CreateViewModel : WorkspacePageViewModel
         private set => SetProperty(ref _chatResponse, value ?? string.Empty);
     }
 
-    public string ChatStatus
-    {
-        get => _chatStatus;
-        private set => SetProperty(ref _chatStatus, value ?? string.Empty);
-    }
+    public string ChatStatus => Localized(_chatStatusKey, _chatStatusArguments);
 
     /// <summary>User-entered effect description for structured generation. It never reaches diagnostics.</summary>
     public string EffectDescription
@@ -91,11 +90,7 @@ public sealed class CreateViewModel : WorkspacePageViewModel
         }
     }
 
-    public string RecipeStatus
-    {
-        get => _recipeStatus;
-        private set => SetProperty(ref _recipeStatus, value ?? string.Empty);
-    }
+    public string RecipeStatus => Localized(_recipeStatusKey, _recipeStatusArguments);
 
     /// <summary>The retained draft JSON (indented for reading; confirmation binds to the canonical hash).</summary>
     public string RecipeDraftJson
@@ -104,11 +99,10 @@ public sealed class CreateViewModel : WorkspacePageViewModel
         private set => SetProperty(ref _recipeDraftJson, value ?? string.Empty);
     }
 
-    public string RecipeValidationSummary
-    {
-        get => _recipeValidationSummary;
-        private set => SetProperty(ref _recipeValidationSummary, value ?? string.Empty);
-    }
+    /// <summary>Either a catalog verdict line or the validator's verbatim issue report (stable codes and paths).</summary>
+    public string RecipeValidationSummary => _validationSummaryKey is null
+        ? _validationIssues
+        : Localization[_validationSummaryKey];
 
     /// <summary>The lifecycle state of the currently displayed draft, if one is retained.</summary>
     public RecipeDraftStatus? DraftStatus => _currentDraft?.Status;
@@ -145,25 +139,25 @@ public sealed class CreateViewModel : WorkspacePageViewModel
                     [new ChatMessage(ChatRole.User, ChatPrompt)]),
                 CancellationToken.None);
             ChatResponse = response.Text;
-            ChatStatus = "Chat completed.";
+            SetChatStatus(UiStringKeys.CreateChatStatusCompleted);
         }
         catch (ChatChannelException exception)
         {
-            ChatStatus = "Chat unavailable: " + exception.Code + ".";
+            SetChatStatus(UiStringKeys.CreateChatStatusUnavailableWithCode, exception.Code);
         }
         catch (AiGatewayException exception)
         {
-            ChatStatus = "Chat unavailable: " + exception.Code + ".";
+            SetChatStatus(UiStringKeys.CreateChatStatusUnavailableWithCode, exception.Code);
         }
         catch (OperationCanceledException)
         {
-            ChatStatus = "Chat cancelled.";
+            SetChatStatus(UiStringKeys.CreateChatStatusCancelled);
         }
         catch
         {
             // The typed catches above carry the failure's own stable code; an unexpected failure has
             // none, so it settles under this fixed code rather than an untraceable bare message.
-            ChatStatus = "Chat unavailable: " + UnexpectedFailureCode + ".";
+            SetChatStatus(UiStringKeys.CreateChatStatusUnavailableWithCode, UnexpectedFailureCode);
         }
     }
 
@@ -178,8 +172,8 @@ public sealed class CreateViewModel : WorkspacePageViewModel
 
         SetCurrentDraft(null);
         RecipeDraftJson = string.Empty;
-        RecipeValidationSummary = string.Empty;
-        RecipeStatus = "Generating recipe draft...";
+        SetValidationSummaryKey(null);
+        SetRecipeStatus(UiStringKeys.CreateRecipeStatusGenerating);
         try
         {
             // The one explicit generate action: the request (plus its ADR-007 repair budget) is the only network
@@ -196,32 +190,34 @@ public sealed class CreateViewModel : WorkspacePageViewModel
                     PresentValidationFailure(result);
                     break;
                 case RecipeGenerationOutcome.Cancelled:
-                    RecipeStatus = "Generation cancelled.";
+                    SetRecipeStatus(UiStringKeys.CreateRecipeStatusGenerationCancelled);
                     break;
                 default:
-                    RecipeStatus = "Generation unavailable: " + result.ChannelError + ".";
+                    SetRecipeStatus(
+                        UiStringKeys.CreateRecipeStatusGenerationUnavailableWithCode,
+                        result.ChannelError);
                     break;
             }
         }
         catch (RecipeDraftStoreException exception)
         {
-            RecipeStatus = "Draft storage failed: " + exception.Code + ".";
+            SetRecipeStatus(UiStringKeys.CreateRecipeStatusDraftStorageFailedWithCode, exception.Code);
         }
         catch (ChatChannelException exception)
         {
-            RecipeStatus = "Generation unavailable: " + exception.Code + ".";
+            SetRecipeStatus(UiStringKeys.CreateRecipeStatusGenerationUnavailableWithCode, exception.Code);
         }
         catch (AiGatewayException exception)
         {
-            RecipeStatus = "Generation unavailable: " + exception.Code + ".";
+            SetRecipeStatus(UiStringKeys.CreateRecipeStatusGenerationUnavailableWithCode, exception.Code);
         }
         catch (OperationCanceledException)
         {
-            RecipeStatus = "Generation cancelled.";
+            SetRecipeStatus(UiStringKeys.CreateRecipeStatusGenerationCancelled);
         }
         catch
         {
-            RecipeStatus = "Generation unavailable: " + UnexpectedFailureCode + ".";
+            SetRecipeStatus(UiStringKeys.CreateRecipeStatusGenerationUnavailableWithCode, UnexpectedFailureCode);
         }
     }
 
@@ -230,20 +226,21 @@ public sealed class CreateViewModel : WorkspacePageViewModel
         var record = _runtime.RecipeDrafts.Save(RecipeDraftRecord.Create(result, DateTimeOffset.UtcNow));
         SetCurrentDraft(record);
         RecipeDraftJson = PrettyPrint(record.RecipeJson);
-        RecipeValidationSummary = "L1 validation passed.";
-        RecipeStatus = "Draft ready after " + result.RequestCount + " request(s) - confirm to queue it for build.";
+        SetValidationSummaryKey(UiStringKeys.CreateValidationPassed);
+        SetRecipeStatus(UiStringKeys.CreateRecipeStatusDraftReady, result.RequestCount);
     }
 
     private void PresentValidationFailure(RecipeGenerationResult result)
     {
         RecipeDraftJson = result.LastOutputText ?? string.Empty;
-        RecipeValidationSummary = FormatIssues(result.Issues);
-        RecipeStatus = "Validation failed after " + result.RequestCount + " request(s): "
-            + string.Join(", ", result.Issues
+        SetValidationIssues(FormatIssues(result.Issues));
+        SetRecipeStatus(
+            UiStringKeys.CreateRecipeStatusValidationFailed,
+            result.RequestCount,
+            string.Join(", ", result.Issues
                 .Where(static issue => issue.Severity == RecipeValidationSeverity.Error)
                 .Select(static issue => issue.Code)
-                .Distinct(StringComparer.Ordinal))
-            + ".";
+                .Distinct(StringComparer.Ordinal)));
         try
         {
             // The failed final state is retained too, so the user can inspect it later (REQ-001 X3).
@@ -270,12 +267,49 @@ public sealed class CreateViewModel : WorkspacePageViewModel
             // Confirmation only flips the retained record's state; the build itself is a later milestone (F2).
             // The canonical hash binds this click to the exact draft content that was presented.
             SetCurrentDraft(_runtime.RecipeDrafts.Confirm(draft.DraftId, draft.CanonicalSha256));
-            RecipeStatus = "Draft confirmed - awaiting build.";
+            SetRecipeStatus(UiStringKeys.CreateRecipeStatusDraftConfirmed);
         }
         catch (RecipeDraftStoreException exception)
         {
-            RecipeStatus = "Confirmation failed: " + exception.Code + ".";
+            SetRecipeStatus(UiStringKeys.CreateRecipeStatusConfirmationFailedWithCode, exception.Code);
         }
+    }
+
+    protected override void RefreshLocalizedText()
+    {
+        OnPropertyChanged(nameof(ChatStatus));
+        OnPropertyChanged(nameof(RecipeStatus));
+        OnPropertyChanged(nameof(RecipeValidationSummary));
+    }
+
+    // Status lines keep their key and arguments instead of a rendered string, so a language switch re-renders them.
+    private void SetChatStatus(string key, params object?[] arguments)
+    {
+        _chatStatusKey = key;
+        _chatStatusArguments = arguments;
+        OnPropertyChanged(nameof(ChatStatus));
+    }
+
+    private void SetRecipeStatus(string key, params object?[] arguments)
+    {
+        _recipeStatusKey = key;
+        _recipeStatusArguments = arguments;
+        OnPropertyChanged(nameof(RecipeStatus));
+    }
+
+    private void SetValidationSummaryKey(string? key)
+    {
+        _validationSummaryKey = key;
+        _validationIssues = string.Empty;
+        OnPropertyChanged(nameof(RecipeValidationSummary));
+    }
+
+    /// <summary>Issue reports stay verbatim: they carry stable codes, JSON paths and validator messages.</summary>
+    private void SetValidationIssues(string issues)
+    {
+        _validationSummaryKey = null;
+        _validationIssues = issues;
+        OnPropertyChanged(nameof(RecipeValidationSummary));
     }
 
     private void SetCurrentDraft(RecipeDraftRecord? record)

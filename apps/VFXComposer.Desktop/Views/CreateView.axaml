@@ -11,35 +11,35 @@
     </StackPanel>
     <Border Classes="card">
       <StackPanel Spacing="10">
-        <TextBlock FontWeight="SemiBold" Text="Recipe draft" />
-        <TextBox Watermark="Recipe name" Text="{Binding RecipeName}" />
-        <TextBox AcceptsReturn="True" Height="140" TextWrapping="Wrap" Watermark="Draft notes" Text="{Binding DraftNotes}" />
+        <TextBlock FontWeight="SemiBold" Text="{Binding Localization[CreateRecipeDraftHeading]}" />
+        <TextBox Watermark="{Binding Localization[CreateRecipeNameWatermark]}" Text="{Binding RecipeName}" />
+        <TextBox AcceptsReturn="True" Height="140" TextWrapping="Wrap" Watermark="{Binding Localization[CreateDraftNotesWatermark]}" Text="{Binding DraftNotes}" />
         <TextBlock Classes="muted" Text="{Binding EmptyStateMessage}" TextWrapping="Wrap" />
       </StackPanel>
     </Border>
     <Border Classes="card">
       <StackPanel Spacing="10">
-        <TextBlock FontWeight="SemiBold" Text="Generate recipe" />
-        <TextBlock Classes="muted" Text="Describe the effect; one explicit click sends the generation request through the configured chat binding. The draft below is not built until you confirm it." TextWrapping="Wrap" />
-        <TextBox AcceptsReturn="True" Height="96" TextWrapping="Wrap" Watermark="Describe the visual effect to generate" Text="{Binding EffectDescription}" />
+        <TextBlock FontWeight="SemiBold" Text="{Binding Localization[CreateGenerateRecipeHeading]}" />
+        <TextBlock Classes="muted" Text="{Binding Localization[CreateGenerateRecipeNotice]}" TextWrapping="Wrap" />
+        <TextBox AcceptsReturn="True" Height="96" TextWrapping="Wrap" Watermark="{Binding Localization[CreateEffectDescriptionWatermark]}" Text="{Binding EffectDescription}" />
         <StackPanel Orientation="Horizontal" Spacing="8">
-          <Button Command="{Binding GenerateRecipeCommand}" Content="Generate recipe draft" />
-          <Button Command="{Binding CancelGenerateRecipeCommand}" Content="Cancel" />
-          <Button Command="{Binding ConfirmRecipeDraftCommand}" Content="Confirm draft" />
+          <Button Command="{Binding GenerateRecipeCommand}" Content="{Binding Localization[CreateGenerateDraftAction]}" />
+          <Button Command="{Binding CancelGenerateRecipeCommand}" Content="{Binding Localization[CreateCancelGenerationAction]}" />
+          <Button Command="{Binding ConfirmRecipeDraftCommand}" Content="{Binding Localization[CreateConfirmDraftAction]}" />
         </StackPanel>
         <TextBlock Classes="muted" Text="{Binding RecipeStatus}" TextWrapping="Wrap" />
-        <TextBox AcceptsReturn="True" Height="72" IsReadOnly="True" Text="{Binding RecipeValidationSummary}" TextWrapping="Wrap" Watermark="Validation results appear here" />
-        <TextBox AcceptsReturn="True" Height="180" IsReadOnly="True" FontFamily="Consolas,Menlo,monospace" Text="{Binding RecipeDraftJson}" TextWrapping="Wrap" Watermark="Draft recipe JSON appears here" />
+        <TextBox AcceptsReturn="True" Height="72" IsReadOnly="True" Text="{Binding RecipeValidationSummary}" TextWrapping="Wrap" Watermark="{Binding Localization[CreateValidationWatermark]}" />
+        <TextBox AcceptsReturn="True" Height="180" IsReadOnly="True" FontFamily="Consolas,Menlo,monospace" Text="{Binding RecipeDraftJson}" TextWrapping="Wrap" Watermark="{Binding Localization[CreateDraftJsonWatermark]}" />
       </StackPanel>
     </Border>
     <Border Classes="card">
       <StackPanel Spacing="10">
-        <TextBlock FontWeight="SemiBold" Text="Chat" />
-        <TextBlock Classes="muted" Text="This sends one explicit ChatLlm prompt through the configured binding." TextWrapping="Wrap" />
-        <TextBox AcceptsReturn="True" Height="96" TextWrapping="Wrap" Watermark="Ask the selected chat provider" Text="{Binding ChatPrompt}" />
-        <Button HorizontalAlignment="Left" Command="{Binding SendChatCommand}" Content="Send chat prompt" />
+        <TextBlock FontWeight="SemiBold" Text="{Binding Localization[CreateChatHeading]}" />
+        <TextBlock Classes="muted" Text="{Binding Localization[CreateChatNotice]}" TextWrapping="Wrap" />
+        <TextBox AcceptsReturn="True" Height="96" TextWrapping="Wrap" Watermark="{Binding Localization[CreateChatPromptWatermark]}" Text="{Binding ChatPrompt}" />
+        <Button HorizontalAlignment="Left" Command="{Binding SendChatCommand}" Content="{Binding Localization[CreateSendChatAction]}" />
         <TextBlock Classes="muted" Text="{Binding ChatStatus}" TextWrapping="Wrap" />
-        <TextBox AcceptsReturn="True" Height="140" IsReadOnly="True" Text="{Binding ChatResponse}" TextWrapping="Wrap" Watermark="Typed chat response appears here" />
+        <TextBox AcceptsReturn="True" Height="140" IsReadOnly="True" Text="{Binding ChatResponse}" TextWrapping="Wrap" Watermark="{Binding Localization[CreateChatResponseWatermark]}" />
       </StackPanel>
     </Border>
   </StackPanel>

@@ -41,6 +41,16 @@ public abstract class WorkspacePageViewModel : ObservableObject
     {
     }
 
+    /// <summary>
+    /// Renders a status line a page stored as a catalog key plus arguments, so a language switch re-renders it. A null
+    /// key is the absent state (an empty banner), not a missing translation.
+    /// </summary>
+    protected string Localized(string? key, object?[] arguments) => key is null
+        ? string.Empty
+        : arguments.Length == 0
+            ? Localization[key]
+            : Localization.Format(key, arguments);
+
     private void OnLanguageChanged(object? sender, EventArgs eventArgs)
     {
         OnPropertyChanged(nameof(Title));

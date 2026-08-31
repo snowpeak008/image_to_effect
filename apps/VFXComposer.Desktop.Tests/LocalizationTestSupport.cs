@@ -1,3 +1,4 @@
+using System.Globalization;
 using VFXComposer.Desktop.Localization;
 
 namespace VFXComposer.Desktop.Tests;
@@ -15,4 +16,10 @@ internal static class LocalizationTestSupport
     public static string English(string key) => UiStringCatalog.Resolve(UiLanguage.English, key);
 
     public static string ChineseSimplified(string key) => UiStringCatalog.Resolve(UiLanguage.ChineseSimplified, key);
+
+    public static string EnglishFormat(string key, params object?[] arguments) =>
+        string.Format(CultureInfo.CurrentCulture, English(key), arguments);
+
+    public static string ChineseSimplifiedFormat(string key, params object?[] arguments) =>
+        string.Format(CultureInfo.CurrentCulture, ChineseSimplified(key), arguments);
 }
