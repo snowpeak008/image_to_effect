@@ -1,5 +1,7 @@
 # 开发记忆与恢复指南
 
+> **更新（2026-08-31 晚）：追加需求「Desktop 中英双语系统」已完成关闭。** F7a（基建：184 键 catalog 的前 114 键、LocalizationService、`%LocalAppData%/VFXComposer/ui-preferences.json` 持久化、Settings 语言节）+ F7b（剩余六页全量迁移，catalog 达 184 键 × 双语，六页切换即刷）均合入 master 并推送；独立审计 PASS-with-remarks 零阻塞，7 条译文建议中 6 条已由主 agent 落实（Desktop.Tests 99/99 复验）。全量基线现为 **807 条 Release 0 失败**（台账勘误：F7a 前基线确为 747）。已知限制：Settings 页 `ProfileStatus`/`SecretPresence`/`Chat、ImageBindingStatus` Unavailable 回退值为渲染快照，切语言后下次状态更新才刷新。设计与验收记录见主计划 §6。
+>
 > **终态（2026-08-31）：优化计划全部关闭，无在途任务、无待办。** master `613dab47` 与 `origin/master` 同步、工作区干净；主计划 18 项 + 延后清算四项 D1–D4 全部合并推送（D1–D4 合并提交 `613dab47`，独立审计 PASS）。`D:\wt\` 已清空（`i2s-f6` 于本日退役），已合并任务分支 `task/F6-e2e-acceptance`/`task/O2-acceptance-script`/`task/O3-baseline` 删除；`codex/m1-protocol-unity`、`codex/m2-production-read` 各 1 笔未合并提交按既定裁决**归档保留**。下方历史条目中的"待办/待批准合并"均已完成，仅作过程记录。若要继续开发，从主计划"后续债务"与 `PROJECT_UNDERSTANDING.md` 起读即可。
 >
 > 暂停时间：2026-08-29 18:20 前后。恢复开发时按 §3 步骤执行即可无缝续接。
