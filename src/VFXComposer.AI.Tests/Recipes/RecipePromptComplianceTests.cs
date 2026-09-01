@@ -14,7 +14,7 @@ namespace VFXComposer.AI.Tests.Recipes;
 [TestClass]
 public sealed class RecipePromptComplianceTests
 {
-    /// <summary>Mirrors the private per-message bound of <see cref="RecipePromptTemplate"/>.</summary>
+    /// <summary>Mirrors the private per-message bound of <see cref="RecipePromptAssembler"/>.</summary>
     private const int MaximumMessageCharacters = 16 * 1024;
 
     private const int MaximumModules = 2;
@@ -29,14 +29,14 @@ public sealed class RecipePromptComplianceTests
     [TestMethod]
     public void TheInjectedReferenceRecipePassesL1Validation()
     {
-        var issues = RecipeL1Validator.Validate(RecipePromptTemplate.ReferenceRecipeJson);
+        var issues = RecipeL1Validator.Validate(RecipePromptAssembler.ReferenceRecipeJson);
         Assert.AreEqual(0, issues.Count, string.Join("; ", issues.Select(static issue => issue.Code + " " + issue.Path)));
     }
 
     [TestMethod]
     public void TheInjectedReferenceRecipeSatisfiesTheStrictStructureBudget()
     {
-        var violations = StrictStructureViolations(RecipePromptTemplate.ReferenceRecipeJson);
+        var violations = StrictStructureViolations(RecipePromptAssembler.ReferenceRecipeJson);
         Assert.AreEqual(0, violations.Count, string.Join("; ", violations));
     }
 
@@ -44,7 +44,7 @@ public sealed class RecipePromptComplianceTests
     public void TheInjectedReferenceRecipeAgreesWithTheCommittedCatalogSnapshot()
     {
         var snapshot = RecipeTemplateCatalogSnapshot.Default;
-        var reference = JsonNode.Parse(RecipePromptTemplate.ReferenceRecipeJson)!.AsObject();
+        var reference = JsonNode.Parse(RecipePromptAssembler.ReferenceRecipeJson)!.AsObject();
 
         Assert.AreEqual(
             snapshot.TemplateCatalogVersion,
@@ -68,7 +68,7 @@ public sealed class RecipePromptComplianceTests
     [TestMethod]
     public void TheSystemPromptStatesTheStrictBudgetRedLines()
     {
-        var prompt = RecipePromptTemplate.SystemPrompt;
+        var prompt = RecipePromptAssembler.SystemPrompt;
 
         foreach (var redLine in new[]
         {
@@ -86,19 +86,19 @@ public sealed class RecipePromptComplianceTests
     [TestMethod]
     public void TheSystemPromptDropsTheMisleadingThreeStageSentenceAndTheLegacyExample()
     {
-        var prompt = RecipePromptTemplate.SystemPrompt;
+        var prompt = RecipePromptAssembler.SystemPrompt;
 
         Assert.IsFalse(prompt.Contains("use exactly three stages", StringComparison.OrdinalIgnoreCase));
         Assert.IsFalse(prompt.Contains("fireball", StringComparison.OrdinalIgnoreCase));
         Assert.IsFalse(prompt.Contains("\"attachTo\"", StringComparison.Ordinal));
-        StringAssert.Contains(prompt, RecipePromptTemplate.ReferenceRecipeJson);
+        StringAssert.Contains(prompt, RecipePromptAssembler.ReferenceRecipeJson);
     }
 
     [TestMethod]
     public void TheSystemPromptIsDeterministicAndStaysInsideTheMessageBound()
     {
-        var first = RecipePromptTemplate.CreateInitialMessages("a short blue spark bolt");
-        var second = RecipePromptTemplate.CreateInitialMessages("a short blue spark bolt");
+        var first = RecipePromptAssembler.CreateInitialMessages("a short blue spark bolt");
+        var second = RecipePromptAssembler.CreateInitialMessages("a short blue spark bolt");
 
         CollectionAssert.AreEqual(
             first.Select(static message => message.Role.ToString() + "|" + message.Content).ToArray(),

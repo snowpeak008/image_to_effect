@@ -194,7 +194,7 @@ public sealed class RecipeDraftStoreTests
             "projectile",
             "2d",
             "mobile_medium",
-            RecipePromptTemplate.Version,
+            RecipePromptAssembler.Version,
             RecipeTemplateCatalogSnapshot.Default.TemplateCatalogVersion);
         return RecipeGenerationResult.Drafted(draft, [new RecipeGenerationAttempt(1, [])]);
     }
@@ -211,6 +211,6 @@ public sealed class RecipeDraftStoreTests
                     "Missing required field: stages"),
             ],
             [new RecipeGenerationAttempt(1, ["E101"]), new RecipeGenerationAttempt(2, ["E101"])],
-            RecipePromptTemplate.Version,
+            RecipePromptAssembler.Version,
             RecipeTemplateCatalogSnapshot.Default.TemplateCatalogVersion);
 }

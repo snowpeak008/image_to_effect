@@ -17,7 +17,7 @@ public sealed class RecipeCatalogPrevalidatorTests
     [TestMethod]
     public void ThePromptReferenceRecipeYieldsNoFindings()
     {
-        var issues = RecipeCatalogPrevalidator.Prevalidate(RecipePromptTemplate.ReferenceRecipeJson);
+        var issues = RecipeCatalogPrevalidator.Prevalidate(RecipePromptAssembler.ReferenceRecipeJson);
         Assert.AreEqual(0, issues.Count, Render(issues));
     }
 
@@ -325,7 +325,7 @@ public sealed class RecipeCatalogPrevalidatorTests
 
     private static string MutateReference(Action<JsonNode> mutate)
     {
-        var recipe = JsonNode.Parse(RecipePromptTemplate.ReferenceRecipeJson)!;
+        var recipe = JsonNode.Parse(RecipePromptAssembler.ReferenceRecipeJson)!;
         mutate(recipe);
         return recipe.ToJsonString();
     }
