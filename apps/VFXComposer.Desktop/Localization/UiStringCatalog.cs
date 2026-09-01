@@ -85,6 +85,79 @@ public static class UiStringCatalog
             [UiStringKeys.CreateRecipeStatusConfirmationFailedWithCode] = "Confirmation failed: {0}.",
             [UiStringKeys.CreateValidationPassed] = "L1 validation passed.",
 
+            [UiStringKeys.CreateSimpleModeHeading] = "Example cards",
+            [UiStringKeys.CreateCapabilityLine] =
+                "Catalog {4} (contract revision {5}): {0} templates, {1} parameters; buildable archetypes: {2}; "
+                + "dimensions: {3}.",
+            [UiStringKeys.CreateScopeNotice] =
+                "Honest scope: only {0} {1} effects from the fire-family template catalog can currently be built.",
+            [UiStringKeys.CreatePresetApplyAction] = "Use this example",
+            [UiStringKeys.CreateRecipeStatusPresetApplied] =
+                "Example draft ready - no AI request was made. Confirm it as-is, or describe changes and generate.",
+            [UiStringKeys.CreateSuggestionsHeading] = "Ways to describe an effect",
+            [UiStringKeys.CreateSuggestionSentence1] =
+                "A small fire bolt with a short flame trail, fast and light.",
+            [UiStringKeys.CreateSuggestionSentence2] =
+                "A slow heavy fireball whose impact sends out a wide shockwave.",
+            [UiStringKeys.CreateSuggestionSentence3] =
+                "A bright launch flash, then a compact projectile scattering embers.",
+            [UiStringKeys.CreateBuildHandoffHeading] = "After you confirm",
+            [UiStringKeys.CreateBuildHandoffNotice] =
+                "Building still runs from the command line: close the Unity editor first, put the confirmed recipe "
+                + "JSON into a batch manifest, then run the command below from the repository root. The batch path "
+                + "does not update this page's draft status.",
+
+            [UiStringKeys.CreatePresetFireBoltTitle] = "Fire bolt",
+            [UiStringKeys.CreatePresetFireBoltDescription] =
+                "A single fiery core travelling in a straight line.",
+            [UiStringKeys.CreatePresetTrailingFireballTitle] = "Trailing fireball",
+            [UiStringKeys.CreatePresetTrailingFireballDescription] =
+                "A fiery core with a motion trail following its flight.",
+            [UiStringKeys.CreatePresetBurstingFireballTitle] = "Bursting fireball",
+            [UiStringKeys.CreatePresetBurstingFireballDescription] =
+                "A fiery core that ends in a burst of sparks on impact.",
+            [UiStringKeys.CreatePresetShockImpactTitle] = "Shock impact",
+            [UiStringKeys.CreatePresetShockImpactDescription] =
+                "A fiery core whose impact sends out an expanding shockwave ring.",
+            [UiStringKeys.CreatePresetLaunchFlashTitle] = "Launch flash",
+            [UiStringKeys.CreatePresetLaunchFlashDescription] =
+                "A bright launch flash followed by a fiery core.",
+            [UiStringKeys.CreatePresetEmberStreakTitle] = "Ember streak",
+            [UiStringKeys.CreatePresetEmberStreakDescription] =
+                "A fiery core scattering embers along its flight.",
+
+            [UiStringKeys.RecipeSuggestionChooseCatalogTemplate] =
+                "Choose a templateId that the committed catalog declares.",
+            [UiStringKeys.RecipeSuggestionMatchTemplateKind] =
+                "Set the module kind to the kind its template declares.",
+            [UiStringKeys.RecipeSuggestionAddMissingParameter] =
+                "Add every parameter the template declares.",
+            [UiStringKeys.RecipeSuggestionRemoveUnknownParameter] =
+                "Remove parameters the template does not declare.",
+            [UiStringKeys.RecipeSuggestionClampParameterToRange] =
+                "Keep the value inside the inclusive [min, max] range.",
+            [UiStringKeys.RecipeSuggestionUseParameterNumericType] =
+                "Use the numeric type the template declares for this parameter.",
+            [UiStringKeys.RecipeSuggestionAddMissingStageRoot] =
+                "Add the missing stage root; launch, travel and impact are all required.",
+            [UiStringKeys.RecipeSuggestionReorderStageRoots] =
+                "Order the stage roots as launch, travel, impact.",
+            [UiStringKeys.RecipeSuggestionReduceModuleCount] =
+                "Reduce the module count to fit the strict build budget.",
+            [UiStringKeys.RecipeSuggestionRemoveAttachment] =
+                "Remove attachTo; module nesting is not allowed under the strict budget.",
+            [UiStringKeys.RecipeSuggestionUseBuildableArchetype] =
+                "Use an archetype the catalog can build.",
+            [UiStringKeys.RecipeSuggestionUseBuildableDimension] =
+                "Use a dimension the catalog can build.",
+            [UiStringKeys.RecipeSuggestionRemoveUnknownField] = "Remove the unknown field.",
+            [UiStringKeys.RecipeSuggestionAddRequiredField] = "Add the missing required field.",
+            [UiStringKeys.RecipeSuggestionUseDeclaredValueType] =
+                "Use the declared value type for this field.",
+            [UiStringKeys.RecipeSuggestionUseAllowedEnumValue] =
+                "Use one of the allowed enumeration values.",
+            [UiStringKeys.RecipeSuggestionReturnOneJsonObject] = "Return exactly one JSON object.",
+
             [UiStringKeys.PreviewTitle] = "Preview",
             [UiStringKeys.PreviewDescription] =
                 "Private image previews arrive only after an explicit ImageGeneration request.",
@@ -314,6 +387,57 @@ public static class UiStringCatalog
             [UiStringKeys.CreateRecipeStatusDraftConfirmed] = "草稿已确认——等待构建。",
             [UiStringKeys.CreateRecipeStatusConfirmationFailedWithCode] = "确认失败：{0}。",
             [UiStringKeys.CreateValidationPassed] = "L1 校验通过。",
+
+            [UiStringKeys.CreateSimpleModeHeading] = "示例卡",
+            [UiStringKeys.CreateCapabilityLine] =
+                "目录 {4}（契约修订 {5}）：{0} 个模板、{1} 个参数；可构建原型：{2}；维度：{3}。",
+            [UiStringKeys.CreateScopeNotice] =
+                "诚实边界：当前仅能构建火系模板目录内的 {0} {1} 特效。",
+            [UiStringKeys.CreatePresetApplyAction] = "使用此示例",
+            [UiStringKeys.CreateRecipeStatusPresetApplied] =
+                "示例草稿已就绪——未发起任何 AI 请求。可直接确认，也可描述修改后重新生成。",
+            [UiStringKeys.CreateSuggestionsHeading] = "可以这样描述效果",
+            [UiStringKeys.CreateSuggestionSentence1] = "一枚小巧的火焰弹，带短促的火焰尾迹，轻快迅捷。",
+            [UiStringKeys.CreateSuggestionSentence2] = "一颗缓慢沉重的火球，命中时激起宽大的冲击波。",
+            [UiStringKeys.CreateSuggestionSentence3] = "先是一道明亮的发射闪光，随后是散落余烬的紧凑弹体。",
+            [UiStringKeys.CreateBuildHandoffHeading] = "确认之后",
+            [UiStringKeys.CreateBuildHandoffNotice] =
+                "构建仍需在命令行完成：先关闭 Unity 编辑器，将已确认的 recipe JSON 放入批量清单，"
+                + "再在仓库根目录运行下方命令。批量路径不会更新本页的草稿状态。",
+
+            [UiStringKeys.CreatePresetFireBoltTitle] = "火焰弹",
+            [UiStringKeys.CreatePresetFireBoltDescription] = "一枚沿直线飞行的火焰核心。",
+            [UiStringKeys.CreatePresetTrailingFireballTitle] = "拖尾火球",
+            [UiStringKeys.CreatePresetTrailingFireballDescription] = "火焰核心飞行时拖着一条运动尾迹。",
+            [UiStringKeys.CreatePresetBurstingFireballTitle] = "爆裂火球",
+            [UiStringKeys.CreatePresetBurstingFireballDescription] = "火焰核心在命中时迸发出火花四溅的爆裂。",
+            [UiStringKeys.CreatePresetShockImpactTitle] = "冲击波命中",
+            [UiStringKeys.CreatePresetShockImpactDescription] = "火焰核心命中时扩散出一圈冲击波环。",
+            [UiStringKeys.CreatePresetLaunchFlashTitle] = "发射闪光",
+            [UiStringKeys.CreatePresetLaunchFlashDescription] = "一道明亮的发射闪光，随后是火焰核心。",
+            [UiStringKeys.CreatePresetEmberStreakTitle] = "余烬流光",
+            [UiStringKeys.CreatePresetEmberStreakDescription] = "火焰核心沿途散落点点余烬。",
+
+            [UiStringKeys.RecipeSuggestionChooseCatalogTemplate] = "选择已入库目录声明的 templateId。",
+            [UiStringKeys.RecipeSuggestionMatchTemplateKind] = "将模块 kind 设为其模板声明的 kind。",
+            [UiStringKeys.RecipeSuggestionAddMissingParameter] = "补齐模板声明的全部参数。",
+            [UiStringKeys.RecipeSuggestionRemoveUnknownParameter] = "移除模板未声明的参数。",
+            [UiStringKeys.RecipeSuggestionClampParameterToRange] = "将数值保持在含界的 [min, max] 区间内。",
+            [UiStringKeys.RecipeSuggestionUseParameterNumericType] = "使用模板为该参数声明的数值类型。",
+            [UiStringKeys.RecipeSuggestionAddMissingStageRoot] =
+                "补上缺失的 stage 根；launch、travel、impact 三者都必须存在。",
+            [UiStringKeys.RecipeSuggestionReorderStageRoots] =
+                "将 stage 根按 launch、travel、impact 的顺序排列。",
+            [UiStringKeys.RecipeSuggestionReduceModuleCount] = "减少模块数量以满足 strict 构建预算。",
+            [UiStringKeys.RecipeSuggestionRemoveAttachment] =
+                "移除 attachTo；strict 预算下不允许模块嵌套。",
+            [UiStringKeys.RecipeSuggestionUseBuildableArchetype] = "使用目录可构建的原型。",
+            [UiStringKeys.RecipeSuggestionUseBuildableDimension] = "使用目录可构建的维度。",
+            [UiStringKeys.RecipeSuggestionRemoveUnknownField] = "移除未知字段。",
+            [UiStringKeys.RecipeSuggestionAddRequiredField] = "补上缺失的必填字段。",
+            [UiStringKeys.RecipeSuggestionUseDeclaredValueType] = "为该字段使用声明的值类型。",
+            [UiStringKeys.RecipeSuggestionUseAllowedEnumValue] = "使用允许的枚举值之一。",
+            [UiStringKeys.RecipeSuggestionReturnOneJsonObject] = "只返回一个 JSON 对象。",
 
             [UiStringKeys.PreviewTitle] = "预览",
             [UiStringKeys.PreviewDescription] = "私有图像预览仅在显式 ImageGeneration 请求之后出现。",
