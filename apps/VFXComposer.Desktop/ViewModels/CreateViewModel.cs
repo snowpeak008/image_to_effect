@@ -5,6 +5,7 @@ using VFXComposer.AI.Contracts;
 using VFXComposer.AI.Contracts.Chat;
 using VFXComposer.AI.Contracts.Desktop;
 using VFXComposer.AI.Contracts.Recipes;
+using VFXComposer.AI.Providers.Recipes;
 using VFXComposer.Desktop.Localization;
 
 namespace VFXComposer.Desktop.ViewModels;
@@ -12,6 +13,34 @@ namespace VFXComposer.Desktop.ViewModels;
 public sealed class CreateViewModel : WorkspacePageViewModel
 {
     private static readonly JsonSerializerOptions IndentedJson = new() { WriteIndented = true };
+
+    /// <summary>
+    /// Closed card copy map: every committed preset id carries exactly one bilingual title/description key pair.
+    /// A preset added without copy fails the construction below at first use, never rendering a raw identifier.
+    /// </summary>
+    private static readonly IReadOnlyDictionary<string, (string TitleKey, string DescriptionKey)> PresetCopyKeys =
+        new Dictionary<string, (string, string)>(StringComparer.Ordinal)
+        {
+            ["fire-bolt"] =
+                (UiStringKeys.CreatePresetFireBoltTitle, UiStringKeys.CreatePresetFireBoltDescription),
+            ["trailing-fireball"] =
+                (UiStringKeys.CreatePresetTrailingFireballTitle, UiStringKeys.CreatePresetTrailingFireballDescription),
+            ["bursting-fireball"] =
+                (UiStringKeys.CreatePresetBurstingFireballTitle, UiStringKeys.CreatePresetBurstingFireballDescription),
+            ["shock-impact"] =
+                (UiStringKeys.CreatePresetShockImpactTitle, UiStringKeys.CreatePresetShockImpactDescription),
+            ["launch-flash"] =
+                (UiStringKeys.CreatePresetLaunchFlashTitle, UiStringKeys.CreatePresetLaunchFlashDescription),
+            ["ember-streak"] =
+                (UiStringKeys.CreatePresetEmberStreakTitle, UiStringKeys.CreatePresetEmberStreakDescription),
+        };
+
+    private static readonly string[] SuggestionSentenceKeys =
+    [
+        UiStringKeys.CreateSuggestionSentence1,
+        UiStringKeys.CreateSuggestionSentence2,
+        UiStringKeys.CreateSuggestionSentence3,
+    ];
 
     private readonly IAiDesktopRuntime _runtime;
     private string _recipeName = string.Empty;
@@ -25,7 +54,7 @@ public sealed class CreateViewModel : WorkspacePageViewModel
     private object?[] _recipeStatusArguments = [];
     private string _recipeDraftJson = string.Empty;
     private string? _validationSummaryKey;
-    private string _validationIssues = string.Empty;
+    private IReadOnlyList<RecipeValidationIssue> _validationIssueList = [];
     private RecipeDraftRecord? _currentDraft;
 
     public CreateViewModel(LocalizationService localization, IAiDesktopRuntime? runtime = null)
@@ -41,6 +70,15 @@ public sealed class CreateViewModel : WorkspacePageViewModel
         GenerateRecipeCommand = new AsyncRelayCommand(GenerateRecipeAsync, CanGenerateRecipe);
         CancelGenerateRecipeCommand = GenerateRecipeCommand.CreateCancelCommand();
         ConfirmRecipeDraftCommand = new RelayCommand(ConfirmRecipeDraft, CanConfirmRecipeDraft);
+        ApplyPresetCommand = new RelayCommand<PresetCardViewModel>(ApplyPreset);
+        UseSuggestionCommand = new RelayCommand<string>(UseSuggestion);
+        PresetCards = RecipePresetSkeletons.All
+            .Select(skeleton =>
+            {
+                var (titleKey, descriptionKey) = PresetCopyKeys[skeleton.PresetId];
+                return new PresetCardViewModel(localization, skeleton, titleKey, descriptionKey);
+            })
+            .ToArray();
     }
 
     public string RecipeName
@@ -99,9 +137,12 @@ public sealed class CreateViewModel : WorkspacePageViewModel
         private set => SetProperty(ref _recipeDraftJson, value ?? string.Empty);
     }
 
-    /// <summary>Either a catalog verdict line or the validator's verbatim issue report (stable codes and paths).</summary>
+    /// <summary>
+    /// Either a catalog verdict line or the validator's issue report: stable codes, JSON paths and validator
+    /// messages verbatim, each followed by its bilingual repair suggestion when the code maps to one (F8a1).
+    /// </summary>
     public string RecipeValidationSummary => _validationSummaryKey is null
-        ? _validationIssues
+        ? FormatIssues(_validationIssueList)
         : Localization[_validationSummaryKey];
 
     /// <summary>The lifecycle state of the currently displayed draft, if one is retained.</summary>
@@ -116,6 +157,59 @@ public sealed class CreateViewModel : WorkspacePageViewModel
     public ICommand CancelGenerateRecipeCommand { get; }
 
     public IRelayCommand ConfirmRecipeDraftCommand { get; }
+
+    /// <summary>Persists one example card's committed skeleton as a fresh pending draft. Zero AI, zero network.</summary>
+    public IRelayCommand<PresetCardViewModel> ApplyPresetCommand { get; }
+
+    /// <summary>Copies one suggestion sentence into the description box. It never triggers generation.</summary>
+    public IRelayCommand<string> UseSuggestionCommand { get; }
+
+    /// <summary>The fixed simple-mode example cards, one per committed preset skeleton.</summary>
+    public IReadOnlyList<PresetCardViewModel> PresetCards { get; }
+
+    /// <summary>
+    /// The capability line, derived entirely from the committed catalog snapshot: template count, parameter
+    /// count, buildable archetypes and dimensions, catalog version and contract revision. Nothing is hard-coded,
+    /// so a snapshot re-export changes this text without a code change (REQ-004-04).
+    /// </summary>
+    public string CapabilityLine
+    {
+        get
+        {
+            var snapshot = RecipeTemplateCatalogSnapshot.Default;
+            return Localization.Format(
+                UiStringKeys.CreateCapabilityLine,
+                snapshot.Templates.Count,
+                snapshot.Templates.Sum(static template => template.Parameters.Count),
+                string.Join(", ", snapshot.BuildableArchetypes),
+                string.Join(", ", snapshot.BuildableDimensions),
+                snapshot.TemplateCatalogVersion,
+                snapshot.ContractRevision);
+        }
+    }
+
+    /// <summary>The honest scope line, derived from the snapshot's buildable sets rather than a fixed promise.</summary>
+    public string ScopeNotice
+    {
+        get
+        {
+            var snapshot = RecipeTemplateCatalogSnapshot.Default;
+            return Localization.Format(
+                UiStringKeys.CreateScopeNotice,
+                string.Join(", ", snapshot.BuildableDimensions),
+                string.Join(", ", snapshot.BuildableArchetypes));
+        }
+    }
+
+    /// <summary>Clickable example sentences; clicking only fills the description box.</summary>
+    public IReadOnlyList<string> SuggestionSentences =>
+        SuggestionSentenceKeys.Select(key => Localization[key]).ToArray();
+
+    /// <summary>
+    /// The copyable command of the honest build handoff. The repository-relative manifest path keeps the line
+    /// machine-neutral; the surrounding notice explains the manifest step and the editor-close requirement.
+    /// </summary>
+    public string BuildCommandLine => "dotnet run --project apps/VFXComposer.Cli -- batch run <manifest.json>";
 
     private bool CanSendChat() => !string.IsNullOrWhiteSpace(ChatPrompt);
 
@@ -230,10 +324,43 @@ public sealed class CreateViewModel : WorkspacePageViewModel
         SetRecipeStatus(UiStringKeys.CreateRecipeStatusDraftReady, result.RequestCount);
     }
 
+    /// <summary>
+    /// The card click: the committed skeleton lands as a fresh pending draft through the same store and hash
+    /// discipline as an AI draft. No prompt is built and no request budget is touched (REQ-004-03).
+    /// </summary>
+    private void ApplyPreset(PresetCardViewModel? card)
+    {
+        if (card is null)
+        {
+            return;
+        }
+
+        try
+        {
+            var record = _runtime.RecipeDrafts.Save(card.Skeleton.CreateDraftRecord(DateTimeOffset.UtcNow));
+            SetCurrentDraft(record);
+            RecipeDraftJson = PrettyPrint(record.RecipeJson);
+            SetValidationSummaryKey(UiStringKeys.CreateValidationPassed);
+            SetRecipeStatus(UiStringKeys.CreateRecipeStatusPresetApplied);
+        }
+        catch (RecipeDraftStoreException exception)
+        {
+            SetRecipeStatus(UiStringKeys.CreateRecipeStatusDraftStorageFailedWithCode, exception.Code);
+        }
+    }
+
+    private void UseSuggestion(string? sentence)
+    {
+        if (!string.IsNullOrWhiteSpace(sentence))
+        {
+            EffectDescription = sentence;
+        }
+    }
+
     private void PresentValidationFailure(RecipeGenerationResult result)
     {
         RecipeDraftJson = result.LastOutputText ?? string.Empty;
-        SetValidationIssues(FormatIssues(result.Issues));
+        SetValidationIssues(result.Issues);
         SetRecipeStatus(
             UiStringKeys.CreateRecipeStatusValidationFailed,
             result.RequestCount,
@@ -280,6 +407,13 @@ public sealed class CreateViewModel : WorkspacePageViewModel
         OnPropertyChanged(nameof(ChatStatus));
         OnPropertyChanged(nameof(RecipeStatus));
         OnPropertyChanged(nameof(RecipeValidationSummary));
+        OnPropertyChanged(nameof(CapabilityLine));
+        OnPropertyChanged(nameof(ScopeNotice));
+        OnPropertyChanged(nameof(SuggestionSentences));
+        foreach (var card in PresetCards)
+        {
+            card.RefreshLocalizedText();
+        }
     }
 
     // Status lines keep their key and arguments instead of a rendered string, so a language switch re-renders them.
@@ -300,15 +434,15 @@ public sealed class CreateViewModel : WorkspacePageViewModel
     private void SetValidationSummaryKey(string? key)
     {
         _validationSummaryKey = key;
-        _validationIssues = string.Empty;
+        _validationIssueList = [];
         OnPropertyChanged(nameof(RecipeValidationSummary));
     }
 
-    /// <summary>Issue reports stay verbatim: they carry stable codes, JSON paths and validator messages.</summary>
-    private void SetValidationIssues(string issues)
+    /// <summary>Issue reports keep the typed list so a language switch re-renders the suggestion lines.</summary>
+    private void SetValidationIssues(IReadOnlyList<RecipeValidationIssue> issues)
     {
         _validationSummaryKey = null;
-        _validationIssues = issues;
+        _validationIssueList = issues;
         OnPropertyChanged(nameof(RecipeValidationSummary));
     }
 
@@ -333,8 +467,15 @@ public sealed class CreateViewModel : WorkspacePageViewModel
         }
     }
 
-    private static string FormatIssues(IReadOnlyList<RecipeValidationIssue> issues) =>
+    /// <summary>
+    /// Renders each issue verbatim (stable code, JSON path, validator message) and appends the bilingual repair
+    /// suggestion on its own indented line when the code maps to a suggestion key.
+    /// </summary>
+    private string FormatIssues(IReadOnlyList<RecipeValidationIssue> issues) =>
         string.Join(
             "\n",
-            issues.Select(static issue => issue.Code + " " + issue.Path + ": " + issue.Message));
+            issues.Select(issue =>
+                RecipeSuggestionCopy.TryGetCatalogKey(issue.Code, out var catalogKey)
+                    ? issue.Code + " " + issue.Path + ": " + issue.Message + "\n    → " + Localization[catalogKey]
+                    : issue.Code + " " + issue.Path + ": " + issue.Message));
 }

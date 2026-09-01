@@ -77,6 +77,51 @@ public static class UiStringKeys
         "CreateRecipeStatusConfirmationFailedWithCode";
     public const string CreateValidationPassed = "CreateValidationPassed";
 
+    public const string CreateSimpleModeHeading = "CreateSimpleModeHeading";
+    public const string CreateCapabilityLine = "CreateCapabilityLine";
+    public const string CreateScopeNotice = "CreateScopeNotice";
+    public const string CreatePresetApplyAction = "CreatePresetApplyAction";
+    public const string CreateRecipeStatusPresetApplied = "CreateRecipeStatusPresetApplied";
+    public const string CreateSuggestionsHeading = "CreateSuggestionsHeading";
+    public const string CreateSuggestionSentence1 = "CreateSuggestionSentence1";
+    public const string CreateSuggestionSentence2 = "CreateSuggestionSentence2";
+    public const string CreateSuggestionSentence3 = "CreateSuggestionSentence3";
+    public const string CreateBuildHandoffHeading = "CreateBuildHandoffHeading";
+    public const string CreateBuildHandoffNotice = "CreateBuildHandoffNotice";
+
+    public const string CreatePresetFireBoltTitle = "CreatePresetFireBoltTitle";
+    public const string CreatePresetFireBoltDescription = "CreatePresetFireBoltDescription";
+    public const string CreatePresetTrailingFireballTitle = "CreatePresetTrailingFireballTitle";
+    public const string CreatePresetTrailingFireballDescription = "CreatePresetTrailingFireballDescription";
+    public const string CreatePresetBurstingFireballTitle = "CreatePresetBurstingFireballTitle";
+    public const string CreatePresetBurstingFireballDescription = "CreatePresetBurstingFireballDescription";
+    public const string CreatePresetShockImpactTitle = "CreatePresetShockImpactTitle";
+    public const string CreatePresetShockImpactDescription = "CreatePresetShockImpactDescription";
+    public const string CreatePresetLaunchFlashTitle = "CreatePresetLaunchFlashTitle";
+    public const string CreatePresetLaunchFlashDescription = "CreatePresetLaunchFlashDescription";
+    public const string CreatePresetEmberStreakTitle = "CreatePresetEmberStreakTitle";
+    public const string CreatePresetEmberStreakDescription = "CreatePresetEmberStreakDescription";
+
+    // Bilingual copy for the closed L1.5 suggestion-key set (F8a1). Constant names and values spell the
+    // RecipeSuggestionKeys values verbatim; RecipeSuggestionCopy pins the two sets against each other.
+    public const string RecipeSuggestionChooseCatalogTemplate = "RecipeSuggestionChooseCatalogTemplate";
+    public const string RecipeSuggestionMatchTemplateKind = "RecipeSuggestionMatchTemplateKind";
+    public const string RecipeSuggestionAddMissingParameter = "RecipeSuggestionAddMissingParameter";
+    public const string RecipeSuggestionRemoveUnknownParameter = "RecipeSuggestionRemoveUnknownParameter";
+    public const string RecipeSuggestionClampParameterToRange = "RecipeSuggestionClampParameterToRange";
+    public const string RecipeSuggestionUseParameterNumericType = "RecipeSuggestionUseParameterNumericType";
+    public const string RecipeSuggestionAddMissingStageRoot = "RecipeSuggestionAddMissingStageRoot";
+    public const string RecipeSuggestionReorderStageRoots = "RecipeSuggestionReorderStageRoots";
+    public const string RecipeSuggestionReduceModuleCount = "RecipeSuggestionReduceModuleCount";
+    public const string RecipeSuggestionRemoveAttachment = "RecipeSuggestionRemoveAttachment";
+    public const string RecipeSuggestionUseBuildableArchetype = "RecipeSuggestionUseBuildableArchetype";
+    public const string RecipeSuggestionUseBuildableDimension = "RecipeSuggestionUseBuildableDimension";
+    public const string RecipeSuggestionRemoveUnknownField = "RecipeSuggestionRemoveUnknownField";
+    public const string RecipeSuggestionAddRequiredField = "RecipeSuggestionAddRequiredField";
+    public const string RecipeSuggestionUseDeclaredValueType = "RecipeSuggestionUseDeclaredValueType";
+    public const string RecipeSuggestionUseAllowedEnumValue = "RecipeSuggestionUseAllowedEnumValue";
+    public const string RecipeSuggestionReturnOneJsonObject = "RecipeSuggestionReturnOneJsonObject";
+
     public const string PreviewTitle = "PreviewTitle";
     public const string PreviewDescription = "PreviewDescription";
     public const string PreviewEmptyState = "PreviewEmptyState";
