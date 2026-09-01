@@ -1,5 +1,13 @@
 # 开发记忆与恢复指南
 
+> **在途状态快照（2026-08-31 深夜，§7 生成体验大改版进行中，供上下文压缩后续接）**：
+> 已关闭并推送：**F8-0**（prompt 合规样例+红线，合并 `2b60d885`，814/814）、**R5**（REQ-004 ACCEPTED + REQ-001 v0.5，`d7fb9bd3`；O-3 中文别名批准、O-4 origin 四值批准）、**F8a1**（L1.5 预校验层 VFXP 码表/建议键映射/上下界查询，合并 `226a2be5`，全量 **838/838**，AI.Tests 138）。
+> **R6（ADR-008 Desktop 构建闭环设计）在途中断**：子 agent 转录停在 23:26 勘察阶段，ADR-008 未落盘，主仓干净——需**重派或主 agent 自写**（任务书要点见主计划 §7 R6 卡：三路线 A 进程内宿主/B 独立宿主子进程/C 维持现状,五个必裁问题含 IL 扫描策略）。
+> **F8a2（Desktop 简单模式）worktree 已建好未开工**：`D:\wt\i2s-f8a2`,分支 `task/F8a2-simple-mode`,基于 `226a2be5`,feed 已复制。任务卡见主计划 §7（示例卡 4~6 张绑预置骨架、能力提示行、建议句渲染=RecipeSuggestionKeys→双语 catalog、确认后构建的诚实提示）。已勘察事实：`CreateViewModel` 已是键+参数模式,`RecipeDraftRecord.Create` 需要 `RecipeGenerationResult`——预置骨架直接落草稿可走 `new RecipeDraftRecord(...)` 构造(PendingConfirmation + `RecipeCanonicalJson.ComputeSha256` 算哈希,origin=preset 语义待 F8b2 store 升版,当前 store 无 origin 字段——F8a2 可先落普通草稿,报告里注明)。
+> **本会话工具异常**：子 agent 派发工具(Task)中途不可用——若恢复则照旧派发;若仍不可用,由主 agent 直接开发(仍遵守 worktree/提交/测试纪律)。
+> 剩余序列：F8a2 → 简单模式里程碑审计(F8-0+F8a1+F8a2) → F8b1(组装器重构)/F8b2(store 版本链,注意 RG-6 跨进程锁冲突行为定义) → F8b3(参数面板) → F8b4(精修回路) → 专业模式里程碑审计 → R6→F8c(构建闭环) → 收尾(指针型 vfx-artist skill、DEV_MEMORY 终态)。
+> 测试基线:全量 **838 条 Release 0 失败**;Jobs.Tests 并行全量偶发 1 条 flake(`JobExecutorLockCrossProcessTests`,单跑必绿,既有缺陷已登记)。
+
 > **更新（2026-08-31 晚）：追加需求「Desktop 中英双语系统」已完成关闭。** F7a（基建：184 键 catalog 的前 114 键、LocalizationService、`%LocalAppData%/VFXComposer/ui-preferences.json` 持久化、Settings 语言节）+ F7b（剩余六页全量迁移，catalog 达 184 键 × 双语，六页切换即刷）均合入 master 并推送；独立审计 PASS-with-remarks 零阻塞，7 条译文建议中 6 条已由主 agent 落实（Desktop.Tests 99/99 复验）。全量基线现为 **807 条 Release 0 失败**（台账勘误：F7a 前基线确为 747）。已知限制：Settings 页 `ProfileStatus`/`SecretPresence`/`Chat、ImageBindingStatus` Unavailable 回退值为渲染快照，切语言后下次状态更新才刷新。设计与验收记录见主计划 §6。
 >
 > **终态（2026-08-31）：优化计划全部关闭，无在途任务、无待办。** master `613dab47` 与 `origin/master` 同步、工作区干净；主计划 18 项 + 延后清算四项 D1–D4 全部合并推送（D1–D4 合并提交 `613dab47`，独立审计 PASS）。`D:\wt\` 已清空（`i2s-f6` 于本日退役），已合并任务分支 `task/F6-e2e-acceptance`/`task/O2-acceptance-script`/`task/O3-baseline` 删除；`codex/m1-protocol-unity`、`codex/m2-production-read` 各 1 笔未合并提交按既定裁决**归档保留**。下方历史条目中的"待办/待批准合并"均已完成，仅作过程记录。若要继续开发，从主计划"后续债务"与 `PROJECT_UNDERSTANDING.md` 起读即可。
