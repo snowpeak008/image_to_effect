@@ -1,6 +1,11 @@
 # 开发记忆与恢复指南
 
-> **在途状态快照（2026-09-03 凌晨 2 点）**：
+> **在途状态快照（2026-09-03 清晨 4 点，F8c 关闭）**：
+> **F8c 已关闭合入**：合并 `09a22c6a`，合并态 Release 0/0、全量 **1106/1106**（新增 BuildHost.Tests 22、Desktop.Tests 187、Cli.Tests 142）。**当前基线：1106 条 Release 0 失败。** Desktop 构建闭环打通：确认 → 点"构建" → BuildHost 宿主自验入队执行 → MarkBuilt/MarkBuildFailed 回写 → 刷新可见。worktree `D:\wt\i2s-f8c` 已退役。
+> **§7 生成体验大改版：十卡全部关闭**（F8-0/R5/R6/F8a1/F8a2/F8b1/F8b2/F8b3/F8b3b/F8b4/F8c + 双里程碑审计）。仅剩**收尾**（指针型 vfx-artist skill、DEV_MEMORY 终态）。
+> **下一步（用户裁定路径）**：①收尾 → ②**九宫格**：批量生成 9 个特效供用户人工验收（首选应用内构建逐个跑，或 `vfxc batch run` 批量——九宫格同时是 F8c 真机 Unity E2E 的实战覆盖；生成可用 Desktop 简单模式示例卡 + AI 生成混合取材，Unity Editor 路径 `E:\workwork\steamgamework\unit\2022.3.62f3c1\Editor` 见 F6 证据）→ ③用户验收后再议模板库扩充 track。
+>
+> **历史快照（2026-09-03 凌晨 2 点）**：
 > **专业模式里程碑审计已关闭**：双组均 PASS-with-remarks 零阻塞；2 条建议落实合并 `68d0d237`，合并态 Release 0/0、全量 **1072/1072**（AI.Tests 294、Desktop.Tests 177）。**当前基线：1072 条 Release 0 失败**（此前"1075"为簿记错误，审计勘误为 1068，微调 +4 后 1072）。worktree `D:\wt\i2s-f8mp` 已退役。
 > **§7 仅剩两项：F8c（Desktop 构建闭环，按 ADR-008）→ 收尾（指针型 vfx-artist skill、DEV_MEMORY 终态）**。F8c 归属项（里程碑审计台账）：①`apps/VFXComposer.BuildHost` 独立宿主子进程 + draft-backed 断链接通；②真实 store 走编排器测试；③`BuildCommandLine` 与 CLI 命令面对照断言；④诚实提示改指应用内构建。F8c 后执行用户裁定的**九宫格**：批量生成 9 个特效供人工验收（可走应用内构建或 `vfxc batch run`），再议模板库扩充 track。
 >
