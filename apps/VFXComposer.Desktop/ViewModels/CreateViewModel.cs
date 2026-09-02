@@ -461,7 +461,9 @@ public sealed class CreateViewModel : WorkspacePageViewModel
         _lineageDescriptions[outcome.Record.LineageId] = EffectDescription;
         SetCurrentDraft(outcome.Record);
         RecipeDraftJson = PrettyPrint(outcome.Record.RecipeJson);
-        SetValidationSummaryKey(UiStringKeys.CreateValidationPassed);
+        // The drafted root passed L1 inside the channel; the verdict box re-derives the L1.5 warnings like every
+        // other retained head instead of asserting a bare pass (F8b3b N7: the paths agree now).
+        PresentRetainedHeadValidation(outcome.Record);
         SetRecipeStatus(UiStringKeys.CreateRecipeStatusDraftReady, result.RequestCount);
         PresentRetention(outcome);
         Timeline.AppendGenerationDrafted(result, outcome);
@@ -486,7 +488,9 @@ public sealed class CreateViewModel : WorkspacePageViewModel
             _lineageDescriptions[outcome.Record.LineageId] = card.Skeleton.EnglishDescription;
             SetCurrentDraft(outcome.Record);
             RecipeDraftJson = PrettyPrint(outcome.Record.RecipeJson);
-            SetValidationSummaryKey(UiStringKeys.CreateValidationPassed);
+            // Committed skeletons pass L1.5 strictly in their build-time tests, so this renders the pass line —
+            // through the same prevalidator as every other path rather than as an unchecked assertion (N7).
+            PresentRetainedHeadValidation(outcome.Record);
             SetRecipeStatus(UiStringKeys.CreateRecipeStatusPresetApplied);
             PresentRetention(outcome);
             Timeline.AppendPresetApplied(outcome);
