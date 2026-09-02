@@ -136,6 +136,30 @@ public static class UiStringCatalog
                 "Retention: {0} older version(s) of this lineage were trimmed.",
             [UiStringKeys.CreateRetentionNoticeEvicted] =
                 "Retention: {0} inactive lineage(s) ({1} version(s)) were evicted from the store.",
+            [UiStringKeys.CreateValidationEditRefusedSeePanel] =
+                "Edit refused; the verdict is in the parameter panel report. The head draft is unchanged.",
+
+            [UiStringKeys.CreateLineageHeading] = "Version chain",
+            [UiStringKeys.CreateLineageNotice] =
+                "Every retained version of the current lineage, oldest first. Select an older version and revert to "
+                + "make it the head again; the newer versions are deleted after one explicit confirmation. No AI "
+                + "request is made.",
+            [UiStringKeys.CreateLineageVersionLabel] = "Version v{0}",
+            [UiStringKeys.CreateLineageHeadMarker] = "head (current)",
+            [UiStringKeys.CreateLineageCreatedLine] = "Created {0} UTC",
+            [UiStringKeys.CreateLineageGuardLine] = "Guard restorations: {0}",
+            [UiStringKeys.CreateLineageFeedbackLine] = "Feedback: {0}",
+            [UiStringKeys.CreateLineageRevertAction] = "Revert to this version",
+            [UiStringKeys.CreateLineageRevertConfirmPrompt] =
+                "This will discard {0} newer version(s) ({1}); the truncation cannot be undone.",
+            [UiStringKeys.CreateLineageConfirmRevertAction] = "Confirm revert",
+            [UiStringKeys.CreateLineageCancelRevertAction] = "Cancel",
+            [UiStringKeys.CreateLineageListFailedWithCode] = "Version list unavailable: {0}.",
+            [UiStringKeys.CreateRecipeStatusRevertedToVersion] = "Reverted to v{0}; {1} newer version(s) deleted.",
+            [UiStringKeys.CreateRecipeStatusRevertBlockedWithCode] =
+                "Revert refused: {0}. A newer version is confirmed or built and is an audit record; start a new "
+                + "lineage instead.",
+            [UiStringKeys.CreateRecipeStatusRevertFailedWithCode] = "Revert failed: {0}.",
 
             [UiStringKeys.RecipeParameterEditNoChanges] = "No parameter value was changed; nothing was saved.",
             [UiStringKeys.RecipeParameterEditTargetNotFound] = "{0}: no declared parameter at this location.",
@@ -474,6 +498,28 @@ public static class UiStringCatalog
                 "保留策略：本链 {0} 个较早版本已被裁剪。",
             [UiStringKeys.CreateRetentionNoticeEvicted] =
                 "保留策略：{0} 条不活跃版本链（共 {1} 个版本）已被淘汰。",
+            [UiStringKeys.CreateValidationEditRefusedSeePanel] =
+                "手改被拒绝；结论见参数面板报告。head 草稿未变。",
+
+            [UiStringKeys.CreateLineageHeading] = "版本链",
+            [UiStringKeys.CreateLineageNotice] =
+                "当前版本链保留的全部版本，最老在前。选中较早版本并回退可使其重新成为 head；"
+                + "较新版本在一次显式确认后被删除。不发起任何 AI 请求。",
+            [UiStringKeys.CreateLineageVersionLabel] = "版本 v{0}",
+            [UiStringKeys.CreateLineageHeadMarker] = "head（当前）",
+            [UiStringKeys.CreateLineageCreatedLine] = "创建于 {0}（UTC）",
+            [UiStringKeys.CreateLineageGuardLine] = "守卫还原：{0} 项",
+            [UiStringKeys.CreateLineageFeedbackLine] = "反馈：{0}",
+            [UiStringKeys.CreateLineageRevertAction] = "回到此版本",
+            [UiStringKeys.CreateLineageRevertConfirmPrompt] =
+                "将丢弃 {0} 个较新版本（{1}），此操作不可撤销。",
+            [UiStringKeys.CreateLineageConfirmRevertAction] = "确认回退",
+            [UiStringKeys.CreateLineageCancelRevertAction] = "取消",
+            [UiStringKeys.CreateLineageListFailedWithCode] = "版本列表不可用：{0}。",
+            [UiStringKeys.CreateRecipeStatusRevertedToVersion] = "已回到 v{0}，删除 {1} 个版本。",
+            [UiStringKeys.CreateRecipeStatusRevertBlockedWithCode] =
+                "回退被拒绝：{0}。较新版本已确认或已构建，属审计记录不可删除；请另起新链。",
+            [UiStringKeys.CreateRecipeStatusRevertFailedWithCode] = "回退失败：{0}。",
 
             [UiStringKeys.RecipeParameterEditNoChanges] = "没有参数值被修改；未保存任何内容。",
             [UiStringKeys.RecipeParameterEditTargetNotFound] = "{0}：此位置没有已声明的参数。",

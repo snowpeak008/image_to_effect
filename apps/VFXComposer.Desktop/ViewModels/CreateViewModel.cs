@@ -75,6 +75,11 @@ public sealed class CreateViewModel : WorkspacePageViewModel
         UseSuggestionCommand = new RelayCommand<string>(UseSuggestion);
         ParameterPanel = new ParameterPanelViewModel(localization);
         ApplyParameterEditsCommand = new RelayCommand(ApplyParameterEdits, CanApplyParameterEdits);
+        Lineage = new LineageViewModel(localization);
+        Lineage.PropertyChanged += OnLineagePropertyChanged;
+        RevertToSelectedVersionCommand = new RelayCommand(RevertToSelectedVersion, Lineage.CanArmRevert);
+        ConfirmRevertCommand = new RelayCommand(ConfirmRevert, () => Lineage.IsRevertPending);
+        CancelRevertCommand = new RelayCommand(Lineage.CancelRevert, () => Lineage.IsRevertPending);
         PresetCards = RecipePresetSkeletons.All
             .Select(skeleton =>
             {
@@ -185,6 +190,24 @@ public sealed class CreateViewModel : WorkspacePageViewModel
     /// after the head. Zero AI, zero network: neither the editor nor the store touches the gateway (REQ-004-44).
     /// </summary>
     public IRelayCommand ApplyParameterEditsCommand { get; }
+
+    /// <summary>The head's lineage as a selectable version list with the inline revert confirmation (REQ-004 §7.3).</summary>
+    public LineageViewModel Lineage { get; }
+
+    /// <summary>
+    /// Step one of the revert: arms the confirmation for the selected older version and shows how many newer versions
+    /// it would delete. Nothing is written yet. Disabled for the head and without a selection.
+    /// </summary>
+    public IRelayCommand RevertToSelectedVersionCommand { get; }
+
+    /// <summary>
+    /// Step two: truncates the lineage after the armed version (REQ-004-25). The store deletes the newer versions or
+    /// refuses with a stable code when one of them is an audit record (REQ-004-26). Zero network either way.
+    /// </summary>
+    public IRelayCommand ConfirmRevertCommand { get; }
+
+    /// <summary>Disarms the pending revert; the store is not touched.</summary>
+    public IRelayCommand CancelRevertCommand { get; }
 
     /// <summary>The fixed simple-mode example cards, one per committed preset skeleton.</summary>
     public IReadOnlyList<PresetCardViewModel> PresetCards { get; }
@@ -395,6 +418,9 @@ public sealed class CreateViewModel : WorkspacePageViewModel
             // The retention notice belongs to the save that produced it; a refused edit saved nothing, so an
             // earlier trim/supersede line must not sit next to this rejection as if it were caused by it.
             SetRetentionLines([]);
+            // Likewise the verdict box: the previous head's "passed" line would read as a verdict on the refused
+            // edit, whose real verdict is the panel report. A neutral pointer replaces it (F8b3 audit B#6).
+            SetValidationSummaryKey(UiStringKeys.CreateValidationEditRefusedSeePanel);
             return;
         }
 
@@ -448,6 +474,98 @@ public sealed class CreateViewModel : WorkspacePageViewModel
         }
 
         SetRetentionLines(lines);
+    }
+
+    private void RevertToSelectedVersion() => Lineage.ArmRevert();
+
+    private void ConfirmRevert()
+    {
+        if (Lineage.PendingTarget is not { } target)
+        {
+            return;
+        }
+
+        Lineage.CancelRevert();
+        // Any retention line on screen describes an earlier save; a truncation is a different event and reports its
+        // own count in the status line (REQ-004-33), so the stale line must not sit next to it.
+        SetRetentionLines([]);
+        try
+        {
+            // The store recomputes the deletable set under its lock and refuses when a newer version is confirmed,
+            // built or build-failed; the page never deletes anything itself (REQ-004-26).
+            var outcome = _runtime.RecipeDrafts.TruncateAfter(target.DraftId);
+            SetCurrentDraft(outcome.Head);
+            RecipeDraftJson = PrettyPrint(outcome.Head.RecipeJson);
+            PresentRetainedHeadValidation(outcome.Head);
+            SetRecipeStatus(
+                UiStringKeys.CreateRecipeStatusRevertedToVersion,
+                outcome.Head.RevisionOrdinal,
+                outcome.RemovedDraftIds.Count);
+        }
+        catch (RecipeDraftStoreException exception)
+        {
+            SetRecipeStatus(
+                exception.Code == RecipeDraftStoreErrorCode.TruncationBlocked
+                    ? UiStringKeys.CreateRecipeStatusRevertBlockedWithCode
+                    : UiStringKeys.CreateRecipeStatusRevertFailedWithCode,
+                exception.Code);
+        }
+    }
+
+    /// <summary>
+    /// A retained version passed L1 when it was saved (the store requires a hash for every non-failed record); only
+    /// the L1.5 warnings are re-derived here, by the same pure prevalidator the editor runs. A failed root shows its
+    /// stored report.
+    /// </summary>
+    private void PresentRetainedHeadValidation(RecipeDraftRecord head)
+    {
+        if (head.CanonicalSha256 is null)
+        {
+            SetValidationIssues(head.Issues);
+            return;
+        }
+
+        var warnings = RecipeCatalogPrevalidator.Prevalidate(head.RecipeJson);
+        if (warnings.Count == 0)
+        {
+            SetValidationSummaryKey(UiStringKeys.CreateValidationPassed);
+        }
+        else
+        {
+            SetValidationIssues(warnings);
+        }
+    }
+
+    private void OnLineagePropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs eventArgs)
+    {
+        if (eventArgs.PropertyName is nameof(LineageViewModel.SelectedVersion) or nameof(LineageViewModel.IsRevertPending))
+        {
+            RevertToSelectedVersionCommand.NotifyCanExecuteChanged();
+            ConfirmRevertCommand.NotifyCanExecuteChanged();
+            CancelRevertCommand.NotifyCanExecuteChanged();
+        }
+    }
+
+    /// <summary>
+    /// Re-lists the head's lineage from the store; every path that moves <c>_currentDraft</c> comes through here. A
+    /// refused listing is shown as its stable code in the view rather than swallowed.
+    /// </summary>
+    private void RefreshLineage()
+    {
+        if (_currentDraft is null)
+        {
+            Lineage.Load([]);
+            return;
+        }
+
+        try
+        {
+            Lineage.Load(_runtime.RecipeDrafts.ListLineage(_currentDraft.LineageId));
+        }
+        catch (RecipeDraftStoreException exception)
+        {
+            Lineage.LoadFailed(exception.Code);
+        }
     }
 
     private void UseSuggestion(string? sentence)
@@ -526,6 +644,7 @@ public sealed class CreateViewModel : WorkspacePageViewModel
         }
 
         ParameterPanel.RefreshLocalizedText();
+        Lineage.RefreshLocalizedText();
     }
 
     // Status lines keep their key and arguments instead of a rendered string, so a language switch re-renders them.
@@ -569,6 +688,7 @@ public sealed class CreateViewModel : WorkspacePageViewModel
     {
         _currentDraft = record;
         ParameterPanel.Load(record);
+        RefreshLineage();
         OnPropertyChanged(nameof(DraftStatus));
         OnPropertyChanged(nameof(DraftId));
         ConfirmRecipeDraftCommand.NotifyCanExecuteChanged();
