@@ -76,11 +76,12 @@ public sealed class RecipePresetSkeleton
     public override string ToString() => "RecipePresetSkeleton(" + PresetId + ")";
 
     /// <summary>
-    /// Builds a fresh pending draft record for one card click. Every click creates a new draft identity; the
+    /// Builds a fresh pending draft record for one card click. Every click creates a new draft identity and a new
+    /// lineage whose root carries <see cref="RecipeDraftOrigin.Preset"/> and this preset's identifier; the
     /// confirmation flow then binds to the precomputed canonical hash exactly like an AI-drafted record.
     /// </summary>
     public RecipeDraftRecord CreateDraftRecord(DateTimeOffset createdUtc) => new(
-        "draft-" + Guid.NewGuid().ToString("N"),
+        RecipeDraftRecord.NewDraftId(),
         RecipeDraftStatus.PendingConfirmation,
         createdUtc,
         createdUtc,
@@ -94,7 +95,8 @@ public sealed class RecipePresetSkeleton
         Dimension,
         TargetProfile,
         Array.Empty<RecipeValidationIssue>(),
-        requestCount: 0);
+        requestCount: 0,
+        RecipeDraftProvenance.Root(RecipeDraftProvenance.NewLineageId(), RecipeDraftOrigin.Preset, PresetId));
 
     private static string ReadString(JsonElement objectElement, string name) =>
         objectElement.GetProperty(name).GetString()
