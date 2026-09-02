@@ -225,7 +225,8 @@ public sealed class RecipeParameterEdit
 
 /// <summary>
 /// Typed verdict of <see cref="RecipeParameterEditor.Apply"/>. Accepted carries the canonical new document, its
-/// hash and the L1.5 warnings (never blocking, F8a1 ruling); Rejected carries the error issues and no document.
+/// hash and the non-blocking findings on it: any L1 finding below Error severity followed by the L1.5 warnings
+/// (never blocking, F8a1 ruling); Rejected carries the error issues and no document.
 /// </summary>
 public sealed class RecipeParameterEditResult
 {
@@ -236,7 +237,10 @@ public sealed class RecipeParameterEditResult
         Issues = issues;
     }
 
-    /// <summary>True when a new document was produced and passed L1.</summary>
+    /// <summary>
+    /// True when a new document was produced and passed L1 without an Error finding. <see cref="Issues"/> may still
+    /// carry L1 findings below Error severity and L1.5 warnings; they inform, they do not block.
+    /// </summary>
     public bool IsAccepted => RecipeJson is not null;
 
     /// <summary>The canonical new recipe document; null when rejected.</summary>
@@ -245,7 +249,10 @@ public sealed class RecipeParameterEditResult
     /// <summary>The SHA-256 of <see cref="RecipeJson"/>; null when rejected.</summary>
     public string? CanonicalSha256 { get; }
 
-    /// <summary>Rejected: error issues (editor codes or L1). Accepted: L1.5 warnings, possibly none.</summary>
+    /// <summary>
+    /// Rejected: error issues (editor codes or L1). Accepted: the L1 findings below Error severity on the new
+    /// document (none under today's L1 rules, which emit errors only), then the L1.5 warnings; possibly none.
+    /// </summary>
     public IReadOnlyList<RecipeValidationIssue> Issues { get; }
 
     public override string ToString() => "RecipeParameterEditResult(" + (IsAccepted ? "Accepted" : "Rejected") + ")";
