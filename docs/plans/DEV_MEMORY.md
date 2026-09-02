@@ -1,6 +1,10 @@
 # 开发记忆与恢复指南
 
-> **在途状态快照（2026-09-03 凌晨）**：
+> **在途状态快照（2026-09-03 凌晨 2 点）**：
+> **专业模式里程碑审计已关闭**：双组均 PASS-with-remarks 零阻塞；2 条建议落实合并 `68d0d237`，合并态 Release 0/0、全量 **1072/1072**（AI.Tests 294、Desktop.Tests 177）。**当前基线：1072 条 Release 0 失败**（此前"1075"为簿记错误，审计勘误为 1068，微调 +4 后 1072）。worktree `D:\wt\i2s-f8mp` 已退役。
+> **§7 仅剩两项：F8c（Desktop 构建闭环，按 ADR-008）→ 收尾（指针型 vfx-artist skill、DEV_MEMORY 终态）**。F8c 归属项（里程碑审计台账）：①`apps/VFXComposer.BuildHost` 独立宿主子进程 + draft-backed 断链接通；②真实 store 走编排器测试；③`BuildCommandLine` 与 CLI 命令面对照断言；④诚实提示改指应用内构建。F8c 后执行用户裁定的**九宫格**：批量生成 9 个特效供人工验收（可走应用内构建或 `vfxc batch run`），再议模板库扩充 track。
+>
+> **历史快照（2026-09-03 凌晨）**：
 > **F8b4 已关闭合入**：合并 `06f46cd4`，合并态 Release 0/0、全量 **1075/1075**（AI.Tests 294、Desktop.Tests 173）。**当前基线：1075 条 Release 0 失败。** §7 十卡仅剩 F8c（构建闭环）与收尾。worktree `D:\wt\i2s-f8b4` 已退役。
 > **新登记 flake**：并行全量下 `Broker.Tests` 的 `UserModeBrokerWorkerSessionTests.PostAdmissionChildExitAutomaticallyRevokesAndCleansSession` 偶发 1~2 条失败（进程时序类，单跑必绿，master 既有非 F8b4 引入）；与 Mcp `ValidatingAManifestOpensNoNetwork`、AiLocalE2E 负载 flake 同列。遇到即单跑确认。
 > **用户裁定的收尾路径（2026-09-02 晚）**：①关闭本轮（F8b4 ✓ → 专业模式里程碑审计 → F8c → 收尾）→ ②**批量生成 9 个特效（九宫格）供用户人工验收质量** → ③验收后再议"模板库扩充 track"（当前仅 6 模板/11 参数/2D 火系弹道，覆盖面窄是已登记债务，扩充需用户美术方向输入）。
@@ -10,6 +14,7 @@
 > **F8b3b 已关闭合入**：合并 `d974118c`，合并态 Release 0/0、全量 **993/993**（Desktop.Tests 137）。**当前基线：993 条 Release 0 失败。** worktree `D:\wt\i2s-f8b3b` 已退役。专业模式 UI 现有：参数面板（F8b3）+ 版本链视图与回退（F8b3b）；简单模式全量在位。
 > **下一步：派发 F8b4 精修回路**（依赖 F8b1 ✓、F8b2 ✓、F8b3 ✓；卡见主计划 §7）。F8b4 范围：每轮 1+N 精修（三件套上下文 + 艺术家知识片段 `refine-artist-knowledge`——源文档 `docs/ai-workflow/refine-artist-knowledge.md` + 入库 fragment JSON，REQ-004 §10 章程）、覆盖守卫（§9.3，别名词表点名判定、guardRestorations 落盘与呈现）、模式切换 UI + ui-preferences `/2` 升版（§5.3，REQ-004-08~11）、任务时间线条目（REQ-004-20 与 -33 时间线半边）；顺带 F8b3b 余项 N7（AI 生成/示例卡路径校验框统一走 L1.5）。F8b4 是唯一动生成链路的卡，交付后做专业模式里程碑审计（F8b1+F8b2+F8b3+F8b3b+F8b4 合一次）。
 > **模型槽位勘误**：子 agent 模型槽位名已由 `claude-fable-5-1-thinking-high` 变为 **`claude-fable-5-high`**（本日晚间起）；派发时用新槽位，旧名会被拒绝。
+> **用户模型偏好（2026-09-03 凌晨）**：子 agent 优先使用 **Opus 5 High**；当前环境可用清单仅有 `claude-fable-5-high`（无 Opus 槽位）。纪律：每次派发前检查可用模型清单，Opus 5 High 可用即切换；不可用时用 Fable 5 High 并在状态板照实登记所用模型。
 >
 > **历史快照（2026-09-02 晚）**：
 > **F8b3 已关闭合入**：合并 `f5e776ef`，合并态 Release 0/0、全量 **979/979**（AI.Tests 255、Desktop.Tests 123）。**当前基线：979 条 Release 0 失败。** 简单模式+参数面板闭环（AI 出一版→手调→确认）已有测试。REQ-004 §11.6 已登记 VFXE 码与 F8b3 裁决。worktree `D:\wt\i2s-f8b3` 已退役。
