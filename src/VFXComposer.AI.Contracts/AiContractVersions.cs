@@ -8,6 +8,7 @@ public static class AiContractVersions
     public const string ChatRequest = "vfxcomposer.ai.chat-request/1";
     public const string ImageGenerationRequest = "vfxcomposer.ai.image-generation-request/1";
     public const string RecipeGenerationRequest = "vfxcomposer.ai.recipe-generation-request/1";
+    public const string RecipeRefinementRequest = "vfxcomposer.ai.recipe-refinement-request/1";
 
     /// <summary>
     /// Identifies the prompt assembler revision that leads the composite prompt version carried by every draft

@@ -3,6 +3,7 @@ using CommunityToolkit.Mvvm.Input;
 using VFXComposer.AI.Contracts;
 using VFXComposer.AI.Contracts.Desktop;
 using VFXComposer.Desktop.Localization;
+using VFXComposer.Desktop.Services;
 
 namespace VFXComposer.Desktop.ViewModels;
 
@@ -39,7 +40,10 @@ public sealed class SettingsViewModel : WorkspacePageViewModel
     private string _chatBindingStatus = AiDesktopChannelStatusKind.Unbound.ToString();
     private string _imageBindingStatus = AiDesktopChannelStatusKind.Unbound.ToString();
 
-    public SettingsViewModel(LocalizationService localization, IAiDesktopRuntime? runtime = null)
+    public SettingsViewModel(
+        LocalizationService localization,
+        IAiDesktopRuntime? runtime = null,
+        GenerationModeService? generationModes = null)
         : base(
             localization,
             "settings",
@@ -48,6 +52,9 @@ public sealed class SettingsViewModel : WorkspacePageViewModel
             UiStringKeys.SettingsEmptyState)
     {
         _runtime = runtime ?? AiDesktopRuntime.Unavailable;
+        GenerationModes = generationModes ?? new GenerationModeService();
+        // Pages live as long as the shell that owns the mode service, so the subscription needs no teardown.
+        GenerationModes.ModeChanged += OnGenerationModeChanged;
         _secretPresence = localization[UiStringKeys.SettingsSecretNotConfigured];
         _profileStatus = localization[UiStringKeys.SettingsStatusNotLoaded];
         Profiles = new ObservableCollection<AiDesktopProfileSummary>();
@@ -89,6 +96,34 @@ public sealed class SettingsViewModel : WorkspacePageViewModel
             if (value)
             {
                 Localization.SetLanguage(UiLanguage.ChineseSimplified);
+            }
+        }
+    }
+
+    /// <summary>The shell-wide generation mode source; the Create page binds its gated sections to it.</summary>
+    public GenerationModeService GenerationModes { get; }
+
+    /// <summary>Selecting a mode applies it immediately and stores it for the current user (REQ-004-01).</summary>
+    public bool IsSimpleModeSelected
+    {
+        get => GenerationModes.Mode == GenerationMode.Simple;
+        set
+        {
+            if (value)
+            {
+                GenerationModes.SetMode(GenerationMode.Simple);
+            }
+        }
+    }
+
+    public bool IsProfessionalModeSelected
+    {
+        get => GenerationModes.Mode == GenerationMode.Professional;
+        set
+        {
+            if (value)
+            {
+                GenerationModes.SetMode(GenerationMode.Professional);
             }
         }
     }
@@ -293,6 +328,12 @@ public sealed class SettingsViewModel : WorkspacePageViewModel
         OnPropertyChanged(nameof(SecurityNotice));
         OnPropertyChanged(nameof(IsEnglishSelected));
         OnPropertyChanged(nameof(IsChineseSimplifiedSelected));
+    }
+
+    private void OnGenerationModeChanged(object? sender, EventArgs eventArgs)
+    {
+        OnPropertyChanged(nameof(IsSimpleModeSelected));
+        OnPropertyChanged(nameof(IsProfessionalModeSelected));
     }
 
     private void BeginNewProfile()

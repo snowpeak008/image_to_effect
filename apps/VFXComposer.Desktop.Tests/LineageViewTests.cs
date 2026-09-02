@@ -384,7 +384,12 @@ public sealed class LineageViewTests
     public void ARefusedListingShowsTheStableCodeInPlaceOfTheList()
     {
         var runtime = new ListingRefusedRuntime(RecipeDraftStoreErrorCode.StoreBusy);
-        var viewModel = new CreateViewModel(LocalizationTestSupport.CreateEnglish(), runtime);
+        // F8b4 semantic adaptation: the version-chain card is a professional-mode section now (REQ-004-07), so the
+        // rendered-visibility half of this test runs under that mode; the stable-code semantics are unchanged.
+        var viewModel = new CreateViewModel(
+            LocalizationTestSupport.CreateEnglish(),
+            runtime,
+            new Services.GenerationModeService(Services.GenerationMode.Professional));
         var view = new CreateView { DataContext = viewModel };
 
         viewModel.ApplyPresetCommand.Execute(FireBoltCard(viewModel));

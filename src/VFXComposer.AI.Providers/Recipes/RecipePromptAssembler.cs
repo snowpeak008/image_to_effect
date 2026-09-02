@@ -28,11 +28,15 @@ internal static class RecipePromptAssembler
     private const string RequestFragmentId = "request";
     private const string PreviousOutputFragmentId = "previous-output";
     private const string RepairFragmentId = "repair";
+    private const string RefineKnowledgeFragmentId = "refine-knowledge";
+    private const string RefineRequestFragmentId = "refine-request";
 
     /// <summary>
     /// Every fragment the assembler can emit, in composite-version order. Changing any fragment's content
     /// requires bumping its version here, which changes <see cref="Version"/> and is pinned by the assembly
-    /// snapshot test. F8b4 registers its refinement knowledge fragment here; F8b1 deliberately ships none.
+    /// snapshot test. The refine-knowledge fragment version follows the committed knowledge asset, so a
+    /// re-export of <c>refine-artist-knowledge.fragment.json</c> propagates into the composite version
+    /// (REQ-004-55) without touching this registry.
     /// </summary>
     private static readonly (string Id, int Version)[] FragmentRegistry =
     [
@@ -44,6 +48,8 @@ internal static class RecipePromptAssembler
         (RequestFragmentId, 1),
         (PreviousOutputFragmentId, 1),
         (RepairFragmentId, 1),
+        (RefineKnowledgeFragmentId, RecipeRefineKnowledge.Default.Version),
+        (RefineRequestFragmentId, 1),
     ];
 
     /// <summary>
@@ -83,6 +89,16 @@ internal static class RecipePromptAssembler
 
     private static readonly Lazy<string> CachedSystemPrompt =
         new(() => string.Concat(CachedSystemFragments.Value.Select(static fragment => fragment.Content)));
+
+    private static readonly Lazy<IReadOnlyList<RecipePromptFragment>> CachedRefinementSystemFragments =
+        new(static () =>
+        [
+            .. CachedSystemFragments.Value,
+            new RecipePromptFragment(
+                RefineKnowledgeFragmentId,
+                RegistryVersion(RefineKnowledgeFragmentId),
+                "\n" + RecipeRefineKnowledge.Default.RenderPromptText()),
+        ]);
 
     /// <summary>
     /// The composite prompt version written to <c>PromptTemplateVersion</c>: the assembler revision followed by
@@ -156,6 +172,102 @@ internal static class RecipePromptAssembler
             ChatRole.User,
             [new RecipePromptFragment(RepairFragmentId, RegistryVersion(RepairFragmentId), BuildRepairInstruction(issues))]));
         return Assemble(sections);
+    }
+
+    /// <summary>
+    /// Builds one refinement request (REQ-004-13): one System message carrying the generation system prompt plus
+    /// the refine-knowledge fragment, then one User section carrying exactly the anchored triple — the lineage's
+    /// original description, the current head recipe JSON, and this round's feedback. Nothing else is ever
+    /// included: no earlier rounds, no other lineages. The head recipe is chunked into per-message-bound
+    /// fragments, so an oversized draft splits into further same-role messages instead of being truncated;
+    /// every other size overflow fails closed as <see cref="ChatChannelErrorCode.PayloadTooLarge"/> from
+    /// <see cref="Assemble"/>. Identical inputs yield identical messages.
+    /// </summary>
+    public static IReadOnlyList<ChatChannelMessage> CreateRefinementMessages(
+        string originalDescription,
+        string headRecipeJson,
+        string feedbackText)
+    {
+        return Assemble(
+        [
+            new RecipePromptSection(ChatRole.System, CachedRefinementSystemFragments.Value),
+            new RecipePromptSection(ChatRole.User, RefinementRequestFragments(originalDescription, headRecipeJson, feedbackText)),
+        ]);
+    }
+
+    /// <summary>
+    /// Builds a refinement retry after a validation failure: the same System and User messages as
+    /// <see cref="CreateRefinementMessages"/>, then the optional Assistant echo and the repair instruction under
+    /// exactly the rules of <see cref="CreateRepairMessages"/>. The context stays the anchored triple of this
+    /// round; repair never adds history.
+    /// </summary>
+    public static IReadOnlyList<ChatChannelMessage> CreateRefinementRepairMessages(
+        string originalDescription,
+        string headRecipeJson,
+        string feedbackText,
+        string? previousOutput,
+        IReadOnlyList<RecipeValidationIssue> issues)
+    {
+        ArgumentNullException.ThrowIfNull(issues);
+
+        var sections = new List<RecipePromptSection>
+        {
+            new(ChatRole.System, CachedRefinementSystemFragments.Value),
+            new(ChatRole.User, RefinementRequestFragments(originalDescription, headRecipeJson, feedbackText)),
+        };
+
+        if (!string.IsNullOrWhiteSpace(previousOutput) && previousOutput.Length <= MaximumMessageCharacters)
+        {
+            sections.Add(new RecipePromptSection(
+                ChatRole.Assistant,
+                [new RecipePromptFragment(PreviousOutputFragmentId, RegistryVersion(PreviousOutputFragmentId), previousOutput)]));
+        }
+
+        sections.Add(new RecipePromptSection(
+            ChatRole.User,
+            [new RecipePromptFragment(RepairFragmentId, RegistryVersion(RepairFragmentId), BuildRepairInstruction(issues))]));
+        return Assemble(sections);
+    }
+
+    /// <summary>
+    /// The anchored-triple user section: fixed shell text around the description, the head recipe chunked at the
+    /// per-message bound (the only splittable piece; REQ-001-07 forbids truncation, so chunk fragments let
+    /// <see cref="Assemble"/> continue the same-role section across messages), and the feedback with the output
+    /// instruction. All three pieces are required.
+    /// </summary>
+    private static IReadOnlyList<RecipePromptFragment> RefinementRequestFragments(
+        string originalDescription,
+        string headRecipeJson,
+        string feedbackText)
+    {
+        ArgumentException.ThrowIfNullOrWhiteSpace(originalDescription);
+        ArgumentException.ThrowIfNullOrWhiteSpace(headRecipeJson);
+        ArgumentException.ThrowIfNullOrWhiteSpace(feedbackText);
+
+        var version = RegistryVersion(RefineRequestFragmentId);
+        var fragments = new List<RecipePromptFragment>
+        {
+            new(
+                RefineRequestFragmentId,
+                version,
+                "Original effect description:\n" + originalDescription +
+                "\n\nCurrent recipe (the head version being refined):\n"),
+        };
+
+        for (var offset = 0; offset < headRecipeJson.Length; offset += MaximumMessageCharacters)
+        {
+            fragments.Add(new RecipePromptFragment(
+                RefineRequestFragmentId,
+                version,
+                headRecipeJson.Substring(offset, Math.Min(MaximumMessageCharacters, headRecipeJson.Length - offset))));
+        }
+
+        fragments.Add(new RecipePromptFragment(
+            RefineRequestFragmentId,
+            version,
+            "\n\nRefinement feedback for this round:\n" + feedbackText +
+            "\n\nApply the feedback to the current recipe. Return the complete revised Recipe v1 JSON object now."));
+        return fragments;
     }
 
     /// <summary>

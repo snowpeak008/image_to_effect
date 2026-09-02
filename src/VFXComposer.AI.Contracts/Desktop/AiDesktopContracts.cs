@@ -302,6 +302,14 @@ public interface IAiDesktopRuntime : IAsyncDisposable
     IRecipeGenerationChannel RecipeGeneration { get; }
 
     /// <summary>
+    /// Recipe refinement over the same explicit ChatLlm binding (REQ-004 §6). The default implementation keeps
+    /// pre-F8b4 runtime fakes compiling; a shell that surfaces refinement must override it, and production and
+    /// <see cref="AiDesktopRuntime.Unavailable"/> both do.
+    /// </summary>
+    IRecipeRefinementChannel RecipeRefinement =>
+        throw new NotSupportedException("This runtime does not surface recipe refinement.");
+
+    /// <summary>
     /// Recipe draft persistence in current-user application data; never a Unity project path. The version-chain
     /// surface is exposed so the Create page can append hand edits after the lineage head (REQ-004 §7, §9).
     /// </summary>
@@ -320,6 +328,7 @@ public static class AiDesktopRuntime
         IAiGateway,
         IAiDesktopSettings,
         IRecipeGenerationChannel,
+        IRecipeRefinementChannel,
         IRecipeDraftLineageStore
     {
         private static readonly AiDesktopSettingsSnapshot Empty = new(
@@ -334,12 +343,18 @@ public static class AiDesktopRuntime
         public IAiGateway Gateway => this;
         public IAiDesktopSettings Settings => this;
         public IRecipeGenerationChannel RecipeGeneration => this;
+        public IRecipeRefinementChannel RecipeRefinement => this;
         public IRecipeDraftLineageStore RecipeDrafts => this;
 
         public ValueTask<RecipeGenerationResult> GenerateAsync(
             RecipeGenerationRequest request,
             CancellationToken cancellationToken = default) =>
             ValueTask.FromException<RecipeGenerationResult>(new AiGatewayException(AiErrorCode.ConfigurationUnavailable));
+
+        public ValueTask<RecipeRefinementResult> RefineAsync(
+            RecipeRefinementRequest request,
+            CancellationToken cancellationToken = default) =>
+            ValueTask.FromException<RecipeRefinementResult>(new AiGatewayException(AiErrorCode.ConfigurationUnavailable));
 
         public RecipeDraftRecord Save(RecipeDraftRecord record) =>
             throw new RecipeDraftStoreException(RecipeDraftStoreErrorCode.StorageFailed);

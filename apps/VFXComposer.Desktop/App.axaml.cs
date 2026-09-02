@@ -23,10 +23,15 @@ public sealed partial class App : Application
 
             try
             {
-                // The stored preference wins; a first run (or unusable storage) follows the OS UI culture.
+                // The stored preferences win; a first run (or unusable storage) follows the OS UI culture and the
+                // default simple mode (REQ-004-11). Both services share the one document through merged saves.
                 var preferences = UiPreferencesStore.TryCreateCurrentUser(diagnostics);
+                var storedPreferences = preferences?.Load();
                 var localization = new LocalizationService(
-                    preferences?.Load()?.Language ?? UiLanguages.FromCurrentUiCulture(),
+                    storedPreferences?.Language ?? UiLanguages.FromCurrentUiCulture(),
+                    preferences);
+                var generationModes = new GenerationModeService(
+                    storedPreferences?.GenerationMode ?? GenerationMode.Simple,
                     preferences);
                 var session = new VFXComposer.Client.UserModeDesktopSession();
                 // Local composition only: the runtime derives current-user storage but creates no provider adapter,
@@ -62,7 +67,8 @@ public sealed partial class App : Application
                     errorBoundary,
                     aiRuntime,
                     jobStore,
-                    localization);
+                    localization,
+                    generationModes);
                 window.DataContext = viewModel;
                 desktop.MainWindow = window;
                 desktop.Exit += async (_, _) =>

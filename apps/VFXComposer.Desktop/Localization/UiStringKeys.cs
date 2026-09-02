@@ -111,6 +111,41 @@ public static class UiStringKeys
     public const string CreateRetentionNoticeEvicted = "CreateRetentionNoticeEvicted";
     public const string CreateValidationEditRefusedSeePanel = "CreateValidationEditRefusedSeePanel";
 
+    // Refinement input area (F8b4, professional mode): the feedback box, the explicit refine action, the round
+    // status lines and the guard-restoration disclosure. Stable codes, counts, ordinals, parameter paths and value
+    // literals are formatted as arguments, untranslated.
+    public const string CreateRefineHeading = "CreateRefineHeading";
+    public const string CreateRefineNotice = "CreateRefineNotice";
+    public const string CreateRefineFeedbackWatermark = "CreateRefineFeedbackWatermark";
+    public const string CreateRefineAction = "CreateRefineAction";
+    public const string CreateRefineCancelAction = "CreateRefineCancelAction";
+    public const string CreateRefineStatusIdle = "CreateRefineStatusIdle";
+    public const string CreateRefineStatusNoHead = "CreateRefineStatusNoHead";
+    public const string CreateRefineStatusEmptyFeedback = "CreateRefineStatusEmptyFeedback";
+    public const string CreateRefineStatusRefining = "CreateRefineStatusRefining";
+    public const string CreateRefineStatusCompleted = "CreateRefineStatusCompleted";
+    public const string CreateRefineStatusValidationFailed = "CreateRefineStatusValidationFailed";
+    public const string CreateRefineStatusChannelFailedWithCode = "CreateRefineStatusChannelFailedWithCode";
+    public const string CreateRefineStatusNotConfiguredWithCode = "CreateRefineStatusNotConfiguredWithCode";
+    public const string CreateRefineStatusCancelled = "CreateRefineStatusCancelled";
+    public const string CreateRefineGuardHeading = "CreateRefineGuardHeading";
+    public const string CreateRefineGuardLine = "CreateRefineGuardLine";
+
+    // Session timeline (F8b4, professional mode): one entry per round, protocol literals as arguments.
+    public const string CreateTimelineHeading = "CreateTimelineHeading";
+    public const string CreateTimelineNotice = "CreateTimelineNotice";
+    public const string CreateTimelineEntryDraftSaved = "CreateTimelineEntryDraftSaved";
+    public const string CreateTimelineEntryGenerationFailed = "CreateTimelineEntryGenerationFailed";
+    public const string CreateTimelineEntryGenerationUnavailable = "CreateTimelineEntryGenerationUnavailable";
+    public const string CreateTimelineEntryPresetApplied = "CreateTimelineEntryPresetApplied";
+    public const string CreateTimelineEntryHumanEditSaved = "CreateTimelineEntryHumanEditSaved";
+    public const string CreateTimelineEntryRefined = "CreateTimelineEntryRefined";
+    public const string CreateTimelineEntryRefineValidationFailed = "CreateTimelineEntryRefineValidationFailed";
+    public const string CreateTimelineEntryRefineChannelFailed = "CreateTimelineEntryRefineChannelFailed";
+    public const string CreateTimelineEntryReverted = "CreateTimelineEntryReverted";
+    public const string CreateTimelineEntryConfirmed = "CreateTimelineEntryConfirmed";
+    public const string CreateTimelineRetentionLine = "CreateTimelineRetentionLine";
+
     // Version-chain view and revert (F8b3b): the list rows, the inline two-step confirmation and the status lines.
     // Origin/status words, ordinals, stable codes and the UTC time literal are formatted as arguments, untranslated.
     public const string CreateLineageHeading = "CreateLineageHeading";
@@ -273,6 +308,12 @@ public static class UiStringKeys
     public const string SettingsLanguageNotice = "SettingsLanguageNotice";
     public const string SettingsLanguageEnglishOption = "SettingsLanguageEnglishOption";
     public const string SettingsLanguageChineseSimplifiedOption = "SettingsLanguageChineseSimplifiedOption";
+
+    // Generation-mode section (F8b4): two closed options, applied and persisted immediately like the language.
+    public const string SettingsGenerationModeHeading = "SettingsGenerationModeHeading";
+    public const string SettingsGenerationModeNotice = "SettingsGenerationModeNotice";
+    public const string SettingsGenerationModeSimpleOption = "SettingsGenerationModeSimpleOption";
+    public const string SettingsGenerationModeProfessionalOption = "SettingsGenerationModeProfessionalOption";
 
     public const string SettingsSecurityNotice = "SettingsSecurityNotice";
     public const string SettingsSecretConfigured = "SettingsSecretConfigured";
