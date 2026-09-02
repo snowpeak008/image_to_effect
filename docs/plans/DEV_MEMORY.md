@@ -1,6 +1,11 @@
 # 开发记忆与恢复指南
 
-> **在途状态快照（2026-09-02 晚）**：
+> **在途状态快照（2026-09-02 深夜）**：
+> **F8b3b 已关闭合入**：合并 `d974118c`，合并态 Release 0/0、全量 **993/993**（Desktop.Tests 137）。**当前基线：993 条 Release 0 失败。** worktree `D:\wt\i2s-f8b3b` 已退役。专业模式 UI 现有：参数面板（F8b3）+ 版本链视图与回退（F8b3b）；简单模式全量在位。
+> **下一步：派发 F8b4 精修回路**（依赖 F8b1 ✓、F8b2 ✓、F8b3 ✓；卡见主计划 §7）。F8b4 范围：每轮 1+N 精修（三件套上下文 + 艺术家知识片段 `refine-artist-knowledge`——源文档 `docs/ai-workflow/refine-artist-knowledge.md` + 入库 fragment JSON，REQ-004 §10 章程）、覆盖守卫（§9.3，别名词表点名判定、guardRestorations 落盘与呈现）、模式切换 UI + ui-preferences `/2` 升版（§5.3，REQ-004-08~11）、任务时间线条目（REQ-004-20 与 -33 时间线半边）；顺带 F8b3b 余项 N7（AI 生成/示例卡路径校验框统一走 L1.5）。F8b4 是唯一动生成链路的卡，交付后做专业模式里程碑审计（F8b1+F8b2+F8b3+F8b3b+F8b4 合一次）。
+> **模型槽位勘误**：子 agent 模型槽位名已由 `claude-fable-5-1-thinking-high` 变为 **`claude-fable-5-high`**（本日晚间起）；派发时用新槽位，旧名会被拒绝。
+>
+> **历史快照（2026-09-02 晚）**：
 > **F8b3 已关闭合入**：合并 `f5e776ef`，合并态 Release 0/0、全量 **979/979**（AI.Tests 255、Desktop.Tests 123）。**当前基线：979 条 Release 0 失败。** 简单模式+参数面板闭环（AI 出一版→手调→确认）已有测试。REQ-004 §11.6 已登记 VFXE 码与 F8b3 裁决。worktree `D:\wt\i2s-f8b3` 已退役。
 > **下一步：派发 F8b3b 版本链视图与回退**（依赖 F8b3 ✓；卡见主计划 §7）。F8b3b 顺带：B#6 手改被拒时 `RecipeValidationSummary` 改中性键；`RecipeParameterEditResult.Issues` XML doc 补"L1 非 Error 发现"。之后 F8b4（精修回路 + 覆盖守卫 + 模式切换 + ui-preferences `/2` + 时间线）→ 专业模式里程碑审计（F8b1~F8b4 + F8b3b）→ F8c → 收尾。
 > 运维追加：全量并行跑时若 AI.Tests 耗时远超 40 s，AiLocalE2E 可能出现 1 条负载 flake（本日合并态首跑出现、复跑绿、未定位用例）；遇到即单跑该工程确认再复跑全量。
