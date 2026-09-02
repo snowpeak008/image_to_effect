@@ -65,6 +65,8 @@
           <Button Command="{Binding GenerateRecipeCommand}" Content="{Binding Localization[CreateGenerateDraftAction]}" />
           <Button Command="{Binding CancelGenerateRecipeCommand}" Content="{Binding Localization[CreateCancelGenerationAction]}" />
           <Button Command="{Binding ConfirmRecipeDraftCommand}" Content="{Binding Localization[CreateConfirmDraftAction]}" />
+          <Button Command="{Binding BuildRecipeDraftCommand}" Content="{Binding Localization[CreateBuildDraftAction]}" />
+          <Button Command="{Binding RefreshBuildStatusCommand}" Content="{Binding Localization[CreateRefreshDraftStatusAction]}" />
         </StackPanel>
         <TextBlock Classes="muted" Text="{Binding RecipeStatus}" TextWrapping="Wrap" />
         <TextBlock Classes="muted" IsVisible="{Binding HasRetentionNotice}" Text="{Binding RecipeRetentionNotice}" TextWrapping="Wrap" />

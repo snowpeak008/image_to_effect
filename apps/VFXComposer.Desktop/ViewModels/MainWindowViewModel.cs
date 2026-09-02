@@ -36,7 +36,8 @@ public sealed class MainWindowViewModel : ObservableObject, IAsyncDisposable
         IAiDesktopRuntime? aiRuntime = null,
         IJobQueueClient? jobQueue = null,
         LocalizationService? localization = null,
-        GenerationModeService? generationModes = null)
+        GenerationModeService? generationModes = null,
+        IBuildHostLauncher? buildHostLauncher = null)
     {
         _client = client ?? throw new ArgumentNullException(nameof(client));
         _diagnostics = diagnostics ?? throw new ArgumentNullException(nameof(diagnostics));
@@ -46,7 +47,7 @@ public sealed class MainWindowViewModel : ObservableObject, IAsyncDisposable
         // the composition root passes the services that carry the persisted choices.
         Localization = localization ?? new LocalizationService();
         var modes = generationModes ?? new GenerationModeService();
-        _createPage = new CreateViewModel(Localization, _aiRuntime, modes);
+        _createPage = new CreateViewModel(Localization, _aiRuntime, modes, buildHostLauncher);
         _previewPage = new PreviewViewModel(Localization, _aiRuntime);
         _settingsPage = new SettingsViewModel(Localization, _aiRuntime, modes);
 
@@ -163,7 +164,8 @@ public sealed class MainWindowViewModel : ObservableObject, IAsyncDisposable
         IAiDesktopRuntime? aiRuntime = null,
         IJobQueueClient? jobQueue = null,
         LocalizationService? localization = null,
-        GenerationModeService? generationModes = null)
+        GenerationModeService? generationModes = null,
+        IBuildHostLauncher? buildHostLauncher = null)
     {
         ArgumentNullException.ThrowIfNull(session);
         ArgumentNullException.ThrowIfNull(selectionDialog);
@@ -171,7 +173,14 @@ public sealed class MainWindowViewModel : ObservableObject, IAsyncDisposable
         diagnostics ??= new InMemoryDiagnosticSink();
         errorBoundary ??= new UiErrorBoundary(diagnostics);
         var result = new MainWindowViewModel(
-            VfxComposerClient.CreateDisconnected(), diagnostics, errorBoundary, aiRuntime, jobQueue, localization, generationModes)
+            VfxComposerClient.CreateDisconnected(),
+            diagnostics,
+            errorBoundary,
+            aiRuntime,
+            jobQueue,
+            localization,
+            generationModes,
+            buildHostLauncher)
         {
             _session = session,
             _selectionDialog = selectionDialog,

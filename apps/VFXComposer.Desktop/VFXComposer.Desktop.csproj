@@ -16,5 +16,23 @@
     <ProjectReference Include="..\..\src\VFXComposer.AI.Contracts\VFXComposer.AI.Contracts.csproj" />
     <ProjectReference Include="..\..\src\VFXComposer.AI.Providers\VFXComposer.AI.Providers.csproj" />
     <ProjectReference Include="..\..\src\VFXComposer.Jobs\VFXComposer.Jobs.csproj" />
+    <!-- Build-order-only reference (JobExecutorLockHost precedent): the Desktop IL must never
+         reference the host or its Batch.Core dependency graph; the host is deployed beside the
+         shell by the copy target below, which is how BuildHostLauncher finds it (ADR-008 §2.3). -->
+    <ProjectReference Include="..\VFXComposer.BuildHost\VFXComposer.BuildHost.csproj"
+                      ReferenceOutputAssembly="false"
+                      Private="false" />
   </ItemGroup>
+
+  <!-- Deploys the private build host into the shell's own output directory. The launcher looks for
+       the fixed-name executable exactly there, so shell and host always ship as one product set
+       (REQ-004 §8 same-version deployment). -->
+  <Target Name="DeployBuildHostBesideShell" AfterTargets="Build">
+    <ItemGroup>
+      <BuildHostOutput Include="..\VFXComposer.BuildHost\bin\$(Configuration)\$(TargetFramework)\**\*.*" />
+    </ItemGroup>
+    <Copy SourceFiles="@(BuildHostOutput)"
+          DestinationFiles="@(BuildHostOutput->'$(OutDir)%(RecursiveDir)%(Filename)%(Extension)')"
+          SkipUnchangedFiles="true" />
+  </Target>
 </Project>

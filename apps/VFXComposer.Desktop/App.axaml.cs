@@ -68,7 +68,10 @@ public sealed partial class App : Application
                     aiRuntime,
                     jobStore,
                     localization,
-                    generationModes);
+                    generationModes,
+                    // ADR-008: the only new Desktop capability is starting its own deployed build
+                    // host; state observation stays on the two shared stores above.
+                    new BuildHostLauncher(diagnostics));
                 window.DataContext = viewModel;
                 desktop.MainWindow = window;
                 desktop.Exit += async (_, _) =>
