@@ -410,9 +410,17 @@ public sealed class RecipeDraftStore : IRecipeDraftLineageStore
 
     private void Persist(RecipeDraftStoreDocument document)
     {
+        // Never write a file the reader would refuse: the caps bound recipe JSON, not every field, so the
+        // serialized size is checked against the read ceiling before the atomic replace touches disk.
+        var bytes = RecipeDraftCodec.Serialize(document);
+        if (bytes.Length > MaximumFileBytes)
+        {
+            throw new RecipeDraftStoreException(RecipeDraftStoreErrorCode.StorageFailed);
+        }
+
         try
         {
-            AtomicFileWriter.WriteReplace(_storePath, _backupPath, RecipeDraftCodec.Serialize(document));
+            AtomicFileWriter.WriteReplace(_storePath, _backupPath, bytes);
         }
         catch (IOException)
         {
