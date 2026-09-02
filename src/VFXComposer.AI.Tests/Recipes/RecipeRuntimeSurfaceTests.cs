@@ -36,7 +36,7 @@ public sealed class RecipeRuntimeSurfaceTests
             "projectile",
             "2d",
             "mobile_medium",
-            RecipePromptTemplate.Version,
+            RecipePromptAssembler.Version,
             RecipeTemplateCatalogSnapshot.Default.TemplateCatalogVersion);
         var record = runtime.RecipeDrafts.Save(RecipeDraftRecord.Create(
             RecipeGenerationResult.Drafted(draft, [new RecipeGenerationAttempt(1, [])]),
