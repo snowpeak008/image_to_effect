@@ -1,6 +1,11 @@
 # 开发记忆与恢复指南
 
-> **在途状态快照（2026-09-02 下午，崩溃恢复会话续）**：
+> **在途状态快照（2026-09-02 傍晚）**：
+> **F8b2 已关闭合入**：合并 `36c2b4f1`，合并态 Release 0/0、全量 **921/921**（AI.Tests 210、Desktop.Tests 110）。**当前基线：921 条 Release 0 失败。** REQ-004 已同步 F8b2 裁决（§7.3 Superseded 澄清、§7.4 第 5/6 条、§7.5 级 2 收紧、RG-6/O-5 关闭）。worktree `D:\wt\i2s-f8b2` 已退役。
+> **下一步：派发 F8b3 参数面板**（依赖 F8a1 ✓、F8b2 ✓）。F8b3 须顺带：Desktop `CreateViewModel` 从 `IRecipeDraftStore.Save` 切到 `IRecipeDraftLineageStore.SaveVersion/AppendVersion` 并呈现类型化 trim/淘汰/supersede 结果（REQ-004 §7.5 第 6 条）；`PresentValidationFailure` 不再吞 `RecipeDraftStoreException`；简单模式审计建议②（存储失败测试改断言状态键+参数）。之后 F8b4 → 专业模式里程碑审计 → F8c → 收尾。
+> **本会话运维经验（重要）**：①子 agent 会话可能在长命令/长会话中无声终止（转录停在 tool_use），**`resume` 在 Fable 端点不可用**（`Sand traffic is not supported`）——一律重派全新子 agent 并附完整任务书；因此任务书必须自足，开发子 agent 必须逐单元提交。②平台用量策略偶发误拦截只读审计（读普通 C# 文件时），应对：把审计拆成机械/语义两组小会话并行，单条 shell 命令 ≤3 分钟、长输出落 `%TEMP%` 日志。③主 agent 把 master 合入任务分支后**必须复跑构建**——git 无冲突不等于语义无冲突（F8b2 测试助手引用了 F8b1 已删常量）。④跑 `--no-build` 测试前确认 dll 时间戳晚于 HEAD，否则会被陈旧产物误导。
+>
+> **历史快照（2026-09-02 下午，崩溃恢复会话续）**：
 > **治理定版（用户，2026-09-02）**：主 agent 只派发/调度/验收合并/维护状态板，**不亲自开发**；开发、测试、审计全部由子 agent 承担，子 agent 模型一律 **Fable 5 High**（`claude-fable-5-1-thinking-high`）。
 > **F8b1 已关闭合入**：独立审计 PASS-with-remarks 零阻塞 → 微调子 agent 落实 3 条建议（`fdd550cc`）→ 合并 `d7f17d22`，合并态 Release 0/0、全量 **876/876**（AI.Tests 165）。REQ-004 三处旧名已勘误。worktree `D:\wt\i2s-f8b1` 待退役（本次会话末退役）。**当前基线：876 条 Release 0 失败。**
 > **F8b2 开发中**：开发子 agent 在 `D:\wt\i2s-f8b2`（基于 `8428199d`，即 F8b1 合入之前的 master）。合并时注意：F8b1 已把 `src/VFXComposer.AI.Tests/Recipes/RecipeDraftStoreTests.cs` 等 5 个测试文件里的 `RecipePromptTemplate.Version` 机械改为 `RecipePromptAssembler.Version`；F8b2 被要求不改这些引用，但若其大幅改写 `RecipeDraftStoreTests.cs` 仍可能冲突，冲突解法一律"保留 F8b2 内容 + 把 `RecipePromptTemplate` 替换为 `RecipePromptAssembler`"。F8b2 派发时的九条定版见主计划 §7 F8b2 卡。交付后：主 agent 初审 → 合并 → 派 F8b3。

@@ -196,7 +196,7 @@ v1 的精修是**单段**：一轮 = 至多一个 route 请求 + 预算内的修
 
 1. 用户在版本链视图选中版本 `v_k` 并显式确认"回到此版本"→ head 移到 `v_k`，`v_{k+1}..v_n` **立即删除**。
 2. 截断必须有一次性显式确认，提示将丢弃的版本数；截断不可撤销。
-3. **拒绝条件（fail-closed）**：若 `v_{k+1}..v_n` 中存在状态为 `ConfirmedAwaitingBuild`、`Built` 或 `BuildFailed` 的版本，则截断被拒绝并给出稳定码——已确认/已构建的版本是审计记录，不得被删除。用户的出路是另起新链。
+3. **拒绝条件（fail-closed）**：若 `v_{k+1}..v_n` 中存在状态为 `ConfirmedAwaitingBuild`、`Built` 或 `BuildFailed` 的版本，则截断被拒绝并给出稳定码（F8b2：`TruncationBlocked`）——已确认/已构建的版本是审计记录，不得被删除。用户的出路是另起新链。**澄清（主 agent 裁决，2026-09-02）**：`Superseded` **不在**阻断清单内——失效的确认从未产生构建，用户显式回退时可随其后版本一并删除；它仍受级 1 trim 保护（§7.5 第 4 条），两者不矛盾：trim 是系统自动行为，截断是用户显式动作。
 
 **确认与哈希绑定**（继承 REQ-001-14/15，代码事实：`RecipeDraftStore.Confirm/MarkBuilt/MarkBuildFailed` 经 `Advance` 做 `CanonicalSha256` **精确判等**，不符即 `HashMismatch`）：
 
@@ -216,6 +216,8 @@ v1 的精修是**单段**：一轮 = 至多一个 route 请求 + 预算内的修
 2. **必须区分"版本不支持"与"文件损坏"**：新增稳定码 `RecipeDraftStoreErrorCode.UnsupportedVersion`。理由：当前实现下版本 1 文件与乱码文件都收敛到 `StorageFailed`，用户无法知道该做的动作是"删除旧文件重建"而不是"报 bug"。这是本文在裁决框架内的细化决策。
 3. 旧文件处置行为（明示）：程序**不删除、不改名、不迁移**旧文件。首次遇到版本 1 文件时以 `UnsupportedVersion` fail-closed，并向用户给出精确处置指引——删除当前用户应用数据目录下的 `VFXComposer/AI/recipe-drafts.json` 及其 `.bak` 后重建。指引文案只描述相对位置，不拼接绝对路径（继承 §6.3 与 REQ-003 §9 第 9 条的 redaction 纪律）。
 4. fail-closed 的代价必须显式承认：在用户完成上述一次性删除动作之前，草稿保存/读取/确认全部不可用。这是刻意选择（宁可停摆不可静默丢历史），备选与否决见 §16 第 1 条。
+5. **backup 不作版本兜底（F8b2 实现事实，主 agent 确认 2026-09-02）**：primary 命中 `UnsupportedVersion` 时**不查阅** `.bak`（即便其恰为版本 2）；primary 损坏而 `.bak` 为版本 1 时同样报 `UnsupportedVersion`。`.bak` 只兜底"同版本文件损坏"，不兜底"版本不支持"，避免静默恢复出与用户预期不同的记录集。
+6. **写入侧上界自检（F8b2）**：持久化前按读取上界自检，超界即以 `StorageFailed` 拒绝写出（原子替换之前），避免写出下次读不回的文件形成自锁；文件保持上一份可读态。
 
 ### 7.5 两级容量 cap 与 trim 可见语义（关闭 REQ-001 O-2）
 
@@ -224,7 +226,7 @@ v1 的精修是**单段**：一轮 = 至多一个 route 请求 + 预算内的修
 定版规则（**本节即 REQ-001 开放问题 O-2 的关闭答案**）：
 
 1. **级 1（每 lineage）**：一条链最多保留 **16 个版本**，且该链全部版本的 `recipeJson` 累计 ≤ **1 MiB**；两者取先到者触发链内 trim。
-2. **级 2（全局）**：最多保留 **8 条 lineage**；超出时按"最近活动时间"最久未活动者优先淘汰。
+2. **级 2（全局）**：最多保留 **8 条 lineage**；超出时按"最近活动时间"最久未活动者优先淘汰。**F8b2 收紧（主 agent 裁决，2026-09-02）**：含任一 `ConfirmedAwaitingBuild` 版本的链**免于级 2 淘汰**（它是跨入口待构建 backlog 的条目，Desktop 确认后 CLI/MCP 可能稍后才构建），淘汰候选只在不含待构建版本的链中取最久未活动者；若全部 8 条既有链都含待构建版本，新链创建以 `LineageCapacityExhausted` fail-closed 拒绝且文件不变。仅含 `Built`/`BuildFailed`/`Superseded`/`PendingConfirmation`/`Failed` 的链仍可淘汰（构建事实已在 Unity 项目的 recipe 溯源文件与 manifest 留档），淘汰必须出现在类型化结果中。
 3. **淘汰粒度**：级 2 的淘汰单位是**整条链**，不是单条记录。理由：跨链混合淘汰会产生 `parentDraftId` 指向已被 trim 记录的孤儿版本，破坏 §7.1 第 4 条不变量。
 4. **受保护记录**：head、以及状态为 `ConfirmedAwaitingBuild` / `Built` / `BuildFailed` / `Superseded` 的记录**不被级 1 trim**。级 1 trim 从"最老且非受保护"的版本开始。
 5. **受保护记录占满 cap 时拒绝新版本**（fail-closed）：若一条链的受保护记录已达 16 个版本或 1 MiB，则新版本创建被拒绝并返回稳定码，提示用户另起新链或清理该链。绝不为了腾位置而丢弃审计记录。
@@ -594,7 +596,7 @@ Given 一轮包含 1 次修复重试与 2 项守卫还原的精修；When 查看
 - **RG-3 fail-closed 的一次性手工动作**：草稿 store 升版后，开发机与早期用户必须手动删除旧文件（F3c 已有同类先例：删除 `%LocalAppData%\VFXComposer\Jobs` 重建）。这是刻意代价，但必须在发布说明与 UI 提示里明确，否则会被当成崩溃。
 - **RG-4 守卫的保守匹配会误还原**：点名判定取窄匹配，用户用了词表外的说法（"让尾巴收一点"而词表只有 "trail/streak/tail" 的英文别名）时，AI 的正确改动会被还原。缓解：还原可见 + 一键在面板采纳 AI 值（§9.3 第 6 条）；中文反馈的别名覆盖是 F8b4 的具体工作量（词表须含中文说法，尽管片段其余部分为英文——见 O-3）。
 - **RG-5 两层预算不一致（既有债务）**：`BudgetCalculator`（mobile_medium，MaxMaterials=8）与 strict 审计（≤2 渲染模块）两层不一致且后者在构建后才跑（主计划债务项）。参数面板与 L1.5 都以 strict 为准呈现，用户看到的"合法"与 `BudgetCalculator` 的宽松结论可能不一致。本文不解决该债务，仅记录。
-- **RG-6 单文件全量读写的并发面**：三入口共享一个 store 文件，现有实现是进程内 `lock` + 原子替换，**没有跨进程锁**。Desktop 精修与 CLI 构建同时写同一文件时，后写者会覆盖前者的记录集（last-write-wins）。版本链把单文件的记录数从 32 提到 128，写冲突窗口相应变宽。是否需要为草稿 store 引入 durable lock（仿 `ProviderConfigurationRevisionLock`）是 F8b2 的设计题，见 O-5。
+- **RG-6 单文件全量读写的并发面**：三入口共享一个 store 文件，现有实现是进程内 `lock` + 原子替换，**没有跨进程锁**。Desktop 精修与 CLI 构建同时写同一文件时，后写者会覆盖前者的记录集（last-write-wins）。版本链把单文件的记录数从 32 提到 128，写冲突窗口相应变宽。是否需要为草稿 store 引入 durable lock（仿 `ProviderConfigurationRevisionLock`）是 F8b2 的设计题，见 O-5。**已关闭（F8b2，2026-09-02）——冲突行为定义**：Desktop、`vfxc`、`vfxc-mcp` 共享同一草稿 store 文件；`RecipeDraftStore` 的每个公开成员（含只读成员）都把完整的 load→mutate→persist 周期包在一把 durable 跨进程锁内（独立锁类 `RecipeDraftStoreLock`）：锁锚文件 `recipe-drafts.json.lock` 与 store 同目录、永不删除，以独占打开句柄作为租约；同进程内的调用先经同一路径的 Monitor 串行。并发写者因此串行化——后到者在租约内读到先到者刚写入的记录并在其上追加，last-write-wins 丢记录不可能发生。等待有界（默认 5 s），超时即 fail-closed 抛 `RecipeDraftStoreErrorCode.StoreBusy`，此时不读、不写、不轮换 `.bak`、不产生临时文件，由调用方决定是否重试。持锁者被杀时 OS 释放句柄，文件本体因原子替换仍完整。文件不存在时的只读查询不取锁直接返回空。
 
 ### 17.2 开放问题
 
@@ -602,7 +604,7 @@ Given 一轮包含 1 次修复重试与 2 项守卫还原的精修；When 查看
 - **O-2** L1.5 预警是否阻断"确认"动作（不是阻断生成）：v1 按 F8a1 定版为纯预警，但"带已知 strict 违规的草稿可以被确认并提交构建"值得再看一眼。建议 v1 保持不阻断 + 确认面板显著警示，F8b3 交付后按实测失败率复议。
 - **O-3（已裁决，2026-08-31）** 别名词表的语言：**批准词表条目携带中文别名字段**。裁决澄清"prompt 纯英文"（F7 裁决 2）的适用范围 = 送往 AI 的模板/片段文本；别名词表是覆盖守卫的**本地确定性匹配数据**，永不进入 prompt，允许双语。（用户反馈原文本就允许任意语言进入 prompt 的 user 内容位，与模板语言裁决无关。）
 - **O-4（已裁决，2026-08-31）** `origin` 闭集扩为四值（新增 `preset`）——主 agent 追认批准，见 §7.2 与 §16 第 6 条。
-- **O-5** 草稿 store 是否引入跨进程 durable lock（RG-6）。v1 可接受的最小方案是"写前重读 + 记录集按 `draftId` 合并"（现行 `Save` 已按 `draftId` 去重后 append，冲突表现为对方新增记录被丢弃）；完整方案是 durable lock。建议 F8b2 至少给出一个可测试的冲突行为定义。
+- **O-5（已裁决，2026-09-02）** 草稿 store 跨进程冲突（RG-6）：**采用完整方案 durable lock**（主 agent 派发 F8b2 时定版，F8b2 交付 `RecipeDraftStoreLock` + `StoreBusy` 稳定码 + 他进程持锁/并发写者串行测试）。原最小方案"写前重读 + 按 `draftId` 合并"否决：与两级 cap/trim 重挂父链接叠加后合并语义不可判定。冲突行为定义见 RG-6。
 - **O-6** 版本链信息是否需要在 CLI 可见（`vfxc` 列出 lineage/版本）。本文按非目标 3 排除；若批量用户需要按 lineage 复查，另立需求。
 
 ---
