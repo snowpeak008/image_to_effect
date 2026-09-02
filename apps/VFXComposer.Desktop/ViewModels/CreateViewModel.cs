@@ -61,6 +61,7 @@ public sealed class CreateViewModel : WorkspacePageViewModel
     private string _refineFeedback = string.Empty;
     private string _refineStatusKey = UiStringKeys.CreateRefineStatusIdle;
     private object?[] _refineStatusArguments = [];
+    private bool _refineRoundInFlight;
     private IReadOnlyList<RecipeRefinementGuardRestoration> _guardRestorations = [];
 
     /// <summary>
@@ -562,6 +563,14 @@ public sealed class CreateViewModel : WorkspacePageViewModel
 
     private async Task RefineRecipeAsync(CancellationToken cancellationToken)
     {
+        // Re-entrancy guard: the command already reports CanExecute false while a round runs (the toolkit's
+        // default), but a programmatic Execute bypasses that check, so the delegate refuses a second in-flight
+        // round itself — one explicit click is one request, never two (REQ-004-12).
+        if (_refineRoundInFlight)
+        {
+            return;
+        }
+
         // Preflight, before any assembly or network work (REQ-004-14): no head, or an empty feedback, refuses the
         // round with an input-state line and zero requests. The unbound-route case fails closed inside the channel
         // before the network (REQ-004-15) and lands in the typed catches below.
@@ -577,6 +586,7 @@ public sealed class CreateViewModel : WorkspacePageViewModel
             return;
         }
 
+        _refineRoundInFlight = true;
         SetGuardRestorations([]);
         SetRefineStatus(UiStringKeys.CreateRefineStatusRefining);
         try
@@ -628,6 +638,10 @@ public sealed class CreateViewModel : WorkspacePageViewModel
         catch
         {
             SetRefineStatus(UiStringKeys.CreateRefineStatusChannelFailedWithCode, UnexpectedFailureCode);
+        }
+        finally
+        {
+            _refineRoundInFlight = false;
         }
     }
 

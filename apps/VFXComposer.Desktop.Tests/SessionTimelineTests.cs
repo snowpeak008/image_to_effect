@@ -122,6 +122,30 @@ public sealed class SessionTimelineTests
     }
 
     [TestMethod]
+    public async Task ACancelledRoundWithoutAStableCodeRendersAPlaceholderNotAnEmptySlot()
+    {
+        // Defensive rendering: a Cancelled refinement outcome whose ChannelError is null (unreachable through the
+        // public factories, pinned here through the private constructor) must not leave an empty code slot in the
+        // timeline entry; the argument-level "-" placeholder fills it without a new catalog key.
+        var runtime = CreateRuntime(static request => CancelledWithoutCode(request.CorrelationId));
+        var viewModel = NewCreatePage(runtime);
+        viewModel.ApplyPresetCommand.Execute(FireBoltCard(viewModel));
+
+        viewModel.RefineFeedback = "make it bigger";
+        await viewModel.RefineRecipeCommand.ExecuteAsync(null);
+
+        Assert.AreEqual(2, viewModel.Timeline.Entries.Count, "Preset entry plus the cancelled-round entry.");
+        var entryText = viewModel.Timeline.Entries[1].Text;
+        Assert.AreEqual(
+            LocalizationTestSupport.EnglishFormat(UiStringKeys.CreateTimelineEntryRefineChannelFailed, "-", 1),
+            entryText);
+        Assert.IsFalse(entryText.Contains("  ", StringComparison.Ordinal), "No empty slot collapses into a double space.");
+        Assert.AreEqual(
+            LocalizationTestSupport.English(UiStringKeys.CreateRefineStatusCancelled),
+            viewModel.RefineStatus);
+    }
+
+    [TestMethod]
     public void ATrimFoldsIntoTheEntryOfTheSaveThatCausedIt()
     {
         // REQ-004-33 timeline half: the save outcome's trim counts land inside the causing entry, not silently.
@@ -283,6 +307,32 @@ public sealed class SessionTimelineTests
         }
 
         return RecipeCanonicalJson.Canonicalize(root.ToJsonString());
+    }
+
+    /// <summary>
+    /// A Cancelled outcome carrying no stable code. The public factories always pair Cancelled with its code, so
+    /// this defensive shape is built through the private constructor to pin the renderer's placeholder behavior.
+    /// </summary>
+    private static RecipeRefinementResult CancelledWithoutCode(string correlationId)
+    {
+        var constructor = typeof(RecipeRefinementResult).GetConstructors(
+            System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic).Single();
+        return (RecipeRefinementResult)constructor.Invoke(
+        [
+            RecipeGenerationOutcome.Cancelled,
+            correlationId,
+            null,
+            null,
+            null,
+            null,
+            Array.Empty<RecipeRefinementGuardRestoration>(),
+            null,
+            Array.Empty<RecipeValidationIssue>(),
+            new[] { new RecipeGenerationAttempt(1, []) },
+            null,
+            "prompt/refine-tests",
+            "1.0.0",
+        ]);
     }
 
     private static RecipeRefinementResult RefinedResult(RecipeRefinementRequest request, string refinedJson)

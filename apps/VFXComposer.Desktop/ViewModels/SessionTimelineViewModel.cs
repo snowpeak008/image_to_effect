@@ -83,7 +83,9 @@ public sealed class SessionTimelineViewModel : ObservableObject
 
     internal void AppendRefineChannelFailed(RecipeRefinementResult result) => Append(
         UiStringKeys.CreateTimelineEntryRefineChannelFailed,
-        [result.ChannelError, result.RequestCount]);
+        // A result without a stable code (defensive: e.g. a cancellation surfaced without one) renders "-"
+        // instead of an empty slot; the placeholder is an argument, not a new catalog key.
+        [(object?)result.ChannelError ?? "-", result.RequestCount]);
 
     internal void AppendReverted(RecipeDraftTruncateOutcome outcome) => Append(
         UiStringKeys.CreateTimelineEntryReverted,

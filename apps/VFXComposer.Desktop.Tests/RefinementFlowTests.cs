@@ -147,9 +147,48 @@ public sealed class RefinementFlowTests
     }
 
     [TestMethod]
+    public async Task ASecondExecuteWhileARoundIsInFlightSendsNoSecondRequest()
+    {
+        // Double-send guard: RefineRecipeCommand is an AsyncRelayCommand without concurrent executions, so while
+        // the first round is awaiting the channel the command reports CanExecute false and a second Execute is a
+        // no-op — the channel sees exactly one request per explicit click (REQ-004-12).
+        var gate = new TaskCompletionSource<RecipeRefinementResult>(TaskCreationOptions.RunContinuationsAsynchronously);
+        var runtime = CreateRuntime(static _ => throw new AssertFailedException("The async override handles this test."));
+        runtime.NextRefinementAsync = async _ => await gate.Task;
+        var viewModel = NewCreatePage(runtime);
+        viewModel.ApplyPresetCommand.Execute(FireBoltCard(viewModel));
+
+        viewModel.RefineFeedback = Feedback;
+        var firstRound = viewModel.RefineRecipeCommand.ExecuteAsync(null);
+
+        Assert.AreEqual(1, runtime.RefineCalls, "The first click reached the channel and is now suspended.");
+        Assert.IsFalse(viewModel.RefineRecipeCommand.CanExecute(null), "The command disables itself while executing.");
+        viewModel.RefineRecipeCommand.Execute(null);
+        Assert.AreEqual(1, runtime.RefineCalls, "The second Execute during the round sends no second request.");
+
+        var request = runtime.Requests.Single();
+        gate.SetResult(RefinedResult(request, WithScale(request.Head.RecipeJson, "1.8")));
+        await firstRound;
+
+        Assert.AreEqual(1, runtime.RefineCalls, "Completing the round did not replay the swallowed click.");
+        Assert.IsTrue(viewModel.RefineRecipeCommand.CanExecute(null), "The command re-enables after the round.");
+        var refined = runtime.Store.TryGet(viewModel.DraftId!)!;
+        Assert.AreEqual(RecipeDraftOrigin.AiRefine, refined.Origin, "The one round landed its one version normally.");
+        Assert.AreEqual(string.Empty, viewModel.RefineFeedback);
+        runtime.AssertNoGatewayTraffic();
+    }
+
+    [TestMethod]
     public async Task TheThreePreflightNegativesRefuseWithoutAnyNetwork()
     {
         // REQ-004-14: no head, empty feedback, unbound route — all refuse before any request.
+        //
+        // Mapping note (REQ-004-14 ↔ this test): the requirement's literal third negative, "empty original
+        // description", is structurally impossible in this implementation — OriginalDescriptionFor never returns
+        // an empty string, because it falls back through three sources (the AI chain's cached generate-click
+        // description, the preset chain's skeleton English description, and a synthesized neutral description
+        // from the head's protocol fields). The unbound route therefore serves as the third pre-network
+        // fail-closed negative, per the master plan's F8b4 ruling ⑧.
         var runtime = CreateRuntime(static _ => throw new AssertFailedException("No round may start."));
         var viewModel = NewCreatePage(runtime);
 
@@ -393,6 +432,9 @@ public sealed class RefinementFlowTests
 
         public RecipeDraftStore Store { get; }
         public Func<RecipeGenerationRequest, RecipeGenerationResult>? NextGeneration { get; set; }
+
+        /// <summary>When set, refinement awaits this instead of the synchronous factory (for in-flight tests).</summary>
+        public Func<RecipeRefinementRequest, Task<RecipeRefinementResult>>? NextRefinementAsync { get; set; }
         public List<RecipeRefinementRequest> Requests { get; } = [];
         public int RefineCalls { get; private set; }
         public int GenerateCalls { get; private set; }
@@ -417,7 +459,9 @@ public sealed class RefinementFlowTests
         {
             RefineCalls++;
             Requests.Add(request);
-            return ValueTask.FromResult(_nextRefinement(request));
+            return NextRefinementAsync is { } asynchronous
+                ? new ValueTask<RecipeRefinementResult>(asynchronous(request))
+                : ValueTask.FromResult(_nextRefinement(request));
         }
 
         public ValueTask<RecipeGenerationResult> GenerateAsync(
