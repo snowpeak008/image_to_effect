@@ -57,9 +57,10 @@ public sealed class ProviderDesktopRuntime : IAiDesktopRuntime
             secretStore,
             healthRegistry,
             _gateway.InvalidateConfiguration);
-        // The service only captures the accessor; the network-capable chat gateway itself is still constructed
-        // lazily inside the first explicit generate request.
+        // The services only capture the accessor; the network-capable chat gateway itself is still constructed
+        // lazily inside the first explicit generate or refine request.
         RecipeGeneration = new RecipeGenerationService(_gateway.AcquireChatChannel);
+        RecipeRefinement = new RecipeRefinementService(_gateway.AcquireChatChannel);
         RecipeDrafts = new RecipeDraftStore(recipeDraftStorePath ?? DefaultRecipeDraftStorePath());
     }
 
@@ -68,6 +69,8 @@ public sealed class ProviderDesktopRuntime : IAiDesktopRuntime
     public IAiDesktopSettings Settings { get; }
 
     public IRecipeGenerationChannel RecipeGeneration { get; }
+
+    public IRecipeRefinementChannel RecipeRefinement { get; }
 
     public IRecipeDraftLineageStore RecipeDrafts { get; }
 
