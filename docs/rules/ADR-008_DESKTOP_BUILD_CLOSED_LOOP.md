@@ -1,7 +1,7 @@
 # ADR-008：Desktop 构建闭环（独立构建宿主子进程，Desktop 保持零项目 I/O）
 
-状态：`PROPOSED`（任务卡 R6 交付物；作为 F8c「Desktop 构建闭环实现」的规范输入）
-日期：2026-09-01
+状态：`ACCEPTED`（主 agent 验收转正，2026-09-03，F8c 派发前置；原 `PROPOSED` 为任务卡 R6 交付物）
+日期：2026-09-01（定版）/ 2026-09-03（转 ACCEPTED）
 规范架构令牌：`DESKTOP_BUILD_CLOSED_LOOP_V1`
 
 本 ADR 兼容并继承 ADR-005（`USER_MODE_LOCAL_CREATIVE_TOOL_V1`）、ADR-006（`AI_PROVIDER_TWO_CHANNEL_ROUTING_V1`）与 ADR-007（`CONTROLLED_PROJECT_MUTATION_V1`），不重开任何已关闭结论。它裁决的是唯一一个新问题：**用户在 Desktop 确认草稿之后，如何不离开 Desktop 完成受限构建**，同时不破坏「Desktop 零直接项目 I/O」的机器可验证边界。
