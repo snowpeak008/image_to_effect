@@ -53,7 +53,15 @@ public sealed class LocalizationService : ObservableObject
         OnPropertyChanged(IndexerPropertyName);
         OnPropertyChanged(IndexerCollectionPropertyName);
         LanguageChanged?.Invoke(this, EventArgs.Empty);
-        _preferences?.Save(new UiPreferences(language));
+        if (_preferences is not null)
+        {
+            // The document carries more than the language (REQ-004 §5.3), so the save merges into the stored
+            // preferences instead of rebuilding them from this one field: switching the language must never reset
+            // the stored generation mode. An absent or unusable document falls back to the defaults, which is
+            // exactly what the next start would read from it anyway.
+            var stored = _preferences.Load() ?? new UiPreferences(language);
+            _preferences.Save(stored with { Language = language });
+        }
     }
 
     private static void ThrowIfUnsupported(UiLanguage language)
