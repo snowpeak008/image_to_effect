@@ -72,7 +72,7 @@
         <TextBox AcceptsReturn="True" Height="180" IsReadOnly="True" FontFamily="Consolas,Menlo,monospace" Text="{Binding RecipeDraftJson}" TextWrapping="Wrap" Watermark="{Binding Localization[CreateDraftJsonWatermark]}" />
       </StackPanel>
     </Border>
-    <Border Classes="card" IsVisible="{Binding ParameterPanel.HasHead}">
+    <Border Classes="card" IsVisible="{Binding IsParameterPanelVisible}">
       <StackPanel Spacing="10">
         <TextBlock FontWeight="SemiBold" Text="{Binding Localization[CreateParameterPanelHeading]}" />
         <TextBlock Classes="muted" Text="{Binding Localization[CreateParameterPanelNotice]}" TextWrapping="Wrap" />
@@ -109,7 +109,7 @@
         <TextBox AcceptsReturn="True" Height="72" IsReadOnly="True" Text="{Binding ParameterPanel.IssueReport}" TextWrapping="Wrap" Watermark="{Binding Localization[CreateParameterReportWatermark]}" />
       </StackPanel>
     </Border>
-    <Border Classes="card" IsVisible="{Binding Lineage.IsCardVisible}">
+    <Border Classes="card" IsVisible="{Binding IsLineageVisible}">
       <StackPanel Spacing="10">
         <TextBlock FontWeight="SemiBold" Text="{Binding Localization[CreateLineageHeading]}" />
         <TextBlock Classes="muted" Text="{Binding Localization[CreateLineageNotice]}" TextWrapping="Wrap" />

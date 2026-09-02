@@ -35,18 +35,20 @@ public sealed class MainWindowViewModel : ObservableObject, IAsyncDisposable
         IUiErrorBoundary errorBoundary,
         IAiDesktopRuntime? aiRuntime = null,
         IJobQueueClient? jobQueue = null,
-        LocalizationService? localization = null)
+        LocalizationService? localization = null,
+        GenerationModeService? generationModes = null)
     {
         _client = client ?? throw new ArgumentNullException(nameof(client));
         _diagnostics = diagnostics ?? throw new ArgumentNullException(nameof(diagnostics));
         _errorBoundary = errorBoundary ?? throw new ArgumentNullException(nameof(errorBoundary));
         _aiRuntime = aiRuntime ?? AiDesktopRuntime.Unavailable;
-        // A shell built without a stored preference (tests, design time) starts in the default language; the
-        // composition root passes the service that carries the persisted choice.
+        // A shell built without a stored preference (tests, design time) starts in the default language and mode;
+        // the composition root passes the services that carry the persisted choices.
         Localization = localization ?? new LocalizationService();
-        _createPage = new CreateViewModel(Localization, _aiRuntime);
+        var modes = generationModes ?? new GenerationModeService();
+        _createPage = new CreateViewModel(Localization, _aiRuntime, modes);
         _previewPage = new PreviewViewModel(Localization, _aiRuntime);
-        _settingsPage = new SettingsViewModel(Localization, _aiRuntime);
+        _settingsPage = new SettingsViewModel(Localization, _aiRuntime, modes);
 
         NavigationItems = new ReadOnlyObservableCollection<NavigationItemViewModel>(
             new ObservableCollection<NavigationItemViewModel>(
@@ -136,7 +138,8 @@ public sealed class MainWindowViewModel : ObservableObject, IAsyncDisposable
         IUiErrorBoundary? errorBoundary = null,
         IAiDesktopRuntime? aiRuntime = null,
         IJobQueueClient? jobQueue = null,
-        LocalizationService? localization = null)
+        LocalizationService? localization = null,
+        GenerationModeService? generationModes = null)
     {
         diagnostics ??= new InMemoryDiagnosticSink();
         errorBoundary ??= new UiErrorBoundary(diagnostics);
@@ -147,7 +150,8 @@ public sealed class MainWindowViewModel : ObservableObject, IAsyncDisposable
             errorBoundary,
             aiRuntime,
             jobQueue,
-            localization);
+            localization,
+            generationModes);
     }
 
     public static MainWindowViewModel CreateUserMode(
@@ -158,7 +162,8 @@ public sealed class MainWindowViewModel : ObservableObject, IAsyncDisposable
         IUiErrorBoundary? errorBoundary = null,
         IAiDesktopRuntime? aiRuntime = null,
         IJobQueueClient? jobQueue = null,
-        LocalizationService? localization = null)
+        LocalizationService? localization = null,
+        GenerationModeService? generationModes = null)
     {
         ArgumentNullException.ThrowIfNull(session);
         ArgumentNullException.ThrowIfNull(selectionDialog);
@@ -166,7 +171,7 @@ public sealed class MainWindowViewModel : ObservableObject, IAsyncDisposable
         diagnostics ??= new InMemoryDiagnosticSink();
         errorBoundary ??= new UiErrorBoundary(diagnostics);
         var result = new MainWindowViewModel(
-            VfxComposerClient.CreateDisconnected(), diagnostics, errorBoundary, aiRuntime, jobQueue, localization)
+            VfxComposerClient.CreateDisconnected(), diagnostics, errorBoundary, aiRuntime, jobQueue, localization, generationModes)
         {
             _session = session,
             _selectionDialog = selectionDialog,

@@ -274,6 +274,12 @@ public static class UiStringKeys
     public const string SettingsLanguageEnglishOption = "SettingsLanguageEnglishOption";
     public const string SettingsLanguageChineseSimplifiedOption = "SettingsLanguageChineseSimplifiedOption";
 
+    // Generation-mode section (F8b4): two closed options, applied and persisted immediately like the language.
+    public const string SettingsGenerationModeHeading = "SettingsGenerationModeHeading";
+    public const string SettingsGenerationModeNotice = "SettingsGenerationModeNotice";
+    public const string SettingsGenerationModeSimpleOption = "SettingsGenerationModeSimpleOption";
+    public const string SettingsGenerationModeProfessionalOption = "SettingsGenerationModeProfessionalOption";
+
     public const string SettingsSecurityNotice = "SettingsSecurityNotice";
     public const string SettingsSecretConfigured = "SettingsSecretConfigured";
     public const string SettingsSecretNotConfigured = "SettingsSecretNotConfigured";

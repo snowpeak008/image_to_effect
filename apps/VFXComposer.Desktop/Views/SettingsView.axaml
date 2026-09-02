@@ -28,6 +28,21 @@
 
     <Border Classes="card">
       <StackPanel Spacing="8">
+        <TextBlock FontWeight="SemiBold" Text="{Binding Localization[SettingsGenerationModeHeading]}" />
+        <TextBlock Classes="muted" Text="{Binding Localization[SettingsGenerationModeNotice]}" TextWrapping="Wrap" />
+        <RadioButton
+            GroupName="GenerationModeSelection"
+            Content="{Binding Localization[SettingsGenerationModeSimpleOption]}"
+            IsChecked="{Binding IsSimpleModeSelected, Mode=TwoWay}" />
+        <RadioButton
+            GroupName="GenerationModeSelection"
+            Content="{Binding Localization[SettingsGenerationModeProfessionalOption]}"
+            IsChecked="{Binding IsProfessionalModeSelected, Mode=TwoWay}" />
+      </StackPanel>
+    </Border>
+
+    <Border Classes="card">
+      <StackPanel Spacing="8">
         <TextBlock FontWeight="SemiBold" Text="{Binding Localization[SettingsProviderProfilesHeading]}" />
         <TextBlock Classes="muted" Text="{Binding Localization[SettingsProviderProfilesNotice]}" TextWrapping="Wrap" />
         <ItemsControl ItemsSource="{Binding Profiles}">

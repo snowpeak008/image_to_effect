@@ -7,6 +7,7 @@ using VFXComposer.AI.Contracts.Desktop;
 using VFXComposer.AI.Contracts.Recipes;
 using VFXComposer.AI.Providers.Recipes;
 using VFXComposer.Desktop.Localization;
+using VFXComposer.Desktop.Services;
 
 namespace VFXComposer.Desktop.ViewModels;
 
@@ -58,7 +59,10 @@ public sealed class CreateViewModel : WorkspacePageViewModel
     private IReadOnlyList<(string Key, object?[] Arguments)> _retentionLines = [];
     private RecipeDraftRecord? _currentDraft;
 
-    public CreateViewModel(LocalizationService localization, IAiDesktopRuntime? runtime = null)
+    public CreateViewModel(
+        LocalizationService localization,
+        IAiDesktopRuntime? runtime = null,
+        GenerationModeService? generationModes = null)
         : base(
             localization,
             "create",
@@ -67,6 +71,9 @@ public sealed class CreateViewModel : WorkspacePageViewModel
             UiStringKeys.CreateEmptyState)
     {
         _runtime = runtime ?? AiDesktopRuntime.Unavailable;
+        GenerationModes = generationModes ?? new GenerationModeService();
+        // The page lives as long as the shell that owns the mode service, so the subscription needs no teardown.
+        GenerationModes.ModeChanged += OnGenerationModeChanged;
         SendChatCommand = new AsyncRelayCommand(SendChatAsync, CanSendChat);
         GenerateRecipeCommand = new AsyncRelayCommand(GenerateRecipeAsync, CanGenerateRecipe);
         CancelGenerateRecipeCommand = GenerateRecipeCommand.CreateCancelCommand();
@@ -74,6 +81,7 @@ public sealed class CreateViewModel : WorkspacePageViewModel
         ApplyPresetCommand = new RelayCommand<PresetCardViewModel>(ApplyPreset);
         UseSuggestionCommand = new RelayCommand<string>(UseSuggestion);
         ParameterPanel = new ParameterPanelViewModel(localization);
+        ParameterPanel.PropertyChanged += OnParameterPanelPropertyChanged;
         ApplyParameterEditsCommand = new RelayCommand(ApplyParameterEdits, CanApplyParameterEdits);
         Lineage = new LineageViewModel(localization);
         Lineage.PropertyChanged += OnLineagePropertyChanged;
@@ -181,6 +189,20 @@ public sealed class CreateViewModel : WorkspacePageViewModel
 
     /// <summary>Copies one suggestion sentence into the description box. It never triggers generation.</summary>
     public IRelayCommand<string> UseSuggestionCommand { get; }
+
+    /// <summary>
+    /// The shell-wide generation mode (REQ-004 §5). Simple mode keeps the example cards, the AI entry, the
+    /// suggestions and the capability notices; professional mode adds the parameter panel, the refinement input,
+    /// the version chain and the timeline on top, hiding nothing (REQ-004-07). Switching only re-renders: it makes
+    /// no request and touches no draft (REQ-004-01).
+    /// </summary>
+    public GenerationModeService GenerationModes { get; }
+
+    /// <summary>The panel card gates on the mode and its own head condition; neither alone shows it.</summary>
+    public bool IsParameterPanelVisible => GenerationModes.IsProfessional && ParameterPanel.HasHead;
+
+    /// <summary>The version-chain card keeps its own visibility rule (list or failure line) under the mode gate.</summary>
+    public bool IsLineageVisible => GenerationModes.IsProfessional && Lineage.IsCardVisible;
 
     /// <summary>The head draft's declared parameters, editable within the catalog bounds (REQ-004 §9).</summary>
     public ParameterPanelViewModel ParameterPanel { get; }
@@ -545,6 +567,26 @@ public sealed class CreateViewModel : WorkspacePageViewModel
             ConfirmRevertCommand.NotifyCanExecuteChanged();
             CancelRevertCommand.NotifyCanExecuteChanged();
         }
+
+        if (eventArgs.PropertyName is nameof(LineageViewModel.IsCardVisible))
+        {
+            OnPropertyChanged(nameof(IsLineageVisible));
+        }
+    }
+
+    private void OnParameterPanelPropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs eventArgs)
+    {
+        if (eventArgs.PropertyName is nameof(ParameterPanelViewModel.HasHead))
+        {
+            OnPropertyChanged(nameof(IsParameterPanelVisible));
+        }
+    }
+
+    private void OnGenerationModeChanged(object? sender, EventArgs eventArgs)
+    {
+        // A mode switch re-renders the gated sections and nothing else: no store call, no request (REQ-004-01).
+        OnPropertyChanged(nameof(IsParameterPanelVisible));
+        OnPropertyChanged(nameof(IsLineageVisible));
     }
 
     /// <summary>

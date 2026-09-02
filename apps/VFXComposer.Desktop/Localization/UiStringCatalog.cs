@@ -340,6 +340,13 @@ public static class UiStringCatalog
                 "The selection applies immediately and is stored for the current user only.",
             [UiStringKeys.SettingsLanguageEnglishOption] = "English",
             [UiStringKeys.SettingsLanguageChineseSimplifiedOption] = "简体中文",
+            [UiStringKeys.SettingsGenerationModeHeading] = "Generation mode",
+            [UiStringKeys.SettingsGenerationModeNotice] =
+                "The selection applies immediately and is stored for the current user. Professional mode adds the "
+                + "parameter panel, refinement, version chain and timeline on the Create page; simple mode keeps "
+                + "the example cards and the AI entry. Switching sends no request and changes no draft.",
+            [UiStringKeys.SettingsGenerationModeSimpleOption] = "Simple mode",
+            [UiStringKeys.SettingsGenerationModeProfessionalOption] = "Professional mode",
 
             [UiStringKeys.SettingsSecurityNotice] =
                 "Secrets are entry-only. Revoke detaches the selected secret and leaves its route fail-closed until "
@@ -669,6 +676,12 @@ public static class UiStringCatalog
             [UiStringKeys.SettingsLanguageNotice] = "选择后立即生效，并仅为当前用户保存。",
             [UiStringKeys.SettingsLanguageEnglishOption] = "English",
             [UiStringKeys.SettingsLanguageChineseSimplifiedOption] = "简体中文",
+            [UiStringKeys.SettingsGenerationModeHeading] = "生成模式",
+            [UiStringKeys.SettingsGenerationModeNotice] =
+                "选择后立即生效，并仅为当前用户保存。专业模式会在 Create 页额外显示参数面板、精修、版本链与时间线；"
+                + "简单模式保留示例卡与 AI 入口。切换不发起任何请求，也不改动任何草稿。",
+            [UiStringKeys.SettingsGenerationModeSimpleOption] = "简单模式",
+            [UiStringKeys.SettingsGenerationModeProfessionalOption] = "专业模式",
 
             [UiStringKeys.SettingsSecurityNotice] =
                 "密钥仅可录入。吊销会分离选中的密钥，其路由在显式替换前保持 fail-closed。Endpoint 文本仅在编辑本配置档时"
