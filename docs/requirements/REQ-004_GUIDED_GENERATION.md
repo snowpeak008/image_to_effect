@@ -142,7 +142,7 @@ F-4 归任务卡 **R6/F8c**，属本文非目标（§4 第 5 条）。
 - 三件缺一即**拒绝发起**（无网络请求）：无 head 草稿不能精修，空反馈不能精修。
 - 不携带历史轮次的对话消息、不携带其他 lineage、不携带任务时间线（§4 非目标 2）。
 - prompt 内容侧另加两块**非用户输入**的固定资产：F8-0 交付后的 prompt 红线（strict 约束与合规参考样例）+ 艺术家知识片段（§10）。它们随 `PromptTemplateVersion` 复合版本串记入每个版本（F8b1）。
-- 请求界：单条消息 ≤ 16 KiB（`RecipePromptTemplate.MaximumMessageCharacters` 的既有纪律；草稿超单消息界时按 F8b1 的多消息拆分处理）、消息数 ≤ 64（`ChatChannelLimits.MaximumMessages`——多消息拆分不得越过这条）、整请求 ≤ 256 KiB（`ChatChannelLimits.MaximumRequestBytes`，越界为 `PayloadTooLarge`）。越界一律 fail-closed 映射稳定错误码，**不截断续传**（继承 REQ-001-07）。
+- 请求界：单条消息 ≤ 16 KiB（`RecipePromptAssembler.MaximumMessageCharacters`，F8b1 合入后原 `RecipePromptTemplate` 的既有纪律由组装器承接；草稿超单消息界时按 F8b1 的按片段边界多消息拆分处理）、消息数 ≤ 64（`ChatChannelLimits.MaximumMessages`——多消息拆分不得越过这条）、整请求 ≤ 256 KiB（`ChatChannelLimits.MaximumRequestBytes`，越界为 `PayloadTooLarge`）。越界一律 fail-closed 映射稳定错误码，**不截断续传**（继承 REQ-001-07）。
 
 ### 6.2 每轮预算与显式动作
 
@@ -306,7 +306,7 @@ v1 的精修是**单段**：一轮 = 至多一个 route 请求 + 预算内的修
 2. **目录内美学惯例**：当前目录（2D 火系弹道）的搭配与时序惯例，例如：launch/travel/impact 三段的时长量级关系、`LaunchFlash.lifetime` 与 stage duration 的匹配、`Embers.rate` 与 `FireCore.scale` 的观感耦合、strict 预算下"该省哪个模块"的取舍优先级。惯例必须是**目录内可验证**的陈述，不得引入目录外的模板/参数（否则等于让 AI 生成不可构建的 recipe）。
 3. **精修纪律**：
    - 只改本轮反馈点名的方面，其余字段逐字保留；
-   - 输出完整 recipe JSON 单对象，无 markdown 围栏、无解释（与既有 `RecipePromptTemplate` 的输出指令一致）；
+   - 输出完整 recipe JSON 单对象，无 markdown 围栏、无解释（与既有 `RecipePromptAssembler`（原 `RecipePromptTemplate`）的输出指令一致）；
    - 不得改 `id`、`metadata.templateCatalogVersion`、`recipeVersion`；
    - 遵守 F8-0 交付后的 strict 红线（三 stage 根齐全、全 recipe ≤ 2 个渲染模块、禁 `attachTo`）。
 
@@ -525,9 +525,9 @@ Given 一轮包含 1 次修复重试与 2 项守卫还原的精修；When 查看
 | L1 结构校验 | `RecipeL1Validator`（模块 `parameters` 仅 `ReadObject(required: true)`） | 已有；**不校验键集与上下界**（F-3），差额由 L1.5 补 |
 | L1.5 预校验与 `issueCode → 建议键` | 不存在 | 缺口，F8a1 |
 | 精修请求预算常量 | `RecipeChannelLimits.DefaultRetryLimit = 2`、`MaximumRetryLimit = 5`、`MaximumDescriptionUtf8Bytes = 16 KiB`、`MaximumDraftJsonCharacters = 128 KiB` | 直接复用，不新增常量语义 |
-| 请求/响应有界 | `ChatChannelLimits`（`MaximumMessages = 64`、`MaximumRequestBytes = 256 KiB`、`MaximumResponseBytes = 1 MiB`、`MaximumStructuredOutputSchemaBytes = 32 KiB`）；`RecipePromptTemplate.MaximumMessageCharacters = 16 KiB`；越界稳定码 `PayloadTooLarge` | 直接继承 |
+| 请求/响应有界 | `ChatChannelLimits`（`MaximumMessages = 64`、`MaximumRequestBytes = 256 KiB`、`MaximumResponseBytes = 1 MiB`、`MaximumStructuredOutputSchemaBytes = 32 KiB`）；`RecipePromptAssembler.MaximumMessageCharacters = 16 KiB`（F8b1 前为 `RecipePromptTemplate`）；越界稳定码 `PayloadTooLarge` | 直接继承 |
 | 唯一绑定调用与零 fallback | `ChatChannelGateway`、`ChatRouteResolver`、`IRecipeGenerationChannel` | 直接继承（ADR-006） |
-| prompt 组装（片段化、多消息、复合版本） | `RecipePromptTemplate`（`Version = "vfxcomposer.ai.recipe-prompt/1"`、`SystemPrompt` 单条 ≤16 KiB、修复话术 "Fix only the listed errors…"） | 由 F8b1 重构吸收（非并存）；本文的精修消息在其之上组装 |
+| prompt 组装（片段化、多消息、复合版本） | **F8b1 已合入（2026-09-02）**：`RecipePromptAssembler` 吸收原 `RecipePromptTemplate`（非并存）。复合版本串 `AiContractVersions.RecipePromptAssembler = "vfxcomposer.ai.recipe-prompt-assembler/1"` + 8 片段 `id/version`（写入 `PromptTemplateVersion`，≤256 字符有守卫；store 未升版）；`SystemPrompt` 由 5 个片段拼接、与重构前逐字节等价（哈希 pin 测试）；只在片段边界拆分、不跨 role，单片段 >16 KiB / 消息数 >64 / 总字节 >256 KiB 一律 `PayloadTooLarge` 不截断；修复话术 "Fix only the listed errors…" 不变。F8b4 的精修知识片段在 `FragmentRegistry` 登记 | 本文的精修消息在其之上组装 |
 | prompt 参考样例与 strict 红线 | 快照 `canonicalExample`（当前为 `fireball_2d`，8 模块 + 双 `attachTo`，F-2） | 由 **F8-0** 修正；本文以"F8-0 交付后的 prompt 红线"为前提 |
 | 草稿记录与状态机 | `RecipeDraftRecord`、`RecipeDraftStatus`（`PendingConfirmation`/`Failed`/`ConfirmedAwaitingBuild`/`Built`/`BuildFailed`） | 纯加法扩字段（§7.2）+ 新增终态 `Superseded`（§7.3） |
 | 哈希绑定确认 | `RecipeDraftStore.Advance`（`CanonicalSha256` 精确判等 → `HashMismatch`）、`Confirm`/`MarkBuilt`/`MarkBuildFailed` | 语义不变；新增 supersede 迁移同样做哈希绑定 |

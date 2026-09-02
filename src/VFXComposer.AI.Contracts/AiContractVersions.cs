@@ -10,10 +10,13 @@ public static class AiContractVersions
     public const string RecipeGenerationRequest = "vfxcomposer.ai.recipe-generation-request/1";
 
     /// <summary>
-    /// Identifies the recipe system prompt carried by every draft record. Revision 2 replaced the legacy-exempt
-    /// reference recipe with a strict-budget one and states the build budget explicitly.
+    /// Identifies the prompt assembler revision that leads the composite prompt version carried by every draft
+    /// record (F8b1). The assembler composes it with each registered fragment's id and version; bump this
+    /// revision when the assembly mechanics (packing, splitting, ordering) change rather than fragment content.
+    /// Lineage: revision 1 of the assembler supersedes the monolithic <c>vfxcomposer.ai.recipe-prompt/2</c>
+    /// template version (whose revision 2 replaced the legacy-exempt reference recipe with a strict-budget one).
     /// </summary>
-    public const string RecipeSystemPrompt = "vfxcomposer.ai.recipe-prompt/2";
+    public const string RecipePromptAssembler = "vfxcomposer.ai.recipe-prompt-assembler/1";
 
     /// <summary>
     /// Wire version of the retained recipe draft store. Version 2 added the version-chain provenance

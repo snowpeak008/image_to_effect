@@ -34,7 +34,7 @@ internal sealed class RecipeGenerationService : IRecipeGenerationChannel
         var gateway = _acquireChatGateway() ?? throw new InvalidOperationException("The chat gateway accessor returned null.");
 
         var attempts = new List<RecipeGenerationAttempt>();
-        var messages = RecipePromptTemplate.CreateInitialMessages(request.Description);
+        var messages = RecipePromptAssembler.CreateInitialMessages(request.Description);
         string? lastOutputText = null;
         IReadOnlyList<RecipeValidationIssue> lastIssues = Array.Empty<RecipeValidationIssue>();
 
@@ -55,7 +55,7 @@ internal sealed class RecipeGenerationService : IRecipeGenerationChannel
                     request.CorrelationId,
                     exception.Code,
                     attempts,
-                    RecipePromptTemplate.Version,
+                    RecipePromptAssembler.Version,
                     snapshot.TemplateCatalogVersion);
             }
             catch (OperationCanceledException)
@@ -64,7 +64,7 @@ internal sealed class RecipeGenerationService : IRecipeGenerationChannel
                     request.CorrelationId,
                     ChatChannelErrorCode.Cancelled,
                     attempts,
-                    RecipePromptTemplate.Version,
+                    RecipePromptAssembler.Version,
                     snapshot.TemplateCatalogVersion);
             }
 
@@ -88,7 +88,7 @@ internal sealed class RecipeGenerationService : IRecipeGenerationChannel
                 break;
             }
 
-            messages = RecipePromptTemplate.CreateRepairMessages(request.Description, lastOutputText, issues);
+            messages = RecipePromptAssembler.CreateRepairMessages(request.Description, lastOutputText, issues);
         }
 
         return RecipeGenerationResult.ValidationFailed(
@@ -96,7 +96,7 @@ internal sealed class RecipeGenerationService : IRecipeGenerationChannel
             lastOutputText,
             lastIssues,
             attempts,
-            RecipePromptTemplate.Version,
+            RecipePromptAssembler.Version,
             snapshot.TemplateCatalogVersion);
     }
 
@@ -147,7 +147,7 @@ internal sealed class RecipeGenerationService : IRecipeGenerationChannel
             ReadSummaryString(root, "archetype"),
             ReadSummaryString(root, "dimension"),
             ReadSummaryString(root, "targetProfile"),
-            RecipePromptTemplate.Version,
+            RecipePromptAssembler.Version,
             snapshot.TemplateCatalogVersion);
         return RecipeGenerationResult.Drafted(draft, attempts);
     }

@@ -38,7 +38,7 @@ public sealed class RecipeGenerationServiceTests
         Assert.AreEqual("fireball_2d", result.Draft.RecipeId);
         Assert.AreEqual("projectile", result.Draft.Archetype);
         Assert.AreEqual("2d", result.Draft.Dimension);
-        Assert.AreEqual(RecipePromptTemplate.Version, result.PromptTemplateVersion);
+        Assert.AreEqual(RecipePromptAssembler.Version, result.PromptTemplateVersion);
     }
 
     [TestMethod]
