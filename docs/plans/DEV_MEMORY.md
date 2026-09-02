@@ -1,6 +1,11 @@
 # 开发记忆与恢复指南
 
-> **在途状态快照（2026-09-02 傍晚）**：
+> **在途状态快照（2026-09-02 晚）**：
+> **F8b3 已关闭合入**：合并 `f5e776ef`，合并态 Release 0/0、全量 **979/979**（AI.Tests 255、Desktop.Tests 123）。**当前基线：979 条 Release 0 失败。** 简单模式+参数面板闭环（AI 出一版→手调→确认）已有测试。REQ-004 §11.6 已登记 VFXE 码与 F8b3 裁决。worktree `D:\wt\i2s-f8b3` 已退役。
+> **下一步：派发 F8b3b 版本链视图与回退**（依赖 F8b3 ✓；卡见主计划 §7）。F8b3b 顺带：B#6 手改被拒时 `RecipeValidationSummary` 改中性键；`RecipeParameterEditResult.Issues` XML doc 补"L1 非 Error 发现"。之后 F8b4（精修回路 + 覆盖守卫 + 模式切换 + ui-preferences `/2` + 时间线）→ 专业模式里程碑审计（F8b1~F8b4 + F8b3b）→ F8c → 收尾。
+> 运维追加：全量并行跑时若 AI.Tests 耗时远超 40 s，AiLocalE2E 可能出现 1 条负载 flake（本日合并态首跑出现、复跑绿、未定位用例）；遇到即单跑该工程确认再复跑全量。
+>
+> **历史快照（2026-09-02 傍晚）**：
 > **F8b2 已关闭合入**：合并 `36c2b4f1`，合并态 Release 0/0、全量 **921/921**（AI.Tests 210、Desktop.Tests 110）。**当前基线：921 条 Release 0 失败。** REQ-004 已同步 F8b2 裁决（§7.3 Superseded 澄清、§7.4 第 5/6 条、§7.5 级 2 收紧、RG-6/O-5 关闭）。worktree `D:\wt\i2s-f8b2` 已退役。
 > **下一步：派发 F8b3 参数面板**（依赖 F8a1 ✓、F8b2 ✓）。F8b3 须顺带：Desktop `CreateViewModel` 从 `IRecipeDraftStore.Save` 切到 `IRecipeDraftLineageStore.SaveVersion/AppendVersion` 并呈现类型化 trim/淘汰/supersede 结果（REQ-004 §7.5 第 6 条）；`PresentValidationFailure` 不再吞 `RecipeDraftStoreException`；简单模式审计建议②（存储失败测试改断言状态键+参数）。之后 F8b4 → 专业模式里程碑审计 → F8c → 收尾。
 > **本会话运维经验（重要）**：①子 agent 会话可能在长命令/长会话中无声终止（转录停在 tool_use），**`resume` 在 Fable 端点不可用**（`Sand traffic is not supported`）——一律重派全新子 agent 并附完整任务书；因此任务书必须自足，开发子 agent 必须逐单元提交。②平台用量策略偶发误拦截只读审计（读普通 C# 文件时），应对：把审计拆成机械/语义两组小会话并行，单条 shell 命令 ≤3 分钟、长输出落 `%TEMP%` 日志。③主 agent 把 master 合入任务分支后**必须复跑构建**——git 无冲突不等于语义无冲突（F8b2 测试助手引用了 F8b1 已删常量）。④跑 `--no-build` 测试前确认 dll 时间戳晚于 HEAD，否则会被陈旧产物误导。

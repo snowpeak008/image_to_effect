@@ -409,6 +409,8 @@ v1 的精修是**单段**：一轮 = 至多一个 route 请求 + 预算内的修
 | REQ-004-49 | 守卫无用户开关；用户采纳 AI 值的唯一出口是在面板改成该值（产生新 `human_edit` 版本） | P1 |
 | REQ-004-50 | 守卫确定性：同一（parent 链、AI 输出、反馈文本、词表版本）四元组产出同一还原清单（快照测试） | P1 |
 
+**F8b3 实现登记（主 agent，2026-09-02）**：REQ-004-41~44 由公共纯函数 `RecipeParameterEditor`（`src/VFXComposer.AI.Providers/Recipes/`，`Describe`/`Apply`/`CreateHumanEditRevision`）+ Desktop `ParameterPanelViewModel` 落地。手改拒绝码为新前缀 **VFXE** 闭集 7 码（`RecipeParameterEditCodes`）：`VFXE0001 NoChanges`、`0002 TargetNotFound`、`0003 ValueNotInteger`、`0004 ValueNotFinite`、`0005 ValueOutOfRange`、`0006 DocumentNotEditable`、`0007 DuplicateTarget`；每码在 Desktop catalog 有双语外壳句（`RecipeParameterEditCopy`，奇偶由测试钉住），路径/原文/区间作占位参数不译。裁决：①编辑器 DTO/码表放 AI.Providers（依赖快照类型，与 `RecipeCatalogPrevalidator` 先例一致）；②任意持哈希 head（含 `Built`/`BuildFailed`）可手改——落同链新 `PendingConfirmation` 版本，`Built` 保持审计记录不被 supersede；③允许为草稿补设"已声明但缺失"的参数（清除 `VFXP0003`）；④手改版本 `promptTemplateVersion = "human-edit/1"`（与 `preset/1` 同型，F8b4 精修版本写组装器复合版本串）；⑤`Apply` 中 L1 仅 Error 级拒绝，L1.5 全部作预警随 Accepted 返回（F8a1 定版不阻断）。模式门控归 F8b4，版本链视图/回退归 F8b3b，时间线归 F8b4。
+
 ### 11.7 艺术家知识（§10）
 
 | 编号 | 需求 | 优先级 |
