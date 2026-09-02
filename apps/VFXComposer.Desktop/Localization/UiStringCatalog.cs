@@ -110,9 +110,20 @@ public static class UiStringCatalog
                 "A bright launch flash, then a compact projectile scattering embers.",
             [UiStringKeys.CreateBuildHandoffHeading] = "After you confirm",
             [UiStringKeys.CreateBuildHandoffNotice] =
-                "Building still runs from the command line: close the Unity editor first, put the confirmed recipe "
-                + "JSON into a batch manifest, then run the command below from the repository root. The batch path "
-                + "does not update this page's draft status.",
+                "Use the Build button above to build the confirmed draft inside the app: close the Unity editor "
+                + "first, then watch progress on the Jobs page and refresh this page for the final state. As a "
+                + "supplementary route, the command below builds recipe JSON files through a batch manifest from "
+                + "the repository root; that batch path does not update this page's draft status.",
+            [UiStringKeys.CreateBuildDraftAction] = "Build",
+            [UiStringKeys.CreateRefreshDraftStatusAction] = "Refresh status",
+            [UiStringKeys.CreateRecipeStatusBuildStarted] =
+                "Build started in a background process. Progress appears on the Jobs page; refresh this page for "
+                + "the final draft state.",
+            [UiStringKeys.CreateRecipeStatusBuildLaunchFailedWithCode] =
+                "The build could not be started ({0}). Nothing was built.",
+            [UiStringKeys.CreateRecipeStatusRefreshedWithState] = "Draft state re-read from storage: {0}.",
+            [UiStringKeys.CreateRecipeStatusRefreshDraftGone] =
+                "This draft is no longer in storage; it may have been trimmed by retention.",
 
             [UiStringKeys.CreateParameterPanelHeading] = "Parameter panel",
             [UiStringKeys.CreateParameterPanelNotice] =
@@ -217,6 +228,7 @@ public static class UiStringCatalog
                 "Refinement unavailable: {0} after {1} request(s). No version.",
             [UiStringKeys.CreateTimelineEntryReverted] = "Reverted to v{0}; {1} newer version(s) deleted.",
             [UiStringKeys.CreateTimelineEntryConfirmed] = "Confirmed {0} for build.",
+            [UiStringKeys.CreateTimelineEntryBuildStarted] = "Build started for {0} in a background process.",
             [UiStringKeys.CreateTimelineRetentionLine] =
                 "Retention: {0} superseded, {1} trimmed, {2} lineage(s) evicted ({3} version(s)).",
 
@@ -537,8 +549,16 @@ public static class UiStringCatalog
             [UiStringKeys.CreateSuggestionSentence3] = "先是一道明亮的发射闪光，随后是散落余烬的紧凑弹体。",
             [UiStringKeys.CreateBuildHandoffHeading] = "确认之后",
             [UiStringKeys.CreateBuildHandoffNotice] =
-                "构建仍需在命令行完成：先关闭 Unity 编辑器，将已确认的 recipe JSON 放入批量清单，"
-                + "再在仓库根目录运行下方命令。批量路径不会更新本页的草稿状态。",
+                "使用上方\u201c构建\u201d按钮即可在应用内构建已确认的草稿：先关闭 Unity 编辑器，"
+                + "然后在任务页查看进度，并刷新本页查看最终状态。作为补充路径，下方命令可在仓库根目录"
+                + "经批量清单构建 recipe JSON 文件；该批量路径不会更新本页的草稿状态。",
+            [UiStringKeys.CreateBuildDraftAction] = "构建",
+            [UiStringKeys.CreateRefreshDraftStatusAction] = "刷新状态",
+            [UiStringKeys.CreateRecipeStatusBuildStarted] =
+                "构建已在后台进程启动。进度见任务页；刷新本页可查看草稿的最终状态。",
+            [UiStringKeys.CreateRecipeStatusBuildLaunchFailedWithCode] = "构建无法启动（{0}）。未执行任何构建。",
+            [UiStringKeys.CreateRecipeStatusRefreshedWithState] = "已从存储重新读取草稿状态：{0}。",
+            [UiStringKeys.CreateRecipeStatusRefreshDraftGone] = "该草稿已不在存储中；可能已被保留策略清理。",
 
             [UiStringKeys.CreateParameterPanelHeading] = "参数面板",
             [UiStringKeys.CreateParameterPanelNotice] =
@@ -636,6 +656,7 @@ public static class UiStringCatalog
                 "精修不可用：{0}（{1} 次请求）。未产生版本。",
             [UiStringKeys.CreateTimelineEntryReverted] = "回退到 v{0}；删除 {1} 个更新版本。",
             [UiStringKeys.CreateTimelineEntryConfirmed] = "已确认 {0} 待构建。",
+            [UiStringKeys.CreateTimelineEntryBuildStarted] = "已为 {0} 在后台进程中启动构建。",
             [UiStringKeys.CreateTimelineRetentionLine] =
                 "保留策略：{0} 个确认失效，{1} 个被 trim，{2} 条链被淘汰（{3} 个版本）。",
 

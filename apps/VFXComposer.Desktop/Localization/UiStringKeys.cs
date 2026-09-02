@@ -97,6 +97,16 @@ public static class UiStringKeys
     public const string CreateBuildHandoffHeading = "CreateBuildHandoffHeading";
     public const string CreateBuildHandoffNotice = "CreateBuildHandoffNotice";
 
+    // In-app build closed loop (F8c, ADR-008): the explicit build action, its launch outcomes,
+    // and the manual status refresh that surfaces Built/BuildFailed after the host finishes.
+    public const string CreateBuildDraftAction = "CreateBuildDraftAction";
+    public const string CreateRefreshDraftStatusAction = "CreateRefreshDraftStatusAction";
+    public const string CreateRecipeStatusBuildStarted = "CreateRecipeStatusBuildStarted";
+    public const string CreateRecipeStatusBuildLaunchFailedWithCode = "CreateRecipeStatusBuildLaunchFailedWithCode";
+    public const string CreateRecipeStatusRefreshedWithState = "CreateRecipeStatusRefreshedWithState";
+    public const string CreateRecipeStatusRefreshDraftGone = "CreateRecipeStatusRefreshDraftGone";
+    public const string CreateTimelineEntryBuildStarted = "CreateTimelineEntryBuildStarted";
+
     // Parameter panel (F8b3): static copy, per-row hints, warning rows and the hand-edit status lines.
     public const string CreateParameterPanelHeading = "CreateParameterPanelHeading";
     public const string CreateParameterPanelNotice = "CreateParameterPanelNotice";

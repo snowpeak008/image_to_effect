@@ -99,6 +99,26 @@ public sealed class JobsPageTests
     }
 
     [TestMethod]
+    public void AWaitingProjectLockBuildEntryStaysCancellableFromTheBanneredPage()
+    {
+        // ADR-008 §2.4: while the editor owns the project the queue backs off and the entry stays
+        // QUEUED; the page must both say so and keep the user's way out (cancel) available, or the
+        // wait becomes the "editor open, job stuck, user blind" black hole the ADR names.
+        var queue = new FakeJobQueueClient { QueueState = JobQueueStates.WaitingProjectLock };
+        queue.AddQueued("job-buildwait01");
+        var viewModel = new JobsViewModel(LocalizationTestSupport.CreateEnglish(), queue);
+        viewModel.Refresh();
+
+        Assert.IsTrue(viewModel.IsWaitingForProjectLock);
+        var row = viewModel.Jobs.Single();
+        Assert.IsTrue(row.CanCancel, "A queued entry waiting on the project lock must stay cancellable.");
+
+        viewModel.RequestCancelCommand.Execute(row);
+        viewModel.ConfirmCancelCommand.Execute(row);
+        CollectionAssert.AreEqual(new[] { "job-buildwait01" }, queue.CancelRequests);
+    }
+
+    [TestMethod]
     public void CancellationIsTwoStepAndOnlyTheConfirmationReachesTheQueue()
     {
         var queue = new FakeJobQueueClient();

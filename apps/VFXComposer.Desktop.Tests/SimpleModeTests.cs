@@ -145,14 +145,19 @@ public sealed class SimpleModeTests
     }
 
     [TestMethod]
-    public void TheBuildHandoffCarriesTheCopyableCommand()
+    public void TheBuildHandoffPointsAtTheInAppBuildAndKeepsTheCommandAsSupplement()
     {
         var viewModel = CreateViewModelWith(new CountingRuntime());
 
+        // F8c closed the loop (ADR-008): the primary path is the in-app Build button; the copyable
+        // command stays as the supplementary batch route, still honestly flagged as not updating
+        // this page's draft status.
+        var notice = LocalizationTestSupport.English(UiStringKeys.CreateBuildHandoffNotice);
+        StringAssert.Contains(notice, "Build button");
+        StringAssert.Contains(notice, "Unity editor");
+        StringAssert.Contains(notice, "supplementary");
+        StringAssert.Contains(notice, "does not update this page's draft status");
         StringAssert.Contains(viewModel.BuildCommandLine, "batch run");
-        StringAssert.Contains(
-            LocalizationTestSupport.English(UiStringKeys.CreateBuildHandoffNotice),
-            "Unity editor");
     }
 
     [TestMethod]

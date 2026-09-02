@@ -44,6 +44,7 @@ public sealed class CreateViewModel : WorkspacePageViewModel
     ];
 
     private readonly IAiDesktopRuntime _runtime;
+    private readonly IBuildHostLauncher? _buildHostLauncher;
     private string _recipeName = string.Empty;
     private string _draftNotes = string.Empty;
     private string _chatPrompt = string.Empty;
@@ -75,7 +76,8 @@ public sealed class CreateViewModel : WorkspacePageViewModel
     public CreateViewModel(
         LocalizationService localization,
         IAiDesktopRuntime? runtime = null,
-        GenerationModeService? generationModes = null)
+        GenerationModeService? generationModes = null,
+        IBuildHostLauncher? buildHostLauncher = null)
         : base(
             localization,
             "create",
@@ -84,6 +86,7 @@ public sealed class CreateViewModel : WorkspacePageViewModel
             UiStringKeys.CreateEmptyState)
     {
         _runtime = runtime ?? AiDesktopRuntime.Unavailable;
+        _buildHostLauncher = buildHostLauncher;
         GenerationModes = generationModes ?? new GenerationModeService();
         // The page lives as long as the shell that owns the mode service, so the subscription needs no teardown.
         GenerationModes.ModeChanged += OnGenerationModeChanged;
@@ -91,6 +94,8 @@ public sealed class CreateViewModel : WorkspacePageViewModel
         GenerateRecipeCommand = new AsyncRelayCommand(GenerateRecipeAsync, CanGenerateRecipe);
         CancelGenerateRecipeCommand = GenerateRecipeCommand.CreateCancelCommand();
         ConfirmRecipeDraftCommand = new RelayCommand(ConfirmRecipeDraft, CanConfirmRecipeDraft);
+        BuildRecipeDraftCommand = new RelayCommand(BuildRecipeDraft, CanBuildRecipeDraft);
+        RefreshBuildStatusCommand = new RelayCommand(RefreshBuildStatus, () => _currentDraft is not null);
         ApplyPresetCommand = new RelayCommand<PresetCardViewModel>(ApplyPreset);
         UseSuggestionCommand = new RelayCommand<string>(UseSuggestion);
         ParameterPanel = new ParameterPanelViewModel(localization);
@@ -200,6 +205,22 @@ public sealed class CreateViewModel : WorkspacePageViewModel
     public ICommand CancelGenerateRecipeCommand { get; }
 
     public IRelayCommand ConfirmRecipeDraftCommand { get; }
+
+    /// <summary>
+    /// The explicit build action (ADR-008 §2.1): available only while the current head is
+    /// ConfirmedAwaitingBuild and this shell deploys a launcher. It starts one private host process
+    /// carrying the draft identity and nothing else; progress is observed through the Jobs page
+    /// snapshot and this page's refresh, never through the host's output.
+    /// </summary>
+    public IRelayCommand BuildRecipeDraftCommand { get; }
+
+    /// <summary>
+    /// Re-reads the current draft from the shared store so a finished build's Built/BuildFailed
+    /// state and the version chain become visible. Manual refresh is the deliberate choice: the
+    /// draft store exposes no change notification, and polling from this page would duplicate the
+    /// Jobs page's snapshot timer for no authority gain.
+    /// </summary>
+    public IRelayCommand RefreshBuildStatusCommand { get; }
 
     /// <summary>Persists one example card's committed skeleton as a fresh pending draft. Zero AI, zero network.</summary>
     public IRelayCommand<PresetCardViewModel> ApplyPresetCommand { get; }
@@ -948,6 +969,64 @@ public sealed class CreateViewModel : WorkspacePageViewModel
         }
     }
 
+    /// <summary>
+    /// Only the exact ConfirmedAwaitingBuild head is buildable, and only when this shell deploys a
+    /// launcher (a test shell without one simply never offers the action).
+    /// </summary>
+    private bool CanBuildRecipeDraft() =>
+        _buildHostLauncher is not null &&
+        _currentDraft is { Status: RecipeDraftStatus.ConfirmedAwaitingBuild, CanonicalSha256: not null };
+
+    private void BuildRecipeDraft()
+    {
+        if (_buildHostLauncher is null ||
+            _currentDraft is not { Status: RecipeDraftStatus.ConfirmedAwaitingBuild, CanonicalSha256: not null } draft)
+        {
+            return;
+        }
+
+        // The launch carries identity only; the host re-verifies it against the shared store, so a
+        // stale page state costs one refused process and zero writes. Build progress is observed
+        // through the Jobs page snapshot; this page re-reads the draft on explicit refresh.
+        var outcome = _buildHostLauncher.TryLaunch(draft.DraftId, draft.CanonicalSha256);
+        if (outcome.Started)
+        {
+            SetRecipeStatus(UiStringKeys.CreateRecipeStatusBuildStarted);
+            Timeline.AppendBuildStarted(draft);
+        }
+        else
+        {
+            SetRecipeStatus(UiStringKeys.CreateRecipeStatusBuildLaunchFailedWithCode, outcome.DiagnosticCode);
+        }
+    }
+
+    private void RefreshBuildStatus()
+    {
+        if (_currentDraft is null)
+        {
+            return;
+        }
+
+        try
+        {
+            var refreshed = _runtime.RecipeDrafts.TryGet(_currentDraft.DraftId);
+            if (refreshed is null)
+            {
+                SetRecipeStatus(UiStringKeys.CreateRecipeStatusRefreshDraftGone);
+                return;
+            }
+
+            SetCurrentDraft(refreshed);
+            RecipeDraftJson = PrettyPrint(refreshed.RecipeJson);
+            // The status word is protocol vocabulary (REQ-004 §7.2) and stays untranslated.
+            SetRecipeStatus(UiStringKeys.CreateRecipeStatusRefreshedWithState, refreshed.Status);
+        }
+        catch (RecipeDraftStoreException exception)
+        {
+            SetRecipeStatus(DraftStorageStatusKeyFor(exception.Code), exception.Code);
+        }
+    }
+
     protected override void RefreshLocalizedText()
     {
         OnPropertyChanged(nameof(ChatStatus));
@@ -1032,6 +1111,8 @@ public sealed class CreateViewModel : WorkspacePageViewModel
         OnPropertyChanged(nameof(DraftId));
         ConfirmRecipeDraftCommand.NotifyCanExecuteChanged();
         ApplyParameterEditsCommand.NotifyCanExecuteChanged();
+        BuildRecipeDraftCommand.NotifyCanExecuteChanged();
+        RefreshBuildStatusCommand.NotifyCanExecuteChanged();
     }
 
     private static string PrettyPrint(string json)

@@ -34,6 +34,21 @@ public sealed class NoProjectAccessSurfaceTests
     private const string UiPreferencesStoreType =
         "VFXComposer.Desktop.Services.UiPreferencesStore";
 
+    // ADR-008 §2.3: the launcher's whole authority is its own deployment directory (locating the fixed-name build
+    // host executable) and its own child process. Exactly this one type may therefore reference System.IO types; the
+    // System.Diagnostics.Process family it also uses is not in the prohibited set today, but the allowance is declared
+    // here so a future tightening of the scan cannot drift it in silently. Every other rule (network, listeners,
+    // pipes, Unity, project-path-like literals) still applies inside it, and no member accepts any location at all.
+    private const string BuildHostLauncherType =
+        "VFXComposer.Desktop.Services.BuildHostLauncher";
+
+    // The declared allowance surface of the launcher exemption, asserted as an exact closed set below.
+    private static readonly string[] BuildHostLauncherAllowedTypePrefixes =
+    [
+        "System.Diagnostics.Process",
+        "System.IO.",
+    ];
+
     // U4 permits this exact Client-only process/control-pipe implementation.
     // The Desktop assembly and every other Client type remain fully inspected.
     private static readonly string[] UserModeClientInfrastructureAllowlist =
@@ -197,6 +212,89 @@ public sealed class NoProjectAccessSurfaceTests
         // The exemption covers storage only. Everything else stays prohibited inside the store as well.
         Assert.IsTrue(CheckTypeReference(typeof(System.Net.Sockets.Socket), storageContext).Any());
         Assert.IsTrue(CheckTypeReference(typeof(System.IO.FileStream), "VFXComposer.Desktop.App.Save local").Any());
+    }
+
+    [TestMethod]
+    public void BuildHostLauncherAllowanceIsExactAndClosed()
+    {
+        Assert.AreEqual(BuildHostLauncherType, typeof(BuildHostLauncher).FullName);
+
+        // The declared allowance list itself is a closed set: exactly deployment-directory IO plus
+        // the shell's own child process, nothing else.
+        CollectionAssert.AreEquivalent(
+            new[] { "System.Diagnostics.Process", "System.IO." },
+            BuildHostLauncherAllowedTypePrefixes);
+
+        Assert.IsTrue(IsBuildHostLauncherContext(BuildHostLauncherType + ".TryLaunch local"));
+        Assert.IsTrue(IsBuildHostLauncherContext(BuildHostLauncherType + "+<>c__DisplayClass0_0.TryLaunch local"));
+        Assert.IsFalse(IsBuildHostLauncherContext(BuildHostLauncherType + "Shadow.TryLaunch local"));
+        Assert.IsFalse(IsBuildHostLauncherContext("VFXComposer.Desktop.ViewModels.CreateViewModel.TryLaunch local"));
+
+        var launcherContext = BuildHostLauncherType + ".TryLaunch local";
+        Assert.AreEqual(0, CheckTypeReference(typeof(System.IO.File), launcherContext).Count());
+        Assert.AreEqual(0, CheckTypeReference(typeof(System.Diagnostics.Process), launcherContext).Count());
+        Assert.AreEqual(0, CheckTypeReference(typeof(System.Diagnostics.ProcessStartInfo), launcherContext).Count());
+
+        // The exemption covers exactly the declared surface. Network, pipes, Environment and
+        // Unity-named types stay prohibited inside the launcher as well (ADR-008 §2.3 point 3).
+        Assert.IsTrue(CheckTypeReference(typeof(System.Net.Sockets.Socket), launcherContext).Any());
+        Assert.IsTrue(CheckTypeReference(typeof(System.Net.Http.HttpClient), launcherContext).Any());
+        Assert.IsTrue(CheckTypeReference(typeof(System.IO.Pipes.NamedPipeServerStream), launcherContext).Any(),
+            "Pipes are carved out of the IO allowance: no IPC surface may ride in on the launcher exemption.");
+        Assert.IsTrue(CheckTypeReference(typeof(Environment), launcherContext).Any());
+
+        // The allowance is context-bound: the same IO types stay prohibited everywhere else.
+        Assert.IsTrue(CheckTypeReference(typeof(System.IO.File), "VFXComposer.Desktop.App.Run local").Any());
+    }
+
+    [TestMethod]
+    public void BuildHostLauncherAllowanceRejectsTypesThatOnlyShareThePrefix()
+    {
+        var assembly = AssemblyBuilder.DefineDynamicAssembly(
+            new AssemblyName("VFXComposer.Desktop.Tests.LauncherScannerFixture"),
+            AssemblyBuilderAccess.Run);
+        var module = assembly.DefineDynamicModule("fixture");
+        var typeBuilder = module.DefineType(
+            BuildHostLauncherType + "Shadow",
+            TypeAttributes.Public | TypeAttributes.Abstract | TypeAttributes.Sealed);
+        var method = typeBuilder.DefineMethod(
+            "PassThrough",
+            MethodAttributes.Public | MethodAttributes.Static,
+            typeof(void),
+            [typeof(System.IO.FileStream)]);
+        method.GetILGenerator().Emit(OpCodes.Ret);
+        var shadow = typeBuilder.CreateType()!;
+
+        var violations = ScanType(shadow).ToArray();
+
+        Assert.IsTrue(
+            violations.Any(violation => violation.Contains(
+                "prohibited type reference System.IO.FileStream",
+                StringComparison.Ordinal)),
+            "Only BuildHostLauncher itself and its compiler-generated nested types may receive the IO allowance.");
+    }
+
+    [TestMethod]
+    public void BuildHostLauncherExposesNoCallerSuppliedLocationAndNoProjectLiteral()
+    {
+        // The launcher's inputs are identity strings only: no constructor or method parameter can carry a
+        // location of any kind, so it is structurally unable to receive a project path.
+        var parameters = typeof(BuildHostLauncher)
+            .GetConstructors()
+            .SelectMany(constructor => constructor.GetParameters())
+            .Concat(typeof(BuildHostLauncher)
+                .GetMethods(BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public | BindingFlags.DeclaredOnly)
+                .SelectMany(method => method.GetParameters()))
+            .Where(parameter => parameter.ParameterType == typeof(string))
+            .Select(parameter => parameter.Name)
+            .Order(StringComparer.Ordinal)
+            .ToArray();
+
+        CollectionAssert.AreEqual(new[] { "canonicalSha256", "draftId" }, parameters);
+        // The deployment name is pinned as data so a rename of the host project breaks this test
+        // rather than silently orphaning already-deployed shells.
+        StringAssert.StartsWith(BuildHostLauncher.HostExecutableName, "VFXComposer.BuildHost");
+        StringAssert.EndsWith(BuildHostLauncher.HostExecutableName, ".exe");
     }
 
     [TestMethod]
@@ -659,6 +757,13 @@ public sealed class NoProjectAccessSurfaceTests
             yield break;
         }
 
+        // The launcher receives exactly its declared allowance (deployment-directory IO plus its own child process)
+        // and nothing else: network, Unity, listeners and System.Environment stay prohibited inside it.
+        if (IsBuildHostLauncherAllowedType(type) && IsBuildHostLauncherContext(context))
+        {
+            yield break;
+        }
+
         if (type.HasElementType)
         {
             foreach (var violation in CheckTypeReference(type.GetElementType(), context))
@@ -717,6 +822,34 @@ public sealed class NoProjectAccessSurfaceTests
         // Only the store itself, its members and its compiler-generated nested types qualify: a type that merely
         // begins with the same name receives nothing.
         var index = UiPreferencesStoreType.Length;
+        return index >= context.Length || context[index] is '.' or ' ' or '+';
+    }
+
+    private static bool IsBuildHostLauncherAllowedType(Type type)
+    {
+        var typeName = type.FullName ?? type.Name;
+        // Pipes are carved out before the IO prefix is consulted: the launcher allowance must not
+        // become an IPC surface (ADR-008 §2.3 point 3 keeps pipes and listeners prohibited inside it).
+        if (typeName.StartsWith("System.IO.Pipes.", StringComparison.Ordinal))
+        {
+            return false;
+        }
+
+        return BuildHostLauncherAllowedTypePrefixes.Any(prefix =>
+            typeName.StartsWith(prefix, StringComparison.Ordinal));
+    }
+
+    private static bool IsBuildHostLauncherContext(string context)
+    {
+        ArgumentNullException.ThrowIfNull(context);
+        if (!context.StartsWith(BuildHostLauncherType, StringComparison.Ordinal))
+        {
+            return false;
+        }
+
+        // Only the launcher itself, its members and its compiler-generated nested types (the Exited handler's
+        // closure) qualify: a type that merely begins with the same name receives nothing.
+        var index = BuildHostLauncherType.Length;
         return index >= context.Length || context[index] is '.' or ' ' or '+';
     }
 

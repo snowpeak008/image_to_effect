@@ -95,6 +95,11 @@ public sealed class SessionTimelineViewModel : ObservableObject
         UiStringKeys.CreateTimelineEntryConfirmed,
         [record.DraftId]);
 
+    /// <summary>One explicit build action started one private host process for this draft (F8c).</summary>
+    internal void AppendBuildStarted(RecipeDraftRecord record) => Append(
+        UiStringKeys.CreateTimelineEntryBuildStarted,
+        [record.DraftId]);
+
     internal void RefreshLocalizedText()
     {
         foreach (var entry in _entries)
