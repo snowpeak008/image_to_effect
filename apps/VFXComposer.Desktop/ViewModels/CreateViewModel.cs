@@ -55,6 +55,7 @@ public sealed class CreateViewModel : WorkspacePageViewModel
     private string _recipeDraftJson = string.Empty;
     private string? _validationSummaryKey;
     private IReadOnlyList<RecipeValidationIssue> _validationIssueList = [];
+    private IReadOnlyList<(string Key, object?[] Arguments)> _retentionLines = [];
     private RecipeDraftRecord? _currentDraft;
 
     public CreateViewModel(LocalizationService localization, IAiDesktopRuntime? runtime = null)
@@ -72,6 +73,8 @@ public sealed class CreateViewModel : WorkspacePageViewModel
         ConfirmRecipeDraftCommand = new RelayCommand(ConfirmRecipeDraft, CanConfirmRecipeDraft);
         ApplyPresetCommand = new RelayCommand<PresetCardViewModel>(ApplyPreset);
         UseSuggestionCommand = new RelayCommand<string>(UseSuggestion);
+        ParameterPanel = new ParameterPanelViewModel(localization);
+        ApplyParameterEditsCommand = new RelayCommand(ApplyParameterEdits, CanApplyParameterEdits);
         PresetCards = RecipePresetSkeletons.All
             .Select(skeleton =>
             {
@@ -130,6 +133,16 @@ public sealed class CreateViewModel : WorkspacePageViewModel
 
     public string RecipeStatus => Localized(_recipeStatusKey, _recipeStatusArguments);
 
+    /// <summary>
+    /// The typed retention report of the last save (REQ-004-33): superseded confirmations, level-1 trims and level-2
+    /// evictions, one catalog line each. Empty when the save retained everything, and cleared again by the next
+    /// action that saves nothing (a refused edit, a confirmation), so it never outlives the save it describes.
+    /// </summary>
+    public string RecipeRetentionNotice =>
+        string.Join("\n", _retentionLines.Select(line => Localized(line.Key, line.Arguments)));
+
+    public bool HasRetentionNotice => _retentionLines.Count > 0;
+
     /// <summary>The retained draft JSON (indented for reading; confirmation binds to the canonical hash).</summary>
     public string RecipeDraftJson
     {
@@ -163,6 +176,15 @@ public sealed class CreateViewModel : WorkspacePageViewModel
 
     /// <summary>Copies one suggestion sentence into the description box. It never triggers generation.</summary>
     public IRelayCommand<string> UseSuggestionCommand { get; }
+
+    /// <summary>The head draft's declared parameters, editable within the catalog bounds (REQ-004 §9).</summary>
+    public ParameterPanelViewModel ParameterPanel { get; }
+
+    /// <summary>
+    /// Runs the pending panel edits through the editor and appends the accepted document as a human_edit version
+    /// after the head. Zero AI, zero network: neither the editor nor the store touches the gateway (REQ-004-44).
+    /// </summary>
+    public IRelayCommand ApplyParameterEditsCommand { get; }
 
     /// <summary>The fixed simple-mode example cards, one per committed preset skeleton.</summary>
     public IReadOnlyList<PresetCardViewModel> PresetCards { get; }
@@ -267,6 +289,7 @@ public sealed class CreateViewModel : WorkspacePageViewModel
         SetCurrentDraft(null);
         RecipeDraftJson = string.Empty;
         SetValidationSummaryKey(null);
+        SetRetentionLines([]);
         SetRecipeStatus(UiStringKeys.CreateRecipeStatusGenerating);
         try
         {
@@ -317,11 +340,14 @@ public sealed class CreateViewModel : WorkspacePageViewModel
 
     private void PresentDraftedResult(RecipeGenerationResult result)
     {
-        var record = _runtime.RecipeDrafts.Save(RecipeDraftRecord.Create(result, DateTimeOffset.UtcNow));
-        SetCurrentDraft(record);
-        RecipeDraftJson = PrettyPrint(record.RecipeJson);
+        // An AI draft is a new lineage root (origin ai_draft); the typed outcome reports any lineage the level-2
+        // cap evicted so the page can say so instead of dropping it silently (REQ-004-33).
+        var outcome = _runtime.RecipeDrafts.SaveVersion(RecipeDraftRecord.Create(result, DateTimeOffset.UtcNow));
+        SetCurrentDraft(outcome.Record);
+        RecipeDraftJson = PrettyPrint(outcome.Record.RecipeJson);
         SetValidationSummaryKey(UiStringKeys.CreateValidationPassed);
         SetRecipeStatus(UiStringKeys.CreateRecipeStatusDraftReady, result.RequestCount);
+        PresentRetention(outcome);
     }
 
     /// <summary>
@@ -337,16 +363,91 @@ public sealed class CreateViewModel : WorkspacePageViewModel
 
         try
         {
-            var record = _runtime.RecipeDrafts.Save(card.Skeleton.CreateDraftRecord(DateTimeOffset.UtcNow));
-            SetCurrentDraft(record);
-            RecipeDraftJson = PrettyPrint(record.RecipeJson);
+            var outcome = _runtime.RecipeDrafts.SaveVersion(card.Skeleton.CreateDraftRecord(DateTimeOffset.UtcNow));
+            SetCurrentDraft(outcome.Record);
+            RecipeDraftJson = PrettyPrint(outcome.Record.RecipeJson);
             SetValidationSummaryKey(UiStringKeys.CreateValidationPassed);
             SetRecipeStatus(UiStringKeys.CreateRecipeStatusPresetApplied);
+            PresentRetention(outcome);
         }
         catch (RecipeDraftStoreException exception)
         {
             SetRecipeStatus(UiStringKeys.CreateRecipeStatusDraftStorageFailedWithCode, exception.Code);
         }
+    }
+
+    private bool CanApplyParameterEdits() => _currentDraft is { CanonicalSha256: not null };
+
+    private void ApplyParameterEdits()
+    {
+        if (_currentDraft is not { CanonicalSha256: not null } head)
+        {
+            return;
+        }
+
+        // The editor is a pure function over the head's JSON: type discipline, inclusive bounds, structural
+        // immutability, L1 and L1.5 all happen here, before anything is persisted (REQ-004-43).
+        var result = RecipeParameterEditor.Apply(head.RecipeJson, ParameterPanel.CollectEdits());
+        if (!result.IsAccepted)
+        {
+            ParameterPanel.PresentIssues(result.Issues);
+            SetRecipeStatus(UiStringKeys.CreateRecipeStatusParameterEditRejected, result.Issues.Count);
+            // The retention notice belongs to the save that produced it; a refused edit saved nothing, so an
+            // earlier trim/supersede line must not sit next to this rejection as if it were caused by it.
+            SetRetentionLines([]);
+            return;
+        }
+
+        try
+        {
+            // The hand edit lands as a new version after the head (origin human_edit, pending confirmation); the
+            // head's hash proves the user edited what was presented. The head's own record is never rewritten.
+            var outcome = _runtime.RecipeDrafts.AppendVersion(
+                head.DraftId,
+                head.CanonicalSha256,
+                RecipeParameterEditor.CreateHumanEditRevision(head, result),
+                DateTimeOffset.UtcNow);
+            SetCurrentDraft(outcome.Record);
+            RecipeDraftJson = PrettyPrint(outcome.Record.RecipeJson);
+            if (result.Issues.Count == 0)
+            {
+                SetValidationSummaryKey(UiStringKeys.CreateValidationPassed);
+            }
+            else
+            {
+                // L1.5 findings on the accepted document are warnings: they show, they do not block (F8a1 ruling).
+                SetValidationIssues(result.Issues);
+            }
+
+            SetRecipeStatus(UiStringKeys.CreateRecipeStatusHumanEditSaved, outcome.Record.RevisionOrdinal);
+            PresentRetention(outcome);
+        }
+        catch (RecipeDraftStoreException exception)
+        {
+            SetRecipeStatus(UiStringKeys.CreateRecipeStatusDraftStorageFailedWithCode, exception.Code);
+        }
+    }
+
+    /// <summary>Turns the typed retention outcome into catalog lines; a fully retained save leaves the notice empty.</summary>
+    private void PresentRetention(RecipeDraftSaveOutcome outcome)
+    {
+        var lines = new List<(string Key, object?[] Arguments)>();
+        if (outcome.SupersededDraftIds.Count > 0)
+        {
+            lines.Add((UiStringKeys.CreateRetentionNoticeSuperseded, []));
+        }
+
+        if (outcome.TrimmedDraftIds.Count > 0)
+        {
+            lines.Add((UiStringKeys.CreateRetentionNoticeTrimmed, [outcome.TrimmedDraftIds.Count]));
+        }
+
+        if (outcome.EvictedLineageIds.Count > 0)
+        {
+            lines.Add((UiStringKeys.CreateRetentionNoticeEvicted, [outcome.EvictedLineageIds.Count, outcome.EvictedVersionCount]));
+        }
+
+        SetRetentionLines(lines);
     }
 
     private void UseSuggestion(string? sentence)
@@ -361,21 +462,27 @@ public sealed class CreateViewModel : WorkspacePageViewModel
     {
         RecipeDraftJson = result.LastOutputText ?? string.Empty;
         SetValidationIssues(result.Issues);
-        SetRecipeStatus(
-            UiStringKeys.CreateRecipeStatusValidationFailed,
-            result.RequestCount,
-            string.Join(", ", result.Issues
-                .Where(static issue => issue.Severity == RecipeValidationSeverity.Error)
-                .Select(static issue => issue.Code)
-                .Distinct(StringComparer.Ordinal)));
+        var errorCodes = string.Join(", ", result.Issues
+            .Where(static issue => issue.Severity == RecipeValidationSeverity.Error)
+            .Select(static issue => issue.Code)
+            .Distinct(StringComparer.Ordinal));
         try
         {
             // The failed final state is retained too, so the user can inspect it later (REQ-001 X3).
-            SetCurrentDraft(_runtime.RecipeDrafts.Save(RecipeDraftRecord.Create(result, DateTimeOffset.UtcNow)));
+            var outcome = _runtime.RecipeDrafts.SaveVersion(RecipeDraftRecord.Create(result, DateTimeOffset.UtcNow));
+            SetCurrentDraft(outcome.Record);
+            SetRecipeStatus(UiStringKeys.CreateRecipeStatusValidationFailed, result.RequestCount, errorCodes);
+            PresentRetention(outcome);
         }
-        catch (RecipeDraftStoreException)
+        catch (RecipeDraftStoreException exception)
         {
-            // Retention is best-effort for a failed draft; the on-screen report above stays authoritative.
+            // The on-screen report stays authoritative, and the store's stable code is said out loud rather than
+            // swallowed: the user learns the failed draft is not retained and why.
+            SetRecipeStatus(
+                UiStringKeys.CreateRecipeStatusValidationFailedNotRetainedWithCode,
+                result.RequestCount,
+                errorCodes,
+                exception.Code);
         }
     }
 
@@ -395,6 +502,8 @@ public sealed class CreateViewModel : WorkspacePageViewModel
             // The canonical hash binds this click to the exact draft content that was presented.
             SetCurrentDraft(_runtime.RecipeDrafts.Confirm(draft.DraftId, draft.CanonicalSha256));
             SetRecipeStatus(UiStringKeys.CreateRecipeStatusDraftConfirmed);
+            // Confirmation saves no version, so the previous save's retention report has run its course.
+            SetRetentionLines([]);
         }
         catch (RecipeDraftStoreException exception)
         {
@@ -406,6 +515,7 @@ public sealed class CreateViewModel : WorkspacePageViewModel
     {
         OnPropertyChanged(nameof(ChatStatus));
         OnPropertyChanged(nameof(RecipeStatus));
+        OnPropertyChanged(nameof(RecipeRetentionNotice));
         OnPropertyChanged(nameof(RecipeValidationSummary));
         OnPropertyChanged(nameof(CapabilityLine));
         OnPropertyChanged(nameof(ScopeNotice));
@@ -414,6 +524,8 @@ public sealed class CreateViewModel : WorkspacePageViewModel
         {
             card.RefreshLocalizedText();
         }
+
+        ParameterPanel.RefreshLocalizedText();
     }
 
     // Status lines keep their key and arguments instead of a rendered string, so a language switch re-renders them.
@@ -446,12 +558,21 @@ public sealed class CreateViewModel : WorkspacePageViewModel
         OnPropertyChanged(nameof(RecipeValidationSummary));
     }
 
+    private void SetRetentionLines(IReadOnlyList<(string Key, object?[] Arguments)> lines)
+    {
+        _retentionLines = lines;
+        OnPropertyChanged(nameof(RecipeRetentionNotice));
+        OnPropertyChanged(nameof(HasRetentionNotice));
+    }
+
     private void SetCurrentDraft(RecipeDraftRecord? record)
     {
         _currentDraft = record;
+        ParameterPanel.Load(record);
         OnPropertyChanged(nameof(DraftStatus));
         OnPropertyChanged(nameof(DraftId));
         ConfirmRecipeDraftCommand.NotifyCanExecuteChanged();
+        ApplyParameterEditsCommand.NotifyCanExecuteChanged();
     }
 
     private static string PrettyPrint(string json)
@@ -467,15 +588,5 @@ public sealed class CreateViewModel : WorkspacePageViewModel
         }
     }
 
-    /// <summary>
-    /// Renders each issue verbatim (stable code, JSON path, validator message) and appends the bilingual repair
-    /// suggestion on its own indented line when the code maps to a suggestion key.
-    /// </summary>
-    private string FormatIssues(IReadOnlyList<RecipeValidationIssue> issues) =>
-        string.Join(
-            "\n",
-            issues.Select(issue =>
-                RecipeSuggestionCopy.TryGetCatalogKey(issue.Code, out var catalogKey)
-                    ? issue.Code + " " + issue.Path + ": " + issue.Message + "\n    → " + Localization[catalogKey]
-                    : issue.Code + " " + issue.Path + ": " + issue.Message));
+    private string FormatIssues(IReadOnlyList<RecipeValidationIssue> issues) => RecipeIssueReport.Render(Localization, issues);
 }

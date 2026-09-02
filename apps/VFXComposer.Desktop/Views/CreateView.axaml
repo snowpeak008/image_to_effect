@@ -67,8 +67,46 @@
           <Button Command="{Binding ConfirmRecipeDraftCommand}" Content="{Binding Localization[CreateConfirmDraftAction]}" />
         </StackPanel>
         <TextBlock Classes="muted" Text="{Binding RecipeStatus}" TextWrapping="Wrap" />
+        <TextBlock Classes="muted" IsVisible="{Binding HasRetentionNotice}" Text="{Binding RecipeRetentionNotice}" TextWrapping="Wrap" />
         <TextBox AcceptsReturn="True" Height="72" IsReadOnly="True" Text="{Binding RecipeValidationSummary}" TextWrapping="Wrap" Watermark="{Binding Localization[CreateValidationWatermark]}" />
         <TextBox AcceptsReturn="True" Height="180" IsReadOnly="True" FontFamily="Consolas,Menlo,monospace" Text="{Binding RecipeDraftJson}" TextWrapping="Wrap" Watermark="{Binding Localization[CreateDraftJsonWatermark]}" />
+      </StackPanel>
+    </Border>
+    <Border Classes="card" IsVisible="{Binding ParameterPanel.HasHead}">
+      <StackPanel Spacing="10">
+        <TextBlock FontWeight="SemiBold" Text="{Binding Localization[CreateParameterPanelHeading]}" />
+        <TextBlock Classes="muted" Text="{Binding Localization[CreateParameterPanelNotice]}" TextWrapping="Wrap" />
+        <ItemsControl ItemsSource="{Binding ParameterPanel.Modules}">
+          <ItemsControl.ItemTemplate>
+            <DataTemplate x:DataType="vm:ParameterModuleViewModel">
+              <StackPanel Margin="0,4" Spacing="4">
+                <TextBlock FontWeight="SemiBold" Text="{Binding Header}" TextWrapping="Wrap" />
+                <ItemsControl ItemsSource="{Binding Parameters}">
+                  <ItemsControl.ItemTemplate>
+                    <DataTemplate x:DataType="vm:ParameterRowViewModel">
+                      <Grid ColumnDefinitions="120,110,150,*" Margin="0,2">
+                        <TextBlock Grid.Column="0" VerticalAlignment="Center" Text="{Binding Name}" />
+                        <TextBox Grid.Column="1" Text="{Binding EditText}" />
+                        <TextBlock Grid.Column="2" Classes="muted" Margin="8,0,0,0" VerticalAlignment="Center" Text="{Binding ValueHint}" TextWrapping="Wrap" />
+                        <TextBlock Grid.Column="3" Classes="muted" Margin="8,0,0,0" VerticalAlignment="Center" Text="{Binding BoundsHint}" TextWrapping="Wrap" />
+                      </Grid>
+                    </DataTemplate>
+                  </ItemsControl.ItemTemplate>
+                </ItemsControl>
+              </StackPanel>
+            </DataTemplate>
+          </ItemsControl.ItemTemplate>
+        </ItemsControl>
+        <TextBlock FontWeight="SemiBold" IsVisible="{Binding ParameterPanel.HasWarnings}" Text="{Binding Localization[CreateParameterWarningsHeading]}" />
+        <ItemsControl ItemsSource="{Binding ParameterPanel.Warnings}">
+          <ItemsControl.ItemTemplate>
+            <DataTemplate x:DataType="vm:ParameterWarningViewModel">
+              <TextBlock Classes="muted" Text="{Binding Text}" TextWrapping="Wrap" />
+            </DataTemplate>
+          </ItemsControl.ItemTemplate>
+        </ItemsControl>
+        <Button HorizontalAlignment="Left" Command="{Binding ApplyParameterEditsCommand}" Content="{Binding Localization[CreateParameterApplyAction]}" />
+        <TextBox AcceptsReturn="True" Height="72" IsReadOnly="True" Text="{Binding ParameterPanel.IssueReport}" TextWrapping="Wrap" Watermark="{Binding Localization[CreateParameterReportWatermark]}" />
       </StackPanel>
     </Border>
     <Border Classes="card">

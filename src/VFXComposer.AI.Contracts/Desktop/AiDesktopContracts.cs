@@ -301,8 +301,11 @@ public interface IAiDesktopRuntime : IAsyncDisposable
     /// <summary>Structured Recipe generation over the same explicit ChatLlm binding as <see cref="Gateway"/>.</summary>
     IRecipeGenerationChannel RecipeGeneration { get; }
 
-    /// <summary>Recipe draft persistence in current-user application data; never a Unity project path.</summary>
-    IRecipeDraftStore RecipeDrafts { get; }
+    /// <summary>
+    /// Recipe draft persistence in current-user application data; never a Unity project path. The version-chain
+    /// surface is exposed so the Create page can append hand edits after the lineage head (REQ-004 §7, §9).
+    /// </summary>
+    IRecipeDraftLineageStore RecipeDrafts { get; }
 
     ValueTask<Stream> OpenImageArtifactAsync(string privateArtifactId, CancellationToken cancellationToken = default);
 }
@@ -317,7 +320,7 @@ public static class AiDesktopRuntime
         IAiGateway,
         IAiDesktopSettings,
         IRecipeGenerationChannel,
-        IRecipeDraftStore
+        IRecipeDraftLineageStore
     {
         private static readonly AiDesktopSettingsSnapshot Empty = new(
             0,
@@ -331,7 +334,7 @@ public static class AiDesktopRuntime
         public IAiGateway Gateway => this;
         public IAiDesktopSettings Settings => this;
         public IRecipeGenerationChannel RecipeGeneration => this;
-        public IRecipeDraftStore RecipeDrafts => this;
+        public IRecipeDraftLineageStore RecipeDrafts => this;
 
         public ValueTask<RecipeGenerationResult> GenerateAsync(
             RecipeGenerationRequest request,
@@ -340,6 +343,21 @@ public static class AiDesktopRuntime
 
         public RecipeDraftRecord Save(RecipeDraftRecord record) =>
             throw new RecipeDraftStoreException(RecipeDraftStoreErrorCode.StorageFailed);
+
+        public RecipeDraftSaveOutcome SaveVersion(RecipeDraftRecord record) =>
+            throw new RecipeDraftStoreException(RecipeDraftStoreErrorCode.StorageFailed);
+
+        public RecipeDraftSaveOutcome AppendVersion(
+            string parentDraftId,
+            string parentCanonicalSha256,
+            RecipeDraftRevision revision,
+            DateTimeOffset createdUtc) =>
+            throw new RecipeDraftStoreException(RecipeDraftStoreErrorCode.StorageFailed);
+
+        public RecipeDraftTruncateOutcome TruncateAfter(string draftId) =>
+            throw new RecipeDraftStoreException(RecipeDraftStoreErrorCode.StorageFailed);
+
+        public IReadOnlyList<RecipeDraftRecord> ListLineage(string lineageId) => Array.Empty<RecipeDraftRecord>();
 
         public RecipeDraftRecord Confirm(string draftId, string canonicalSha256) =>
             throw new RecipeDraftStoreException(RecipeDraftStoreErrorCode.StorageFailed);

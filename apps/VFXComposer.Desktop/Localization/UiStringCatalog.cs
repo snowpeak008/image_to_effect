@@ -107,6 +107,46 @@ public static class UiStringCatalog
                 + "JSON into a batch manifest, then run the command below from the repository root. The batch path "
                 + "does not update this page's draft status.",
 
+            [UiStringKeys.CreateParameterPanelHeading] = "Parameter panel",
+            [UiStringKeys.CreateParameterPanelNotice] =
+                "The current head draft's declared parameters, editable inside the catalog's inclusive [min, max] "
+                + "bounds. Applying lands a new human_edit version awaiting confirmation; no AI request is made.",
+            [UiStringKeys.CreateParameterApplyAction] = "Apply changes",
+            [UiStringKeys.CreateParameterReportWatermark] = "Edit results appear here",
+            [UiStringKeys.CreateParameterModuleHeader] = "Stage {0}, module {1}: {2} ({3})",
+            [UiStringKeys.CreateParameterBoundsHint] = "{0} in {1}, default {2}",
+            [UiStringKeys.CreateParameterCurrentValue] = "Current {0}",
+            [UiStringKeys.CreateParameterMissingHint] = "Not set in the draft (declared by the template)",
+            [UiStringKeys.CreateParameterWarningsHeading] = "Warnings (not editable)",
+            [UiStringKeys.CreateParameterWarningTemplateUnknown] =
+                "{0}: template {1} is not declared by the catalog; the module cannot be edited here.",
+            [UiStringKeys.CreateParameterWarningParameterUndeclared] =
+                "{0}: key {1} is not declared by the template and cannot be edited.",
+            [UiStringKeys.CreateParameterWarningModuleUnaddressable] =
+                "{0}: the module has no string id ({1}) and cannot be addressed.",
+            [UiStringKeys.CreateRecipeStatusHumanEditSaved] =
+                "Version v{0} saved (human_edit) - confirm to queue it for build.",
+            [UiStringKeys.CreateRecipeStatusParameterEditRejected] =
+                "Edit rejected: {0} issue(s); nothing was saved.",
+            [UiStringKeys.CreateRecipeStatusValidationFailedNotRetainedWithCode] =
+                "Validation failed after {0} request(s): {1}. The failed draft was not retained: {2}.",
+            [UiStringKeys.CreateRetentionNoticeSuperseded] =
+                "The earlier confirmation in this lineage is now Superseded; that version can no longer be built.",
+            [UiStringKeys.CreateRetentionNoticeTrimmed] =
+                "Retention: {0} older version(s) of this lineage were trimmed.",
+            [UiStringKeys.CreateRetentionNoticeEvicted] =
+                "Retention: {0} inactive lineage(s) ({1} version(s)) were evicted from the store.",
+
+            [UiStringKeys.RecipeParameterEditNoChanges] = "No parameter value was changed; nothing was saved.",
+            [UiStringKeys.RecipeParameterEditTargetNotFound] = "{0}: no declared parameter at this location.",
+            [UiStringKeys.RecipeParameterEditValueNotInteger] = "{0}: '{1}' is not an integer; expected {2}.",
+            [UiStringKeys.RecipeParameterEditValueNotFinite] = "{0}: '{1}' is not a finite number; expected {2}.",
+            [UiStringKeys.RecipeParameterEditValueOutOfRange] =
+                "{0}: {1} is outside the allowed range {2}; the value was not clamped.",
+            [UiStringKeys.RecipeParameterEditDocumentNotEditable] =
+                "The draft document cannot be parsed into editable stages.",
+            [UiStringKeys.RecipeParameterEditDuplicateTarget] = "{0}: the same parameter is edited more than once.",
+
             [UiStringKeys.CreatePresetFireBoltTitle] = "Fire bolt",
             [UiStringKeys.CreatePresetFireBoltDescription] =
                 "A single fiery core travelling in a straight line.",
@@ -404,6 +444,46 @@ public static class UiStringCatalog
             [UiStringKeys.CreateBuildHandoffNotice] =
                 "构建仍需在命令行完成：先关闭 Unity 编辑器，将已确认的 recipe JSON 放入批量清单，"
                 + "再在仓库根目录运行下方命令。批量路径不会更新本页的草稿状态。",
+
+            [UiStringKeys.CreateParameterPanelHeading] = "参数面板",
+            [UiStringKeys.CreateParameterPanelNotice] =
+                "当前 head 草稿已声明的参数，可在目录含界 [min, max] 区间内编辑。"
+                + "应用后落一个等待确认的新 human_edit 版本；不发起任何 AI 请求。",
+            [UiStringKeys.CreateParameterApplyAction] = "应用修改",
+            [UiStringKeys.CreateParameterReportWatermark] = "手改结果显示在此",
+            [UiStringKeys.CreateParameterModuleHeader] = "stage {0}，模块 {1}：{2}（{3}）",
+            [UiStringKeys.CreateParameterBoundsHint] = "{0}，区间 {1}，默认 {2}",
+            [UiStringKeys.CreateParameterCurrentValue] = "当前 {0}",
+            [UiStringKeys.CreateParameterMissingHint] = "草稿中未设置（模板已声明）",
+            [UiStringKeys.CreateParameterWarningsHeading] = "预警（不可编辑）",
+            [UiStringKeys.CreateParameterWarningTemplateUnknown] =
+                "{0}：模板 {1} 未在目录中声明；该模块无法在此编辑。",
+            [UiStringKeys.CreateParameterWarningParameterUndeclared] =
+                "{0}：键 {1} 未被模板声明，不可编辑。",
+            [UiStringKeys.CreateParameterWarningModuleUnaddressable] =
+                "{0}：模块缺少字符串 id（{1}），无法定位。",
+            [UiStringKeys.CreateRecipeStatusHumanEditSaved] =
+                "已落新版本 v{0}（human_edit）——确认后加入构建队列。",
+            [UiStringKeys.CreateRecipeStatusParameterEditRejected] =
+                "手改被拒绝：{0} 条问题；未保存任何内容。",
+            [UiStringKeys.CreateRecipeStatusValidationFailedNotRetainedWithCode] =
+                "{0} 次请求后校验失败：{1}。失败草稿未能保留：{2}。",
+            [UiStringKeys.CreateRetentionNoticeSuperseded] =
+                "本链此前的确认已失效（Superseded）；该版本不可再构建。",
+            [UiStringKeys.CreateRetentionNoticeTrimmed] =
+                "保留策略：本链 {0} 个较早版本已被裁剪。",
+            [UiStringKeys.CreateRetentionNoticeEvicted] =
+                "保留策略：{0} 条不活跃版本链（共 {1} 个版本）已被淘汰。",
+
+            [UiStringKeys.RecipeParameterEditNoChanges] = "没有参数值被修改；未保存任何内容。",
+            [UiStringKeys.RecipeParameterEditTargetNotFound] = "{0}：此位置没有已声明的参数。",
+            [UiStringKeys.RecipeParameterEditValueNotInteger] = "{0}：'{1}' 不是整数；期望 {2}。",
+            [UiStringKeys.RecipeParameterEditValueNotFinite] = "{0}：'{1}' 不是有限实数；期望 {2}。",
+            [UiStringKeys.RecipeParameterEditValueOutOfRange] =
+                "{0}：{1} 超出允许区间 {2}；数值未被夹取。",
+            [UiStringKeys.RecipeParameterEditDocumentNotEditable] =
+                "草稿文档无法解析为可编辑的 stage。",
+            [UiStringKeys.RecipeParameterEditDuplicateTarget] = "{0}：同一参数被重复编辑。",
 
             [UiStringKeys.CreatePresetFireBoltTitle] = "火焰弹",
             [UiStringKeys.CreatePresetFireBoltDescription] = "一枚沿直线飞行的火焰核心。",

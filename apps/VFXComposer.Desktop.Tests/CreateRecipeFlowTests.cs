@@ -144,9 +144,39 @@ public sealed class CreateRecipeFlowTests
 
         await viewModel.GenerateRecipeCommand.ExecuteAsync(null);
 
-        Assert.IsTrue(viewModel.RecipeStatus.Contains("StorageFailed", StringComparison.Ordinal));
+        // Semantics, not wording: the status is the storage-failure key rendered with the store's stable code.
+        Assert.AreEqual(
+            LocalizationTestSupport.EnglishFormat(
+                UiStringKeys.CreateRecipeStatusDraftStorageFailedWithCode,
+                RecipeDraftStoreErrorCode.StorageFailed),
+            viewModel.RecipeStatus);
         Assert.IsNull(viewModel.DraftStatus);
         Assert.IsFalse(viewModel.ConfirmRecipeDraftCommand.CanExecute(null));
+    }
+
+    [TestMethod]
+    public async Task AStorageFailureWhileRetainingAFailedDraftIsSaidOutLoudWithItsStableCode()
+    {
+        var runtime = new FakeRecipeRuntime { NextResult = FailedResult, ThrowOnSave = true };
+        var viewModel = new CreateViewModel(LocalizationTestSupport.CreateEnglish(), runtime)
+        {
+            EffectDescription = "a synthetic fireball",
+        };
+
+        await viewModel.GenerateRecipeCommand.ExecuteAsync(null);
+
+        // The validation report stays authoritative and the store code is no longer swallowed (F8b3 ruling ⑤).
+        Assert.AreEqual(
+            LocalizationTestSupport.EnglishFormat(
+                UiStringKeys.CreateRecipeStatusValidationFailedNotRetainedWithCode,
+                1,
+                "E101",
+                RecipeDraftStoreErrorCode.StorageFailed),
+            viewModel.RecipeStatus);
+        Assert.IsTrue(viewModel.RecipeValidationSummary.Contains("E101", StringComparison.Ordinal));
+        Assert.IsNull(viewModel.DraftStatus, "Nothing was retained.");
+        Assert.AreEqual(0, runtime.Records.Count);
+        Assert.IsFalse(viewModel.ParameterPanel.HasHead);
     }
 
     [TestMethod]
@@ -195,7 +225,7 @@ public sealed class CreateRecipeFlowTests
             "prompt/1",
             "1.0.0");
 
-    private sealed class FakeRecipeRuntime : IAiDesktopRuntime, IAiGateway, IRecipeGenerationChannel, IRecipeDraftStore
+    private sealed class FakeRecipeRuntime : IAiDesktopRuntime, IAiGateway, IRecipeGenerationChannel, IRecipeDraftLineageStore
     {
         public Func<RecipeGenerationRequest, RecipeGenerationResult>? NextResult { get; init; }
         public bool ThrowOnSave { get; init; }
@@ -209,7 +239,7 @@ public sealed class CreateRecipeFlowTests
         public IAiGateway Gateway => this;
         public IAiDesktopSettings Settings => throw new NotSupportedException();
         public IRecipeGenerationChannel RecipeGeneration => this;
-        public IRecipeDraftStore RecipeDrafts => this;
+        public IRecipeDraftLineageStore RecipeDrafts => this;
 
         public ValueTask<RecipeGenerationResult> GenerateAsync(
             RecipeGenerationRequest request,
@@ -218,6 +248,24 @@ public sealed class CreateRecipeFlowTests
             GenerateCalls++;
             return ValueTask.FromResult(NextResult!(request));
         }
+
+        // F8b3 mechanical adaptation: the lineage surface wraps the existing in-memory Save; chain operations are
+        // not exercised by these flow tests (the parameter-panel tests use the real store).
+        public RecipeDraftSaveOutcome SaveVersion(RecipeDraftRecord record) =>
+            new(Save(record), Array.Empty<string>(), Array.Empty<string>(), Array.Empty<string>(), 0);
+
+        public RecipeDraftSaveOutcome AppendVersion(
+            string parentDraftId,
+            string parentCanonicalSha256,
+            RecipeDraftRevision revision,
+            DateTimeOffset createdUtc) =>
+            throw new NotSupportedException("The flow tests never append a version.");
+
+        public RecipeDraftTruncateOutcome TruncateAfter(string draftId) =>
+            throw new NotSupportedException("The Create page never truncates in this card.");
+
+        public IReadOnlyList<RecipeDraftRecord> ListLineage(string lineageId) =>
+            Records.Values.Where(record => record.LineageId == lineageId).OrderBy(static record => record.RevisionOrdinal).ToArray();
 
         public RecipeDraftRecord Save(RecipeDraftRecord record)
         {

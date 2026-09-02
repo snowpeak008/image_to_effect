@@ -69,7 +69,7 @@ public sealed class ProviderDesktopRuntime : IAiDesktopRuntime
 
     public IRecipeGenerationChannel RecipeGeneration { get; }
 
-    public IRecipeDraftStore RecipeDrafts { get; }
+    public IRecipeDraftLineageStore RecipeDrafts { get; }
 
     public ValueTask<Stream> OpenImageArtifactAsync(string privateArtifactId, CancellationToken cancellationToken = default) =>
         _gateway.OpenImageArtifactAsync(privateArtifactId, cancellationToken);
