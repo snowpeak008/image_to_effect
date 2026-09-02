@@ -91,11 +91,24 @@ internal static class RecipePromptAssembler
     /// </summary>
     public static string Version { get; } = ComposeVersion();
 
+    /// <summary>
+    /// The full system prompt: the concatenation of every system fragment in registry order, computed once and
+    /// identical across calls. It fits one message; <see cref="CreateInitialMessages"/> and
+    /// <see cref="CreateRepairMessages"/> emit exactly this text as their first message.
+    /// </summary>
     public static string SystemPrompt => CachedSystemPrompt.Value;
 
     /// <summary>The strict-budget reference recipe exactly as embedded in the system prompt.</summary>
     public static string ReferenceRecipeJson => CachedReferenceRecipe.Value;
 
+    /// <summary>
+    /// Builds the first-attempt request: one System message (<see cref="SystemPrompt"/>) followed by one User
+    /// message wrapping <paramref name="description"/> in the fixed request shell. Identical descriptions yield
+    /// identical messages. A null, empty, or whitespace description is an <see cref="ArgumentException"/>; a
+    /// description that clears the contract guard but, once wrapped, exceeds <see cref="MaximumMessageCharacters"/>
+    /// fails closed from <see cref="Assemble"/> as <see cref="ChatChannelErrorCode.PayloadTooLarge"/> — it is
+    /// never split or truncated.
+    /// </summary>
     public static IReadOnlyList<ChatChannelMessage> CreateInitialMessages(string description)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(description);
@@ -106,6 +119,16 @@ internal static class RecipePromptAssembler
         ]);
     }
 
+    /// <summary>
+    /// Builds a retry request after a validation failure: the same System and User messages as
+    /// <see cref="CreateInitialMessages"/>, then an optional Assistant message echoing
+    /// <paramref name="previousOutput"/>, then a User message listing <paramref name="issues"/> as repair
+    /// instructions. The echo is omitted when the previous output is blank or longer than
+    /// <see cref="MaximumMessageCharacters"/>; the issue list renders at most 64 entries and stops early near
+    /// the message bound, appending an "omitted" count. Identical inputs yield identical messages. The
+    /// description guard and the size fail-closed behavior are those of <see cref="CreateInitialMessages"/>;
+    /// a null issue list is an <see cref="ArgumentNullException"/>.
+    /// </summary>
     public static IReadOnlyList<ChatChannelMessage> CreateRepairMessages(
         string description,
         string? previousOutput,

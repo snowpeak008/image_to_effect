@@ -14,9 +14,6 @@ namespace VFXComposer.AI.Tests.Recipes;
 [TestClass]
 public sealed class RecipePromptComplianceTests
 {
-    /// <summary>Mirrors the private per-message bound of <see cref="RecipePromptAssembler"/>.</summary>
-    private const int MaximumMessageCharacters = 16 * 1024;
-
     private const int MaximumModules = 2;
 
     private static readonly (string Id, string Trigger)[] RequiredStageRoots =
@@ -104,7 +101,7 @@ public sealed class RecipePromptComplianceTests
             first.Select(static message => message.Role.ToString() + "|" + message.Content).ToArray(),
             second.Select(static message => message.Role.ToString() + "|" + message.Content).ToArray());
         Assert.IsTrue(
-            first[0].Content.Length <= MaximumMessageCharacters,
+            first[0].Content.Length <= RecipePromptAssembler.MaximumMessageCharacters,
             "The system prompt is " + first[0].Content.Length.ToString(CultureInfo.InvariantCulture) + " characters.");
     }
 

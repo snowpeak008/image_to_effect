@@ -202,6 +202,50 @@ public sealed class RecipePromptAssemblerTests
         Assert.ThrowsExactly<ArgumentException>(() => RecipePromptAssembler.Assemble([]));
     }
 
+    // ---- description upper bound (contract guard passes, request shell pushes past the message bound) ----
+
+    [TestMethod]
+    public void ADescriptionAtTheContractBoundFailsClosedAsPayloadTooLargeOnceTheRequestShellIsAdded()
+    {
+        // 16 384 ASCII characters clear the contract's description guard (RecipeGenerationRequest applies
+        // RecipeChannelLimits.MaximumDescriptionUtf8Bytes), but the request fragment wraps the description in fixed
+        // shell text, so the single user fragment ends past the per-message bound. Assemble rejects it as
+        // PayloadTooLarge rather than truncating.
+        var description = new string('a', RecipeChannelLimits.MaximumDescriptionUtf8Bytes);
+        Assert.AreEqual(description, new RecipeGenerationRequest(Guid.NewGuid().ToString("N"), description).Description);
+
+        var exception = Assert.ThrowsExactly<ChatChannelException>(() =>
+            RecipePromptAssembler.CreateInitialMessages(description));
+
+        Assert.AreEqual(ChatChannelErrorCode.PayloadTooLarge, exception.Code);
+    }
+
+    [TestMethod]
+    public void TheLargestDescriptionWhoseRequestFillsExactlyOneMessageStillAssembles()
+    {
+        // The single-fragment check is strict (>), so shell + description == MaximumMessageCharacters passes and
+        // one more character fails: the positive edge sits at 16 384 - shell characters.
+        var description = new string('a', RecipePromptAssembler.MaximumMessageCharacters - RequestShellCharacters());
+
+        var messages = RecipePromptAssembler.CreateInitialMessages(description);
+
+        Assert.AreEqual(2, messages.Count);
+        Assert.AreEqual(ChatRole.User, messages[1].Role);
+        Assert.AreEqual(RecipePromptAssembler.MaximumMessageCharacters, messages[1].Content.Length);
+        StringAssert.Contains(messages[1].Content, description);
+
+        var exception = Assert.ThrowsExactly<ChatChannelException>(() =>
+            RecipePromptAssembler.CreateInitialMessages(description + "a"));
+        Assert.AreEqual(ChatChannelErrorCode.PayloadTooLarge, exception.Code);
+    }
+
+    /// <summary>
+    /// The fixed shell text the request fragment wraps around a description, measured from a one-character
+    /// probe so the edge tests track the fragment's text rather than a copied constant (68 today; the
+    /// <c>User|91</c> snapshot pin for the 23-character fixed description confirms it).
+    /// </summary>
+    private static int RequestShellCharacters() => RecipePromptAssembler.CreateInitialMessages("x")[1].Content.Length - 1;
+
     // ---- composite version string ----
 
     [TestMethod]
