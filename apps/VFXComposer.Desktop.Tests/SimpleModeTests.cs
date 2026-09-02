@@ -98,7 +98,12 @@ public sealed class SimpleModeTests
 
         viewModel.ApplyPresetCommand.Execute(viewModel.PresetCards[0]);
 
-        Assert.IsTrue(viewModel.RecipeStatus.Contains("StorageFailed", StringComparison.Ordinal));
+        // Semantics, not wording: the status is the storage-failure key rendered with the store's stable code.
+        Assert.AreEqual(
+            LocalizationTestSupport.EnglishFormat(
+                UiStringKeys.CreateRecipeStatusDraftStorageFailedWithCode,
+                RecipeDraftStoreErrorCode.StorageFailed),
+            viewModel.RecipeStatus);
         Assert.IsNull(viewModel.DraftStatus);
         Assert.IsFalse(viewModel.ConfirmRecipeDraftCommand.CanExecute(null));
     }
