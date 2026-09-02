@@ -15,5 +15,10 @@ public static class AiContractVersions
     /// </summary>
     public const string RecipeSystemPrompt = "vfxcomposer.ai.recipe-prompt/2";
 
-    public const int RecipeDraftRecordFormatVersion = 1;
+    /// <summary>
+    /// Wire version of the retained recipe draft store. Version 2 added the version-chain provenance
+    /// (lineage, parent, ordinal, origin) and the per-lineage revision watermark; version 1 files are refused
+    /// with <see cref="Recipes.RecipeDraftStoreErrorCode.UnsupportedVersion"/> and never migrated (REQ-004 §7.4).
+    /// </summary>
+    public const int RecipeDraftRecordFormatVersion = 2;
 }
