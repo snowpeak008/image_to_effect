@@ -1,6 +1,12 @@
 # 开发记忆与恢复指南
 
-> **在途状态快照（2026-09-01 续接会话，§7 生成体验大改版进行中）**：
+> **在途状态快照（2026-09-02 崩溃恢复会话）**：Cursor 在 F8b1/F8b2 并行开发期间崩溃并重装，对话记录全丢；本快照由重读仓库与 worktree 还原。
+> **master `8428199d`（01:21）= origin/master，工作树干净**；最后一笔为简单模式里程碑审计登记（PASS-with-remarks，858/858）。§7 已闭：F8-0、R5、R6、F8a1、F8a2、简单模式审计。
+> **F8b1（PromptAssembler 重构）——开发完成、未初审、未合并**：worktree `D:\wt\i2s-f8b1`，分支 `task/F8b1-prompt-assembler`，基于 `8428199d`，2 笔提交（`bf7b388a` 重构 02:07、`0ff5d401` 测试 02:10），工作树干净。改动 12 文件 +715/−218：新增 `RecipePromptAssembler`/`RecipePromptFragment`/`RecipePromptSection`，删除 `RecipePromptTemplate`；`AiContractVersions.RecipeSystemPrompt`→`RecipePromptAssembler = "vfxcomposer.ai.recipe-prompt-assembler/1"`，复合版本串 = 组装器修订 + 8 片段 `id/version`（写入 `PromptTemplateVersion`，store 未升版）；按片段边界拆分 16 KiB/条、`MaximumMessages`/256 KiB 请求界 fail-closed 为 `PayloadTooLarge`；`RecipeGenerationService` 与 5 个既有测试文件仅机械改引用；新增 `RecipePromptAssemblerTests` 16 条（哈希 pin 重构前消息序列、拆分正负向、版本串守卫）。**本会话复验：Release 构建 0/0，AI.Tests 163/163（147+16），全量 874/874（858+16）**。下一步：主 agent 初审（allow-list 应仅 `src/VFXComposer.AI.Contracts/**`、`src/VFXComposer.AI.Providers/Recipes/**`、`src/VFXComposer.AI.Tests/**`）→ 合并推送 → 状态板登记 → 退役 worktree。
+> **F8b2（草稿 store 版本链）——仅建好 worktree，零提交、零 WIP**：`D:\wt\i2s-f8b2`，分支 `task/F8b2-draft-store-lineage`，01:22 与 F8b1 同时建立，feed 已复制，HEAD 仍在 `8428199d`。需重派或主 agent 自做（任务卡见主计划 §7；注意 RG-6 跨入口冲突行为定义必须可测试；lineage/origin 四值/parentDraftId/两级 cap/`UnsupportedVersion`/`Superseded`，store 升版仿 F3c 旧版 fail-closed）。
+> 剩余序列不变：F8b1 合入 → F8b2 → F8b3（参数面板）→ F8b4（精修回路）→ 专业模式里程碑审计 → F8c（按 ADR-008）→ 收尾。
+
+> **历史快照（2026-09-01 续接会话，§7 生成体验大改版进行中）**：
 > **R6 与 F8a2 均已关闭合入推送**。R6：ADR-008（`60c39c02`）。F8a2：分支 `task/F8a2-simple-mode` 3 笔提交合并进 master，合并态复验 Release 0/0、全量 **858/858**（AI.Tests 147、Desktop.Tests 110）；交付细节见主计划 §7 F8a2 卡。worktree `D:\wt\i2s-f8a2` 已退役。
 > **测试基线勘误（重要）**：此前登记的"Jobs.Tests 并行偶发 1 条 flake（`JobExecutorLockCrossProcessTests`，单跑必绿）"定性有误——真实原因是锁宿主工程 `src/VFXComposer.Jobs.Tests/JobExecutorLockHost/`（`ReferenceOutputAssembly=false` 引用）**不随 `dotnet build VFXComposer.sln -c Release` 构建**，宿主 dll 缺失即该测试必失败、存在即必绿。跑全量前先 `dotnet build src\VFXComposer.Jobs.Tests\JobExecutorLockHost\VFXComposer.Jobs.Tests.JobExecutorLockHost.csproj -c Release`。当前基线：全量 **858 条 Release 0 失败**。
 > **下一步是简单模式里程碑审计（F8-0+F8a1+F8a2 合一次）**：若子 agent 派发可用则派只读独立审计（Opus 5 High）；不可用则主 agent 自行复核（allow-list、构建/测试复跑、任务卡验收标准逐条对照）后在状态板登记。之后按序 F8b1（PromptAssembler 重构）/F8b2（store 版本链，RG-6 冲突行为定义必须可测试）并行候选 → F8b3 → F8b4 → 专业模式审计 → F8c（按 ADR-008）→ 收尾（指针型 vfx-artist skill、DEV_MEMORY 终态）。
