@@ -155,6 +155,58 @@ public sealed class CreateRecipeFlowTests
     }
 
     [TestMethod]
+    public async Task AnUnsupportedStoreVersionShowsItsDedicatedRemedyLine()
+    {
+        // F8 milestone audit ②: the stable code alone tells the user nothing to do; the dedicated key names the
+        // store file to delete by its relative position only (ADR-002: never an absolute path).
+        var runtime = new FakeRecipeRuntime
+        {
+            NextResult = DraftedResult,
+            ThrowOnSave = true,
+            SaveErrorCode = RecipeDraftStoreErrorCode.UnsupportedVersion,
+        };
+        var viewModel = new CreateViewModel(LocalizationTestSupport.CreateEnglish(), runtime)
+        {
+            EffectDescription = "a synthetic fireball",
+        };
+
+        await viewModel.GenerateRecipeCommand.ExecuteAsync(null);
+
+        Assert.AreEqual(
+            LocalizationTestSupport.EnglishFormat(
+                UiStringKeys.CreateRecipeStatusStoreUnsupportedVersionWithCode,
+                RecipeDraftStoreErrorCode.UnsupportedVersion),
+            viewModel.RecipeStatus);
+        StringAssert.Contains(viewModel.RecipeStatus, "VFXComposer/AI/recipe-drafts.json", "The remedy names the file.");
+        Assert.IsNull(viewModel.DraftStatus);
+    }
+
+    [TestMethod]
+    public async Task AnExhaustedLineageCapacityShowsItsDedicatedWayOutLine()
+    {
+        // F8 milestone audit ②: LineageCapacityExhausted gets the new-lineage way out instead of the bare code.
+        var runtime = new FakeRecipeRuntime
+        {
+            NextResult = DraftedResult,
+            ThrowOnSave = true,
+            SaveErrorCode = RecipeDraftStoreErrorCode.LineageCapacityExhausted,
+        };
+        var viewModel = new CreateViewModel(LocalizationTestSupport.CreateEnglish(), runtime)
+        {
+            EffectDescription = "a synthetic fireball",
+        };
+
+        await viewModel.GenerateRecipeCommand.ExecuteAsync(null);
+
+        Assert.AreEqual(
+            LocalizationTestSupport.EnglishFormat(
+                UiStringKeys.CreateRecipeStatusLineageCapacityWithCode,
+                RecipeDraftStoreErrorCode.LineageCapacityExhausted),
+            viewModel.RecipeStatus);
+        Assert.IsNull(viewModel.DraftStatus);
+    }
+
+    [TestMethod]
     public async Task AStorageFailureWhileRetainingAFailedDraftIsSaidOutLoudWithItsStableCode()
     {
         var runtime = new FakeRecipeRuntime { NextResult = FailedResult, ThrowOnSave = true };
@@ -230,6 +282,9 @@ public sealed class CreateRecipeFlowTests
         public Func<RecipeGenerationRequest, RecipeGenerationResult>? NextResult { get; init; }
         public bool ThrowOnSave { get; init; }
 
+        /// <summary>The stable code a refused save carries (the dedicated-presentation tests vary it).</summary>
+        public RecipeDraftStoreErrorCode SaveErrorCode { get; init; } = RecipeDraftStoreErrorCode.StorageFailed;
+
         /// <summary>Simulates another writer changing the retained draft between display and confirmation.</summary>
         public bool MutateRecordAfterSave { get; init; }
 
@@ -271,7 +326,7 @@ public sealed class CreateRecipeFlowTests
         {
             if (ThrowOnSave)
             {
-                throw new RecipeDraftStoreException(RecipeDraftStoreErrorCode.StorageFailed);
+                throw new RecipeDraftStoreException(SaveErrorCode);
             }
 
             var stored = record;

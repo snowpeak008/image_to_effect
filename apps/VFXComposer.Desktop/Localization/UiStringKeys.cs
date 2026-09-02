@@ -72,6 +72,14 @@ public static class UiStringKeys
         "CreateRecipeStatusGenerationUnavailableWithCode";
     public const string CreateRecipeStatusDraftStorageFailedWithCode =
         "CreateRecipeStatusDraftStorageFailedWithCode";
+
+    // Dedicated presentation for the two store codes whose remedy is user-actionable (F8 milestone audit ②):
+    // UnsupportedVersion names the store file to delete (relative position only, ADR-002 redaction) and
+    // LineageCapacityExhausted names the way out (start a new lineage). Every other code stays on the generic key.
+    public const string CreateRecipeStatusStoreUnsupportedVersionWithCode =
+        "CreateRecipeStatusStoreUnsupportedVersionWithCode";
+    public const string CreateRecipeStatusLineageCapacityWithCode =
+        "CreateRecipeStatusLineageCapacityWithCode";
     public const string CreateRecipeStatusDraftConfirmed = "CreateRecipeStatusDraftConfirmed";
     public const string CreateRecipeStatusConfirmationFailedWithCode =
         "CreateRecipeStatusConfirmationFailedWithCode";
@@ -122,6 +130,7 @@ public static class UiStringKeys
     public const string CreateRefineStatusIdle = "CreateRefineStatusIdle";
     public const string CreateRefineStatusNoHead = "CreateRefineStatusNoHead";
     public const string CreateRefineStatusEmptyFeedback = "CreateRefineStatusEmptyFeedback";
+    public const string CreateRefineStatusLineageFull = "CreateRefineStatusLineageFull";
     public const string CreateRefineStatusRefining = "CreateRefineStatusRefining";
     public const string CreateRefineStatusCompleted = "CreateRefineStatusCompleted";
     public const string CreateRefineStatusValidationFailed = "CreateRefineStatusValidationFailed";
