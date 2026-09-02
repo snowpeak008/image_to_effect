@@ -12,5 +12,6 @@
   <ItemGroup>
     <EmbeddedResource Include="Recipes\Assets\recipe-v1-template-catalog.snapshot.json" />
     <EmbeddedResource Include="Recipes\Assets\recipe-v1.schema.json" />
+    <EmbeddedResource Include="Recipes\Assets\refine-artist-knowledge.fragment.json" />
   </ItemGroup>
 </Project>

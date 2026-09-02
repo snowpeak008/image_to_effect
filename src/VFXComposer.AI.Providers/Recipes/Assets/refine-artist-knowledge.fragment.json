@@ -1,0 +1,132 @@
+{
+  "schema": "vfxcomposer.ai.refine-artist-knowledge/1",
+  "version": 1,
+  "source": "docs/ai-workflow/refine-artist-knowledge.md (the only human-edited source of truth; re-export after the source document changes: mirror the content, bump version, refresh exportedOn and sourceSha256)",
+  "exportedOn": "2026-09-02",
+  "sourceSha256": "1fd1c640ae746843109914cd3d749fc40d87dad39119f3e86f08b45a8a03c8ed",
+  "feedbackTranslations": [
+    {
+      "templateId": "PFT_2D_FireCore",
+      "parameter": "scale",
+      "parameterPaths": ["PFT_2D_FireCore.scale"],
+      "direction": "bidirectional",
+      "magnitude": "moderate-step",
+      "aliases": ["core", "fire core", "fireball", "flame body", "scale"],
+      "aliasesZh": ["火核", "火球", "主体", "核心", "火焰主体"],
+      "guidance": "\"Bigger, hotter, more massive fire\" raises scale by a moderate step (about 0.2 to 0.4); \"smaller, tighter, more compact\" lowers it the same way; an extreme ask such as \"as big as possible\" goes to the bound and stops there."
+    },
+    {
+      "templateId": "PFT_2D_Embers",
+      "parameter": "rate",
+      "parameterPaths": ["PFT_2D_Embers.rate"],
+      "direction": "bidirectional",
+      "magnitude": "moderate-step",
+      "aliases": ["embers", "ember", "sparks", "spark", "ember density", "spark density", "denser", "sparser"],
+      "aliasesZh": ["余烬", "火星", "余烬密度", "火星数量"],
+      "guidance": "\"More, denser embers or sparks\" raises rate by a moderate step (about 4 to 8); \"fewer, cleaner, sparser\" lowers it; \"as many as possible\" means the upper bound, never past it."
+    },
+    {
+      "templateId": "PFT_2D_Embers",
+      "parameter": "lifetime",
+      "parameterPaths": ["PFT_2D_Embers.lifetime"],
+      "direction": "bidirectional",
+      "magnitude": "small-step",
+      "aliases": ["ember lifetime", "ember duration", "linger", "lingering"],
+      "aliasesZh": ["余烬时长", "余烬持续", "火星存留"],
+      "guidance": "\"Embers linger, fade slower\" raises lifetime by a small step (about 0.1 to 0.2); \"fade quicker, snappier embers\" lowers it; stop at the bound."
+    },
+    {
+      "templateId": "PFT_2D_FireTrail",
+      "parameter": "time",
+      "parameterPaths": ["PFT_2D_FireTrail.time"],
+      "direction": "bidirectional",
+      "magnitude": "small-step",
+      "aliases": ["trail", "tail", "streak", "trail length", "trail time", "length"],
+      "aliasesZh": ["拖尾", "尾迹", "尾巴", "拖尾长度", "轨迹长度"],
+      "guidance": "\"A longer trail or tail\" raises time by a small step (about 0.05 to 0.1); \"shorter, snappier trail\" lowers it; \"barely any trail\" means the lower bound, never below it."
+    },
+    {
+      "templateId": "PFT_2D_FireTrail",
+      "parameter": "width",
+      "parameterPaths": ["PFT_2D_FireTrail.width"],
+      "direction": "bidirectional",
+      "magnitude": "small-step",
+      "aliases": ["trail", "tail", "streak", "width", "thickness", "thick", "thin", "thicker", "thinner", "wider", "narrower"],
+      "aliasesZh": ["拖尾", "尾迹", "尾巴", "宽度", "粗细", "变细", "变粗"],
+      "guidance": "\"A thicker, bolder trail\" raises width by a small step (about 0.05 to 0.1); \"thinner, finer, more delicate\" lowers it; stop at the bound."
+    },
+    {
+      "templateId": "PFT_2D_LaunchFlash",
+      "parameter": "lifetime",
+      "parameterPaths": ["PFT_2D_LaunchFlash.lifetime"],
+      "direction": "bidirectional",
+      "magnitude": "small-step",
+      "aliases": ["launch flash", "muzzle flash", "flash", "flash duration", "flash lifetime"],
+      "aliasesZh": ["起手闪光", "发射闪光", "枪口闪光", "闪光", "闪光时长"],
+      "guidance": "\"The launch flash reads longer\" raises lifetime by a small step (about 0.02 to 0.05); \"snappier, blink-and-miss\" lowers it; keep it at or below the launch stage duration and stop at the bound."
+    },
+    {
+      "templateId": "PFT_2D_LaunchFlash",
+      "parameter": "size",
+      "parameterPaths": ["PFT_2D_LaunchFlash.size"],
+      "direction": "bidirectional",
+      "magnitude": "moderate-step",
+      "aliases": ["launch flash", "muzzle flash", "flash", "flash size"],
+      "aliasesZh": ["起手闪光", "发射闪光", "枪口闪光", "闪光", "闪光大小"],
+      "guidance": "\"A bigger, punchier launch flash\" raises size by a moderate step (about 0.2 to 0.4); \"subtler, smaller flash\" lowers it; stop at the bound."
+    },
+    {
+      "templateId": "PFT_2D_FireImpact",
+      "parameter": "count",
+      "parameterPaths": ["PFT_2D_FireImpact.count"],
+      "direction": "bidirectional",
+      "magnitude": "moderate-step",
+      "aliases": ["impact burst", "burst", "debris", "fragments", "impact particles", "count"],
+      "aliasesZh": ["爆裂", "碎片", "冲击粒子", "碎片数量", "爆裂数量"],
+      "guidance": "\"A denser, richer burst with more debris\" raises count by a moderate integer step (about 4 to 8); \"cleaner, fewer fragments\" lowers it; count stays an integer and stops at the bound."
+    },
+    {
+      "templateId": "PFT_2D_FireImpact",
+      "parameter": "speed",
+      "parameterPaths": ["PFT_2D_FireImpact.speed"],
+      "direction": "bidirectional",
+      "magnitude": "moderate-step",
+      "aliases": ["impact burst", "burst", "debris", "fragments", "speed", "velocity", "burst speed", "debris speed"],
+      "aliasesZh": ["爆裂", "碎片", "速度", "爆裂速度", "碎片速度"],
+      "guidance": "\"Debris flies faster, a more violent burst\" raises speed by a moderate step (about 0.5 to 1); \"softer, slower burst\" lowers it; stop at the bound."
+    },
+    {
+      "templateId": "PFT_2D_Shockwave",
+      "parameter": "endSize",
+      "parameterPaths": ["PFT_2D_Shockwave.endSize"],
+      "direction": "bidirectional",
+      "magnitude": "moderate-step",
+      "aliases": ["shockwave", "shock wave", "ring", "shockwave size", "ring size", "ring radius", "radius"],
+      "aliasesZh": ["冲击波", "冲击环", "冲击波大小", "冲击波半径", "半径"],
+      "guidance": "\"A wider shockwave ring\" raises endSize by a moderate step (about 0.3 to 0.6); \"a tighter ring\" lowers it; stop at the bound."
+    },
+    {
+      "templateId": "PFT_2D_Shockwave",
+      "parameter": "lifetime",
+      "parameterPaths": ["PFT_2D_Shockwave.lifetime"],
+      "direction": "bidirectional",
+      "magnitude": "small-step",
+      "aliases": ["shockwave", "shock wave", "ring", "shockwave duration", "ring duration", "shockwave lifetime"],
+      "aliasesZh": ["冲击波", "冲击环", "冲击波时长", "冲击波持续"],
+      "guidance": "\"The ring expands more slowly, reads longer\" raises lifetime by a small step (about 0.05 to 0.1); \"a quick sharp pulse\" lowers it; stop at the bound."
+    }
+  ],
+  "aestheticConventions": [
+    "Three-beat timing: launch is a short accent (roughly 0.06 to 0.22 seconds), travel carries the body of the effect (roughly 0.6 to 1.5 seconds), impact resolves in roughly 0.2 to 0.5 seconds; keep the beats in that magnitude relation instead of letting one beat dominate.",
+    "Keep PFT_2D_LaunchFlash.lifetime at or below the launch stage duration, so the flash never bleeds into the travel beat.",
+    "PFT_2D_Embers.rate and PFT_2D_FireCore.scale couple perceptually: a larger core reads hollow without proportionally more embers, so when scale moves toward its upper half, move rate in the same direction moderately rather than leaving it at the default.",
+    "Under the strict budget (at most two modules in the whole recipe), spend the first slot on the travel-stage fire core; give the second slot to the fire trail when the description stresses motion, or to the impact burst when it stresses the hit; drop the launch flash and the shockwave first, because launch and impact stay readable as empty beats.",
+    "When feedback asks for \"more impact\" without naming a module and the module budget is already spent, retune the existing impact-stage module instead of restructuring the recipe."
+  ],
+  "refinementDiscipline": [
+    "Change only the aspects the current feedback names; every other field keeps its previous value verbatim.",
+    "Output the complete Recipe v1 JSON as exactly one JSON object, with no markdown fence and no explanation.",
+    "Never change id, metadata.templateCatalogVersion, or recipeVersion.",
+    "Keep the strict red lines: the three stage roots launch, travel, impact in that order; at most two modules in the whole recipe; never attachTo; every parameter inside its inclusive [min, max]. When feedback asks for a value past a bound, set the bound and stop."
+  ]
+}
