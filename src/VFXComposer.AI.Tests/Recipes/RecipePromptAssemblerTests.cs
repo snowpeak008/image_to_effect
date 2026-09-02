@@ -254,7 +254,7 @@ public sealed class RecipePromptAssemblerTests
         var version = RecipePromptAssembler.Version;
 
         Assert.AreEqual(
-            "vfxcomposer.ai.recipe-prompt-assembler/1;system/1;contract/1;redline/1;catalog/1;reference/1;request/1;previous-output/1;repair/1",
+            "vfxcomposer.ai.recipe-prompt-assembler/1;system/1;contract/1;redline/1;catalog/1;reference/1;request/1;previous-output/1;repair/1;refine-knowledge/1;refine-request/1",
             version);
         Assert.IsTrue(version.Length <= 256, "The draft record bounds PromptTemplateVersion as short text.");
     }
