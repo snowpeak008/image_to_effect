@@ -135,7 +135,8 @@ public sealed class CreateViewModel : WorkspacePageViewModel
 
     /// <summary>
     /// The typed retention report of the last save (REQ-004-33): superseded confirmations, level-1 trims and level-2
-    /// evictions, one catalog line each. Empty when the save retained everything, so it never repeats itself.
+    /// evictions, one catalog line each. Empty when the save retained everything, and cleared again by the next
+    /// action that saves nothing (a refused edit, a confirmation), so it never outlives the save it describes.
     /// </summary>
     public string RecipeRetentionNotice =>
         string.Join("\n", _retentionLines.Select(line => Localized(line.Key, line.Arguments)));
@@ -391,6 +392,9 @@ public sealed class CreateViewModel : WorkspacePageViewModel
         {
             ParameterPanel.PresentIssues(result.Issues);
             SetRecipeStatus(UiStringKeys.CreateRecipeStatusParameterEditRejected, result.Issues.Count);
+            // The retention notice belongs to the save that produced it; a refused edit saved nothing, so an
+            // earlier trim/supersede line must not sit next to this rejection as if it were caused by it.
+            SetRetentionLines([]);
             return;
         }
 
@@ -498,6 +502,8 @@ public sealed class CreateViewModel : WorkspacePageViewModel
             // The canonical hash binds this click to the exact draft content that was presented.
             SetCurrentDraft(_runtime.RecipeDrafts.Confirm(draft.DraftId, draft.CanonicalSha256));
             SetRecipeStatus(UiStringKeys.CreateRecipeStatusDraftConfirmed);
+            // Confirmation saves no version, so the previous save's retention report has run its course.
+            SetRetentionLines([]);
         }
         catch (RecipeDraftStoreException exception)
         {

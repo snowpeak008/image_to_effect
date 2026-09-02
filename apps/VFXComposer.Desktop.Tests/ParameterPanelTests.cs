@@ -162,6 +162,12 @@ public sealed class ParameterPanelTests
         Assert.AreEqual(LocalizationTestSupport.English(UiStringKeys.CreateValidationPassed), viewModel.RecipeValidationSummary);
         Assert.AreEqual("1.5", ScaleRow(viewModel).CurrentValueLiteral, "The panel re-renders from the new head.");
         StringAssert.Contains(viewModel.RecipeDraftJson, "1.5");
+
+        // Confirming the new head saves no version, so the Superseded line of the previous save is retired.
+        viewModel.ConfirmRecipeDraftCommand.Execute(null);
+        Assert.AreEqual(RecipeDraftStatus.ConfirmedAwaitingBuild, viewModel.DraftStatus);
+        Assert.IsFalse(viewModel.HasRetentionNotice);
+        Assert.AreEqual(string.Empty, viewModel.RecipeRetentionNotice);
         runtime.AssertNoGatewayTraffic();
     }
 
@@ -225,9 +231,62 @@ public sealed class ParameterPanelTests
         Assert.AreEqual(
             LocalizationTestSupport.EnglishFormat(UiStringKeys.CreateRetentionNoticeTrimmed, 1),
             viewModel.RecipeRetentionNotice);
+        Assert.IsTrue(viewModel.HasRetentionNotice);
         Assert.AreEqual(RecipeDraftLineageLimits.MaximumVersionsPerLineage, runtime.Store.ListLineage(lineageId).Count);
         Assert.AreEqual(RecipeDraftLineageLimits.MaximumVersionsPerLineage + 1, runtime.Store.TryGet(viewModel.DraftId!)!.RevisionOrdinal);
+
+        // A refused edit saves nothing: the trim line of the previous save must not sit next to the rejection.
+        ScaleRow(viewModel).EditText = "3.0";
+        viewModel.ApplyParameterEditsCommand.Execute(null);
+        Assert.AreEqual(
+            LocalizationTestSupport.EnglishFormat(UiStringKeys.CreateRecipeStatusParameterEditRejected, 1),
+            viewModel.RecipeStatus);
+        Assert.IsFalse(viewModel.HasRetentionNotice);
+        Assert.AreEqual(string.Empty, viewModel.RecipeRetentionNotice);
+        Assert.AreEqual(RecipeDraftLineageLimits.MaximumVersionsPerLineage, runtime.Store.ListLineage(lineageId).Count);
         runtime.AssertNoGatewayTraffic();
+    }
+
+    [TestMethod]
+    public void ALevelTwoEvictionIsReportedWithLineageAndVersionCountsInThatOrder()
+    {
+        // The real store needs dozens of lineages to hit the level-2 cap; a fake outcome pins the VM rendering.
+        var runtime = new EvictingRuntime(evictedLineageIds: ["lineage-a", "lineage-b"], evictedVersionCount: 5);
+        var viewModel = new CreateViewModel(LocalizationTestSupport.CreateEnglish(), runtime);
+
+        viewModel.ApplyPresetCommand.Execute(FireBoltCard(viewModel));
+
+        Assert.AreEqual(1, runtime.SaveVersionCalls);
+        Assert.IsTrue(viewModel.ParameterPanel.HasHead);
+        Assert.IsTrue(viewModel.HasRetentionNotice);
+        Assert.AreEqual(
+            LocalizationTestSupport.EnglishFormat(UiStringKeys.CreateRetentionNoticeEvicted, 2, 5),
+            viewModel.RecipeRetentionNotice);
+        StringAssert.Contains(viewModel.RecipeRetentionNotice, "2 inactive lineage(s) (5 version(s))", "Lineage count first, version count second.");
+        Assert.AreEqual(LocalizationTestSupport.English(UiStringKeys.CreateRecipeStatusPresetApplied), viewModel.RecipeStatus);
+    }
+
+    [TestMethod]
+    public void TheUnavailableRuntimeLeavesThePanelHiddenAndTheApplyCommandDisabledWithoutThrowing()
+    {
+        var viewModel = new CreateViewModel(LocalizationTestSupport.CreateEnglish(), AiDesktopRuntime.Unavailable);
+
+        Assert.IsFalse(viewModel.ParameterPanel.HasHead);
+        Assert.AreEqual(0, viewModel.ParameterPanel.ParameterCount);
+        Assert.IsFalse(viewModel.ParameterPanel.HasWarnings);
+        Assert.IsFalse(viewModel.ApplyParameterEditsCommand.CanExecute(null));
+        Assert.AreEqual(string.Empty, viewModel.ParameterPanel.IssueReport);
+        viewModel.ApplyParameterEditsCommand.Execute(null);
+        Assert.IsFalse(viewModel.ParameterPanel.HasHead, "Executing without a head is a no-op, not an exception.");
+
+        // The disconnected store refuses the save with its stable code; the panel still has no head to render.
+        viewModel.ApplyPresetCommand.Execute(FireBoltCard(viewModel));
+        Assert.AreEqual(
+            LocalizationTestSupport.EnglishFormat(UiStringKeys.CreateRecipeStatusDraftStorageFailedWithCode, RecipeDraftStoreErrorCode.StorageFailed),
+            viewModel.RecipeStatus);
+        Assert.IsFalse(viewModel.ParameterPanel.HasHead);
+        Assert.IsFalse(viewModel.ApplyParameterEditsCommand.CanExecute(null));
+        Assert.IsFalse(viewModel.HasRetentionNotice);
     }
 
     [TestMethod]
@@ -471,6 +530,67 @@ public sealed class ParameterPanelTests
             ImageCalls++;
             return ValueTask.FromException<ImageGenerationResponse>(new AiGatewayException(AiErrorCode.ConfigurationUnavailable));
         }
+
+        public ValueTask<Stream> OpenImageArtifactAsync(string privateArtifactId, CancellationToken cancellationToken = default) =>
+            throw new NotSupportedException();
+
+        public ValueTask DisposeAsync() => ValueTask.CompletedTask;
+    }
+
+    /// <summary>
+    /// A store whose every root save reports a level-2 eviction, so the VM's rendering of that outcome can be
+    /// pinned without growing a real store past its lineage cap. Nothing else on this runtime is reachable.
+    /// </summary>
+    private sealed class EvictingRuntime : IAiDesktopRuntime, IRecipeDraftLineageStore
+    {
+        private readonly IReadOnlyList<string> _evictedLineageIds;
+        private readonly int _evictedVersionCount;
+        private RecipeDraftRecord? _saved;
+
+        public EvictingRuntime(IReadOnlyList<string> evictedLineageIds, int evictedVersionCount)
+        {
+            _evictedLineageIds = evictedLineageIds;
+            _evictedVersionCount = evictedVersionCount;
+        }
+
+        public int SaveVersionCalls { get; private set; }
+
+        public IAiGateway Gateway => throw new NotSupportedException("The panel never reaches the gateway.");
+        public IAiDesktopSettings Settings => throw new NotSupportedException();
+        public IRecipeGenerationChannel RecipeGeneration => throw new NotSupportedException("The panel never generates.");
+        public IRecipeDraftLineageStore RecipeDrafts => this;
+
+        public RecipeDraftSaveOutcome SaveVersion(RecipeDraftRecord record)
+        {
+            SaveVersionCalls++;
+            _saved = record;
+            return new RecipeDraftSaveOutcome(record, [], [], _evictedLineageIds, _evictedVersionCount);
+        }
+
+        public RecipeDraftRecord? TryGet(string draftId) =>
+            _saved is not null && string.Equals(_saved.DraftId, draftId, StringComparison.Ordinal) ? _saved : null;
+
+        public IReadOnlyList<RecipeDraftRecord> ListLineage(string lineageId) =>
+            _saved is not null && string.Equals(_saved.LineageId, lineageId, StringComparison.Ordinal) ? [_saved] : [];
+
+        public IReadOnlyList<RecipeDraftRecord> ListConfirmedAwaitingBuild() => [];
+
+        public RecipeDraftSaveOutcome AppendVersion(
+            string parentDraftId,
+            string parentCanonicalSha256,
+            RecipeDraftRevision revision,
+            DateTimeOffset createdUtc) =>
+            throw new NotSupportedException("This test only exercises a root save.");
+
+        public RecipeDraftTruncateOutcome TruncateAfter(string draftId) => throw new NotSupportedException();
+
+        public RecipeDraftRecord Save(RecipeDraftRecord record) => throw new NotSupportedException();
+
+        public RecipeDraftRecord Confirm(string draftId, string canonicalSha256) => throw new NotSupportedException();
+
+        public RecipeDraftRecord MarkBuilt(string draftId, string canonicalSha256) => throw new NotSupportedException();
+
+        public RecipeDraftRecord MarkBuildFailed(string draftId, string canonicalSha256) => throw new NotSupportedException();
 
         public ValueTask<Stream> OpenImageArtifactAsync(string privateArtifactId, CancellationToken cancellationToken = default) =>
             throw new NotSupportedException();

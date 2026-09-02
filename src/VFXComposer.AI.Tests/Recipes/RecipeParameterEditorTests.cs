@@ -163,6 +163,24 @@ public sealed class RecipeParameterEditorTests
     }
 
     [TestMethod]
+    [DataRow("")]
+    [DataRow("  ")]
+    [DataRow("\r\n\t")]
+    public void AnEmptyOrWhitespaceDocumentDescribesAsEmptyAndRejectsEditsTyped(string recipeJson)
+    {
+        // Canonicalize throws ArgumentException (not JsonException) for blank text; neither entry point may leak it.
+        var panel = RecipeParameterEditor.Describe(recipeJson);
+        Assert.AreEqual(0, panel.Modules.Count);
+        Assert.AreEqual(0, panel.Warnings.Count);
+        Assert.AreEqual(0, panel.ParameterCount);
+
+        AssertRejected(
+            RecipeParameterEditor.Apply(recipeJson, [new RecipeParameterEdit("travel", "core", "scale", "1.5")]),
+            RecipeParameterEditCodes.DocumentNotEditable,
+            "/");
+    }
+
+    [TestMethod]
     public void AnInRangeEditIsAcceptedAndChangesOnlyThatValue()
     {
         var result = RecipeParameterEditor.Apply(FireBolt.RecipeJson, [new RecipeParameterEdit("travel", "core", "scale", "1.5")]);
@@ -227,12 +245,29 @@ public sealed class RecipeParameterEditorTests
     [DataRow("")]
     [DataRow("NaN")]
     [DataRow("24.0")]
+    [DataRow("1,5")]
     public void AnIntegerParameterOnlyAcceptsAnIntegerLiteral(string rawText)
     {
         var result = RecipeParameterEditor.Apply(BurstingFireball.RecipeJson, [new RecipeParameterEdit("impact", "burst", "count", rawText)]);
 
         var issue = AssertRejected(result, RecipeParameterEditCodes.ValueNotInteger, "stages[impact].modules[burst].parameters.count");
         Assert.AreEqual("integer in [8, 40]", issue.AllowedRange);
+    }
+
+    [TestMethod]
+    [DataRow("8", 8L)]
+    [DataRow("40", 40L)]
+    [DataRow(" 12 ", 12L)]
+    public void AnIntegerExactlyOnABoundOrWithSurroundingWhitespaceIsAccepted(string rawText, long expected)
+    {
+        // Same whitespace tolerance as the float path: the text is trimmed, the number itself is never corrected.
+        var result = RecipeParameterEditor.Apply(BurstingFireball.RecipeJson, [new RecipeParameterEdit("impact", "burst", "count", rawText)]);
+
+        Assert.IsTrue(result.IsAccepted, Render(result.Issues));
+        using var document = JsonDocument.Parse(result.RecipeJson!);
+        Assert.AreEqual(
+            expected,
+            document.RootElement.GetProperty("stages")[2].GetProperty("modules")[0].GetProperty("parameters").GetProperty("count").GetInt64());
     }
 
     [TestMethod]

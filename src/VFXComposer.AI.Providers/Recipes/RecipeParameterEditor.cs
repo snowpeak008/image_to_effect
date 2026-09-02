@@ -75,9 +75,10 @@ public static class RecipeParameterEditor
 
     /// <summary>
     /// Applies scalar value edits to declared module parameters. Every edit is checked before any is applied, so
-    /// a rejection reports all offending edits; the accepted document is canonical and L1-valid, and any L1.5
-    /// findings on it are returned as warnings. Zero edits, or edits that leave the canonical document unchanged,
-    /// are rejected: no change lands no version.
+    /// a rejection reports all offending edits; the accepted document is canonical and L1-valid, and any non-error
+    /// L1 findings followed by the L1.5 findings on it are returned as warnings. Zero edits, or edits that leave
+    /// the canonical document unchanged, are rejected: no change lands no version. An empty, whitespace-only or
+    /// unparseable document is rejected with <see cref="RecipeParameterEditCodes.DocumentNotEditable"/>.
     /// </summary>
     public static RecipeParameterEditResult Apply(string recipeJson, IReadOnlyList<RecipeParameterEdit> edits)
     {
@@ -101,8 +102,10 @@ public static class RecipeParameterEditor
             root = JsonNode.Parse(canonicalInput) as JsonObject
                 ?? throw new JsonException("The recipe root is not an object.");
         }
-        catch (JsonException)
+        catch (Exception exception) when (exception is JsonException or ArgumentException)
         {
+            // Canonicalize refuses an empty or whitespace-only document with ArgumentException rather than a
+            // JsonException; both mean the same thing to the editor: there is no document to edit.
             return RecipeParameterEditResult.Rejected([Issue(RecipeParameterEditCodes.DocumentNotEditable, "/")]);
         }
 
@@ -163,7 +166,11 @@ public static class RecipeParameterEditor
             return RecipeParameterEditResult.Rejected(l1Issues);
         }
 
-        return RecipeParameterEditResult.Accepted(canonicalOutput, RecipeCatalogPrevalidator.Prevalidate(canonicalOutput, snapshot));
+        // L1 currently emits errors only, so this list is empty today; should a future L1 rule emit a non-error
+        // finding, it rides along the accepted result ahead of the L1.5 findings instead of being dropped.
+        var findings = new List<RecipeValidationIssue>(l1Issues);
+        findings.AddRange(RecipeCatalogPrevalidator.Prevalidate(canonicalOutput, snapshot));
+        return RecipeParameterEditResult.Accepted(canonicalOutput, findings);
     }
 
     /// <summary>
