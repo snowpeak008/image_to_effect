@@ -1,6 +1,12 @@
 # 开发记忆与恢复指南
 
-> **在途状态快照（2026-09-02 崩溃恢复会话）**：Cursor 在 F8b1/F8b2 并行开发期间崩溃并重装，对话记录全丢；本快照由重读仓库与 worktree 还原。
+> **在途状态快照（2026-09-02 下午，崩溃恢复会话续）**：
+> **治理定版（用户，2026-09-02）**：主 agent 只派发/调度/验收合并/维护状态板，**不亲自开发**；开发、测试、审计全部由子 agent 承担，子 agent 模型一律 **Fable 5 High**（`claude-fable-5-1-thinking-high`）。
+> **F8b1 已关闭合入**：独立审计 PASS-with-remarks 零阻塞 → 微调子 agent 落实 3 条建议（`fdd550cc`）→ 合并 `d7f17d22`，合并态 Release 0/0、全量 **876/876**（AI.Tests 165）。REQ-004 三处旧名已勘误。worktree `D:\wt\i2s-f8b1` 待退役（本次会话末退役）。**当前基线：876 条 Release 0 失败。**
+> **F8b2 开发中**：开发子 agent 在 `D:\wt\i2s-f8b2`（基于 `8428199d`，即 F8b1 合入之前的 master）。合并时注意：F8b1 已把 `src/VFXComposer.AI.Tests/Recipes/RecipeDraftStoreTests.cs` 等 5 个测试文件里的 `RecipePromptTemplate.Version` 机械改为 `RecipePromptAssembler.Version`；F8b2 被要求不改这些引用，但若其大幅改写 `RecipeDraftStoreTests.cs` 仍可能冲突，冲突解法一律"保留 F8b2 内容 + 把 `RecipePromptTemplate` 替换为 `RecipePromptAssembler`"。F8b2 派发时的九条定版见主计划 §7 F8b2 卡。交付后：主 agent 初审 → 合并 → 派 F8b3。
+> 剩余序列：F8b2 → F8b3（参数面板）→ F8b4（精修回路）→ 专业模式里程碑审计 → F8c（按 ADR-008）→ 收尾。
+>
+> **历史快照（2026-09-02 上午，崩溃恢复会话）**：Cursor 在 F8b1/F8b2 并行开发期间崩溃并重装，对话记录全丢；本快照由重读仓库与 worktree 还原。
 > **master `8428199d`（01:21）= origin/master，工作树干净**；最后一笔为简单模式里程碑审计登记（PASS-with-remarks，858/858）。§7 已闭：F8-0、R5、R6、F8a1、F8a2、简单模式审计。
 > **F8b1（PromptAssembler 重构）——开发完成、未初审、未合并**：worktree `D:\wt\i2s-f8b1`，分支 `task/F8b1-prompt-assembler`，基于 `8428199d`，2 笔提交（`bf7b388a` 重构 02:07、`0ff5d401` 测试 02:10），工作树干净。改动 12 文件 +715/−218：新增 `RecipePromptAssembler`/`RecipePromptFragment`/`RecipePromptSection`，删除 `RecipePromptTemplate`；`AiContractVersions.RecipeSystemPrompt`→`RecipePromptAssembler = "vfxcomposer.ai.recipe-prompt-assembler/1"`，复合版本串 = 组装器修订 + 8 片段 `id/version`（写入 `PromptTemplateVersion`，store 未升版）；按片段边界拆分 16 KiB/条、`MaximumMessages`/256 KiB 请求界 fail-closed 为 `PayloadTooLarge`；`RecipeGenerationService` 与 5 个既有测试文件仅机械改引用；新增 `RecipePromptAssemblerTests` 16 条（哈希 pin 重构前消息序列、拆分正负向、版本串守卫）。**本会话复验：Release 构建 0/0，AI.Tests 163/163（147+16），全量 874/874（858+16）**。下一步：主 agent 初审（allow-list 应仅 `src/VFXComposer.AI.Contracts/**`、`src/VFXComposer.AI.Providers/Recipes/**`、`src/VFXComposer.AI.Tests/**`）→ 合并推送 → 状态板登记 → 退役 worktree。
 > **F8b2（草稿 store 版本链）——仅建好 worktree，零提交、零 WIP**：`D:\wt\i2s-f8b2`，分支 `task/F8b2-draft-store-lineage`，01:22 与 F8b1 同时建立，feed 已复制，HEAD 仍在 `8428199d`。需重派或主 agent 自做（任务卡见主计划 §7；注意 RG-6 跨入口冲突行为定义必须可测试；lineage/origin 四值/parentDraftId/两级 cap/`UnsupportedVersion`/`Superseded`，store 升版仿 F3c 旧版 fail-closed）。
