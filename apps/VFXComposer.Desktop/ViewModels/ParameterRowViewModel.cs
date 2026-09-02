@@ -32,8 +32,6 @@ public sealed class ParameterRowViewModel : ObservableObject
 
     public string Type => _parameter.Type;
 
-    public bool IsInteger => _parameter.IsInteger;
-
     /// <summary>The inclusive bounds exactly as the catalog snapshot commits them.</summary>
     public string RangeLiteral => _parameter.RangeLiteral;
 
@@ -55,7 +53,7 @@ public sealed class ParameterRowViewModel : ObservableObject
     public string BoundsHint => _localization.Format(UiStringKeys.CreateParameterBoundsHint, Type, RangeLiteral, DefaultLiteral);
 
     /// <summary>The current value, or the "not set" hint for a declared key the draft omits.</summary>
-    public string ValueHint => CurrentValueLiteral is null
+    public string ValueHint => IsMissing
         ? _localization[UiStringKeys.CreateParameterMissingHint]
         : _localization.Format(UiStringKeys.CreateParameterCurrentValue, CurrentValueLiteral);
 
