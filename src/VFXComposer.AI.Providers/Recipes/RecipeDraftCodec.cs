@@ -8,19 +8,31 @@ namespace VFXComposer.AI.Providers.Recipes;
 /// <summary>
 /// Hand-written, versioned wire format for retained recipe drafts. Every field round-trips through the
 /// RecipeDraftRecord constructor, so a tampered file can never smuggle an out-of-contract record into memory.
+/// The format version is checked by exact equality: a file whose integer <c>formatVersion</c> differs fails with
+/// <see cref="RecipeDraftStoreErrorCode.UnsupportedVersion"/>, everything else unreadable is corruption.
 /// </summary>
 internal static class RecipeDraftCodec
 {
-    public static byte[] Serialize(IReadOnlyList<RecipeDraftRecord> records)
+    public static byte[] Serialize(RecipeDraftStoreDocument document)
     {
-        ArgumentNullException.ThrowIfNull(records);
+        ArgumentNullException.ThrowIfNull(document);
         using var buffer = new MemoryStream();
         using (var writer = new Utf8JsonWriter(buffer))
         {
             writer.WriteStartObject();
             writer.WriteNumber("formatVersion", AiContractVersions.RecipeDraftRecordFormatVersion);
+            writer.WriteStartArray("lineages");
+            foreach (var (lineageId, watermark) in document.RevisionWatermarks.OrderBy(static pair => pair.Key, StringComparer.Ordinal))
+            {
+                writer.WriteStartObject();
+                writer.WriteString("lineageId", lineageId);
+                writer.WriteNumber("revisionWatermark", watermark);
+                writer.WriteEndObject();
+            }
+
+            writer.WriteEndArray();
             writer.WriteStartArray("records");
-            foreach (var record in records)
+            foreach (var record in document.Records)
             {
                 WriteRecord(writer, record);
             }
@@ -32,7 +44,7 @@ internal static class RecipeDraftCodec
         return buffer.ToArray();
     }
 
-    public static List<RecipeDraftRecord> Deserialize(byte[] bytes)
+    public static RecipeDraftStoreDocument Deserialize(byte[] bytes)
     {
         ArgumentNullException.ThrowIfNull(bytes);
         using var document = JsonDocument.Parse(bytes);
@@ -40,11 +52,38 @@ internal static class RecipeDraftCodec
         if (root.ValueKind != JsonValueKind.Object ||
             !root.TryGetProperty("formatVersion", out var version) ||
             version.ValueKind != JsonValueKind.Number ||
-            version.GetInt32() != AiContractVersions.RecipeDraftRecordFormatVersion ||
+            !version.TryGetInt32(out var formatVersion))
+        {
+            throw new InvalidDataException("Recipe draft storage is invalid.");
+        }
+
+        if (formatVersion != AiContractVersions.RecipeDraftRecordFormatVersion)
+        {
+            throw new RecipeDraftStoreException(RecipeDraftStoreErrorCode.UnsupportedVersion);
+        }
+
+        if (!root.TryGetProperty("lineages", out var lineagesElement) ||
+            lineagesElement.ValueKind != JsonValueKind.Array ||
             !root.TryGetProperty("records", out var recordsElement) ||
             recordsElement.ValueKind != JsonValueKind.Array)
         {
             throw new InvalidDataException("Recipe draft storage is invalid.");
+        }
+
+        var watermarks = new Dictionary<string, int>(StringComparer.Ordinal);
+        foreach (var lineageElement in lineagesElement.EnumerateArray())
+        {
+            if (lineageElement.ValueKind != JsonValueKind.Object)
+            {
+                throw new InvalidDataException("Recipe draft storage is invalid.");
+            }
+
+            var lineageId = ReadString(lineageElement, "lineageId");
+            var watermark = ReadInt32(lineageElement, "revisionWatermark");
+            if (watermark < 1 || !watermarks.TryAdd(lineageId, watermark))
+            {
+                throw new InvalidDataException("Recipe draft storage is invalid.");
+            }
         }
 
         var records = new List<RecipeDraftRecord>();
@@ -53,7 +92,16 @@ internal static class RecipeDraftCodec
             records.Add(ReadRecord(recordElement));
         }
 
-        return records;
+        var loaded = new RecipeDraftStoreDocument(records, watermarks);
+        loaded.ThrowIfInvalid();
+        return loaded;
+    }
+
+    /// <summary>The UTF-8 bytes the store writes for one record's recipeJson value, escaping included.</summary>
+    public static int PersistedRecipeJsonBytes(RecipeDraftRecord record)
+    {
+        ArgumentNullException.ThrowIfNull(record);
+        return JsonEncodedText.Encode(record.RecipeJson).EncodedUtf8Bytes.Length;
     }
 
     private static void WriteRecord(Utf8JsonWriter writer, RecipeDraftRecord record)
@@ -87,6 +135,23 @@ internal static class RecipeDraftCodec
         }
 
         writer.WriteEndArray();
+        writer.WriteString("lineageId", record.LineageId);
+        writer.WriteString("parentDraftId", record.ParentDraftId);
+        writer.WriteNumber("revisionOrdinal", record.RevisionOrdinal);
+        writer.WriteString("origin", RecipeDraftOriginNames.Of(record.Origin));
+        writer.WriteString("feedbackText", record.FeedbackText);
+        writer.WriteStartArray("guardRestorations");
+        foreach (var restoration in record.GuardRestorations)
+        {
+            writer.WriteStartObject();
+            writer.WriteString("parameterPath", restoration.ParameterPath);
+            writer.WriteString("sourceDraftId", restoration.SourceDraftId);
+            writer.WriteEndObject();
+        }
+
+        writer.WriteEndArray();
+        writer.WriteNumber("guardRestorationCount", record.GuardRestorationCount);
+        writer.WriteString("presetId", record.PresetId);
         writer.WriteEndObject();
     }
 
@@ -98,19 +163,39 @@ internal static class RecipeDraftCodec
         }
 
         var issues = new List<RecipeValidationIssue>();
-        if (element.TryGetProperty("issues", out var issuesElement) && issuesElement.ValueKind == JsonValueKind.Array)
+        foreach (var issueElement in ReadArray(element, "issues"))
         {
-            foreach (var issueElement in issuesElement.EnumerateArray())
-            {
-                issues.Add(new RecipeValidationIssue(
-                    ReadString(issueElement, "code"),
-                    ReadEnum<RecipeValidationSeverity>(issueElement, "severity"),
-                    ReadString(issueElement, "path"),
-                    ReadString(issueElement, "message"),
-                    ReadOptionalString(issueElement, "actualValueJson"),
-                    ReadOptionalString(issueElement, "allowedRange")));
-            }
+            issues.Add(new RecipeValidationIssue(
+                ReadString(issueElement, "code"),
+                ReadEnum<RecipeValidationSeverity>(issueElement, "severity"),
+                ReadString(issueElement, "path"),
+                ReadString(issueElement, "message"),
+                ReadOptionalString(issueElement, "actualValueJson"),
+                ReadOptionalString(issueElement, "allowedRange")));
         }
+
+        var restorations = new List<RecipeGuardRestoration>();
+        foreach (var restorationElement in ReadArray(element, "guardRestorations"))
+        {
+            restorations.Add(new RecipeGuardRestoration(
+                ReadString(restorationElement, "parameterPath"),
+                ReadString(restorationElement, "sourceDraftId")));
+        }
+
+        if (!RecipeDraftOriginNames.TryParse(ReadString(element, "origin"), out var origin))
+        {
+            throw new InvalidDataException("Recipe draft storage is invalid.");
+        }
+
+        var provenance = new RecipeDraftProvenance(
+            ReadString(element, "lineageId"),
+            ReadOptionalString(element, "parentDraftId"),
+            ReadInt32(element, "revisionOrdinal"),
+            origin,
+            ReadOptionalString(element, "feedbackText"),
+            restorations,
+            ReadInt32(element, "guardRestorationCount"),
+            ReadOptionalString(element, "presetId"));
 
         return new RecipeDraftRecord(
             ReadString(element, "draftId"),
@@ -127,7 +212,18 @@ internal static class RecipeDraftCodec
             ReadOptionalString(element, "dimension"),
             ReadOptionalString(element, "targetProfile"),
             issues,
-            ReadInt32(element, "requestCount"));
+            ReadInt32(element, "requestCount"),
+            provenance);
+    }
+
+    private static JsonElement.ArrayEnumerator ReadArray(JsonElement element, string name)
+    {
+        if (!element.TryGetProperty(name, out var value) || value.ValueKind != JsonValueKind.Array)
+        {
+            throw new InvalidDataException("Recipe draft storage is invalid.");
+        }
+
+        return value.EnumerateArray();
     }
 
     private static string ReadString(JsonElement element, string name) =>

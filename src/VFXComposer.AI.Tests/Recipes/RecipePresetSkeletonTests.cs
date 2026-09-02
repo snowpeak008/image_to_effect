@@ -181,6 +181,25 @@ public sealed class RecipePresetSkeletonTests
     }
 
     [TestMethod]
+    public void CreateDraftRecordRootsANewLineageWithPresetOrigin()
+    {
+        var preset = RecipePresetSkeletons.All[1];
+
+        var first = preset.CreateDraftRecord(DateTimeOffset.UtcNow);
+        var second = preset.CreateDraftRecord(DateTimeOffset.UtcNow);
+
+        Assert.AreEqual(RecipeDraftOrigin.Preset, first.Origin);
+        Assert.AreEqual(preset.PresetId, first.PresetId);
+        Assert.IsNull(first.ParentDraftId, "A card click starts a lineage; it never appends to one.");
+        Assert.AreEqual(1, first.RevisionOrdinal);
+        Assert.IsNull(first.FeedbackText);
+        Assert.AreEqual(0, first.GuardRestorationCount);
+        Assert.AreNotEqual(first.LineageId, second.LineageId, "Every click is its own lineage.");
+        Assert.AreEqual("preset-" + preset.PresetId, first.CorrelationId, "The F8a2 marker is kept alongside the typed origin.");
+        Assert.AreEqual(RecipePresetSkeleton.PresetPromptTemplateVersion, first.PromptTemplateVersion);
+    }
+
+    [TestMethod]
     public void SkeletonJsonIsCanonicalAndParameterValuesAreTheCatalogDefaults()
     {
         var snapshot = RecipeTemplateCatalogSnapshot.Default;

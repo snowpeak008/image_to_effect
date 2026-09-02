@@ -403,11 +403,24 @@ public enum RecipeDraftStatus
 
     /// <summary>The restricted build path refused or failed the build; the build is never retried automatically.</summary>
     BuildFailed,
+
+    /// <summary>
+    /// The confirmation lapsed because a newer version landed in the same lineage (REQ-004 §7.3); the version
+    /// can never be built and never appears in the awaiting-build backlog.
+    /// </summary>
+    Superseded,
 }
 
-/// <summary>One persisted draft record in user application data. The user can inspect and delete it at any time.</summary>
+/// <summary>
+/// One persisted draft record in user application data. The user can inspect and delete it at any time. Every
+/// record is one version of a lineage (REQ-004 §7.2); its content and hash are immutable once persisted.
+/// </summary>
 public sealed class RecipeDraftRecord
 {
+    /// <summary>
+    /// Lineage-unaware construction kept for callers that predate the version chain: the record is the root of a
+    /// lineage named after itself with <see cref="RecipeDraftOrigin.AiDraft"/> origin.
+    /// </summary>
     public RecipeDraftRecord(
         string draftId,
         RecipeDraftStatus status,
@@ -424,8 +437,51 @@ public sealed class RecipeDraftRecord
         string? targetProfile,
         IEnumerable<RecipeValidationIssue> issues,
         int requestCount)
+        : this(
+            draftId,
+            status,
+            createdUtc,
+            updatedUtc,
+            correlationId,
+            promptTemplateVersion,
+            templateCatalogVersion,
+            recipeJson,
+            canonicalSha256,
+            recipeId,
+            archetype,
+            dimension,
+            targetProfile,
+            issues,
+            requestCount,
+            RecipeDraftProvenance.Root(AiContractGuard.Identifier(draftId, nameof(draftId)), RecipeDraftOrigin.AiDraft))
+    {
+    }
+
+    public RecipeDraftRecord(
+        string draftId,
+        RecipeDraftStatus status,
+        DateTimeOffset createdUtc,
+        DateTimeOffset updatedUtc,
+        string correlationId,
+        string promptTemplateVersion,
+        string templateCatalogVersion,
+        string recipeJson,
+        string? canonicalSha256,
+        string? recipeId,
+        string? archetype,
+        string? dimension,
+        string? targetProfile,
+        IEnumerable<RecipeValidationIssue> issues,
+        int requestCount,
+        RecipeDraftProvenance provenance)
     {
         DraftId = AiContractGuard.Identifier(draftId, nameof(draftId));
+        ArgumentNullException.ThrowIfNull(provenance);
+        if (string.Equals(provenance.ParentDraftId, DraftId, StringComparison.Ordinal))
+        {
+            throw new ArgumentException("A version cannot be its own parent.", nameof(provenance));
+        }
+
         if (!Enum.IsDefined(status))
         {
             throw new ArgumentOutOfRangeException(nameof(status));
@@ -461,6 +517,7 @@ public sealed class RecipeDraftRecord
         TargetProfile = targetProfile;
         Issues = CopyIssues(issues);
         RequestCount = requestCount;
+        Provenance = provenance;
     }
 
     public string DraftId { get; }
@@ -479,13 +536,26 @@ public sealed class RecipeDraftRecord
     public IReadOnlyList<RecipeValidationIssue> Issues { get; }
     public int RequestCount { get; }
 
+    /// <summary>The version-chain fields as one bundle; the flat properties below are its REQ-004 §7.2 names.</summary>
+    public RecipeDraftProvenance Provenance { get; }
+
+    public string LineageId => Provenance.LineageId;
+    public string? ParentDraftId => Provenance.ParentDraftId;
+    public int RevisionOrdinal => Provenance.RevisionOrdinal;
+    public RecipeDraftOrigin Origin => Provenance.Origin;
+    public string? FeedbackText => Provenance.FeedbackText;
+    public IReadOnlyList<RecipeGuardRestoration> GuardRestorations => Provenance.GuardRestorations;
+    public int GuardRestorationCount => Provenance.GuardRestorationCount;
+    public string? PresetId => Provenance.PresetId;
+
     public override string ToString() => "RecipeDraftRecord(" + DraftId + "," + Status + ")";
 
-    /// <summary>Builds the persistable record for a drafted or validation-failed result.</summary>
+    /// <summary>Builds the persistable record for a drafted or validation-failed result as a new lineage root.</summary>
     public static RecipeDraftRecord Create(RecipeGenerationResult result, DateTimeOffset createdUtc)
     {
         ArgumentNullException.ThrowIfNull(result);
-        var draftId = "draft-" + Guid.NewGuid().ToString("N");
+        var draftId = NewDraftId();
+        var provenance = RecipeDraftProvenance.Root(RecipeDraftProvenance.NewLineageId(), RecipeDraftOrigin.AiDraft);
         return result.Outcome switch
         {
             RecipeGenerationOutcome.Drafted when result.Draft is not null => new RecipeDraftRecord(
@@ -503,7 +573,8 @@ public sealed class RecipeDraftRecord
                 result.Draft.Dimension,
                 result.Draft.TargetProfile,
                 Array.Empty<RecipeValidationIssue>(),
-                result.RequestCount),
+                result.RequestCount,
+                provenance),
             RecipeGenerationOutcome.ValidationFailed => new RecipeDraftRecord(
                 draftId,
                 RecipeDraftStatus.Failed,
@@ -519,10 +590,43 @@ public sealed class RecipeDraftRecord
                 dimension: null,
                 targetProfile: null,
                 result.Issues,
-                result.RequestCount),
+                result.RequestCount,
+                provenance),
             _ => throw new ArgumentException("Only drafted or validation-failed results are persistable.", nameof(result)),
         };
     }
+
+    /// <summary>Produces a fresh draft identifier.</summary>
+    public static string NewDraftId() => "draft-" + Guid.NewGuid().ToString("N");
+
+    /// <summary>The same version in a new lifecycle state; content, hash and chain position are unchanged.</summary>
+    public RecipeDraftRecord WithStatus(RecipeDraftStatus status, DateTimeOffset updatedUtc) =>
+        Copy(status, updatedUtc, Provenance);
+
+    /// <summary>
+    /// The same version re-linked to a new parent. This exists for the store's trim splice: when the version
+    /// below is removed, the survivor points at the nearest remaining ancestor so the chain stays linear.
+    /// </summary>
+    public RecipeDraftRecord WithParentDraftId(string? parentDraftId) =>
+        Copy(Status, UpdatedUtc, Provenance.WithParentDraftId(parentDraftId));
+
+    private RecipeDraftRecord Copy(RecipeDraftStatus status, DateTimeOffset updatedUtc, RecipeDraftProvenance provenance) => new(
+        DraftId,
+        status,
+        CreatedUtc,
+        updatedUtc,
+        CorrelationId,
+        PromptTemplateVersion,
+        TemplateCatalogVersion,
+        RecipeJson,
+        CanonicalSha256,
+        RecipeId,
+        Archetype,
+        Dimension,
+        TargetProfile,
+        Issues,
+        RequestCount,
+        provenance);
 
     private static IReadOnlyList<RecipeValidationIssue> CopyIssues(IEnumerable<RecipeValidationIssue> issues)
     {
@@ -545,6 +649,29 @@ public enum RecipeDraftStoreErrorCode
     HashMismatch,
     StorageFailed,
     RecordInvalid,
+
+    /// <summary>
+    /// The store file parses far enough to expose its integer formatVersion, and that version is not the current
+    /// one. Distinct from <see cref="StorageFailed"/> (corruption): the remedy is to delete the old file, not to
+    /// report a defect (REQ-004 §7.4).
+    /// </summary>
+    UnsupportedVersion,
+
+    /// <summary>Another process held the store lock for the whole bounded wait; nothing was read or written.</summary>
+    StoreBusy,
+
+    /// <summary>The parent of the new version is not its lineage head; chains are linear, so appending there would branch.</summary>
+    NotLineageHead,
+
+    /// <summary>
+    /// Protected records fill a retention cap and are never dropped to make room: either the lineage cap is
+    /// filled by protected versions (level 1), or every retained lineage holds a version awaiting build, so no
+    /// lineage may be evicted for a new one (level 2). Nothing is written in either case.
+    /// </summary>
+    LineageCapacityExhausted,
+
+    /// <summary>Truncation would delete a confirmed, built or build-failed version, which is an audit record.</summary>
+    TruncationBlocked,
 }
 
 /// <summary>Deliberately low-detail draft-store failure. It never carries file contents or paths.</summary>
@@ -566,8 +693,22 @@ public sealed class RecipeDraftStoreException : Exception
         RecipeDraftStoreErrorCode.InvalidStatus => "The recipe draft is not awaiting confirmation.",
         RecipeDraftStoreErrorCode.HashMismatch => "The recipe draft changed after it was presented for confirmation.",
         RecipeDraftStoreErrorCode.StorageFailed => "The recipe draft storage operation failed.",
+        RecipeDraftStoreErrorCode.UnsupportedVersion =>
+            "The recipe draft storage was written by an unsupported format version. Delete " +
+            UnsupportedVersionRemedyPath + " and its .bak copy under the current user's application data " +
+            "directory, then retry; the file is never migrated or deleted automatically.",
+        RecipeDraftStoreErrorCode.StoreBusy => "Another process is using the recipe draft storage; retry shortly.",
+        RecipeDraftStoreErrorCode.NotLineageHead => "The recipe draft version is not the latest version of its lineage.",
+        RecipeDraftStoreErrorCode.LineageCapacityExhausted =>
+            "Recipe draft capacity is exhausted: the lineage is full of confirmed or built versions, or every " +
+            "retained lineage holds a draft awaiting build. Build or revise an awaiting draft before adding more.",
+        RecipeDraftStoreErrorCode.TruncationBlocked =>
+            "A later version of the recipe draft lineage is confirmed or built and cannot be deleted.",
         _ => "The recipe draft record is invalid.",
     };
+
+    /// <summary>The store file's position relative to the user application data root; never an absolute path.</summary>
+    public const string UnsupportedVersionRemedyPath = "VFXComposer/AI/recipe-drafts.json";
 }
 
 /// <summary>

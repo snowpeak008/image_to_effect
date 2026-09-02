@@ -54,6 +54,9 @@ public sealed class SimpleModeTests
         Assert.AreEqual(card.Skeleton.CanonicalSha256, retained.CanonicalSha256);
         Assert.AreEqual(RecipePresetSkeleton.PresetPromptTemplateVersion, retained.PromptTemplateVersion);
         Assert.AreEqual(0, retained.RequestCount);
+        Assert.AreEqual(RecipeDraftOrigin.Preset, retained.Origin, "A card click must be recorded as a preset lineage root.");
+        Assert.AreEqual(card.Skeleton.PresetId, retained.PresetId);
+        Assert.IsNull(retained.ParentDraftId);
     }
 
     [TestMethod]
