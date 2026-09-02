@@ -1,0 +1,20 @@
+{
+  "recipeVersion": 1,
+  "revision": 1,
+  "id": "preset_bursting_fireball_2d",
+  "name": "Bursting Fireball 2D",
+  "dimension": "2d",
+  "archetype": "projectile",
+  "targetProfile": "mobile_medium",
+  "randomSeed": 20260903,
+  "stages": [
+    { "id": "launch", "trigger": "on_launch", "duration": 0.1, "enabled": true, "modules": [] },
+    { "id": "travel", "trigger": "after_previous", "duration": 1.0, "enabled": true, "modules": [
+      { "id": "core", "kind": "energy_body", "templateId": "PFT_2D_FireCore", "parameters": { "scale": 1.2 }, "enabled": true }
+    ] },
+    { "id": "impact", "trigger": "on_hit", "duration": 0.5, "enabled": true, "modules": [
+      { "id": "burst", "kind": "impact_burst", "templateId": "PFT_2D_FireImpact", "parameters": { "count": 24, "speed": 3.5 }, "enabled": true }
+    ] }
+  ],
+  "metadata": { "createdBy": "vfxcomposer.preset", "templateCatalogVersion": "1.0.0" }
+}

@@ -1,0 +1,20 @@
+{
+  "recipeVersion": 1,
+  "revision": 1,
+  "id": "preset_shock_impact_2d",
+  "name": "Shock Impact 2D",
+  "dimension": "2d",
+  "archetype": "projectile",
+  "targetProfile": "mobile_medium",
+  "randomSeed": 20260904,
+  "stages": [
+    { "id": "launch", "trigger": "on_launch", "duration": 0.1, "enabled": true, "modules": [] },
+    { "id": "travel", "trigger": "after_previous", "duration": 1.0, "enabled": true, "modules": [
+      { "id": "core", "kind": "energy_body", "templateId": "PFT_2D_FireCore", "parameters": { "scale": 1.2 }, "enabled": true }
+    ] },
+    { "id": "impact", "trigger": "on_hit", "duration": 0.5, "enabled": true, "modules": [
+      { "id": "shockwave", "kind": "shockwave", "templateId": "PFT_2D_Shockwave", "parameters": { "lifetime": 0.28, "endSize": 2.8 }, "enabled": true }
+    ] }
+  ],
+  "metadata": { "createdBy": "vfxcomposer.preset", "templateCatalogVersion": "1.0.0" }
+}

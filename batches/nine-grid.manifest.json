@@ -1,0 +1,52 @@
+{
+  "schemaVersion": "vfxcomposer.batch-manifest/1",
+  "batchId": "nine-grid",
+  "onFailure": "continue",
+  "items": [
+    {
+      "itemId": "spark-projectile",
+      "kind": "recipe",
+      "recipePath": "recipes/spark_projectile_2d.json"
+    },
+    {
+      "itemId": "trailing-fireball",
+      "kind": "recipe",
+      "recipePath": "recipes/preset_trailing_fireball_2d.json"
+    },
+    {
+      "itemId": "bursting-fireball",
+      "kind": "recipe",
+      "recipePath": "recipes/preset_bursting_fireball_2d.json"
+    },
+    {
+      "itemId": "shock-impact",
+      "kind": "recipe",
+      "recipePath": "recipes/preset_shock_impact_2d.json"
+    },
+    {
+      "itemId": "launch-flash",
+      "kind": "recipe",
+      "recipePath": "recipes/preset_launch_flash_2d.json"
+    },
+    {
+      "itemId": "ember-streak",
+      "kind": "recipe",
+      "recipePath": "recipes/preset_ember_streak_2d.json"
+    },
+    {
+      "itemId": "trailing-fireball-bold",
+      "kind": "recipe",
+      "recipePath": "recipes/preset_trailing_fireball_2d_bold.json"
+    },
+    {
+      "itemId": "ember-streak-sparse",
+      "kind": "recipe",
+      "recipePath": "recipes/preset_ember_streak_2d_sparse.json"
+    },
+    {
+      "itemId": "shock-impact-wide",
+      "kind": "recipe",
+      "recipePath": "recipes/preset_shock_impact_2d_wide.json"
+    }
+  ]
+}
