@@ -89,6 +89,37 @@ public static class UiStringKeys
     public const string CreateBuildHandoffHeading = "CreateBuildHandoffHeading";
     public const string CreateBuildHandoffNotice = "CreateBuildHandoffNotice";
 
+    // Parameter panel (F8b3): static copy, per-row hints, warning rows and the hand-edit status lines.
+    public const string CreateParameterPanelHeading = "CreateParameterPanelHeading";
+    public const string CreateParameterPanelNotice = "CreateParameterPanelNotice";
+    public const string CreateParameterApplyAction = "CreateParameterApplyAction";
+    public const string CreateParameterReportWatermark = "CreateParameterReportWatermark";
+    public const string CreateParameterModuleHeader = "CreateParameterModuleHeader";
+    public const string CreateParameterBoundsHint = "CreateParameterBoundsHint";
+    public const string CreateParameterCurrentValue = "CreateParameterCurrentValue";
+    public const string CreateParameterMissingHint = "CreateParameterMissingHint";
+    public const string CreateParameterWarningsHeading = "CreateParameterWarningsHeading";
+    public const string CreateParameterWarningTemplateUnknown = "CreateParameterWarningTemplateUnknown";
+    public const string CreateParameterWarningParameterUndeclared = "CreateParameterWarningParameterUndeclared";
+    public const string CreateParameterWarningModuleUnaddressable = "CreateParameterWarningModuleUnaddressable";
+    public const string CreateRecipeStatusHumanEditSaved = "CreateRecipeStatusHumanEditSaved";
+    public const string CreateRecipeStatusParameterEditRejected = "CreateRecipeStatusParameterEditRejected";
+    public const string CreateRecipeStatusValidationFailedNotRetainedWithCode =
+        "CreateRecipeStatusValidationFailedNotRetainedWithCode";
+    public const string CreateRetentionNoticeSuperseded = "CreateRetentionNoticeSuperseded";
+    public const string CreateRetentionNoticeTrimmed = "CreateRetentionNoticeTrimmed";
+    public const string CreateRetentionNoticeEvicted = "CreateRetentionNoticeEvicted";
+
+    // Bilingual copy for the closed editor rejection-code set (F8b3). Each sentence formats the issue path as
+    // {0}, the offending text as {1} and the allowed range as {2}; RecipeParameterEditCopy pins the mapping.
+    public const string RecipeParameterEditNoChanges = "RecipeParameterEditNoChanges";
+    public const string RecipeParameterEditTargetNotFound = "RecipeParameterEditTargetNotFound";
+    public const string RecipeParameterEditValueNotInteger = "RecipeParameterEditValueNotInteger";
+    public const string RecipeParameterEditValueNotFinite = "RecipeParameterEditValueNotFinite";
+    public const string RecipeParameterEditValueOutOfRange = "RecipeParameterEditValueOutOfRange";
+    public const string RecipeParameterEditDocumentNotEditable = "RecipeParameterEditDocumentNotEditable";
+    public const string RecipeParameterEditDuplicateTarget = "RecipeParameterEditDuplicateTarget";
+
     public const string CreatePresetFireBoltTitle = "CreatePresetFireBoltTitle";
     public const string CreatePresetFireBoltDescription = "CreatePresetFireBoltDescription";
     public const string CreatePresetTrailingFireballTitle = "CreatePresetTrailingFireballTitle";
