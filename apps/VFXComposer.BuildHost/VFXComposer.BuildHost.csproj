@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <AssemblyName>VFXComposer.BuildHost</AssemblyName>
+    <RootNamespace>VFXComposer.BuildHost</RootNamespace>
+    <IsPackable>false</IsPackable>
+    <Description>Desktop-private restricted build host (ADR-008): one short-lived process per explicit build action that re-verifies one confirmed draft, enqueues its draft-backed build entry and executes it under the shared executor lock. Not a user-facing command surface.</Description>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\VFXComposer.AI.Contracts\VFXComposer.AI.Contracts.csproj" />
+    <ProjectReference Include="..\..\src\VFXComposer.AI.Providers\VFXComposer.AI.Providers.csproj" />
+    <ProjectReference Include="..\..\src\VFXComposer.Batch.Core\VFXComposer.Batch.Core.csproj" />
+    <ProjectReference Include="..\..\src\VFXComposer.Jobs\VFXComposer.Jobs.csproj" />
+    <ProjectReference Include="..\..\src\VFXComposer.Protocol\VFXComposer.Protocol.csproj" />
+  </ItemGroup>
+</Project>
