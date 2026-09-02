@@ -11,6 +11,9 @@ public sealed class RecipeDraftRetentionTests
 {
     private static readonly DateTimeOffset Epoch = new(2026, 1, 1, 0, 0, 0, TimeSpan.Zero);
 
+    /// <summary>Beyond any wall-clock stamp Confirm/MarkBuilt apply, so activity order stays deterministic around them.</summary>
+    private static readonly DateTimeOffset Later = new(2100, 1, 1, 0, 0, 0, TimeSpan.Zero);
+
     [TestMethod]
     public void LevelOneTrimsTheOldestUnprotectedVersionAndKeepsTheChainLinear()
     {
@@ -143,13 +146,7 @@ public sealed class RecipeDraftRetentionTests
         using var directory = new A1TestDirectory();
         var path = StorePath(directory);
         var store = new RecipeDraftStore(path);
-        var roots = new List<RecipeDraftRecord>();
-        for (var index = 0; index < RecipeDraftLineageLimits.MaximumLineages; index++)
-        {
-            var outcome = store.SaveVersion(Root(RecipeDraftOrigin.AiDraft, Epoch.AddHours(index)));
-            Assert.IsTrue(outcome.RetainedEverything);
-            roots.Add(outcome.Record);
-        }
+        var roots = SaveRoots(store);
 
         // Lineage 0 is the oldest root but the most recently active: two versions land on it much later.
         var lineageZeroHead = Append(store, roots[0], createdUtc: Epoch.AddHours(20), variant: 1).Record;
@@ -175,8 +172,8 @@ public sealed class RecipeDraftRetentionTests
         Assert.AreEqual(2, eleventh.EvictedVersionCount, "Eviction removes the whole chain, root and appended version alike.");
         Assert.IsNull(reopened.TryGet(lineageThreeHead.DraftId));
 
-        // A confirmation is activity too: it stamps the record with the current time, which is later than every
-        // synthetic timestamp above, so lineage 4 jumps to the front and lineage 5 is evicted instead.
+        // A confirmation both stamps the record with the current time (later than every synthetic timestamp above)
+        // and exempts its lineage from eviction while the build is pending, so lineage 5 is evicted instead.
         store.Confirm(roots[4].DraftId, roots[4].CanonicalSha256!);
         var twelfth = store.SaveVersion(Root(RecipeDraftOrigin.AiDraft, Epoch.AddHours(33)));
         CollectionAssert.AreEqual(new[] { roots[5].LineageId }, twelfth.EvictedLineageIds.ToArray());
@@ -187,6 +184,96 @@ public sealed class RecipeDraftRetentionTests
         {
             Assert.IsNotNull(reopened.TryGet(record.DraftId), "Retained lineage: " + record.LineageId);
         }
+    }
+
+    [TestMethod]
+    public void LevelTwoSkipsALineageAwaitingBuildAndEvictsTheNextLeastRecentlyActiveOne()
+    {
+        using var directory = new A1TestDirectory();
+        var path = StorePath(directory);
+        var store = new RecipeDraftStore(path);
+        var roots = SaveRoots(store);
+        store.Confirm(roots[0].DraftId, roots[0].CanonicalSha256!);
+        var appended = MakeMoreRecentThanTheClock(store, roots.Skip(1));
+
+        var ninth = store.SaveVersion(Root(RecipeDraftOrigin.AiDraft, Later.AddHours(30)));
+
+        CollectionAssert.AreEqual(new[] { roots[1].LineageId }, ninth.EvictedLineageIds.ToArray(),
+            "Lineage 0 is the least recently active but awaits a build; the next one without a pending build goes.");
+        Assert.AreEqual(2, ninth.EvictedVersionCount, "The whole evicted chain is counted.");
+        Assert.IsFalse(ninth.RetainedEverything);
+        var reopened = new RecipeDraftStore(path);
+        Assert.IsNull(reopened.TryGet(roots[1].DraftId));
+        Assert.IsNull(reopened.TryGet(appended[0].DraftId));
+        Assert.AreEqual(RecipeDraftStatus.ConfirmedAwaitingBuild, reopened.TryGet(roots[0].DraftId)!.Status);
+        CollectionAssert.AreEqual(new[] { roots[0].DraftId }, reopened.ListConfirmedAwaitingBuild().Select(static record => record.DraftId).ToArray());
+        Assert.IsNotNull(reopened.TryGet(ninth.Record.DraftId));
+        foreach (var root in roots.Skip(2))
+        {
+            Assert.IsNotNull(reopened.TryGet(root.DraftId), "Retained lineage: " + root.LineageId);
+        }
+    }
+
+    [TestMethod]
+    public void LevelTwoRefusesANewLineageWhenEveryRetainedLineageAwaitsBuildAndLeavesNoResidue()
+    {
+        using var directory = new A1TestDirectory();
+        var path = StorePath(directory);
+        var store = new RecipeDraftStore(path);
+        var roots = SaveRoots(store);
+        foreach (var root in roots)
+        {
+            store.Confirm(root.DraftId, root.CanonicalSha256!);
+        }
+
+        var before = File.ReadAllBytes(path);
+        var refused = Root(RecipeDraftOrigin.AiDraft, Later);
+
+        Throws(RecipeDraftStoreErrorCode.LineageCapacityExhausted, () => store.SaveVersion(refused));
+
+        CollectionAssert.AreEqual(before, File.ReadAllBytes(path), "A refused lineage leaves the file byte-identical.");
+        var reopened = new RecipeDraftStore(path);
+        Assert.IsNull(reopened.TryGet(refused.DraftId));
+        foreach (var root in roots)
+        {
+            Assert.AreEqual(RecipeDraftStatus.ConfirmedAwaitingBuild, reopened.TryGet(root.DraftId)!.Status, "Retained head: " + root.LineageId);
+        }
+
+        Assert.AreEqual(RecipeDraftLineageLimits.MaximumLineages, reopened.ListConfirmedAwaitingBuild().Count);
+
+        // The way out is to settle one pending build: the built lineage becomes the eviction candidate.
+        store.MarkBuilt(roots[2].DraftId, roots[2].CanonicalSha256!);
+        var ninth = store.SaveVersion(refused);
+        CollectionAssert.AreEqual(new[] { roots[2].LineageId }, ninth.EvictedLineageIds.ToArray());
+        Assert.IsNotNull(reopened.TryGet(refused.DraftId));
+    }
+
+    [TestMethod]
+    public void LevelTwoStillEvictsABuiltOnlyLineageAndReportsIt()
+    {
+        using var directory = new A1TestDirectory();
+        var path = StorePath(directory);
+        var store = new RecipeDraftStore(path);
+        var roots = SaveRoots(store);
+        store.Confirm(roots[0].DraftId, roots[0].CanonicalSha256!);
+        store.MarkBuilt(roots[0].DraftId, roots[0].CanonicalSha256!);
+        MakeMoreRecentThanTheClock(store, roots.Skip(1));
+
+        var ninth = store.SaveVersion(Root(RecipeDraftOrigin.AiDraft, Later.AddHours(30)));
+
+        CollectionAssert.AreEqual(new[] { roots[0].LineageId }, ninth.EvictedLineageIds.ToArray(),
+            "A built version is an audit record inside its lineage but does not shield the whole chain: the build facts live in the project.");
+        Assert.AreEqual(1, ninth.EvictedVersionCount);
+        Assert.IsFalse(ninth.RetainedEverything);
+        var reopened = new RecipeDraftStore(path);
+        Assert.IsNull(reopened.TryGet(roots[0].DraftId));
+        Assert.AreEqual(0, reopened.ListLineage(roots[0].LineageId).Count);
+        foreach (var root in roots.Skip(1))
+        {
+            Assert.IsNotNull(reopened.TryGet(root.DraftId), "Retained lineage: " + root.LineageId);
+        }
+
+        Assert.IsNotNull(reopened.TryGet(ninth.Record.DraftId));
     }
 
     [TestMethod]
@@ -282,6 +369,27 @@ public sealed class RecipeDraftRetentionTests
         Assert.IsTrue(saved.Count >= 2, "Sanity: the ceiling admits more than one oversized record.");
         Assert.IsNotNull(new RecipeDraftStore(path).TryGet(saved[^1].DraftId), "Everything written before the refusal is still readable.");
     }
+
+    /// <summary>Fills the store to the lineage cap with pending roots created one hour apart from <see cref="Epoch"/>.</summary>
+    private static List<RecipeDraftRecord> SaveRoots(RecipeDraftStore store)
+    {
+        var roots = new List<RecipeDraftRecord>();
+        for (var index = 0; index < RecipeDraftLineageLimits.MaximumLineages; index++)
+        {
+            var outcome = store.SaveVersion(Root(RecipeDraftOrigin.AiDraft, Epoch.AddHours(index)));
+            Assert.IsTrue(outcome.RetainedEverything);
+            roots.Add(outcome.Record);
+        }
+
+        return roots;
+    }
+
+    /// <summary>
+    /// Appends one version to each lineage at <see cref="Later"/> plus its position, so every one of them is more
+    /// recently active than any lineage the wall clock just stamped, in a fixed order.
+    /// </summary>
+    private static List<RecipeDraftRecord> MakeMoreRecentThanTheClock(RecipeDraftStore store, IEnumerable<RecipeDraftRecord> heads) =>
+        heads.Select((head, index) => Append(store, head, createdUtc: Later.AddHours(index), variant: index + 1).Record).ToList();
 
     /// <summary>Read through a call so the assertions compare a runtime value, not a folded constant.</summary>
     private static int ReadCeiling() => RecipeDraftStore.MaximumFileBytes;

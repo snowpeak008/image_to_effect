@@ -26,7 +26,13 @@ namespace VFXComposer.AI.Providers.Recipes;
 /// build-failed or superseded version are protected, and when only protected versions remain a new version is
 /// refused with <see cref="RecipeDraftStoreErrorCode.LineageCapacityExhausted"/>. Level 2 keeps at most
 /// <see cref="RecipeDraftLineageLimits.MaximumLineages"/> lineages by evicting the least recently updated whole
-/// lineage. Every removal is reported on the typed outcome; nothing is dropped silently.
+/// lineage among those holding no <see cref="RecipeDraftStatus.ConfirmedAwaitingBuild"/> version: a confirmed
+/// draft is a cross-entry build backlog entry (Desktop confirms, <c>vfxc</c>/<c>vfxc-mcp</c> may build later), so
+/// its lineage is never evicted, whereas a lineage whose audit trail is only built, build-failed or superseded
+/// versions may go because the build facts already live in the Unity project's recipe provenance file and
+/// manifest. When every retained lineage is protected, a new lineage is refused with the same
+/// <see cref="RecipeDraftStoreErrorCode.LineageCapacityExhausted"/> and the file is left untouched. Every
+/// removal is reported on the typed outcome; nothing is dropped silently.
 /// </para>
 /// </summary>
 public sealed class RecipeDraftStore : IRecipeDraftLineageStore
@@ -343,7 +349,11 @@ public sealed class RecipeDraftStore : IRecipeDraftLineageStore
         }
     }
 
-    /// <summary>Level-2 eviction: whole lineages, least recently updated first; the lineage being saved is never a candidate.</summary>
+    /// <summary>
+    /// Level-2 eviction: whole lineages, least recently updated first. Neither the lineage being saved nor any
+    /// lineage holding a <see cref="RecipeDraftStatus.ConfirmedAwaitingBuild"/> version is a candidate; when the
+    /// cap is exceeded and no candidate remains the save fails closed instead of dropping a pending build.
+    /// </summary>
     private static (IReadOnlyList<string> LineageIds, int VersionCount) EvictLineages(
         RecipeDraftStoreDocument document,
         string retainedLineageId)
@@ -352,18 +362,22 @@ public sealed class RecipeDraftStore : IRecipeDraftLineageStore
         var evictedVersions = 0;
         var candidates = document.RevisionWatermarks.Keys
             .Where(lineageId => !string.Equals(lineageId, retainedLineageId, StringComparison.Ordinal))
-            .Select(lineageId => (LineageId: lineageId, LastActivity: document.Lineage(lineageId).Max(static record => record.UpdatedUtc)))
+            .Select(lineageId => (LineageId: lineageId, Versions: document.Lineage(lineageId)))
+            .Where(static candidate => !candidate.Versions.Any(static record => record.Status == RecipeDraftStatus.ConfirmedAwaitingBuild))
+            .Select(static candidate => (candidate.LineageId, LastActivity: candidate.Versions.Max(static record => record.UpdatedUtc)))
             .OrderBy(static candidate => candidate.LastActivity)
             .ThenBy(static candidate => candidate.LineageId, StringComparer.Ordinal)
             .Select(static candidate => candidate.LineageId)
             .ToList();
-        foreach (var lineageId in candidates)
+        var next = 0;
+        while (document.RevisionWatermarks.Count > RecipeDraftLineageLimits.MaximumLineages)
         {
-            if (document.RevisionWatermarks.Count <= RecipeDraftLineageLimits.MaximumLineages)
+            if (next >= candidates.Count)
             {
-                break;
+                throw new RecipeDraftStoreException(RecipeDraftStoreErrorCode.LineageCapacityExhausted);
             }
 
+            var lineageId = candidates[next++];
             evictedVersions += document.Records.RemoveAll(record => string.Equals(record.LineageId, lineageId, StringComparison.Ordinal));
             document.RevisionWatermarks.Remove(lineageId);
             evicted.Add(lineageId);

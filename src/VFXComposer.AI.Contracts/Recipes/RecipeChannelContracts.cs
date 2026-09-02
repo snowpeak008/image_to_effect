@@ -663,7 +663,11 @@ public enum RecipeDraftStoreErrorCode
     /// <summary>The parent of the new version is not its lineage head; chains are linear, so appending there would branch.</summary>
     NotLineageHead,
 
-    /// <summary>The lineage cap is filled by protected versions, which are never dropped to make room.</summary>
+    /// <summary>
+    /// Protected records fill a retention cap and are never dropped to make room: either the lineage cap is
+    /// filled by protected versions (level 1), or every retained lineage holds a version awaiting build, so no
+    /// lineage may be evicted for a new one (level 2). Nothing is written in either case.
+    /// </summary>
     LineageCapacityExhausted,
 
     /// <summary>Truncation would delete a confirmed, built or build-failed version, which is an audit record.</summary>
@@ -696,7 +700,8 @@ public sealed class RecipeDraftStoreException : Exception
         RecipeDraftStoreErrorCode.StoreBusy => "Another process is using the recipe draft storage; retry shortly.",
         RecipeDraftStoreErrorCode.NotLineageHead => "The recipe draft version is not the latest version of its lineage.",
         RecipeDraftStoreErrorCode.LineageCapacityExhausted =>
-            "The recipe draft lineage is full of confirmed or built versions; start a new lineage.",
+            "Recipe draft capacity is exhausted: the lineage is full of confirmed or built versions, or every " +
+            "retained lineage holds a draft awaiting build. Build or revise an awaiting draft before adding more.",
         RecipeDraftStoreErrorCode.TruncationBlocked =>
             "A later version of the recipe draft lineage is confirmed or built and cannot be deleted.",
         _ => "The recipe draft record is invalid.",
