@@ -184,10 +184,10 @@ internal static class RecipeDraftTestData
         }
     }
 
-    public static RecipeDraftStoreException Throws(RecipeDraftStoreErrorCode expected, Action action)
+    public static RecipeDraftStoreException Throws(RecipeDraftStoreErrorCode expected, Action action, string? message = null)
     {
-        var exception = Assert.ThrowsExactly<RecipeDraftStoreException>(action);
-        Assert.AreEqual(expected, exception.Code);
+        var exception = Assert.ThrowsExactly<RecipeDraftStoreException>(action, message ?? string.Empty);
+        Assert.AreEqual(expected, exception.Code, message ?? string.Empty);
         return exception;
     }
 
