@@ -1,6 +1,12 @@
 # 开发记忆与恢复指南
 
-> **在途状态快照（2026-09-02 深夜）**：
+> **在途状态快照（2026-09-03 凌晨）**：
+> **F8b4 已关闭合入**：合并 `06f46cd4`，合并态 Release 0/0、全量 **1075/1075**（AI.Tests 294、Desktop.Tests 173）。**当前基线：1075 条 Release 0 失败。** §7 十卡仅剩 F8c（构建闭环）与收尾。worktree `D:\wt\i2s-f8b4` 已退役。
+> **新登记 flake**：并行全量下 `Broker.Tests` 的 `UserModeBrokerWorkerSessionTests.PostAdmissionChildExitAutomaticallyRevokesAndCleansSession` 偶发 1~2 条失败（进程时序类，单跑必绿，master 既有非 F8b4 引入）；与 Mcp `ValidatingAManifestOpensNoNetwork`、AiLocalE2E 负载 flake 同列。遇到即单跑确认。
+> **用户裁定的收尾路径（2026-09-02 晚）**：①关闭本轮（F8b4 ✓ → 专业模式里程碑审计 → F8c → 收尾）→ ②**批量生成 9 个特效（九宫格）供用户人工验收质量** → ③验收后再议"模板库扩充 track"（当前仅 6 模板/11 参数/2D 火系弹道，覆盖面窄是已登记债务，扩充需用户美术方向输入）。
+> **下一步：专业模式里程碑审计**（F8b1+F8b2+F8b3+F8b3b+F8b4 合一次独立审计，拆机械/语义两组；机械组顺带复核三个已登记 flake）。之后 F8c 按 ADR-008（`apps/VFXComposer.BuildHost` 独立宿主子进程、draft-backed 断链接通、Desktop 应用内构建），F8c 后九宫格批量生成可走应用内构建或既有 `vfxc batch run`。
+>
+> **历史快照（2026-09-02 深夜）**：
 > **F8b3b 已关闭合入**：合并 `d974118c`，合并态 Release 0/0、全量 **993/993**（Desktop.Tests 137）。**当前基线：993 条 Release 0 失败。** worktree `D:\wt\i2s-f8b3b` 已退役。专业模式 UI 现有：参数面板（F8b3）+ 版本链视图与回退（F8b3b）；简单模式全量在位。
 > **下一步：派发 F8b4 精修回路**（依赖 F8b1 ✓、F8b2 ✓、F8b3 ✓；卡见主计划 §7）。F8b4 范围：每轮 1+N 精修（三件套上下文 + 艺术家知识片段 `refine-artist-knowledge`——源文档 `docs/ai-workflow/refine-artist-knowledge.md` + 入库 fragment JSON，REQ-004 §10 章程）、覆盖守卫（§9.3，别名词表点名判定、guardRestorations 落盘与呈现）、模式切换 UI + ui-preferences `/2` 升版（§5.3，REQ-004-08~11）、任务时间线条目（REQ-004-20 与 -33 时间线半边）；顺带 F8b3b 余项 N7（AI 生成/示例卡路径校验框统一走 L1.5）。F8b4 是唯一动生成链路的卡，交付后做专业模式里程碑审计（F8b1+F8b2+F8b3+F8b3b+F8b4 合一次）。
 > **模型槽位勘误**：子 agent 模型槽位名已由 `claude-fable-5-1-thinking-high` 变为 **`claude-fable-5-high`**（本日晚间起）；派发时用新槽位，旧名会被拒绝。
