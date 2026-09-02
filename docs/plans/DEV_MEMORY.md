@@ -1,6 +1,11 @@
 # 开发记忆与恢复指南
 
-> **在途状态快照（2026-09-03 清晨 4 点，F8c 关闭）**：
+> **终态（2026-09-03 清晨，§7 生成体验大改版全部关闭）**：
+> master 与 origin/master 同步、工作区干净、`D:\wt\` 已清空。**基线：全量 1106 条 Release 0 失败**（跑全量前先 `dotnet build src\VFXComposer.Jobs.Tests\JobExecutorLockHost\VFXComposer.Jobs.Tests.JobExecutorLockHost.csproj -c Release`）。§7 十卡 + 双里程碑审计 + F8c 全部合入推送；收尾完成（指针型 skill `docs/skills/vfx-artist/SKILL.md` 已建）。三个已知负载 flake 见运维段（单跑必绿）。
+> **待办（用户裁定）**：①**九宫格人工验收**——批量生成 9 个特效供用户验收质量（简单模式示例卡 + AI 生成混合取材；构建走 Desktop 应用内（顺带覆盖 F8c 真机 E2E）或 `vfxc batch run`；Unity Editor 路径见 F6 证据 `E:\workwork\steamgamework\unit\2022.3.62f3c1\Editor`）；②验收后再议**模板库扩充 track**（当前 6 模板/11 参数/2D 火系弹道是覆盖面瓶颈，扩充需用户美术方向输入）。
+> 若要继续开发：从主计划 §7"暂缓/债务"与本文件历史快照起读。子 agent 模型：用户偏好 Opus 5 High，可用清单没有时用 Fable 5 High 照实登记。
+>
+> **历史快照（2026-09-03 清晨 4 点，F8c 关闭）**：
 > **F8c 已关闭合入**：合并 `09a22c6a`，合并态 Release 0/0、全量 **1106/1106**（新增 BuildHost.Tests 22、Desktop.Tests 187、Cli.Tests 142）。**当前基线：1106 条 Release 0 失败。** Desktop 构建闭环打通：确认 → 点"构建" → BuildHost 宿主自验入队执行 → MarkBuilt/MarkBuildFailed 回写 → 刷新可见。worktree `D:\wt\i2s-f8c` 已退役。
 > **§7 生成体验大改版：十卡全部关闭**（F8-0/R5/R6/F8a1/F8a2/F8b1/F8b2/F8b3/F8b3b/F8b4/F8c + 双里程碑审计）。仅剩**收尾**（指针型 vfx-artist skill、DEV_MEMORY 终态）。
 > **下一步（用户裁定路径）**：①收尾 → ②**九宫格**：批量生成 9 个特效供用户人工验收（首选应用内构建逐个跑，或 `vfxc batch run` 批量——九宫格同时是 F8c 真机 Unity E2E 的实战覆盖；生成可用 Desktop 简单模式示例卡 + AI 生成混合取材，Unity Editor 路径 `E:\workwork\steamgamework\unit\2022.3.62f3c1\Editor` 见 F6 证据）→ ③用户验收后再议模板库扩充 track。
