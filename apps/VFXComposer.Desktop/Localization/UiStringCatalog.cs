@@ -81,6 +81,13 @@ public static class UiStringCatalog
             [UiStringKeys.CreateRecipeStatusGenerationCancelled] = "Generation cancelled.",
             [UiStringKeys.CreateRecipeStatusGenerationUnavailableWithCode] = "Generation unavailable: {0}.",
             [UiStringKeys.CreateRecipeStatusDraftStorageFailedWithCode] = "Draft storage failed: {0}.",
+            [UiStringKeys.CreateRecipeStatusStoreUnsupportedVersionWithCode] =
+                "Draft storage failed: {0}. The store file was written by an unsupported format version; delete "
+                + "VFXComposer/AI/recipe-drafts.json and its .bak copy under the application data directory, then "
+                + "retry - the file is never migrated or deleted automatically.",
+            [UiStringKeys.CreateRecipeStatusLineageCapacityWithCode] =
+                "Draft storage failed: {0}. This version chain is full of confirmed or built versions; start a new "
+                + "lineage (generate or apply a preset) to continue.",
             [UiStringKeys.CreateRecipeStatusDraftConfirmed] = "Draft confirmed - awaiting build.",
             [UiStringKeys.CreateRecipeStatusConfirmationFailedWithCode] = "Confirmation failed: {0}.",
             [UiStringKeys.CreateValidationPassed] = "L1 validation passed.",
@@ -172,6 +179,9 @@ public static class UiStringCatalog
             [UiStringKeys.CreateRefineStatusIdle] = "Enter feedback, then refine the current draft.",
             [UiStringKeys.CreateRefineStatusNoHead] = "No draft to refine: create or generate one first.",
             [UiStringKeys.CreateRefineStatusEmptyFeedback] = "Feedback is empty; nothing was sent.",
+            [UiStringKeys.CreateRefineStatusLineageFull] =
+                "This version chain is full of confirmed or built versions, so a refined version could not be "
+                + "kept; no request was sent. Start a new lineage (generate or apply a preset) to continue.",
             [UiStringKeys.CreateRefineStatusRefining] = "Refining the current draft...",
             [UiStringKeys.CreateRefineStatusCompleted] = "Refined to v{0} ({1} request(s)).",
             [UiStringKeys.CreateRefineStatusValidationFailed] =
@@ -504,6 +514,11 @@ public static class UiStringCatalog
             [UiStringKeys.CreateRecipeStatusGenerationCancelled] = "生成已取消。",
             [UiStringKeys.CreateRecipeStatusGenerationUnavailableWithCode] = "生成不可用：{0}。",
             [UiStringKeys.CreateRecipeStatusDraftStorageFailedWithCode] = "草稿存储失败：{0}。",
+            [UiStringKeys.CreateRecipeStatusStoreUnsupportedVersionWithCode] =
+                "草稿存储失败：{0}。存储文件由不受支持的格式版本写入；请删除应用数据目录下的 "
+                + "VFXComposer/AI/recipe-drafts.json 及其 .bak 副本后重试——该文件不会被自动迁移或删除。",
+            [UiStringKeys.CreateRecipeStatusLineageCapacityWithCode] =
+                "草稿存储失败：{0}。当前版本链已被已确认或已构建的版本占满；请另起新链（重新生成或应用示例）继续。",
             [UiStringKeys.CreateRecipeStatusDraftConfirmed] = "草稿已确认——等待构建。",
             [UiStringKeys.CreateRecipeStatusConfirmationFailedWithCode] = "确认失败：{0}。",
             [UiStringKeys.CreateValidationPassed] = "L1 校验通过。",
@@ -587,6 +602,8 @@ public static class UiStringCatalog
             [UiStringKeys.CreateRefineStatusIdle] = "输入反馈后即可精修当前草稿。",
             [UiStringKeys.CreateRefineStatusNoHead] = "没有可精修的草稿：请先创建或生成一个。",
             [UiStringKeys.CreateRefineStatusEmptyFeedback] = "反馈为空；未发送任何请求。",
+            [UiStringKeys.CreateRefineStatusLineageFull] =
+                "当前版本链已被已确认或已构建的版本占满，精修产物将无处保留；未发送任何请求。请另起新链（重新生成或应用示例）继续。",
             [UiStringKeys.CreateRefineStatusRefining] = "正在精修当前草稿…",
             [UiStringKeys.CreateRefineStatusCompleted] = "精修完成 v{0}（{1} 次请求）。",
             [UiStringKeys.CreateRefineStatusValidationFailed] =

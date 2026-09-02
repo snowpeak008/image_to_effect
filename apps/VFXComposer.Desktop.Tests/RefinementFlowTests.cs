@@ -227,6 +227,55 @@ public sealed class RefinementFlowTests
     }
 
     [TestMethod]
+    public async Task AFullyProtectedLineageRefusesTheRefineRoundWithZeroRequests()
+    {
+        // AC-16 last sentence (F8 milestone audit ①): sixteen protected versions would refuse the refined version
+        // at AppendVersion, so the click is refused in the preflight — zero requests, no wasted AI round.
+        var runtime = CreateRuntime(static _ => throw new AssertFailedException("No request may be sent."));
+        var viewModel = NewCreatePage(runtime);
+        viewModel.ApplyPresetCommand.Execute(FireBoltCard(viewModel));
+        var lineageId = GrowToTheVersionCap(runtime.Store, viewModel.DraftId!);
+        foreach (var version in runtime.Store.ListLineage(lineageId))
+        {
+            runtime.Store.Confirm(version.DraftId, version.CanonicalSha256!);
+        }
+
+        viewModel.RefineFeedback = Feedback;
+        await viewModel.RefineRecipeCommand.ExecuteAsync(null);
+
+        Assert.AreEqual(0, runtime.RefineCalls, "The doomed round never reaches the channel.");
+        Assert.AreEqual(
+            LocalizationTestSupport.English(UiStringKeys.CreateRefineStatusLineageFull),
+            viewModel.RefineStatus);
+        Assert.AreEqual(
+            RecipeDraftLineageLimits.MaximumVersionsPerLineage,
+            runtime.Store.ListLineage(lineageId).Count,
+            "No version landed.");
+        Assert.AreEqual(Feedback, viewModel.RefineFeedback, "The feedback is kept for the new lineage.");
+        runtime.AssertNoGatewayTraffic();
+    }
+
+    [TestMethod]
+    public async Task AFullChainWithUnprotectedVersionsStillRefinesNormally()
+    {
+        // Boundary of the preflight's store-semantics mirror: sixteen versions of which only the head is protected
+        // are trimmable, so the round proceeds — the store trims the oldest pending version, never the preflight.
+        var runtime = CreateRuntime(request => RefinedResult(request, WithScale(request.Head.RecipeJson, "1.8")));
+        var viewModel = NewCreatePage(runtime);
+        viewModel.ApplyPresetCommand.Execute(FireBoltCard(viewModel));
+        var lineageId = GrowToTheVersionCap(runtime.Store, viewModel.DraftId!);
+
+        viewModel.RefineFeedback = Feedback;
+        await viewModel.RefineRecipeCommand.ExecuteAsync(null);
+
+        Assert.AreEqual(1, runtime.RefineCalls, "A trimmable chain refines normally.");
+        var lineage = runtime.Store.ListLineage(lineageId);
+        Assert.AreEqual(RecipeDraftLineageLimits.MaximumVersionsPerLineage, lineage.Count, "The level-1 trim kept the cap.");
+        Assert.AreEqual(RecipeDraftOrigin.AiRefine, lineage[^1].Origin, "The refined version landed as the head.");
+        runtime.AssertNoGatewayTraffic();
+    }
+
+    [TestMethod]
     public async Task GuardRestorationsAreDisclosedInTheConfirmationAreaAndTheTimeline()
     {
         // REQ-004-48 / AC-9 visibility half: the round restored two hand-tuned values; both surfaces say so.
@@ -355,6 +404,38 @@ public sealed class RefinementFlowTests
     private static ParameterRowViewModel ScaleRow(CreateViewModel viewModel) => viewModel.ParameterPanel.Modules
         .Single(static module => module.ModuleId == "core")
         .Parameters.Single(static row => row.Name == "scale");
+
+    /// <summary>
+    /// Grows the chain behind <paramref name="rootDraftId"/> to the sixteen-version cap through the real store
+    /// (pending human_edit versions, one distinct scale literal each), returning the lineage identifier.
+    /// </summary>
+    private static string GrowToTheVersionCap(RecipeDraftStore store, string rootDraftId)
+    {
+        var head = store.TryGet(rootDraftId)!;
+        for (var ordinal = 2; ordinal <= RecipeDraftLineageLimits.MaximumVersionsPerLineage; ordinal++)
+        {
+            var editedJson = WithScale(head.RecipeJson, "1." + ordinal.ToString("D2", System.Globalization.CultureInfo.InvariantCulture));
+            var draft = new RecipeDraft(
+                Guid.NewGuid().ToString("N"),
+                editedJson,
+                RecipeCanonicalJson.ComputeSha256(editedJson),
+                head.RecipeId ?? "recipe",
+                head.Archetype ?? "projectile",
+                head.Dimension ?? "2d",
+                head.TargetProfile ?? "mobile_medium",
+                "prompt/refine-tests",
+                head.TemplateCatalogVersion);
+            var outcome = store.AppendVersion(
+                head.DraftId,
+                head.CanonicalSha256!,
+                new RecipeDraftRevision(draft, RecipeDraftOrigin.HumanEdit),
+                DateTimeOffset.UtcNow);
+            Assert.IsTrue(outcome.RetainedEverything, "Growing to the cap must not trim anything.");
+            head = outcome.Record;
+        }
+
+        return head.LineageId;
+    }
 
     private static string WithScale(string recipeJson, string literal)
     {

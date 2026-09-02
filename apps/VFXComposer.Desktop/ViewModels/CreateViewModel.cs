@@ -350,6 +350,18 @@ public sealed class CreateViewModel : WorkspacePageViewModel
     /// <summary>Stable code for an unexpected failure that carries no code of its own (F1 audit ②).</summary>
     private const string UnexpectedFailureCode = "VFXUI001";
 
+    /// <summary>
+    /// Presentation key for a draft-store failure (F8 milestone audit ②). The two codes whose remedy the user can
+    /// act on get a dedicated sentence — UnsupportedVersion names the store file to delete (relative position only)
+    /// and LineageCapacityExhausted names the new-lineage way out; every other code keeps the generic line.
+    /// </summary>
+    private static string DraftStorageStatusKeyFor(RecipeDraftStoreErrorCode code) => code switch
+    {
+        RecipeDraftStoreErrorCode.UnsupportedVersion => UiStringKeys.CreateRecipeStatusStoreUnsupportedVersionWithCode,
+        RecipeDraftStoreErrorCode.LineageCapacityExhausted => UiStringKeys.CreateRecipeStatusLineageCapacityWithCode,
+        _ => UiStringKeys.CreateRecipeStatusDraftStorageFailedWithCode,
+    };
+
     private async Task SendChatAsync()
     {
         if (!CanSendChat())
@@ -432,7 +444,7 @@ public sealed class CreateViewModel : WorkspacePageViewModel
         }
         catch (RecipeDraftStoreException exception)
         {
-            SetRecipeStatus(UiStringKeys.CreateRecipeStatusDraftStorageFailedWithCode, exception.Code);
+            SetRecipeStatus(DraftStorageStatusKeyFor(exception.Code), exception.Code);
         }
         catch (ChatChannelException exception)
         {
@@ -498,7 +510,7 @@ public sealed class CreateViewModel : WorkspacePageViewModel
         }
         catch (RecipeDraftStoreException exception)
         {
-            SetRecipeStatus(UiStringKeys.CreateRecipeStatusDraftStorageFailedWithCode, exception.Code);
+            SetRecipeStatus(DraftStorageStatusKeyFor(exception.Code), exception.Code);
         }
     }
 
@@ -554,7 +566,7 @@ public sealed class CreateViewModel : WorkspacePageViewModel
         }
         catch (RecipeDraftStoreException exception)
         {
-            SetRecipeStatus(UiStringKeys.CreateRecipeStatusDraftStorageFailedWithCode, exception.Code);
+            SetRecipeStatus(DraftStorageStatusKeyFor(exception.Code), exception.Code);
         }
     }
 
@@ -592,6 +604,15 @@ public sealed class CreateViewModel : WorkspacePageViewModel
         try
         {
             var lineage = _runtime.RecipeDrafts.ListLineage(head.LineageId);
+            // Capacity preflight (REQ-004 AC-16 last sentence): a lineage whose sixteen retained versions are all
+            // protected would refuse the refined version at AppendVersion, so the doomed round is refused here
+            // with zero requests instead of after a full AI round.
+            if (LineageWouldRefuseAppend(lineage))
+            {
+                SetRefineStatus(UiStringKeys.CreateRefineStatusLineageFull);
+                return;
+            }
+
             var result = await _runtime.RecipeRefinement.RefineAsync(
                 new RecipeRefinementRequest(
                     Guid.NewGuid().ToString("N"),
@@ -620,7 +641,7 @@ public sealed class CreateViewModel : WorkspacePageViewModel
         }
         catch (RecipeDraftStoreException exception)
         {
-            SetRefineStatus(UiStringKeys.CreateRecipeStatusDraftStorageFailedWithCode, exception.Code);
+            SetRefineStatus(DraftStorageStatusKeyFor(exception.Code), exception.Code);
         }
         catch (ChatChannelException exception)
         {
@@ -680,6 +701,24 @@ public sealed class CreateViewModel : WorkspacePageViewModel
         SetRefineStatus(UiStringKeys.CreateRefineStatusValidationFailed, result.RequestCount, errorCodes);
         Timeline.AppendRefineValidationFailed(result);
     }
+
+    /// <summary>
+    /// Preflight of the store's level-1 refusal (REQ-004 AC-16 last sentence): appending after this chain would be
+    /// refused with LineageCapacityExhausted when the chain already holds
+    /// <see cref="RecipeDraftLineageLimits.MaximumVersionsPerLineage"/> versions in a protected status. The
+    /// predicate mirrors the store's trim semantics (RecipeDraftStore.TrimLineage / IsProtected: confirmed, built,
+    /// build-failed and superseded versions are never trimmed, and the appended version is the protected head) —
+    /// if the store's protection rules evolve, this mirror must be kept in sync. The lineage byte cap (1 MiB of
+    /// persisted recipe JSON) is deliberately not preflighted: no single refined outcome can cross it in one round
+    /// under the per-draft JSON limit, and the store refuses at AppendVersion as the backstop.
+    /// </summary>
+    private static bool LineageWouldRefuseAppend(IReadOnlyList<RecipeDraftRecord> lineage) =>
+        lineage.Count >= RecipeDraftLineageLimits.MaximumVersionsPerLineage &&
+        lineage.All(static version => version.Status is
+            RecipeDraftStatus.ConfirmedAwaitingBuild or
+            RecipeDraftStatus.Built or
+            RecipeDraftStatus.BuildFailed or
+            RecipeDraftStatus.Superseded);
 
     /// <summary>
     /// The anchored triple's first element (REQ-004 §6.1). An AI chain uses the generate click's cached description;
