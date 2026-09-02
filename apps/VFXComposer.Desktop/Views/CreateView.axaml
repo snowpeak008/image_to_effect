@@ -109,6 +109,43 @@
         <TextBox AcceptsReturn="True" Height="72" IsReadOnly="True" Text="{Binding ParameterPanel.IssueReport}" TextWrapping="Wrap" Watermark="{Binding Localization[CreateParameterReportWatermark]}" />
       </StackPanel>
     </Border>
+    <Border Classes="card" IsVisible="{Binding Lineage.IsCardVisible}">
+      <StackPanel Spacing="10">
+        <TextBlock FontWeight="SemiBold" Text="{Binding Localization[CreateLineageHeading]}" />
+        <TextBlock Classes="muted" Text="{Binding Localization[CreateLineageNotice]}" TextWrapping="Wrap" />
+        <TextBlock Foreground="#E39A9A" IsVisible="{Binding Lineage.HasListFailure}" Text="{Binding Lineage.ListFailure}" TextWrapping="Wrap" />
+        <ListBox ItemsSource="{Binding Lineage.Versions}" SelectedItem="{Binding Lineage.SelectedVersion, Mode=TwoWay}">
+          <ListBox.ItemTemplate>
+            <DataTemplate x:DataType="vm:LineageVersionViewModel">
+              <StackPanel Margin="0,2" Spacing="2">
+                <StackPanel Orientation="Horizontal" Spacing="8">
+                  <TextBlock FontWeight="SemiBold" Text="{Binding VersionLabel}" />
+                  <!-- Origin and status are protocol words (REQ-004 §7.2 closed sets) and stay untranslated. -->
+                  <TextBlock Classes="muted" Text="{Binding Origin}" />
+                  <TextBlock Classes="muted" Text="{Binding Status}" />
+                  <TextBlock FontWeight="SemiBold" Foreground="#9AE3B0" IsVisible="{Binding IsHead}" Text="{Binding HeadMarker}" />
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" Spacing="12">
+                  <TextBlock Classes="muted" Text="{Binding CreatedLine}" />
+                  <TextBlock Classes="muted" Text="{Binding GuardLine}" />
+                </StackPanel>
+                <TextBlock Classes="muted" IsVisible="{Binding HasFeedback}" Text="{Binding FeedbackLine}" TextWrapping="Wrap" />
+              </StackPanel>
+            </DataTemplate>
+          </ListBox.ItemTemplate>
+        </ListBox>
+        <Button HorizontalAlignment="Left" Command="{Binding RevertToSelectedVersionCommand}" Content="{Binding Localization[CreateLineageRevertAction]}" />
+        <Border Background="#3A3320" BorderBrush="#F1D39A" BorderThickness="1" CornerRadius="5" Padding="10" IsVisible="{Binding Lineage.IsRevertPending}">
+          <StackPanel Spacing="8">
+            <TextBlock Foreground="#F1D39A" Text="{Binding Lineage.RevertPrompt}" TextWrapping="Wrap" />
+            <StackPanel Orientation="Horizontal" Spacing="8">
+              <Button Command="{Binding ConfirmRevertCommand}" Content="{Binding Localization[CreateLineageConfirmRevertAction]}" />
+              <Button Command="{Binding CancelRevertCommand}" Content="{Binding Localization[CreateLineageCancelRevertAction]}" />
+            </StackPanel>
+          </StackPanel>
+        </Border>
+      </StackPanel>
+    </Border>
     <Border Classes="card">
       <StackPanel Spacing="10">
         <TextBlock FontWeight="SemiBold" Text="{Binding Localization[CreateBuildHandoffHeading]}" />

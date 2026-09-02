@@ -109,6 +109,25 @@ public static class UiStringKeys
     public const string CreateRetentionNoticeSuperseded = "CreateRetentionNoticeSuperseded";
     public const string CreateRetentionNoticeTrimmed = "CreateRetentionNoticeTrimmed";
     public const string CreateRetentionNoticeEvicted = "CreateRetentionNoticeEvicted";
+    public const string CreateValidationEditRefusedSeePanel = "CreateValidationEditRefusedSeePanel";
+
+    // Version-chain view and revert (F8b3b): the list rows, the inline two-step confirmation and the status lines.
+    // Origin/status words, ordinals, stable codes and the UTC time literal are formatted as arguments, untranslated.
+    public const string CreateLineageHeading = "CreateLineageHeading";
+    public const string CreateLineageNotice = "CreateLineageNotice";
+    public const string CreateLineageVersionLabel = "CreateLineageVersionLabel";
+    public const string CreateLineageHeadMarker = "CreateLineageHeadMarker";
+    public const string CreateLineageCreatedLine = "CreateLineageCreatedLine";
+    public const string CreateLineageGuardLine = "CreateLineageGuardLine";
+    public const string CreateLineageFeedbackLine = "CreateLineageFeedbackLine";
+    public const string CreateLineageRevertAction = "CreateLineageRevertAction";
+    public const string CreateLineageRevertConfirmPrompt = "CreateLineageRevertConfirmPrompt";
+    public const string CreateLineageConfirmRevertAction = "CreateLineageConfirmRevertAction";
+    public const string CreateLineageCancelRevertAction = "CreateLineageCancelRevertAction";
+    public const string CreateLineageListFailedWithCode = "CreateLineageListFailedWithCode";
+    public const string CreateRecipeStatusRevertedToVersion = "CreateRecipeStatusRevertedToVersion";
+    public const string CreateRecipeStatusRevertBlockedWithCode = "CreateRecipeStatusRevertBlockedWithCode";
+    public const string CreateRecipeStatusRevertFailedWithCode = "CreateRecipeStatusRevertFailedWithCode";
 
     // Bilingual copy for the closed editor rejection-code set (F8b3). Each sentence formats the issue path as
     // {0}, the offending text as {1} and the allowed range as {2}; RecipeParameterEditCopy pins the mapping.
