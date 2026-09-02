@@ -192,7 +192,12 @@ public static class BuildHostRunner
             if (job is null)
             {
                 // Retention removed the settled entry between polls; the stores remain the
-                // authority and this process has nothing left to host.
+                // authority and this process has nothing left to host. An entry cleared before
+                // reaching a terminal state is a queue-surface anomaly: the diagnostic code
+                // JobNotFound names it precisely, while the exit code folds into the
+                // QueueUnavailable family — the host's exit-code table carries no compatibility
+                // promise, so no dedicated code is minted; if exit-code semantics ever tighten,
+                // this branch can earn its own code.
                 environment.Output.WriteLine(JobQueueDiagnosticCodes.JobNotFound);
                 return BuildHostExitCodes.QueueUnavailable;
             }

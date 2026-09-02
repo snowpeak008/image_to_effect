@@ -114,7 +114,7 @@ public sealed class BuildActionTests
         Assert.IsFalse(
             viewModel.BuildRecipeDraftCommand.CanExecute(null),
             "A built head is terminal; the build action must retire with it.");
-        Assert.AreEqual(0, runtime.GenerateCalls - 1, "Refresh performs zero generation requests.");
+        Assert.AreEqual(1, runtime.GenerateCalls, "Refresh performs zero additional generation requests.");
     }
 
     [TestMethod]
