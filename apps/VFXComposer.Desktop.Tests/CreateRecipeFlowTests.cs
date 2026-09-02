@@ -195,7 +195,7 @@ public sealed class CreateRecipeFlowTests
             "prompt/1",
             "1.0.0");
 
-    private sealed class FakeRecipeRuntime : IAiDesktopRuntime, IAiGateway, IRecipeGenerationChannel, IRecipeDraftStore
+    private sealed class FakeRecipeRuntime : IAiDesktopRuntime, IAiGateway, IRecipeGenerationChannel, IRecipeDraftLineageStore
     {
         public Func<RecipeGenerationRequest, RecipeGenerationResult>? NextResult { get; init; }
         public bool ThrowOnSave { get; init; }
@@ -209,7 +209,7 @@ public sealed class CreateRecipeFlowTests
         public IAiGateway Gateway => this;
         public IAiDesktopSettings Settings => throw new NotSupportedException();
         public IRecipeGenerationChannel RecipeGeneration => this;
-        public IRecipeDraftStore RecipeDrafts => this;
+        public IRecipeDraftLineageStore RecipeDrafts => this;
 
         public ValueTask<RecipeGenerationResult> GenerateAsync(
             RecipeGenerationRequest request,
@@ -218,6 +218,24 @@ public sealed class CreateRecipeFlowTests
             GenerateCalls++;
             return ValueTask.FromResult(NextResult!(request));
         }
+
+        // F8b3 mechanical adaptation: the lineage surface wraps the existing in-memory Save; chain operations are
+        // not exercised by these flow tests (the parameter-panel tests use the real store).
+        public RecipeDraftSaveOutcome SaveVersion(RecipeDraftRecord record) =>
+            new(Save(record), Array.Empty<string>(), Array.Empty<string>(), Array.Empty<string>(), 0);
+
+        public RecipeDraftSaveOutcome AppendVersion(
+            string parentDraftId,
+            string parentCanonicalSha256,
+            RecipeDraftRevision revision,
+            DateTimeOffset createdUtc) =>
+            throw new NotSupportedException("The flow tests never append a version.");
+
+        public RecipeDraftTruncateOutcome TruncateAfter(string draftId) =>
+            throw new NotSupportedException("The Create page never truncates in this card.");
+
+        public IReadOnlyList<RecipeDraftRecord> ListLineage(string lineageId) =>
+            Records.Values.Where(record => record.LineageId == lineageId).OrderBy(static record => record.RevisionOrdinal).ToArray();
 
         public RecipeDraftRecord Save(RecipeDraftRecord record)
         {

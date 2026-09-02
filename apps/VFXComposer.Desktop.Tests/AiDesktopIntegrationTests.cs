@@ -200,7 +200,7 @@ public sealed class AiDesktopIntegrationTests
         Assert.IsTrue(runtime.LastOpenedStream.WasDisposed);
     }
 
-    private sealed class FakeDesktopRuntime : IAiDesktopRuntime, IAiGateway, IRecipeGenerationChannel, IRecipeDraftStore
+    private sealed class FakeDesktopRuntime : IAiDesktopRuntime, IAiGateway, IRecipeGenerationChannel, IRecipeDraftLineageStore
     {
         private static readonly byte[] ValidPng = CreateValidPng();
 
@@ -213,7 +213,7 @@ public sealed class AiDesktopIntegrationTests
         public FakeDesktopSettings Settings { get; }
         IAiDesktopSettings IAiDesktopRuntime.Settings => Settings;
         public IRecipeGenerationChannel RecipeGeneration => this;
-        public IRecipeDraftStore RecipeDrafts => this;
+        public IRecipeDraftLineageStore RecipeDrafts => this;
         public int ChatCalls { get; private set; }
         public int ImageCalls { get; private set; }
         public int OpenArtifactCalls { get; private set; }
@@ -287,6 +287,25 @@ public sealed class AiDesktopIntegrationTests
 
         public RecipeDraftRecord MarkBuildFailed(string draftId, string canonicalSha256) =>
             throw new RecipeDraftStoreException(RecipeDraftStoreErrorCode.StorageFailed);
+
+        // F8b3 mechanical adaptation: the lineage surface fails closed exactly like the flat surface above.
+        public RecipeDraftSaveOutcome SaveVersion(RecipeDraftRecord record)
+        {
+            RecipeDraftSaveCalls++;
+            throw new RecipeDraftStoreException(RecipeDraftStoreErrorCode.StorageFailed);
+        }
+
+        public RecipeDraftSaveOutcome AppendVersion(
+            string parentDraftId,
+            string parentCanonicalSha256,
+            RecipeDraftRevision revision,
+            DateTimeOffset createdUtc) =>
+            throw new RecipeDraftStoreException(RecipeDraftStoreErrorCode.StorageFailed);
+
+        public RecipeDraftTruncateOutcome TruncateAfter(string draftId) =>
+            throw new RecipeDraftStoreException(RecipeDraftStoreErrorCode.StorageFailed);
+
+        public IReadOnlyList<RecipeDraftRecord> ListLineage(string lineageId) => Array.Empty<RecipeDraftRecord>();
 
         private static byte[] CreateValidPng()
         {

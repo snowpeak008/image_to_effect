@@ -234,7 +234,7 @@ public sealed class SimpleModeTests
     private static CreateViewModel CreateViewModelWith(CountingRuntime runtime) =>
         new(LocalizationTestSupport.CreateEnglish(), runtime);
 
-    private sealed class CountingRuntime : IAiDesktopRuntime, IAiGateway, IRecipeGenerationChannel, IRecipeDraftStore
+    private sealed class CountingRuntime : IAiDesktopRuntime, IAiGateway, IRecipeGenerationChannel, IRecipeDraftLineageStore
     {
         public Func<RecipeGenerationRequest, RecipeGenerationResult>? NextResult { get; init; }
         public bool ThrowOnSave { get; init; }
@@ -246,7 +246,7 @@ public sealed class SimpleModeTests
         public IAiGateway Gateway => this;
         public IAiDesktopSettings Settings => throw new NotSupportedException();
         public IRecipeGenerationChannel RecipeGeneration => this;
-        public IRecipeDraftStore RecipeDrafts => this;
+        public IRecipeDraftLineageStore RecipeDrafts => this;
 
         public ValueTask<RecipeGenerationResult> GenerateAsync(
             RecipeGenerationRequest request,
@@ -255,6 +255,24 @@ public sealed class SimpleModeTests
             GenerateCalls++;
             return ValueTask.FromResult(NextResult!(request));
         }
+
+        // F8b3 mechanical adaptation: the lineage surface wraps the counted in-memory Save; chain operations are
+        // not exercised by the simple-mode tests (the parameter-panel tests use the real store).
+        public RecipeDraftSaveOutcome SaveVersion(RecipeDraftRecord record) =>
+            new(Save(record), Array.Empty<string>(), Array.Empty<string>(), Array.Empty<string>(), 0);
+
+        public RecipeDraftSaveOutcome AppendVersion(
+            string parentDraftId,
+            string parentCanonicalSha256,
+            RecipeDraftRevision revision,
+            DateTimeOffset createdUtc) =>
+            throw new NotSupportedException("The simple-mode tests never append a version.");
+
+        public RecipeDraftTruncateOutcome TruncateAfter(string draftId) =>
+            throw new NotSupportedException("The Create page never truncates in this card.");
+
+        public IReadOnlyList<RecipeDraftRecord> ListLineage(string lineageId) =>
+            Records.Values.Where(record => record.LineageId == lineageId).OrderBy(static record => record.RevisionOrdinal).ToArray();
 
         public RecipeDraftRecord Save(RecipeDraftRecord record)
         {
