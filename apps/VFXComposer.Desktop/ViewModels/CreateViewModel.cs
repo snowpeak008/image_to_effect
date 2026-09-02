@@ -58,6 +58,18 @@ public sealed class CreateViewModel : WorkspacePageViewModel
     private IReadOnlyList<RecipeValidationIssue> _validationIssueList = [];
     private IReadOnlyList<(string Key, object?[] Arguments)> _retentionLines = [];
     private RecipeDraftRecord? _currentDraft;
+    private string _refineFeedback = string.Empty;
+    private string _refineStatusKey = UiStringKeys.CreateRefineStatusIdle;
+    private object?[] _refineStatusArguments = [];
+    private IReadOnlyList<RecipeRefinementGuardRestoration> _guardRestorations = [];
+
+    /// <summary>
+    /// The lineage's first-version user description, cached when this session creates the lineage (the generate
+    /// click's description for an AI chain, the committed skeleton's English description for a preset chain). The
+    /// anchored triple requires it (REQ-004 §6.1); a lineage whose root predates this session has no cached text,
+    /// so a neutral synthetic description is derived from the head's protocol fields instead (known limitation).
+    /// </summary>
+    private readonly Dictionary<string, string> _lineageDescriptions = new(StringComparer.Ordinal);
 
     public CreateViewModel(
         LocalizationService localization,
@@ -88,6 +100,10 @@ public sealed class CreateViewModel : WorkspacePageViewModel
         RevertToSelectedVersionCommand = new RelayCommand(RevertToSelectedVersion, Lineage.CanArmRevert);
         ConfirmRevertCommand = new RelayCommand(ConfirmRevert, () => Lineage.IsRevertPending);
         CancelRevertCommand = new RelayCommand(Lineage.CancelRevert, () => Lineage.IsRevertPending);
+        Timeline = new SessionTimelineViewModel(localization);
+        Timeline.PropertyChanged += OnTimelinePropertyChanged;
+        RefineRecipeCommand = new AsyncRelayCommand(RefineRecipeAsync, CanRefineRecipe);
+        CancelRefineRecipeCommand = RefineRecipeCommand.CreateCancelCommand();
         PresetCards = RecipePresetSkeletons.All
             .Select(skeleton =>
             {
@@ -231,6 +247,56 @@ public sealed class CreateViewModel : WorkspacePageViewModel
     /// <summary>Disarms the pending revert; the store is not touched.</summary>
     public IRelayCommand CancelRevertCommand { get; }
 
+    /// <summary>The session timeline (REQ-004 §6.3), shown in professional mode; entries carry protocol literals only.</summary>
+    public SessionTimelineViewModel Timeline { get; }
+
+    /// <summary>The timeline card gates on the mode and on having anything to show.</summary>
+    public bool IsTimelineVisible => GenerationModes.IsProfessional && Timeline.HasEntries;
+
+    /// <summary>The refinement input area gates on the mode alone; its preflight refuses without a head (REQ-004-14).</summary>
+    public bool IsRefineVisible => GenerationModes.IsProfessional;
+
+    /// <summary>This round's feedback for an explicit refine action. It never reaches diagnostics or the timeline.</summary>
+    public string RefineFeedback
+    {
+        get => _refineFeedback;
+        set
+        {
+            if (SetProperty(ref _refineFeedback, value ?? string.Empty))
+            {
+                RefineRecipeCommand.NotifyCanExecuteChanged();
+            }
+        }
+    }
+
+    public string RefineStatus => Localized(_refineStatusKey, _refineStatusArguments);
+
+    /// <summary>
+    /// The one explicit refine action (REQ-004-12): the anchored triple plus this round's feedback go through the
+    /// bound ChatLlm route inside the ADR-007 §2.5 budget; a refined outcome is appended as the one ai_refine
+    /// version. Everything else on this page stays zero-network.
+    /// </summary>
+    public IAsyncRelayCommand RefineRecipeCommand { get; }
+
+    public ICommand CancelRefineRecipeCommand { get; }
+
+    /// <summary>The guard's restorations of the last refined round, shown until the next action (REQ-004-48).</summary>
+    public IReadOnlyList<RecipeRefinementGuardRestoration> GuardRestorations => _guardRestorations;
+
+    public bool HasGuardRestorations => _guardRestorations.Count > 0;
+
+    public string GuardRestorationsHeading =>
+        Localization.Format(UiStringKeys.CreateRefineGuardHeading, _guardRestorations.Count);
+
+    /// <summary>One line per restoration: path, the AI value and the kept hand-tuned value, all protocol literals.</summary>
+    public string GuardRestorationsReport => string.Join(
+        "\n",
+        _guardRestorations.Select(restoration => Localization.Format(
+            UiStringKeys.CreateRefineGuardLine,
+            restoration.ParameterPath,
+            restoration.AiValueLiteral,
+            restoration.RestoredValueLiteral)));
+
     /// <summary>The fixed simple-mode example cards, one per committed preset skeleton.</summary>
     public IReadOnlyList<PresetCardViewModel> PresetCards { get; }
 
@@ -353,11 +419,13 @@ public sealed class CreateViewModel : WorkspacePageViewModel
                     break;
                 case RecipeGenerationOutcome.Cancelled:
                     SetRecipeStatus(UiStringKeys.CreateRecipeStatusGenerationCancelled);
+                    Timeline.AppendGenerationChannelFailed(result.ChannelError, result.RequestCount);
                     break;
                 default:
                     SetRecipeStatus(
                         UiStringKeys.CreateRecipeStatusGenerationUnavailableWithCode,
                         result.ChannelError);
+                    Timeline.AppendGenerationChannelFailed(result.ChannelError, result.RequestCount);
                     break;
             }
         }
@@ -388,11 +456,15 @@ public sealed class CreateViewModel : WorkspacePageViewModel
         // An AI draft is a new lineage root (origin ai_draft); the typed outcome reports any lineage the level-2
         // cap evicted so the page can say so instead of dropping it silently (REQ-004-33).
         var outcome = _runtime.RecipeDrafts.SaveVersion(RecipeDraftRecord.Create(result, DateTimeOffset.UtcNow));
+        // The generate click's description is this lineage's immutable first-version description (REQ-004 §6.1);
+        // it is cached for the refine triple, valid for this session.
+        _lineageDescriptions[outcome.Record.LineageId] = EffectDescription;
         SetCurrentDraft(outcome.Record);
         RecipeDraftJson = PrettyPrint(outcome.Record.RecipeJson);
         SetValidationSummaryKey(UiStringKeys.CreateValidationPassed);
         SetRecipeStatus(UiStringKeys.CreateRecipeStatusDraftReady, result.RequestCount);
         PresentRetention(outcome);
+        Timeline.AppendGenerationDrafted(result, outcome);
     }
 
     /// <summary>
@@ -409,11 +481,15 @@ public sealed class CreateViewModel : WorkspacePageViewModel
         try
         {
             var outcome = _runtime.RecipeDrafts.SaveVersion(card.Skeleton.CreateDraftRecord(DateTimeOffset.UtcNow));
+            // A preset chain's immutable first-version description is the committed skeleton's English text
+            // (REQ-004 §6.1); cached here for the refine triple.
+            _lineageDescriptions[outcome.Record.LineageId] = card.Skeleton.EnglishDescription;
             SetCurrentDraft(outcome.Record);
             RecipeDraftJson = PrettyPrint(outcome.Record.RecipeJson);
             SetValidationSummaryKey(UiStringKeys.CreateValidationPassed);
             SetRecipeStatus(UiStringKeys.CreateRecipeStatusPresetApplied);
             PresentRetention(outcome);
+            Timeline.AppendPresetApplied(outcome);
         }
         catch (RecipeDraftStoreException exception)
         {
@@ -469,11 +545,139 @@ public sealed class CreateViewModel : WorkspacePageViewModel
 
             SetRecipeStatus(UiStringKeys.CreateRecipeStatusHumanEditSaved, outcome.Record.RevisionOrdinal);
             PresentRetention(outcome);
+            Timeline.AppendHumanEditSaved(outcome, result.Issues);
         }
         catch (RecipeDraftStoreException exception)
         {
             SetRecipeStatus(UiStringKeys.CreateRecipeStatusDraftStorageFailedWithCode, exception.Code);
         }
+    }
+
+    /// <summary>The refine button is available whenever the input area is; the click itself preflights (REQ-004-14).</summary>
+    private bool CanRefineRecipe() => true;
+
+    private async Task RefineRecipeAsync(CancellationToken cancellationToken)
+    {
+        // Preflight, before any assembly or network work (REQ-004-14): no head, or an empty feedback, refuses the
+        // round with an input-state line and zero requests. The unbound-route case fails closed inside the channel
+        // before the network (REQ-004-15) and lands in the typed catches below.
+        if (_currentDraft is not { CanonicalSha256: not null } head)
+        {
+            SetRefineStatus(UiStringKeys.CreateRefineStatusNoHead);
+            return;
+        }
+
+        if (string.IsNullOrWhiteSpace(RefineFeedback))
+        {
+            SetRefineStatus(UiStringKeys.CreateRefineStatusEmptyFeedback);
+            return;
+        }
+
+        SetGuardRestorations([]);
+        SetRefineStatus(UiStringKeys.CreateRefineStatusRefining);
+        try
+        {
+            var lineage = _runtime.RecipeDrafts.ListLineage(head.LineageId);
+            var result = await _runtime.RecipeRefinement.RefineAsync(
+                new RecipeRefinementRequest(
+                    Guid.NewGuid().ToString("N"),
+                    OriginalDescriptionFor(head),
+                    lineage,
+                    RefineFeedback),
+                cancellationToken);
+            switch (result.Outcome)
+            {
+                case RecipeGenerationOutcome.Drafted:
+                    PresentRefinedResult(result);
+                    break;
+                case RecipeGenerationOutcome.ValidationFailed:
+                    PresentRefineValidationFailure(result);
+                    break;
+                case RecipeGenerationOutcome.Cancelled:
+                    SetRefineStatus(UiStringKeys.CreateRefineStatusCancelled);
+                    Timeline.AppendRefineChannelFailed(result);
+                    break;
+                default:
+                    // Channel failure: exactly the requests already made, no version, user may re-click (REQ-004-18).
+                    SetRefineStatus(UiStringKeys.CreateRefineStatusChannelFailedWithCode, result.ChannelError);
+                    Timeline.AppendRefineChannelFailed(result);
+                    break;
+            }
+        }
+        catch (RecipeDraftStoreException exception)
+        {
+            SetRefineStatus(UiStringKeys.CreateRecipeStatusDraftStorageFailedWithCode, exception.Code);
+        }
+        catch (ChatChannelException exception)
+        {
+            SetRefineStatus(UiStringKeys.CreateRefineStatusChannelFailedWithCode, exception.Code);
+        }
+        catch (AiGatewayException exception)
+        {
+            // The unbound/disabled route fails closed before the network (REQ-004 §12 X1) and points to Settings.
+            SetRefineStatus(UiStringKeys.CreateRefineStatusNotConfiguredWithCode, exception.Code);
+        }
+        catch (OperationCanceledException)
+        {
+            SetRefineStatus(UiStringKeys.CreateRefineStatusCancelled);
+        }
+        catch
+        {
+            SetRefineStatus(UiStringKeys.CreateRefineStatusChannelFailedWithCode, UnexpectedFailureCode);
+        }
+    }
+
+    private void PresentRefinedResult(RecipeRefinementResult result)
+    {
+        // The guard already ran inside the channel; persisting the one ai_refine version is the only step left
+        // (REQ-004-45). The parent coordinates come from the result, so a stale head fails closed in the store.
+        var outcome = _runtime.RecipeDrafts.AppendVersion(
+            result.ParentDraftId!,
+            result.ParentCanonicalSha256!,
+            result.ToRevision(),
+            DateTimeOffset.UtcNow);
+        SetCurrentDraft(outcome.Record);
+        RecipeDraftJson = PrettyPrint(outcome.Record.RecipeJson);
+        var warnings = PresentRetainedHeadValidation(outcome.Record);
+        PresentRetention(outcome);
+        SetGuardRestorations(result.GuardRestorations);
+        RefineFeedback = string.Empty;
+        SetRefineStatus(
+            UiStringKeys.CreateRefineStatusCompleted,
+            outcome.Record.RevisionOrdinal,
+            result.RequestCount);
+        Timeline.AppendRefined(result, outcome, warnings);
+    }
+
+    private void PresentRefineValidationFailure(RecipeRefinementResult result)
+    {
+        // Budget exhausted (REQ-004-17): the head does not move and no version lands; the last raw output and the
+        // full report stay inspectable. The head's own record is untouched, so the page state is kept as-is.
+        RecipeDraftJson = result.LastOutputText ?? string.Empty;
+        SetValidationIssues(result.Issues);
+        var errorCodes = string.Join(", ", result.Issues
+            .Where(static issue => issue.Severity == RecipeValidationSeverity.Error)
+            .Select(static issue => issue.Code)
+            .Distinct(StringComparer.Ordinal));
+        SetRefineStatus(UiStringKeys.CreateRefineStatusValidationFailed, result.RequestCount, errorCodes);
+        Timeline.AppendRefineValidationFailed(result);
+    }
+
+    /// <summary>
+    /// The anchored triple's first element (REQ-004 §6.1). An AI chain uses the generate click's cached description;
+    /// a preset chain uses the committed skeleton's English description. A chain whose root predates this session
+    /// has neither, so a neutral description is synthesized from the head's protocol fields (known limitation:
+    /// the stored chain does not carry the original description).
+    /// </summary>
+    private string OriginalDescriptionFor(RecipeDraftRecord head)
+    {
+        if (_lineageDescriptions.TryGetValue(head.LineageId, out var cached) && !string.IsNullOrWhiteSpace(cached))
+        {
+            return cached;
+        }
+
+        return "A " + (head.Dimension ?? "2d") + " " + (head.Archetype ?? "projectile") + " effect ("
+            + (head.RecipeId ?? "recipe") + "); refine the current draft according to the feedback.";
     }
 
     /// <summary>Turns the typed retention outcome into catalog lines; a fully retained save leaves the notice empty.</summary>
@@ -523,6 +727,7 @@ public sealed class CreateViewModel : WorkspacePageViewModel
                 UiStringKeys.CreateRecipeStatusRevertedToVersion,
                 outcome.Head.RevisionOrdinal,
                 outcome.RemovedDraftIds.Count);
+            Timeline.AppendReverted(outcome);
         }
         catch (RecipeDraftStoreException exception)
         {
@@ -538,14 +743,14 @@ public sealed class CreateViewModel : WorkspacePageViewModel
     /// A retained version passed L1 when it was saved: every producer of a hashed record (the generation service,
     /// the parameter editor, the preset skeletons' build-time tests) runs L1 before computing the hash; the store
     /// itself does not re-validate. Only the L1.5 warnings are re-derived here, by the same pure prevalidator the
-    /// editor runs. A failed root shows its stored report.
+    /// editor runs. A failed root shows its stored report. Returns the warnings for the caller's timeline entry.
     /// </summary>
-    private void PresentRetainedHeadValidation(RecipeDraftRecord head)
+    private IReadOnlyList<RecipeValidationIssue> PresentRetainedHeadValidation(RecipeDraftRecord head)
     {
         if (head.CanonicalSha256 is null)
         {
             SetValidationIssues(head.Issues);
-            return;
+            return head.Issues;
         }
 
         var warnings = RecipeCatalogPrevalidator.Prevalidate(head.RecipeJson);
@@ -557,6 +762,8 @@ public sealed class CreateViewModel : WorkspacePageViewModel
         {
             SetValidationIssues(warnings);
         }
+
+        return warnings;
     }
 
     private void OnLineagePropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs eventArgs)
@@ -582,11 +789,21 @@ public sealed class CreateViewModel : WorkspacePageViewModel
         }
     }
 
+    private void OnTimelinePropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs eventArgs)
+    {
+        if (eventArgs.PropertyName is nameof(SessionTimelineViewModel.HasEntries))
+        {
+            OnPropertyChanged(nameof(IsTimelineVisible));
+        }
+    }
+
     private void OnGenerationModeChanged(object? sender, EventArgs eventArgs)
     {
         // A mode switch re-renders the gated sections and nothing else: no store call, no request (REQ-004-01).
         OnPropertyChanged(nameof(IsParameterPanelVisible));
         OnPropertyChanged(nameof(IsLineageVisible));
+        OnPropertyChanged(nameof(IsRefineVisible));
+        OnPropertyChanged(nameof(IsTimelineVisible));
     }
 
     /// <summary>
@@ -627,6 +844,7 @@ public sealed class CreateViewModel : WorkspacePageViewModel
             .Where(static issue => issue.Severity == RecipeValidationSeverity.Error)
             .Select(static issue => issue.Code)
             .Distinct(StringComparer.Ordinal));
+        Timeline.AppendGenerationValidationFailed(result);
         try
         {
             // The failed final state is retained too, so the user can inspect it later (REQ-001 X3).
@@ -665,6 +883,7 @@ public sealed class CreateViewModel : WorkspacePageViewModel
             SetRecipeStatus(UiStringKeys.CreateRecipeStatusDraftConfirmed);
             // Confirmation saves no version, so the previous save's retention report has run its course.
             SetRetentionLines([]);
+            Timeline.AppendConfirmed(_currentDraft!);
         }
         catch (RecipeDraftStoreException exception)
         {
@@ -688,6 +907,10 @@ public sealed class CreateViewModel : WorkspacePageViewModel
 
         ParameterPanel.RefreshLocalizedText();
         Lineage.RefreshLocalizedText();
+        Timeline.RefreshLocalizedText();
+        OnPropertyChanged(nameof(RefineStatus));
+        OnPropertyChanged(nameof(GuardRestorationsHeading));
+        OnPropertyChanged(nameof(GuardRestorationsReport));
     }
 
     // Status lines keep their key and arguments instead of a rendered string, so a language switch re-renders them.
@@ -703,6 +926,22 @@ public sealed class CreateViewModel : WorkspacePageViewModel
         _recipeStatusKey = key;
         _recipeStatusArguments = arguments;
         OnPropertyChanged(nameof(RecipeStatus));
+    }
+
+    private void SetRefineStatus(string key, params object?[] arguments)
+    {
+        _refineStatusKey = key;
+        _refineStatusArguments = arguments;
+        OnPropertyChanged(nameof(RefineStatus));
+    }
+
+    private void SetGuardRestorations(IReadOnlyList<RecipeRefinementGuardRestoration> restorations)
+    {
+        _guardRestorations = restorations;
+        OnPropertyChanged(nameof(GuardRestorations));
+        OnPropertyChanged(nameof(HasGuardRestorations));
+        OnPropertyChanged(nameof(GuardRestorationsHeading));
+        OnPropertyChanged(nameof(GuardRestorationsReport));
     }
 
     private void SetValidationSummaryKey(string? key)

@@ -161,6 +161,55 @@ public static class UiStringCatalog
                 + "lineage instead.",
             [UiStringKeys.CreateRecipeStatusRevertFailedWithCode] = "Revert failed: {0}.",
 
+            [UiStringKeys.CreateRefineHeading] = "Refine with feedback",
+            [UiStringKeys.CreateRefineNotice] =
+                "Describe what to change about the current head draft; one explicit click sends a single refine "
+                + "round (with its repair budget) through the configured chat binding. Hand-tuned values the "
+                + "feedback does not name are kept.",
+            [UiStringKeys.CreateRefineFeedbackWatermark] = "This round's feedback, e.g. make the trail longer",
+            [UiStringKeys.CreateRefineAction] = "Refine",
+            [UiStringKeys.CreateRefineCancelAction] = "Cancel",
+            [UiStringKeys.CreateRefineStatusIdle] = "Enter feedback, then refine the current draft.",
+            [UiStringKeys.CreateRefineStatusNoHead] = "No draft to refine: create or generate one first.",
+            [UiStringKeys.CreateRefineStatusEmptyFeedback] = "Feedback is empty; nothing was sent.",
+            [UiStringKeys.CreateRefineStatusRefining] = "Refining the current draft...",
+            [UiStringKeys.CreateRefineStatusCompleted] = "Refined to v{0} ({1} request(s)).",
+            [UiStringKeys.CreateRefineStatusValidationFailed] =
+                "Refinement failed after {0} request(s): {1}. The head is unchanged; the last output and its "
+                + "report are shown below.",
+            [UiStringKeys.CreateRefineStatusChannelFailedWithCode] =
+                "Refinement unavailable: {0}. No version was created; refine again to retry.",
+            [UiStringKeys.CreateRefineStatusNotConfiguredWithCode] =
+                "Refinement is not configured: {0}. Bind a chat route in Settings first.",
+            [UiStringKeys.CreateRefineStatusCancelled] = "Refinement cancelled; no version was created.",
+            [UiStringKeys.CreateRefineGuardHeading] = "Kept your manual adjustments: {0} item(s).",
+            [UiStringKeys.CreateRefineGuardLine] = "{0}: AI wrote {1}; kept {2}.",
+
+            [UiStringKeys.CreateTimelineHeading] = "Timeline",
+            [UiStringKeys.CreateTimelineNotice] =
+                "This session's rounds, newest last. Durable history lives in the version chain; this list is not "
+                + "stored.",
+            [UiStringKeys.CreateTimelineEntryDraftSaved] =
+                "Generated {1} {0}: {2} request(s), codes {3}, prompt {4}.",
+            [UiStringKeys.CreateTimelineEntryGenerationFailed] =
+                "Generation failed validation: {0} request(s), codes {1}. No version.",
+            [UiStringKeys.CreateTimelineEntryGenerationUnavailable] =
+                "Generation unavailable: {0} after {1} request(s). No version.",
+            [UiStringKeys.CreateTimelineEntryPresetApplied] = "Applied example {1} as {0}. Zero requests.",
+            [UiStringKeys.CreateTimelineEntryHumanEditSaved] =
+                "Hand edit saved as {0} (v{1}); warnings {2}. Zero requests.",
+            [UiStringKeys.CreateTimelineEntryRefined] =
+                "Refined {1} {0}: {2} request(s), codes {3}, warnings {4}, kept {5} adjustment(s) at {6}, "
+                + "prompt {7}.",
+            [UiStringKeys.CreateTimelineEntryRefineValidationFailed] =
+                "Refinement failed validation: {0} request(s), codes {1}. Head unchanged.",
+            [UiStringKeys.CreateTimelineEntryRefineChannelFailed] =
+                "Refinement unavailable: {0} after {1} request(s). No version.",
+            [UiStringKeys.CreateTimelineEntryReverted] = "Reverted to v{0}; {1} newer version(s) deleted.",
+            [UiStringKeys.CreateTimelineEntryConfirmed] = "Confirmed {0} for build.",
+            [UiStringKeys.CreateTimelineRetentionLine] =
+                "Retention: {0} superseded, {1} trimmed, {2} lineage(s) evicted ({3} version(s)).",
+
             [UiStringKeys.RecipeParameterEditNoChanges] = "No parameter value was changed; nothing was saved.",
             [UiStringKeys.RecipeParameterEditTargetNotFound] = "{0}: no declared parameter at this location.",
             [UiStringKeys.RecipeParameterEditValueNotInteger] = "{0}: '{1}' is not an integer; expected {2}.",
@@ -527,6 +576,51 @@ public static class UiStringCatalog
             [UiStringKeys.CreateRecipeStatusRevertBlockedWithCode] =
                 "回退被拒绝：{0}。较新版本已确认或已构建，属审计记录不可删除；请另起新链。",
             [UiStringKeys.CreateRecipeStatusRevertFailedWithCode] = "回退失败：{0}。",
+
+            [UiStringKeys.CreateRefineHeading] = "按反馈精修",
+            [UiStringKeys.CreateRefineNotice] =
+                "描述当前 head 草稿需要怎么改；显式点击一次即通过已配置的 Chat 绑定发送一轮精修（含修复预算）。"
+                + "反馈未点名的手动调整值会被保留。",
+            [UiStringKeys.CreateRefineFeedbackWatermark] = "本轮反馈，例如：让拖尾更长一些",
+            [UiStringKeys.CreateRefineAction] = "精修",
+            [UiStringKeys.CreateRefineCancelAction] = "取消",
+            [UiStringKeys.CreateRefineStatusIdle] = "输入反馈后即可精修当前草稿。",
+            [UiStringKeys.CreateRefineStatusNoHead] = "没有可精修的草稿：请先创建或生成一个。",
+            [UiStringKeys.CreateRefineStatusEmptyFeedback] = "反馈为空；未发送任何请求。",
+            [UiStringKeys.CreateRefineStatusRefining] = "正在精修当前草稿…",
+            [UiStringKeys.CreateRefineStatusCompleted] = "精修完成 v{0}（{1} 次请求）。",
+            [UiStringKeys.CreateRefineStatusValidationFailed] =
+                "精修在 {0} 次请求后失败：{1}。head 未变；最后一次输出与报告显示在下方。",
+            [UiStringKeys.CreateRefineStatusChannelFailedWithCode] =
+                "精修不可用：{0}。未产生版本；可再次点击精修重试。",
+            [UiStringKeys.CreateRefineStatusNotConfiguredWithCode] =
+                "精修未配置：{0}。请先在设置中绑定 Chat 路由。",
+            [UiStringKeys.CreateRefineStatusCancelled] = "精修已取消；未产生版本。",
+            [UiStringKeys.CreateRefineGuardHeading] = "已保留你的手动调整：{0} 项。",
+            [UiStringKeys.CreateRefineGuardLine] = "{0}：AI 写入 {1}；保留 {2}。",
+
+            [UiStringKeys.CreateTimelineHeading] = "时间线",
+            [UiStringKeys.CreateTimelineNotice] =
+                "本会话内的每一轮，最新在末尾。持久历史由版本链承担；此列表不落盘。",
+            [UiStringKeys.CreateTimelineEntryDraftSaved] =
+                "生成 {1} {0}：{2} 次请求，错误码 {3}，prompt {4}。",
+            [UiStringKeys.CreateTimelineEntryGenerationFailed] =
+                "生成校验失败：{0} 次请求，错误码 {1}。未产生版本。",
+            [UiStringKeys.CreateTimelineEntryGenerationUnavailable] =
+                "生成不可用：{0}（{1} 次请求）。未产生版本。",
+            [UiStringKeys.CreateTimelineEntryPresetApplied] = "应用示例 {1}，落为 {0}。零请求。",
+            [UiStringKeys.CreateTimelineEntryHumanEditSaved] =
+                "手改已保存为 {0}（v{1}）；预警 {2}。零请求。",
+            [UiStringKeys.CreateTimelineEntryRefined] =
+                "精修 {1} {0}：{2} 次请求，错误码 {3}，预警 {4}，保留 {5} 项调整（{6}），prompt {7}。",
+            [UiStringKeys.CreateTimelineEntryRefineValidationFailed] =
+                "精修校验失败：{0} 次请求，错误码 {1}。head 未变。",
+            [UiStringKeys.CreateTimelineEntryRefineChannelFailed] =
+                "精修不可用：{0}（{1} 次请求）。未产生版本。",
+            [UiStringKeys.CreateTimelineEntryReverted] = "回退到 v{0}；删除 {1} 个更新版本。",
+            [UiStringKeys.CreateTimelineEntryConfirmed] = "已确认 {0} 待构建。",
+            [UiStringKeys.CreateTimelineRetentionLine] =
+                "保留策略：{0} 个确认失效，{1} 个被 trim，{2} 条链被淘汰（{3} 个版本）。",
 
             [UiStringKeys.RecipeParameterEditNoChanges] = "没有参数值被修改；未保存任何内容。",
             [UiStringKeys.RecipeParameterEditTargetNotFound] = "{0}：此位置没有已声明的参数。",
