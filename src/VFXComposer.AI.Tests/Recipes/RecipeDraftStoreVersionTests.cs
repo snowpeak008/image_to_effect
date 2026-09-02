@@ -24,7 +24,9 @@ public sealed class RecipeDraftStoreVersionTests
         Append(store, root);
 
         var file = JsonNode.Parse(File.ReadAllBytes(path))!.AsObject();
-        Assert.AreEqual(AiContractVersions.RecipeDraftRecordFormatVersion, file["formatVersion"]!.GetValue<int>());
+        Assert.AreEqual(2, CurrentFormatVersion(),
+            "A format bump is a deliberate REQ-004 §7.4 event that must update this literal, never a silent constant edit.");
+        Assert.AreEqual(2, file["formatVersion"]!.GetValue<int>());
         var lineages = file["lineages"]!.AsArray();
         Assert.AreEqual(1, lineages.Count);
         Assert.AreEqual(root.LineageId, lineages[0]!["lineageId"]!.GetValue<string>());
@@ -233,6 +235,9 @@ public sealed class RecipeDraftStoreVersionTests
         Throws(RecipeDraftStoreErrorCode.UnsupportedVersion, () => new RecipeDraftStore(path).TryGet(root.DraftId));
         AssertUntouched(directory, path, before);
     }
+
+    /// <summary>Read through a call so the literal-2 assertion compares a runtime value, not a folded constant.</summary>
+    private static int CurrentFormatVersion() => AiContractVersions.RecipeDraftRecordFormatVersion;
 
     private static int SeedStore(string path, out RecipeDraftRecord root)
     {

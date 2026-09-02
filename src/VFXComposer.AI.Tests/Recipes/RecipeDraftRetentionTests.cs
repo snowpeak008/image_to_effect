@@ -350,6 +350,58 @@ public sealed class RecipeDraftRetentionTests
     }
 
     [TestMethod]
+    public void AFullStoreNearTheLineageByteCapRoundTripsThroughANewInstanceWithinTheReadCeiling()
+    {
+        // Sixteen 60 KiB versions leave each lineage just under its 1 MiB recipe-JSON cap, so no level-1 trim
+        // fires and the "8 lineages × 1 MiB" byte dimension of the ceiling derivation is filled for real.
+        const int paddedCharacters = 60 * 1024;
+        const long minimumTotalRecipeJsonBytes = 7L * 1024 * 1024;
+        using var directory = new A1TestDirectory();
+        var path = StorePath(directory);
+        var store = new RecipeDraftStore(path);
+        var lineageIds = new List<string>();
+        for (var lineageIndex = 0; lineageIndex < RecipeDraftLineageLimits.MaximumLineages; lineageIndex++)
+        {
+            var variant = lineageIndex * RecipeDraftLineageLimits.MaximumVersionsPerLineage;
+            var head = store.Save(Root(RecipeDraftOrigin.AiDraft, Epoch.AddHours(lineageIndex), PaddedRecipeJson(paddedCharacters, variant)));
+            lineageIds.Add(head.LineageId);
+            for (var ordinal = 2; ordinal <= RecipeDraftLineageLimits.MaximumVersionsPerLineage; ordinal++)
+            {
+                variant++;
+                var outcome = Append(
+                    store,
+                    head,
+                    recipeJson: PaddedRecipeJson(paddedCharacters, variant),
+                    createdUtc: Epoch.AddHours(lineageIndex).AddMinutes(ordinal),
+                    variant: variant);
+                Assert.IsTrue(outcome.RetainedEverything, "Sixteen 60 KiB versions stay under the lineage byte cap.");
+                head = outcome.Record;
+            }
+        }
+
+        var length = new FileInfo(path).Length;
+        Assert.IsTrue(length <= ReadCeiling(), "File length " + length.ToString(CultureInfo.InvariantCulture) + " exceeds the read ceiling.");
+
+        var reopened = new RecipeDraftStore(path);
+        var totalRecipeJsonBytes = 0L;
+        foreach (var lineageId in lineageIds)
+        {
+            var lineage = reopened.ListLineage(lineageId);
+            Assert.AreEqual(RecipeDraftLineageLimits.MaximumVersionsPerLineage, lineage.Count);
+            AssertLinear(lineage);
+            Assert.AreEqual(RecipeDraftLineageLimits.MaximumVersionsPerLineage, lineage[^1].RevisionOrdinal);
+            var lineageBytes = lineage.Sum(RecipeDraftCodec.PersistedRecipeJsonBytes);
+            Assert.IsTrue(lineageBytes <= RecipeDraftLineageLimits.MaximumLineageRecipeJsonBytes, "Lineage recipe JSON must sit under its cap.");
+            totalRecipeJsonBytes += lineageBytes;
+        }
+
+        Assert.IsTrue(
+            totalRecipeJsonBytes >= minimumTotalRecipeJsonBytes,
+            "Persisted recipe JSON totals " + totalRecipeJsonBytes.ToString(CultureInfo.InvariantCulture) + " bytes; at least 7 MiB must be filled.");
+        Assert.IsTrue(totalRecipeJsonBytes < length, "Recipe JSON is a strict subset of the file.");
+    }
+
+    [TestMethod]
     public void PersistRefusesADocumentTheReaderWouldNotAcceptAndKeepsTheLastGoodFile()
     {
         using var directory = new A1TestDirectory();

@@ -134,7 +134,15 @@ public sealed class RecipeDraftStore : IRecipeDraftLineageStore
                 throw new RecipeDraftStoreException(RecipeDraftStoreErrorCode.NotLineageHead);
             }
 
-            var ordinal = checked(document.RevisionWatermarks[parent.LineageId] + 1);
+            // Only a hand-edited file can carry a watermark at int.MaxValue; the lineage's ordinal space is then
+            // spent, which is a storage fault to fail closed on rather than an unencoded OverflowException.
+            var watermark = document.RevisionWatermarks[parent.LineageId];
+            if (watermark == int.MaxValue)
+            {
+                throw new RecipeDraftStoreException(RecipeDraftStoreErrorCode.StorageFailed);
+            }
+
+            var ordinal = watermark + 1;
             var draft = revision.Draft;
             var version = new RecipeDraftRecord(
                 RecipeDraftRecord.NewDraftId(),
@@ -162,7 +170,10 @@ public sealed class RecipeDraftStore : IRecipeDraftLineageStore
                     revision.GuardRestorationCount));
 
             // REQ-004 §7.3 rule 6: the confirmation belonged to a version that is no longer the head. The
-            // transition goes through the same hash-bound routine as every other status advance.
+            // transition goes through the same Transition routine as every other status advance so state moves
+            // along a single path; the hash passed here is the candidate's own and the equality is therefore
+            // trivially true. The real guard is the parent hash check above: a caller can only reach this
+            // migration by proving it saw the current head's content.
             var supersededDraftIds = new List<string>();
             for (var index = 0; index < document.Records.Count; index++)
             {

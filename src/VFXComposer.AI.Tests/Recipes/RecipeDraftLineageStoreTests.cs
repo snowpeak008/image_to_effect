@@ -1,4 +1,6 @@
 using System.Globalization;
+using System.Text;
+using System.Text.Json.Nodes;
 using VFXComposer.AI.Contracts.Recipes;
 using VFXComposer.AI.Providers.Recipes;
 using static VFXComposer.AI.Tests.Recipes.RecipeDraftTestData;
@@ -123,6 +125,28 @@ public sealed class RecipeDraftLineageStoreTests
 
         CollectionAssert.AreEqual(before, File.ReadAllBytes(path), "A refused append never touches the file.");
         Assert.AreEqual(2, store.ListLineage(root.LineageId).Count);
+    }
+
+    [TestMethod]
+    public void AppendFailsClosedWhenTheLineageWatermarkCannotAdvance()
+    {
+        using var directory = new A1TestDirectory();
+        var path = StorePath(directory);
+        var store = new RecipeDraftStore(path);
+        var root = store.Save(Root(RecipeDraftOrigin.AiDraft));
+        var head = Append(store, root).Record;
+        var file = JsonNode.Parse(File.ReadAllBytes(path))!.AsObject();
+        file["lineages"]![0]!["revisionWatermark"] = int.MaxValue;
+        File.WriteAllBytes(path, Encoding.UTF8.GetBytes(file.ToJsonString()));
+        var before = File.ReadAllBytes(path);
+
+        Throws(RecipeDraftStoreErrorCode.StorageFailed, () => Append(store, head, variant: 2),
+            "A spent ordinal space is a storage fault with a stable code, not an unencoded overflow.");
+
+        CollectionAssert.AreEqual(before, File.ReadAllBytes(path), "The refused append never touches the file.");
+        var lineage = new RecipeDraftStore(path).ListLineage(root.LineageId);
+        Assert.AreEqual(2, lineage.Count, "Sanity: the synthesized file still reads with both versions.");
+        AssertLinear(lineage);
     }
 
     [TestMethod]
