@@ -7,12 +7,12 @@ using VFXComposer.AI.Providers.Recipes;
 namespace VFXComposer.AI.Tests.Recipes;
 
 /// <summary>
-/// Shared builders for the F8b2 version-chain tests. Prompt versions are taken from the contract constants so
-/// these tests never depend on the prompt assembler surface.
+/// Shared builders for the F8b2 version-chain tests. The prompt version is a fixed short-text literal so these
+/// tests never depend on the prompt assembler surface or its composite version string.
 /// </summary>
 internal static class RecipeDraftTestData
 {
-    public const string PromptVersion = AiContractVersions.RecipeSystemPrompt;
+    public const string PromptVersion = "vfxcomposer.ai.recipe-prompt-test/1";
 
     public static string CatalogVersion => RecipeTemplateCatalogSnapshot.Default.TemplateCatalogVersion;
 
