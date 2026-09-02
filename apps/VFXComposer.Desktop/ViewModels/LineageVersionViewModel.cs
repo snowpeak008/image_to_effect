@@ -87,8 +87,21 @@ public sealed class LineageVersionViewModel : ObservableObject
             return string.Empty;
         }
 
-        return feedbackText.Length <= MaximumFeedbackSummaryCharacters
-            ? feedbackText
-            : feedbackText[..MaximumFeedbackSummaryCharacters] + Ellipsis;
+        // The row is a single line: newlines collapse to spaces so a multi-line feedback cannot break the layout.
+        var singleLine = feedbackText.Replace('\r', ' ').Replace('\n', ' ');
+        if (singleLine.Length <= MaximumFeedbackSummaryCharacters)
+        {
+            return singleLine;
+        }
+
+        // Cutting at a fixed UTF-16 index could split a surrogate pair (an emoji straddling the boundary) and
+        // render a broken character, so the cut backs up to the nearest rune boundary instead.
+        var cut = MaximumFeedbackSummaryCharacters;
+        if (char.IsHighSurrogate(singleLine[cut - 1]))
+        {
+            cut--;
+        }
+
+        return singleLine[..cut] + Ellipsis;
     }
 }

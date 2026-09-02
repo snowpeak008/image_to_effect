@@ -34,11 +34,19 @@ public sealed class LineageViewModel : ObservableObject
             if (SetProperty(ref _versions, value))
             {
                 OnPropertyChanged(nameof(HasVersions));
+                OnPropertyChanged(nameof(IsCardVisible));
             }
         }
     }
 
     public bool HasVersions => Versions.Count > 0;
+
+    /// <summary>
+    /// The card shows while there is anything to say: a version list or the stable code of a refused listing.
+    /// Bound instead of <see cref="HasVersions"/> so a refused listing (which empties the list) keeps the card
+    /// and its failure line on screen.
+    /// </summary>
+    public bool IsCardVisible => HasVersions || HasListFailure;
 
     /// <summary>
     /// The row the user selected, if any. Changing the selection disarms a pending revert: its prompt named the
@@ -100,6 +108,7 @@ public sealed class LineageViewModel : ObservableObject
         OnPropertyChanged(nameof(SelectedVersion));
         OnPropertyChanged(nameof(ListFailure));
         OnPropertyChanged(nameof(HasListFailure));
+        OnPropertyChanged(nameof(IsCardVisible));
     }
 
     /// <summary>The store refused to list the lineage: the list empties and the stable code is shown in its place.</summary>
@@ -109,6 +118,7 @@ public sealed class LineageViewModel : ObservableObject
         _listFailureCode = code;
         OnPropertyChanged(nameof(ListFailure));
         OnPropertyChanged(nameof(HasListFailure));
+        OnPropertyChanged(nameof(IsCardVisible));
     }
 
     /// <summary>True when the selected row is an older version the user may revert to; the head and no selection are not.</summary>
@@ -133,13 +143,34 @@ public sealed class LineageViewModel : ObservableObject
 
         _pendingTarget = target;
         _pendingDiscardCount = newer.Length;
-        _pendingRangeLiteral = newer.Length == 1
-            ? "v" + newer[0].RevisionOrdinal
-            : "v" + newer[0].RevisionOrdinal + ".." + "v" + newer[^1].RevisionOrdinal;
+        _pendingRangeLiteral = FormatRangeLiteral(newer);
         OnPropertyChanged(nameof(IsRevertPending));
         OnPropertyChanged(nameof(PendingDiscardCount));
         OnPropertyChanged(nameof(RevertPrompt));
         return true;
+    }
+
+    /// <summary>
+    /// The versions the confirmation names: a <c>v2..v4</c> range only when the listed ordinals are contiguous.
+    /// After a truncation the retained ordinals can skip (1, 2, 4), where a range would contradict the count, so
+    /// the ordinals are listed one by one instead, up to five with a trailing ellipsis.
+    /// </summary>
+    private static string FormatRangeLiteral(IReadOnlyList<LineageVersionViewModel> newer)
+    {
+        if (newer.Count == 1)
+        {
+            return "v" + newer[0].RevisionOrdinal;
+        }
+
+        var contiguous = newer[^1].RevisionOrdinal - newer[0].RevisionOrdinal == newer.Count - 1;
+        if (contiguous)
+        {
+            return "v" + newer[0].RevisionOrdinal + ".." + "v" + newer[^1].RevisionOrdinal;
+        }
+
+        const int maximumListedOrdinals = 5;
+        var listed = string.Join(", ", newer.Take(maximumListedOrdinals).Select(static version => "v" + version.RevisionOrdinal));
+        return newer.Count > maximumListedOrdinals ? listed + ", \u2026" : listed;
     }
 
     internal void CancelRevert()

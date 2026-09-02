@@ -219,6 +219,8 @@ public sealed class LineageViewTests
             Assert.AreEqual(before[index].CanonicalSha256, retained.CanonicalSha256, before[index].DraftId);
             Assert.AreEqual(before[index].RecipeJson, retained.RecipeJson, before[index].DraftId);
             Assert.AreEqual(before[index].ParentDraftId, retained.ParentDraftId, before[index].DraftId);
+            Assert.AreEqual(before[index].UpdatedUtc, retained.UpdatedUtc, before[index].DraftId);
+            Assert.AreEqual(before[index].RevisionOrdinal, retained.RevisionOrdinal, before[index].DraftId);
         }
 
         Assert.AreEqual(v3, viewModel.DraftId, "The page keeps its head.");
@@ -321,6 +323,38 @@ public sealed class LineageViewTests
     }
 
     [TestMethod]
+    public void TheConfirmationListsTheOrdinalsInsteadOfARangeWhenTheyAreNotContiguous()
+    {
+        // A truncation skips ordinals (1, 2, 4): "v2..v4" would name three versions while the count says two, so
+        // the prompt lists the ordinals one by one.
+        var runtime = CreateRuntime();
+        var viewModel = CreateViewModel(runtime);
+        viewModel.ApplyPresetCommand.Execute(FireBoltCard(viewModel));
+        var v1 = viewModel.DraftId!;
+        Edit(viewModel, "0.8");
+        var v2 = viewModel.DraftId!;
+        Edit(viewModel, "1.0");
+        viewModel.Lineage.SelectedVersion = Version(viewModel, v2);
+        viewModel.RevertToSelectedVersionCommand.Execute(null);
+        viewModel.ConfirmRevertCommand.Execute(null);
+        Edit(viewModel, "1.2");
+        CollectionAssert.AreEqual(
+            new[] { 1, 2, 4 },
+            viewModel.Lineage.Versions.Select(static version => version.RevisionOrdinal).ToArray(),
+            "The truncation left a gap in the ordinals.");
+
+        viewModel.Lineage.SelectedVersion = Version(viewModel, v1);
+        viewModel.RevertToSelectedVersionCommand.Execute(null);
+
+        Assert.AreEqual(2, viewModel.Lineage.PendingDiscardCount);
+        Assert.AreEqual(
+            LocalizationTestSupport.EnglishFormat(UiStringKeys.CreateLineageRevertConfirmPrompt, 2, "v2, v4"),
+            viewModel.Lineage.RevertPrompt);
+        Assert.IsFalse(viewModel.Lineage.RevertPrompt.Contains("..", StringComparison.Ordinal));
+        runtime.AssertNoGatewayTraffic();
+    }
+
+    [TestMethod]
     public void TheUnavailableRuntimeShowsNoVersionsAndDisablesRevertWithoutThrowing()
     {
         var viewModel = new CreateViewModel(LocalizationTestSupport.CreateEnglish(), AiDesktopRuntime.Unavailable);
@@ -351,17 +385,59 @@ public sealed class LineageViewTests
     {
         var runtime = new ListingRefusedRuntime(RecipeDraftStoreErrorCode.StoreBusy);
         var viewModel = new CreateViewModel(LocalizationTestSupport.CreateEnglish(), runtime);
+        var view = new CreateView { DataContext = viewModel };
 
         viewModel.ApplyPresetCommand.Execute(FireBoltCard(viewModel));
 
         Assert.IsTrue(viewModel.ParameterPanel.HasHead, "The save succeeded; only the listing was refused.");
         Assert.AreEqual(LocalizationTestSupport.English(UiStringKeys.CreateRecipeStatusPresetApplied), viewModel.RecipeStatus);
         Assert.IsTrue(viewModel.Lineage.HasListFailure);
-        Assert.AreEqual(
-            LocalizationTestSupport.EnglishFormat(UiStringKeys.CreateLineageListFailedWithCode, RecipeDraftStoreErrorCode.StoreBusy),
-            viewModel.Lineage.ListFailure);
+        var failureLine = LocalizationTestSupport.EnglishFormat(
+            UiStringKeys.CreateLineageListFailedWithCode,
+            RecipeDraftStoreErrorCode.StoreBusy);
+        Assert.AreEqual(failureLine, viewModel.Lineage.ListFailure);
         Assert.IsFalse(viewModel.Lineage.HasVersions);
+        Assert.IsTrue(viewModel.Lineage.IsCardVisible, "The emptied list must not take the failure line down with it.");
         Assert.IsFalse(viewModel.RevertToSelectedVersionCommand.CanExecute(null));
+
+        // The stable code actually renders: the failure line and its card stay visible although the list is empty.
+        CollectionAssert.Contains(RenderedText(view), failureLine);
+        var failureBlock = view.GetLogicalDescendants()
+            .OfType<TextBlock>()
+            .Single(block => string.Equals(block.Text, failureLine, StringComparison.Ordinal));
+        Assert.IsTrue(failureBlock.IsVisible);
+        var card = failureBlock.GetLogicalAncestors().OfType<Border>().First(static border => border.Classes.Contains("card"));
+        Assert.IsTrue(card.IsVisible, "The lineage card must show for the failure line even without versions.");
+    }
+
+    [TestMethod]
+    public void ARevertRefusedWithAGenericCodeShowsTheGenericKeyAndChangesNothing()
+    {
+        // A non-TruncationBlocked refusal (here StoreBusy) lands on the generic revert-failed key, not the audit one.
+        var runtime = new LineageRuntime(StorePath) { TruncateRefusal = RecipeDraftStoreErrorCode.StoreBusy };
+        var viewModel = CreateViewModel(runtime);
+        viewModel.ApplyPresetCommand.Execute(FireBoltCard(viewModel));
+        var v1 = viewModel.DraftId!;
+        Edit(viewModel, "0.8");
+        var v2 = viewModel.DraftId!;
+        var lineageId = runtime.Store.TryGet(v1)!.LineageId;
+
+        viewModel.Lineage.SelectedVersion = Version(viewModel, v1);
+        viewModel.RevertToSelectedVersionCommand.Execute(null);
+        viewModel.ConfirmRevertCommand.Execute(null);
+
+        Assert.AreEqual(1, runtime.TruncateCalls);
+        Assert.AreEqual(
+            LocalizationTestSupport.EnglishFormat(UiStringKeys.CreateRecipeStatusRevertFailedWithCode, RecipeDraftStoreErrorCode.StoreBusy),
+            viewModel.RecipeStatus);
+        Assert.AreEqual(v2, viewModel.DraftId, "The page keeps its head.");
+        Assert.AreEqual(2, viewModel.Lineage.Versions.Count);
+        CollectionAssert.AreEqual(
+            new[] { v1, v2 },
+            runtime.Store.ListLineage(lineageId).Select(static record => record.DraftId).ToArray(),
+            "The refusal deleted nothing.");
+        Assert.IsFalse(viewModel.Lineage.IsRevertPending, "The refused confirmation is disarmed, not left dangling.");
+        runtime.AssertNoGatewayTraffic();
     }
 
     [TestMethod]
@@ -397,6 +473,43 @@ public sealed class LineageViewTests
         Assert.AreEqual(3, refine.GuardRestorationCount, "The total counts entries dropped from the bounded list too.");
         Assert.AreEqual(LocalizationTestSupport.EnglishFormat(UiStringKeys.CreateLineageGuardLine, 3), refine.GuardLine);
         Assert.IsFalse(refine.ToString().Contains(feedback[..8], StringComparison.Ordinal), "Diagnostics never carry feedback text.");
+    }
+
+    [TestMethod]
+    public void TheFeedbackSummaryNeverSplitsASurrogatePairAtTheTruncationBoundary()
+    {
+        // An emoji (one rune, two UTF-16 code units) straddles the 80-character cut: units 80 and 81. A blind
+        // [..80] would keep the lone high surrogate and render a broken character.
+        var boundary = LineageVersionViewModel.MaximumFeedbackSummaryCharacters;
+        var feedback = new string('f', boundary - 1) + "\U0001F600" + new string('g', 20);
+        var runtime = new RefineLineageRuntime(feedback, guardRestorationCount: 1);
+        var viewModel = new CreateViewModel(LocalizationTestSupport.CreateEnglish(), runtime);
+
+        viewModel.ApplyPresetCommand.Execute(FireBoltCard(viewModel));
+
+        var summary = viewModel.Lineage.Versions[1].FeedbackSummary;
+        Assert.IsTrue(summary.EndsWith('\u2026'));
+        Assert.AreEqual(new string('f', boundary - 1), summary[..^1], "The cut backed up past the pair's high surrogate.");
+        foreach (var character in summary)
+        {
+            Assert.IsFalse(char.IsSurrogate(character), "Every rune in the summary is whole.");
+        }
+    }
+
+    [TestMethod]
+    public void TheFeedbackSummaryCollapsesNewlinesIntoSpaces()
+    {
+        var runtime = new RefineLineageRuntime("first line\r\nsecond line\nthird line", guardRestorationCount: 1);
+        var viewModel = new CreateViewModel(LocalizationTestSupport.CreateEnglish(), runtime);
+
+        viewModel.ApplyPresetCommand.Execute(FireBoltCard(viewModel));
+
+        var summary = viewModel.Lineage.Versions[1].FeedbackSummary;
+        Assert.IsFalse(summary.Contains('\r'), summary);
+        Assert.IsFalse(summary.Contains('\n'), summary);
+        StringAssert.Contains(summary, "first line");
+        StringAssert.Contains(summary, "second line");
+        StringAssert.Contains(summary, "third line");
     }
 
     [TestMethod]
@@ -499,6 +612,10 @@ public sealed class LineageViewTests
 
         public RecipeDraftStore Store { get; }
         public Func<RecipeGenerationRequest, RecipeGenerationResult>? NextResult { get; init; }
+
+        /// <summary>When set, <see cref="TruncateAfter"/> refuses with this code instead of reaching the store.</summary>
+        public RecipeDraftStoreErrorCode? TruncateRefusal { get; init; }
+
         public int GenerateCalls { get; private set; }
         public int ChatCalls { get; private set; }
         public int ImageCalls { get; private set; }
@@ -555,7 +672,7 @@ public sealed class LineageViewTests
         public RecipeDraftTruncateOutcome TruncateAfter(string draftId)
         {
             TruncateCalls++;
-            return Store.TruncateAfter(draftId);
+            return TruncateRefusal is { } code ? throw new RecipeDraftStoreException(code) : Store.TruncateAfter(draftId);
         }
 
         public IReadOnlyList<RecipeDraftRecord> ListLineage(string lineageId) => Store.ListLineage(lineageId);

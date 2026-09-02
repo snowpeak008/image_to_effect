@@ -513,9 +513,10 @@ public sealed class CreateViewModel : WorkspacePageViewModel
     }
 
     /// <summary>
-    /// A retained version passed L1 when it was saved (the store requires a hash for every non-failed record); only
-    /// the L1.5 warnings are re-derived here, by the same pure prevalidator the editor runs. A failed root shows its
-    /// stored report.
+    /// A retained version passed L1 when it was saved: every producer of a hashed record (the generation service,
+    /// the parameter editor, the preset skeletons' build-time tests) runs L1 before computing the hash; the store
+    /// itself does not re-validate. Only the L1.5 warnings are re-derived here, by the same pure prevalidator the
+    /// editor runs. A failed root shows its stored report.
     /// </summary>
     private void PresentRetainedHeadValidation(RecipeDraftRecord head)
     {
