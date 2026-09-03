@@ -1,5 +1,16 @@
 # 开发记忆与恢复指南
 
+> **在途状态快照（2026-09-03 晚 21:00，会话切换交接）**：
+> **治理模式**：主 agent 只派发/验收/合并/登记，不亲自开发；子 agent 用户偏好 Opus 5 High，当前环境可用清单仅 `claude-fable-5-high`（用户已确认可用 Fable 继续）；子 agent 会中断（resume 不可用），任务书必须自足、逐单元提交，中断即重派。
+> **§8 T1 拟真火球在途**（worktree `D:\wt\i2s-t1`，分支 `task/T1-fireball-remake`，基于 `d54c95ed`）：
+> - **T1a 已交付**（3 笔提交至 `b8689554`）：ADR-009 模板视觉质量标准（PROPOSED，按 kind 谓词闭集 EB/IM/SW/MT/SP，登记 rules README）+ EditMode 强制测试 `TemplateVisualQualityTests.cs`（构造性遍历 + `ExemptTemplates` 豁免表恰等断言）。**实测矩阵**：2D 达标仅 Shockwave/FireTrail；豁免 9 项 = 2D 4 项（FireCore/Embers/FireImpact/LaunchFlash，到期 T1b）+ 3D 5 项（到期 T1b-3D，另排期）。EditMode 全量 688：633 过/1 失败（HandleProbe 环境前置，建 .NET Release 即绿）/54 跳过。
+> - **T1b 进行中**（子 agent 2bf6aeec 约 20:15 派发，任务书要点：重制 2D 4 模板达标并逐个删豁免表行、参数集只留 scale、assetGuid 不变 templateVersion bump、哈希 pin 重封（TemplateDependencyHashProvider 连锁）、.NET 快照 re-export + AI.Tests pin 更新、样本 `batches/recipes/realistic_fireball_2d.json`（FireCore travel + FireImpact impact 组合，strict ≤2 模块）+ manifest、EditMode 全量绿、真机构建 succeeded 后**产物还原**（恢复默认还原纪律）、.NET 全量基线 **1106**）。截至 21:00 尚无 T1b 提交（在勘察/写资产中）；**若接手时子 agent 已中断且无提交，原任务书重派**（任务书全文见本次会话或按上述要点重写）。
+> - T1 交付后流程：主 agent 初审 → 双组审计（机械=EditMode/.NET/构建复跑+allow-list；语义=ADR-009 谓词与资产 YAML 对照+拟真构成审阅）→ 微调 → ADR-009 转 ACCEPTED → 合并推送 → 退役 worktree → **用户视觉复验**（主仓构建样本 + 打开 Unity 看 `realistic_fireball_2d`）。
+> **主仓待清理（用户九宫格验收资产，验收已出结论可清理）**：`project/` 下 46 条九宫格产物漂移 + `project/Assets/VFX/Preview/NineGridReview/`（验收场景）+ `batches/nine-grid.manifest.json.report.json`——T1 合并后按还原纪律清（`git checkout -- project; git clean -fd project`，注意别误删 T1 合并进来的模板源改动）。
+> **用户最新裁定（2026-09-03）**：九宫格视觉不合格（静态图位移）→ 立 §8 track；下一交付 = 单个拟真火球（发射+命中爆炸），绝不允许静态图；不接外部特效工具；T1 复验通过后 → T2 设计流程 PRD（vfx-designer skill / IR 重估）→ T3+ 模板库扩充按用户美术方向。
+> **已知 flake**（单跑必绿）：Broker `PostAdmissionChildExit…`（进程时序）、Mcp `ValidatingAManifestOpensNoNetwork`、AiLocalE2E 负载 1 条；EditMode 的 `dependencyHash` 漂移与测试生成物按 O4 §3.7-1 还原。
+
+
 > **终态（2026-09-03 清晨，§7 生成体验大改版全部关闭）**：
 > master 与 origin/master 同步、工作区干净、`D:\wt\` 已清空。**基线：全量 1106 条 Release 0 失败**（跑全量前先 `dotnet build src\VFXComposer.Jobs.Tests\JobExecutorLockHost\VFXComposer.Jobs.Tests.JobExecutorLockHost.csproj -c Release`）。§7 十卡 + 双里程碑审计 + F8c 全部合入推送；收尾完成（指针型 skill `docs/skills/vfx-artist/SKILL.md` 已建）。三个已知负载 flake 见运维段（单跑必绿）。
 > **九宫格已生成（2026-09-03 清晨，待用户视觉验收）**：9 recipe（6 骨架导出 + 3 参数变体压界）经 `vfxc batch run batches\nine-grid.manifest.json` 真机 Unity batchmode 串行构建 **9/9 succeeded**（单条 ~10 s，热 Library；同时构成 F8c 后首次真机 E2E 实战覆盖）。recipe 与清单已提交 `0d8c44ab` 并推送；**`project/` 下 46 条产物漂移刻意留在工作区未提交**（授权例外，供用户打开 Unity 验收），验收后按还原纪律 `git checkout -- project; git clean -fd project` 清理；`batches/nine-grid.manifest.json.report.json` 为运行产物未入库。验收方式：Unity 2022.3.62f3c1 打开 `project/`，`Assets/VFX/Generated/` 下 9 个 `VFX_*.prefab` 拖场景或 prefab 模式播放；重点对比三组骨架 vs 变体。
