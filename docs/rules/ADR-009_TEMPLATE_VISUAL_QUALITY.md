@@ -80,6 +80,7 @@ EditMode 测试 `project/Packages/com.vfxcomposer.unity/Tests/EditMode/TemplateV
 1. 枚举 `Assets/VFX/Templates/` 下每个维度目录（`2D`/`3D`/…）；含 `Prefabs/` 的维度目录**必须**含非空 `Manifests/`（否则失败，见 §5）。
 2. 每个 `Manifests/*.manifest.json` 经 `TemplateCatalog.LoadFromDirectory` 解析（复用生产解析器，报告有错即失败）。
 3. 每个维度目录 `Prefabs/` 下的每个 `.prefab` 必须被某 manifest 的 `assetPath` 引用——**没有 manifest 的 prefab 不得存在于模板库**（绕过质检的旁路封死）。
+4. **Slash v2 独立闭域排除**：`3D/Slash/**` 与 `3D/SlashManifests/**`（`.slash.manifest.json` 后缀）是刻意独立的 v2 域，生产 `TemplateCatalog.LoadFromDirectory` 本就拒绝把它重释为 v1 模板；本 ADR 沿用该边界，以测试内**显式闭集常量**（`SeparatelyManifestedSubtrees`）声明并整体跳过——与 R-5"自持清单型容器"纪律同构。闭集外的任何子目录不得以此为由逃逸。
 4. 按 manifest `kind` 施加 §2 谓词；prefab 解析用 `AssetDatabase.LoadAssetAtPath<GameObject>` + 组件 API（不做 YAML 文本匹配，序列化格式升级不脆断）。
 5. 豁免机制见 §4；豁免表外的模板任一谓词失败 → 测试失败，模板不得入库/交付。
 
@@ -87,7 +88,9 @@ EditMode 测试 `project/Packages/com.vfxcomposer.unity/Tests/EditMode/TemplateV
 
 ## 4. 存量处置：显式豁免清单
 
-存量 6 模板于 2026-09-03 按 §2 谓词逐项核查（prefab YAML 实测，非转述）：
+存量模板于 2026-09-03 按 §2 谓词逐项核查（prefab YAML 实测，非转述）。核查同时暴露：**3D 模板库与 2D 同病**——`PFT_3D_FireCore` 是 MeshRenderer 静态体（无 ParticleSystem、peak=0），四个 3D 粒子模板 ColorModule 全关。
+
+2D（6 模板）：
 
 | 模板 | kind | 谓词判定 | 处置 |
 |---|---|---|---|
@@ -98,13 +101,24 @@ EditMode 测试 `project/Packages/com.vfxcomposer.unity/Tests/EditMode/TemplateV
 | `PFT_2D_Shockwave` | `shockwave` | SW-1✓（size 曲线 0.35→2.8）SW-2✓（alpha 1→0） | 达标，正常断言 |
 | `PFT_2D_FireTrail` | `motion_trail` | MT-1✓（widthCurve 1→0.46→0）MT-2✓（双色渐变 + alpha 1→0） | 达标，正常断言 |
 
+3D（6 模板；Slash v2 域除外，见 §3-4）：
+
+| 模板 | kind | 谓词判定 | 处置 |
+|---|---|---|---|
+| `PFT_3D_FireCore` | `energy_body` | EB-1✗（0 个 ParticleSystem，MeshRenderer 静态体）EB-2✗ EB-4✗（peak=0）；EB-3✓（非 SpriteRenderer） | **豁免 → 3D 重制卡（T1b 交付报告中排期）** |
+| `PFT_3D_Embers` | `secondary_particles` | SP-1✗（gravity=0 且 ClampVelocityModule 关） | **豁免 → 同上** |
+| `PFT_3D_FireImpact` | `impact_burst` | IM-1✓ IM-2✗（仅 1 个 Renderer） | **豁免 → 同上** |
+| `PFT_3D_LaunchFlash` | `impact_flash` | IM-1✓ IM-2✗（仅 1 个 Renderer） | **豁免 → 同上** |
+| `PFT_3D_Shockwave` | `shockwave` | SW-2✗（ColorModule 关） | **豁免 → 同上** |
+| `PFT_3D_FireTrail` | `motion_trail` | MT-1✓（widthCurve 1→0.36→0）MT-2✓（双色渐变） | 达标，正常断言 |
+
 豁免规则：
 
-1. 豁免表是测试内**显式常量表**：`模板 id → (豁免理由, 到期卡号)`。当前 4 项到期卡号均为 **T1b**。
+1. 豁免表是测试内**显式常量表**：`模板 id → (豁免理由, 到期卡号)`。当前 9 项：2D 侧 4 项到期卡号 **T1b**；3D 侧 5 项到期卡号 **T1b-3D（待排期，T1b 交付报告须给出）**。
 2. 豁免模板**仍然跑谓词**：若某豁免模板实测已全部达标，测试失败并要求把它从豁免表移除（防豁免表陈旧）；若仍不达标，计入"已消费豁免"。
 3. 测试最终断言**已消费豁免集合恰等于声明清单**——豁免不可静默扩、不可静默缩（与 O4 R-4 显式豁免、R-5 闭集纪律同构，见 `docs/plans/UNITY_TEST_TRIAGE.md` §6.4/§6.6）。
 4. 豁免表内模板的 id 必须真实存在于模板库（幽灵豁免即失败）。
-5. **T1b 交付定义**：重制上述 4 模板至谓词达标，并把它们从豁免表移除；豁免表清空后本节归档为历史记录。
+5. **T1b 交付定义**：重制 2D 侧 4 模板至谓词达标，并把它们从豁免表移除；3D 侧 5 项由 T1b 报告排期后续卡。豁免表清空后本节归档为历史记录。
 
 ## 5. fail-closed
 
