@@ -2,7 +2,8 @@
 
 > **终态（2026-09-03 清晨，§7 生成体验大改版全部关闭）**：
 > master 与 origin/master 同步、工作区干净、`D:\wt\` 已清空。**基线：全量 1106 条 Release 0 失败**（跑全量前先 `dotnet build src\VFXComposer.Jobs.Tests\JobExecutorLockHost\VFXComposer.Jobs.Tests.JobExecutorLockHost.csproj -c Release`）。§7 十卡 + 双里程碑审计 + F8c 全部合入推送；收尾完成（指针型 skill `docs/skills/vfx-artist/SKILL.md` 已建）。三个已知负载 flake 见运维段（单跑必绿）。
-> **待办（用户裁定）**：①**九宫格人工验收**——批量生成 9 个特效供用户验收质量（简单模式示例卡 + AI 生成混合取材；构建走 Desktop 应用内（顺带覆盖 F8c 真机 E2E）或 `vfxc batch run`；Unity Editor 路径见 F6 证据 `E:\workwork\steamgamework\unit\2022.3.62f3c1\Editor`）；②验收后再议**模板库扩充 track**（当前 6 模板/11 参数/2D 火系弹道是覆盖面瓶颈，扩充需用户美术方向输入）。
+> **九宫格已生成（2026-09-03 清晨，待用户视觉验收）**：9 recipe（6 骨架导出 + 3 参数变体压界）经 `vfxc batch run batches\nine-grid.manifest.json` 真机 Unity batchmode 串行构建 **9/9 succeeded**（单条 ~10 s，热 Library；同时构成 F8c 后首次真机 E2E 实战覆盖）。recipe 与清单已提交 `0d8c44ab` 并推送；**`project/` 下 46 条产物漂移刻意留在工作区未提交**（授权例外，供用户打开 Unity 验收），验收后按还原纪律 `git checkout -- project; git clean -fd project` 清理；`batches/nine-grid.manifest.json.report.json` 为运行产物未入库。验收方式：Unity 2022.3.62f3c1 打开 `project/`，`Assets/VFX/Generated/` 下 9 个 `VFX_*.prefab` 拖场景或 prefab 模式播放；重点对比三组骨架 vs 变体。
+> **待办（用户裁定）**：①用户对九宫格做视觉验收；②验收后再议**模板库扩充 track**（当前 6 模板/11 参数/2D 火系弹道是覆盖面瓶颈，扩充需用户美术方向输入）。
 > 若要继续开发：从主计划 §7"暂缓/债务"与本文件历史快照起读。子 agent 模型：用户偏好 Opus 5 High，可用清单没有时用 Fable 5 High 照实登记。
 >
 > **历史快照（2026-09-03 清晨 4 点，F8c 关闭）**：
