@@ -7,7 +7,7 @@
   "recipeVersion": 1,
   "recipeRevision": 1,
   "recipeHash": "4f284e172edbd9db8de2ef6dedc03cbbb743a39aedd0377f1f8f06100df8f45a",
-  "buildHash": "c507ee71d49c941e40127ae6fc7f60c04a90198028492ad3e3792188d716b642",
+  "buildHash": "92a196c2094075c100467b757d8a84af32db933f6be869b3a616df599e084170",
   "compilerVersion": "0.1.0",
   "unityVersion": "2022.3.62f3c1",
   "sourceRecipePath": "Assets/VFX/Recipes/fireball-2d.default.json",
@@ -21,7 +21,7 @@
       "path": "Assets/VFX/Generated/fireball_2d/VFX_Fireball_2D.prefab",
       "guid": "edfdb8327c7bd234c94f0f4338c35816",
       "assetType": "GameObject",
-      "sha256": "2eea00d00901b79a924ecffaaa4d2380f9f104076c10736bf0f932f551ce51fc"
+      "sha256": "a4beb65abd4fbb06e63aac97fd19a8d685ea5c7dabc2b02555eb376eb60927f1"
     },
     {
       "path": "Assets/VFX/Generated/fireball_2d/burst_Material_0.mat",
@@ -30,16 +30,46 @@
       "sha256": "bcef081b3949cc6641c1fae91899f62954ec0069e987e17d9616f0cb445a3e89"
     },
     {
+      "path": "Assets/VFX/Generated/fireball_2d/burst_Material_1.mat",
+      "guid": "ce62d140c8345674ca12044ddf9c55f1",
+      "assetType": "Material",
+      "sha256": "e79aaab464277a0ae438ec038df3e2f7c9b860f3e79ac00c62b43d7835bbe894"
+    },
+    {
+      "path": "Assets/VFX/Generated/fireball_2d/burst_Material_2.mat",
+      "guid": "a378a81f66dcc3c4a8fff0a8c0ef6269",
+      "assetType": "Material",
+      "sha256": "e203fff9ca9686be2afdfb63e72a86f69cc3c79e747bf3439df76ff46c8fb668"
+    },
+    {
       "path": "Assets/VFX/Generated/fireball_2d/coreFlash_Material_0.mat",
       "guid": "bab9fb9e3b0eb05449d2ef719fe1c381",
       "assetType": "Material",
       "sha256": "19fb87cadab4e660fa605356d09e393aa16139b5a86ef03aa12a047c39ff44a1"
     },
     {
+      "path": "Assets/VFX/Generated/fireball_2d/coreFlash_Material_1.mat",
+      "guid": "98eb17687bffd68419a12c42fa66b3e1",
+      "assetType": "Material",
+      "sha256": "4a108625595bab8c888bd695c747c682072af92d6b653d4ccbed1141465db418"
+    },
+    {
       "path": "Assets/VFX/Generated/fireball_2d/core_Material_0.mat",
       "guid": "fa1787ed0476ffe41b0d3d648fbf7db6",
       "assetType": "Material",
-      "sha256": "3a681db3e52a2661dbeff1ef35b7e1d8219a48be9c30eddea4b37a14aa52e474"
+      "sha256": "86e6be79c0de2979bb89ea948751b82a64b7c9c6676c2ac32221d3626b3e6ba0"
+    },
+    {
+      "path": "Assets/VFX/Generated/fireball_2d/core_Material_1.mat",
+      "guid": "4811ecb7dbafa8a4da9d533d75c58101",
+      "assetType": "Material",
+      "sha256": "31b160972d9d2f67c65f83666f04eb24d7147dc1f48dca7759f15294310a6377"
+    },
+    {
+      "path": "Assets/VFX/Generated/fireball_2d/core_Material_2.mat",
+      "guid": "641dea0cadd47fc488223cd26a30f4e4",
+      "assetType": "Material",
+      "sha256": "df0d9c64409126f23c25f48c946e0ef5aca91e06591ec0c3da5515ae4795924e"
     },
     {
       "path": "Assets/VFX/Generated/fireball_2d/embers_Material_0.mat",
@@ -52,6 +82,12 @@
       "guid": "e17f16efd4d4ce247b5e2260b793aa73",
       "assetType": "Material",
       "sha256": "71ca3e420a7f246f64149e4dba578dd2e25654f343c2599fdc94b93c41f10b65"
+    },
+    {
+      "path": "Assets/VFX/Generated/fireball_2d/launchFlash_Material_1.mat",
+      "guid": "8425035d6b3c2f6428b93debf31a0148",
+      "assetType": "Material",
+      "sha256": "7f66af70cfe6b84075022a450d5d0c3f2902b11d456c0fdc3e7e91e915d7df1d"
     },
     {
       "path": "Assets/VFX/Generated/fireball_2d/shockwave_Material_0.mat",
@@ -123,15 +159,15 @@
     }
   ],
   "cost": {
-    "particles": 99,
-    "particleSystems": 5,
-    "renderers": 7,
-    "materials": 7,
+    "particles": 179,
+    "particleSystems": 12,
+    "renderers": 13,
+    "materials": 13,
     "trails": 1,
     "duration": 1.62,
     "localTextureBytes": 0,
     "dependencyResidentTextureBytes": 3368944,
-    "gameObjects": 11,
+    "gameObjects": 17,
     "maxDepth": 3
   },
   "audit": [
@@ -148,10 +184,10 @@
       "message": "Runtime Entry exceeds the configured GameObject budget."
     },
     {
-      "code": "R8004",
+      "code": "R8007",
       "severity": "warning",
-      "path": "/structure/maxDepth",
-      "message": "Runtime Entry exceeds the configured hierarchy depth."
+      "path": "/structure/names",
+      "message": "GameObject names must be unique inside a Runtime Entry: LaunchSparks"
     },
     {
       "code": "R8011",
@@ -160,5 +196,6 @@
       "message": "Effect exceeds the recommended local Material count."
     }
   ],
-  "generatedAtUtc": "2026-08-23T08:18:36.6692350Z"
+  "formalProduction": null,
+  "generatedAtUtc": "2026-09-05T07:55:28.8252178Z"
 }

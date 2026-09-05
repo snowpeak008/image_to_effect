@@ -2,13 +2,13 @@
   "recipeId": "fireball_2d",
   "recipeRevision": 1,
   "recipeHash": "4f284e172edbd9db8de2ef6dedc03cbbb743a39aedd0377f1f8f06100df8f45a",
-  "buildHash": "c507ee71d49c941e40127ae6fc7f60c04a90198028492ad3e3792188d716b642",
+  "buildHash": "92a196c2094075c100467b757d8a84af32db933f6be869b3a616df599e084170",
   "compilerVersion": "0.1.0",
   "unityVersion": "2022.3.62f3c1",
   "outputPrefabPath": "Assets/VFX/Generated/fireball_2d/VFX_Fireball_2D.prefab",
-  "generatedAtUtc": "2026-08-22T13:14:57.8950731Z",
+  "generatedAtUtc": "2026-09-05T07:55:28.6784547Z",
   "cost": {
-    "estimatedPeakParticles": 83,
+    "estimatedPeakParticles": 129,
     "materials": 7,
     "trails": 1,
     "totalDuration": 1.62
@@ -16,19 +16,19 @@
   "templates": [
     {
       "templateId": "PFT_2D_Embers",
-      "templateVersion": "1.0.0",
+      "templateVersion": "2.0.0",
       "assetGuid": "e7b6e99096bd0f64a912419158b3d0e2",
       "assetPath": "Assets/VFX/Templates/2D/Prefabs/PFT_2D_Embers.prefab"
     },
     {
       "templateId": "PFT_2D_FireCore",
-      "templateVersion": "1.0.0",
+      "templateVersion": "2.0.0",
       "assetGuid": "dd90f48c6171c0749a07eee8b939a0a2",
       "assetPath": "Assets/VFX/Templates/2D/Prefabs/PFT_2D_FireCore.prefab"
     },
     {
       "templateId": "PFT_2D_FireImpact",
-      "templateVersion": "1.0.0",
+      "templateVersion": "2.0.0",
       "assetGuid": "d9b739d87ad3e854985c47e97d196b89",
       "assetPath": "Assets/VFX/Templates/2D/Prefabs/PFT_2D_FireImpact.prefab"
     },
@@ -40,7 +40,7 @@
     },
     {
       "templateId": "PFT_2D_LaunchFlash",
-      "templateVersion": "1.0.0",
+      "templateVersion": "2.0.0",
       "assetGuid": "67b8b2ebf20d4aa499fed82ee704d4be",
       "assetPath": "Assets/VFX/Templates/2D/Prefabs/PFT_2D_LaunchFlash.prefab"
     },
