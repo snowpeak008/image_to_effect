@@ -1,0 +1,12 @@
+{
+  "schemaVersion": "vfxcomposer.batch-manifest/1",
+  "batchId": "realistic-fireball",
+  "onFailure": "continue",
+  "items": [
+    {
+      "itemId": "realistic-fireball",
+      "kind": "recipe",
+      "recipePath": "recipes/realistic_fireball_2d.json"
+    }
+  ]
+}
