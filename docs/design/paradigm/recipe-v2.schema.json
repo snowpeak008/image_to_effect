@@ -1,0 +1,419 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://vfxcomposer.local/schema/recipe-v2.schema.json",
+  "title": "VFX Composer Recipe v2 (FINAL, T2b 2026-09-05)",
+  "description": "CONTENT_PARADIGM_V1 recipe, finalized from recipe-v2.schema.draft.json. T2b deltas: element.intensity renamed to element.strength (T2A_REPORT #6-8); technique.variant is now a closed per-family enum from TECHNIQUE_VARIANT_LIBRARY_v1.md (includes radial_spike_array, ADR-010 #4bis-8); layer-level optional refraction declaration with runtime Opaque-Texture auto-degrade (ADR-010 #4bis-1); top-level canvasMode for UGUI archetypes with Overlay pseudo-particle degrade (ADR-010 #4bis-2); orchestration children carry mode=inline|link where link is reserved and rejected by the v1 compiler (ADR-010 #4bis-3); glow layer parameter surface (REFERENCE_ANALYSIS #3bis) is schema-enforced for the glow_radial_layered variant. Not compatible with recipe v1; no migration.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["recipeVersion", "id", "dimension", "archetype", "element", "style", "performanceTier", "seed", "layers", "interface", "metadata"],
+  "properties": {
+    "recipeVersion": { "const": 2 },
+    "id": { "type": "string", "pattern": "^[a-z0-9_]+$", "minLength": 1, "maxLength": 96 },
+    "name": { "type": "string", "maxLength": 128 },
+    "dimension": { "$ref": "#/$defs/dimension" },
+    "archetype": { "$ref": "#/$defs/archetype" },
+    "canvasMode": {
+      "enum": ["camera", "world", "overlay"],
+      "description": "UGUI archetypes (ui_*) only. camera = Screen Space-Camera canvas, world = World Space canvas (both use real particle layers); overlay = Screen Space-Overlay canvas, particle-family layers are compiled down to in-material procedural pseudo particles (multi-instance SDF points). Default camera. ADR-010 #4bis-2."
+    },
+    "element": { "$ref": "#/$defs/element" },
+    "style": { "$ref": "#/$defs/style" },
+    "performanceTier": { "$ref": "#/$defs/performanceTier" },
+    "seed": { "type": "integer", "minimum": 0, "maximum": 4294967295 },
+    "timing": { "$ref": "#/$defs/recipeTiming" },
+    "layers": { "type": "array", "items": { "$ref": "#/$defs/layer" }, "description": "Required and non-empty unless archetype is orchestration (then must be empty)." },
+    "children": { "type": "array", "maxItems": 8, "items": { "$ref": "#/$defs/child" }, "description": "Orchestration only." },
+    "timeline": { "type": "array", "items": { "$ref": "#/$defs/timelineEntry" }, "description": "Orchestration only." },
+    "wiring": { "type": "array", "items": { "$ref": "#/$defs/wire" }, "description": "Orchestration only." },
+    "interface": { "$ref": "#/$defs/interface" },
+    "metadata": { "$ref": "#/$defs/metadata" }
+  },
+  "allOf": [
+    {
+      "if": { "properties": { "archetype": { "const": "orchestration" } } },
+      "then": {
+        "required": ["children", "timeline"],
+        "properties": { "layers": { "maxItems": 0 }, "children": { "minItems": 1 } }
+      },
+      "else": {
+        "properties": { "layers": { "minItems": 1 } },
+        "not": { "anyOf": [ { "required": ["children"] }, { "required": ["timeline"] }, { "required": ["wiring"] } ] }
+      }
+    },
+    {
+      "if": { "properties": { "archetype": { "$ref": "#/$defs/uiArchetype" } }, "required": ["archetype"] },
+      "else": { "not": { "required": ["canvasMode"] } }
+    }
+  ],
+  "$defs": {
+    "dimension": { "enum": ["2d", "3d"] },
+    "performanceTier": { "enum": ["mobile_low", "mobile_medium", "mobile_high", "pc_low", "pc_medium", "pc_high"] },
+    "techniqueFamily": { "enum": ["material", "gpu_particles", "cpu_particles", "mesh", "local_light"] },
+    "phase": { "enum": ["launch", "travel", "sustain", "impact", "end"] },
+    "archetype": {
+      "description": "Prototype id from PROTOTYPE_CATALOG_v1 (58) plus orchestration. The compiler validates against the live catalog; this list is the v1.0.0 snapshot.",
+      "enum": [
+        "projectile_linear", "projectile_ballistic", "projectile_homing", "beam", "melee_sweep", "impact_burst", "area_ground", "strike_descending", "wave_ring", "chain_link", "displacement", "tether_link", "summon_manifest",
+        "aura_ground", "aura_body", "orbitals", "shield", "charge_gather", "channel_sustain", "attach_marker", "weapon_enchant", "afflict_erode", "restrain_bind",
+        "hit_reaction", "critical_emphasis", "heal_restore", "empower_rise", "pickup_absorb", "dissolve_out", "entrance_in", "parry_deflect", "transform_shift",
+        "fracture_burst", "collapse_sequence", "cloth_dynamic", "liquid_splash", "liquid_stream", "surface_decal", "soft_deform", "ground_rupture",
+        "weather_precip", "ambient_airflow", "fog_volume", "surface_field", "vent_emitter", "portal_gate", "sweep_curtain", "barrier_wall", "light_body",
+        "ui_button_feedback", "ui_shine_loop", "ui_reward_burst", "ui_reveal", "ui_merge_fuse", "ui_hud_pulse", "ui_bar_energy", "ui_collect_fly", "ui_panel_enter",
+        "orchestration"
+      ]
+    },
+    "uiArchetype": {
+      "enum": ["ui_button_feedback", "ui_shine_loop", "ui_reward_burst", "ui_reveal", "ui_merge_fuse", "ui_hud_pulse", "ui_bar_energy", "ui_collect_fly", "ui_panel_enter"]
+    },
+    "elementId": {
+      "description": "Element id from ELEMENT_CATALOG_v1 plus none.",
+      "enum": ["fire", "ice", "lightning", "water", "wind", "earth", "poison", "light", "shadow", "arcane", "tech", "blood", "nature", "none"]
+    },
+    "physicalProfile": { "enum": ["dust", "rubble", "cloth", "liquid", "spark_metal"] },
+    "styleId": {
+      "description": "First batch cartoon/pixel; none = realistic baseline (no style stage). Candidates reserved but not yet implemented.",
+      "enum": ["cartoon", "pixel", "none", "realistic", "stylized", "inkwash", "neon", "holo", "dark"]
+    },
+    "materialVariant": {
+      "description": "Material family (Shader Graph) variants; TECHNIQUE_VARIANT_LIBRARY_v1.md section 3.",
+      "enum": [
+        "noise_fbm_2layer", "noise_voronoi_crystal", "noise_jagged_1d",
+        "sdf_shape", "sdf_sacred_pattern", "sdf_rune_ring", "sdf_hex_grid", "sdf_scanline", "sdf_crack_branch",
+        "threshold_dissolve", "fresnel_edge", "vertex_displace", "smoothmin_union", "multiply_dark_core",
+        "glow_radial_layered", "refraction_layer"
+      ]
+    },
+    "gpuParticlesVariant": {
+      "description": "GPU particle family (VFX Graph field templates); TECHNIQUE_VARIANT_LIBRARY_v1.md section 4.",
+      "enum": [
+        "field_buoyancy_turbulence", "field_gravity_settle", "field_instant_rephase", "field_gravity_drag_split",
+        "field_vortex", "field_orbital_hover", "field_step_grid", "field_attract_target", "field_drift_curl", "field_fall_wind"
+      ]
+    },
+    "cpuParticlesVariant": {
+      "description": "CPU particle family (ParticleSystem module recipes); TECHNIQUE_VARIANT_LIBRARY_v1.md section 5. Mirrors the GPU field set for tier degradation plus a burst variant.",
+      "enum": [
+        "ps_buoyancy_turbulence", "ps_gravity_settle", "ps_instant_rephase", "ps_gravity_drag_split",
+        "ps_vortex", "ps_orbital_hover", "ps_step_grid", "ps_attract_target", "ps_drift_curl", "ps_fall_wind",
+        "ps_burst_streaks"
+      ]
+    },
+    "meshVariant": {
+      "description": "Mesh family (procedural generators); TECHNIQUE_VARIANT_LIBRARY_v1.md section 6. Includes radial_spike_array (ADR-010 #4bis-8).",
+      "enum": [
+        "crystal_cluster", "rock_chunk", "jagged_polyline", "spiral_ribbon", "tendril_blob", "wire_polyhedron",
+        "tech_panel", "vine_spline", "branch_tree", "sweep_band", "catenary_band", "parabola_tube",
+        "splash_crown", "shell_polyhedron", "ring_torus_segments", "cylinder_beam", "voronoi_prefracture",
+        "subdivided_plane", "radial_spike_array"
+      ]
+    },
+    "localLightVariant": {
+      "description": "Local light family; TECHNIQUE_VARIANT_LIBRARY_v1.md section 7. One beat-driven variant; 3d compiles to URP Light, 2d compiles to Light2D, baked tiers write a material emission multiplier.",
+      "enum": ["light_beat"]
+    },
+    "linearColor": { "type": "array", "minItems": 3, "maxItems": 3, "items": { "type": "number", "minimum": 0 } },
+    "element": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id"],
+      "properties": {
+        "id": { "$ref": "#/$defs/elementId" },
+        "strength": { "type": "number", "minimum": 0, "maximum": 1, "default": 0.7, "description": "Element flavor concentration (ELEMENT_CATALOG_v1 section 1.2). Renamed from draft 'intensity' to avoid collision with the standard intensity parameter (T2A_REPORT #6-8)." },
+        "physicalProfile": { "$ref": "#/$defs/physicalProfile", "description": "Only valid when id = none." },
+        "paletteOverride": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "primary": { "$ref": "#/$defs/linearColor" },
+            "secondary": { "$ref": "#/$defs/linearColor" },
+            "hot": { "$ref": "#/$defs/linearColor" },
+            "cool": { "$ref": "#/$defs/linearColor" },
+            "residue": { "$ref": "#/$defs/linearColor" }
+          }
+        }
+      },
+      "allOf": [
+        { "if": { "properties": { "id": { "not": { "const": "none" } } } }, "then": { "not": { "required": ["physicalProfile"] } } }
+      ]
+    },
+    "style": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id"],
+      "properties": {
+        "id": { "$ref": "#/$defs/styleId" },
+        "parameters": {
+          "type": "object",
+          "additionalProperties": false,
+          "description": "Union of first-batch style subgraph parameters. The compiler validates the subset that applies to style.id.",
+          "properties": {
+            "shadingSteps": { "type": "integer", "minimum": 2, "maximum": 4 },
+            "edgeSharpness": { "type": "number", "minimum": 0, "maximum": 1 },
+            "outlineWidth": { "type": "number", "minimum": 0, "maximum": 0.1 },
+            "outlineColor": { "$ref": "#/$defs/linearColor" },
+            "saturationMul": { "type": "number", "minimum": 0.5, "maximum": 2 },
+            "hdrClamp": { "type": "number", "minimum": 0.5, "maximum": 8 },
+            "detailMul": { "type": "number", "minimum": 0, "maximum": 1 },
+            "innerLine": { "type": "boolean" },
+            "pixelSize": { "type": "number", "exclusiveMinimum": 0, "maximum": 1 },
+            "colorSteps": { "type": "integer", "minimum": 3, "maximum": 8 },
+            "alphaCutoff": { "type": "number", "minimum": 0, "maximum": 1 },
+            "ditherLevels": { "type": "integer", "minimum": 0, "maximum": 4 },
+            "frameRate": { "type": "number", "minimum": 8, "maximum": 15 },
+            "outline1px": { "type": "boolean" },
+            "gridSpace": { "enum": ["object", "screen", "worldXY", "uv"] }
+          }
+        }
+      }
+    },
+    "recipeTiming": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "phases": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "launch": { "$ref": "#/$defs/phaseSpec" },
+            "travel": { "$ref": "#/$defs/phaseSpec" },
+            "sustain": { "$ref": "#/$defs/phaseSpec" },
+            "impact": { "$ref": "#/$defs/phaseSpec" },
+            "end": { "$ref": "#/$defs/phaseSpec" }
+          }
+        },
+        "autoAdvance": { "type": "boolean", "default": true }
+      }
+    },
+    "phaseSpec": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "duration": { "type": ["number", "null"], "minimum": 0, "description": "null = externally driven / until next in-event." },
+        "loop": { "type": "boolean", "default": false }
+      }
+    },
+    "technique": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["family", "variant"],
+      "properties": {
+        "family": { "$ref": "#/$defs/techniqueFamily" },
+        "variant": { "type": "string", "pattern": "^[a-z][a-z0-9_]*$", "description": "Closed per-family variant id; see the family conditionals below and TECHNIQUE_VARIANT_LIBRARY_v1.md." }
+      },
+      "allOf": [
+        { "if": { "properties": { "family": { "const": "material" } } }, "then": { "properties": { "variant": { "$ref": "#/$defs/materialVariant" } } } },
+        { "if": { "properties": { "family": { "const": "gpu_particles" } } }, "then": { "properties": { "variant": { "$ref": "#/$defs/gpuParticlesVariant" } } } },
+        { "if": { "properties": { "family": { "const": "cpu_particles" } } }, "then": { "properties": { "variant": { "$ref": "#/$defs/cpuParticlesVariant" } } } },
+        { "if": { "properties": { "family": { "const": "mesh" } } }, "then": { "properties": { "variant": { "$ref": "#/$defs/meshVariant" } } } },
+        { "if": { "properties": { "family": { "const": "local_light" } } }, "then": { "properties": { "variant": { "$ref": "#/$defs/localLightVariant" } } } }
+      ]
+    },
+    "glowParameters": {
+      "description": "Full self-contained glow-layer parameter surface (REFERENCE_ANALYSIS.md section 3bis, user-decided full parameterization). Enforced when technique.variant = glow_radial_layered.",
+      "type": "object",
+      "properties": {
+        "glowSize": { "type": "number", "minimum": 1, "maximum": 8, "description": "Glow quad scale relative to the host layer (1.5 = tight, 4 = wide haze)." },
+        "glowFalloff": { "type": "number", "minimum": 0.25, "maximum": 8, "description": "Radial falloff exponent: high = crisp ring, low = long fog tail." },
+        "glowSoftness": { "type": "number", "minimum": 0, "maximum": 1, "description": "Noise break-up amount on the falloff edge." },
+        "glowIntensity": { "type": "number", "minimum": 0, "maximum": 16, "description": "HDR multiplier (>1 expected); size-coupled compensation applies at runtime." },
+        "glowColorInner": { "$ref": "#/$defs/linearColor" },
+        "glowColorOuter": { "$ref": "#/$defs/linearColor" },
+        "glowPulseMode": { "enum": ["steady", "breathe", "flicker", "pulse", "strobe"] },
+        "glowPulseRate": { "type": "number", "minimum": 0, "maximum": 30 },
+        "glowPulseDepth": { "type": "number", "minimum": 0, "maximum": 1 },
+        "glowShape": { "enum": ["circle", "ellipse", "stretched"], "description": "stretched = anisotropic along the motion axis (reference group A)." },
+        "glowLayers": { "type": "integer", "minimum": 1, "maximum": 3, "description": "1 tight + 2 mid + 3 wide-haze layered structure; lowest tier keeps 1." },
+        "glowLayerRatio": { "type": "number", "minimum": 1.1, "maximum": 4, "description": "Radius/intensity ratio between adjacent layers." },
+        "glowSoftDepthFade": { "type": "number", "minimum": 0, "maximum": 1, "description": "Soft fade where the glow intersects scene depth." },
+        "glowFlickerCoupling": { "type": "boolean", "description": "true = pulse phase is driven by the sibling local-light beat source (same-source sync)." }
+      },
+      "additionalProperties": false
+    },
+    "refraction": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["enabled"],
+      "properties": {
+        "enabled": { "type": "boolean" },
+        "strength": { "type": "number", "minimum": 0, "maximum": 1, "default": 0.5 }
+      },
+      "description": "Optional refraction declaration (ADR-010 #4bis-1). Compile-time: the material variant gains a refraction stage. Runtime: if the URP Opaque Texture (_CameraOpaqueTexture) is available the true scene-color refraction path runs; otherwise it silently degrades to normal-perturbation highlights. Neither path errors. Material family only."
+    },
+    "layerTiming": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["phase"],
+      "properties": {
+        "phase": { "$ref": "#/$defs/phase" },
+        "offset": { "type": "number", "default": 0 },
+        "duration": { "type": ["number", "null"], "minimum": 0, "default": null },
+        "loop": { "type": "boolean", "default": false }
+      }
+    },
+    "sorting": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["layer", "order"],
+      "properties": {
+        "layer": { "type": "string", "minLength": 1 },
+        "order": { "type": "integer", "minimum": -32768, "maximum": 32767 }
+      },
+      "description": "2D only. Omit to let the compiler assign by prototype layer order."
+    },
+    "tierOverride": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "enabled": { "type": "boolean" },
+        "technique": { "$ref": "#/$defs/technique" },
+        "parameters": { "type": "object", "additionalProperties": true }
+      }
+    },
+    "layer": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["layerId", "role", "technique", "timing", "enabled"],
+      "properties": {
+        "layerId": { "type": "string", "pattern": "^[a-z][a-zA-Z0-9_]*$" },
+        "role": {
+          "type": "string",
+          "pattern": "^(core|body|edge|trail|emission|ground|decal|flash|shock|beam_column|link|mesh_shell|debris|surface|light|orbit|column|veil|cloth|fill|frame)(\\.[a-z][a-zA-Z0-9]*)?$",
+          "description": "Layer role from PROTOTYPE_CATALOG_v1 section 2.1 with optional .suffix; must be declared by the archetype."
+        },
+        "technique": { "$ref": "#/$defs/technique" },
+        "parameters": { "type": "object", "additionalProperties": true, "description": "Parameter surface of technique.variant; keys and ranges validated by the variant manifest. glow_radial_layered is schema-enforced (see layer allOf)." },
+        "refraction": { "$ref": "#/$defs/refraction" },
+        "timing": { "$ref": "#/$defs/layerTiming" },
+        "enabled": { "type": "boolean" },
+        "elementOverride": { "$ref": "#/$defs/elementId" },
+        "sorting": { "$ref": "#/$defs/sorting" },
+        "tierOverrides": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "mobile_low": { "$ref": "#/$defs/tierOverride" },
+            "mobile_medium": { "$ref": "#/$defs/tierOverride" },
+            "mobile_high": { "$ref": "#/$defs/tierOverride" },
+            "pc_low": { "$ref": "#/$defs/tierOverride" },
+            "pc_medium": { "$ref": "#/$defs/tierOverride" },
+            "pc_high": { "$ref": "#/$defs/tierOverride" }
+          }
+        }
+      },
+      "allOf": [
+        {
+          "if": { "properties": { "technique": { "properties": { "variant": { "const": "glow_radial_layered" } }, "required": ["variant"] } }, "required": ["technique"] },
+          "then": { "properties": { "parameters": { "$ref": "#/$defs/glowParameters" } } }
+        },
+        {
+          "if": { "required": ["refraction"] },
+          "then": { "properties": { "technique": { "properties": { "family": { "const": "material" } } } } }
+        }
+      ]
+    },
+    "child": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["childId", "recipeRef", "anchor", "priority"],
+      "properties": {
+        "childId": { "type": "string", "pattern": "^[a-z][a-zA-Z0-9_]*$" },
+        "recipeRef": { "type": "string", "pattern": "^[a-z0-9_]+$", "description": "Id of a non-orchestration recipe v2. Must share dimension, style.id and performanceTier with the parent." },
+        "mode": { "enum": ["inline", "link"], "default": "inline", "description": "inline (ADR-010 #4bis-3, the only implemented mode): the child recipe is expanded and merged at compile time into one self-contained prefab. link: reserved field for a future by-reference composition; the v1 compiler rejects it (E211)." },
+        "anchor": { "type": "string", "pattern": "^(root|follow:[a-z][a-zA-Z0-9_]*|offset:\\[-?[0-9.]+,-?[0-9.]+,-?[0-9.]+\\])$" },
+        "priority": { "type": "integer", "minimum": 1, "maximum": 8, "description": "1 = essential (never auto-disabled); higher = disabled first when tier budget is exceeded." },
+        "overrides": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "element": { "$ref": "#/$defs/element" },
+            "parameters": { "type": "object", "additionalProperties": true, "description": "Values for the child's exposed interface parameters." }
+          }
+        }
+      }
+    },
+    "timelineEntry": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["t", "target", "event"],
+      "properties": {
+        "t": { "type": "number", "minimum": 0 },
+        "target": { "type": "string" },
+        "event": { "type": "string", "pattern": "^[a-z][a-zA-Z0-9]*$" },
+        "payload": { "type": "object", "additionalProperties": true },
+        "waitFor": { "type": "string", "pattern": "^[a-z][a-zA-Z0-9_]*\\.on[A-Z][a-zA-Z0-9]*$" }
+      }
+    },
+    "wire": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["from", "to"],
+      "properties": {
+        "from": { "type": "string", "pattern": "^[a-z][a-zA-Z0-9_]*\\.on[A-Z][a-zA-Z0-9]*$" },
+        "to": { "type": "string", "pattern": "^(__self|[a-z][a-zA-Z0-9_]*)\\.[a-z][a-zA-Z0-9]*$" },
+        "delay": { "type": "number", "minimum": 0 },
+        "payloadMap": { "type": "object", "additionalProperties": { "type": "string" } }
+      }
+    },
+    "interface": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "events": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "expose": { "type": "array", "items": { "type": "string", "pattern": "^[a-z][a-zA-Z0-9]*$" }, "uniqueItems": true },
+            "emit": { "type": "array", "items": { "type": "string", "pattern": "^on[A-Z][a-zA-Z0-9]*$" }, "uniqueItems": true }
+          }
+        },
+        "parameters": { "type": "array", "items": { "$ref": "#/$defs/interfaceParameter" } }
+      }
+    },
+    "interfaceParameter": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "type", "bindings"],
+      "properties": {
+        "id": { "type": "string", "pattern": "^[a-z][a-zA-Z0-9]*$", "not": { "enum": ["palette", "intensity", "scale", "speed", "seed"] }, "description": "Standard parameters are implicit and may not be redeclared." },
+        "type": { "enum": ["float", "int", "bool", "enum", "color", "gradient", "vector2", "vector3", "transformRef", "rendererRef"] },
+        "range": { "type": "array", "minItems": 2, "maxItems": 2, "items": { "type": "number" } },
+        "default": {},
+        "enumValues": { "type": "array", "minItems": 2, "items": { "type": "string" }, "uniqueItems": true },
+        "bindings": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/binding" } }
+      },
+      "allOf": [
+        { "if": { "properties": { "type": { "enum": ["float", "int"] } } }, "then": { "required": ["range"] } },
+        { "if": { "properties": { "type": { "const": "enum" } } }, "then": { "required": ["enumValues"] } }
+      ]
+    },
+    "binding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["layerId", "path"],
+      "properties": {
+        "layerId": { "type": "string", "description": "layerId, or childId in an orchestration." },
+        "path": { "type": "string", "pattern": "^(material|mesh|light|particles|controller|child)\\.[a-zA-Z][a-zA-Z0-9_.]*$" },
+        "map": { "type": "string", "pattern": "^(identity|invert|remap\\(-?[0-9.]+,-?[0-9.]+,-?[0-9.]+,-?[0-9.]+\\)|curve\\([a-z][a-z0-9_]*\\))$", "default": "identity" }
+      }
+    },
+    "metadata": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["createdBy", "catalogVersions"],
+      "properties": {
+        "createdBy": { "type": "string", "minLength": 1 },
+        "catalogVersions": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["prototype", "element", "style"],
+          "properties": {
+            "prototype": { "type": "string", "pattern": "^\\d+\\.\\d+\\.\\d+$" },
+            "element": { "type": "string", "pattern": "^\\d+\\.\\d+\\.\\d+$" },
+            "style": { "type": "string", "pattern": "^\\d+\\.\\d+\\.\\d+$" }
+          }
+        },
+        "notes": { "type": "string", "maxLength": 2048 }
+      }
+    }
+  }
+}
