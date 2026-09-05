@@ -5,6 +5,7 @@
 上位规范：`docs/rules/ADR-010_CONTENT_PARADIGM.md`（`CONTENT_PARADIGM_V1`，含 §4bis 八条用户裁定）
 质感标尺：`docs/design/references/REFERENCE_ANALYSIS.md`（§2 六条质量准则 + §3bis 辉光参数面）
 输入：`T2A_REPORT.md` §5 对 T2b 的输入建议、`PROTOTYPE_CATALOG_v1.md`、`ELEMENT_CATALOG_v1.md`、`STYLE_CATALOG_v1.md`、`RECIPE_V2_SCHEMA_DRAFT.md` + `recipe-v2.schema.draft.json`
+**验收状态：`ACCEPTED`（2026-09-05）**——主 agent 初审通过（覆盖对照 / 绑定 ~112 键论证 / 三件套不修订结论）；用户自行合入 `1168e2c6`；用户拍板未决见文末 §9。代码实现另走 worktree 线，交付报告命名 `T2B_IMPL_REPORT.md` 以免与本规格报告撞名。
 
 ---
 
@@ -207,4 +208,18 @@ T2b 完成后：
 3. 审 `COMPILER_BOUNDARY_V2.md` §8 的"三件套写入面不修订"结论与三条理由（与 ADR-007 §2.1/§2.2 的一致性）。
 4. 对 §6 的新增未决问题 11~16 拍板（11 与 16 影响 T2c 的产出范围，建议优先）。
 5. 对 §5 的未决 6~10 建议拍板（8 的改名影响 schema 定稿）。
+
+---
+
+## 9. 验收裁定（2026-09-05，用户拍板 + 主 agent 初审）
+
+| # | 议题 | 裁定 |
+|---|---|---|
+| 8 | `element.intensity` 命名 | **改为 `element.strength`**（代码线 schema 定稿已按此） |
+| 6/7/9/10 | T2a 遗留建议 | **采纳** T2b 报告 §5 建议（保持合并 / 认可发光职责表述 / 3D 先行 / ElementCombo 宏不单列元素） |
+| 11 | 画廊场景是否进 git | **进仓**。`Assets/VFX/Gallery/**` 是场景工具，不受产物审计约束、不在依赖白名单内；规则文档落地属代码线/T2c |
+| 12~15 | 经验校准 / unitScale / F 类双实现 / 速度差分 | **记台账不阻塞**；T2c 实测后再裁 |
+| 16 | 像素风 PX-6 体素三件套 | **改为条件谓词**（缺类不作要求）；代码线门禁按此实现 |
+
+主 agent 初审要点：①§3 覆盖对照 `—` 格均为设计性；②`COMPILER_BOUNDARY_V2` §6.3 绑定键不随内容增长论证成立；③§8 三件套不修订与 ADR-007 一致。`STYLE_CATALOG_v1.md` 曾出现换行漂移，已还原，未纳入提交。
 6. 通过后提交，并在 `OPTIMIZATION_MASTER_PLAN.md` §8 将 T2b 置 DONE、T2c 解锁；`RECIPE_V2_SCHEMA_DRAFT.md` §11 的未决 1（变体命名规范）与 2（绑定 path 语法）可标记为已由本卡解决（§2 与 `COMPILER_BOUNDARY_V2.md` §6.5）。
