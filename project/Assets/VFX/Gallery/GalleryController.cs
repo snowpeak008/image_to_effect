@@ -1,11 +1,13 @@
+#if UNITY_EDITOR
+// Whole-file editor guard: the gallery is a development-time inspection tool
+// and its scenes never enter player builds (GA-8), so the controller compiles
+// out of players entirely (A7 editor-dependency audit compliance).
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
 using VFXComposer.TechniqueFamilies;
-#if UNITY_EDITOR
 using UnityEditor;
-#endif
 
 namespace VFXComposer.Gallery
 {
@@ -222,3 +224,4 @@ namespace VFXComposer.Gallery
         }
     }
 }
+#endif
