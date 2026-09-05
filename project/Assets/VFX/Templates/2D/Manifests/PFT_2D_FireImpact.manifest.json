@@ -1,12 +1,12 @@
 {
   "manifestVersion": 1,
   "templateId": "PFT_2D_FireImpact",
-  "templateVersion": "1.0.0",
+  "templateVersion": "2.0.0",
   "kind": "impact_burst",
   "dimension": "2d",
   "assetGuid": "d9b739d87ad3e854985c47e97d196b89",
   "assetPath": "Assets/VFX/Templates/2D/Prefabs/PFT_2D_FireImpact.prefab",
-  "tags": ["fire", "stylized", "2d"],
-  "parameters": { "count": { "type": "integer", "min": 8, "max": 40, "default": 24, "binding": "impact.count" }, "speed": { "type": "float", "min": 1.5, "max": 6, "default": 3.5, "binding": "impact.speed" } },
-  "cost": { "estimatedPeakParticles": 40, "materials": 1, "trails": 0 }
+  "tags": ["fire", "realistic", "2d"],
+  "parameters": { "scale": { "type": "float", "min": .5, "max": 2.2, "default": 1, "binding": "core.scale" } },
+  "cost": { "estimatedPeakParticles": 62, "materials": 3, "trails": 0 }
 }
