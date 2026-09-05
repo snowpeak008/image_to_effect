@@ -2,7 +2,8 @@
   "name": "VFXComposer.Runtime",
   "rootNamespace": "VFXComposer",
   "references": [
-    "Unity.ugui"
+    "Unity.ugui",
+    "Unity.RenderPipelines.Universal.Runtime"
   ],
   "includePlatforms": [],
   "excludePlatforms": [],
