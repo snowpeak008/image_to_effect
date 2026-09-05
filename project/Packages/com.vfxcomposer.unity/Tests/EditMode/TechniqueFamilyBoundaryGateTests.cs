@@ -255,18 +255,182 @@ namespace VFXComposer.Tests.EditMode
             var material = new Material(shader);
             try
             {
-                // ADR-010 section 4bis-6 mandated parameter surface.
+                // ADR-010 section 4bis-6 mandated parameter surface, including
+                // the M-13 size-intensity coupling pair.
                 foreach (string prop in new[]
                 {
                     "_InnerColor", "_OuterColor", "_ColorMixPower", "_FalloffParams",
                     "_BreakupNoise", "_BreakupAngularFreq", "_BreakupSeed",
-                    "_Anisotropy", "_GlowAxisWS", "_BeatValue", "_FlickerCoupling", "_LayerIndex"
+                    "_Anisotropy", "_GlowAxisWS", "_BeatValue", "_FlickerCoupling", "_LayerIndex",
+                    "_GlowSize", "_SizeCouplingK"
                 })
                 {
                     Assert.That(material.HasProperty(prop), Is.True, prop);
                 }
             }
             finally { UnityEngine.Object.DestroyImmediate(material); }
+        }
+
+        [Test]
+        public void GlowShader_SizeCouplingCompensation_IsInTheInstructionStream()
+        {
+            // M-13 (TECHNIQUE_VARIANT_LIBRARY_v1 section 3): the compensation
+            // chain glowIntensity * pow(glowSize, k) must exist in the shader
+            // so raising glowSize never silently fades the glow.
+            string source = File.ReadAllText(ShaderRoot + "/VFX_GlowStack.shader");
+            Assert.That(source, Does.Contain("_GlowSize"));
+            Assert.That(source, Does.Match(@"pow\(max\(_GlowSize[^)]*\),\s*_SizeCouplingK\)"),
+                "M-13: pow(size, k) compensation term must be present");
+            Assert.That(source, Does.Contain("sizeCompensation"),
+                "compensation must feed the final colour, not just be declared");
+        }
+
+        [Test]
+        public void BindingKeyIds_ResolverAndDispatcher_ShareOneIdSpace()
+        {
+            // Every id the resolver can hand out must be either handled or
+            // explicitly rejected by the dispatcher — never silently misrouted
+            // through a parallel numeric convention.
+            var go = new GameObject("pb");
+            try
+            {
+                var pb = go.AddComponent<VfxParameterBlock>();
+                var rendererGo = new GameObject("r");
+                rendererGo.transform.SetParent(go.transform);
+                var renderer = rendererGo.AddComponent<MeshRenderer>();
+                var beatGo = new GameObject("beat");
+                beatGo.transform.SetParent(go.transform);
+                var beat = beatGo.AddComponent<VfxLightBeat>();
+                pb.ConfigureCustom(new[] { "p" }, new[] { 0.5f });
+                pb.ConfigureBindings(new VfxParameterBlock.BindingEntry[0], new Renderer[] { renderer });
+                pb.ConfigureLightTargets(new Component[] { beat });
+
+                string[] keys = VfxTechniqueFamilyBoundary.BindingKeys;
+                var handled = new List<string>();
+                for (int keyId = 0; keyId < keys.Length; keyId++)
+                {
+                    // Resolver and key table must agree on the dense index.
+                    Assert.That(VfxTechniqueFamilyBoundary.ResolveBindingKey(keys[keyId]), Is.EqualTo(keyId), keys[keyId]);
+                    // Family derivation must match the key prefix.
+                    VfxBindingFamily family = VfxTechniqueFamilyBoundary.GetBindingFamily(keyId);
+                    Assert.That(family, Is.Not.EqualTo(VfxBindingFamily.Unknown), keys[keyId]);
+                    Assert.That(keys[keyId], Does.StartWith(family.ToString().ToLowerInvariant() + "."), keys[keyId]);
+
+                    var entry = new VfxParameterBlock.BindingEntry
+                    {
+                        paramIndex = 0,
+                        targetIndex = 0,
+                        bindingKeyId = keyId,
+                        nameId = Shader.PropertyToID("_Progress")
+                    };
+                    bool consumed = false;
+                    Assert.DoesNotThrow(() => consumed = pb.ApplyBindingEntry(entry, 0.5f), keys[keyId]);
+                    if (consumed) handled.Add(keys[keyId]);
+                }
+                // v1 runtime scope: the mat float path + 4 light.beat handlers.
+                Assert.That(handled, Is.EquivalentTo(new[]
+                {
+                    "mat.prop.float",
+                    "light.beat.intensity", "light.beat.range",
+                    "light.beat.flickerRate", "light.beat.flickerDepth"
+                }), "handled set must be exact: anything else is rejected, not misrouted");
+
+                // Out-of-range / unknown ids are rejected, never dispatched.
+                var bogus = new VfxParameterBlock.BindingEntry { paramIndex = 0, targetIndex = 0, bindingKeyId = -1 };
+                Assert.That(pb.ApplyBindingEntry(bogus, 1f), Is.False);
+                bogus.bindingKeyId = keys.Length + 50;
+                Assert.That(pb.ApplyBindingEntry(bogus, 1f), Is.False);
+            }
+            finally { UnityEngine.Object.DestroyImmediate(go); }
+        }
+
+        [Test]
+        public void BindingDispatch_LightKey_WritesTheBeatDriver()
+        {
+            var go = new GameObject("pb");
+            try
+            {
+                var pb = go.AddComponent<VfxParameterBlock>();
+                var beatGo = new GameObject("beat");
+                beatGo.transform.SetParent(go.transform);
+                var beat = beatGo.AddComponent<VfxLightBeat>();
+                pb.ConfigureLightTargets(new Component[] { beat });
+
+                int keyId = VfxTechniqueFamilyBoundary.ResolveBindingKey("light.beat.flickerDepth");
+                Assert.That(keyId, Is.GreaterThanOrEqualTo(0));
+                var entry = new VfxParameterBlock.BindingEntry { paramIndex = 0, targetIndex = 0, bindingKeyId = keyId };
+                Assert.That(pb.ApplyBindingEntry(entry, 0.85f), Is.True);
+                Assert.That(beat.FlickerDepth, Is.EqualTo(0.85f).Within(1e-5f));
+            }
+            finally { UnityEngine.Object.DestroyImmediate(go); }
+        }
+
+        [Test]
+        public void Px6b_ConditionalPredicate_FlagsPixelLitWithoutNormalQuantize()
+        {
+            // PX-6b: only products that actually contain a Lit layer are asked
+            // for normal quantization (user decision #16). The all-unlit
+            // technique-family library is exempt; simulate a Lit material via
+            // the placeholder detection contract (_NormalQuantize property or
+            // "Lit" in the shader name) using a URP Lit shader.
+            Shader litShader = Shader.Find("Universal Render Pipeline/Lit");
+            Assert.That(litShader, Is.Not.Null, "URP Lit must exist in this project");
+            var root = new GameObject("pixel_lit_product");
+            var material = new Material(litShader);
+            try
+            {
+                // URP Lit does not declare _STYLESTAGE_PIXEL, so EnableKeyword
+                // would be dropped; the legacy shaderKeywords string array
+                // bypasses local-keyword declaration checks (what a compiled
+                // product would carry once SG_VfxLit exists).
+                material.shaderKeywords = new[] { VfxStylePreset.KeywordPixel };
+
+                var meshGo = GameObject.CreatePrimitive(PrimitiveType.Cube);
+                meshGo.transform.SetParent(root.transform);
+                meshGo.GetComponent<MeshRenderer>().sharedMaterial = material;
+
+                // Lit + pixel + no _NormalQuantize -> PX-6b violation.
+                bool ok = VfxTechniqueFamilyBoundary.ValidatePixelVoxelTrio(root, out List<string> violations);
+                Assert.That(ok, Is.False);
+                Assert.That(violations, Has.Some.Contains("PX-6b"));
+
+                // Non-pixel Lit imposes no requirement (conditional predicate).
+                material.shaderKeywords = new string[0];
+                ok = VfxTechniqueFamilyBoundary.ValidatePixelVoxelTrio(root, out violations);
+                Assert.That(ok, Is.True, "PX-6b only applies under the pixel style");
+            }
+            finally
+            {
+                UnityEngine.Object.DestroyImmediate(root);
+                UnityEngine.Object.DestroyImmediate(material);
+            }
+        }
+
+        [Test]
+        public void Px6b_ConditionalPredicate_SkipsUnlitLibraryMaterials()
+        {
+            // The shipped technique-family library is all unlit: pixel style on
+            // it must never trip PX-6b.
+            Shader shader = Shader.Find("VFXComposer/TechniqueFamilies/SdfShape");
+            Assert.That(shader, Is.Not.Null);
+            var root = new GameObject("pixel_unlit_product");
+            var material = new Material(shader);
+            try
+            {
+                material.EnableKeyword(VfxStylePreset.KeywordPixel);
+                material.SetFloat("_PixelSize", 0.0625f);
+                var meshGo = GameObject.CreatePrimitive(PrimitiveType.Quad);
+                meshGo.transform.SetParent(root.transform);
+                meshGo.GetComponent<MeshRenderer>().sharedMaterial = material;
+
+                bool ok = VfxTechniqueFamilyBoundary.ValidatePixelVoxelTrio(root, out List<string> violations);
+                Assert.That(ok, Is.True, string.Join("; ", violations));
+            }
+            finally
+            {
+                UnityEngine.Object.DestroyImmediate(root);
+                UnityEngine.Object.DestroyImmediate(material);
+            }
         }
     }
 

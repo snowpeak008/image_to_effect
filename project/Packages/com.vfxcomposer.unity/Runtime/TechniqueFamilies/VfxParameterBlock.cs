@@ -22,7 +22,8 @@ namespace VFXComposer.TechniqueFamilies
         {
             public int paramIndex;
             public int targetIndex;   // -1 = disabled layer (tier cut): no-op, interface stays identical
-            public int bindingKeyId;  // integerized three-segment key (family.target.property)
+            public int bindingKeyId;  // dense index into VfxBindingKeys.Keys (single id space with the resolver)
+            public int nameId;        // family-specific: mat.* = Shader.PropertyToID baked at compile time
             public MapKind mapKind;
             public float mapArg;
         }
@@ -96,6 +97,11 @@ namespace VFXComposer.TechniqueFamilies
         {
             bindings = table ?? new BindingEntry[0];
             rendererTargets = renderers ?? new Renderer[0];
+        }
+
+        public void ConfigureLightTargets(Component[] lights)
+        {
+            lightTargets = lights ?? new Component[0];
         }
 
         /// <summary>Resolve a custom parameter id to a stable handle (-1 = unknown). Cache the result.</summary>
@@ -173,7 +179,7 @@ namespace VFXComposer.TechniqueFamilies
                 if (entry.targetIndex < 0) continue; // disabled layer: no-op keeps the interface identical
                 if (entry.paramIndex < 0 || entry.paramIndex >= customValues.Length) continue;
                 float value = MapValue(customValues[entry.paramIndex], entry.mapKind, entry.mapArg);
-                ApplyBinding(entry, value);
+                ApplyBindingEntry(entry, value);
             }
         }
 
@@ -188,34 +194,51 @@ namespace VFXComposer.TechniqueFamilies
             }
         }
 
-        private void ApplyBinding(BindingEntry entry, float value)
+        /// <summary>
+        /// Dispatches one binding entry. bindingKeyId is the dense index into
+        /// VfxBindingKeys.Keys — the exact id ResolveBindingKey returns — and
+        /// the family is derived from the key itself, so the resolver and this
+        /// dispatcher can never disagree about what an id means. Returns true
+        /// when a handler consumed the entry; unknown/out-of-scope ids are
+        /// explicitly rejected (false), never silently misrouted.
+        /// </summary>
+        public bool ApplyBindingEntry(in BindingEntry entry, float value)
         {
-            // bindingKeyId encodes the write target category (compile-time).
-            // Family ids: 0xx = mat.self.*, 1xx = light.*, 2xx = ctrl.*.
-            if (entry.bindingKeyId < 100)
+            switch (VfxBindingKeys.GetFamily(entry.bindingKeyId))
             {
-                if (entry.targetIndex >= rendererTargets.Length) return;
-                Renderer r = rendererTargets[entry.targetIndex];
-                if (r == null) return;
-                r.GetPropertyBlock(block);
-                // Property id is baked as the low bits of the key at compile
-                // time; here the key id IS the shader property id offset table
-                // index. v1 scope: _Progress(0) / _Intensity(1) / custom via table.
-                block.SetFloat(entry.bindingKeyId == 0 ? Shader.PropertyToID("_Progress") : IntensityId, value);
-                r.SetPropertyBlock(block);
-            }
-            else if (entry.bindingKeyId < 200)
-            {
-                if (entry.targetIndex >= lightTargets.Length) return;
-                var beat = lightTargets[entry.targetIndex] as VfxLightBeat;
-                if (beat == null) return;
-                switch (entry.bindingKeyId)
+                case VfxBindingFamily.Mat:
                 {
-                    case 100: beat.Intensity = value; break;
-                    case 101: beat.Range = value; break;
-                    case 102: beat.FlickerRate = value; break;
-                    case 103: beat.FlickerDepth = value; break;
+                    string key = VfxBindingKeys.Keys[entry.bindingKeyId];
+                    if (!string.Equals(key, "mat.prop.float", StringComparison.Ordinal))
+                        return false; // v1 runtime scope: only the float MPB path; other mat keys are compile-time
+                    if (entry.targetIndex >= rendererTargets.Length) return false;
+                    Renderer r = rendererTargets[entry.targetIndex];
+                    if (r == null) return false;
+                    if (block == null) block = new MaterialPropertyBlock();
+                    r.GetPropertyBlock(block);
+                    // nameId comes from the compile-time variant manifest, never from recipe strings.
+                    block.SetFloat(entry.nameId != 0 ? entry.nameId : IntensityId, value);
+                    r.SetPropertyBlock(block);
+                    return true;
                 }
+                case VfxBindingFamily.Light:
+                {
+                    if (entry.targetIndex >= lightTargets.Length) return false;
+                    var beat = lightTargets[entry.targetIndex] as VfxLightBeat;
+                    if (beat == null) return false;
+                    switch (VfxBindingKeys.Keys[entry.bindingKeyId])
+                    {
+                        case "light.beat.intensity": beat.Intensity = value; return true;
+                        case "light.beat.range": beat.Range = value; return true;
+                        case "light.beat.flickerRate": beat.FlickerRate = value; return true;
+                        case "light.beat.flickerDepth": beat.FlickerDepth = value; return true;
+                        default: return false; // key exists in the allow-list but has no v1 runtime handler
+                    }
+                }
+                default:
+                    // gpu/cpu/mesh/ctrl handlers arrive with the T3 compiler wiring;
+                    // until then these ids are explicitly rejected, not misrouted.
+                    return false;
             }
         }
     }

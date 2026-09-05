@@ -19,6 +19,8 @@ Shader "VFXComposer/TechniqueFamilies/GlowStack"
         _Intensity("Intensity", Range(0, 4)) = 1
         _Speed("Speed", Range(0.25, 3)) = 1
         _Seed("Seed", Float) = 0
+        _GlowSize("Glow Size (radius multiple, drives coupling)", Range(1, 8)) = 1.8
+        _SizeCouplingK("Size Coupling Exponent k", Range(0, 2)) = 0.85
         _ColorMixPower("Color Mix Power", Range(0.5, 3)) = 1.4
         _FalloffParams("Falloff (x power, y steps)", Vector) = (1.5, 3, 0, 0)
         _BreakupNoise("Breakup Noise", Range(0, 1)) = 0.35
@@ -65,6 +67,8 @@ Shader "VFXComposer/TechniqueFamilies/GlowStack"
             VFX_COMMON_UNIFORMS
             half4 _InnerColor;
             half4 _OuterColor;
+            float _GlowSize;
+            float _SizeCouplingK;
             float _ColorMixPower;
             float4 _FalloffParams;
             float _BreakupNoise;
@@ -134,8 +138,15 @@ Shader "VFXComposer/TechniqueFamilies/GlowStack"
                 // only consumes _BeatValue so light and glow breathe together.
                 float beat = lerp(1.0, _BeatValue, _FlickerCoupling);
 
+                // Size-intensity coupling compensation (M-13, REFERENCE_ANALYSIS
+                // section 3bis): a larger glow quad spreads the same energy over
+                // more pixels and reads dimmer; multiply by pow(size, k) so
+                // turning glowSize up never silently fades the glow. The
+                // compiler writes the transform-scale multiple into _GlowSize.
+                float sizeCompensation = pow(max(_GlowSize, 1.0), _SizeCouplingK);
+
                 float mixT = pow(saturate(w), _ColorMixPower);
-                float3 rgb = lerp(_OuterColor.rgb, _InnerColor.rgb, mixT) * w * _Intensity * beat;
+                float3 rgb = lerp(_OuterColor.rgb, _InnerColor.rgb, mixT) * w * _Intensity * sizeCompensation * beat;
                 half4 color = half4(rgb, saturate(w));
                 return VfxApplyStyleStage(color, uv, w < 0.001 ? -1.0 : w);
             }

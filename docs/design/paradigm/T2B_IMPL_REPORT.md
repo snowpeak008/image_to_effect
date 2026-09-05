@@ -59,10 +59,10 @@
 
 | 规格 | 实现 | 差异 |
 |---|---|---|
-| 光晕 18 参数（`MATERIAL` §5.10） | shader 侧 12 属性 + 编译期 6 项（enabled/layerCount/layerRadiusRatio/layerIntensityRatio/glowShape/anisotropyAxisMode 属预制体结构与绑定来源，不是材质属性） | 与规格的"生效位置"列一致：编译期项在 §5.10 表中本就标注"编译期决定" |
+| 光晕 18 参数（`MATERIAL` §5.10） | shader 侧 14 属性（含审计后补的 `_GlowSize` / `_SizeCouplingK`）+ 编译期 6 项（enabled/layerCount/layerRadiusRatio/layerIntensityRatio/glowShape/anisotropyAxisMode 属预制体结构与绑定来源，不是材质属性） | 与规格的"生效位置"列一致；**M-13 耦合补偿已在 shader 内落地**：`sizeCompensation = pow(max(_GlowSize,1), _SizeCouplingK)` 乘进最终亮度，编译器把 transform 缩放倍数写入 `_GlowSize`（语义审计建议 #1，选路 (a)） |
 | `VfxLightBeat` 20 参数（`MESH_LIGHT` §6.2） | 19 序列化字段 + `unitScale` | `followTarget` 未实现（需原型层表支持，T2c 输入）；`beatChannel` 0~3 + `phaseOffset` + 双驱动 + `MaterialOnly` 退化 + 风格量化全齐 |
 | 控制器 v2（`COMPILER_BOUNDARY_V2` §5） | 阶段表 / sustain 安全阀 / 事件二分 / 出事件双形式 / 池化复位 9 项全实现 | 池化复位第 3 项（`VisualEffect.Reinit`）注释登记为 GPU 粒子接线时补（无 VFX Graph 包依赖）；第 5 项 Cloth 用 `GetComponentsInChildren`（编译器接线后可烘数组） |
-| 绑定三段键 ~112（§6.3） | 112 键常量表 + `ResolveBindingKey` fail-closed | 键集逐族与规格 §6.2 各表一致；处理器数组（§6.4 的 Handler 机制）留 T3（本卡交付键闭集与解析） |
+| 绑定三段键 ~112（§6.3） | 112 键单一事实源 `VfxBindingKeys`（Runtime 程序集）+ `ResolveBindingKey` fail-closed + `GetFamily`（族由键前缀派生） | 键集逐族与规格 §6.2 各表一致；**id 空间已统一**（语义审计建议 #2）：解析器与 `VfxParameterBlock.ApplyBindingEntry` 共用稠密索引，族分派查同一张表，未接线族显式拒绝（返回 false）不静默错路由；完整 Handler 数组机制（§6.4）仍留 T3 |
 | ElementPreset | `strength`（非 intensity）+ 5 色线性 HDR + 四族倾向 | 与 schema `$defs/element` 一致 |
 
 ### 2.3 谓词
@@ -76,7 +76,7 @@
 | MS-2/MS-3/MS-4/MS-5（网格确定性/通道/预算/包围盒） | 测试 `AllGenerators_AreSeedDeterministic` / `AssertMeshContract` / `AllGenerators_HonourTightVertexBudget` |
 | CP-5（禁 flipbook）/ Lights / ExternalForces | `VfxCpuParticleTemplates.Configure` 构建期强制 + 测试逐模板断言 |
 | LT-6/LT-7（闪烁非静态/像素禁阴影） | `VfxStylePreset.Validate`（LT-7）；LT-6 属产物门禁留编译器接线 |
-| PX-6（条件式，拍板 #16） | `ValidatePixelVoxelTrio`：缺类不查 + 测试跳过/命中双向 |
+| PX-6（条件式，拍板 #16） | `ValidatePixelVoxelTrio` 三分支齐备：PX-6a 网格顶点吸附 / **PX-6b Lit 法线量化**（审计后补；检测占位契约 = shader 名含 "Lit" 或声明 `_NormalQuantize`，T3 引入 `SG_VfxLit` 主图时生效——当前库全 unlit 故空真）/ PX-6c 粒子位置吸附；缺类不查 + 三分支测试跳过/命中双向 |
 | GA-2/3/4/5/8/9/10（画廊） | 场景构建器保证 + `GallerySceneGateTests` 5 条 |
 | 156 条全量 | **未全量落地**——本卡交付各族核心谓词的构造性测试 158 条；完整 156 谓词编号体系的逐条映射属 T2c 门禁扩展（见 §6-4） |
 
@@ -87,8 +87,9 @@
 1. **材质族走手写 HLSL 而非 Shader Graph 子图**（任务书预授权路线）：`.shadergraph` / `.shadersubgraph` 是 JSON 图结构，手写不可靠且无公开稳定 API；规格 §12.0 自己也承认图结构不可断言而要求 sidecar。HLSL 路线下"子图"以 include 函数库承载（`VfxCommon.hlsl` = 哈希/噪声/极坐标/色板/台阶/节拍；`VfxStyleStage.hlsl` = 风格插槽三实现），谓词直接对 shader 属性与源码断言，可查性更强。
 2. **画廊场景用 Editor 脚本确定性生成**（`GallerySceneBuilder`）而非手写 .unity YAML：场景 YAML 跨版本脆弱、审阅困难；构建器可重跑、diff 可读，且 GA-* 谓词直接对生成结果断言。
 3. **`voronoi_prefracture` 的凸胞算法**用"盒体被站点对中垂面依次半空间裁剪"，断面 `colors.a=1` 标记；这是规格 §4.17 算法要点的直接实现，凸多面体裁剪确定性稳定。
-4. **`VfxParameterBlock` 的绑定键 id 编码**：v1 范围内用整数段（<100 = 材质、100~199 = 光）承载 keyId→处理器分支；完整的 §6.4 Handler 数组机制（静态方法 + BindingContext struct）留给编译器接线（T3），本卡保证"recipe 字符串不进运行时"的键闭集与 fail-closed 解析。
+4. **`VfxParameterBlock` 的绑定键 id 编码**（语义审计建议 #2 后修订）：初版用整数段（<100 材质、100~199 光）与解析器的稠密索引两义并存，T3 接线会静默错路由。已改为单一事实源 `VfxBindingKeys`（Runtime 程序集）：keyId 恒为 `Keys[]` 稠密索引，族由键前缀派生（`GetFamily`），`ApplyBindingEntry` 按族查表分派、未接线族显式拒绝；`BindingEntry` 增 `nameId` 字段承载编译期解析的 `Shader.PropertyToID`（recipe 字符串不进运行时的纪律不变）。完整 Handler 数组机制（§6.4）仍留 T3。
 5. **Cloth / ScreenCapture 内置模块启用**：Unity 自带模块（`com.unity.modules.*`），非外部依赖，零红线冲突。
+6. **M-13 光晕耦合补偿选路 (a)——shader 内实现**（语义审计建议 #1）：M-13 谓词原文要求"shader 内 `glowIntensity * pow(glowSize, k)` 补偿项**可查**"，把补偿推给编译期/绑定层会使谓词失去断言面（登记路线 (b) 只能靠文档承诺）。故在 `VFX_GlowStack` 加 `_GlowSize`（默认 1.8，与规格 glowRadius 默认一致）与 `_SizeCouplingK`（默认 0.85，k<1 保证补偿是缓和的能量守恒近似而非过冲），`sizeCompensation` 乘进最终亮度；编译器在生成 `Glow_k` 时把几何缩放倍数同步写入 `_GlowSize`（几何与材质双写是 §5.2 "两处生效"的既有设计）。附测试断言属性存在 + `pow(max(_GlowSize,…), _SizeCouplingK)` 补偿链在指令流中。
 
 ---
 

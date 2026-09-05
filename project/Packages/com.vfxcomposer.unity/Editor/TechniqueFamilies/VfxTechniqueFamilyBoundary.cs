@@ -208,67 +208,23 @@ namespace VFXComposer.Editor.TechniqueFamilies
         // ------------------------------------------------------------ section 6: binding key allow-list
 
         /// <summary>
-        /// The three-segment binding keys (family.target.property). Data-driven
-        /// families (mat/gpu) need only a handful of keys; cpu/mesh/light/ctrl
-        /// enumerate Unity API fields. Total ~112 and content-growth-free.
+        /// The three-segment binding keys (family.target.property). Single
+        /// source of truth is <see cref="VfxBindingKeys"/> (runtime assembly)
+        /// so the compile-time resolver and the runtime dispatcher share one
+        /// id space; this alias exists for editor-side callers and tests.
         /// </summary>
-        public static readonly string[] BindingKeys =
-        {
-            // mat.* — 7 keys, data-driven (nameId resolved from the variant manifest at compile time)
-            "mat.prop.float", "mat.prop.vector", "mat.prop.color", "mat.prop.int",
-            "mat.keyword", "mat.renderer.sortingOrder", "mat.renderer.enabled",
-            // gpu.* — 9 keys
-            "gpu.exposed.float", "gpu.exposed.vector", "gpu.exposed.int", "gpu.exposed.uint",
-            "gpu.exposed.bool", "gpu.exposed.gradient", "gpu.exposed.curve",
-            "gpu.playRate", "gpu.sendEvent",
-            // cpu.* — Unity ParticleSystem API fields (~50)
-            "cpu.main.startLifetime", "cpu.main.startSpeed", "cpu.main.startSize", "cpu.main.startColor",
-            "cpu.main.startRotation", "cpu.main.gravityModifier", "cpu.main.maxParticles", "cpu.main.simulationSpeed",
-            "cpu.emission.rateOverTime", "cpu.emission.rateOverDistance", "cpu.emission.burstCount",
-            "cpu.emission.burstCycles", "cpu.emission.burstInterval",
-            "cpu.shape.radius", "cpu.shape.angle", "cpu.shape.arc", "cpu.shape.scale", "cpu.shape.randomDirectionAmount",
-            "cpu.velocity.linearX", "cpu.velocity.linearY", "cpu.velocity.linearZ",
-            "cpu.velocity.orbitalX", "cpu.velocity.orbitalY", "cpu.velocity.orbitalZ",
-            "cpu.velocity.radial", "cpu.velocity.speedModifier",
-            "cpu.limit.limit", "cpu.limit.dampen", "cpu.limit.drag",
-            "cpu.force.x", "cpu.force.y", "cpu.force.z",
-            "cpu.noise.strength", "cpu.noise.frequency", "cpu.noise.scrollSpeed", "cpu.noise.damping",
-            "cpu.color.gradient",
-            "cpu.size.curve", "cpu.size.sizeMultiplier",
-            "cpu.rotation.angularVelocity",
-            "cpu.collision.bounce", "cpu.collision.dampen", "cpu.collision.lifetimeLoss", "cpu.collision.radiusScale",
-            "cpu.trails.ratio", "cpu.trails.lifetime", "cpu.trails.widthOverTrail", "cpu.trails.colorOverLifetime",
-            "cpu.renderer.sortingOrder", "cpu.renderer.lengthScale", "cpu.renderer.velocityScale", "cpu.renderer.enabled",
-            // mesh.* — ~20 keys
-            "mesh.transform.localScale", "mesh.transform.localPosition", "mesh.transform.localRotation",
-            "mesh.renderer.enabled", "mesh.renderer.sortingOrder", "mesh.renderer.shadowCasting",
-            "mesh.trail.time", "mesh.trail.widthMultiplier", "mesh.trail.colorGradient", "mesh.trail.emitting",
-            "mesh.line.positionCount", "mesh.line.setPositions", "mesh.line.widthMultiplier", "mesh.line.colorGradient",
-            "mesh.cloth.externalAcceleration", "mesh.cloth.randomAcceleration", "mesh.cloth.damping", "mesh.cloth.stretchingStiffness",
-            "mesh.debris.breakForce", "mesh.debris.explode", "mesh.debris.gravityScale", "mesh.debris.fadeMode",
-            // light.* — 15 keys (always through VfxLightBeat, never the Light directly)
-            "light.beat.color", "light.beat.intensity", "light.beat.range", "light.beat.innerAngle", "light.beat.outerAngle",
-            "light.beat.flickerMode", "light.beat.flickerRate", "light.beat.flickerDepth", "light.beat.decayShape",
-            "light.beat.intensitySteps", "light.beat.flickerQuantize", "light.beat.beatFrameRate",
-            "light.beat.castShadows", "light.beat.enabled", "light.beat.phaseOffset",
-            // ctrl.* — 11 keys
-            "ctrl.phase.duration", "ctrl.phase.autoAdvance",
-            "ctrl.layer.offset", "ctrl.layer.duration", "ctrl.layer.enabled",
-            "ctrl.speed",
-            "ctrl.custom.float", "ctrl.custom.int", "ctrl.custom.bool", "ctrl.custom.enum", "ctrl.custom.vector3"
-        };
-
-        private static Dictionary<string, int> keyIndex;
+        public static string[] BindingKeys { get { return VfxBindingKeys.Keys; } }
 
         /// <summary>Compile-time key resolution: unknown keys are rejected (fail-closed).</summary>
         public static int ResolveBindingKey(string key)
         {
-            if (keyIndex == null)
-            {
-                keyIndex = new Dictionary<string, int>(BindingKeys.Length, StringComparer.Ordinal);
-                for (int i = 0; i < BindingKeys.Length; i++) keyIndex[BindingKeys[i]] = i;
-            }
-            return keyIndex.TryGetValue(key, out int id) ? id : -1;
+            return VfxBindingKeys.Resolve(key);
+        }
+
+        /// <summary>Family of a resolved keyId (prefix-derived, never a parallel numeric convention).</summary>
+        public static VfxBindingFamily GetBindingFamily(int keyId)
+        {
+            return VfxBindingKeys.GetFamily(keyId);
         }
 
         // ------------------------------------------------------------ PX-6 conditional predicate (user decision #16)
@@ -283,6 +239,19 @@ namespace VFXComposer.Editor.TechniqueFamilies
             violations = new List<string>();
             if (productRoot == null) return true;
 
+            // Pixel-style detection covers both carriers a compiled product can
+            // have: the declared local keyword (technique-family shaders) and
+            // the legacy shaderKeywords string list (materials whose shader does
+            // not declare the keyword yet, e.g. Lit placeholders before T3).
+            bool IsPixelStyled(Material m)
+            {
+                if (m.IsKeywordEnabled(VfxStylePreset.KeywordPixel)) return true;
+                string[] legacy = m.shaderKeywords;
+                for (int i = 0; i < legacy.Length; i++)
+                    if (string.Equals(legacy[i], VfxStylePreset.KeywordPixel, StringComparison.Ordinal)) return true;
+                return false;
+            }
+
             // Category 1: mesh-family layers (a MeshFilter with a generated mesh)
             // must have vertex grid snap — approximated by the material carrying
             // a positive _PixelSize (the vdisp grid snap parameter surface).
@@ -293,19 +262,36 @@ namespace VFXComposer.Editor.TechniqueFamilies
                 var renderer = mf.GetComponent<MeshRenderer>();
                 Material m = renderer != null ? renderer.sharedMaterial : null;
                 if (m == null) continue;
-                if (!m.IsKeywordEnabled(VfxStylePreset.KeywordPixel)) continue;
+                if (!IsPixelStyled(m)) continue;
                 if (!m.HasProperty("_PixelSize") || m.GetFloat("_PixelSize") <= 0f)
                     violations.Add($"PX-6a: mesh layer '{mf.gameObject.name}' lacks vertex grid snap (_PixelSize)");
             }
 
-            // Category 2: particle layers under pixel style must carry the
-            // position-snap parameter on their material.
+            // Category 2 (PX-6b): Lit layers under pixel style must quantize
+            // their normals. The current library is all-unlit so this branch is
+            // vacuous today; the detection is a placeholder contract ("material
+            // is Lit" = shader name contains "Lit" or declares _NormalQuantize)
+            // that becomes live when T3 introduces the SG_VfxLit master graph.
+            var meshRenderers = productRoot.GetComponentsInChildren<MeshRenderer>(true);
+            foreach (MeshRenderer mr in meshRenderers)
+            {
+                Material m = mr.sharedMaterial;
+                if (m == null || m.shader == null) continue;
+                if (!IsPixelStyled(m)) continue;
+                bool isLit = m.shader.name.Contains("Lit") || m.HasProperty("_NormalQuantize");
+                if (!isLit) continue;
+                if (!m.HasProperty("_NormalQuantize") || m.GetFloat("_NormalQuantize") <= 0f)
+                    violations.Add($"PX-6b: lit layer '{mr.gameObject.name}' lacks normal quantization (_NormalQuantize)");
+            }
+
+            // Category 3 (PX-6c): particle layers under pixel style must carry
+            // the position-snap parameter on their material.
             var particles = productRoot.GetComponentsInChildren<ParticleSystemRenderer>(true);
             foreach (ParticleSystemRenderer pr in particles)
             {
                 Material m = pr.sharedMaterial;
                 if (m == null) continue;
-                if (!m.IsKeywordEnabled(VfxStylePreset.KeywordPixel)) continue;
+                if (!IsPixelStyled(m)) continue;
                 if (!m.HasProperty("_PixelSize") || m.GetFloat("_PixelSize") <= 0f)
                     violations.Add($"PX-6c: particle layer '{pr.gameObject.name}' lacks position snap (_PixelSize)");
             }
