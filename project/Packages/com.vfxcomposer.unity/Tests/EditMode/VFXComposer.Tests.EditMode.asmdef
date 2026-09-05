@@ -3,7 +3,10 @@
   "rootNamespace": "VFXComposer.Tests.EditMode",
   "references": [
     "VFXComposer.Runtime",
-    "VFXComposer.Editor"
+    "VFXComposer.Editor",
+    "VFXComposer.Gallery",
+    "Unity.RenderPipelines.Universal.Runtime",
+    "Unity.RenderPipelines.Core.Runtime"
   ],
   "includePlatforms": [
     "Editor"
