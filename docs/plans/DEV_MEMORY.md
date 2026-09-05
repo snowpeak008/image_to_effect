@@ -1,6 +1,18 @@
 # 开发记忆与恢复指南
 
-> **在途状态快照（2026-09-03 晚 21:00，会话切换交接）**：
+> **在途状态快照（2026-09-05，T1b 交付完成待验收）**：
+> **治理模式**：主 agent 只派发/验收/合并/登记；本轮例外——T1b 两次重派子 agent 均触平台用量限制（Grok Bot usage limit，7 天重置），经用户"继续开发"指示由主 agent 直接完成开发（照实登记）。
+> **§8 T1 状态**（worktree `D:\wt\i2s-t1`，分支 `task/T1-fireball-remake`，基于 `d54c95ed`）：
+> - **T1a 已交付**（3 笔至 `b8689554`）：ADR-009 PROPOSED + `TemplateVisualQualityTests.cs` EditMode 强制 + 9 项豁免表。
+> - **T1b 已交付**（7 笔至 `0c21a077`，明细见主计划 §8 T1 卡）：4 模板多层重制（首个中断子 agent 的 WIP 资产被接手收编）、豁免表退役 2D 4 行、快照 re-export（**参数集保留既有面未收缩为 scale**——收缩连锁面过大，主 agent 裁定偏离任务书并登记）、样本 `realistic_fireball_2d` 真机构建 succeeded（strict 零审计条目）、EditMode 连锁（金样/成本 83→129/simple 档预算放宽 maxDepth 3 与 maxLocalMaterials 6/S12 封存 pin 同步）、**顺带修复 `VfxCompiler` 回滚非字节精确缺陷**（文件级备份/还原替代 CopyAsset/SaveAsPrefabAsset）。
+> - **验证终态**：EditMode 全量 688（634 过/0 失败/54 跳过）；.NET 全量 **1106 条 Release 0 失败**（基线保持）；worktree 工作区干净（除已提交内容）。
+> - **接下来**：主 agent 初审 ✓（本轮开发者即主 agent，初审并入审计）→ **双组审计**（机械=EditMode/.NET/构建复跑+allow-list 越界清单（本轮越界：`VfxCompiler.cs` 生产修复、`VfxProjectRules.json` 预算、`ProductionRulesTests`/`S12A`/`S12B`/`CompilerIntegrationTests` pin、`docs/release/STATIC_PERFORMANCE_PREFLIGHT.md`、金样快照——均已在提交信息说明理由）；语义=ADR-009 谓词与资产 YAML 对照+拟真构成审阅）→ 微调 → ADR-009 转 ACCEPTED → 合并推送 → 退役 worktree → **用户视觉复验**（主仓 `vfxc batch run batches\realistic-fireball.manifest.json` 构建样本 + 打开 Unity 看 `realistic_fireball_2d`）。
+> - **T1b-3D 排期建议**（ADR-009 §4 要求）：3D 侧 5 豁免模板与 2D 同病（FireCore 静态 MeshRenderer、四粒子模板 ColorModule 关/单层），重制工作量与 2D 相当（prefab YAML 手写多层），建议 T1 合并 + 用户视觉复验通过后作为独立 T1b-3D 卡派发，复用本轮 2D 模板的层次结构模式与谓词自查清单。
+> **主仓待清理（不变）**：`project/` 下 46 条九宫格产物漂移 + `NineGridReview/` 场景 + report.json——T1 合并后清（注意别误删 T1 模板源改动）。
+> **已知 flake**（单跑必绿）：Broker `PostAdmissionChildExit…`、Mcp `ValidatingAManifestOpensNoNetwork`、AiLocalE2E 负载 1 条；EditMode 的 `dependencyHash` 漂移按 O4 §3.7-1 还原。
+> **T1 后路径（用户裁定）**：T1 复验通过 → T2 设计流程 PRD（vfx-designer skill / IR 重估）→ T3+ 模板库扩充按用户美术方向。
+
+> **历史快照（2026-09-03 晚 21:00，会话切换交接）**：
 > **治理模式**：主 agent 只派发/验收/合并/登记，不亲自开发；子 agent 用户偏好 Opus 5 High，当前环境可用清单仅 `claude-fable-5-high`（用户已确认可用 Fable 继续）；子 agent 会中断（resume 不可用），任务书必须自足、逐单元提交，中断即重派。
 > **§8 T1 拟真火球在途**（worktree `D:\wt\i2s-t1`，分支 `task/T1-fireball-remake`，基于 `d54c95ed`）：
 > - **T1a 已交付**（3 笔提交至 `b8689554`）：ADR-009 模板视觉质量标准（PROPOSED，按 kind 谓词闭集 EB/IM/SW/MT/SP，登记 rules README）+ EditMode 强制测试 `TemplateVisualQualityTests.cs`（构造性遍历 + `ExemptTemplates` 豁免表恰等断言）。**实测矩阵**：2D 达标仅 Shockwave/FireTrail；豁免 9 项 = 2D 4 项（FireCore/Embers/FireImpact/LaunchFlash，到期 T1b）+ 3D 5 项（到期 T1b-3D，另排期）。EditMode 全量 688：633 过/1 失败（HandleProbe 环境前置，建 .NET Release 即绿）/54 跳过。
