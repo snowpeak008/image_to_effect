@@ -105,7 +105,10 @@ namespace VFXComposer.Tests.EditMode
         {
             Assert.That(new VfxCompiler().Build(Recipe()).Succeeded, Is.True);
             var before = FileHashes(VfxCompiler.GeneratedRoot);
-            const string wrongBindingManifest = "{ 'manifestVersion':1, 'templateId':'T_BadCore', 'templateVersion':'1', 'kind':'energy_body', 'dimension':'2d', 'assetGuid':'dd90f48c6171c074a07eee8b939a0a2', 'assetPath':'Assets/VFX/Templates/2D/Prefabs/PFT_2D_FireCore.prefab', 'tags':[], 'parameters':{'scale':{'type':'float','min':0.6,'max':2.4,'default':1.2,'binding':'embers.rate'}}, 'cost':{'estimatedPeakParticles':0,'materials':1,'trails':0} }";
+            // trail.time requires a TrailRenderer, which the remade FireCore deliberately lacks, so the
+            // binding still fails deterministically (the pre-T1b probe used embers.rate against a prefab
+            // that had no ParticleSystem at its root; the remade template has one).
+            const string wrongBindingManifest = "{ 'manifestVersion':1, 'templateId':'T_BadCore', 'templateVersion':'1', 'kind':'energy_body', 'dimension':'2d', 'assetGuid':'dd90f48c6171c074a07eee8b939a0a2', 'assetPath':'Assets/VFX/Templates/2D/Prefabs/PFT_2D_FireCore.prefab', 'tags':[], 'parameters':{'scale':{'type':'float','min':0.6,'max':2.4,'default':1.2,'binding':'trail.time'}}, 'cost':{'estimatedPeakParticles':0,'materials':1,'trails':0} }";
             const string wrongBindingRecipe = "{ 'recipeVersion':1, 'id':'fireball_2d', 'dimension':'2d', 'archetype':'projectile', 'targetProfile':'pc_editor', 'randomSeed':1, 'stages':[{'id':'travel','trigger':'on_launch','duration':1,'enabled':true,'modules':[{'id':'core','kind':'energy_body','templateId':'T_BadCore','parameters':{'scale':1.3},'enabled':true}]}], 'metadata':{'createdBy':'test','templateCatalogVersion':'1'} }";
             var catalog = TemplateCatalog.FromManifestJson(new[] { wrongBindingManifest.Replace('\'', '\"') });
             var failed = new VfxCompiler().Build(wrongBindingRecipe.Replace('\'', '\"'), catalog);
@@ -159,7 +162,7 @@ namespace VFXComposer.Tests.EditMode
             foreach (var id in new[] { "PFT_2D_FireCore", "PFT_2D_Embers", "PFT_2D_FireImpact", "PFT_2D_FireTrail", "PFT_2D_LaunchFlash", "PFT_2D_Shockwave" }) StringAssert.Contains("\"templateId\": \"" + id + "\"", manifest);
             // D4: dependencyHash is folded into buildHash but never serialized into the committed manifest.
             StringAssert.DoesNotContain("\"dependencyHash\":", manifest);
-            StringAssert.Contains("\"estimatedPeakParticles\": 83", manifest);
+            StringAssert.Contains("\"estimatedPeakParticles\": 129", manifest);
             StringAssert.Contains("\"materials\": 7", manifest);
             StringAssert.Contains("\"trails\": 1", manifest);
         }

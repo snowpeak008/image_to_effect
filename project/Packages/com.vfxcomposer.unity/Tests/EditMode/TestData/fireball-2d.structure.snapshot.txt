@@ -1,11 +1,17 @@
 VFX_Fireball_2D [GeneratedVfxController]
   Launch []
     LaunchFlash [ParticleSystem,ParticleSystemRenderer] {lifetime=0.12,rate=0,burst=1}
+      LaunchSparks [ParticleSystem,ParticleSystemRenderer] {lifetime=0.3,rate=0,burst=8}
   Travel []
-    Core [SpriteRenderer] {scale=1.2}
+    Core [ParticleSystem,ParticleSystemRenderer] {lifetime=0.7,rate=16,scale=1.2}
+      FlameTongues [ParticleSystem,ParticleSystemRenderer] {lifetime=0.9,rate=10}
+      HeatGlow [ParticleSystem,ParticleSystemRenderer] {lifetime=0.8,rate=6}
       Trail [TrailRenderer] {time=0.22,width=0.42}
       Embers [ParticleSystem,ParticleSystemRenderer] {lifetime=0.55,rate=18}
   Impact []
     CoreFlash [ParticleSystem,ParticleSystemRenderer] {lifetime=0.12,rate=0,burst=1}
-    Burst [ParticleSystem,ParticleSystemRenderer] {lifetime=0.24,rate=0,burst=24}
+      LaunchSparks [ParticleSystem,ParticleSystemRenderer] {lifetime=0.3,rate=0,burst=8}
+    Burst [ParticleSystem,ParticleSystemRenderer] {lifetime=0.6,rate=0,burst=24}
+      ImpactFlash [ParticleSystem,ParticleSystemRenderer] {lifetime=0.2,rate=0,burst=1}
+      EmberSpray [ParticleSystem,ParticleSystemRenderer] {lifetime=0.85,rate=0,burst=12}
     Shockwave [ParticleSystem,ParticleSystemRenderer] {lifetime=0.28,rate=0,burst=1,endSize=2.8}

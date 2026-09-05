@@ -23,8 +23,8 @@
   ],
   "simple": {
     "maxGameObjects": 10,
-    "maxDepth": 2,
-    "maxLocalMaterials": 2,
+    "maxDepth": 3,
+    "maxLocalMaterials": 6,
     "maxLocalTextures": 3
   },
   "complex": {

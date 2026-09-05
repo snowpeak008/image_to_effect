@@ -396,7 +396,14 @@ namespace VFXComposer.Editor.Build
             EnsureFolder(backupFolder);
             var backupPrefabPath = backupFolder + "/prior.prefab";
             var hadPrefab = priorPrefab != null;
-            if (hadPrefab && !AssetDatabase.CopyAsset(prefabPath, backupPrefabPath)) throw new InvalidOperationException("Could not snapshot existing managed Prefab for recovery.");
+            if (hadPrefab)
+            {
+                // File-level snapshot: AssetDatabase.CopyAsset renames the root GameObject to the backup
+                // file name ("prior"), so a rollback would restore the wrong root name. The backup is only
+                // ever consumed as bytes by the rollback below, never loaded as an asset.
+                try { File.Copy(Path.Combine(Application.dataPath, prefabPath.Substring("Assets/".Length)), Path.Combine(Application.dataPath, backupPrefabPath.Substring("Assets/".Length)), true); }
+                catch (Exception exception) { throw new InvalidOperationException("Could not snapshot existing managed Prefab for recovery: " + exception.Message, exception); }
+            }
             var priorManifest = File.Exists(manifestPath) ? File.ReadAllText(manifestPath) : null;
             var priorRulesManifest = VfxProductionRules.CaptureManifest(recipe.Id);
             var materialBackups = new List<KeyValuePair<string, string>>();
@@ -448,8 +455,16 @@ namespace VFXComposer.Editor.Build
                 foreach (var created in createdMaterials) if (AssetDatabase.LoadAssetAtPath<Material>(created) != null) AssetDatabase.DeleteAsset(created);
                 if (hadPrefab)
                 {
-                    var backup = AssetDatabase.LoadAssetAtPath<GameObject>(backupPrefabPath);
-                    if (backup != null) PrefabUtility.SaveAsPrefabAsset(backup, prefabPath);
+                    // Byte-exact restore. Re-saving the backup through SaveAsPrefabAsset re-serializes the
+                    // hierarchy and regenerates child-object fileIDs non-deterministically once a template
+                    // carries child GameObjects (T1b layered templates); a file-level copy keeps the managed
+                    // Prefab GUID (destination .meta untouched) and restores the exact prior bytes.
+                    var backupAbsolute = Path.Combine(Application.dataPath, backupPrefabPath.Substring("Assets/".Length));
+                    if (File.Exists(backupAbsolute))
+                    {
+                        File.Copy(backupAbsolute, Path.Combine(Application.dataPath, prefabPath.Substring("Assets/".Length)), true);
+                        AssetDatabase.ImportAsset(prefabPath, ImportAssetOptions.ForceUpdate);
+                    }
                 }
                 else if (AssetDatabase.LoadAssetAtPath<GameObject>(prefabPath) != null) AssetDatabase.DeleteAsset(prefabPath);
                 if (priorManifest == null) { if (File.Exists(manifestPath)) File.Delete(manifestPath); }

@@ -4,13 +4,13 @@
   "templateCatalogVersion": "1.0.0",
   "contractRevision": "1.4",
   "source": "docs/ai-workflow/template-parameters.generated.md + docs/ai-workflow/canonical-recipe.generated.json (static export of the resolved v1 TemplateCatalog, S12SlashAiExporter pattern; re-export after a catalog change)",
-  "exportedOn": "2026-08-29",
+  "exportedOn": "2026-09-04",
   "buildableArchetypes": ["projectile"],
   "buildableDimensions": ["2d"],
   "templates": [
     {
       "templateId": "PFT_2D_Embers",
-      "version": "1.0.0",
+      "version": "2.0.0",
       "kind": "secondary_particles",
       "dimension": "2d",
       "parameters": {
@@ -20,7 +20,7 @@
     },
     {
       "templateId": "PFT_2D_FireCore",
-      "version": "1.0.0",
+      "version": "2.0.0",
       "kind": "energy_body",
       "dimension": "2d",
       "parameters": {
@@ -29,7 +29,7 @@
     },
     {
       "templateId": "PFT_2D_FireImpact",
-      "version": "1.0.0",
+      "version": "2.0.0",
       "kind": "impact_burst",
       "dimension": "2d",
       "parameters": {
@@ -49,7 +49,7 @@
     },
     {
       "templateId": "PFT_2D_LaunchFlash",
-      "version": "1.0.0",
+      "version": "2.0.0",
       "kind": "impact_flash",
       "dimension": "2d",
       "parameters": {

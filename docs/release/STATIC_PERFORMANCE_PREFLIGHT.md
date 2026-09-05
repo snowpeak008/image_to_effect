@@ -6,7 +6,7 @@
 
 | Recipe | peak particles | materials | trails | total duration (s) |
 | --- | ---: | ---: | ---: | ---: |
-| fireball_2d | 83 | 7 | 1 | 1.62 |
+| fireball_2d | 129 | 7 | 1 | 1.62 |
 | fireball_3d | 83 | 8 | 1 | 1.62 |
 
 | Profile | particles | materials | trails | duration (s) | Static result |
