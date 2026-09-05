@@ -1,6 +1,13 @@
 # 开发记忆与恢复指南
 
-> **在途状态快照（2026-09-05，T1b 交付完成待验收）**：
+> **终态（2026-09-05，T1 拟真火球全关闭）**：
+> **T1 已合并推送**：合并 `84e9a34d`（快进前合并提交含双组审计 PASS 结论），master 与 origin 同步、工作区干净、`D:\wt\` 已清空（i2s-t1 退役，分支删除）。**合并态基线：.NET 全量 1106 条 Release 0 失败**；EditMode 全量 688（634 过/0 失败/54 跳过，worktree 尖端实测）。ADR-009 已转 **ACCEPTED**。九宫格遗留漂移（46 条产物+NineGridReview+report.json）已按还原纪律清理。
+> **交付摘要**：2D 火系 4 模板多层拟真重制（FireCore 三层焰/Embers 重力余烬/FireImpact 三层爆发/LaunchFlash 双层闪光，assetGuid 不变、templateVersion 2.0.0）；豁免表退役 2D 4 行（余 3D 5 行，到期卡 T1b-3D）；样本 `batches/recipes/realistic_fireball_2d.json` + `batches/realistic-fireball.manifest.json` 真机构建 succeeded（strict 审计零条目）；顺带修复 `VfxCompiler` 回滚非字节精确缺陷。参数集保留既有面（偏离原任务书的"仅 scale"，主 agent 裁定，审计判偏离方向正确）。
+> **下一步 = 用户视觉复验**：主仓跑 `apps\VFXComposer.Cli\bin\Release\net8.0\vfxc.exe batch run batches\realistic-fireball.manifest.json`（先建 Release），Unity 2022.3.62f3c1 打开 `project/`，看 `Assets/VFX/Generated/realistic_fireball_2d/VFX_realistic_fireball_2d.prefab`（发射+命中爆炸）与重建后的 `fireball_2d`（全 6 模板）。构建产物验收后按还原纪律清理。**复验通过 → T2 设计流程 PRD**（vfx-designer skill / IR 重估）→ T3+/T1b-3D 模板扩充与 3D 重制（排期建议见 ADR-009 §4 勘注）。
+> **审计遗留非阻塞项**（记台账不阻塞）：①`fireball_2d` 重建产物有重名子对象 LaunchSparks（R8007 警告，LegacyAudit 档）；②`estimatedPeakParticles` 估算口径 2D 模板间不完全统一（FireImpact 44 为样本口径）；③豁免表为模板级粒度（可选升级为谓词集粒度）；④simple 档 maxLocalMaterials 放宽为 6 属全局政策（层次化模板依据），非层次化模板同享上限。
+> **子 agent 运维（2026-09-05）**：平台曾出现 Grok Bot 用量限制（7 天重置）导致两次 T1b 派发失败——本轮由主 agent 直接开发（用户指示）；晚间派发审计子 agent 时已恢复可用。派发前先小规模试探可用性。
+
+> **历史快照（2026-09-05 白天，T1b 交付完成待验收）**：
 > **治理模式**：主 agent 只派发/验收/合并/登记；本轮例外——T1b 两次重派子 agent 均触平台用量限制（Grok Bot usage limit，7 天重置），经用户"继续开发"指示由主 agent 直接完成开发（照实登记）。
 > **§8 T1 状态**（worktree `D:\wt\i2s-t1`，分支 `task/T1-fireball-remake`，基于 `d54c95ed`）：
 > - **T1a 已交付**（3 笔至 `b8689554`）：ADR-009 PROPOSED + `TemplateVisualQualityTests.cs` EditMode 强制 + 9 项豁免表。
