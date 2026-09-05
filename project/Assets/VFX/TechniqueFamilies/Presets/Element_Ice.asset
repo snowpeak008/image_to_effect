@@ -1,0 +1,37 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7df287bcd556f8d727ab2c5bdd3bddb8, type: 3}
+  m_Name: Element_Ice
+  m_EditorClassIdentifier: 
+  elementId: ice
+  strength: 0.7
+  primary: {r: 0.45, g: 0.75, b: 1, a: 1}
+  secondary: {r: 0.7, g: 0.9, b: 1, a: 1}
+  hot: {r: 2.4, g: 3, b: 3.6, a: 1}
+  cool: {r: 0.05, g: 0.2, b: 0.45, a: 1}
+  residue: {r: 0.1, g: 0.15, b: 0.2, a: 1}
+  primaryMaterialVariant: mat_crystal_cell
+  anisotropy: {x: 1, y: 1}
+  speedMul: 0.25
+  thresholdWidth: 0.02
+  stopMultipliers: {x: 0.06, y: 0.3, z: 1, w: 2}
+  lightEnabled: 1
+  lightColor: {r: 0.7, g: 0.85, b: 1, a: 1}
+  lightIntensityMul: 0.7
+  flickerMode: 0
+  flickerRate: 0.3
+  flickerDepth: 0.1
+  decayShape: 1
+  gpuTemplate: vfx_gravity_settle
+  cpuVariant: cpu_gravity_settle
+  particleLifetime: {x: 0.8, y: 2}
+  primaryMeshGenerator: crystal_cluster

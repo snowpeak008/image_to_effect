@@ -1,0 +1,37 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7df287bcd556f8d727ab2c5bdd3bddb8, type: 3}
+  m_Name: Element_Lightning
+  m_EditorClassIdentifier: 
+  elementId: lightning
+  strength: 0.7
+  primary: {r: 0.55, g: 0.6, b: 1, a: 1}
+  secondary: {r: 0.8, g: 0.7, b: 1, a: 1}
+  hot: {r: 6, g: 6, b: 8, a: 1}
+  cool: {r: 0.1, g: 0.1, b: 0.35, a: 1}
+  residue: {r: 0.08, g: 0.08, b: 0.14, a: 1}
+  primaryMaterialVariant: mat_jagged_band
+  anisotropy: {x: 1, y: 1}
+  speedMul: 1
+  thresholdWidth: 0.005
+  stopMultipliers: {x: 0.06, y: 0.3, z: 1, w: 8}
+  lightEnabled: 1
+  lightColor: {r: 0.8, g: 0.8, b: 1, a: 1}
+  lightIntensityMul: 2
+  flickerMode: 4
+  flickerRate: 22
+  flickerDepth: 0.8
+  decayShape: 2
+  gpuTemplate: vfx_instant_rephase
+  cpuVariant: cpu_instant_rephase
+  particleLifetime: {x: 0.05, y: 0.2}
+  primaryMeshGenerator: jagged_polyline
