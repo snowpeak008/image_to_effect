@@ -32,8 +32,10 @@ namespace VFXComposer.Tests.EditMode
             var rules = VfxProjectRules.Load();
             Assert.That(rules.SchemaVersion, Is.EqualTo(1));
             Assert.That(rules.RulesVersion, Is.EqualTo("1.0-draft"));
+            // T1b: ADR-009 layered particle templates put module children at depth 3 and clone one
+            // material per renderer (up to 3 renderers per module, 2 modules per strict recipe).
             Assert.That(rules.Simple.MaxGameObjects, Is.EqualTo(10));
-            Assert.That(rules.Simple.MaxDepth, Is.EqualTo(2));
+            Assert.That(rules.Simple.MaxDepth, Is.EqualTo(3));
             Assert.That(rules.ArchetypeProfiles.Keys, Is.EquivalentTo(new[] { "projectile", "impact", "slash", "aura", "area", "beam", "trail", "shield", "spawn", "summon", "transform", "status", "environment", "screen_ui", "composite", "decal", "weapon_trail", "destruction", "lifecycle", "portal", "loot" }));
             Assert.That(VfxProjectRules.BudgetFor("area"), Is.SameAs(rules.Complex));
             Assert.That(VfxProjectRules.EnforcementFor("fireball_2d"), Is.EqualTo(VfxRulesEnforcement.LegacyAudit));

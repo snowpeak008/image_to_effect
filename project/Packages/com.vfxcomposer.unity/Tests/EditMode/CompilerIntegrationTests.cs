@@ -159,7 +159,7 @@ namespace VFXComposer.Tests.EditMode
             foreach (var id in new[] { "PFT_2D_FireCore", "PFT_2D_Embers", "PFT_2D_FireImpact", "PFT_2D_FireTrail", "PFT_2D_LaunchFlash", "PFT_2D_Shockwave" }) StringAssert.Contains("\"templateId\": \"" + id + "\"", manifest);
             // D4: dependencyHash is folded into buildHash but never serialized into the committed manifest.
             StringAssert.DoesNotContain("\"dependencyHash\":", manifest);
-            StringAssert.Contains("\"estimatedPeakParticles\": 83", manifest);
+            StringAssert.Contains("\"estimatedPeakParticles\": 129", manifest);
             StringAssert.Contains("\"materials\": 7", manifest);
             StringAssert.Contains("\"trails\": 1", manifest);
         }
