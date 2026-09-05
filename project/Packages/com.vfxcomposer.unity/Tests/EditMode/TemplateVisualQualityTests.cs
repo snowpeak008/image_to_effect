@@ -46,13 +46,9 @@ namespace VFXComposer.Tests.EditMode
         }
 
         // ADR-009 §4 exemption table. Every entry must name the follow-up card that retires it.
-        // T1b remakes the 2D fire set; the 3D fire set is scheduled by the T1b delivery report.
+        // T1b remade the 2D fire set (entries retired); the 3D fire set is scheduled by the T1b delivery report.
         private static readonly Dictionary<string, Exemption> ExemptTemplates = new Dictionary<string, Exemption>(StringComparer.Ordinal)
         {
-            { "PFT_2D_FireCore", new Exemption("EB-1/EB-2/EB-3/EB-4: bare SpriteRenderer with a static texture, no ParticleSystem, peak=0", "T1b") },
-            { "PFT_2D_Embers", new Exemption("SP-1: gravityModifier is zero and LimitVelocityOverLifetime is disabled", "T1b") },
-            { "PFT_2D_FireImpact", new Exemption("IM-2: single renderer, no secondary/flash layer", "T1b") },
-            { "PFT_2D_LaunchFlash", new Exemption("IM-2: single renderer, no secondary/flash layer", "T1b") },
             { "PFT_3D_FireCore", new Exemption("EB-1/EB-2/EB-4: static MeshRenderer body, no ParticleSystem, peak=0", "T1b-3D") },
             { "PFT_3D_Embers", new Exemption("SP-1: gravityModifier is zero and LimitVelocityOverLifetime is disabled", "T1b-3D") },
             { "PFT_3D_FireImpact", new Exemption("IM-2: single renderer, no secondary/flash layer", "T1b-3D") },
