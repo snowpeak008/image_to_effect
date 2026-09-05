@@ -3,7 +3,8 @@
   "rootNamespace": "VFXComposer.Editor",
   "references": [
     "VFXComposer.Runtime",
-    "Unity.ugui"
+    "Unity.ugui",
+    "Unity.RenderPipelines.Universal.Runtime"
   ],
   "includePlatforms": [
     "Editor"
