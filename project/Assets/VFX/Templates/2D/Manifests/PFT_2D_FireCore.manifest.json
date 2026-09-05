@@ -8,5 +8,5 @@
   "assetPath": "Assets/VFX/Templates/2D/Prefabs/PFT_2D_FireCore.prefab",
   "tags": ["fire", "realistic", "2d"],
   "parameters": { "scale": { "type": "float", "min": .6, "max": 2.4, "default": 1.2, "binding": "core.scale" } },
-  "cost": { "estimatedPeakParticles": 48, "materials": 2, "trails": 0 }
+  "cost": { "estimatedPeakParticles": 24, "materials": 1, "trails": 0 }
 }
