@@ -29,8 +29,10 @@ namespace VFXComposer.AI.Providers.Recipes;
 public static class RecipeCatalogPrevalidator
 {
     /// <summary>
-    /// The strict simple-profile budget for a projectile recipe: <c>maxLocalMaterials = 2</c> in
-    /// <c>ProjectSettings/VFXComposer/VfxProjectRules.json</c> caps the whole recipe at two modules.
+    /// The strict budget declaration for a recipe: at most two modules across all stages. This is an
+    /// independent strict-budget rule of its own (T1b raised the simple-profile
+    /// <c>maxLocalMaterials</c> in <c>VfxProjectRules.json</c> to 6 for layered templates, which is
+    /// exactly two modules of at most three renderer layers each, so the two-module cap still holds).
     /// </summary>
     public const int MaximumModules = 2;
 
