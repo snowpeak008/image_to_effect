@@ -1,6 +1,11 @@
 # 开发记忆与恢复指南
 
-> **终态（2026-09-05，T1 拟真火球全关闭）**：
+> ## 路线宪法（每次会话恢复先读，2026-09-05 起）
+> **读 `docs/rules/ADR-010_CONTENT_PARADIGM.md`。** 一句话：这是**通用美术特效生产线**，目标是覆盖尽可能多的 2D/3D 特效类型、只依赖 Unity；内容轴（原型×元素）与风格轴（首批卡通/像素）独立；特效产物 = 自包含预制体，**资产外（后处理/相机/UI/全局光）一律不碰**只开接口；**绝对禁止序列帧**；旧内容资产全部清理。**任何以单一具体特效为目标的任务卡即为偏离**——派卡前写覆盖面声明，例子只许进样片清单。T1 火球是这次纠偏的触发点，不是目标；治理/交付外壳（契约、门禁、三入口、AI 回路、测试基线 1106）不在推翻范围。
+>
+> **在途（2026-09-05 晚）**：T2a 原型目录 v1 + Recipe v2 schema 草案（docs-only，用户只审分类与数量）派发中；T2b/T2c 卡序见主计划 §8 与 ADR-010 §11。用户对 T1 的复验结论：结构层达标、美术层不满足商业方向 → 触发范式重估。
+
+> **历史快照（2026-09-05 白天，T1 拟真火球全关闭）**：
 > **T1 已合并推送**：合并 `84e9a34d`（快进前合并提交含双组审计 PASS 结论），master 与 origin 同步、工作区干净、`D:\wt\` 已清空（i2s-t1 退役，分支删除）。**合并态基线：.NET 全量 1106 条 Release 0 失败**；EditMode 全量 688（634 过/0 失败/54 跳过，worktree 尖端实测）。ADR-009 已转 **ACCEPTED**。九宫格遗留漂移（46 条产物+NineGridReview+report.json）已按还原纪律清理。
 > **交付摘要**：2D 火系 4 模板多层拟真重制（FireCore 三层焰/Embers 重力余烬/FireImpact 三层爆发/LaunchFlash 双层闪光，assetGuid 不变、templateVersion 2.0.0）；豁免表退役 2D 4 行（余 3D 5 行，到期卡 T1b-3D）；样本 `batches/recipes/realistic_fireball_2d.json` + `batches/realistic-fireball.manifest.json` 真机构建 succeeded（strict 审计零条目）；顺带修复 `VfxCompiler` 回滚非字节精确缺陷。参数集保留既有面（偏离原任务书的"仅 scale"，主 agent 裁定，审计判偏离方向正确）。
 > **下一步 = 用户视觉复验**：主仓跑 `apps\VFXComposer.Cli\bin\Release\net8.0\vfxc.exe batch run batches\realistic-fireball.manifest.json`（先建 Release），Unity 2022.3.62f3c1 打开 `project/`，看 `Assets/VFX/Generated/realistic_fireball_2d/VFX_realistic_fireball_2d.prefab`（发射+命中爆炸）与重建后的 `fireball_2d`（全 6 模板）。构建产物验收后按还原纪律清理。**复验通过 → T2 设计流程 PRD**（vfx-designer skill / IR 重估）→ T3+/T1b-3D 模板扩充与 3D 重制（排期建议见 ADR-009 §4 勘注）。

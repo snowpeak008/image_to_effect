@@ -29,10 +29,11 @@
 12. [ADR-006：AI Provider 双通道路由（Accepted）](ADR-006_AI_PROVIDER_TWO_CHANNEL_ROUTING.md)
 13. [ADR-007：受控项目写入（Accepted，v1.2）](ADR-007_CONTROLLED_PROJECT_MUTATION.md)
 14. [ADR-008：Desktop 构建闭环（PROPOSED，F8c 规范输入）](ADR-008_DESKTOP_BUILD_CLOSED_LOOP.md)
-15. [ADR-009：模板视觉质量标准（ACCEPTED，按 kind 谓词闭集 + EditMode 强制）](ADR-009_TEMPLATE_VISUAL_QUALITY.md)
-16. [机器门禁实现](50_MACHINE_ENFORCEMENT.md)
-17. [全项目开发经验库](60_ENGINEERING_LESSONS.md)
-18. [视觉迭代、证据与经验递归](70_ITERATION_EVIDENCE_AND_LEARNING.md)
+15. [ADR-009：模板视觉质量标准（ACCEPTED，按 kind 谓词闭集 + EditMode 强制；谓词族随旧 kind 闭集退役，方法论由 ADR-010 继承）](ADR-009_TEMPLATE_VISUAL_QUALITY.md)
+16. [**ADR-010：内容范式——路线宪法**（ACCEPTED，原型×元素×风格三轴 + 5 技术族闭集 + 资产边界 + 素材纪律 + 防偏离机制）](ADR-010_CONTENT_PARADIGM.md)
+17. [机器门禁实现](50_MACHINE_ENFORCEMENT.md)
+18. [全项目开发经验库](60_ENGINEERING_LESSONS.md)
+19. [视觉迭代、证据与经验递归](70_ITERATION_EVIDENCE_AND_LEARNING.md)
 
 ## 规则层级
 
