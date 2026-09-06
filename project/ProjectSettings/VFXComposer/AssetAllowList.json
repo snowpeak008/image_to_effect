@@ -1,0 +1,73 @@
+{
+  "schemaVersion": 1,
+  "note": "COMPILER_BOUNDARY_V2 §3.3. Human-maintained admission list; never written by any build flow (WL-6). The material family ships as hand-written HLSL (T2B_IMPL_REPORT §3-1), so 'shaderGraphs' rows carry the variant .shader files and 'subgraphs' rows carry the .hlsl include libraries; 'vfxTemplates' is empty until the GPU-particle .vfx templates land (T2B_IMPL_REPORT §6-1).",
+  "shaderGraphs": [
+    { "id": "VFX_BubbleField", "guid": "36b84ec188ab12be4c977f597349affe", "path": "Assets/VFX/TechniqueFamilies/Shaders/VFX_BubbleField.shader", "sha256": "d4bb813deaa8aba99b5a46658499681285478d5d44afce613c3f2a5d1d257148" },
+    { "id": "VFX_FresnelEdge", "guid": "3e8c10a0c1645c62c1b47522eee6707a", "path": "Assets/VFX/TechniqueFamilies/Shaders/VFX_FresnelEdge.shader", "sha256": "ba4ab06c94d56001f015140c705f9e65992daec24fe9799b0fd2410a65322ec2" },
+    { "id": "VFX_GlowStack", "guid": "2df64db1ba63e516db71438b89e38d90", "path": "Assets/VFX/TechniqueFamilies/Shaders/VFX_GlowStack.shader", "sha256": "3f030ce9ea6d276187363e9fa2b6de4beaf8466bac26ae1a0cec38f5308e4526" },
+    { "id": "VFX_LiquidBlobRefract", "guid": "ae49f45986f342ff91249f54ff62b581", "path": "Assets/VFX/TechniqueFamilies/Shaders/VFX_LiquidBlobRefract.shader", "sha256": "1e8a8360c3c09e2ec139f935030917797954b2dc904f7e812f52b070d43a440c" },
+    { "id": "VFX_MultiplyDarkCore", "guid": "f9f88043bc8843daa3e37d6a529c83b0", "path": "Assets/VFX/TechniqueFamilies/Shaders/VFX_MultiplyDarkCore.shader", "sha256": "be93e2b4cb37a7a2e3e4388cc128af56b1844cfb0f0d41a35893e4ea4b652365" },
+    { "id": "VFX_NoiseFbm2Layer", "guid": "d4a589a30446d1d2a0575b8845385f54", "path": "Assets/VFX/TechniqueFamilies/Shaders/VFX_NoiseFbm2Layer.shader", "sha256": "18256a70fb6e9e69080910793470966db7e428cdbd34087b77cd6a06dcf21fc1" },
+    { "id": "VFX_NoiseJagged1D", "guid": "49bc23a71c7df29b0b501a66fe89c40c", "path": "Assets/VFX/TechniqueFamilies/Shaders/VFX_NoiseJagged1D.shader", "sha256": "9e0778825d627aacd9cecf5aca64014c3f33c7662c2f81d3a4d25818e98f9021" },
+    { "id": "VFX_NoiseVoronoiCrystal", "guid": "e6a13e6b6ff100ff34e82eac2f75ed93", "path": "Assets/VFX/TechniqueFamilies/Shaders/VFX_NoiseVoronoiCrystal.shader", "sha256": "d353642aa797ae34e49567dff355d24022e2eb20eb83e503ba9f0ec560f4c0ea" },
+    { "id": "VFX_RadialSpike", "guid": "d2d69911690a71e6db01453dcd0e1ef7", "path": "Assets/VFX/TechniqueFamilies/Shaders/VFX_RadialSpike.shader", "sha256": "b5e1136fd69f82be82b7fc81c19b4c9f7156ce7bf8e4aa41635c281857131dc0" },
+    { "id": "VFX_RefractDual", "guid": "a09e6e7a54b62b198af9fe97ff72cd14", "path": "Assets/VFX/TechniqueFamilies/Shaders/VFX_RefractDual.shader", "sha256": "62d545321124cd6ebda241f01e791010a552955691ce5dfb1993d9b7b395b8c4" },
+    { "id": "VFX_RingPolar", "guid": "25ce7638514ea5a715530d96bf20bdb7", "path": "Assets/VFX/TechniqueFamilies/Shaders/VFX_RingPolar.shader", "sha256": "8585e44a04250e664cbb98d1c90a1a70006ef3a02dcb532d44406cdae7b9b9a1" },
+    { "id": "VFX_SdfCrackBranch", "guid": "3ba84dfb2584c9be20f10efae8fe002f", "path": "Assets/VFX/TechniqueFamilies/Shaders/VFX_SdfCrackBranch.shader", "sha256": "b1378ee36041e622450217547556b4f1422411e31da48d705682058122b43810" },
+    { "id": "VFX_SdfHexGrid", "guid": "595e91fdcc880f4337d45dd2c60febf1", "path": "Assets/VFX/TechniqueFamilies/Shaders/VFX_SdfHexGrid.shader", "sha256": "e5383a63c45f06802ec6c7a58e433265914d3779a80fdeec28a8feba77f1c6af" },
+    { "id": "VFX_SdfRuneRing", "guid": "72c9be9832ac08427725ee93470cd5e0", "path": "Assets/VFX/TechniqueFamilies/Shaders/VFX_SdfRuneRing.shader", "sha256": "5210b8133ae32446f5a19d6b12854122e75f81fb5ff2ff9076d170d704577a60" },
+    { "id": "VFX_SdfSacredPattern", "guid": "4cd2a2935c0f0f6a6a6a7f6a14852766", "path": "Assets/VFX/TechniqueFamilies/Shaders/VFX_SdfSacredPattern.shader", "sha256": "400c067c623653ce4811d0f3c5bc601fe1c435022b67592d5bb1b3bdd6c7d3ae" },
+    { "id": "VFX_SdfScanline", "guid": "714c6957cf9480b2dc111868631053e3", "path": "Assets/VFX/TechniqueFamilies/Shaders/VFX_SdfScanline.shader", "sha256": "8a17f145a72f46606e385ff0b15f48b2712c2b84812a87f51d51681b7ac21ca4" },
+    { "id": "VFX_SdfShape", "guid": "f49730e4f1eea37ad097fd919def3334", "path": "Assets/VFX/TechniqueFamilies/Shaders/VFX_SdfShape.shader", "sha256": "352227fce8d488c04546fb99370b545bcd26d5bb49ab4ca4e3f3e931b69fe8c5" },
+    { "id": "VFX_ShellRipple", "guid": "8c41f2a9be04d7c3ab5e91f60d23c471", "path": "Assets/VFX/TechniqueFamilies/Shaders/VFX_ShellRipple.shader", "sha256": "445be2e77326eea388e08ae582981bca06bfa9ad880b353010ad05fb3c1fcc3b" },
+    { "id": "VFX_SmoothminUnion", "guid": "b948b46bf2ce8526364509a5fde40715", "path": "Assets/VFX/TechniqueFamilies/Shaders/VFX_SmoothminUnion.shader", "sha256": "64be4e6cb26a5af4260373786baf67243f06df2217df9a6c3445017b3e158852" },
+    { "id": "VFX_ThresholdDissolve", "guid": "3150c22619c949a9172cab9ec479856c", "path": "Assets/VFX/TechniqueFamilies/Shaders/VFX_ThresholdDissolve.shader", "sha256": "a40924b5c205e3261a23750549d0a09d36a272f50a613b46137798d397105af0" },
+    { "id": "VFX_VeilSoft", "guid": "2aae85dc518034bd6088eeaefca015e6", "path": "Assets/VFX/TechniqueFamilies/Shaders/VFX_VeilSoft.shader", "sha256": "574cc6e3e66b1fe2d970619b915ca14734ac24593ed747cc2f4e0dfeeb7aa0ec" },
+    { "id": "VFX_VertexDisplace", "guid": "f147223f4a91fb7bafa32d43894d937d", "path": "Assets/VFX/TechniqueFamilies/Shaders/VFX_VertexDisplace.shader", "sha256": "9f18a14a78155845b16de5d13323023ca75a3bf10cfa790081c7b3837caebc2f" }
+  ],
+  "subgraphs": [
+    { "id": "VfxCommon", "guid": "ffadb806818cf0b347c6512ac6625542", "path": "Assets/VFX/TechniqueFamilies/Shaders/Includes/VfxCommon.hlsl", "sha256": "a6c157864a55a93b9fc663fb9fdee09f29f802a13e5670862fd6f0d153a17484" },
+    { "id": "VfxStyleStage", "guid": "1ac164ced6e944f10b3b766c34589a91", "path": "Assets/VFX/TechniqueFamilies/Shaders/Includes/VfxStyleStage.hlsl", "sha256": "4fef40186cc1c8e56bc3f05327ce6057559a612a7e7c542a98e2435f10da8feb" }
+  ],
+  "vfxTemplates": [],
+  "meshGenerators": [
+    { "id": "branch_tree", "version": "1.0.0", "codeSha256": "4ef492985e3144e567383ad66b5206c25cb918eaccea09c4f5f562dc14322f71" },
+    { "id": "catenary_band", "version": "1.0.0", "codeSha256": "4ef492985e3144e567383ad66b5206c25cb918eaccea09c4f5f562dc14322f71" },
+    { "id": "cloth_patch", "version": "1.0.0", "codeSha256": "4ef492985e3144e567383ad66b5206c25cb918eaccea09c4f5f562dc14322f71" },
+    { "id": "crystal_cluster", "version": "1.0.0", "codeSha256": "4ef492985e3144e567383ad66b5206c25cb918eaccea09c4f5f562dc14322f71" },
+    { "id": "cylinder_beam", "version": "1.0.0", "codeSha256": "4ef492985e3144e567383ad66b5206c25cb918eaccea09c4f5f562dc14322f71" },
+    { "id": "jagged_polyline", "version": "1.0.0", "codeSha256": "4ef492985e3144e567383ad66b5206c25cb918eaccea09c4f5f562dc14322f71" },
+    { "id": "parabola_tube", "version": "1.0.0", "codeSha256": "4ef492985e3144e567383ad66b5206c25cb918eaccea09c4f5f562dc14322f71" },
+    { "id": "radial_spike_array", "version": "1.0.0", "codeSha256": "4ef492985e3144e567383ad66b5206c25cb918eaccea09c4f5f562dc14322f71" },
+    { "id": "ring_torus_segments", "version": "1.0.0", "codeSha256": "4ef492985e3144e567383ad66b5206c25cb918eaccea09c4f5f562dc14322f71" },
+    { "id": "rock_chunk", "version": "1.0.0", "codeSha256": "4ef492985e3144e567383ad66b5206c25cb918eaccea09c4f5f562dc14322f71" },
+    { "id": "shell_polyhedron", "version": "1.0.0", "codeSha256": "4ef492985e3144e567383ad66b5206c25cb918eaccea09c4f5f562dc14322f71" },
+    { "id": "spiral_ribbon", "version": "1.0.0", "codeSha256": "4ef492985e3144e567383ad66b5206c25cb918eaccea09c4f5f562dc14322f71" },
+    { "id": "splash_crown", "version": "1.0.0", "codeSha256": "4ef492985e3144e567383ad66b5206c25cb918eaccea09c4f5f562dc14322f71" },
+    { "id": "subdivided_plane", "version": "1.0.0", "codeSha256": "4ef492985e3144e567383ad66b5206c25cb918eaccea09c4f5f562dc14322f71" },
+    { "id": "sweep_band", "version": "1.0.0", "codeSha256": "4ef492985e3144e567383ad66b5206c25cb918eaccea09c4f5f562dc14322f71" },
+    { "id": "tech_panel", "version": "1.0.0", "codeSha256": "4ef492985e3144e567383ad66b5206c25cb918eaccea09c4f5f562dc14322f71" },
+    { "id": "tendril_blob", "version": "1.0.0", "codeSha256": "4ef492985e3144e567383ad66b5206c25cb918eaccea09c4f5f562dc14322f71" },
+    { "id": "vine_spline", "version": "1.0.0", "codeSha256": "4ef492985e3144e567383ad66b5206c25cb918eaccea09c4f5f562dc14322f71" },
+    { "id": "voronoi_prefracture", "version": "1.0.0", "codeSha256": "4ef492985e3144e567383ad66b5206c25cb918eaccea09c4f5f562dc14322f71" },
+    { "id": "wire_polyhedron", "version": "1.0.0", "codeSha256": "4ef492985e3144e567383ad66b5206c25cb918eaccea09c4f5f562dc14322f71" }
+  ],
+  "presets": [
+    { "kind": "element", "id": "fire", "guid": "d39545571340982e18be26374dd1d408", "path": "Assets/VFX/TechniqueFamilies/Presets/Element_Fire.asset", "sha256": "886df023b218ed189055c1c9818de41d0a2b7154fcc10f04630239dca4d6c953" },
+    { "kind": "element", "id": "ice", "guid": "f88ab38241deb8bd75995e388b14b549", "path": "Assets/VFX/TechniqueFamilies/Presets/Element_Ice.asset", "sha256": "9dc8e93e7fce5f2c1090f7d1ed5d32c862a54ce071712aecd083e49b2a3157c7" },
+    { "kind": "element", "id": "lightning", "guid": "38de1fc8554284be163e3bad679043d6", "path": "Assets/VFX/TechniqueFamilies/Presets/Element_Lightning.asset", "sha256": "e497f723b416c5b3b595892ccc4e4d2430383e0a562ae853f7af01e0337a5b1a" },
+    { "kind": "element", "id": "poison", "guid": "3fa2c815d9b04e67a1c2f4b8e7d15a92", "path": "Assets/VFX/TechniqueFamilies/Presets/Element_Poison.asset", "sha256": "ca9ff8c0563bc7d869da17470fe4240f448a770d825c196409fd093085a62740" },
+    { "kind": "style", "id": "cartoon", "guid": "00f9923f326e682705b87f48c1355179", "path": "Assets/VFX/TechniqueFamilies/Presets/Style_Cartoon.asset", "sha256": "ab4ca31f53b3c624da3a3c8bca5ebc700f3b11a3cb8b9a5c761e0506350c88a5" },
+    { "kind": "style", "id": "pixel", "guid": "4dc0d75c8befb938311fc6c0064cb2b4", "path": "Assets/VFX/TechniqueFamilies/Presets/Style_Pixel.asset", "sha256": "bdccd59f565746b1ff4a66da5185319a09fc417d3ca0ee134ac013bf0f278a48" }
+  ],
+  "allowedDependencyRoots": [
+    "Assets/VFX/Shared/",
+    "Assets/VFX/Generated/",
+    "Assets/VFX/TechniqueFamilies/",
+    "Packages/com.vfxcomposer.unity/Runtime/",
+    "Packages/com.unity.render-pipelines.core/",
+    "Packages/com.unity.render-pipelines.universal/",
+    "Packages/com.unity.visualeffectgraph/",
+    "Packages/com.unity.ugui/"
+  ]
+}
