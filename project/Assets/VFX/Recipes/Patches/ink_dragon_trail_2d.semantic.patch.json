@@ -1,7 +1,0 @@
-[
-  {
-    "op": "set_content_param",
-    "path": "/content/parameters/body_width",
-    "value": 2.0
-  }
-]

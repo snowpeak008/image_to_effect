@@ -463,6 +463,19 @@ namespace VFXComposer.Tests.EditMode
         }
 
         [Test]
+        public void BuildSettings_CarryNoDanglingScenePaths()
+        {
+            // ADR-010 §9 cleanup hygiene: a Build Settings entry whose scene asset was deleted is
+            // dead configuration (the retired Preview/NextCandidate scenes once lingered here).
+            var dangling = EditorBuildSettings.scenes
+                .Where(scene => AssetDatabase.LoadAssetAtPath<SceneAsset>(scene.path) == null)
+                .Select(scene => scene.path)
+                .ToArray();
+            Assert.That(dangling, Is.Empty,
+                "EditorBuildSettings references deleted scene asset(s):\n" + string.Join("\n", dangling));
+        }
+
+        [Test]
         public void GalleryVolumeProfile_HasExactlyBloomAndTonemapping()
         {
             var profile = AssetDatabase.LoadAssetAtPath<UnityEngine.Rendering.VolumeProfile>(GalleryRoot + "/GalleryVolume.asset");

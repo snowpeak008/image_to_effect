@@ -61,7 +61,12 @@ namespace VFXComposer.Editor.Build
 
         public static TemplateCatalog LoadFormalCatalog()
         {
-            return TemplateCatalog.LoadFromDirectory(Path.Combine(Application.dataPath, "VFX", "Templates"), new UnityAssetReferenceResolver());
+            // ADR-010 §9 retired the v1 sprite template library. Until the Recipe v2 compiler lands
+            // (T3), the formal catalog is empty and every template reference fails closed (E308).
+            var directory = Path.Combine(Application.dataPath, "VFX", "Templates");
+            return Directory.Exists(directory)
+                ? TemplateCatalog.LoadFromDirectory(directory, new UnityAssetReferenceResolver())
+                : new TemplateCatalog();
         }
 
         public VfxBuildPlan DryRun(string recipeJson, TemplateCatalog catalog = null)

@@ -9,12 +9,12 @@
   "randomSeed": 20260905,
   "stages": [
     { "id": "launch", "trigger": "on_launch", "duration": 0.12, "enabled": true, "modules": [
-      { "id": "flash", "kind": "impact_flash", "templateId": "PFT_2D_LaunchFlash", "parameters": { "lifetime": 0.12, "size": 1.0 }, "enabled": true }
+      { "id": "flash", "kind": "impact_flash", "templateId": "mat_glow_stack", "parameters": { "lifetime": 0.12, "size": 1.0 }, "enabled": true }
     ] },
     { "id": "travel", "trigger": "after_previous", "duration": 1.0, "enabled": true, "modules": [
-      { "id": "core", "kind": "energy_body", "templateId": "PFT_2D_FireCore", "parameters": { "scale": 1.2 }, "enabled": true }
+      { "id": "core", "kind": "energy_body", "templateId": "mat_volume_fbm", "parameters": { "scale": 1.2 }, "enabled": true }
     ] },
     { "id": "impact", "trigger": "on_hit", "duration": 0.2, "enabled": true, "modules": [] }
   ],
-  "metadata": { "createdBy": "vfxcomposer.preset", "templateCatalogVersion": "1.0.0" }
+  "metadata": { "createdBy": "vfxcomposer.preset", "templateCatalogVersion": "2.0.0" }
 }

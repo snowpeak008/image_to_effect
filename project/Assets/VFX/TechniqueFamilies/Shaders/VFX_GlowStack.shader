@@ -31,6 +31,7 @@ Shader "VFXComposer/TechniqueFamilies/GlowStack"
         _BeatValue("Beat Value (driver-written)", Range(0, 1)) = 1
         _FlickerCoupling("Flicker Coupling", Range(0, 1)) = 0.6
         _LayerIndex("Layer Index k", Float) = 0
+        _Billboard("Billboard (1 = view-facing quad; 0 for 2D)", Float) = 1
         _ShadingSteps("Style Shading Steps", Float) = 3
         _EdgeSharpness("Style Edge Sharpness", Range(0, 1)) = 0.85
         _OutlineWidth("Style Outline Width", Float) = 0
@@ -56,7 +57,7 @@ Shader "VFXComposer/TechniqueFamilies/GlowStack"
         {
             Name "Forward"
             HLSLPROGRAM
-            #pragma vertex VfxVert
+            #pragma vertex VfxVertBillboard
             #pragma fragment Frag
             #pragma multi_compile_local _FALLOFF_GAUSSIAN _FALLOFF_EXP _FALLOFF_LINEAR _FALLOFF_STEP
             #pragma multi_compile_local _ _STYLESTAGE_CARTOON _STYLESTAGE_PIXEL
@@ -79,9 +80,39 @@ Shader "VFXComposer/TechniqueFamilies/GlowStack"
             float _BeatValue;
             float _FlickerCoupling;
             float _LayerIndex;
+            float _Billboard;
             CBUFFER_END
 
             #include "Includes/VfxStyleStage.hlsl"
+
+            // View-facing quad: rebuild the vertex in view space around the
+            // object pivot so a unit quad always faces the camera in 3D.
+            // _Billboard = 0 keeps the mesh orientation (2D sorting-plane path).
+            VfxVaryings VfxVertBillboard(VfxAttributes input)
+            {
+                VfxVaryings output;
+                if (_Billboard > 0.5)
+                {
+                    float3 pivotWS = mul(unity_ObjectToWorld, float4(0, 0, 0, 1)).xyz;
+                    float3 pivotVS = TransformWorldToView(pivotWS);
+                    float2 scale = float2(length(unity_ObjectToWorld._m00_m10_m20),
+                                          length(unity_ObjectToWorld._m01_m11_m21));
+                    float3 posVS = pivotVS + float3(input.positionOS.xy * scale, 0.0);
+                    output.positionCS = mul(GetViewToHClipMatrix(), float4(posVS, 1.0));
+                    output.positionWS = mul(UNITY_MATRIX_I_V, float4(posVS, 1.0)).xyz;
+                    output.normalWS = -GetViewForwardDir();
+                }
+                else
+                {
+                    VertexPositionInputs positionInputs = GetVertexPositionInputs(input.positionOS.xyz);
+                    output.positionCS = positionInputs.positionCS;
+                    output.positionWS = positionInputs.positionWS;
+                    output.normalWS = TransformObjectToWorldNormal(input.normalOS);
+                }
+                output.uv = input.uv;
+                output.color = input.color;
+                return output;
+            }
 
             float GlowFalloff(float d)
             {
@@ -90,8 +121,12 @@ Shader "VFXComposer/TechniqueFamilies/GlowStack"
 #elif defined(_FALLOFF_LINEAR)
                 return pow(saturate(1.0 - d), max(_FalloffParams.x, 0.01));
 #elif defined(_FALLOFF_STEP)
+                // Stepped ring stack = the QUANTIZED soft curve (cartoon "hard-edged
+                // soft light"), not linear rings: a linear 1-floor(d*s)/s keeps w=1
+                // over the whole inner band and reads as a solid disc, losing the
+                // halo energy profile entirely.
                 float s = max(_FalloffParams.y, 2.0);
-                return saturate(1.0 - floor(saturate(d) * s) / s);
+                return floor(exp(-5.5 * d * d) * s + 0.5) / s;
 #else // gaussian (default)
                 return exp(-5.5 * d * d);
 #endif

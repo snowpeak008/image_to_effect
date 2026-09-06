@@ -32,7 +32,7 @@ public sealed class RecipeRuntimeSurfaceTests
             Guid.NewGuid().ToString("N"),
             recipeJson,
             RecipeCanonicalJson.ComputeSha256(recipeJson),
-            "fireball_2d",
+            "probe_projectile_2d",
             "projectile",
             "2d",
             "mobile_medium",

@@ -1,0 +1,10 @@
+{
+  "schema": "t2c-review-metrics/v1",
+  "note": "advisory readings, not acceptance verdicts (GALLERY_SPEC 6.5)",
+  "pages": [
+    { "dimension": "3d", "pass": "bloom-on", "frame": 60, "luminanceStops": 3, "edgeSharpnessRatio": 10.9202, "anisotropyRatio": 1.1559, "glowSpill": 0.0313, "overdrawP95Estimate": 0.7102 },
+    { "dimension": "3d", "pass": "bloom-off", "frame": 60, "luminanceStops": 4, "edgeSharpnessRatio": 10.6944, "anisotropyRatio": 1.1544, "glowSpill": 0.0313, "overdrawP95Estimate": 0.7101 },
+    { "dimension": "2d", "pass": "bloom-on", "frame": 60, "luminanceStops": 4, "edgeSharpnessRatio": 16.3746, "anisotropyRatio": 1.0199, "glowSpill": 0, "overdrawP95Estimate": 0.0704 },
+    { "dimension": "2d", "pass": "bloom-off", "frame": 60, "luminanceStops": 4, "edgeSharpnessRatio": 16.1597, "anisotropyRatio": 1.0109, "glowSpill": 0, "overdrawP95Estimate": 0.0704 }
+  ]
+}

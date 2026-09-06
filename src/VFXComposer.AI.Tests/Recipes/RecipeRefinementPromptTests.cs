@@ -21,9 +21,9 @@ public sealed class RecipeRefinementPromptTests
     private const string SecondRoundFeedback = "now shorten the trail";
 
     /// <summary>The pinned size and hash of the refinement System message (system prompt + knowledge fragment).</summary>
-    private const int RefinementSystemMessageCharacters = 8903;
+    private const int RefinementSystemMessageCharacters = 8913;
 
-    private const string RefinementSystemMessagePin = "a4bc5518dcdeb53470f87e0609681b7ce2718d3cdecb6f2e6679e8f6ce08bf0b";
+    private const string RefinementSystemMessagePin = "de9fd3425b0db08ecc9aff19566fdced0fffa0110667098b1067d8f6848a536b";
 
     private static string HeadRecipeJson => RecipeCanonicalJson.Canonicalize(RecipePromptAssembler.ReferenceRecipeJson);
 
@@ -83,9 +83,9 @@ public sealed class RecipeRefinementPromptTests
     [TestMethod]
     public void TheCompositeVersionRegistersTheRefinementFragments()
     {
-        StringAssert.Contains(RecipePromptAssembler.Version, ";refine-knowledge/1");
+        StringAssert.Contains(RecipePromptAssembler.Version, ";refine-knowledge/2");
         StringAssert.Contains(RecipePromptAssembler.Version, ";refine-request/1");
-        Assert.AreEqual(1, RecipeRefineKnowledge.Default.Version, "The registry mirrors the knowledge asset version.");
+        Assert.AreEqual(2, RecipeRefineKnowledge.Default.Version, "The registry mirrors the knowledge asset version.");
     }
 
     [TestMethod]

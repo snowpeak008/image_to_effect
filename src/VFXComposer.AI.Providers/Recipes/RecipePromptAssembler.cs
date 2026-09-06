@@ -73,11 +73,11 @@ internal static class RecipePromptAssembler
           "stages": [
             { "id": "launch", "trigger": "on_launch", "duration": 0.1, "enabled": true, "modules": [] },
             { "id": "travel", "trigger": "after_previous", "duration": 1.0, "enabled": true, "modules": [
-              { "id": "core", "kind": "energy_body", "templateId": "PFT_2D_FireCore", "parameters": { "scale": 1.2 }, "enabled": true }
+              { "id": "core", "kind": "energy_body", "templateId": "mat_volume_fbm", "parameters": { "scale": 1.2 }, "enabled": true }
             ] },
             { "id": "impact", "trigger": "on_hit", "duration": 0.2, "enabled": true, "modules": [] }
           ],
-          "metadata": { "createdBy": "vfxcomposer.ai", "templateCatalogVersion": "1.0.0" }
+          "metadata": { "createdBy": "vfxcomposer.ai", "templateCatalogVersion": "2.0.0" }
         }
         """;
 

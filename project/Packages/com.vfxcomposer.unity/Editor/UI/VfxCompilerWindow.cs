@@ -5,8 +5,6 @@ using UnityEngine;
 using VFXComposer.Editor.Build;
 using VFXComposer.Editor.Domain;
 using VFXComposer.Editor.Patch;
-using VFXComposer.Editor.Preview;
-using VFXComposer.Editor.SlashV2;
 
 namespace VFXComposer.Editor.UI
 {
@@ -61,23 +59,22 @@ namespace VFXComposer.Editor.UI
 
         private void Validate()
         {
-            var plan = new S12CompilerDispatcher().Validate(recipe.text);
+            var plan = new VfxCompiler().DryRun(recipe.text);
             report = Format(plan, false);
         }
         private void DryRun()
         {
-            var plan = new S12CompilerDispatcher().DryRun(recipe.text);
+            var plan = new VfxCompiler().DryRun(recipe.text);
             report = Format(plan, true);
         }
         private void Build()
         {
-            var result = new S12CompilerDispatcher().Build(recipe.text);
+            var result = new VfxCompiler().Build(recipe.text);
             report = Format(result.Plan, true) + "\nBuild: " + (result.Succeeded ? "succeeded" : "failed or blocked") + (string.IsNullOrEmpty(result.PrefabPath) ? string.Empty : "\nPrefab: " + result.PrefabPath);
         }
         private void ValidatePatch()
         {
-            var dispatch = S12RecipeDispatcher.Parse(recipe.text);
-            var result = dispatch.RecipeVersion == 2 ? new S12SlashPatchService().Validate(recipe.text, patch.text, expectedRevision) : new VfxPatchService().Validate(recipe.text, patch.text, expectedRevision);
+            var result = new VfxPatchService().Validate(recipe.text, patch.text, expectedRevision);
             lastPatchValidation = result;
             patchInputsChanged = false;
             report = FormatPatch(result);
@@ -85,40 +82,21 @@ namespace VFXComposer.Editor.UI
         private void ApplyPatch()
         {
             var path = AssetDatabase.GetAssetPath(recipe);
-            var dispatch = S12RecipeDispatcher.Parse(recipe.text);
-            var result = dispatch.RecipeVersion == 2 ? new S12SlashPatchService().ApplyToAsset(path, patch.text, expectedRevision) : new VfxPatchService().ApplyToAsset(path, patch.text, expectedRevision);
+            var result = new VfxPatchService().ApplyToAsset(path, patch.text, expectedRevision);
             report = FormatPatch(result);
             lastPatchValidation = null;
             patchInputsChanged = true;
             if (result.IsValid) { expectedRevision = result.AfterRevision; recipe = AssetDatabase.LoadAssetAtPath<TextAsset>(path); }
         }
-        /// <summary>Dimension-safe Preview dispatch used by the UI and EditMode integration tests.</summary>
+        /// <summary>
+        /// ADR-010 §8: the paradigm gallery scenes are the acceptance surface. The old per-dimension
+        /// preview scene generators were removed with the legacy content layer.
+        /// </summary>
         public static bool PreviewSelectedRecipe(TextAsset selectedRecipe, out string status)
         {
             if (selectedRecipe == null) { status = "Preview blocked: choose a Recipe."; return false; }
-            var slashDispatch = S12RecipeDispatcher.Parse(selectedRecipe.text);
-            if (!slashDispatch.Report.HasErrors && slashDispatch.RecipeVersion == 2)
-            {
-                if (!string.Equals(slashDispatch.SlashV2.Id, "slash_3d_stylized", System.StringComparison.Ordinal)) { status = "Preview blocked: S12 v2 output currently supports only id slash_3d_stylized."; return false; }
-                try { if (!S12SlashGeneratedPreview.OpenOrCreate(selectedRecipe)) { status = "Preview cancelled before selected S12 v2 Recipe build."; return false; } }
-                catch (System.Exception exception) { status = "Preview blocked: selected S12 v2 Recipe could not build.\n" + exception.Message; return false; }
-                status = "Built selected S12 Slash v2 Recipe revision " + slashDispatch.SlashV2.Revision + " and opened its generated preview."; return true;
-            }
-            var parsed = VfxDomainParser.ParseRecipe(selectedRecipe.text);
-            if (parsed.Report.HasErrors)
-            {
-                status = "Preview blocked: Recipe dimension could not be parsed.\n" + string.Join("\n", parsed.Report.Entries.Select(entry => entry.Code + " " + entry.Path + " — " + entry.Message));
-                return false;
-            }
-            if (parsed.Value.Dimension == RecipeDimension.ThreeD)
-            {
-                S10PreviewScene.OpenOrCreate();
-                status = "Opened S10 3D perspective preview for " + parsed.Value.Id + ".";
-                return true;
-            }
-            S7PreviewScene.OpenOrCreate();
-            status = "Opened S7 2D orthographic preview for " + parsed.Value.Id + ".";
-            return true;
+            status = "Preview: open Assets/VFX/Gallery/VFXGallery_2D.unity or VFXGallery_3D.unity (ADR-010 §8 acceptance surface).";
+            return false;
         }
         private static string Format(VfxBuildPlan plan, bool includeItems)
         {

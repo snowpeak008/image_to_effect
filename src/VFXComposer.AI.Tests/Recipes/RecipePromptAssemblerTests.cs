@@ -22,7 +22,7 @@ public sealed class RecipePromptAssemblerTests
     private const string FixedPreviousOutput = "{\"recipeVersion\":1,\"revision\":1}";
 
     /// <summary>SHA-256 pins of every message the legacy template produced for the fixed inputs.</summary>
-    private const string SystemPromptPin = "7a446a865be00a37eabc0c2695cb1c393adaa242d1f1af95bbb4be8172c7a123";
+    private const string SystemPromptPin = "2e49aee41e23c90744e6e653ff34e6bd6ecbcf7ce49dd71bcc0b866c06980ce5";
 
     private const string RequestMessagePin = "3fa72e6a9829ddf410fc3f05645ca64549583b538a52fa2fc0c58c114e19e0ca";
     private const string PreviousOutputMessagePin = "8db441181876277374a21bf7ecfdf54e3f8645fb20b34e43f30a2503d39b4683";
@@ -39,7 +39,7 @@ public sealed class RecipePromptAssemblerTests
         CollectionAssert.AreEqual(
             new[]
             {
-                "System|4607|" + SystemPromptPin,
+                "System|4609|" + SystemPromptPin,
                 "User|91|" + RequestMessagePin,
             },
             messages.Select(Pin).ToArray());
@@ -56,7 +56,7 @@ public sealed class RecipePromptAssemblerTests
         CollectionAssert.AreEqual(
             new[]
             {
-                "System|4607|" + SystemPromptPin,
+                "System|4609|" + SystemPromptPin,
                 "User|91|" + RequestMessagePin,
                 "Assistant|32|" + PreviousOutputMessagePin,
                 "User|436|" + RepairMessagePin,
@@ -83,7 +83,7 @@ public sealed class RecipePromptAssemblerTests
         CollectionAssert.AreEqual(
             new[]
             {
-                "System|4607|" + SystemPromptPin,
+                "System|4609|" + SystemPromptPin,
                 "User|91|" + RequestMessagePin,
                 "User|4009|" + TruncatedRepairMessagePin,
             },
@@ -254,7 +254,7 @@ public sealed class RecipePromptAssemblerTests
         var version = RecipePromptAssembler.Version;
 
         Assert.AreEqual(
-            "vfxcomposer.ai.recipe-prompt-assembler/1;system/1;contract/1;redline/1;catalog/1;reference/1;request/1;previous-output/1;repair/1;refine-knowledge/1;refine-request/1",
+            "vfxcomposer.ai.recipe-prompt-assembler/1;system/1;contract/1;redline/1;catalog/1;reference/1;request/1;previous-output/1;repair/1;refine-knowledge/2;refine-request/1",
             version);
         Assert.IsTrue(version.Length <= 256, "The draft record bounds PromptTemplateVersion as short text.");
     }
@@ -267,7 +267,7 @@ public sealed class RecipePromptAssemblerTests
             Guid.NewGuid().ToString("N"),
             recipeJson,
             RecipeCanonicalJson.ComputeSha256(recipeJson),
-            "fireball_2d",
+            "probe_projectile_2d",
             "projectile",
             "2d",
             "mobile_medium",

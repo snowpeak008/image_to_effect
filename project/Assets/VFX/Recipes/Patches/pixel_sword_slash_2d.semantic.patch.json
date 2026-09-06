@@ -1,7 +1,0 @@
-[
-  {
-    "op": "set_content_param",
-    "path": "/content/parameters/arc_frames",
-    "value": 4
-  }
-]

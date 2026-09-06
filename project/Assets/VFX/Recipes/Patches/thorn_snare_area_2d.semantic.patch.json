@@ -1,7 +1,0 @@
-[
-  {
-    "op": "set_content_param",
-    "path": "/content/parameters/pulse_interval",
-    "value": 5.35
-  }
-]

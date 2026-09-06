@@ -31,7 +31,7 @@ public sealed class RetainedHeadValidationTests
             {
                 ["id"] = "trail",
                 ["kind"] = "motion_trail",
-                ["templateId"] = "PFT_2D_FireTrail",
+                ["templateId"] = "mesh_sweep_band",
                 ["parameters"] = new JsonObject { ["time"] = 0.22, ["width"] = 0.42 },
                 ["enabled"] = true,
             });
@@ -39,7 +39,7 @@ public sealed class RetainedHeadValidationTests
             {
                 ["id"] = "burst",
                 ["kind"] = "impact_burst",
-                ["templateId"] = "PFT_2D_FireImpact",
+                ["templateId"] = "cpu_burst_radial",
                 ["parameters"] = new JsonObject { ["count"] = 24, ["speed"] = 3.5 },
                 ["enabled"] = true,
             });

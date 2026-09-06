@@ -91,7 +91,7 @@ public sealed class ParameterPanelTests
     [TestMethod]
     public void AnOutOfRangeEditIsRefusedWithPathAndRangeAndLandsNothing()
     {
-        // AC-7: PFT_2D_FireCore.scale is declared in [0.6, 2.4]; 3.0 must be refused, not clamped to 2.4.
+        // AC-7: mat_volume_fbm.scale is declared in [0.6, 2.4]; 3.0 must be refused, not clamped to 2.4.
         var runtime = CreateRuntime();
         var viewModel = CreateViewModel(runtime);
         viewModel.ApplyPresetCommand.Execute(FireBoltCard(viewModel));
@@ -352,7 +352,7 @@ public sealed class ParameterPanelTests
             {
                 ["id"] = "trail",
                 ["kind"] = "motion_trail",
-                ["templateId"] = "PFT_2D_FireTrail",
+                ["templateId"] = "mesh_sweep_band",
                 ["parameters"] = new System.Text.Json.Nodes.JsonObject { ["time"] = 0.22, ["width"] = 0.42 },
                 ["enabled"] = true,
             });
@@ -360,7 +360,7 @@ public sealed class ParameterPanelTests
             {
                 ["id"] = "burst",
                 ["kind"] = "impact_burst",
-                ["templateId"] = "PFT_2D_FireImpact",
+                ["templateId"] = "cpu_burst_radial",
                 ["parameters"] = new System.Text.Json.Nodes.JsonObject { ["count"] = 24, ["speed"] = 3.5 },
                 ["enabled"] = true,
             });
@@ -406,7 +406,7 @@ public sealed class ParameterPanelTests
         Assert.AreNotEqual(englishHint, ScaleRow(viewModel).BoundsHint);
         StringAssert.Contains(ScaleRow(viewModel).BoundsHint, "[0.6, 2.4]", "The range literal is a carrier and stays verbatim.");
         Assert.AreNotEqual(englishHeader, viewModel.ParameterPanel.Modules[0].Header);
-        StringAssert.Contains(viewModel.ParameterPanel.Modules[0].Header, "PFT_2D_FireCore");
+        StringAssert.Contains(viewModel.ParameterPanel.Modules[0].Header, "mat_volume_fbm");
         Assert.AreNotEqual(englishReport, viewModel.ParameterPanel.IssueReport);
         StringAssert.Contains(
             viewModel.ParameterPanel.IssueReport,
