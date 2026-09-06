@@ -81,6 +81,39 @@ namespace VFXComposer.Tests.EditMode
         }
 
         [Test]
+        public void TheSummaryCountsEqualThePerRowStatusCounts()
+        {
+            var text = LedgerText();
+
+            // Per-row counts: the status cell is the last cell of a predicate row and must be one of
+            // the three enum values; range rows (e.g. "GP-2 ~ GP-9") count by their expanded id span.
+            var perStatus = new Dictionary<string, int> { ["已实现"] = 0, ["T3待做"] = 0, ["条件豁免"] = 0 };
+            foreach (Match match in Regex.Matches(text, @"^\|\s*([A-Z]{2})-(\d+)(?:\s*~\s*(?:[A-Z]{2}-)?(\d+))?\s*\|(.*)\|\s*$", RegexOptions.Multiline))
+            {
+                var cells = match.Groups[4].Value.Split('|');
+                var status = cells[cells.Length - 1].Trim();
+                if (!perStatus.ContainsKey(status)) continue; // §12/§13 tables carry non-status columns.
+                var first = int.Parse(match.Groups[2].Value);
+                var last = match.Groups[3].Success ? int.Parse(match.Groups[3].Value) : first;
+                perStatus[status] += last - first + 1;
+            }
+
+            Assert.That(perStatus.Values.Sum(), Is.EqualTo(156), "Every predicate row must carry one of the three enum status values.");
+
+            // Summary rows: "| <label> | <count> |" in §0. The label leads with the enum value.
+            var summary = new Dictionary<string, int>();
+            foreach (Match match in Regex.Matches(text, @"^\|\s*(已实现|T3待做|条件豁免)[^|]*\|\s*(\d+)\s*\|\s*$", RegexOptions.Multiline))
+                summary[match.Groups[1].Value] = int.Parse(match.Groups[2].Value);
+
+            foreach (var status in perStatus.Keys)
+            {
+                Assert.That(summary.ContainsKey(status), Is.True, "The §0 summary is missing the status row: " + status);
+                Assert.That(summary[status], Is.EqualTo(perStatus[status]),
+                    "§0 summary drifted from the per-row counts for '" + status + "' (summary " + summary[status] + " vs rows " + perStatus[status] + ").");
+            }
+        }
+
+        [Test]
         public void EveryReferencedEditModeTestNameReallyExists()
         {
             var text = LedgerText();

@@ -150,7 +150,7 @@ EditMode 删 77 文件（含 `TemplateVisualQualityTests`+其豁免表、全部 
 | 绝对禁止序列帧 | **通过**。删除面：Slash 序列帧纹理随模板库清零。新增面：`VFX_LiquidBlobRefract` 零 Texture 属性（`ShaderLibrary_ZeroTextureSamplingProperties` 覆盖）；样片门禁 `Sample_NoFlipbook_NoTextureSampling` 持续在库 |
 | 资产外不碰 | **通过**。本批零资产外写入；画廊 Bloom 属场景工具（拍板 #11），Gallery 不在依赖根（GA-9 在库） |
 | 不以单一特效为目标 | **通过**。D/E/F 无新样片；新增变体按形态能力命名（`LiquidBlobRefract`）；具体组合名仅在判定页与本报告 |
-| 只依赖 Unity + 既有 feed，不引新包 | **通过**。零 manifest 变更；.NET 零新依赖 |
+| 只依赖 Unity + 既有 feed，不引新包 | **通过**。单元 A（`a07ec32c`）新增 `com.unity.modules.physics2d: 1.0.0`（Unity **内置模块**，source: builtin，2D 债务碎片的 Rigidbody2D 需要；lock 文件同步）——与 T2b 启用 cloth/screencapture 同性质，零外部依赖、零 registry 包；D/E/F 单元零 manifest 变更；.NET 零新依赖 |
 | 删除与替代同批闭合 | **通过**。单元 D 一个提交内完成删除+替代+双绿；任何时刻全量不处于"无替代物的红"（删除轮次间以编译检查+全量验证） |
 | 禁写主仓 / 未 push / 不碰 master | **通过**。全部提交在 worktree 分支 `task/T2c-paradigm-samples`，未 push |
 
