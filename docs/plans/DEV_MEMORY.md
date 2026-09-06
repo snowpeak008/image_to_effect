@@ -3,7 +3,12 @@
 > ## 路线宪法（每次会话恢复先读，2026-09-05 起）
 > **读 `docs/rules/ADR-010_CONTENT_PARADIGM.md`。** 一句话：这是**通用美术特效生产线**，目标是覆盖尽可能多的 2D/3D 特效类型、只依赖 Unity；内容轴（原型×元素）与风格轴（首批卡通/像素）独立；特效产物 = 自包含预制体，**资产外（后处理/相机/UI/全局光）一律不碰**只开接口；**绝对禁止序列帧**；旧内容资产全部清理。**任何以单一具体特效为目标的任务卡即为偏离**——派卡前写覆盖面声明，例子只许进样片清单。T1 火球是这次纠偏的触发点，不是目标；治理/交付外壳（契约、门禁、三入口、AI 回路、测试基线 1106）不在推翻范围。
 >
-> **在途状态快照（2026-09-06 傍晚，T2c 全关闭，待用户九格判定）**：
+> **在途状态快照（2026-09-06 晚，用户九格判定 FAIL，T2cv 视觉返工在途）**：
+> **用户裁定：九格 FAIL**（原话"就不是一个合格的特效……做出来的都是垃圾"）。主 agent 亲眼对比 contact-sheet 与参考图后确认裁定成立。已定位三个技术族级视觉缺陷：①GlowStack/VeilSoft 雾幕层渲染成不透明大色块糊屏（疑卡通量化把衰减压成实心台阶）②SdfCrackBranch 雷电裂纹全黑（HDR 发光路未生效）③整体发灰、四级亮度台阶在像素上没拉开。结构层（穹顶/涟漪/逐跳/消散/接口）用户未否定。
+> **验收流程缺陷复盘（已立规矩）**：T2c 全链（测试→数值自评→双组审计→合并）没有任何一环真正看过渲染像素——数值代理全绿但肉眼不合格。**新硬规矩：内容卡合并前主 agent 必须亲眼读渲染帧并与参考图并排对比，不过关即打回，不送用户验收。**
+> **T2cv 已派**（`6bae5810` Fable 5，worktree `D:\wt\i2s-t2cv` 基于 `8f46de41`）：V1 雾幕修复/V2 裂纹发光/V3 亮度分级+质感/V4 重建 18 样片+新 contact-sheet 入库 `t2cv-review/`/V5 报告含逐轮看图迭代记录。任务书强制"改→截帧→子 agent 自己读图自评→再改"循环，修复限定技术族/构造器通用面（禁逐格特判）。完成后主 agent 亲眼看图验收，过关才送用户复判。
+> **另**：画廊页序缺陷已修复推送 `8f46de41`（用户 Play 一片空的根因=默认页是空的 none 结构页；判定页已设为 pages[0]）。
+>> **在途状态快照（2026-09-06 傍晚，T2c 全关闭，待用户九格判定）**：
 > **T2c 已合并推送 `fba3f762`**：18 范式样片（3 原型×3 元素×cartoon×2 维度，`VfxSampleAssembler` 通用输入面）+ 画廊判定页 + contact-sheet（`docs/design/paradigm/t2c-review/`）+ **旧范式资产清零**（Templates/旧 Generated 254 目录/Recipes/Preview/BuildManifests 293/旧代码与测试；保留 VfxCompiler 回滚、W24 recorder、S5 gate、S6 worker；v1 管线空目录 E308 fail-closed）+ AI.Providers 快照 re-export 2.0.0（v1 形状投影，AI 回路改造缺口已登记）+ AllowList/156 谓词登记表（78/75/3）/C_over 校准。双组审计 PASS-with-remarks 零阻塞，3 条建议已微调（`dcfa968e`）。worktree i2s-t2c 已退役。
 > **新基线：EditMode 572（572 过/0 失败/0 跳过）；.NET 1106 Release 0 失败**。跑全量前仍先建 JobExecutorLockHost；已知 flake 不变。
 > **下一步 = 用户九格判定（ADR-010 §8）**：Unity 打开 `Assets/VFX/Gallery/VFXGallery_3D.unity` / `VFXGallery_2D.unity` 点 Play（行=shield/chain_link/dissolve_out，列=ice/lightning/poison；方向键翻页/空格重播/数字键单格/B 键 Bloom 开关）；不进 Unity 可先看 `docs/design/paradigm/t2c-review/contact-sheet_{3d,2d}_verdict.png`。**判定提醒（语义审计）**：2D 静帧各向异性弱（1.02）属已登记弱项，2D 维度请以 Play 运动中的节拍表现为准，勿以静帧单独否决。**通过 → T3 技术族逐族落地**（输入清单在 T2C_REPORT §9：GPU .vfx 引包属依赖裁定、109 谓词、材质 8 变体 P1P2、followTarget、2D 各向异性打磨、F 类 UI 变体；**另加语义审计建议级遗留**：R1 构造器内 5 处按元素 id 的 switch 表应迁入元素预设/目录数据——13 元素铺开的前置项；R4 RF-1 给 LiquidBlobRefract 补路线级专断言；R5 生成器 AllowList codeSha256 从文件级细化到逐生成器；43 条"已实现(样片面)"谓词在编译器 v2 产物面落地时升级为产物断言；PlayMode 截帧套件在 T3 首轮连跑一次确认 D 删除无隐性破坏）→ T4 三轴铺开 → AI 回路改造。不通过 → 按批评面定向返工（构造器与技术族是通用面，返工局部化）。
