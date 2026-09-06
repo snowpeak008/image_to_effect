@@ -87,29 +87,33 @@ namespace VFXComposer.Gallery.Editor
             SerializedProperty pages = so.FindProperty("pages");
             pages.arraySize = 2;
 
-            // Page 1: structure page — element:none neutral products, one row of
-            // archetypes to be filled as archetype coverage grows (holes are normal).
+            // Page 1 (pages[0]): paradigm verdict page (ADR-010 section 8
+            // user-judgement face): the T2c sample grid — 3 archetypes x 3
+            // elements x cartoon. It must be the page Play lands on: the
+            // structure page's none-neutral prefabs only arrive with T3, so
+            // leading with it showed an empty gallery (user acceptance defect).
             SerializedProperty p0 = pages.GetArrayElementAtIndex(0);
-            p0.FindPropertyRelative("title").stringValue = "结构页（element:none 中性）";
+            p0.FindPropertyRelative("title").stringValue = "范式判定页（原型×元素，cartoon）";
             p0.FindPropertyRelative("mode").enumValueIndex = (int)GalleryPageMode.Matrix3x3;
             p0.FindPropertyRelative("rowAxis").enumValueIndex = (int)GalleryAxis.Archetype;
             p0.FindPropertyRelative("colAxis").enumValueIndex = (int)GalleryAxis.Element;
             SetStringArray(p0.FindPropertyRelative("rowValues"), "shield", "chain_link", "dissolve_out");
-            SetStringArray(p0.FindPropertyRelative("colValues"), "none", "none", "none");
-            p0.FindPropertyRelative("fixedElement").stringValue = "none";
-            p0.FindPropertyRelative("fixedStyle").stringValue = "none";
+            SetStringArray(p0.FindPropertyRelative("colValues"), "ice", "lightning", "poison");
+            p0.FindPropertyRelative("fixedElement").stringValue = string.Empty;
+            p0.FindPropertyRelative("fixedStyle").stringValue = "cartoon";
             p0.FindPropertyRelative("fixedTier").stringValue = "PM";
 
-            // Page 2: paradigm verdict page (ADR-010 section 8 user-judgement
-            // face): the T2c sample grid — 3 archetypes x 3 elements x cartoon.
+            // Page 2 (pages[1]): structure page — element:none neutral products,
+            // to be filled as archetype coverage grows with T3 (holes are normal).
             SerializedProperty p1 = pages.GetArrayElementAtIndex(1);
-            p1.FindPropertyRelative("title").stringValue = "范式判定页（原型×元素，cartoon）";
+            p1.FindPropertyRelative("title").stringValue = "结构页（element:none 中性）——T3 生成，当前为空";
             p1.FindPropertyRelative("mode").enumValueIndex = (int)GalleryPageMode.Matrix3x3;
             p1.FindPropertyRelative("rowAxis").enumValueIndex = (int)GalleryAxis.Archetype;
             p1.FindPropertyRelative("colAxis").enumValueIndex = (int)GalleryAxis.Element;
             SetStringArray(p1.FindPropertyRelative("rowValues"), "shield", "chain_link", "dissolve_out");
-            SetStringArray(p1.FindPropertyRelative("colValues"), "ice", "lightning", "poison");
-            p1.FindPropertyRelative("fixedStyle").stringValue = "cartoon";
+            SetStringArray(p1.FindPropertyRelative("colValues"), "none", "none", "none");
+            p1.FindPropertyRelative("fixedElement").stringValue = "none";
+            p1.FindPropertyRelative("fixedStyle").stringValue = "none";
             p1.FindPropertyRelative("fixedTier").stringValue = "PM";
 
             so.ApplyModifiedPropertiesWithoutUndo();

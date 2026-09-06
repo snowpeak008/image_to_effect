@@ -124,7 +124,7 @@ EditMode 删 77 文件（含 `TemplateVisualQualityTests`+其豁免表、全部 
 ## 8. 用户九格判定指引（ADR-010 §8）
 
 1. **打开场景**：`Assets/VFX/Gallery/VFXGallery_3D.unity`（透视相机）与 `VFXGallery_2D.unity`（正交相机）——两个独立场景，各自点 Play 即开始。
-2. **判定页**：Play 后默认页即范式判定页（页资产 `GalleryPages_3D.asset` / `GalleryPages_2D.asset`）：**行 = shield / chain_link / dissolve_out，列 = ice / lightning / poison**，风格 cartoon、档位 PM。左右方向键翻页，空格全格重播，数字键 1~9 单格重播，0 全停。
+2. **判定页**：Play 后默认页即范式判定页（pages[0]，页资产 `GalleryPages_3D.asset` / `GalleryPages_2D.asset`）：**行 = shield / chain_link / dissolve_out，列 = ice / lightning / poison**，风格 cartoon、档位 PM。第 2 页为结构页（element:none 中性，其预制体 T3 生成，**当前为空**——标题已注明）。左右方向键翻页，空格全格重播，数字键 1~9 单格重播，0 全停。
 3. **Bloom 开关**：Play 中按 **B** 键切换场景 Volume 的 Bloom（开 = 完整观感，关 = 资产裸质量；ADR-010 §4bis-6 判定面）。
 4. **contact-sheet**（不进 Unity 也可初判）：`docs/design/paradigm/t2c-review/contact-sheet_3d_verdict.png` 与 `contact-sheet_2d_verdict.png`——每张 7 节拍帧 × 上行 Bloom 开 / 下行 Bloom 关 + 底部参考图标尺条；辅助指标 `metrics.json`。
 

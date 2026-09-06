@@ -73,7 +73,7 @@ namespace VFXComposer.Tests.PlayMode
                     if (light.type == LightType.Directional) light.enabled = false;
                 Transform grid = roots.Select(r => r.transform.Find("GridLines")).FirstOrDefault(t => t != null);
                 if (grid != null) grid.gameObject.SetActive(false);
-                controller.LoadPage(1); // paradigm verdict page
+                controller.LoadPage(0); // paradigm verdict page (pages[0] since the acceptance fix)
                 yield return null;
 
                 UnityEngine.Rendering.Universal.Bloom bloom = null;

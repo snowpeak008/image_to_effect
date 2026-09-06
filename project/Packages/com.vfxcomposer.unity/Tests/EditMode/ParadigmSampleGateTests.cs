@@ -284,7 +284,9 @@ namespace VFXComposer.Tests.EditMode
                     "Assets/VFX/Gallery/GalleryPages_" + dimension.ToUpperInvariant() + ".asset");
                 Assert.That(pageSet, Is.Not.Null);
                 Assert.That(pageSet.PrefabRootPath, Is.EqualTo("Assets/VFX/Generated/" + dimension + "/"));
-                // Verdict page (index 1): all nine cells must resolve to checked-in prefabs.
+                // Verdict page is pages[0] (user acceptance: Play must land on the nine-grid
+                // verdict, not the empty structure page whose none-neutral prefabs arrive with T3);
+                // all nine cells must resolve to checked-in prefabs.
                 var controllerGo = new GameObject("resolver");
                 try
                 {
@@ -294,7 +296,7 @@ namespace VFXComposer.Tests.EditMode
                     so.ApplyModifiedPropertiesWithoutUndo();
                     for (int cell = 0; cell < 9; cell++)
                     {
-                        string path = controller.ResolveCellPrefabPath(pageSet.Pages[1], cell);
+                        string path = controller.ResolveCellPrefabPath(pageSet.Pages[0], cell);
                         Assert.That(path, Is.Not.Null.And.Not.Empty, dimension + " cell " + cell);
                         Assert.That(AssetDatabase.LoadAssetAtPath<GameObject>(path), Is.Not.Null,
                             dimension + " verdict cell " + cell + " must resolve: " + path);
