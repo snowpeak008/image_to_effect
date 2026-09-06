@@ -193,16 +193,140 @@ namespace VFXComposer.Editor.TechniqueFamilies
                 if (mf.sharedMesh != null)
                     report.MaxLayerVertexCount = Mathf.Max(report.MaxLayerVertexCount, mf.sharedMesh.vertexCount);
 
-            // Overdraw estimate: transparent renderer count as the conservative floor.
-            var renderers = productRoot.GetComponentsInChildren<Renderer>(true);
-            int transparent = 0;
-            foreach (Renderer r in renderers)
+            report.OverdrawEstimate = EstimateOverdraw(productRoot);
+            return report;
+        }
+
+        /// <summary>
+        /// C_over static estimate per spec section 4.4: project every transparent
+        /// layer's local-space bounds onto the three principal planes (XY only
+        /// for products without depth), rasterize each plane at 32x32 over the
+        /// union bounds, count covering layers per cell, and take the 95th
+        /// percentile of the busiest plane (never the max: bounding-box corner
+        /// gaps produce spurious extremes). Particle bounds inflate by emitter
+        /// shape + max speed x max lifetime. Calibrated against the 18 paradigm
+        /// samples (T2c unit E, ledger #12).
+        /// </summary>
+        public static int EstimateOverdraw(GameObject productRoot)
+        {
+            const int gridSize = 32;
+            var boxes = new List<Bounds>();
+            Transform rootTransform = productRoot.transform;
+
+            // Voronoi-prefracture fragments partition space by construction:
+            // per fragment they never overlap, but their AABBs all cross the
+            // partition centre. Counting each AABB would systematically
+            // overstate C_over, so one fragment set (renderers that carry a
+            // rigidbody, grouped by parent) contributes a single union box.
+            var fragmentUnions = new Dictionary<Transform, Bounds>();
+            var fragmentSeen = new HashSet<Transform>();
+
+            foreach (Renderer r in productRoot.GetComponentsInChildren<Renderer>(true))
             {
                 Material m = r.sharedMaterial;
-                if (m != null && m.renderQueue >= 2500) transparent++;
+                if (m == null || m.renderQueue < 2500) continue;
+                Bounds local;
+                var ps = r.GetComponent<ParticleSystem>();
+                if (ps != null)
+                {
+                    local = ParticleBoundsEstimate(ps);
+                }
+                else
+                {
+                    var mf = r.GetComponent<MeshFilter>();
+                    Mesh mesh = mf != null ? mf.sharedMesh : null;
+                    local = mesh != null ? mesh.bounds : new Bounds(Vector3.zero, Vector3.one);
+                }
+                // Into product root space: lossyScale is identity at edit time for
+                // prefab roots, so compose the local TRS chain manually.
+                Transform t = r.transform;
+                Vector3 center = rootTransform.InverseTransformPoint(t.TransformPoint(local.center));
+                Vector3 size = Vector3.Scale(local.size, WorldScaleWithin(t, rootTransform));
+                var box = new Bounds(center, new Vector3(Mathf.Abs(size.x), Mathf.Abs(size.y), Mathf.Abs(size.z)));
+
+                bool isFragment = (r.GetComponent<Rigidbody>() != null || r.GetComponent<Rigidbody2D>() != null)
+                                  && t.parent != null;
+                if (isFragment)
+                {
+                    Transform group = t.parent;
+                    if (fragmentSeen.Add(group)) fragmentUnions[group] = box;
+                    else { Bounds u = fragmentUnions[group]; u.Encapsulate(box); fragmentUnions[group] = u; }
+                }
+                else
+                {
+                    boxes.Add(box);
+                }
             }
-            report.OverdrawEstimate = transparent;
-            return report;
+            foreach (KeyValuePair<Transform, Bounds> union in fragmentUnions)
+                boxes.Add(union.Value);
+            if (boxes.Count == 0) return 0;
+
+            // Spec: three principal planes for 3D, XY only for flat (2D) products
+            // — the depth-degenerate side planes of a sorting-plane product would
+            // count z-stacking twice.
+            float zMin = float.MaxValue, zMax = float.MinValue;
+            foreach (Bounds b in boxes) { zMin = Mathf.Min(zMin, b.min.z); zMax = Mathf.Max(zMax, b.max.z); }
+            bool flat = (zMax - zMin) < 0.3f;
+
+            int worst = 0;
+            // Plane axes: XY, XZ, YZ (axis index pairs).
+            var planes = flat
+                ? new[] { new Vector2Int(0, 1) }
+                : new[] { new Vector2Int(0, 1), new Vector2Int(0, 2), new Vector2Int(1, 2) };
+            foreach (Vector2Int plane in planes)
+            {
+                float minA = float.MaxValue, minB = float.MaxValue, maxA = float.MinValue, maxB = float.MinValue;
+                foreach (Bounds b in boxes)
+                {
+                    minA = Mathf.Min(minA, b.min[plane.x]); maxA = Mathf.Max(maxA, b.max[plane.x]);
+                    minB = Mathf.Min(minB, b.min[plane.y]); maxB = Mathf.Max(maxB, b.max[plane.y]);
+                }
+                float spanA = Mathf.Max(maxA - minA, 1e-4f);
+                float spanB = Mathf.Max(maxB - minB, 1e-4f);
+                var counts = new int[gridSize * gridSize];
+                foreach (Bounds b in boxes)
+                {
+                    int x0 = Mathf.Clamp(Mathf.FloorToInt((b.min[plane.x] - minA) / spanA * gridSize), 0, gridSize - 1);
+                    int x1 = Mathf.Clamp(Mathf.CeilToInt((b.max[plane.x] - minA) / spanA * gridSize) - 1, 0, gridSize - 1);
+                    int y0 = Mathf.Clamp(Mathf.FloorToInt((b.min[plane.y] - minB) / spanB * gridSize), 0, gridSize - 1);
+                    int y1 = Mathf.Clamp(Mathf.CeilToInt((b.max[plane.y] - minB) / spanB * gridSize) - 1, 0, gridSize - 1);
+                    for (int y = y0; y <= y1; y++)
+                        for (int x = x0; x <= x1; x++)
+                            counts[y * gridSize + x]++;
+                }
+                Array.Sort(counts);
+                int p95 = counts[Mathf.Clamp(Mathf.FloorToInt(counts.Length * 0.95f), 0, counts.Length - 1)];
+                worst = Mathf.Max(worst, p95);
+            }
+            return worst;
+        }
+
+        private static Bounds ParticleBoundsEstimate(ParticleSystem ps)
+        {
+            ParticleSystem.MainModule main = ps.main;
+            ParticleSystem.ShapeModule shape = ps.shape;
+            float speed = main.startSpeed.mode == ParticleSystemCurveMode.TwoConstants
+                ? main.startSpeed.constantMax : main.startSpeed.constant;
+            float lifetime = main.startLifetime.mode == ParticleSystemCurveMode.TwoConstants
+                ? main.startLifetime.constantMax : main.startLifetime.constant;
+            float travel = Mathf.Abs(speed) * Mathf.Max(lifetime, 0f);
+            Vector3 emitter = shape.enabled
+                ? Vector3.Max(shape.scale, Vector3.one * shape.radius * 2f)
+                : Vector3.one * 0.1f;
+            Vector3 size = emitter + Vector3.one * (travel * 2f);
+            return new Bounds(Vector3.zero, size);
+        }
+
+        private static Vector3 WorldScaleWithin(Transform leaf, Transform root)
+        {
+            Vector3 scale = Vector3.one;
+            Transform t = leaf;
+            while (t != null && t != root)
+            {
+                scale = Vector3.Scale(scale, t.localScale);
+                t = t.parent;
+            }
+            return scale;
         }
 
         // ------------------------------------------------------------ section 6: binding key allow-list

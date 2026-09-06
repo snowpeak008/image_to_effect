@@ -81,7 +81,9 @@ namespace VFXComposer.Gallery.Editor
             }
             var so = new SerializedObject(pageSet);
             so.FindProperty("dimension").stringValue = dimension;
-            so.FindProperty("prefabRootPath").stringValue = "Assets/VFX/Generated/";
+            // Dimension-specific product root: the sample assembler lands 3D and
+            // 2D products in sibling roots under Assets/VFX/Generated/.
+            so.FindProperty("prefabRootPath").stringValue = "Assets/VFX/Generated/" + dimension + "/";
             SerializedProperty pages = so.FindProperty("pages");
             pages.arraySize = 2;
 
@@ -92,20 +94,21 @@ namespace VFXComposer.Gallery.Editor
             p0.FindPropertyRelative("mode").enumValueIndex = (int)GalleryPageMode.Matrix3x3;
             p0.FindPropertyRelative("rowAxis").enumValueIndex = (int)GalleryAxis.Archetype;
             p0.FindPropertyRelative("colAxis").enumValueIndex = (int)GalleryAxis.Element;
-            SetStringArray(p0.FindPropertyRelative("rowValues"), "", "", "");
+            SetStringArray(p0.FindPropertyRelative("rowValues"), "shield", "chain_link", "dissolve_out");
             SetStringArray(p0.FindPropertyRelative("colValues"), "none", "none", "none");
             p0.FindPropertyRelative("fixedElement").stringValue = "none";
             p0.FindPropertyRelative("fixedStyle").stringValue = "none";
             p0.FindPropertyRelative("fixedTier").stringValue = "PM";
 
-            // Page 2: paradigm verdict page (ADR-010 section 8 user-judgement face).
+            // Page 2: paradigm verdict page (ADR-010 section 8 user-judgement
+            // face): the T2c sample grid — 3 archetypes x 3 elements x cartoon.
             SerializedProperty p1 = pages.GetArrayElementAtIndex(1);
             p1.FindPropertyRelative("title").stringValue = "范式判定页（原型×元素，cartoon）";
             p1.FindPropertyRelative("mode").enumValueIndex = (int)GalleryPageMode.Matrix3x3;
             p1.FindPropertyRelative("rowAxis").enumValueIndex = (int)GalleryAxis.Archetype;
             p1.FindPropertyRelative("colAxis").enumValueIndex = (int)GalleryAxis.Element;
-            SetStringArray(p1.FindPropertyRelative("rowValues"), "", "", "");
-            SetStringArray(p1.FindPropertyRelative("colValues"), "fire", "ice", "lightning");
+            SetStringArray(p1.FindPropertyRelative("rowValues"), "shield", "chain_link", "dissolve_out");
+            SetStringArray(p1.FindPropertyRelative("colValues"), "ice", "lightning", "poison");
             p1.FindPropertyRelative("fixedStyle").stringValue = "cartoon";
             p1.FindPropertyRelative("fixedTier").stringValue = "PM";
 

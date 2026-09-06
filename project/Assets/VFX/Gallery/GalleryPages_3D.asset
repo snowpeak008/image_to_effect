@@ -13,16 +13,16 @@ MonoBehaviour:
   m_Name: GalleryPages_3D
   m_EditorClassIdentifier: 
   dimension: 3d
-  prefabRootPath: Assets/VFX/Generated/
+  prefabRootPath: Assets/VFX/Generated/3d/
   pages:
   - title: "\u7ED3\u6784\u9875\uFF08element:none \u4E2D\u6027\uFF09"
     mode: 0
     rowAxis: 1
     colAxis: 2
     rowValues:
-    - 
-    - 
-    - 
+    - shield
+    - chain_link
+    - dissolve_out
     colValues:
     - none
     - none
@@ -37,13 +37,13 @@ MonoBehaviour:
     rowAxis: 1
     colAxis: 2
     rowValues:
-    - 
-    - 
-    - 
+    - shield
+    - chain_link
+    - dissolve_out
     colValues:
-    - fire
     - ice
     - lightning
+    - poison
     fixedArchetype: 
     fixedElement: 
     fixedStyle: cartoon

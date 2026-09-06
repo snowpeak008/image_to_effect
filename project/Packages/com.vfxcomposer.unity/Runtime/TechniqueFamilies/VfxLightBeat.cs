@@ -98,6 +98,25 @@ namespace VFXComposer.TechniqueFamilies
             saturationMul = Mathf.Clamp(satMul, 0.5f, 2f);
         }
 
+        /// <summary>Compile-time beat wiring (element preset injection).</summary>
+        public void ConfigureBeat(VfxFlickerMode mode, float rate, float depth, VfxDecayShape shape, float phase)
+        {
+            flickerMode = mode;
+            flickerRate = Mathf.Clamp(rate, 0.1f, 30f);
+            flickerDepth = Mathf.Clamp01(depth);
+            decayShape = shape;
+            phaseOffset = Mathf.Repeat(phase, 1f);
+        }
+
+        /// <summary>Compile-time light shape wiring.</summary>
+        public void ConfigureLight(Color lightColor, float lightIntensity, float lightRange, bool shadows)
+        {
+            color = lightColor;
+            intensity = Mathf.Max(lightIntensity, 0f);
+            range = Mathf.Max(lightRange, 0.01f);
+            castShadows = shadows;
+        }
+
         /// <summary>Pool reset: phase to zero, light back to base intensity.</summary>
         public void ResetForPool()
         {
