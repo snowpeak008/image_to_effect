@@ -33,12 +33,12 @@ public sealed class RecipeRefineOverrideGuardTests
           "stages": [
             { "id": "launch", "trigger": "on_launch", "duration": 0.1, "enabled": true, "modules": [] },
             { "id": "travel", "trigger": "after_previous", "duration": 1.0, "enabled": true, "modules": [
-              { "id": "core", "kind": "energy_body", "templateId": "PFT_2D_FireCore", "parameters": { "scale": 1.2 }, "enabled": true },
-              { "id": "trail", "kind": "motion_trail", "templateId": "PFT_2D_FireTrail", "parameters": { "time": 0.22, "width": 0.42 }, "enabled": true }
+              { "id": "core", "kind": "energy_body", "templateId": "mat_volume_fbm", "parameters": { "scale": 1.2 }, "enabled": true },
+              { "id": "trail", "kind": "motion_trail", "templateId": "mesh_sweep_band", "parameters": { "time": 0.22, "width": 0.42 }, "enabled": true }
             ] },
             { "id": "impact", "trigger": "on_hit", "duration": 0.2, "enabled": true, "modules": [] }
           ],
-          "metadata": { "createdBy": "vfxcomposer.ai", "templateCatalogVersion": "1.0.0" }
+          "metadata": { "createdBy": "vfxcomposer.ai", "templateCatalogVersion": "2.0.0" }
         }
         """);
 
@@ -274,7 +274,7 @@ public sealed class RecipeRefineOverrideGuardTests
             {
                 if (string.Equals(module!["id"]!.GetValue<string>(), "trail", StringComparison.Ordinal))
                 {
-                    module["templateId"] = "PFT_2D_Embers";
+                    module["templateId"] = "cpu_buoyancy_turbulence";
                     module["kind"] = "secondary_particles";
                     module["parameters"] = new JsonObject { ["rate"] = 18, ["lifetime"] = 0.55 };
                 }

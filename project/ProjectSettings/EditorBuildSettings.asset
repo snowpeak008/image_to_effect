@@ -44,4 +44,22 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/VFX/Preview/VFXPREVIEW_CapTiming.unity
     guid: 24f680078fc775a429e4f2cee36ed295
+  - enabled: 1
+    path: Assets/VFX/Preview/VFXPREVIEW_FireFamily_NextCandidate.unity
+    guid: 7cafcddb6f6939441b2abf5a238661c2
+  - enabled: 1
+    path: Assets/VFX/Preview/VFXPREVIEW_FrostFamily_NextCandidate.unity
+    guid: c362febdf56e47a469ced558f9f1f3f5
+  - enabled: 1
+    path: Assets/VFX/Preview/VFXPREVIEW_LightningFamily_NextCandidate.unity
+    guid: 6f5ca643728d56a4d86ad700df44c106
+  - enabled: 1
+    path: Assets/VFX/Preview/VFXPREVIEW_WaterWindFamily_NextCandidate.unity
+    guid: e176e19261c8dd04d99e2a28deda3b44
+  - enabled: 1
+    path: Assets/VFX/Preview/VFXPREVIEW_EarthNatureToxicFamily_NextCandidate.unity
+    guid: 20cc0906e3668994490953742c082bb9
+  - enabled: 1
+    path: Assets/VFX/Preview/VFXPREVIEW_HolyShadowArcaneFamily_NextCandidate.unity
+    guid: f888e814fe5478f469aa6325fca23a83
   m_configObjects: {}

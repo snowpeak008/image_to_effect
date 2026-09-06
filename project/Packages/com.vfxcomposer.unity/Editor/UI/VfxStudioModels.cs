@@ -65,7 +65,11 @@ namespace VFXComposer.Editor.UI
     {
         public static List<VfxStudioLibraryItem> Scan()
         {
-            var items=new List<VfxStudioLibraryItem>();foreach(var guid in AssetDatabase.FindAssets("t:TextAsset",new[]{"Assets/VFX/Recipes"}))
+            var items=new List<VfxStudioLibraryItem>();
+            // ADR-010 §9: the recipe root only exists after a formal build lands provenance; scanning a
+            // missing folder is a valid empty library, not an AssetDatabase error.
+            if(!AssetDatabase.IsValidFolder("Assets/VFX/Recipes"))return items;
+            foreach(var guid in AssetDatabase.FindAssets("t:TextAsset",new[]{"Assets/VFX/Recipes"}))
             {
             var path=AssetDatabase.GUIDToAssetPath(guid);if(!path.EndsWith(".json",StringComparison.OrdinalIgnoreCase)||path.EndsWith(".patch.json",StringComparison.OrdinalIgnoreCase)||path.EndsWith(".history.json",StringComparison.OrdinalIgnoreCase))continue;VfxStudioLibraryItem item;try{item=Parse(path,File.ReadAllText(Absolute(path)));}catch{continue;}if(item!=null)items.Add(item);
             }

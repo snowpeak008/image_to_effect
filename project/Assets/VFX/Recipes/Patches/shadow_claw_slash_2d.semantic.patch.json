@@ -1,7 +1,0 @@
-[
-  {
-    "op": "set_content_param",
-    "path": "/content/parameters/claw_count",
-    "value": 4
-  }
-]

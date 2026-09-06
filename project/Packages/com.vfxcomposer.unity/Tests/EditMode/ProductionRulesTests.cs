@@ -38,16 +38,9 @@ namespace VFXComposer.Tests.EditMode
             Assert.That(rules.Simple.MaxDepth, Is.EqualTo(3));
             Assert.That(rules.ArchetypeProfiles.Keys, Is.EquivalentTo(new[] { "projectile", "impact", "slash", "aura", "area", "beam", "trail", "shield", "spawn", "summon", "transform", "status", "environment", "screen_ui", "composite", "decal", "weapon_trail", "destruction", "lifecycle", "portal", "loot" }));
             Assert.That(VfxProjectRules.BudgetFor("area"), Is.SameAs(rules.Complex));
-            Assert.That(VfxProjectRules.EnforcementFor("fireball_2d"), Is.EqualTo(VfxRulesEnforcement.LegacyAudit));
-            CollectionAssert.AreEquivalent(new[]
-            {
-                "fireball_2d", "fireball_3d", "slash_3d_stylized",
-                "fireball_2d_s7test", "fireball_2d_s8test", "fireball_3d_s10test",
-                "s11_a5", "s11_a6", "s9_canonical_patch_export_base",
-                "i1_river_comet", "i2_glass_spark", "i3_brazier_bead", "i4_rail_flare", "i5_aurora_seed",
-                "s9_cohort_k_final_k1", "s9_cohort_k_final_k2", "s9_cohort_k_final_k3"
-            }, rules.LegacyEffectIds, "Legacy audit is a closed allow-list of protected old products and isolated historical test IDs.");
-            Assert.That(VfxProjectRules.EnforcementFor("cap_linear_proj_3d"), Is.EqualTo(VfxRulesEnforcement.Strict), "Capability products must not inherit historical test exemptions.");
+            // ADR-010 §9: the legacy audit allow-list is empty after the old content layer cleanup.
+            Assert.That(rules.LegacyEffectIds, Is.Empty, "Every legacy effect id retired with the T2c cleanup; new products are always strict.");
+            Assert.That(VfxProjectRules.EnforcementFor("fireball_2d"), Is.EqualTo(VfxRulesEnforcement.Strict), "Retired legacy ids no longer receive audit exemptions.");
             Assert.That(VfxProjectRules.EnforcementFor(StrictId), Is.EqualTo(VfxRulesEnforcement.Strict));
             Assert.That(VfxProjectRules.ManifestAbsolutePath(StrictId), Does.EndWith("ProjectSettings" + Path.DirectorySeparatorChar + "VFXComposer" + Path.DirectorySeparatorChar + "BuildManifests" + Path.DirectorySeparatorChar + StrictId + ".manifest.json"));
             Assert.Throws<ArgumentException>(() => VfxProjectRules.ManifestAbsolutePath("Bad/Id"));
@@ -76,34 +69,14 @@ namespace VFXComposer.Tests.EditMode
         }
 
         [Test]
-        public void ReconcileCurrentOutputs_WritesExternalOwnershipManifestsWithoutChangingRuntimeFolders()
+        public void LegacyContentSurfaces_AreFullyRetired()
         {
-            var before = Directory.GetDirectories(Absolute("Assets/VFX/Generated")).Select(Path.GetFileName).OrderBy(value => value, StringComparer.Ordinal).ToArray();
-            VfxProductionRulesMenu.ReconcileCurrentOutputs();
-            var after = Directory.GetDirectories(Absolute("Assets/VFX/Generated")).Select(Path.GetFileName).OrderBy(value => value, StringComparer.Ordinal).ToArray();
-            CollectionAssert.AreEqual(before, after);
-            foreach (var effectId in new[] { "fireball_2d", "fireball_3d", "slash_3d_stylized" })
-            {
-                var path = VfxProjectRules.ManifestAbsolutePath(effectId);
-                Assert.That(File.Exists(path), Is.True, effectId);
-                var manifest = JObject.Parse(File.ReadAllText(path));
-                Assert.That((int)manifest["manifestVersion"], Is.EqualTo(1));
-                Assert.That((string)manifest["rulesVersion"], Is.EqualTo("1.0-draft"));
-                Assert.That((string)manifest["enforcement"], Is.EqualTo("legacy_audit"));
-                Assert.That((string)manifest["effectId"], Is.EqualTo(effectId));
-                Assert.That((string)manifest["archetype"], Is.EqualTo(effectId == "slash_3d_stylized" ? "slash" : "projectile"));
-                Assert.That((string)manifest["runtimeEntry"]["kind"], Is.EqualTo("prefab"));
-                Assert.That(((JArray)manifest["ownedOutputs"]).Count, Is.GreaterThan(0));
-                Assert.That(((JArray)manifest["ownedOutputs"]).All(item => !((string)item["path"]).EndsWith("BuildManifest.json", StringComparison.Ordinal)), Is.True);
-                Assert.That(((JArray)manifest["ownedOutputs"]).All(item => !string.IsNullOrEmpty((string)item["guid"]) && ((string)item["sha256"]).Length == 64), Is.True);
-                // D4: dependency records keep their identity (path/guid/assetType) but no longer carry the
-                // machine-local dependencyHash, which was never compared and churned the committed manifest.
-                Assert.That(((JArray)manifest["dependencies"]).All(item => !string.IsNullOrEmpty((string)item["path"]) && item["dependencyHash"] == null), Is.True);
-                Assert.That(manifest["cost"]["localTextureBytes"], Is.Not.Null);
-                Assert.That(manifest["cost"]["dependencyResidentTextureBytes"], Is.Not.Null);
-                var prefab = AssetDatabase.LoadAssetAtPath<GameObject>((string)manifest["runtimeEntry"]["path"]);
-                Assert.That(prefab.GetComponents<MonoBehaviour>().Count(value => value is IVfxRuntimeEntry), Is.EqualTo(1));
-            }
+            // ADR-010 §9 delete-with-replacement audit: the old content layer must leave no residue.
+            Assert.That(Directory.Exists(Absolute("Assets/VFX/Templates")), Is.False, "The v1 sprite template library is retired.");
+            Assert.That(Directory.Exists(Absolute("Assets/VFX/Recipes")), Is.False, "The v1 recipe assets are retired.");
+            Assert.That(Directory.Exists(Absolute("Assets/VFX/Preview")), Is.False, "The v1 preview scenes are retired.");
+            var generated = Directory.GetDirectories(Absolute("Assets/VFX/Generated")).Select(Path.GetFileName).ToArray();
+            Assert.That(generated, Is.SubsetOf(new[] { "2d", "3d" }), "Only the paradigm sample roots survive the cleanup.");
         }
 
         private static void DeleteStrictProbe()

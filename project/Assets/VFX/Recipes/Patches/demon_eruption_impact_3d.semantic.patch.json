@@ -1,7 +1,0 @@
-[
-  {
-    "op": "set_content_param",
-    "path": "/content/parameters/ash_lifetime",
-    "value": 5.0
-  }
-]

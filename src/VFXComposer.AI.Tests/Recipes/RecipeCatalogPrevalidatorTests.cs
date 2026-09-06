@@ -44,14 +44,14 @@ public sealed class RecipeCatalogPrevalidatorTests
     [TestMethod]
     public void AFullBudgetRecipeWithAnIntegerParameterYieldsNoFindings()
     {
-        // Two modules is exactly the strict budget; PFT_2D_FireImpact carries the integer-typed "count".
+        // Two modules is exactly the strict budget; cpu_burst_radial carries the integer-typed "count".
         var recipe = MutateReference(recipe =>
         {
             recipe["stages"]![2]!["modules"] = new JsonArray(new JsonObject
             {
                 ["id"] = "burst",
                 ["kind"] = "impact_burst",
-                ["templateId"] = "PFT_2D_FireImpact",
+                ["templateId"] = "cpu_burst_radial",
                 ["parameters"] = new JsonObject { ["count"] = 24, ["speed"] = 3.5 },
                 ["enabled"] = true,
             });
@@ -65,11 +65,11 @@ public sealed class RecipeCatalogPrevalidatorTests
     public void AnUnknownTemplateIsReportedWithTheDeclaredCandidates()
     {
         var issue = Single(
-            MutateReference(recipe => Module(recipe)["templateId"] = "PFT_2D_Nonexistent"),
+            MutateReference(recipe => Module(recipe)["templateId"] = "mat_nonexistent_variant"),
             RecipePrevalidationCodes.TemplateUnknown);
 
         Assert.AreEqual("/stages/travel/modules/core/templateId", issue.Path);
-        StringAssert.Contains(issue.AllowedRange, "PFT_2D_FireCore");
+        StringAssert.Contains(issue.AllowedRange, "mat_volume_fbm");
     }
 
     [TestMethod]
@@ -146,7 +146,7 @@ public sealed class RecipeCatalogPrevalidatorTests
         {
             var module = Module(recipe);
             module["kind"] = "impact_burst";
-            module["templateId"] = "PFT_2D_FireImpact";
+            module["templateId"] = "cpu_burst_radial";
             module["parameters"] = new JsonObject { ["count"] = 8.5, ["speed"] = 3.5 };
         });
 
@@ -189,7 +189,7 @@ public sealed class RecipeCatalogPrevalidatorTests
             {
                 ["id"] = id,
                 ["kind"] = "secondary_particles",
-                ["templateId"] = "PFT_2D_Embers",
+                ["templateId"] = "cpu_buoyancy_turbulence",
                 ["parameters"] = new JsonObject { ["lifetime"] = 0.55, ["rate"] = 18 },
                 ["enabled"] = true,
             };
@@ -314,8 +314,8 @@ public sealed class RecipeCatalogPrevalidatorTests
             }
         }
 
-        Assert.IsFalse(snapshot.TryGetParameter("PFT_2D_FireCore", "no_such_parameter", out _));
-        Assert.IsFalse(snapshot.TryGetParameter("PFT_2D_Nonexistent", "scale", out _));
+        Assert.IsFalse(snapshot.TryGetParameter("mat_volume_fbm", "no_such_parameter", out _));
+        Assert.IsFalse(snapshot.TryGetParameter("mat_nonexistent_variant", "scale", out _));
     }
 
     private static JsonObject Module(JsonNode recipe) =>

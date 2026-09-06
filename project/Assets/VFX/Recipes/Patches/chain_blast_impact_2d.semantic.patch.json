@@ -1,7 +1,0 @@
-[
-  {
-    "op": "set_content_param",
-    "path": "/content/parameters/blast_count",
-    "value": 4
-  }
-]

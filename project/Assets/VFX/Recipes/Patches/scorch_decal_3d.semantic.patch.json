@@ -1,7 +1,0 @@
-[
-  {
-    "op": "set_archetype_param",
-    "path": "/archetypeParameters/stack_limit",
-    "value": 3
-  }
-]

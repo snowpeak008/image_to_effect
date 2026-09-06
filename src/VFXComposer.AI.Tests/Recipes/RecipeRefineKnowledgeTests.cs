@@ -37,7 +37,7 @@ public sealed class RecipeRefineKnowledgeTests
     {
         var knowledge = RecipeRefineKnowledge.Default;
 
-        Assert.AreEqual(1, knowledge.Version);
+        Assert.AreEqual(2, knowledge.Version);
         Assert.IsTrue(
             DateOnly.TryParseExact(knowledge.ExportedOn, "yyyy-MM-dd", out _),
             "exportedOn must be an ISO date.");

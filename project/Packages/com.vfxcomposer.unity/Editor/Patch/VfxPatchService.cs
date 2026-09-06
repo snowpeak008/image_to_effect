@@ -10,14 +10,11 @@ using Newtonsoft.Json.Serialization;
 using UnityEditor;
 using UnityEngine;
 using VFXComposer.Editor.Build;
-using VFXComposer.Editor.Composite;
 using VFXComposer.Editor.Catalog;
 using VFXComposer.Editor.Capabilities;
 using VFXComposer.Editor.Domain;
 using VFXComposer.Editor.Validation;
-using VFXComposer.Editor.Style;
 using VFXComposer.Editor.Rules;
-using VFXComposer.Editor.Independent;
 
 namespace VFXComposer.Editor.Patch
 {
@@ -58,8 +55,6 @@ namespace VFXComposer.Editor.Patch
             catalog = catalog ?? VfxCompiler.LoadFormalCatalog();
             var result = new VfxPatchResult();
             var current = VfxDomainParser.ParseRecipe(recipeJson);
-            var dispatch = VFXComposer.Editor.SlashV2.S12RecipeDispatcher.Parse(recipeJson);
-            if (dispatch.RecipeVersion == 2) result.Report.Add("E712", ValidationSeverity.Error, "/recipeVersion", "v1 VfxPatchService rejects Recipe v2; use S12SlashPatchService.");
             result.Report.AddRange(current.Report);
             result.Report.AddRange(catalog.Report);
             if (!result.Report.HasErrors) { result.Report.AddRange(RecipeValidator.ValidateSemantic(current.Value, catalog)); result.Report.AddRange(ArchetypeParameterRegistry.Validate(current.Value)); result.Report.AddRange(CapabilityRegistry.Validate(current.Value)); result.Report.AddRange(CapabilitySlotValidator.Validate(current.Value)); }
@@ -89,9 +84,8 @@ namespace VFXComposer.Editor.Patch
             var parsedPatched = VfxDomainParser.ParseRecipe(patchedJson);
             result.Report.AddRange(parsedPatched.Report);
             if (!result.Report.HasErrors) { result.Report.AddRange(RecipeValidator.ValidateSemantic(parsedPatched.Value, catalog)); result.Report.AddRange(ArchetypeParameterRegistry.Validate(parsedPatched.Value)); result.Report.AddRange(CapabilityRegistry.Validate(parsedPatched.Value)); result.Report.AddRange(CapabilitySlotValidator.Validate(parsedPatched.Value)); }
-            if (!result.Report.HasErrors&&parsedPatched.Value.Archetype==RecipeArchetype.Composite) result.Report.AddRange(CompositeContentCompiler.ValidateJson(patchedJson));
-            else if (!result.Report.HasErrors) result.Report.AddRange(BudgetCalculator.Evaluate(parsedPatched.Value, catalog));
-            if (!result.Report.HasErrors&&parsedPatched.Value.Archetype!=RecipeArchetype.Composite) result.Report.AddRange(compilerFactory().DryRun(patchedJson, catalog).Report);
+            if (!result.Report.HasErrors) result.Report.AddRange(BudgetCalculator.Evaluate(parsedPatched.Value, catalog));
+            if (!result.Report.HasErrors) result.Report.AddRange(compilerFactory().DryRun(patchedJson, catalog).Report);
             if (result.Report.HasErrors)
             {
                 result.IsPostPatchValidationFailure = true;
@@ -137,24 +131,7 @@ namespace VFXComposer.Editor.Patch
             }
             try
             {
-                var patchedRecipe=VfxDomainParser.ParseRecipe(result.PatchedRecipeJson).Value;
-                VfxBuildResult build;
-                if(UsesCompositeCompiler(patchedRecipe,recipeAssetPath))
-                {
-                    var composite=CompositeContentCompiler.BuildJsonForTransaction(recipeAssetPath,result.PatchedRecipeJson);
-                    build=new VfxBuildResult{Succeeded=composite.Succeeded,PrefabPath=composite.PrefabPath,Plan=new VfxBuildPlan{Report=composite.Report,RecipeRevision=patchedRecipe.Revision,RecipeHash=composite.RecipeHash,BuildHash=composite.BuildHash}};
-                }
-                else if(UsesIndependentCompiler(patchedRecipe,recipeAssetPath))
-                {
-                    var independent=IndependentContentCompiler.BuildJsonForTransaction(recipeAssetPath,result.PatchedRecipeJson);
-                    build=new VfxBuildResult{Succeeded=independent.Succeeded,PrefabPath=independent.PrefabPath,Plan=new VfxBuildPlan{Report=independent.Report,RecipeRevision=patchedRecipe.Revision,RecipeHash=independent.RecipeHash,BuildHash=independent.BuildHash}};
-                }
-                else if(UsesStyledCompiler(patchedRecipe,recipeAssetPath))
-                {
-                    var styled=StyledContentCompiler.BuildJsonForTransaction(recipeAssetPath,result.PatchedRecipeJson);
-                    build=new VfxBuildResult{Succeeded=styled.Succeeded,PrefabPath=styled.PrefabPath,Plan=new VfxBuildPlan{Report=styled.Report,RecipeRevision=patchedRecipe.Revision,RecipeHash=styled.RecipeHash,BuildHash=styled.BuildHash}};
-                }
-                else build = compilerFactory().Build(result.PatchedRecipeJson, catalog);
+                var build = compilerFactory().Build(result.PatchedRecipeJson, catalog);
                 result.Report.AddRange(build.Plan.Report);
                 if (!build.Succeeded)
                 {
@@ -182,31 +159,6 @@ namespace VFXComposer.Editor.Patch
                 catch (Exception exception) { result.Report.Add(PatchRollback, ValidationSeverity.Error, "/transaction/backup-cleanup", "Patch backup cleanup failed: " + exception.Message + " Manual cleanup may be required."); }
             }
             return result;
-        }
-
-        private static bool UsesStyledCompiler(Recipe recipe,string recipeAssetPath)
-        {
-            if(recipe==null)return false;
-            if(recipe.Archetype==RecipeArchetype.Decal||recipe.Archetype==RecipeArchetype.WeaponTrail||recipe.Archetype==RecipeArchetype.Destruction||recipe.Archetype==RecipeArchetype.LifeCycle||recipe.Archetype==RecipeArchetype.Portal||recipe.Archetype==RecipeArchetype.Loot)return true;
-            if(!string.IsNullOrEmpty(recipeAssetPath)&&recipeAssetPath.IndexOf("/StyleSamples/",StringComparison.Ordinal)>=0)return true;
-            try{var manifestPath=VfxProjectRules.ManifestAbsolutePath(recipe.Id);if(File.Exists(manifestPath)){var version=(string)JObject.Parse(File.ReadAllText(manifestPath))["compilerVersion"];return version!=null&&version.StartsWith("styled-content-",StringComparison.Ordinal);}}catch{}
-            return false;
-        }
-
-        private static bool UsesCompositeCompiler(Recipe recipe,string recipeAssetPath)
-        {
-            if(recipe==null||recipe.Archetype!=RecipeArchetype.Composite)return false;
-            if(!string.IsNullOrEmpty(recipeAssetPath)&&recipeAssetPath.IndexOf("/Composites/",StringComparison.Ordinal)>=0)return true;
-            try{var manifestPath=VfxProjectRules.ManifestAbsolutePath(recipe.Id);if(File.Exists(manifestPath)){var version=(string)JObject.Parse(File.ReadAllText(manifestPath))["compilerVersion"];return version!=null&&version.StartsWith("composite-runtime-",StringComparison.Ordinal);}}catch{}
-            return false;
-        }
-
-        private static bool UsesIndependentCompiler(Recipe recipe,string recipeAssetPath)
-        {
-            if(recipe==null)return false;
-            if(!string.IsNullOrEmpty(recipeAssetPath)&&recipeAssetPath.IndexOf("/Independent/",StringComparison.Ordinal)>=0)return true;
-            try{var manifestPath=VfxProjectRules.ManifestAbsolutePath(recipe.Id);if(File.Exists(manifestPath)){var version=(string)JObject.Parse(File.ReadAllText(manifestPath))["compilerVersion"];return version!=null&&version.StartsWith("planned-independent-",StringComparison.Ordinal);}}catch{}
-            return false;
         }
 
         private static List<VfxPatchOperation> ParseOperations(string patchJson, VfxPatchResult result)

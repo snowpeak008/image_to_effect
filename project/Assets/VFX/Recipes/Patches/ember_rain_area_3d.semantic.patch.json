@@ -1,7 +1,0 @@
-[
-  {
-    "op": "set_content_param",
-    "path": "/content/parameters/burn_patch_count",
-    "value": 6
-  }
-]

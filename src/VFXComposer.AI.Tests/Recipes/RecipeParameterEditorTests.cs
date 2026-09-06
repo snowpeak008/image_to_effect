@@ -115,7 +115,7 @@ public sealed class RecipeParameterEditorTests
     [TestMethod]
     public void AnUnknownTemplateListsTheWholeModuleAsAWarning()
     {
-        var recipe = Mutate(FireBolt.RecipeJson, root => Module(root)["templateId"] = "PFT_2D_Nonexistent");
+        var recipe = Mutate(FireBolt.RecipeJson, root => Module(root)["templateId"] = "mat_nonexistent_variant");
 
         var panel = RecipeParameterEditor.Describe(recipe);
 
@@ -123,7 +123,7 @@ public sealed class RecipeParameterEditorTests
         var warning = panel.Warnings.Single();
         Assert.AreEqual(RecipeParameterPanelWarningKind.TemplateUnknown, warning.Kind);
         Assert.AreEqual("stages[travel].modules[core].templateId", warning.Path);
-        Assert.AreEqual("PFT_2D_Nonexistent", warning.Subject);
+        Assert.AreEqual("mat_nonexistent_variant", warning.Subject);
         AssertRejected(
             RecipeParameterEditor.Apply(recipe, [new RecipeParameterEdit("travel", "core", "scale", "1.5")]),
             RecipeParameterEditCodes.TargetNotFound,
@@ -360,7 +360,7 @@ public sealed class RecipeParameterEditorTests
             {
                 ["id"] = "flash",
                 ["kind"] = "impact_flash",
-                ["templateId"] = "PFT_2D_LaunchFlash",
+                ["templateId"] = "mat_glow_stack",
                 ["parameters"] = new JsonObject { ["lifetime"] = 0.12, ["size"] = 1.0 },
                 ["enabled"] = true,
             }));

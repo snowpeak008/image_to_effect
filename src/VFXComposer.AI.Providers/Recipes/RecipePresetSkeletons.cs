@@ -133,11 +133,11 @@ public static class RecipePresetSkeletons
               "stages": [
                 { "id": "launch", "trigger": "on_launch", "duration": 0.1, "enabled": true, "modules": [] },
                 { "id": "travel", "trigger": "after_previous", "duration": 1.0, "enabled": true, "modules": [
-                  { "id": "core", "kind": "energy_body", "templateId": "PFT_2D_FireCore", "parameters": { "scale": 1.2 }, "enabled": true }
+                  { "id": "core", "kind": "energy_body", "templateId": "mat_volume_fbm", "parameters": { "scale": 1.2 }, "enabled": true }
                 ] },
                 { "id": "impact", "trigger": "on_hit", "duration": 0.2, "enabled": true, "modules": [] }
               ],
-              "metadata": { "createdBy": "vfxcomposer.preset", "templateCatalogVersion": "1.0.0" }
+              "metadata": { "createdBy": "vfxcomposer.preset", "templateCatalogVersion": "2.0.0" }
             }
             """),
         new(
@@ -156,12 +156,12 @@ public static class RecipePresetSkeletons
               "stages": [
                 { "id": "launch", "trigger": "on_launch", "duration": 0.1, "enabled": true, "modules": [] },
                 { "id": "travel", "trigger": "after_previous", "duration": 1.0, "enabled": true, "modules": [
-                  { "id": "core", "kind": "energy_body", "templateId": "PFT_2D_FireCore", "parameters": { "scale": 1.2 }, "enabled": true },
-                  { "id": "trail", "kind": "motion_trail", "templateId": "PFT_2D_FireTrail", "parameters": { "time": 0.22, "width": 0.42 }, "enabled": true }
+                  { "id": "core", "kind": "energy_body", "templateId": "mat_volume_fbm", "parameters": { "scale": 1.2 }, "enabled": true },
+                  { "id": "trail", "kind": "motion_trail", "templateId": "mesh_sweep_band", "parameters": { "time": 0.22, "width": 0.42 }, "enabled": true }
                 ] },
                 { "id": "impact", "trigger": "on_hit", "duration": 0.2, "enabled": true, "modules": [] }
               ],
-              "metadata": { "createdBy": "vfxcomposer.preset", "templateCatalogVersion": "1.0.0" }
+              "metadata": { "createdBy": "vfxcomposer.preset", "templateCatalogVersion": "2.0.0" }
             }
             """),
         new(
@@ -180,13 +180,13 @@ public static class RecipePresetSkeletons
               "stages": [
                 { "id": "launch", "trigger": "on_launch", "duration": 0.1, "enabled": true, "modules": [] },
                 { "id": "travel", "trigger": "after_previous", "duration": 1.0, "enabled": true, "modules": [
-                  { "id": "core", "kind": "energy_body", "templateId": "PFT_2D_FireCore", "parameters": { "scale": 1.2 }, "enabled": true }
+                  { "id": "core", "kind": "energy_body", "templateId": "mat_volume_fbm", "parameters": { "scale": 1.2 }, "enabled": true }
                 ] },
                 { "id": "impact", "trigger": "on_hit", "duration": 0.5, "enabled": true, "modules": [
-                  { "id": "burst", "kind": "impact_burst", "templateId": "PFT_2D_FireImpact", "parameters": { "count": 24, "speed": 3.5 }, "enabled": true }
+                  { "id": "burst", "kind": "impact_burst", "templateId": "cpu_burst_radial", "parameters": { "count": 24, "speed": 3.5 }, "enabled": true }
                 ] }
               ],
-              "metadata": { "createdBy": "vfxcomposer.preset", "templateCatalogVersion": "1.0.0" }
+              "metadata": { "createdBy": "vfxcomposer.preset", "templateCatalogVersion": "2.0.0" }
             }
             """),
         new(
@@ -205,13 +205,13 @@ public static class RecipePresetSkeletons
               "stages": [
                 { "id": "launch", "trigger": "on_launch", "duration": 0.1, "enabled": true, "modules": [] },
                 { "id": "travel", "trigger": "after_previous", "duration": 1.0, "enabled": true, "modules": [
-                  { "id": "core", "kind": "energy_body", "templateId": "PFT_2D_FireCore", "parameters": { "scale": 1.2 }, "enabled": true }
+                  { "id": "core", "kind": "energy_body", "templateId": "mat_volume_fbm", "parameters": { "scale": 1.2 }, "enabled": true }
                 ] },
                 { "id": "impact", "trigger": "on_hit", "duration": 0.5, "enabled": true, "modules": [
-                  { "id": "shockwave", "kind": "shockwave", "templateId": "PFT_2D_Shockwave", "parameters": { "lifetime": 0.28, "endSize": 2.8 }, "enabled": true }
+                  { "id": "shockwave", "kind": "shockwave", "templateId": "mat_ring_polar", "parameters": { "lifetime": 0.28, "endSize": 2.8 }, "enabled": true }
                 ] }
               ],
-              "metadata": { "createdBy": "vfxcomposer.preset", "templateCatalogVersion": "1.0.0" }
+              "metadata": { "createdBy": "vfxcomposer.preset", "templateCatalogVersion": "2.0.0" }
             }
             """),
         new(
@@ -229,14 +229,14 @@ public static class RecipePresetSkeletons
               "randomSeed": 20260905,
               "stages": [
                 { "id": "launch", "trigger": "on_launch", "duration": 0.12, "enabled": true, "modules": [
-                  { "id": "flash", "kind": "impact_flash", "templateId": "PFT_2D_LaunchFlash", "parameters": { "lifetime": 0.12, "size": 1.0 }, "enabled": true }
+                  { "id": "flash", "kind": "impact_flash", "templateId": "mat_glow_stack", "parameters": { "lifetime": 0.12, "size": 1.0 }, "enabled": true }
                 ] },
                 { "id": "travel", "trigger": "after_previous", "duration": 1.0, "enabled": true, "modules": [
-                  { "id": "core", "kind": "energy_body", "templateId": "PFT_2D_FireCore", "parameters": { "scale": 1.2 }, "enabled": true }
+                  { "id": "core", "kind": "energy_body", "templateId": "mat_volume_fbm", "parameters": { "scale": 1.2 }, "enabled": true }
                 ] },
                 { "id": "impact", "trigger": "on_hit", "duration": 0.2, "enabled": true, "modules": [] }
               ],
-              "metadata": { "createdBy": "vfxcomposer.preset", "templateCatalogVersion": "1.0.0" }
+              "metadata": { "createdBy": "vfxcomposer.preset", "templateCatalogVersion": "2.0.0" }
             }
             """),
         new(
@@ -255,12 +255,12 @@ public static class RecipePresetSkeletons
               "stages": [
                 { "id": "launch", "trigger": "on_launch", "duration": 0.1, "enabled": true, "modules": [] },
                 { "id": "travel", "trigger": "after_previous", "duration": 1.0, "enabled": true, "modules": [
-                  { "id": "core", "kind": "energy_body", "templateId": "PFT_2D_FireCore", "parameters": { "scale": 1.2 }, "enabled": true },
-                  { "id": "embers", "kind": "secondary_particles", "templateId": "PFT_2D_Embers", "parameters": { "rate": 18, "lifetime": 0.55 }, "enabled": true }
+                  { "id": "core", "kind": "energy_body", "templateId": "mat_volume_fbm", "parameters": { "scale": 1.2 }, "enabled": true },
+                  { "id": "embers", "kind": "secondary_particles", "templateId": "cpu_buoyancy_turbulence", "parameters": { "rate": 18, "lifetime": 0.55 }, "enabled": true }
                 ] },
                 { "id": "impact", "trigger": "on_hit", "duration": 0.2, "enabled": true, "modules": [] }
               ],
-              "metadata": { "createdBy": "vfxcomposer.preset", "templateCatalogVersion": "1.0.0" }
+              "metadata": { "createdBy": "vfxcomposer.preset", "templateCatalogVersion": "2.0.0" }
             }
             """),
     ];

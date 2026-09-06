@@ -40,6 +40,10 @@ namespace VFXComposer.Tests.EditMode
         private static readonly UTF8Encoding StrictUtf8 = new UTF8Encoding(false, true);
         private static readonly string[] AllowedScratchFiles =
         {
+            // ADR-010 §9 removed the legacy Recipes/Preview roots; the scratch fixture recreates
+            // them for its own files, so Unity's generated folder .meta files are fixture-owned too.
+            "project/Assets/VFX/Recipes.meta",
+            "project/Assets/VFX/Preview.meta",
             "project/Assets/VFX/Recipes/__w24_s6_editor_integration_scratch.json",
             "project/Assets/VFX/Recipes/__w24_s6_editor_integration_scratch.json.meta",
             "project/Assets/VFX/Recipes/__w24_s6_editor_integration_l3_scratch.json",
@@ -316,6 +320,10 @@ namespace VFXComposer.Tests.EditMode
         private static void CreateScratchHostScene()
         {
             RequireSafeInitialBatchRunner("immediately before creating the scratch host Scene");
+            // The legacy Assets/VFX/Preview root was retired (ADR-010 §9); the fixture recreates it
+            // for its own scratch scenes and removes it again in CleanupScratch.
+            Directory.CreateDirectory(ProjectAbsolute("Assets/VFX/Preview"));
+            AssetDatabase.Refresh(ImportAssetOptions.ForceSynchronousImport);
             var scene = EditorSceneManager.NewScene(NewSceneSetup.EmptyScene, NewSceneMode.Single);
             Assert.That(EditorSceneManager.SaveScene(scene, HostScenePath), Is.True, HostScenePath);
             AssetDatabase.ImportAsset(HostScenePath, ImportAssetOptions.ForceSynchronousImport);
@@ -377,8 +385,22 @@ namespace VFXComposer.Tests.EditMode
             if (File.Exists(contract)) File.Delete(contract);
             var trace = RepositoryAbsolute(TracePath);
             if (File.Exists(trace)) File.Delete(trace);
+            RemoveScratchRootIfEmpty("Assets/VFX/Recipes");
+            RemoveScratchRootIfEmpty("Assets/VFX/Preview");
             AssetDatabase.Refresh(ImportAssetOptions.ForceSynchronousImport);
             ownsScratch = false;
+        }
+
+        private static void RemoveScratchRootIfEmpty(string assetFolder)
+        {
+            // The fixture recreates the retired legacy roots (ADR-010 §9) for its own scratch files;
+            // an exact teardown must remove them again together with their generated .meta files.
+            var absolute = ProjectAbsolute(assetFolder);
+            if (Directory.Exists(absolute) && !Directory.EnumerateFileSystemEntries(absolute).Any())
+            {
+                Directory.Delete(absolute);
+                if (File.Exists(absolute + ".meta")) File.Delete(absolute + ".meta");
+            }
         }
 
         private static void RequireSafeInitialBatchRunner(string label)

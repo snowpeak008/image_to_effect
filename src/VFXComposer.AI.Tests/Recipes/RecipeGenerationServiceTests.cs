@@ -35,7 +35,7 @@ public sealed class RecipeGenerationServiceTests
         Assert.IsNotNull(result.Draft);
         Assert.AreEqual(RecipeCanonicalJson.Canonicalize(ValidRecipeJson), result.Draft.RecipeJson);
         Assert.AreEqual(RecipeCanonicalJson.ComputeSha256(ValidRecipeJson), result.Draft.CanonicalSha256);
-        Assert.AreEqual("fireball_2d", result.Draft.RecipeId);
+        Assert.AreEqual("probe_projectile_2d", result.Draft.RecipeId);
         Assert.AreEqual("projectile", result.Draft.Archetype);
         Assert.AreEqual("2d", result.Draft.Dimension);
         Assert.AreEqual(RecipePromptAssembler.Version, result.PromptTemplateVersion);
@@ -183,7 +183,7 @@ public sealed class RecipeGenerationServiceTests
         var result = await service.GenerateAsync(Request());
 
         var systemPrompt = gateway.Requests[0].Messages[0].Content;
-        Assert.IsTrue(systemPrompt.Contains("PFT_2D_FireCore", StringComparison.Ordinal));
+        Assert.IsTrue(systemPrompt.Contains("mat_volume_fbm", StringComparison.Ordinal));
         Assert.IsTrue(gateway.Requests[0].Messages[1].Content.Contains("synthetic effect description", StringComparison.Ordinal));
         Assert.IsFalse(result.ToString().Contains("synthetic", StringComparison.Ordinal));
         Assert.IsFalse(service.ToString().Contains("synthetic", StringComparison.Ordinal));

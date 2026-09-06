@@ -1,7 +1,0 @@
-[
-  {
-    "op": "set_archetype_param",
-    "path": "/archetypeParameters/swirl_speed",
-    "value": 3.3
-  }
-]

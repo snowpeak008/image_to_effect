@@ -40,49 +40,19 @@ namespace VFXComposer.Tests.EditMode
         }
 
         [Test]
-        public void AConfirmedRecipeBuildsThePrefabOwnershipManifestAndProvenanceRecipe()
+        public void AConfirmedV1RecipeIsRefusedFailClosedWhileTheV2CompilerIsPending()
         {
+            // ADR-010 §9 retired the v1 template library; until the Recipe v2 compiler lands (T3)
+            // the formal catalog is empty and every module template reference must be refused with
+            // zero writes. This preserves the ADR-007 fail-closed write surface across the paradigm
+            // transition instead of leaving a green test that could silently rebuild v1 content.
             var recipeJson = MinimalRecipe(EffectId);
             var outcome = VfxRecipeBuildEntrypoint.Execute(Request(recipeJson));
 
-            Assert.That(outcome.Succeeded, Is.True, Describe(outcome));
-            Assert.That(outcome.FailureCode, Is.Null);
-            Assert.That(outcome.EffectId, Is.EqualTo(EffectId));
-            Assert.That(outcome.DryRunState, Is.EqualTo("Create"));
-            Assert.That(outcome.CompilerVersion, Is.EqualTo(VfxCompiler.CompilerVersion));
-            Assert.That(outcome.DeclaredTemplateCatalogVersion, Is.EqualTo("1.0.0"));
-            Assert.That(outcome.CatalogIdentityHash, Does.Match("^[0-9a-f]{64}$"));
-
-            // Member 1: the Prefab and its in-root build manifest.
-            Assert.That(outcome.PrefabPath, Is.EqualTo("Assets/VFX/Generated/" + EffectId + "/VFX_" + EffectId + ".prefab"));
-            Assert.That(AssetDatabase.LoadAssetAtPath<GameObject>(outcome.PrefabPath), Is.Not.Null);
-            var buildManifest = ReadJson(outcome.BuildManifestPath);
-            Assert.That((string)buildManifest["recipeHash"], Is.EqualTo(outcome.RecipeHash));
-            Assert.That((string)buildManifest["buildHash"], Is.EqualTo(outcome.BuildHash));
-
-            // Member 2: the authoritative ownership manifest single point.
-            Assert.That(outcome.OwnershipManifestPath, Is.EqualTo("ProjectSettings/VFXComposer/BuildManifests/" + EffectId + ".manifest.json"));
-            var ownership = ReadJson(outcome.OwnershipManifestPath);
-            Assert.That((string)ownership["enforcement"], Is.EqualTo("strict"), "The probe id must exercise strict enforcement, not legacy audit.");
-            Assert.That((string)ownership["recipeHash"], Is.EqualTo(outcome.RecipeHash));
-            Assert.That((string)ownership["buildHash"], Is.EqualTo(outcome.BuildHash));
-            Assert.That((string)ownership["sourceRecipePath"], Is.EqualTo(outcome.ProvenanceRecipePath), "Strict provenance must resolve to the recipe this build landed.");
-
-            // Member 3: the build provenance recipe, canonical and hash-identical to the built input.
-            Assert.That(outcome.ProvenanceRecipePath, Is.EqualTo("Assets/VFX/Recipes/" + EffectId + ".json"));
-            var provenance = File.ReadAllText(Absolute(outcome.ProvenanceRecipePath));
-            Assert.That(provenance, Is.EqualTo(RecipeCanonicalizer.Canonicalize(recipeJson)));
-            Assert.That(RecipeCanonicalizer.ComputeSha256(provenance), Is.EqualTo(outcome.RecipeHash));
-
-            // Idempotency (REQ-001-19): the same confirmed draft rebuilds as Unchanged with stable bytes.
-            var prefabGuid = AssetDatabase.AssetPathToGUID(outcome.PrefabPath);
-            var ownershipBytes = File.ReadAllBytes(Absolute(outcome.OwnershipManifestPath));
-            var second = VfxRecipeBuildEntrypoint.Execute(Request(recipeJson));
-            Assert.That(second.Succeeded, Is.True, Describe(second));
-            Assert.That(second.DryRunState, Is.EqualTo("Unchanged"));
-            Assert.That(second.BuildHash, Is.EqualTo(outcome.BuildHash));
-            Assert.That(AssetDatabase.AssetPathToGUID(outcome.PrefabPath), Is.EqualTo(prefabGuid));
-            CollectionAssert.AreEqual(ownershipBytes, File.ReadAllBytes(Absolute(outcome.OwnershipManifestPath)));
+            Assert.That(outcome.Succeeded, Is.False);
+            Assert.That(outcome.FailureCode, Is.EqualTo(VfxRecipeBuildCodes.AuthoritativeValidationFailed), Describe(outcome));
+            Assert.That(outcome.Issues.Any(issue => issue.Code == "E308"), Is.True, Describe(outcome));
+            AssertNoWriteSurfaceMembers();
             AssertNoTemporaryResidue();
         }
 
@@ -103,12 +73,24 @@ namespace VFXComposer.Tests.EditMode
         public void AnInProjectRecipeInputIsRefusedBecauseBuildInputsAreStagedOutsideTheProject()
         {
             var request = Request(MinimalRecipe(EffectId));
-            request.RecipePath = Absolute("Assets/VFX/Recipes/fireball-2d.default.json");
+            var inProject = Absolute("Assets/VFX/Recipes/__f2_probe_in_project.json");
+            Directory.CreateDirectory(Path.GetDirectoryName(inProject));
+            File.WriteAllText(inProject, MinimalRecipe(EffectId), new UTF8Encoding(false));
+            try
+            {
+                request.RecipePath = inProject;
 
-            var outcome = VfxRecipeBuildEntrypoint.Execute(request);
+                var outcome = VfxRecipeBuildEntrypoint.Execute(request);
 
-            Assert.That(outcome.FailureCode, Is.EqualTo(VfxRecipeBuildCodes.RecipeInputRejected));
-            AssertNoWriteSurfaceMembers();
+                Assert.That(outcome.FailureCode, Is.EqualTo(VfxRecipeBuildCodes.RecipeInputRejected));
+                AssertNoWriteSurfaceMembers();
+            }
+            finally
+            {
+                if (File.Exists(inProject)) File.Delete(inProject);
+                if (File.Exists(inProject + ".meta")) File.Delete(inProject + ".meta");
+                RemoveEmptyRecipesRoot();
+            }
         }
 
         [Test]
@@ -172,8 +154,8 @@ namespace VFXComposer.Tests.EditMode
 
             foreach (var refused in new[]
             {
-                "Assets/VFX/Shared/Styles/Materials/MAT_Style_cartoon.mat",
-                "Assets/VFX/Templates/2D/Manifests/PFT_2D_FireCore.manifest.json",
+                "Assets/VFX/Shared/Shaders/SomeShared.shader",
+                "Assets/VFX/TechniqueFamilies/Shaders/VFX_GlowStack.shader",
                 "Assets/VFX/Recipes/Projectile/x.json",
                 "Assets/VFX/Recipes/x.txt",
                 "Assets/VFX/Recipes/con.json",
@@ -443,6 +425,18 @@ namespace VFXComposer.Tests.EditMode
             Assert.That(lingering, Is.Empty);
         }
 
+        private static void RemoveEmptyRecipesRoot()
+        {
+            // The provenance root is created on demand; a scratch-only run must leave no residue
+            // now that the legacy recipe assets are retired (ADR-010 §9).
+            var root = Absolute("Assets/VFX/Recipes");
+            if (Directory.Exists(root) && !Directory.EnumerateFileSystemEntries(root).Any())
+            {
+                Directory.Delete(root);
+                if (File.Exists(root + ".meta")) File.Delete(root + ".meta");
+            }
+        }
+
         private static void DeleteWriteSurfaceMembers()
         {
             var generated = "Assets/VFX/Generated/" + EffectId;
@@ -458,6 +452,7 @@ namespace VFXComposer.Tests.EditMode
                 if (File.Exists(ownership)) File.Delete(ownership);
             }
 
+            RemoveEmptyRecipesRoot();
             AssetDatabase.Refresh();
         }
     }
