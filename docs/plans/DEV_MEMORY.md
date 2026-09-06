@@ -6,7 +6,7 @@
 > **在途状态快照（2026-09-06 深夜，单样片攻坚：壳体透光冰已达成，氛围层在途）**：
 > **策略转向（用户指令）**："不要做一堆特效了，先做一个，我直接检查质量"——主路径改为单样片攻坚 shield×ice×cartoon×3D（worktree `D:\wt\i2s-solo` 分支 `task/T2cv-solo-sample`），全量 18 格返工降级后台后随平台限制中断废弃（`D:\wt\i2s-t2cv` 分支留档未合并）。
 > **平台限制事故与接手**：三个子 agent（单样片 `153eeb0e`/全量二派 `bc79a332` `f4addacc`）同时触 Grok Bot 用量限制；用户指示继续 → **主 agent 亲手开发**（照实登记）：修 `VFX_ShellRipple.shader` 加物体空间 FBM 霜化内部填充（interiorFill 提亮/霜色锁冰蓝域/填充遮内部碎片），round10→12 三轮亲眼看图迭代，**round12 达成"透光冰"读感**；18 样片全量重建修复门禁 17 失败（教训：改共享 shader 后必须 BuildAll），153/153 绿，至 `f9505a07`。
-> **限制解除（用户通知）**：试探通过后派**氛围层攻坚** `20aa7dc5`（Fable 5）：外围漂浮冰晶碎屑（CPU 粒子，≤20 粒克制）/接地冰雾 veil/接地辉光 decal/节拍幅度——round13 起，逐轮截帧读图提交，禁一次性 shield_ice 专属代码（走通用层语义+ElementPreset）。验收 = 主 agent 亲眼看帧 → 用户终审单样片质量。
+> **氛围层已交付（`20aa7dc5`，round13~24 共 9 笔至 `90ee4b1f`）**：三通用角色层（AmbientDebris/GroundMist/GroundGlow）+ veil 退量化纪律 + 碎屑半球轴向修正 + 接地辉光定稿（高斯尾层暗芯池，两条死路留档：RingPolar 靶心贴纸/热芯加白）+ 呼吸节拍 0.35 + hitAt 涟漪证据帧。门禁 153/153、EditMode 574/574、.NET 1106/0，18 样片同构受益。**主 agent 终审看图（round21 vs 参考 6.png）：静帧质感达标可送用户**——透光冰/亮度分级/硬柔并存/克制碎屑/接地渐变全成立；剩余差距如实登记（碎屑平面亮片/无光针/雾幕缺体积/运动语义，属 T3 GPU+mesh 粒子）。**待用户终审单样片**（入口：solo-review round21/23/24 三帧或 D:\wt\i2s-solo\project 画廊 Play）。
 > **运维备忘**：solo-review 目录 PowerShell Get-ChildItem 偶发空返回，用 `cmd /c dir`。
 >> **在途状态快照（2026-09-06 晚，用户九格判定 FAIL，T2cv 视觉返工在途）**：
 > **用户裁定：九格 FAIL**（原话"就不是一个合格的特效……做出来的都是垃圾"）。主 agent 亲眼对比 contact-sheet 与参考图后确认裁定成立。已定位三个技术族级视觉缺陷：①GlowStack/VeilSoft 雾幕层渲染成不透明大色块糊屏（疑卡通量化把衰减压成实心台阶）②SdfCrackBranch 雷电裂纹全黑（HDR 发光路未生效）③整体发灰、四级亮度台阶在像素上没拉开。结构层（穹顶/涟漪/逐跳/消散/接口）用户未否定。
