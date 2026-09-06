@@ -252,6 +252,16 @@ namespace VFXComposer.Editor.TechniqueFamilies
         private static GameObject BuildGlowStack(BuildContext ctx, GameObject root, string name,
             float baseScale, int layerCount, float layerRadiusRatio, float layerIntensityRatio, float anisotropy)
         {
+            // Quality yardstick (REFERENCE_ANALYSIS section 2-2): the glow is
+            // the SOFT half of hard+soft — a halo BEHIND the hard form layers,
+            // never a wash over them. Additive blending sums layer energy, so
+            // the per-layer target luminance must be well below the form
+            // layers' hot stop. Palette colours are HDR (hot up to 8): they are
+            // luminance-normalized here so every element gets the same halo
+            // energy, and the shader's M-13 size compensation is divided back
+            // out (we want a fixed target, not size-proportional gain).
+            const float innerTargetLum = 0.5f;
+            const float outerTargetLum = 0.22f;
             var stack = MakeLayer(root, name);
             for (int k = 0; k < layerCount; k++)
             {
@@ -260,18 +270,37 @@ namespace VFXComposer.Editor.TechniqueFamilies
                 float scale = baseScale * Mathf.Pow(layerRadiusRatio, k);
                 layer.transform.localScale = new Vector3(scale, scale, 1f);
                 Material glow = MakeMaterial(ctx, "GlowStack", name + "_glow" + k);
-                glow.SetColor("_InnerColor", ctx.Element.Hot);
-                glow.SetColor("_OuterColor", ctx.Element.Primary);
-                glow.SetFloat("_Intensity", Mathf.Pow(layerIntensityRatio, k));
+                // Cartoon compatibility measure #1 (STYLE_IMPL_CARTOON_PIXEL
+                // section 2.8): the glow stack is NEVER cel-quantized — its
+                // cartoon reading comes from the stepped falloff ring stack.
+                glow.DisableKeyword(VfxStylePreset.KeywordCartoon);
+                glow.DisableKeyword(VfxStylePreset.KeywordPixel);
+                glow.DisableKeyword("_FALLOFF_GAUSSIAN");
+                glow.EnableKeyword("_FALLOFF_STEP");
+                glow.SetVector("_FalloffParams", new Vector4(1.5f, 4f, 0f, 0f)); // 4-step ring stack
+                glow.SetColor("_InnerColor", NormalizeLum(ctx.Element.Hot, innerTargetLum));
+                glow.SetColor("_OuterColor", NormalizeLum(ctx.Element.Primary, outerTargetLum));
+                glow.SetFloat("_ColorMixPower", 2.2f); // hot core only at the very centre
+                float compensation = Mathf.Pow(Mathf.Max(scale, 1f), 0.85f);
+                glow.SetFloat("_Intensity", Mathf.Pow(layerIntensityRatio, k) / compensation);
                 glow.SetFloat("_GlowSize", Mathf.Max(scale, 1f));
                 glow.SetFloat("_LayerIndex", k);
                 glow.SetFloat("_BreakupSeed", ctx.Seed % 97u + k * 17f);
+                glow.SetFloat("_BreakupNoise", 0.55f); // broken edges, no "sticker disc"
                 glow.SetFloat("_Anisotropy", anisotropy);
                 glow.SetFloat("_Billboard", ctx.Is3D ? 1f : 0f);
                 var renderer = AddMesh(ctx, layer, Quad(ctx), glow, SortGlow + k);
                 ctx.BeatTargets.Add(renderer);
             }
             return stack;
+        }
+
+        private static Color NormalizeLum(Color c, float targetLum)
+        {
+            float lum = c.r * 0.2126f + c.g * 0.7152f + c.b * 0.0722f;
+            if (lum <= 1e-4f) return c;
+            float mul = targetLum / lum;
+            return new Color(c.r * mul, c.g * mul, c.b * mul, c.a);
         }
 
         /// <summary>Local light node: Light (3D) or Light2D (2D) + VfxLightBeat from the element preset.</summary>
@@ -443,8 +472,8 @@ namespace VFXComposer.Editor.TechniqueFamilies
             }
             AddMesh(ctx, ringNode, Quad(ctx), ringMaterial, SortEdge);
 
-            // Layer 2: glow stack.
-            GameObject glow = BuildGlowStack(ctx, root, "Glow", ctx.Is3D ? 3.2f : 3.4f, 2, 1.6f, 0.45f, 0f);
+            // Layer 2: glow stack (halo just outside the shell radius).
+            GameObject glow = BuildGlowStack(ctx, root, "Glow", ctx.Is3D ? 2.6f : 2.8f, 2, 1.5f, 0.45f, 0f);
 
             // Layer 3: prefractured debris (kinematic until break).
             var debrisRoot = MakeLayer(root, "Debris");
@@ -585,7 +614,7 @@ namespace VFXComposer.Editor.TechniqueFamilies
             AddMesh(ctx, flashNode, Quad(ctx), flashMaterial, SortFlash);
 
             // Layer 2: latest-node glow stack (follower).
-            GameObject glow = BuildGlowStack(ctx, root, "NodeGlow", 1.5f, 2, 1.7f, 0.4f,
+            GameObject glow = BuildGlowStack(ctx, root, "NodeGlow", 1.1f, 2, 1.6f, 0.4f,
                 ctx.Element.ElementId == "lightning" ? 1.2f : 0f);
 
             // Layer 3: per-hop emission bursts.
@@ -727,7 +756,7 @@ namespace VFXComposer.Editor.TechniqueFamilies
             AddMesh(ctx, residueNode, Quad(ctx), residueMaterial, SortVeil);
 
             // Layer 3: glow stack around the dissolve front.
-            GameObject glow = BuildGlowStack(ctx, root, "Glow", 2.6f, 2, 1.7f, 0.4f, 0f);
+            GameObject glow = BuildGlowStack(ctx, root, "Glow", 2.1f, 2, 1.6f, 0.4f, 0f);
             if (ctx.Is3D) glow.transform.localPosition = bodyNode.transform.localPosition;
 
             // Layer 4: light (decays with the phase tail).

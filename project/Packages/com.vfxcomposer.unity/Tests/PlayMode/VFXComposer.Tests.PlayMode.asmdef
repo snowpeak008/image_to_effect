@@ -2,7 +2,10 @@
   "name": "VFXComposer.Tests.PlayMode",
   "rootNamespace": "VFXComposer.Tests.PlayMode",
   "references": [
-    "VFXComposer.Runtime"
+    "VFXComposer.Runtime",
+    "VFXComposer.Gallery",
+    "Unity.RenderPipelines.Universal.Runtime",
+    "Unity.RenderPipelines.Core.Runtime"
   ],
   "includePlatforms": [],
   "excludePlatforms": [],

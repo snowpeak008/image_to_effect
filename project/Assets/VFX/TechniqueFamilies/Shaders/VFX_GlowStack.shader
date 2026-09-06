@@ -121,8 +121,12 @@ Shader "VFXComposer/TechniqueFamilies/GlowStack"
 #elif defined(_FALLOFF_LINEAR)
                 return pow(saturate(1.0 - d), max(_FalloffParams.x, 0.01));
 #elif defined(_FALLOFF_STEP)
+                // Stepped ring stack = the QUANTIZED soft curve (cartoon "hard-edged
+                // soft light"), not linear rings: a linear 1-floor(d*s)/s keeps w=1
+                // over the whole inner band and reads as a solid disc, losing the
+                // halo energy profile entirely.
                 float s = max(_FalloffParams.y, 2.0);
-                return saturate(1.0 - floor(saturate(d) * s) / s);
+                return floor(exp(-5.5 * d * d) * s + 0.5) / s;
 #else // gaussian (default)
                 return exp(-5.5 * d * d);
 #endif

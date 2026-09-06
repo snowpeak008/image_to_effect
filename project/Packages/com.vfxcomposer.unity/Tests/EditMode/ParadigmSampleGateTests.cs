@@ -157,6 +157,18 @@ namespace VFXComposer.Tests.EditMode
             {
                 Material material = renderer.sharedMaterial;
                 if (material == null) continue;
+                bool isGlow = material.shader != null && material.shader.name.Contains("GlowStack");
+                if (isGlow)
+                {
+                    // Cartoon compatibility measure #1 (STYLE_IMPL 2.8): glow
+                    // layers are never cel-quantized; their cartoon reading is
+                    // the stepped falloff ring stack.
+                    Assert.That(material.IsKeywordEnabled(VfxStylePreset.KeywordCartoon), Is.False,
+                        path + ": " + renderer.name + " glow must stay un-quantized (hard+soft)");
+                    Assert.That(material.IsKeywordEnabled("_FALLOFF_STEP"), Is.True,
+                        path + ": cartoon glow uses the stepped falloff ring stack");
+                    continue;
+                }
                 Assert.That(material.IsKeywordEnabled(VfxStylePreset.KeywordCartoon), Is.True,
                     path + ": " + renderer.name + " must carry the cartoon StyleStage");
                 Assert.That(material.IsKeywordEnabled(VfxStylePreset.KeywordPixel), Is.False,
