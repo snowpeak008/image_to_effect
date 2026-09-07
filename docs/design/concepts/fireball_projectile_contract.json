@@ -1,0 +1,584 @@
+{
+  "contractVersion": "s0/v1",
+  "effectId": "fireball_projectile_3d",
+  "contractRevision": 1,
+  "lifecycle": {
+    "kind": "event_driven",
+    "start": {
+      "entryConditions": [
+        "launch event"
+      ],
+      "deadlineSeconds": 0.15,
+      "completionConditions": [
+        "head core visible at full brightness"
+      ]
+    },
+    "steady": {
+      "entryConditions": [
+        "launch complete"
+      ],
+      "deadlineSeconds": 2.4,
+      "completionConditions": [
+        "travel loop stable for one full beat cycle"
+      ]
+    },
+    "stop": {
+      "entryConditions": [
+        "impact or end event"
+      ],
+      "deadlineSeconds": 0.6,
+      "completionConditions": [
+        "all layers cleared"
+      ]
+    },
+    "interrupt": {
+      "entryConditions": [
+        "end event mid-travel"
+      ],
+      "deadlineSeconds": 0.6,
+      "completionConditions": [
+        "all layers cleared"
+      ]
+    }
+  },
+  "references": [
+    {
+      "source": "docs/design/concepts/fireball_projectile_APPROVED.png",
+      "hash": "sha256:877820c6e2c84bca82213b37ba5fa0a27dd26b1ab6f131697fd3be288c7a9643",
+      "license": "project-approved-concept",
+      "assetUse": "reference-only",
+      "roles": [
+        {
+          "dimension": "composition",
+          "weight": 1
+        },
+        {
+          "dimension": "colour",
+          "weight": 1
+        },
+        {
+          "dimension": "motion",
+          "weight": 0.7
+        },
+        {
+          "dimension": "atmosphere",
+          "weight": 0.8
+        }
+      ],
+      "notRequired": [
+        "pixel-identical silhouette",
+        "painterly brush texture",
+        "exact tongue count"
+      ]
+    }
+  ],
+  "spatialContract": {
+    "coordinateSpace": "local",
+    "origin": [
+      0,
+      0,
+      0
+    ],
+    "orientationEulerDegrees": [
+      0,
+      0,
+      0
+    ],
+    "visualAnchor": {
+      "kind": "transform",
+      "reference": "projectile_linear_fire_cartoon__PM"
+    },
+    "designDimensions": {
+      "width": 4.8,
+      "height": 1.6,
+      "depth": 1.6,
+      "unit": "meter"
+    },
+    "gameplayDistanceDimensions": {
+      "width": 2.4,
+      "height": 0.8,
+      "depth": 0.8,
+      "unit": "meter"
+    }
+  },
+  "captureProfile": {
+    "captureProfileId": "solo_projectile_side_1024",
+    "unityVersion": "2022.3.62f3c1",
+    "urpVersion": "14.x",
+    "graphicsApi": "Direct3D11",
+    "graphicsDeviceDriver": "workstation-current",
+    "cameraSerializedReference": "SoloSampleCaptureTests:runtime-camera",
+    "cameraPose": {
+      "position": [
+        0,
+        0.2,
+        -4.4
+      ],
+      "orientationEulerDegrees": [
+        0,
+        0,
+        0
+      ]
+    },
+    "cameraFovDegrees": 55,
+    "sceneSerializedReference": "SoloSampleCaptureTests:runtime-scene",
+    "sceneHash": "pending:formal-build",
+    "prefabManifestSerializedReference": "Assets/VFX/Generated/3d/projectile_linear_fire_cartoon/projectile_linear_fire_cartoon__PM.prefab",
+    "prefabManifestHash": "pending:formal-build",
+    "rendererAssetSerializedReference": "project URP renderer (worktree default)",
+    "volumeSerializedReference": "SoloSampleCaptureTests:runtime-volume(bloom on/off dual pass)",
+    "resolution": {
+      "width": 1024,
+      "height": 768
+    },
+    "fps": 60,
+    "background": "near-black neutral (0.035,0.04,0.055)",
+    "colorSpace": "Linear",
+    "hdr": true,
+    "msaaSamples": 1,
+    "renderTextureFormat": "ARGBHalf",
+    "bloom": {
+      "enabled": true,
+      "settingsReference": "runtime bloom, dual on/off pass"
+    },
+    "toneMapping": "None",
+    "captureToolVersion": "SoloSampleCaptureTests/T2cv",
+    "captureToolHash": "sha256:4086ef34e9aca55e2081c10faa85a3d5e5f8c2848342765709fc777ad7ca43d6",
+    "canonicalSeed": 4242,
+    "robustnessSeeds": [
+      4243,
+      4244
+    ]
+  },
+  "extensions": {
+    "captureBindingStatus": "PENDING_FIRST_FORMAL_BUILD",
+    "userDecisions": [
+      {
+        "decisionId": "tail_color",
+        "decision": "hybrid-blend",
+        "statement": "头/中段加法发光，尾段渐变回 alpha 混合保认可稿深红——分段混合，光效感与色阶并存 (user 2026-09-07)"
+      },
+      {
+        "decisionId": "smoke_weight",
+        "decision": "per-sheet",
+        "statement": "烟幕按认可稿体量：构图的一半，明显可见的深红衬底 (user 2026-09-07)"
+      },
+      {
+        "decisionId": "verdict_gate",
+        "decision": "final-only",
+        "statement": "逐条销号由 visual-qa 独立评审承担；用户只对最终 Play 效果一锤定音 (user 2026-09-07)"
+      }
+    ]
+  },
+  "semanticStateMachine": {
+    "deterministicForSameSeed": true,
+    "states": [
+      {
+        "stateId": "launch",
+        "role": "start",
+        "durationSeconds": 0.12,
+        "entryConditions": [
+          "launch event"
+        ],
+        "exitConditions": [
+          "flash decayed"
+        ],
+        "triggeredEvents": [
+          "launch"
+        ],
+        "preservedSemantics": [
+          "root anchor"
+        ]
+      },
+      {
+        "stateId": "travel",
+        "role": "steady",
+        "durationSeconds": 2.4,
+        "entryConditions": [
+          "launch complete"
+        ],
+        "exitConditions": [
+          "impact or end"
+        ],
+        "triggeredEvents": [],
+        "preservedSemantics": [
+          "root anchor",
+          "head-tail axis",
+          "brightness hierarchy"
+        ]
+      },
+      {
+        "stateId": "impact",
+        "role": "stop",
+        "durationSeconds": 0.25,
+        "entryConditions": [
+          "impact event"
+        ],
+        "exitConditions": [
+          "burst decayed"
+        ],
+        "triggeredEvents": [
+          "impact"
+        ],
+        "preservedSemantics": [
+          "root anchor"
+        ]
+      },
+      {
+        "stateId": "end",
+        "role": "interrupt",
+        "durationSeconds": 0.5,
+        "entryConditions": [
+          "end event"
+        ],
+        "exitConditions": [
+          "all clear"
+        ],
+        "triggeredEvents": [
+          "end"
+        ],
+        "preservedSemantics": [
+          "root anchor"
+        ]
+      }
+    ],
+    "transitions": [
+      {
+        "from": "launch",
+        "to": "travel",
+        "continuityMode": "continuous",
+        "preservedSemantics": [
+          "root anchor",
+          "head position"
+        ],
+        "triggeredEvents": []
+      }
+    ],
+    "completionExits": [
+      "impact complete"
+    ],
+    "interruptExits": [
+      "end complete"
+    ]
+  },
+  "layers": [
+    {
+      "layerId": "head_core",
+      "responsibility": "白热头部核心（认可稿成分1）",
+      "carrier": "glow-stack-quads",
+      "geometry": "anisotropic billboard stack, motion-axis stretched",
+      "materialModel": "unlit additive HDR",
+      "colorRole": "hot",
+      "blendMode": "additive",
+      "motionModel": "beat-coupled pulse",
+      "timing": "launch through impact",
+      "attachment": "root+headX",
+      "continuityFrom": [],
+      "continuityTo": [
+        "flame_body"
+      ],
+      "budgetCost": {
+        "renderers": 3
+      },
+      "required": true
+    },
+    {
+      "layerId": "flame_body",
+      "responsibility": "焰体主体：致密焰海+撕裂丝带（认可稿成分2）",
+      "carrier": "crossed-quad band mesh",
+      "geometry": "long axis-aligned band, 3.4 tail span",
+      "materialModel": "StreakTear: additive head/mid, alpha-blend graded tail (userDecision tail_color)",
+      "colorRole": "primary-through-cool",
+      "blendMode": "hybrid-graded",
+      "motionModel": "ribbon flow + lane subdivision + FBM tear, seeded",
+      "timing": "travel loop",
+      "attachment": "root",
+      "continuityFrom": [
+        "head_core"
+      ],
+      "continuityTo": [
+        "smoke_veil"
+      ],
+      "budgetCost": {
+        "renderers": 1
+      },
+      "required": true
+    },
+    {
+      "layerId": "smoke_veil",
+      "responsibility": "深红烟幕衬底，构图的一半体量（认可稿成分3，userDecision smoke_weight=per-sheet）",
+      "carrier": "veil quad",
+      "geometry": "oversized quad below/behind wake",
+      "materialModel": "VeilSoft continuous (never cel-quantized)",
+      "colorRole": "cool",
+      "blendMode": "alpha",
+      "motionModel": "tailward drift",
+      "timing": "travel loop",
+      "attachment": "root offset",
+      "continuityFrom": [
+        "flame_body"
+      ],
+      "continuityTo": [],
+      "budgetCost": {
+        "renderers": 1
+      },
+      "required": true
+    },
+    {
+      "layerId": "sparks",
+      "responsibility": "离散火星：少而顶亮（认可稿成分4）",
+      "carrier": "particle-system",
+      "geometry": "point billboards",
+      "materialModel": "unlit additive HDR",
+      "colorRole": "secondary",
+      "blendMode": "additive",
+      "motionModel": "shed into wake, seeded",
+      "timing": "travel loop",
+      "attachment": "head offset",
+      "continuityFrom": [],
+      "continuityTo": [],
+      "budgetCost": {
+        "particles": 24
+      },
+      "required": true
+    },
+    {
+      "layerId": "head_light",
+      "responsibility": "随体局部光（原型 A01 一等成员）",
+      "carrier": "local-light",
+      "geometry": "point light",
+      "materialModel": "VfxLightBeat flicker",
+      "colorRole": "hot",
+      "blendMode": "n/a",
+      "motionModel": "beat-coupled",
+      "timing": "launch through impact",
+      "attachment": "head",
+      "continuityFrom": [],
+      "continuityTo": [],
+      "budgetCost": {
+        "lights": 1
+      },
+      "required": true
+    }
+  ],
+  "allowedSubstitutions": [],
+  "forbiddenSubstitutions": [
+    {
+      "substitutionId": "no_flipbook",
+      "from": "procedural flame body",
+      "to": "texture sheet animation",
+      "rationale": "ADR-010 §5 绝对禁止序列帧"
+    },
+    {
+      "substitutionId": "no_opaque_flame",
+      "from": "emissive additive flame",
+      "to": "alpha-occluding flat bands",
+      "rationale": "round44 用户裁定：遮挡混合=图片感；火为发光体（尾段例外按 userDecision tail_color）"
+    },
+    {
+      "substitutionId": "no_element_hardcode",
+      "from": "ElementPreset-driven personality",
+      "to": "fire-specific code branches",
+      "rationale": "通用面纪律：lightning/poison 投射物换预设复用"
+    }
+  ],
+  "cleanup": {
+    "cleanupDeadline": 0.6,
+    "allowedResidualLayers": [],
+    "lightStopDeadline": 0.3
+  },
+  "budget": {
+    "particlePeak": 48,
+    "particleSteady": 24,
+    "rendererCount": 8,
+    "materialCount": 7,
+    "lightCount": 1,
+    "textureResidency": {
+      "localExclusiveMb": 0,
+      "totalDependencyMb": 0
+    }
+  },
+  "requirements": [
+    {
+      "designRequirementId": "fb.head.whitehot",
+      "type": "visual-measurable",
+      "evidenceAuthority": "diagnostic",
+      "statement": "travel 稳态帧中头部核心为画面最亮区域，线性亮度达 HDR（>1.0），Bloom-off 帧中心 ROI 平均亮度 ≥ 焰体中段 ROI 的 2.5 倍。",
+      "visualVerdict": {
+        "subject": "head_core",
+        "expectedCondition": "brightest region; >=2.5x mid-body luminance in bloom-off frame",
+        "evidenceLocation": {
+          "state": "travel",
+          "frameInterval": [
+            55,
+            65
+          ],
+          "roi": "head circle r=12% at head anchor"
+        }
+      }
+    },
+    {
+      "designRequirementId": "fb.body.emissive",
+      "type": "visual-measurable",
+      "evidenceAuthority": "diagnostic",
+      "statement": "焰体头/中段为加法发光：bloom-on 帧焰体边缘外侧 4px 环带亮度显著高于背景底噪（发光渗出），且中段档内存在连续亮度梯度（非纯平色块）。",
+      "visualVerdict": {
+        "subject": "flame_body",
+        "expectedCondition": "additive bleed beyond silhouette; in-band gradient stddev > flat-band epsilon",
+        "evidenceLocation": {
+          "state": "travel",
+          "frameInterval": [
+            55,
+            65
+          ],
+          "roi": "mid-body band x∈[35%,60%]"
+        }
+      }
+    },
+    {
+      "designRequirementId": "fb.body.fourstep",
+      "type": "visual-semantic",
+      "evidenceAuthority": "visualQa",
+      "statement": "焰体沿运动轴呈四级可辨色带：白热核/亮橙/橙红/深红尾（认可稿色阶），尾段深红可读不发黑不偏橙（userDecision tail_color=hybrid）。",
+      "visualVerdict": {
+        "subject": "flame_body",
+        "expectedCondition": "four distinguishable brightness/hue steps head-to-tail; tail step reads deep red",
+        "evidenceLocation": {
+          "state": "travel",
+          "frameInterval": [
+            55,
+            65
+          ],
+          "roi": "full wake band"
+        }
+      }
+    },
+    {
+      "designRequirementId": "fb.body.ribbons",
+      "type": "visual-semantic",
+      "evidenceAuthority": "visualQa",
+      "statement": "焰体后 1/3 撕裂为多条细丝带（认可稿的焰海尾梢），丝带与主体连续（无断裂空档），前 1/3 保持致密连接头部。",
+      "visualVerdict": {
+        "subject": "flame_body",
+        "expectedCondition": "tail third resolves into >=4 thin continuous ribbons; front third solid and connected to head",
+        "evidenceLocation": {
+          "state": "travel",
+          "frameInterval": [
+            55,
+            65
+          ],
+          "roi": "tail band x∈[0%,35%]"
+        }
+      }
+    },
+    {
+      "designRequirementId": "fb.smoke.weight",
+      "type": "visual-semantic",
+      "evidenceAuthority": "visualQa",
+      "statement": "深红烟幕衬底明显可见，宽于焰体主体、亮度低于焰体最暗档，位于尾流下后方（userDecision smoke_weight=per-sheet：构图的一半体量）。",
+      "visualVerdict": {
+        "subject": "smoke_veil",
+        "expectedCondition": "clearly visible deep-red mass wider than flame body, darker than dimmest flame step",
+        "evidenceLocation": {
+          "state": "travel",
+          "frameInterval": [
+            55,
+            65
+          ],
+          "roi": "lower/rear half of wake extent"
+        }
+      }
+    },
+    {
+      "designRequirementId": "fb.sparks.restraint",
+      "type": "visual-measurable",
+      "evidenceAuthority": "diagnostic",
+      "statement": "离散火星 6~14 颗可见，单颗亮度进入最亮两档（顶亮），总数不淹没构图（克制纪律）。",
+      "visualVerdict": {
+        "subject": "sparks",
+        "expectedCondition": "6-14 visible motes, each in top-2 brightness steps",
+        "evidenceLocation": {
+          "state": "travel",
+          "frameInterval": [
+            55,
+            65
+          ],
+          "roi": "full frame"
+        }
+      }
+    },
+    {
+      "designRequirementId": "fb.anisotropy",
+      "type": "visual-measurable",
+      "evidenceAuthority": "diagnostic",
+      "statement": "整体强各向异性：效果包围盒长宽比 ≥ 2.8（沿运动轴），头部轮廓锐（高梯度）尾部散（低梯度）。",
+      "visualVerdict": {
+        "subject": "whole effect",
+        "expectedCondition": "bbox aspect >= 2.8; head edge gradient > tail edge gradient",
+        "evidenceLocation": {
+          "state": "travel",
+          "frameInterval": [
+            55,
+            65
+          ],
+          "roi": "effect bbox"
+        }
+      }
+    },
+    {
+      "designRequirementId": "fb.beat.alive",
+      "type": "visual-semantic",
+      "evidenceAuthority": "visualQa",
+      "statement": "travel 循环中焰体形态逐帧演化（噪声流动+丝带起伏），头光与光晕同节拍呼吸——连续 3 帧逐帧差异可见，无静止贴图感。",
+      "visualVerdict": {
+        "subject": "whole effect",
+        "expectedCondition": "frame-to-frame morphological evolution visible across 3 consecutive beat frames",
+        "evidenceLocation": {
+          "state": "travel",
+          "frameInterval": [
+            55,
+            85
+          ],
+          "roi": "full frame, 3-frame series"
+        }
+      }
+    },
+    {
+      "designRequirementId": "fb.structure.selfcontained",
+      "type": "structural",
+      "evidenceAuthority": "telemetry",
+      "statement": "预制体自包含：依赖闭包零外部引用越界；组件全在识别闭集；禁序列帧谓词零命中；PM 档预算内（现有门禁测试承载）。",
+      "visualVerdict": {
+        "subject": "fb.structure.selfcontained",
+        "expectedCondition": "non-visual authority; see statement (telemetry/user verdict)",
+        "evidenceLocation": {
+          "state": "travel",
+          "frameInterval": [
+            55,
+            65
+          ],
+          "roi": "n/a"
+        }
+      }
+    },
+    {
+      "designRequirementId": "fb.user.final",
+      "type": "user-signoff",
+      "evidenceAuthority": "user",
+      "statement": "用户对最终 Play 效果一锤定音（userDecision verdict_gate=final-only）；此前逐条销号由 visual-qa 独立评审承担。",
+      "visualVerdict": {
+        "subject": "fb.user.final",
+        "expectedCondition": "non-visual authority; see statement (telemetry/user verdict)",
+        "evidenceLocation": {
+          "state": "travel",
+          "frameInterval": [
+            55,
+            65
+          ],
+          "roi": "n/a"
+        }
+      }
+    }
+  ],
+  "contractHash": "sha256:1d538b85e1a470f599241ba87775e4363491180524a8d45c798da81b51a0a64f"
+}
